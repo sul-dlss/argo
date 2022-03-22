@@ -46,7 +46,6 @@ RSpec.describe SetGoverningApoJob do
 
       it 'logs info about progress' do
         allow(subject).to receive(:set_governing_apo_and_index_safely)
-        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         subject.perform(bulk_action.id, params)
 
@@ -108,8 +107,6 @@ RSpec.describe SetGoverningApoJob do
       # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
       # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
       it 'increments the failure and success counts and logs status of each update' do
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-
         subject.perform(bulk_action.id, params)
         expect(state_service).to have_received(:allows_modification?)
         expect(object_client1).to have_received(:update).with(params: Cocina::Models::DRO)

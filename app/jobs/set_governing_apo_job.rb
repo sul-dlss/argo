@@ -37,7 +37,6 @@ class SetGoverningApoJob < GenericJob
     change_set = ItemChangeSet.new(cocina_item)
     change_set.validate(admin_policy_id: new_apo_id)
     change_set.save
-    Argo::Indexer.reindex_pid_remotely(current_druid)
 
     log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
