@@ -39,7 +39,6 @@ class SetCollectionJob < GenericJob
     change_set = ItemChangeSet.new(cocina_object)
     change_set.validate(collection_ids: new_collection_ids)
     change_set.save
-    Argo::Indexer.reindex_pid_remotely(cocina_object.externalIdentifier)
 
     log.puts("#{Time.current} SetCollectionJob: Successfully updated #{cocina_object.externalIdentifier} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
