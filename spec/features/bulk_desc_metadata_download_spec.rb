@@ -21,7 +21,8 @@ RSpec.describe 'Bulk Descriptive Metadata Download', js: true do
 
   it 'Creates a new jobs' do
     visit new_bulk_action_path
-    select 'Download descriptive metadata'
+    select 'Download descriptive metadata (as MODS)'
+
     fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'

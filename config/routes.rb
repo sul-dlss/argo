@@ -39,7 +39,8 @@ Rails.application.routes.draw do
         resource :manage_embargo_job, only: %i[new create]
         resource :register_druid_job, only: %i[new create]
 
-        resource :descriptive_download_job, only: %i[new create]
+        resource :descriptive_metadata_export_job, only: %i[new create]
+        resource :download_mods_job, only: %i[new create]
         resource :checksum_report_job, only: %i[new create]
       end
     end

@@ -9,6 +9,7 @@ class BulkAction < ApplicationRecord
                      AddWorkflowJob
                      ApplyApoDefaultsJob
                      DescmetadataDownloadJob
+                     DescriptiveMetadataExportJob
                      ReleaseObjectJob
                      RemoteIndexingJob
                      PurgeJob
