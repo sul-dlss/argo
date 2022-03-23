@@ -53,7 +53,8 @@ class CollectionForm
       type: Cocina::Models::ObjectType.collection,
       administrative: {
         hasAdminPolicy: params[:apo_pid]
-      }
+      },
+      identification: {}
     }
 
     reg_params[:description] = build_description if params[:collection_title].present? || params[:collection_abstract].present?
