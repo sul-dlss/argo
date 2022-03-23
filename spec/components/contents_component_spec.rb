@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ContentsComponent, type: :component do
-  let(:presenter) { instance_double(ArgoShowPresenter, document: solr_doc, cocina: cocina, state_service: state_service) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: solr_doc, item: item, state_service: state_service) }
   let(:component) { described_class.new(presenter: presenter) }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
@@ -94,8 +94,8 @@ RSpec.describe ContentsComponent, type: :component do
       }
     end
 
-    let(:cocina) do
-      Cocina::Models.build(attrs)
+    let(:item) do
+      Item.new(Cocina::Models.build(attrs))
     end
 
     before do

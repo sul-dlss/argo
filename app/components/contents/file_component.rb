@@ -19,15 +19,14 @@ module Contents
       @image
     end
 
-    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, :use, :presentation, to: :file
-    delegate :publish, :shelve, :sdrPreserve, to: :administrative
+    delegate :filename, :mime_type, :size, :use, :publish, :shelve, :preserve, to: :file
 
     def view_access
-      access.view.capitalize
+      file.view_access.capitalize
     end
 
     def download_access
-      access.download.capitalize
+      file.download_access.capitalize
     end
 
     def role
@@ -41,15 +40,11 @@ module Contents
     end
 
     def height
-      return '' if presentation&.height.blank?
-
-      "#{presentation.height} px"
+      "#{file.height} px" if file.height
     end
 
     def width
-      return '' if presentation&.width.blank?
-
-      "#{presentation.width} px"
+      "#{file.width} px" if file.width
     end
   end
 end

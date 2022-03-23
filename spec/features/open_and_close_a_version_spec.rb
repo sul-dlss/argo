@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Open and close a version' do
   let(:item) do
-    FactoryBot.create_for_repository(:item)
+    FactoryBot.create_for_repository(:persisted_item)
   end
 
   let(:dsc) { Dor::Services::Client.object(item.externalIdentifier) }

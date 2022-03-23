@@ -12,5 +12,5 @@ puts 'This will clear the Solr repo. Are you sure? [y/n]:' # rubocop:disable Rai
 if gets.chomp == 'y'
   ResetSolr.reset_solr
   FactoryBot.create_for_repository(:agreement)
-  FactoryBot.create_for_repository(:apo, roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
+  FactoryBot.create_for_repository(:persisted_apo, roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
 end

@@ -1,7 +1,7 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="document-contents-heading">
     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#document-contents-section" aria-expanded="true" aria-controls="document-contents-section">
-      Content (<%= pluralize Array(@cocina.structural&.contains).size, 'Resource' %>)
+      Content (<%= pluralize @item.file_sets.size, 'Resource' %>)
     </button>
   </h2>
   <div id="document-contents-section" class="accordion-collapse collapse show" aria-labelledby="document-contents-heading">
@@ -28,7 +28,7 @@
         <% end %>
       </div>
 
-      <%= render Contents::StructuralComponent.new(structural: @cocina.structural, object_id: @cocina.externalIdentifier, viewable: can?(:view_content, @cocina)) %>
+      <%= render Contents::StructuralComponent.new(item: @item, viewable: can?(:view_content, @item)) %>
     </div>
   </div>
 </div>

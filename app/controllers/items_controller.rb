@@ -2,7 +2,7 @@
 
 # rubocop:disable Metrics/ClassLength
 class ItemsController < ApplicationController
-  before_action :load_cocina
+  before_action :load_resource
   before_action :authorize_manage!, only: %i[
     add_collection remove_collection
     purge_object
@@ -35,8 +35,8 @@ class ItemsController < ApplicationController
     end
   end
 
-  rescue_from Cocina::Models::ValidationError do |exception|
-    message = "Error building Cocina: #{exception.message.truncate(200)}"
+  rescue_from Cocina::Models::ValidationError, Repository::NotCocina do |exception|
+    message = exception.is_a?(Repository::NotCocina) ? exception.message : "Error building Cocina: #{exception.message.truncate(200)}"
     Honeybadger.notify(exception)
     logger.error(message)
     if turbo_frame_request?
@@ -49,8 +49,8 @@ class ItemsController < ApplicationController
 
   def add_collection
     response_message = if params[:collection].present?
-                         new_collections = Array(@cocina.structural&.isMemberOf) + [params[:collection]]
-                         change_set = ItemChangeSet.new(@cocina)
+                         new_collections = @item.collection_ids + [params[:collection]]
+                         change_set = ItemChangeSet.new(@item)
                          change_set.validate(collection_ids: new_collections)
                          change_set.save
                          reindex
@@ -59,33 +59,33 @@ class ItemsController < ApplicationController
                          'No collection selected'
                        end
 
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    object_client = Dor::Services::Client.object(@item.id)
     @collection_list = object_client.collections
     render partial: 'collection_ui', locals: { response_message: response_message }
   end
 
   def remove_collection
-    new_collections = Array(@cocina.structural&.isMemberOf) - [params[:collection]]
-    change_set = ItemChangeSet.new(@cocina)
+    new_collections = @item.collection_ids - [params[:collection]]
+    change_set = ItemChangeSet.new(@item)
     change_set.validate(collection_ids: new_collections)
     change_set.save
     reindex
 
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    object_client = Dor::Services::Client.object(@item.id)
     @collection_list = object_client.collections
     render partial: 'collection_ui', locals: { response_message: 'Collection successfully removed' }
   end
 
   def show
-    authorize! :view_metadata, @cocina
+    authorize! :view_metadata, @item
 
     respond_to do |format|
-      format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
+      format.json { render json: CocinaHashPresenter.new(cocina_object: @item.model).render }
     end
   end
 
   def source_id
-    change_set = ItemChangeSet.new(@cocina)
+    change_set = ItemChangeSet.new(@item)
     change_set.validate(source_id: params[:new_id])
     change_set.save
     reindex
@@ -104,17 +104,17 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
-    authorize! :manage_desc_metadata, @cocina
+    authorize! :manage_desc_metadata, @item
 
-    catkey = @cocina.identification&.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
+    catkey = @item.catkey
     if catkey.blank?
       render status: :bad_request, plain: 'object must have catkey to refresh descMetadata'
       return
     end
 
-    Dor::Services::Client.object(@cocina.externalIdentifier).refresh_metadata
+    Dor::Services::Client.object(@item.id).refresh_metadata
 
-    redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from catkey: #{catkey}"
+    redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@item.id} successfully refreshed from catkey: #{catkey}"
   rescue Dor::Services::Client::UnexpectedResponse => e
     user_begin = 'An error occurred while attempting to refresh metadata'
     user_end = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
@@ -124,7 +124,7 @@ class ItemsController < ApplicationController
 
   # set the object's access to its admin policy's accessTemplate
   def apply_apo_defaults
-    Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
+    Dor::Services::Client.object(@item.id).apply_admin_policy_defaults
     reindex
     redirect_to solr_document_path(params[:id]), notice: 'APO defaults applied!'
   rescue Dor::Services::Client::UnexpectedResponse => e
@@ -135,7 +135,7 @@ class ItemsController < ApplicationController
   def set_governing_apo
     return redirect_to solr_document_path(params[:id]), flash: { error: "Can't set governing APO on an invalid model" } if @cocina.is_a? NilModel
 
-    authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
+    authorize! :manage_governing_apo, @item, params[:new_apo_id]
 
     change_set = build_change_set
     change_set.validate(admin_policy_id: params[:new_apo_id])
@@ -146,7 +146,7 @@ class ItemsController < ApplicationController
   end
 
   def collection_ui
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    object_client = Dor::Services::Client.object(@item.id)
     @collection_list = object_client.collections
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -155,12 +155,12 @@ class ItemsController < ApplicationController
 
   # Draw form for barcode
   def edit_barcode
-    @change_set = ItemChangeSet.new(@cocina)
+    @change_set = ItemChangeSet.new(@item)
   end
 
   def show_barcode
-    change_set = ItemChangeSet.new(@cocina)
-    state_service = StateService.new(@cocina)
+    change_set = ItemChangeSet.new(@item)
+    state_service = StateService.new(@item)
     render Show::BarcodeComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -171,7 +171,7 @@ class ItemsController < ApplicationController
 
   def show_copyright
     change_set = build_change_set
-    state_service = StateService.new(@cocina)
+    state_service = StateService.new(@item)
     render Show::CopyrightComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -182,7 +182,7 @@ class ItemsController < ApplicationController
 
   def show_use_statement
     change_set = build_change_set
-    state_service = StateService.new(@cocina)
+    state_service = StateService.new(@item)
     render Show::UseStatementComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -193,13 +193,13 @@ class ItemsController < ApplicationController
 
   def show_license
     change_set = build_change_set
-    state_service = StateService.new(@cocina)
+    state_service = StateService.new(@item)
     render Show::LicenseComponent.new(change_set: change_set, state_service: state_service)
   end
 
   # save the form
   def update
-    change_set = ItemChangeSet.new(@cocina)
+    change_set = ItemChangeSet.new(@item)
     if change_set.validate(**item_params)
       change_set.save # may raise Dor::Services::Client::BadRequestError
       reindex
@@ -213,7 +213,7 @@ class ItemsController < ApplicationController
 
   def edit_rights
     @change_set = build_change_set
-    if @cocina.collection?
+    if @item.is_a?(Collection)
       render partial: 'edit_collection_rights'
     else
       render partial: 'edit_dro_rights'
@@ -222,12 +222,12 @@ class ItemsController < ApplicationController
 
   def show_rights
     @change_set = build_change_set
-    state_service = StateService.new(@cocina)
-    if @cocina.collection?
-      change_set = CollectionChangeSet.new(@cocina)
+    state_service = StateService.new(@item)
+    if @item.is_a? Collection
+      change_set = CollectionChangeSet.new(@item)
       render Show::Collection::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
     else
-      change_set = ItemChangeSet.new(@cocina)
+      change_set = ItemChangeSet.new(@item)
       render Show::Item::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
     end
   end
@@ -252,25 +252,32 @@ class ItemsController < ApplicationController
                   :view_access, :download_access, :access_location, :controlled_digital_lending)
   end
 
-  def load_cocina
-    raise 'missing druid' unless params[:id]
-
-    @cocina = maybe_load_cocina(params[:id])
+  def load_resource
+    @item = Repository.find(params[:id])
   end
 
   def reindex
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@item.id)
   end
 
   # ---
   # Permissions
 
   def authorize_manage!
-    authorize! :manage_item, @cocina
+    authorize! :manage_item, @item
   end
 
   def build_change_set
-    @cocina.collection? ? CollectionChangeSet.new(@cocina) : ItemChangeSet.new(@cocina)
+    change_set_class.new(@item)
+  end
+
+  def change_set_class
+    case @item
+    when Item
+      ItemChangeSet
+    when Collection
+      CollectionChangeSet
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

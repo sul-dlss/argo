@@ -7,48 +7,15 @@ RSpec.describe Ability do
   subject(:ability) { described_class.new(user) }
 
   let(:dro) do
-    Cocina::Models::DRO.new(externalIdentifier: new_cocina_object_id,
-                            label: 'test',
-                            type: Cocina::Models::ObjectType.object,
-                            version: 1,
-                            description: {
-                              title: [{ value: 'test' }],
-                              purl: "https://purl.stanford.edu/#{new_cocina_object_id.delete_prefix('druid:')}"
-                            },
-                            access: {},
-                            identification: { sourceId: 'sul:1234' },
-                            structural: {},
-                            administrative: {
-                              hasAdminPolicy: apo_id
-                            })
+    build(:item, id: new_cocina_object_id, admin_policy_id: apo_id)
   end
 
   let(:admin_policy) do
-    Cocina::Models::AdminPolicy.new(externalIdentifier: new_cocina_object_id,
-                                    label: 'test',
-                                    type: Cocina::Models::ObjectType.admin_policy,
-                                    version: 1,
-                                    administrative: {
-                                      hasAdminPolicy: apo_id,
-                                      hasAgreement: 'druid:hp308wm0436',
-                                      accessTemplate: { view: 'world', download: 'world' }
-                                    })
+    build(:admin_policy, id: new_cocina_object_id, admin_policy_id: apo_id, agreement_id: 'druid:hp308wm0436')
   end
 
   let(:collection) do
-    Cocina::Models::Collection.new(externalIdentifier: new_cocina_object_id,
-                                   label: 'test',
-                                   type: Cocina::Models::ObjectType.collection,
-                                   version: 1,
-                                   description: {
-                                     title: [{ value: 'test' }],
-                                     purl: "https://purl.stanford.edu/#{new_cocina_object_id.delete_prefix('druid:')}"
-                                   },
-                                   access: {},
-                                   identification: { sourceId: 'sul:1234' },
-                                   administrative: {
-                                     hasAdminPolicy: apo_id
-                                   })
+    build(:collection, id: new_cocina_object_id, admin_policy_id: apo_id)
   end
 
   let(:user) do
@@ -79,7 +46,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_item, dro) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
-    it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.to be_able_to(:create, AdminPolicy) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:update, :workflow) }
   end
@@ -92,7 +59,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
 
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
-    it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.to be_able_to(:create, AdminPolicy) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
@@ -102,7 +69,7 @@ RSpec.describe Ability do
 
     it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
-    it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.not_to be_able_to(:create, AdminPolicy) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.to be_able_to(:view_metadata, dro) }
     it { is_expected.to be_able_to(:view_content, dro) }
@@ -125,7 +92,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_item, dro) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
-    it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.not_to be_able_to(:create, AdminPolicy) }
 
     it { is_expected.to be_able_to(:view_metadata, dro) }
     it { is_expected.to be_able_to(:view_metadata, collection) }
@@ -140,7 +107,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
-    it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.not_to be_able_to(:create, AdminPolicy) }
 
     it { is_expected.not_to be_able_to(:view_metadata, dro) }
     it { is_expected.not_to be_able_to(:view_metadata, collection) }
@@ -155,7 +122,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
-    it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.not_to be_able_to(:create, AdminPolicy) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
   end
 
@@ -166,7 +133,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
-    it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.not_to be_able_to(:create, AdminPolicy) }
     it { is_expected.to be_able_to(:view_content, dro) }
   end
 end

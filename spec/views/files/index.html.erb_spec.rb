@@ -3,10 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'files/index' do
-  let(:admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
-
   before do
-    @file = instance_double(Cocina::Models::File, administrative: admin)
+    @file = build(:managed_file)
     @has_been_accessioned = true
     @last_accessioned_version = '7'
     params[:id] = 'M1090_S15_B01_F07_0106.jp2'

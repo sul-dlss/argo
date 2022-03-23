@@ -2,33 +2,15 @@
 
 # Represents a set of changes to a collection
 class CollectionChangeSet < ApplicationChangeSet
-  property :admin_policy_id, virtual: true
-  property :catkeys, virtual: true
-  property :copyright, virtual: true
-  property :license, virtual: true
-  property :use_statement, virtual: true
-  property :source_id, virtual: true
-  property :view_access, virtual: true
+  property :admin_policy_id
+  property :catkeys
+  property :copyright
+  property :license
+  property :use_statement
+  property :source_id
+  property :view_access
 
   def self.model_name
     ::ActiveModel::Name.new(nil, nil, 'Collection')
-  end
-
-  def id
-    model.externalIdentifier
-  end
-
-  # When the object is initialized, copy the properties from the cocina model to the form:
-  def setup_properties!(_options)
-    self.catkeys = Catkey.symphony_links(model) if model.identification
-    self.copyright = model.access.copyright
-    self.use_statement = model.access.useAndReproductionStatement
-    self.license = model.access.license
-    self.source_id = model.identification&.sourceId
-    self.view_access = model.access.view
-  end
-
-  def save_model
-    CollectionChangeSetPersister.update(model, self)
   end
 end

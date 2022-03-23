@@ -10,7 +10,7 @@ module Show
       end
 
       def render?
-        !@presenter.cocina.is_a? NilModel
+        @presenter.item
       end
 
       delegate :object_type, :created_date, :preservation_size, to: :@solr_document

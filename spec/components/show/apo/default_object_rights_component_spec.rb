@@ -4,25 +4,15 @@ require 'rails_helper'
 
 RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina) }
-  let(:cocina) do
-    Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bb663yf7144',
-                                    type: Cocina::Models::ObjectType.admin_policy,
-                                    label: 'An APO',
-                                    version: 1,
-                                    administrative: {
-                                      hasAdminPolicy: 'druid:hv992ry2431',
-                                      hasAgreement: 'druid:hp308wm0436',
-                                      accessTemplate: {
-                                        view: 'location-based',
-                                        download: 'location-based',
-                                        location: 'spec',
-                                        useAndReproductionStatement: 'Use and reproduction statement.',
-                                        copyright: 'This is the copyright.',
-                                        license: 'A license goes here.'
-                                      }
-                                    })
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, item: item) }
+  let(:item) do
+    build(:admin_policy).tap do |apo|
+      apo.access_template.use_statement = 'Use and reproduction statement.'
+      apo.access_template.copyright = 'This is the copyright.'
+      apo.access_template.license = 'A license goes here.'
+    end
   end
+
   let(:doc) do
     SolrDocument.new('id' => 'druid:bb663yf7144',
                      SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',

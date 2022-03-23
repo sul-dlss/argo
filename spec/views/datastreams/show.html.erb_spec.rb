@@ -6,7 +6,7 @@ RSpec.describe 'datastreams/show' do
   before do
     params[:id] = dsid
     allow(view).to receive(:can?).and_return(true)
-    @cocina = build(:dro)
+    @item = build(:item)
     @content = '<identityMetadata></identityMetadata>'
   end
 

@@ -15,17 +15,17 @@ module Show
       private
 
       def model
-        @presenter.cocina
+        @presenter.item
       end
 
       def manage_permissions
-        manage_role = model.administrative.roles&.find { |role| role.name == 'dor-apo-manager' }
+        manage_role = model.roles&.find { |role| role.name == 'dor-apo-manager' }
         managers = manage_role ? manage_role.members.map { |member| "#{member.type}:#{member.identifier}" } : []
         build_permissions(managers, 'manage')
       end
 
       def view_permissions
-        view_role = model.administrative.roles&.find { |role| role.name == 'dor-apo-viewer' }
+        view_role = model.roles&.find { |role| role.name == 'dor-apo-viewer' }
         viewers = view_role ? view_role.members.map { |member| "#{member.type}:#{member.identifier}" } : []
         build_permissions(viewers, 'view')
       end

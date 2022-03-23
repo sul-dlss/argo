@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Show::Item::OverviewComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, change_set: change_set, state_service: state_service) }
-  let(:change_set) { ItemChangeSet.new(cocina) }
-  let(:cocina) do
-    build(:dro)
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, item: item, change_set: change_set, state_service: state_service) }
+  let(:change_set) { ItemChangeSet.new(item) }
+  let(:item) do
+    build(:item)
   end
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }
@@ -32,23 +32,8 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   end
 
   context 'with a license set' do
-    let(:cocina) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.document,
-                              label: 'my dro',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'my dro' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {
-                                license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode'
-                              },
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              })
+    let(:item) do
+      build(:item, license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode')
     end
     let(:doc) do
       SolrDocument.new('id' => 'druid:kv840xx0000',

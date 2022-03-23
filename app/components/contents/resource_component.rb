@@ -2,6 +2,7 @@
 
 module Contents
   class ResourceComponent < ViewComponent::Base
+    # @param [FileSet] resource
     def initialize(resource:, resource_counter:, object_id:, viewable:)
       @resource = resource
       @resource_counter = resource_counter
@@ -23,10 +24,6 @@ module Contents
       resource.type.delete_prefix('https://cocina.sul.stanford.edu/models/resources/')
     end
 
-    delegate :label, to: :resource
-
-    def files
-      resource.structural.contains
-    end
+    delegate :label, :files, to: :resource
   end
 end

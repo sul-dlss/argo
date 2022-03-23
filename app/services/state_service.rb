@@ -9,9 +9,9 @@ class StateService
   STATES = Types::Symbol.enum(:unlock, :lock, :lock_inactive, :unlock_inactive)
   UNLOCKED_STATES = [STATES[:unlock], STATES[:unlock_inactive]].freeze
 
-  def initialize(cocina)
-    @druid = cocina.externalIdentifier
-    @version = cocina.version
+  def initialize(item)
+    @druid = item.id
+    @version = item.version
   end
 
   def allows_modification?

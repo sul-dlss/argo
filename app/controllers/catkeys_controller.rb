@@ -11,7 +11,7 @@ class CatkeysController < ApplicationController
   end
 
   def edit
-    @change_set = CatkeyForm.new(@cocina)
+    @change_set = CatkeyForm.new(@item)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -20,20 +20,20 @@ class CatkeysController < ApplicationController
   def update
     return unless enforce_versioning
 
-    form = CatkeyForm.new(@cocina)
+    form = CatkeyForm.new(@item)
     form.validate(catkey: update_params[:catkey].strip)
     form.save
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@item.id)
 
-    msg = "Catkey for #{@cocina.externalIdentifier} has been updated!"
-    redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
+    msg = "Catkey for #{@item.id} has been updated!"
+    redirect_to solr_document_path(@item.id), notice: msg
   end
 
   private
 
   def load_and_authorize_resource
-    @cocina = maybe_load_cocina(params[:item_id])
-    authorize! :manage_item, @cocina
+    @item = Repository.find(params[:item_id])
+    authorize! :manage_item, @item
   end
 
   def update_params

@@ -10,9 +10,9 @@ module ItemsHelper
     super.tap do |presenter|
       # rubocop:disable Rails/HelperInstanceVariable
       presenter.view_token = @verified_token_with_expiration if presenter.respond_to? :view_token
-      if presenter.respond_to? :cocina
-        presenter.cocina = @cocina
-        presenter.state_service = StateService.new(@cocina)
+      if presenter.respond_to? :item
+        presenter.item = @item
+        presenter.state_service = StateService.new(@item)
       end
       # rubocop:enable Rails/HelperInstanceVariable
     end

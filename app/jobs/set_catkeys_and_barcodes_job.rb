@@ -21,11 +21,11 @@ class SetCatkeysAndBarcodesJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count(count: update_druids.count)
       update_druids.each_with_index do |current_druid, i|
-        cocina_object = Dor::Services::Client.object(current_druid).find
+        item = Repository.find(current_druid)
         args = {}
         args[:catkeys] = catkeys[i] if catkeys
         args[:barcode] = barcodes[i] if barcodes
-        change_set = ItemChangeSet.new(cocina_object)
+        change_set = ItemChangeSet.new(item)
         change_set.validate(args)
         update_catkey_and_barcode(change_set, log) if change_set.changed?
       end
@@ -43,11 +43,11 @@ class SetCatkeysAndBarcodesJob < GenericJob
   private
 
   def update_catkey_and_barcode(change_set, log)
-    cocina_object = change_set.model
-    log.puts("#{Time.current} Beginning SetCatkeysAndBarcodesJob for #{cocina_object.externalIdentifier}")
+    item = change_set.model
+    log.puts("#{Time.current} Beginning SetCatkeysAndBarcodesJob for #{item.id}")
 
-    unless ability.can?(:manage_item, cocina_object)
-      log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
+    unless ability.can?(:manage_item, item)
+      log.puts("#{Time.current} Not authorized for #{item.id}")
       bulk_action.increment(:druid_count_fail).save
       return
     end
@@ -55,8 +55,8 @@ class SetCatkeysAndBarcodesJob < GenericJob
     log_update(change_set, log)
 
     begin
-      state_service = StateService.new(cocina_object)
-      open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(change_set)) unless state_service.allows_modification?
+      state_service = StateService.new(item)
+      open_new_version(item.id, item.version, version_message(change_set)) unless state_service.allows_modification?
       change_set.save
 
       bulk_action.increment(:druid_count_success).save

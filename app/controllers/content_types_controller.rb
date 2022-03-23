@@ -4,7 +4,7 @@ class ContentTypesController < ApplicationController
   before_action :load_and_authorize_resource
 
   def show
-    @form = ContentTypeForm.new(@cocina_object)
+    @form = ContentTypeForm.new(@item)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -15,7 +15,7 @@ class ContentTypesController < ApplicationController
     # if this object has been submitted and doesnt have an open version, they cannot change it.
     return unless enforce_versioning
 
-    form = ContentTypeForm.new(@cocina)
+    form = ContentTypeForm.new(@item)
     if form.validate(params[:content_type])
       form.save
       redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
@@ -31,7 +31,7 @@ class ContentTypesController < ApplicationController
   end
 
   def load_and_authorize_resource
-    @cocina = Dor::Services::Client.object(params[:item_id]).find
-    authorize! :manage_item, @cocina
+    @item = Repository.find(params[:item_id])
+    authorize! :manage_item, @item
   end
 end
