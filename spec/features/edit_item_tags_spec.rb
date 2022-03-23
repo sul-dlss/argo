@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Edit administrative tags for a single item', js: true do
   let(:user) { create(:user) }
   let(:item) do
-    FactoryBot.create_for_repository(:item)
+    FactoryBot.create_for_repository(:persisted_item)
   end
 
   let(:first_new_tag) { 'cow : pig' }

@@ -25,20 +25,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
     let(:allows_modification) { true }
     let(:instance_args) { { copyright: copyright_statement } }
     let(:cocina_object) do
-      Cocina::Models::DRO.new(
-        externalIdentifier: 'druid:bc123df4568',
-        label: 'test',
-        type: Cocina::Models::ObjectType.object,
-        version: 1,
-        description: {
-          title: [{ value: 'test' }],
-          purl: 'https://purl.stanford.edu/bc123df4567'
-        },
-        access: {},
-        identification: {},
-        structural: {},
-        administrative: { hasAdminPolicy: 'druid:bc123df4569' }
-      )
+      build_for_repository(:item)
     end
     let(:copyright_statement) { 'the new hotness' }
     let(:fake_state_service) { instance_double(StateService, allows_modification?: allows_modification) }
@@ -92,19 +79,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
 
       context 'with a collection' do
         let(:cocina_object) do
-          Cocina::Models::Collection.new(
-            externalIdentifier: 'druid:bc123df4568',
-            label: 'test',
-            type: Cocina::Models::ObjectType.collection,
-            description: {
-              title: [{ value: 'test' }],
-              purl: 'https://purl.stanford.edu/bc123df4567'
-            },
-            version: 1,
-            identification: {},
-            access: {},
-            administrative: { hasAdminPolicy: 'druid:bc123df4569' }
-          )
+          build_for_repository(:collection)
         end
 
         it 'updates via collection change set persister' do
@@ -116,17 +91,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
 
     context 'with an unsupported object type' do
       let(:cocina_object) do
-        Cocina::Models::AdminPolicy.new(
-          externalIdentifier: 'druid:bc123df4570',
-          label: 'test',
-          type: Cocina::Models::ObjectType.admin_policy,
-          version: 1,
-          administrative: {
-            hasAdminPolicy: 'druid:bc123df4570',
-            hasAgreement: 'druid:hp308wm0436',
-            accessTemplate: { view: 'world', download: 'world' }
-          }
-        )
+        build_for_repository(:apo)
       end
 
       it 'raises' do

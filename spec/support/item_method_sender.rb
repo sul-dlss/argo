@@ -18,4 +18,8 @@ class ItemMethodSender
   def collection_id=(collection_id)
     @cocina_model = @cocina_model.new(structural: Cocina::Models::DROStructural.new(isMemberOf: [collection_id]))
   end
+
+  def license=(license)
+    @cocina_model = @cocina_model.new(access: @cocina_model.access.new(license: license))
+  end
 end

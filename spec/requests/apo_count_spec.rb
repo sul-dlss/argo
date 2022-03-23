@@ -20,8 +20,8 @@ RSpec.describe 'Count the members of an apo' do
 
   describe 'counting the collection members' do
     before do
-      FactoryBot.create_for_repository(:collection)
-      FactoryBot.create_for_repository(:collection)
+      FactoryBot.create_for_repository(:persisted_collection)
+      FactoryBot.create_for_repository(:persisted_collection)
     end
 
     it 'returns the count' do
@@ -41,8 +41,8 @@ RSpec.describe 'Count the members of an apo' do
 
   describe 'counting the item members' do
     before do
-      FactoryBot.create_for_repository(:item)
-      FactoryBot.create_for_repository(:item)
+      FactoryBot.create_for_repository(:persisted_item)
+      FactoryBot.create_for_repository(:persisted_item)
     end
 
     it 'returns the count' do

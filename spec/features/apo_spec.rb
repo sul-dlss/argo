@@ -10,7 +10,7 @@ RSpec.describe 'Create an apo', js: true do
   # An Agreement object must exist to populate the dropdown on the form
   let(:agreement) { FactoryBot.create_for_repository(:agreement) }
   let!(:preexisting_collection) do
-    FactoryBot.create_for_repository(:collection,
+    FactoryBot.create_for_repository(:persisted_collection,
                                      label: 'Another type of collection',
                                      title: 'Another type of collection',
                                      admin_policy_id: agreement.administrative.hasAdminPolicy)
