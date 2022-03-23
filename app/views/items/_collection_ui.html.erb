@@ -2,7 +2,7 @@
   <% if response_message %>
     <div class="alert alert-info"><%= response_message %></div>
   <% end %>
-  
+
   <% unless @collection_list.empty? %>
     <div class='panel panel-default'>
       <div class='panel-heading'>
@@ -13,7 +13,7 @@
           <% @collection_list.each do |collection| %>
             <%= render 'collection_ui_line_item', collection_label: collection.label,
                                                   collection_id: collection.externalIdentifier,
-                                                  item_id: @cocina.externalIdentifier %>
+                                                  item_id: @item.id %>
           <% end %>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <h3 class="panel-title">Add a collection</h3>
     </div>
     <div class='panel-body'>
-      <%= form_tag add_collection_item_path(@cocina.externalIdentifier) do %>
+      <%= form_tag add_collection_item_path(@item) do %>
         <div class='mb-3'>
           <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-select' %>
         </div>

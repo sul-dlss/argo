@@ -15,14 +15,12 @@ RSpec.describe 'Draw the edit datastream form' do
 
   context 'for content managers' do
     let(:object_client) do
-      instance_double(Dor::Services::Client::Object,
-                      find: cocina_model,
-                      metadata: metadata_client)
+      instance_double(Dor::Services::Client::Object, metadata: metadata_client)
     end
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:bc123df4567') }
 
     before do
+      allow(Repository).to receive(:find).and_return(build(:item))
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(metadata_client).to receive(:datastream).with('descMetadata').and_return('<descMetadata></descMetadata>')
 
@@ -34,18 +32,6 @@ RSpec.describe 'Draw the edit datastream form' do
     end
 
     context 'when dsa returns a cocina model' do
-      it 'authorizes the view' do
-        get '/items/druid:bc123df4567/datastreams/descMetadata/edit', xhr: true
-        expect(response).to have_http_status(:success)
-        expect(response.body).to include('Update Datastream')
-      end
-    end
-
-    context 'when dsa returns an UnexpectedResponse' do
-      before do
-        allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
-      end
-
       it 'authorizes the view' do
         get '/items/druid:bc123df4567/datastreams/descMetadata/edit', xhr: true
         expect(response).to have_http_status(:success)

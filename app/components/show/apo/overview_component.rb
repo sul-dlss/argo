@@ -7,11 +7,11 @@ module Show
       def initialize(presenter:)
         @presenter = presenter
         @solr_document = presenter.document
-        @registration_workflow = presenter.cocina.administrative.registrationWorkflow
+        @registration_workflows = presenter.item.registration_workflows
       end
 
       def registration_workflow
-        @registration_workflow.present? ? @registration_workflow.join(', ') : 'None'
+        @registration_workflows.present? ? @registration_workflows.join(', ') : 'None'
       end
 
       delegate :id, :status, to: :@solr_document

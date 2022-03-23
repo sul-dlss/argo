@@ -32,9 +32,9 @@ class ContentTypeForm < ApplicationChangeSet
 
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    return unless model.respond_to?(:structural)
+    return unless model.is_a? Item
 
-    self.old_resource_type = Constants::RESOURCE_TYPES.key(model.structural.contains.first&.type)
+    self.old_resource_type = Constants::RESOURCE_TYPES.key(model.file_sets.first&.type)
     self.new_resource_type = old_resource_type
     self.viewing_direction = model.structural.hasMemberOrders.first&.viewingDirection
   end
@@ -68,9 +68,9 @@ class ContentTypeForm < ApplicationChangeSet
   end
 
   def structural_with_resource_type_changes
-    model.structural.new(
+    cocina_structural.new(
       hasMemberOrders: member_orders,
-      contains: model.structural.contains.map do |resource|
+      contains: cocina_structural.contains.map do |resource|
         next resource unless resource.type == old_resource_type
 
         resource.new(type: new_resource_type)
@@ -80,8 +80,12 @@ class ContentTypeForm < ApplicationChangeSet
 
   def resource_types_should_change?
     new_resource_type.present? &&
-      model.structural.contains
-           .map(&:type)
-           .any? { |resource_type| resource_type == old_resource_type }
+      cocina_structural.contains
+                       .map(&:type)
+                       .any? { |resource_type| resource_type == old_resource_type }
+  end
+
+  def cocina_structural
+    model.model.structural
   end
 end

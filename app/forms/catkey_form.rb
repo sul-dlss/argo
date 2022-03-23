@@ -5,18 +5,12 @@ class CatkeyForm < ApplicationChangeSet
 
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    self.catkey = Catkey.symphony_links(model).join(', ')
+    self.catkey = model.catkeys.join(', ')
   end
 
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
-  def save_model
-    return unless changed?(:catkey)
-
-    updated = model
-    identification_props = updated.identification.new(catalogLinks: Catkey.serialize(model, catkey.split(/\s*,\s*/)))
-    updated = updated.new(identification: identification_props)
-
-    Repository.store(updated)
+  def sync
+    model.catkeys = catkey.split(/\s*,\s*/) if changed?(:catkey)
   end
 end

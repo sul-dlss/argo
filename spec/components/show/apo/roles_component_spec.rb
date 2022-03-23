@@ -3,21 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe Show::Apo::RolesComponent, type: :component do
-  let(:presenter) { instance_double(ArgoShowPresenter, cocina: apo) }
+  let(:presenter) { instance_double(ArgoShowPresenter, item: apo) }
   let(:component) { described_class.new(presenter: presenter) }
   let(:rendered) { render_inline(component) }
 
   let(:apo) do
-    build(:admin_policy).new(administrative: administrative)
-  end
-
-  let(:administrative) do
-    {
-      hasAdminPolicy: 'druid:xx666zz7777',
-      hasAgreement: 'druid:hp308wm0436',
-      accessTemplate: { view: 'world', download: 'world' },
-      roles: [
-        {
+    build(:admin_policy).tap do |ap|
+      ap.roles = [
+        Cocina::Models::AccessRole.new(
           members: [
             { identifier: 'dlss:developers', type: 'workgroup' },
             { identifier: 'dlss:pmag-staff', type: 'workgroup' },
@@ -26,9 +19,9 @@ RSpec.describe Show::Apo::RolesComponent, type: :component do
             { identifier: 'dlss:argo-access-spec', type: 'workgroup' }
           ],
           name: 'dor-apo-manager'
-        }
+        )
       ]
-    }
+    end
   end
 
   it 'has the value' do

@@ -30,4 +30,33 @@ FactoryBot.define do
 
     type { Cocina::Models::ObjectType.admin_policy }
   end
+
+  factory :admin_policy do
+    initialize_with do
+      new(
+        Cocina::Models.build({
+                               externalIdentifier: id,
+                               type: type,
+                               label: label,
+                               version: 1,
+                               administrative: {
+                                 hasAdminPolicy: admin_policy_id,
+                                 hasAgreement: agreement_id,
+                                 accessTemplate: {
+                                   view: 'world',
+                                   download: 'world'
+                                 }
+                               }
+                             })
+      )
+    end
+
+    id { 'druid:bc234fg5678' }
+    version { 1 }
+    admin_policy_id { 'druid:hv992ry2431' }
+    agreement_id { 'druid:hp308wm0436' }
+
+    label { 'test apo' }
+    type { Cocina::Models::ObjectType.admin_policy }
+  end
 end

@@ -2,8 +2,8 @@
   <% component.header { 'Create Collection' } %>
   <% component.body do %>
     <div data-controller="collection-editor">
-      <h4>APO &mdash; <%= @cocina.label %></h4>
-      <%= form_tag apo_collections_path(@cocina.externalIdentifier) do %>
+      <h4>APO &mdash; <%= @item.label %></h4>
+      <%= form_tag apo_collections_path(@item.id) do %>
         <div class="mb-3" style="padding-left:20px">
           <div class="form-check">
             <label class="form-check-label" for="from-title">
@@ -67,7 +67,7 @@
 
         <% if !request.xhr? %>
           <div class="mb-3">
-            <%= button_to 'Cancel', solr_document_path(@cocina.externalIdentifier), method: :get, class: 'btn btn-secondary' %>
+            <%= button_to 'Cancel', solr_document_path(@item.id), method: :get, class: 'btn btn-secondary' %>
           </div>
         <% end %>
       <% end %>

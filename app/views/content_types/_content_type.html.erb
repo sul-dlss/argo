@@ -2,7 +2,7 @@
 <p><%= I18n.t('argo.content_type.suggeted_mappings').html_safe %></p>
 <p>More complex updates should be executed by hand on the datastream XML.</p>
 
-<%= form_with model: @form, url: item_content_type_path(item_id: @cocina.externalIdentifier),
+<%= form_with model: @form, url: item_content_type_path(item_id: @item.id),
               method: :patch,
               data: { controller: 'content-type' } do |f| %>
   <div class='mb-3'>

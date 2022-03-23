@@ -32,4 +32,38 @@ FactoryBot.define do
       type { Cocina::Models::ObjectType.agreement }
     end
   end
+
+  factory :item do
+    initialize_with do
+      new(
+        Cocina::Models.build({
+                               externalIdentifier: id,
+                               type: type,
+                               label: label,
+                               version: 1,
+                               description: {
+                                 title: [{ value: title }],
+                                 purl: purl
+                               },
+                               identification: {
+                                 sourceId: source_id
+                               },
+                               administrative: {
+                                 hasAdminPolicy: admin_policy_id
+                               },
+                               access: {},
+                               structural: {}
+                             })
+      )
+    end
+
+    id { 'druid:bc234fg5678' }
+    version { 1 }
+    admin_policy_id { 'druid:hv992ry2431' }
+    source_id { "sul:#{SecureRandom.uuid}" }
+    label { 'test object' }
+    type { Cocina::Models::ObjectType.object }
+    title { 'my dro' }
+    purl { 'https://purl.stanford.edu/bc234fg5678' }
+  end
 end

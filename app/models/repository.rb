@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
 class Repository
-  # @param [String] id the identifier for the item to be found
-  # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy,NilModel] cocina model instance corresponding to the given druid
-  # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the given object ID
+  class NotCocina < StandardError; end
+
   def self.find(id)
     raise ArgumentError, 'Missing identifier' unless id
 
-    maybe_load_cocina(id)
+    cocina = maybe_load_cocina(id)
+    raise NotCocina, 'Unable to retrieve the cocina model' if cocina.is_a? NilModel
+
+    klass = if cocina.collection?
+              Collection
+            elsif cocina.admin_policy?
+              AdminPolicy
+            else
+              Item
+            end
+    @item = klass.new(cocina)
   end
 
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request

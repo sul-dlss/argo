@@ -2,42 +2,40 @@
 
 # dispatches to the dor-services-app to (re/un)publish
 class StructuresController < ApplicationController
-  before_action :load_and_authorize_cocina, only: :update
+  before_action :load_and_authorize_resource, only: :update
   before_action :enforce_versioning, only: :update
 
   def show
     respond_to do |format|
       format.csv do
         # Download the structural spreadsheet
-        load_and_authorize_cocina
-        filename = "structure-#{Druid.new(@cocina).without_namespace}.csv"
-        send_data StructureSerializer.as_csv(@cocina.structural), filename: filename
+        load_and_authorize_resource
+        filename = "structure-#{Druid.new(@item.id).without_namespace}.csv"
+        send_data StructureSerializer.as_csv(@item.structural), filename: filename
       end
       format.html do
         # Lazy loading of the structural part of the show page
-        @cocina_item = Repository.find(decrypted_token.fetch(:key))
+        @item = Repository.find(decrypted_token.fetch(:key))
       end
     end
   end
 
   def update
-    authorize! :manage_item, @cocina
-
-    status = StructureUpdater.from_csv(@cocina, params[:csv].read)
+    status = StructureUpdater.from_csv(@item, params[:csv].read)
 
     if status.success?
-      Repository.store(@cocina.new(structural: status.value!))
-      redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Structural metadata updated'
+      Repository.store(@item.new(structural: status.value!))
+      redirect_to solr_document_path(@item.id), status: :see_other, notice: 'Structural metadata updated'
     else
-      redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: status.failure.join('\n') }
+      redirect_to solr_document_path(@item.id), flash: { error: status.failure.join('\n') }
     end
   end
 
   private
 
-  def load_and_authorize_cocina
-    @cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, @cocina
+  def load_and_authorize_resource
+    @item = Repository.find(params[:item_id])
+    authorize! :manage_item, @item
   end
 
   # decode the token that grants view access

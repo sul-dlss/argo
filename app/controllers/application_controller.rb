@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
 
   layout :determine_layout
 
-  def allows_modification?(cocina_object)
-    state_service = StateService.new(cocina_object)
+  def allows_modification?(item)
+    state_service = StateService.new(item)
     state_service.allows_modification?
   end
 
@@ -36,13 +36,11 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def enforce_versioning
-    return redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
-
+  def enforce_versioning(item = @item)
     # if this object has been submitted and doesn't have an open version, they cannot change it.
-    return true if allows_modification?(@cocina)
+    return true if allows_modification?(item)
 
-    redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Object cannot be modified in its current state.' }
+    redirect_to solr_document_path(item.id), flash: { error: 'Object cannot be modified in its current state.' }
     false
   end
 end

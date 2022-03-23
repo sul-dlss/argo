@@ -17,14 +17,14 @@ class ApoController < ApplicationController
   end
 
   def new
-    authorize! :create, Cocina::Models::AdminPolicy
+    authorize! :create, AdminPolicy
     @form = ApoForm.new(nil, search_service: search_service)
 
     render layout: 'one_column'
   end
 
   def create
-    authorize! :create, Cocina::Models::AdminPolicy
+    authorize! :create, AdminPolicy
     @form = ApoForm.new(nil, search_service: search_service)
     unless @form.validate(params.require(:apo).to_unsafe_h.merge(registered_by: current_user.login))
       respond_to do |format|

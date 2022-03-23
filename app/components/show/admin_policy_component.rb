@@ -8,6 +8,6 @@ module Show
 
     attr_reader :presenter
 
-    delegate :document, :cocina, :view_token, to: :presenter
+    delegate :document, :item, :view_token, to: :presenter
   end
 end

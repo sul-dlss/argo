@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ContentsComponent, type: :component do
   let(:presenter) do
     instance_double(ArgoShowPresenter,
-                    document: solr_doc, cocina: cocina,
+                    document: solr_doc, item: item,
                     view_token: 'skret-t0k3n',
                     state_service: state_service)
   end
@@ -18,7 +18,7 @@ RSpec.describe ContentsComponent, type: :component do
     let(:solr_doc) do
       SolrDocument.new(id: 'druid:bb000zn0114')
     end
-    let(:cocina) { build(:dro) }
+    let(:item) { build(:item) }
 
     before do
       allow(controller).to receive(:can?).and_return(true)

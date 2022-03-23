@@ -17,10 +17,10 @@ RSpec.describe SetSourceIdsCsvJob do
   end
   let(:log_buffer) { StringIO.new }
   let(:item1) do
-    build(:dro, id: druids[0], source_id: 'sul:36105014757519')
+    build(:item, id: druids[0], source_id: 'sul:36105014757519')
   end
   let(:item2) do
-    build(:dro, id: druids[1], source_id: 'sul:36105014757510')
+    build(:item, id: druids[1], source_id: 'sul:36105014757510')
   end
   let(:item3) do
     build(:collection, id: druids[2], source_id: 'sul:1234')
@@ -35,9 +35,9 @@ RSpec.describe SetSourceIdsCsvJob do
     ].join("\n")
   end
 
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, update: true) }
-  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3, update: true) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, update: true) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, update: true) }
+  let(:object_client3) { instance_double(Dor::Services::Client::Object, update: true) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   before do
@@ -48,6 +48,9 @@ RSpec.describe SetSourceIdsCsvJob do
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
+    allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
+    allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
+    allow(Repository).to receive(:find).with(druids[2]).and_return(item3)
   end
 
   describe '#perform' do
@@ -100,9 +103,7 @@ RSpec.describe SetSourceIdsCsvJob do
 
       context 'when an exception is raised' do
         before do
-          allow(object_client1).to receive(:find).and_raise(StandardError, 'ruh roh')
-          allow(object_client2).to receive(:find).and_raise(StandardError, 'ruh roh')
-          allow(object_client3).to receive(:find).and_raise(StandardError, 'ruh roh')
+          allow(Repository).to receive(:find).and_raise(StandardError, 'ruh roh')
           job.perform(bulk_action.id,
                       csv_file: csv_file,
                       groups: groups,

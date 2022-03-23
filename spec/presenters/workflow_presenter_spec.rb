@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe WorkflowPresenter do
   subject(:presenter) do
-    described_class.new(view: stub_view, workflow_status: workflow_status, cocina_object: item)
+    described_class.new(view: stub_view, workflow_status: workflow_status, item: item)
   end
 
   let(:stub_view) { double('view') }
   let(:workflow_status) { instance_double(WorkflowStatus, process_statuses: process_statuses) }
   let(:workflow_name) { 'accessionWF' }
-  let(:item) { instance_double(Cocina::Models::DRO) }
+  let(:item) { build(:item) }
 
   describe '#processes' do
     subject { presenter.processes }

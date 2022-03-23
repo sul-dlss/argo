@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'collections/new', type: :view do
   it 'renders the HTML template form' do
-    assign(:cocina, instance_double(Cocina::Models::AdminPolicy, externalIdentifier: 'druid:zt570qh4444', label: 'My label'))
+    @item = build(:admin_policy)
     render
     expect(rendered).to have_field 'collection_title'
     expect(rendered).to have_field 'collection_abstract'

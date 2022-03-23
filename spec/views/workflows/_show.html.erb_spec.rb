@@ -25,7 +25,7 @@ RSpec.describe 'workflows/_show' do
                     druid: druid,
                     workflow_name: workflow_name,
                     processes: [process_status],
-                    cocina_object: nil)
+                    item: nil)
   end
 
   before do

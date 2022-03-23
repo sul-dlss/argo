@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe CollectionChangeSetPersister do
+RSpec.describe CollectionPersister do
   describe '.update' do
-    let(:change_set) { instance_double(CollectionChangeSet) }
+    let(:entity) { build(:collection) }
     let(:instance) { instance_double(described_class, update: nil) }
     let(:model) { instance_double(Cocina::Models::Collection) }
 
     before do
       allow(described_class).to receive(:new).and_return(instance)
-      described_class.update(model, change_set)
+      described_class.update(model, entity)
     end
 
     it 'calls #update on a new instance' do
@@ -21,9 +21,9 @@ RSpec.describe CollectionChangeSetPersister do
   describe '#update' do
     let(:copyright_statement_before) { 'My First Copyright Statement' }
     let(:instance) do
-      described_class.new(model, change_set)
+      described_class.new(model, entity)
     end
-    let(:change_set) { CollectionChangeSet.new(model) }
+    let(:entity) { build(:collection) }
     let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
       Cocina::Models::Collection.new(
@@ -52,7 +52,7 @@ RSpec.describe CollectionChangeSetPersister do
 
     context 'when change set has changed copyright statement' do
       before do
-        change_set.validate(copyright: new_copyright_statement)
+        entity.copyright = new_copyright_statement
         instance.update
       end
 
@@ -73,7 +73,7 @@ RSpec.describe CollectionChangeSetPersister do
 
     context 'when change set has changed license' do
       before do
-        change_set.validate(license: new_license)
+        entity.license = new_license
         instance.update
       end
 
@@ -94,7 +94,7 @@ RSpec.describe CollectionChangeSetPersister do
 
     context 'when change set has changed use statement' do
       before do
-        change_set.validate(use_statement: new_use_statement)
+        entity.use_statement = new_use_statement
         instance.update
       end
 
@@ -133,7 +133,7 @@ RSpec.describe CollectionChangeSetPersister do
 
     context 'when change set has changed APO' do
       before do
-        change_set.validate(admin_policy_id: new_apo)
+        entity.admin_policy_id = new_apo
         instance.update
       end
 

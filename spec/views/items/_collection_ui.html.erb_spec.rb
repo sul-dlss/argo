@@ -13,7 +13,7 @@ RSpec.describe 'items/_collection_ui.html.erb' do
   end
 
   before do
-    @cocina = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
+    @item = build(:item)
     assign(:collection_list, collection_list)
     allow(view).to receive(:current_user).and_return(current_user)
   end

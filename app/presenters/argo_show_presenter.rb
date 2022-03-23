@@ -10,14 +10,14 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
   end
 
   def change_set
-    cocina.collection? ? CollectionChangeSet.new(cocina) : ItemChangeSet.new(cocina)
+    item.is_a?(Collection) ? CollectionChangeSet.new(item) : ItemChangeSet.new(item)
   end
 
   def id
-    cocina.externalIdentifier
+    item.externalIdentifier
   end
 
   delegate :allows_modification?, to: :state_service
 
-  attr_accessor :cocina, :view_token, :state_service
+  attr_accessor :item, :view_token, :state_service
 end

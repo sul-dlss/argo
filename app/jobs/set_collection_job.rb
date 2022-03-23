@@ -23,7 +23,7 @@ class SetCollectionJob < GenericJob
         cocina_object = cocina_object.new(version: new_version.to_i)
       end
 
-      change_set = ItemChangeSet.new(cocina_object)
+      change_set = ItemChangeSet.new(Item.new(cocina_object))
       change_set.validate(collection_ids: new_collection_ids)
       change_set.save
 

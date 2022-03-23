@@ -2,18 +2,18 @@
 
 class ContentsComponent < ApplicationComponent
   def initialize(presenter:)
+    @item = presenter.item
     @document = presenter.document
-    @cocina = presenter.cocina
     @state_service = presenter.state_service
     @view_token = presenter.view_token
   end
 
   def render?
-    @cocina.respond_to?(:structural)
+    @item.is_a? Item
   end
 
   def number_of_file_sets
-    @cocina.structural.contains.size
+    @item.file_sets.size
   end
 
   delegate :allows_modification?, to: :@state_service

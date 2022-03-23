@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe ItemChangeSetPersister do
+RSpec.describe ItemPersister do
   describe '.update' do
-    let(:change_set) { instance_double(ItemChangeSet) }
+    let(:entity) { instance_double(Item) }
     let(:instance) { instance_double(described_class, update: nil) }
     let(:model) { instance_double(Cocina::Models::DRO) }
 
     before do
       allow(described_class).to receive(:new).and_return(instance)
-      described_class.update(model, change_set)
+      described_class.update(model, entity)
     end
 
     it 'calls #update on a new instance' do
@@ -21,7 +21,7 @@ RSpec.describe ItemChangeSetPersister do
   describe '#update' do
     let(:copyright_statement_before) { 'My First Copyright Statement' }
     let(:instance) do
-      described_class.new(model, change_set)
+      described_class.new(model, entity)
     end
     let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
@@ -51,17 +51,17 @@ RSpec.describe ItemChangeSetPersister do
     let(:use_statement_before) { 'My First Use Statement' }
     let(:barcode_before) { '36105014757517' }
     let(:catkey_before) { '367268' }
-    let(:change_set) { ItemChangeSet.new(model) }
+    let(:entity) { Item.new(model) }
 
     before do
       allow(Repository).to receive(:store)
     end
 
-    context 'when change set has changed copyright statement' do
+    context 'when entity has changed copyright statement' do
       let(:new_copyright_statement) { 'A Changed Copyright Statement' }
 
       before do
-        change_set.validate(copyright: new_copyright_statement)
+        entity.copyright = new_copyright_statement
         instance.update
       end
 
@@ -82,7 +82,7 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' }
 
       before do
-        change_set.validate(license: new_license)
+        entity.license = new_license
         instance.update
       end
 
@@ -103,7 +103,7 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_use_statement) { 'A Changed Use Statement' }
 
       before do
-        change_set.validate(use_statement: new_use_statement)
+        entity.use_statement = new_use_statement
         instance.update
       end
 
@@ -147,8 +147,9 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       before do
-        change_set.validate(embargo_release_date: new_embargo_release_date,
-                            embargo_access: 'stanford')
+        entity.embargo.view_access = 'stanford'
+        entity.embargo.download_access = 'stanford'
+        entity.embargo.release_date = new_embargo_release_date
         instance.update
       end
 
@@ -198,7 +199,11 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       before do
-        change_set.validate(embargo_release_date: new_embargo_release_date, embargo_access: 'stanford')
+        entity.embargo = Embargo.new(
+          Cocina::Models::Embargo.new(view: 'stanford',
+                                      download: 'stanford',
+                                      releaseDate: new_embargo_release_date)
+        )
         instance.update
       end
 
@@ -242,7 +247,7 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_use_statement) { 'A Changed Use Statement' }
 
       before do
-        change_set.validate(use_statement: new_use_statement)
+        entity.use_statement = new_use_statement
         instance.update
       end
 
@@ -280,7 +285,7 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_barcode) { '36105014757518' }
 
       before do
-        change_set.validate(barcode: new_barcode)
+        entity.barcode = new_barcode
         instance.update
       end
 
@@ -298,7 +303,7 @@ RSpec.describe ItemChangeSetPersister do
 
     context 'when change set has removed barcode' do
       before do
-        change_set.validate(barcode: nil)
+        entity.barcode = nil
         instance.update
       end
 
@@ -318,7 +323,7 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_catkeys) { ['367269'] }
 
       before do
-        change_set.validate(catkeys: new_catkeys)
+        entity.catkeys = new_catkeys
         instance.update
       end
 
@@ -339,7 +344,7 @@ RSpec.describe ItemChangeSetPersister do
 
     context 'when change set has removed catkey' do
       before do
-        change_set.validate(catkeys: [])
+        entity.catkeys = []
         instance.update
       end
 
@@ -357,7 +362,7 @@ RSpec.describe ItemChangeSetPersister do
 
     context 'when change set has changed APO' do
       before do
-        change_set.validate(admin_policy_id: new_apo)
+        entity.admin_policy_id = new_apo
         instance.update
       end
 

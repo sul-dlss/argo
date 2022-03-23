@@ -2,16 +2,15 @@
 
 module Contents
   class StructuralComponent < ViewComponent::Base
-    # @param [Cocina::Models::DroStructural] structural
-    # @param [String] object_id the identifier of the object
+    # @param [Item] item
     # @param [Bool] viewable if true the user will be presented with a link to download files
-    def initialize(structural:, object_id:, viewable:)
-      @structural = structural
+    def initialize(item:, viewable:)
+      @item = item
       @viewable = viewable
-      @object_id = object_id
+      @object_id = item.id
     end
 
-    attr_reader :structural, :object_id
+    attr_reader :item, :object_id
 
     def viewable?
       @viewable

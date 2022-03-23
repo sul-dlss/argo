@@ -77,7 +77,7 @@ class DatastreamsController < ApplicationController
   def show_aspect
     druid = Druid.new(params[:item_id]).with_namespace
     @response, @document = search_service.fetch druid # this does the authorization
-    @cocina = Repository.find(druid)
+    @item = Repository.find(druid)
     @object_client = Dor::Services::Client.object(druid)
   end
 end

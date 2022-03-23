@@ -36,18 +36,21 @@ RSpec.describe SetCollectionJob do
         new_collection_id: new_collection_id
       }.with_indifferent_access
     end
-    let(:cocina1) do
-      build(:dro, id: druids[0])
+    let(:item1) do
+      build(:item, id: druids[0])
     end
-    let(:cocina2) do
-      build(:dro, id: druids[1])
+    let(:item2) do
+      build(:item, id: druids[1])
     end
-    let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
-    let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }
+    let(:object_client1) { instance_double(Dor::Services::Client::Object, update: true) }
+    let(:object_client2) { instance_double(Dor::Services::Client::Object, update: true) }
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     context 'with authorization' do
       before do
+        allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
+        allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
+
         allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
         allow(StateService).to receive(:new).and_return(state_service)
