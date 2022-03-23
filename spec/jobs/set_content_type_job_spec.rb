@@ -37,11 +37,13 @@ RSpec.describe SetContentTypeJob, type: :job do
                            structural: { contains: [{ type: Cocina::Models::FileSetType.page,
                                                       label: 'Book page',
                                                       version: 1,
-                                                      externalIdentifier: 'abc123456' },
+                                                      externalIdentifier: 'abc123456',
+                                                      structural: {} },
                                                     { type: Cocina::Models::FileSetType.image,
                                                       label: 'Book page 2',
                                                       version: 1,
-                                                      externalIdentifier: 'abc789012' }] },
+                                                      externalIdentifier: 'abc789012',
+                                                      structural: {} }] },
                            identification: {}
                          })
   end
@@ -60,7 +62,8 @@ RSpec.describe SetContentTypeJob, type: :job do
                            structural: { contains: [{ type: Cocina::Models::FileSetType.file,
                                                       label: 'Map label',
                                                       version: 1,
-                                                      externalIdentifier: 'xyz012345' }] },
+                                                      externalIdentifier: 'xyz012345',
+                                                      structural: {} }] },
                            identification: {}
                          })
   end
@@ -75,7 +78,8 @@ RSpec.describe SetContentTypeJob, type: :job do
                              purl: 'https://purl.stanford.edu/bc234fg5678'
                            },
                            access: {},
-                           administrative: { hasAdminPolicy: 'druid:cg532dg5405' }
+                           administrative: { hasAdminPolicy: 'druid:cg532dg5405' },
+                           identification: {}
                          })
   end
 

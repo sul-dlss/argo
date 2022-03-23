@@ -56,6 +56,7 @@ RSpec.describe 'Release history' do
                                   }
                                 ]
                               },
+                              identification: {},
                               structural: {
                                 contains: []
                               })

@@ -36,6 +36,7 @@ RSpec.describe 'Collection manage release' do
                              'title' => [{ 'value' => 'The model' }],
                              'purl' => "https://purl.stanford.edu/#{collection_id.delete_prefix('druid:')}"
                            },
+                           'identification' => {},
                            'administrative' => { hasAdminPolicy: uber_apo_id },
                            'access' => {}
                          })

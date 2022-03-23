@@ -42,13 +42,14 @@ RSpec.describe CocinaHashPresenter do
             ],
             purl: 'https://purl.stanford.edu/zt570qh4444'
           },
+          identification: {},
           access: {}
         )
       end
 
       # NOTE: You might not see an empty e.g. `structuredValue` array above, but it's there in the instance
       it 'removes empty descriptive elements' do
-        expect(rendered).to eq(cocinaVersion: '0.69.2',
+        expect(rendered).to eq(cocinaVersion: Cocina::Models::VERSION,
                                type: 'https://cocina.sul.stanford.edu/models/collection',
                                externalIdentifier: 'druid:zt570qh4444',
                                label: 'My title',
@@ -59,6 +60,9 @@ RSpec.describe CocinaHashPresenter do
                                administrative: {
                                  hasAdminPolicy: 'druid:hv992ry2431',
                                  releaseTags: []
+                               },
+                               identification: {
+                                 catalogLinks: []
                                },
                                description: {
                                  title: [

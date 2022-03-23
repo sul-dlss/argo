@@ -44,6 +44,7 @@ RSpec.describe 'Collection membership', type: :request do
                                'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                              },
                              'access' => {},
+                             'identification' => {},
                              'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                              'structural' => structural
                            })
@@ -74,6 +75,7 @@ RSpec.describe 'Collection membership', type: :request do
                                  },
                                  'access' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                                 'identification' => {},
                                  'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
                                })
         end
@@ -103,6 +105,7 @@ RSpec.describe 'Collection membership', type: :request do
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
+                                 'identification' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => { 'isMemberOf' => ['druid:bc555gh3434'] }
                                })
@@ -141,6 +144,7 @@ RSpec.describe 'Collection membership', type: :request do
                                'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                              },
                              'access' => {},
+                             'identification' => {},
                              'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                              'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
                            })
@@ -170,6 +174,7 @@ RSpec.describe 'Collection membership', type: :request do
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
+                                 'identification' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
                                })
@@ -194,6 +199,7 @@ RSpec.describe 'Collection membership', type: :request do
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
+                                 'identification' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => {}
                                })

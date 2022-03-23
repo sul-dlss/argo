@@ -68,6 +68,7 @@ RSpec.describe 'Set catkey' do
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
+                                 'identification' => {},
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                                })
         end
@@ -167,6 +168,7 @@ RSpec.describe 'Set catkey' do
                                  'access' => {
                                    'view' => 'world'
                                  },
+                                 'identification' => {},
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                                })
         end

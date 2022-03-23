@@ -36,6 +36,7 @@ RSpec.describe CollectionChangeSetPersister do
           title: [{ value: 'test' }],
           purl: 'https://purl.stanford.edu/bc123df4568'
         },
+        identification: {},
         access: {
           copyright: copyright_statement_before,
           license: license_before,

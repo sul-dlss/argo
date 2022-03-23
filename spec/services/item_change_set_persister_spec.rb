@@ -44,6 +44,7 @@ RSpec.describe ItemChangeSetPersister do
           barcode: barcode_before,
           catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
         },
+        structural: {},
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
     end
@@ -139,6 +140,8 @@ RSpec.describe ItemChangeSetPersister do
             view: 'dark',
             download: 'none'
           },
+          identification: {},
+          structural: {},
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
       end
@@ -188,6 +191,8 @@ RSpec.describe ItemChangeSetPersister do
             view: 'dark',
             download: 'none'
           },
+          identification: {},
+          structural: {},
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
       end
@@ -229,6 +234,8 @@ RSpec.describe ItemChangeSetPersister do
             license: license_before,
             useAndReproductionStatement: use_statement_before
           },
+          identification: {},
+          structural: {},
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
       end
