@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Contents::FileComponent, type: :component do
-  let(:component) { described_class.new(file: file, object_id: 'druid:kb487gt5106', viewable: true) }
+  let(:component) { described_class.new(file: file, object_id: 'druid:kb487gt5106', viewable: true, image: true) }
   let(:rendered) { render_inline(component) }
   let(:file) do
     instance_double(Cocina::Models::File,
@@ -13,11 +13,13 @@ RSpec.describe Contents::FileComponent, type: :component do
                     size: 99,
                     access: access,
                     administrative: admin,
+                    presentation: presentation,
                     use: use)
   end
 
   let(:access) { instance_double(Cocina::Models::FileAccess, view: 'world', download: 'stanford') }
   let(:admin) { instance_double(Cocina::Models::FileAdministrative, sdrPreserve: true, publish: true, shelve: true) }
+  let(:presentation) { instance_double(Cocina::Models::Presentation, height: 11_839, width: 19_380) }
   let(:use) { 'transcription' }
 
   it 'renders the component' do
@@ -26,6 +28,7 @@ RSpec.describe Contents::FileComponent, type: :component do
     expect(rendered.to_html).to include 'World'
     expect(rendered.to_html).to include 'Stanford'
     expect(rendered.to_html).to include 'Transcription'
+    expect(rendered.to_html).to include '11839 px'
   end
 
   context 'with no file use set' do

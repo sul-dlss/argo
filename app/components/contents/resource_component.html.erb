@@ -13,6 +13,10 @@
         <th>File name</th>
         <th>Type</th>
         <th>Size</th>
+        <% if image? %> 
+          <th>Height</th>
+          <th>Width</th>
+        <% end %>
         <th>Role</th>
         <th>Publish</th>
         <th>Shelve</th>
@@ -21,6 +25,6 @@
         <th>Download</th>
       </tr>
 
-    <%= render Contents::FileComponent.with_collection(files, object_id: object_id, viewable: viewable?) %>
+    <%= render Contents::FileComponent.with_collection(files, object_id: object_id, viewable: viewable?, image: image?) %>
   </table>
 </li>
