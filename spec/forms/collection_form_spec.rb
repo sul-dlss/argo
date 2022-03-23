@@ -84,7 +84,8 @@ RSpec.describe CollectionForm do
           version: 1,
           access: { view: 'dark' },
           administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
-          description: request_description
+          description: request_description,
+          identification: {}
         }
       end
 
