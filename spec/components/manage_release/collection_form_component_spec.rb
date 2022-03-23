@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ManageRelease::CollectionFormComponent, type: :component do
   subject(:component) { described_class.new(form: form, current_user: build(:user)) }
 
-  let(:form) { ActionView::Helpers::FormBuilder.new('bulk_action', nil, controller.view_context, {}) }
+  let(:form) { ActionView::Helpers::FormBuilder.new(nil, nil, controller.view_context, {}) }
   let(:rendered) { render_inline(component) }
 
   it 'renders the options' do
@@ -15,7 +15,6 @@ RSpec.describe ManageRelease::CollectionFormComponent, type: :component do
       'Release it',
       'Do not release it (withdraw)'
     )
-
-    expect(rendered.css('#bulk_action_manage_release_tag_true[checked]')).to be_present
+    expect(rendered.css('#tag_true[checked]')).to be_present
   end
 end

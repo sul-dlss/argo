@@ -1,33 +1,31 @@
-<%= form.fields_for :manage_release do |manage_release_fields| %>
-  <div class='mb-3'>
-    <label>What should be released/withdrawn?</label>
-    <div class='radio'>
-      <label class='radio-inline'>
-        <%= manage_release_fields.radio_button(:what, 'collection', checked: true) %>
-        This collection and all its members*
-      </label>
-      <label class='radio-inline'>
-        <%= manage_release_fields.radio_button(:what, 'self') %>
-        Only this collection description but not any of its members
-      </label>
-    </div>
+<div class='mb-3'>
+  <label>What should be released/withdrawn?</label>
+  <div class='radio'>
+    <label class='radio-inline'>
+      <%= form.radio_button(:what, 'collection', checked: true) %>
+      This collection and all its members*
+    </label>
+    <label class='radio-inline'>
+      <%= form.radio_button(:what, 'self') %>
+      Only this collection description but not any of its members
+    </label>
   </div>
-  <div class='mb-3'>
-    <label>Should it be released or withdrawn?</label>
-    <div class='radio'>
-      <label class='radio-inline'>
-        <%= manage_release_fields.radio_button(:tag, true, checked: true) %>
-        Release it
-      </label>
-      <label class='radio-inline'>
-        <%= manage_release_fields.radio_button(:tag, false) %>
-        Do not release it (withdraw)
-      </label>
-    </div>
+</div>
+<div class='mb-3'>
+  <label>Should it be released or withdrawn?</label>
+  <div class='radio'>
+    <label class='radio-inline'>
+      <%= form.radio_button(:tag, true, checked: true) %>
+      Release it
+    </label>
+    <label class='radio-inline'>
+      <%= form.radio_button(:tag, false) %>
+      Do not release it (withdraw)
+    </label>
   </div>
-  <p class='form-text'>* Any members that have their own overriding release information will not be affected</p>
-  <div class='mb-3'>
-    <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-select' %>
-  </div>
-  <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>
-<% end %>
+</div>
+<p class='form-text'>* Any members that have their own overriding release information will not be affected</p>
+<div class='mb-3'>
+  <%= form.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-select' %>
+</div>
+<%= form.hidden_field('who', value: current_user.sunetid) %>

@@ -1,0 +1,24 @@
+<%= form_with url: register_druid_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Register druids
+  </span>
+  <div class='mb-3'>
+    <%= f.label :csv_file, 'Upload a CSV file' %>
+      <p><small><em>Please note that each row should have headers for:
+        <ul>
+        <li>APO (required)</li>
+        <li>Collection</li>
+        <li>Rights (required)</li>
+        <li>Initial Workflow (required)</li>
+        <li>Content Type (required)</li>
+        <li>Project Name</li>
+        <li>Tags (not required, may repeat)</li>
+        <li>Catkey</li>
+        <li>Source ID (required)</li>
+        <li>Label (required if no Catkey)</li>
+        </ul>
+  </em></small></p>
+    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 # Feature tests for the spreadsheet bulk uploads view.
-RSpec.describe 'Bulk jobs view' do
+RSpec.describe 'Bulk jobs view', js: true do
   before do
     solr_conn.add(id: apo_id, objectType_ssim: 'adminPolicy')
     solr_conn.commit
@@ -17,7 +17,7 @@ RSpec.describe 'Bulk jobs view' do
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
   let(:apo_id) { 'druid:hv992yv2222' }
 
-  context 'on the page with the list of bulk jobs', js: true do
+  context 'on the page with the list of bulk jobs' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
 
     before do
@@ -33,7 +33,7 @@ RSpec.describe 'Bulk jobs view' do
     end
   end
 
-  context 'on the form for creating a new bulk job', js: true do
+  context 'on the form for creating a new bulk job' do
     let(:bulk_job_data_path) { file_fixture('crowdsourcing_bridget_1.xml') }
 
     before do

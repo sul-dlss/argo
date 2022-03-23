@@ -8,12 +8,11 @@ class AddWorkflowJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :pids required list of pids
-  # @option params [Hash] :add_workflow required Hash of workflow options
-  # @option add_workflow [String] :workflow the name of the workflow to start
+  # @option params [String] :workflow the name of the workflow to start
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
     super
-    @workflow_name = params.fetch(:add_workflow).fetch(:workflow)
+    @workflow_name = params.fetch(:workflow)
     with_bulk_action_log do |log|
       update_druid_count
 

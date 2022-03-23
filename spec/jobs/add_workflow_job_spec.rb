@@ -51,7 +51,7 @@ RSpec.describe AddWorkflowJob, type: :job do
 
     described_class.perform_now(bulk_action.id,
                                 pids: pids,
-                                add_workflow: { workflow: 'accessionWF' },
+                                workflow: 'accessionWF',
                                 groups: groups,
                                 user: user)
   end

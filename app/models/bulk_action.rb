@@ -33,6 +33,7 @@ class BulkAction < ApplicationRecord
                      SetRightsJob]
             }
 
+  after_create :create_output_directory, :create_log_file
   before_destroy :remove_output_directory
 
   def file(filename)
@@ -60,7 +61,26 @@ class BulkAction < ApplicationRecord
     File.join(Settings.bulk_metadata.directory, prefix)
   end
 
+  def create_log_file
+    log_filename = file(Settings.bulk_metadata.log)
+    FileUtils.touch(log_filename)
+    update(log_name: log_filename)
+  end
+
+  def create_output_directory
+    FileUtils.mkdir_p(output_directory) unless File.directory?(output_directory)
+  end
+
+  def enqueue_job(job_params)
+    active_job_class.perform_later(id, job_params)
+    update(status: 'Scheduled Action')
+  end
+
   private
+
+  def active_job_class
+    action_type.constantize
+  end
 
   def prefix
     "#{action_type}_#{id}"

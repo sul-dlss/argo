@@ -10,12 +10,13 @@ class PrepareJob < GenericJob
   # @option params [Array] :pids required list of pids
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required because groups are not persisted with the user.
   # @option params [Array] :user the user
-  # @option params [Hash] :prepare parameters for the prepare job (:significance and :description)
+  # @option params [String] :significance
+  # @option params [String] :version_description
   def perform(bulk_action_id, params)
     super
 
-    significance = params[:prepare]['significance']
-    description = params[:prepare]['description']
+    significance = params['significance']
+    description = params['version_description']
 
     with_bulk_action_log do |log|
       update_druid_count

@@ -1,0 +1,26 @@
+<%= form_with url: manage_embargo_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Manage embargoes with a CSV
+  </span>
+
+  <div class='mb-3'>
+    <%= f.label :csv_file, 'Upload a CSV file' %>
+    <p><small><em>Please note that each row should have headers for:
+    <ul>
+      <li>Druid</li>
+      <li>Release_date (in YYYY-MM-DD format)</li>
+      <li>Rights</li>
+    </ul>
+    </em></small></p>
+    <p><small><em>Valid values for rights are:
+    <ul>
+      <% Constants::REGISTRATION_RIGHTS_OPTIONS.each do |label, value| %>
+        <li><%= value %> (<%= label %>)</li>
+      <% end %>
+    </ul>
+    </em></small></p>
+    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

@@ -6,7 +6,7 @@ RSpec.describe RepublishJob, type: :job do
   let(:pids) { ['druid:123', 'druid:456'] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
-  let(:bulk_action) { create(:bulk_action, log_name: 'foo.txt') }
+  let(:bulk_action) { create(:bulk_action) }
 
   let(:client1) { instance_double(Dor::Services::Client::Object, publish: true) }
   let(:client2) { instance_double(Dor::Services::Client::Object, publish: true) }
@@ -23,7 +23,7 @@ RSpec.describe RepublishJob, type: :job do
   end
 
   after do
-    FileUtils.rm('foo.txt')
+    FileUtils.rm(bulk_action.log_name)
   end
 
   context 'with already published objects' do

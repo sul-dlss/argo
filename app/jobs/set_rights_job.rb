@@ -10,7 +10,7 @@ class SetRightsJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    @new_rights = params[:set_rights][:rights]
+    @new_rights = params[:rights]
 
     with_bulk_action_log do |log|
       raise StandardError, 'Must provide rights' if @new_rights.blank?

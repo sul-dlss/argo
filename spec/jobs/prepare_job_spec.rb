@@ -6,10 +6,7 @@ RSpec.describe PrepareJob, type: :job do
   let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:workflow_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
-  let(:bulk_action) do
-    create(:bulk_action,
-           log_name: 'foo.txt')
-  end
+  let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
 
   let(:cocina1) do
@@ -47,6 +44,15 @@ RSpec.describe PrepareJob, type: :job do
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
+  let(:params) do
+    {
+      pids: pids,
+      groups: groups,
+      user: user,
+      version_description: 'Changed dates',
+      significance: 'major'
+    }.with_indifferent_access
+  end
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
@@ -57,21 +63,14 @@ RSpec.describe PrepareJob, type: :job do
   end
 
   after do
-    FileUtils.rm('foo.txt')
+    FileUtils.rm(bulk_action.log_name)
   end
 
   context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
 
     it 'opens new versions' do
-      described_class.perform_now(bulk_action.id,
-                                  pids: pids,
-                                  groups: groups,
-                                  user: user,
-                                  prepare: {
-                                    'description' => 'Changed dates',
-                                    'significance' => 'major'
-                                  })
+      described_class.perform_now(bulk_action.id, params)
 
       expect(VersionService).to have_received(:open).with(identifier: anything,
                                                           description: 'Changed dates',
@@ -84,14 +83,7 @@ RSpec.describe PrepareJob, type: :job do
     let(:ability) { instance_double(Ability, can?: false) }
 
     it 'does not open new versions' do
-      described_class.perform_now(bulk_action.id,
-                                  pids: pids,
-                                  groups: groups,
-                                  user: user,
-                                  prepare: {
-                                    'description' => 'Changed dates',
-                                    'significance' => 'major'
-                                  })
+      described_class.perform_now(bulk_action.id, params)
 
       expect(VersionService).not_to have_received(:open)
     end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Bulk Descriptive Metadata Download' do
+RSpec.describe 'Bulk Descriptive Metadata Download', js: true do
   let(:current_user) { create(:user) }
 
   before do
@@ -16,23 +16,13 @@ RSpec.describe 'Bulk Descriptive Metadata Download' do
     click_link 'New Bulk Action'
     expect(page).to have_css 'h1', text: 'New Bulk Action'
     expect(page).to have_button 'Populate with previous search'
-    expect(page).to have_css 'form[data-bulk-actions-populate-url-value="/catalog?pids_only=true&q=stanford"]'
-  end
-
-  it 'New page does not have a populate druids button if no search params provided' do
-    visit root_path
-    click_link 'Bulk Edits'
-    expect(page).to have_css 'h1', text: 'Bulk Actions'
-    click_link 'New Bulk Action'
-    expect(page).to have_css 'h1', text: 'New Bulk Action'
-    expect(page).not_to have_button 'Populate with previous search'
+    expect(page).to have_css 'div[data-bulk-actions-populate-url-value="/catalog?pids_only=true&q=stanford"]'
   end
 
   it 'Creates a new jobs' do
     visit new_bulk_action_path
     select 'Download descriptive metadata'
-
-    fill_in 'pids', with: 'druid:ab123gg7777'
+    fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     reload_page_until_timeout do

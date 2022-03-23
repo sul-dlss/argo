@@ -195,9 +195,7 @@ RSpec.describe SetRightsJob, type: :job do
     let(:params) do
       {
         pids: [pids[0]],
-        set_rights: {
-          rights: 'world'
-        }
+        rights: 'world'
       }
     end
 
@@ -221,9 +219,7 @@ RSpec.describe SetRightsJob, type: :job do
     let(:params) do
       {
         pids: pids,
-        set_rights: {
-          rights: 'world'
-        }
+        rights: 'world'
       }
     end
 

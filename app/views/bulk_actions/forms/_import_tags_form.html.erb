@@ -1,8 +1,0 @@
-<% f.fields_for :import_tags do |import_tags_fields| %>
-  <div class='mb-3' id="import-csv">
-    <%= import_tags_fields.label :csv_file, 'Upload a CSV file' %>
-      <br>
-      <small>Each row in the CSV should start with the druid in the first field, followed by a comma-separated list of the tags to be assigned to that druid. <br> To remove all tags from an object, include only the druid and no tags or commas.</small>
-    <%= import_tags_fields.file_field :csv_file, class: 'form-control', accept: '.csv' %>
-  </div>
-<% end %>

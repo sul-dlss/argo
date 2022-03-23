@@ -1,0 +1,30 @@
+<%= form_with url: manage_release_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Adds release tags to individual objects.
+  </span>
+
+  <div class='mb-3'>
+    <div class='form-check'>
+      <label class='form-check-label'>
+        <%= f.radio_button :tag, true, checked: true, class: 'form-check-input' %>
+        Release this object*
+      </label>
+    </div>
+    <div class='form-check'>
+      <label class='form-check-label'>
+        <%= f.radio_button :tag, false, class: 'form-check-input'  %>
+        Do not release this object*
+      </label>
+    </div>
+  </div>
+  <div class='mb-3'>
+    <label for='bulk_action_manage_release_to'>to</label>
+    <%= f.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-select' %>
+  </div>
+  <%= f.hidden_field('what', value: 'self') %>
+  <%= f.hidden_field('who', value: current_user.sunetid) %>
+  <span class='form-text'>* for items this overrides any collection release instructions; for a collection this releases the collection object itself, not its members</span>
+
+  <%= render 'bulk_actions/druids', f: f %>
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

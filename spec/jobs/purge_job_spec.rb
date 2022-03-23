@@ -8,10 +8,7 @@ RSpec.describe PurgeJob, type: :job do
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted) }
   let(:submitted) { false }
-  let(:bulk_action) do
-    create(:bulk_action,
-           log_name: 'foo.txt')
-  end
+  let(:bulk_action) { create(:bulk_action) }
 
   let(:cocina1) do
     Cocina::Models.build({
@@ -63,7 +60,7 @@ RSpec.describe PurgeJob, type: :job do
   end
 
   after do
-    FileUtils.rm('foo.txt')
+    FileUtils.rm(bulk_action.log_name)
   end
 
   context 'with manage ability' do

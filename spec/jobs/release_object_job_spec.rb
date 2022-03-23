@@ -58,8 +58,11 @@ RSpec.describe ReleaseObjectJob do
     let(:params) do
       {
         pids: pids,
-        manage_release: { 'to' => 'SEARCHWORKS', 'who' => 'bergeraj', 'what' => 'self', 'tag' => 'true' }
-      }
+        to: 'SEARCHWORKS',
+        who: 'bergeraj',
+        what: 'self',
+        tag: 'true'
+      }.with_indifferent_access
     end
 
     context 'with already published objects' do

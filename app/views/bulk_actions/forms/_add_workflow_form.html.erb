@@ -1,6 +1,0 @@
-<% f.fields_for :add_workflow do |add_workflow_fields| %>
-  <div class='mt-2 mb-3'>
-    <%= add_workflow_fields.label :workflow %>
-    <%= add_workflow_fields.select :workflow, workflow_options, {}, class: 'form-select' %>
-  </div>
-<% end %>

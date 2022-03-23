@@ -33,40 +33,6 @@ RSpec.describe 'BulkActionsController' do
     end
   end
 
-  describe 'POST create' do
-    context 'with correct parameters' do
-      it 'creates a new BulkAction' do
-        expect do
-          post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
-        end.to change(BulkAction, :count).by(1)
-      end
-
-      it 'has a 302 status code' do
-        post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
-        expect(response.status).to eq 302
-      end
-
-      context 'when not saveable' do
-        before do
-          fake_bulk_action = build(:bulk_action)
-          allow(fake_bulk_action).to receive(:save).and_return(false)
-          allow(BulkAction).to receive(:new).and_return fake_bulk_action
-        end
-
-        it 'renders new' do
-          post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob' } }
-          expect(response.body).to include 'New Bulk Action'
-        end
-      end
-    end
-
-    context 'without current parameters' do
-      it 'requires bulk_action parameter' do
-        expect { post '/bulk_actions' }.to raise_error ActionController::ParameterMissing
-      end
-    end
-  end
-
   describe 'DELETE destroy' do
     it 'assigns and deletes current_users BulkAction by id param' do
       b_action = create(:bulk_action, user: current_user)

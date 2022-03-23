@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Bulk Update of Governing APO' do
+RSpec.describe 'Bulk Update of Governing APO', js: true do
   let(:current_user) { create(:user) }
 
   before do
@@ -14,7 +14,7 @@ RSpec.describe 'Bulk Update of Governing APO' do
     visit new_bulk_action_path
     select 'Update governing APO'
     select 'APO 2'
-    fill_in 'pids', with: 'druid:ab123gg7777'
+    fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
     click_button 'Submit'
 
     expect(page).to have_css 'h1', text: 'Bulk Actions'
