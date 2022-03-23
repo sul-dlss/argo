@@ -4,10 +4,10 @@
 # Job to open objects
 class PrepareJob < GenericJob
   ##
-  # A job that allows a user to specify a list of pids of objects to open
+  # A job that allows a user to specify a list of druids of objects to open
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of pids
+  # @option params [Array] :druids required list of druids
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required because groups are not persisted with the user.
   # @option params [Array] :user the user
   # @option params [String] :significance
@@ -21,7 +21,7 @@ class PrepareJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         open_object(current_druid, significance, description, @current_user.to_s, log)
       end
     end
@@ -29,25 +29,25 @@ class PrepareJob < GenericJob
 
   private
 
-  def open_object(pid, significance, description, user_name, log)
-    cocina = Dor::Services::Client.object(pid).find
+  def open_object(druid, significance, description, user_name, log)
+    cocina = Dor::Services::Client.object(druid).find
 
-    return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid, version: cocina.version)
+    return log.puts("#{Time.current} #{druid} is not openable") unless openable?(druid, version: cocina.version)
 
-    return log.puts("#{Time.current} Not authorized for #{pid}") unless ability.can?(:manage_item, cocina)
+    return log.puts("#{Time.current} Not authorized for #{druid}") unless ability.can?(:manage_item, cocina)
 
-    VersionService.open(identifier: pid,
+    VersionService.open(identifier: druid,
                         significance: significance,
                         description: description,
                         opening_user_name: user_name)
     bulk_action.increment(:druid_count_success).save
-    log.puts("#{Time.current} Object successfully opened #{pid}")
+    log.puts("#{Time.current} Object successfully opened #{druid}")
   rescue StandardError => e
-    log.puts("#{Time.current} Opening #{pid} failed #{e.class} #{e.message}")
+    log.puts("#{Time.current} Opening #{druid} failed #{e.class} #{e.message}")
     bulk_action.increment(:druid_count_fail).save
   end
 
-  def openable?(pid, version:)
-    DorObjectWorkflowStatus.new(pid, version: version).can_open_version?
+  def openable?(druid, version:)
+    DorObjectWorkflowStatus.new(druid, version: version).can_open_version?
   end
 end

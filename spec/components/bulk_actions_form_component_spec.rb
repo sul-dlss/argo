@@ -13,20 +13,20 @@ RSpec.describe BulkActionsFormComponent, type: :component do
     allow(subject).to receive(:search_state).and_return(search_state)
   end
 
-  describe '#search_of_pids' do
+  describe '#search_of_druids' do
     context 'when last search is nil' do
       let(:search_params) { nil }
 
       it 'returns an empty string' do
-        expect(instance.search_of_pids).to eq ''
+        expect(instance.search_of_druids).to eq ''
       end
     end
 
     context 'when a Blacklight::Search is present' do
       let(:search_params) { { q: 'cool catz' } }
 
-      it 'adds a pids_only param' do
-        expect(instance.search_of_pids).to include(q: 'cool catz', 'pids_only' => true)
+      it 'adds a druids_only param' do
+        expect(instance.search_of_druids).to include(q: 'cool catz', 'druids_only' => true)
       end
     end
   end

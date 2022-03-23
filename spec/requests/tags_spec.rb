@@ -34,7 +34,7 @@ RSpec.describe 'Tags', type: :request do
   end
 
   describe '#update' do
-    let(:pid) { 'druid:bc123df4567' }
+    let(:druid) { 'druid:bc123df4567' }
     let(:object_client) do
       instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
     end
@@ -43,10 +43,10 @@ RSpec.describe 'Tags', type: :request do
                              'label' => 'My Item',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My item' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -57,7 +57,7 @@ RSpec.describe 'Tags', type: :request do
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
     context 'when they have manage access' do
@@ -71,7 +71,7 @@ RSpec.describe 'Tags', type: :request do
       end
 
       it 'updates tags' do
-        patch "/items/#{pid}/tags", params: {
+        patch "/items/#{druid}/tags", params: {
           tags: {
             tags_attributes: {
               '0' => { name: 'Some : Thing : Else', id: 'Some : Thing' }
@@ -79,11 +79,11 @@ RSpec.describe 'Tags', type: :request do
           }
         }
         expect(tags_client).to have_received(:update).with(current: current_tag, new: 'Some : Thing : Else')
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
       end
 
       it 'deletes tag' do
-        patch "/items/#{pid}/tags", params: {
+        patch "/items/#{druid}/tags", params: {
           tags: {
             tags_attributes: {
               '0' => { name: 'Some : Thing : Else', id: 'Some : Thing', _destroy: '1' }
@@ -91,18 +91,18 @@ RSpec.describe 'Tags', type: :request do
           }
         }
         expect(tags_client).to have_received(:destroy).with(tag: current_tag)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
       end
 
       it 'adds a tag' do
-        patch "/items/#{pid}/tags", params: {
+        patch "/items/#{druid}/tags", params: {
           tags: {
             tags_attributes: {
               '0' => { name: 'New : Thing', id: '', _destroy: '' }
             }
           }
         }
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
         expect(tags_client).to have_received(:create).with(tags: ['New : Thing'])
       end
     end

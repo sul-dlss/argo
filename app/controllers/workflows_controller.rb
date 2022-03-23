@@ -72,7 +72,7 @@ class WorkflowsController < ApplicationController
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
-    Argo::Indexer.reindex_pid_remotely(cocina_object.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(cocina_object.externalIdentifier)
 
     msg = "Added #{wf_name}"
     redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg
@@ -91,9 +91,9 @@ class WorkflowsController < ApplicationController
   delegate :can_update_workflow?, to: :current_ability
 
   # Fetches the workflow from the workflow service and checks to see if it's active
-  def workflow_active?(wf_name, pid, version)
+  def workflow_active?(wf_name, druid, version)
     client = WorkflowClientFactory.build
-    workflow = client.workflow(pid: pid, workflow_name: wf_name)
+    workflow = client.workflow(pid: druid, workflow_name: wf_name)
     workflow.active_for?(version: version)
   end
 

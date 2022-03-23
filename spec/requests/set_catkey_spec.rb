@@ -4,19 +4,19 @@ require 'rails_helper'
 
 RSpec.describe 'Set catkey' do
   let(:user) { create(:user) }
-  let(:pid) { 'druid:dc243mg0841' }
+  let(:druid) { 'druid:dc243mg0841' }
 
   context 'without manage content access' do
     let(:cocina) { instance_double(Cocina::Models::DRO) }
     let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
 
     before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
       sign_in user
     end
 
     it 'returns a 403' do
-      patch "/items/#{pid}/catkey", params: { item: { catkey: '12345' } }
+      patch "/items/#{druid}/catkey", params: { item: { catkey: '12345' } }
 
       expect(response.code).to eq('403')
     end
@@ -37,10 +37,10 @@ RSpec.describe 'Set catkey' do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -50,7 +50,7 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'draws the form' do
-          get "/items/#{pid}/catkey/edit"
+          get "/items/#{druid}/catkey/edit"
 
           expect(response).to be_successful
         end
@@ -62,10 +62,10 @@ RSpec.describe 'Set catkey' do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.collection,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'identification' => {},
@@ -74,7 +74,7 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'draws the form' do
-          get "/items/#{pid}/catkey/edit"
+          get "/items/#{druid}/catkey/edit"
 
           expect(response).to be_successful
         end
@@ -86,9 +86,9 @@ RSpec.describe 'Set catkey' do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.collection,
-                                 'externalIdentifier' => pid, 'description' => {
+                                 'externalIdentifier' => druid, 'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'identification' => {
@@ -104,7 +104,7 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'draws the form' do
-          get "/items/#{pid}/catkey/edit"
+          get "/items/#{druid}/catkey/edit"
 
           expect(response).to be_successful
           expect(response.body).to include '10448742'
@@ -124,7 +124,7 @@ RSpec.describe 'Set catkey' do
       end
 
       before do
-        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
       context 'with an item' do
@@ -133,10 +133,10 @@ RSpec.describe 'Set catkey' do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -146,11 +146,11 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'updates the catkey, trimming whitespace' do
-          patch "/items/#{pid}/catkey", params: { item: { catkey: '   12345 ' } }
+          patch "/items/#{druid}/catkey", params: { item: { catkey: '   12345 ' } }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
@@ -160,10 +160,10 @@ RSpec.describe 'Set catkey' do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.collection,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {
                                    'view' => 'world'
@@ -174,11 +174,11 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'updates the catkey, trimming whitespace' do
-          patch "/items/#{pid}/catkey", params: { collection: { catkey: '   12345 ' } }
+          patch "/items/#{druid}/catkey", params: { collection: { catkey: '   12345 ' } }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
     end

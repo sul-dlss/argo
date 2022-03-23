@@ -12,7 +12,7 @@ class ExportTagsJob < GenericJob
       update_druid_count
 
       CSV.open(csv_download_path, 'w') do |csv|
-        pids.each do |druid|
+        druids.each do |druid|
           log_buffer.puts("#{Time.current} #{self.class}: Exporting tags for #{druid} (bulk_action.id=#{bulk_action_id})")
           csv << [druid, *export_tags(druid)]
           bulk_action.increment(:druid_count_success).save

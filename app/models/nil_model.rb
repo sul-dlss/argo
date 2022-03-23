@@ -2,13 +2,13 @@
 
 # This stands in place of a Cocina model, when the server returns an UnexpectedResponse
 class NilModel
-  def initialize(pid)
-    @pid = pid
+  def initialize(druid)
+    @druid = druid
   end
 
   # rubocop:disable Naming/MethodName
   def externalIdentifier
-    @pid
+    @druid
   end
   # rubocop:enable Naming/MethodName
 

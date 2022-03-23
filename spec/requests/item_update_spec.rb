@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'Set the properties for an item' do
   let(:user) { create(:user) }
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do
@@ -22,10 +22,10 @@ RSpec.describe 'Set the properties for an item' do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -46,11 +46,11 @@ RSpec.describe 'Set the properties for an item' do
       end
 
       it 'sets the new barcode' do
-        patch "/items/#{pid}", params: { item: { barcode: '36105010362304' } }
+        patch "/items/#{druid}", params: { item: { barcode: '36105010362304' } }
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
         expect(response.code).to eq('303')
       end
     end
@@ -67,11 +67,11 @@ RSpec.describe 'Set the properties for an item' do
       end
 
       it 'sets the new copyright' do
-        patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+        patch "/items/#{druid}", params: { item: { copyright: 'in public domain' } }
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
         expect(response.code).to eq('303')
       end
     end
@@ -88,11 +88,11 @@ RSpec.describe 'Set the properties for an item' do
       end
 
       it 'sets the new use and reproduction statement' do
-        patch "/items/#{pid}", params: { item: { use_statement: 'call before using' } }
+        patch "/items/#{druid}", params: { item: { use_statement: 'call before using' } }
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
         expect(response.code).to eq('303')
       end
     end
@@ -109,18 +109,18 @@ RSpec.describe 'Set the properties for an item' do
       end
 
       it 'sets the new license statement' do
-        patch "/items/#{pid}", params: { item: { license: 'https://creativecommons.org/licenses/by/4.0/legalcode' } }
+        patch "/items/#{druid}", params: { item: { license: 'https://creativecommons.org/licenses/by/4.0/legalcode' } }
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
         expect(response.code).to eq('303')
       end
     end
 
     context 'when there is an error building the Cocina' do
       it 'draws the error' do
-        patch "/items/#{pid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
+        patch "/items/#{druid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include '<turbo-frame id="barcode">Error building Cocina: &quot;invalid&quot; isn&#39;t one of in #/components/schemas/Barcode</turbo-frame>'
@@ -130,7 +130,7 @@ RSpec.describe 'Set the properties for an item' do
     context 'when there is an error retrieving the Cocina' do
       it 'draws the error' do
         allow(object_client).to receive(:update).and_raise(Dor::Services::Client::BadRequestError, '({"errors":[{"detail":"broken"}]})')
-        patch "/items/#{pid}", params: { item: { barcode: '36105010362304' } }, headers: { 'Turbo-Frame' => 'barcode' }
+        patch "/items/#{druid}", params: { item: { barcode: '36105010362304' } }, headers: { 'Turbo-Frame' => 'barcode' }
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include '<turbo-frame id="barcode">Unable to retrieve the cocina model: broken</turbo-frame>'

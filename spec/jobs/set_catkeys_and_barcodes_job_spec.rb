@@ -12,7 +12,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     bulk_action
   end
 
-  let(:pids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
+  let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
   let(:catkeys) { ['12345', '', '44444'] }
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
@@ -21,10 +21,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'label' => 'My Item1',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[0],
+                           'externalIdentifier' => druids[0],
                            'description' => {
                              'title' => [{ 'value' => 'My Item1' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -40,10 +40,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'label' => 'My Item2',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[1],
+                           'externalIdentifier' => druids[1],
                            'description' => {
                              'title' => [{ 'value' => 'My Item2' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[1].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -59,10 +59,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'label' => 'My Item3',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[2],
+                           'externalIdentifier' => druids[2],
                            'description' => {
                              'title' => [{ 'value' => 'My Item3' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[2].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -81,13 +81,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
   end
 
   describe '#perform' do
     before do
-      allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
-      allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
+      allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
+      allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
     end
 
     context 'when catkey and barcode selected' do
@@ -98,7 +98,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
       let(:params) do
         {
-          pids: pids,
+          druids: druids,
           catkeys: catkeys.join("\n"),
           barcodes: barcodes.join("\n"),
           use_catkeys_option: '1',
@@ -112,7 +112,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
         expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, buffer)
         expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+        expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
         expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkey: catkeys[0])
         expect(change_set2).to have_received(:validate).with(barcode: nil, catkey: nil)
         expect(change_set3).to have_received(:validate).with(barcode: barcodes[2], catkey: catkeys[2])
@@ -122,7 +122,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     context 'when catkey and barcode not selected' do
       let(:params) do
         {
-          pids: pids,
+          druids: druids,
           catkeys: catkeys.join("\n"),
           barcodes: barcodes.join("\n"),
           use_catkeys_option: '0',
@@ -134,13 +134,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         expect(subject).not_to receive(:update_catkey_and_barcode)
         subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+        expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
       end
     end
   end
 
   describe '#update_catkey_and_barcode' do
-    let(:pid) { pids[0] }
+    let(:druid) { druids[0] }
     let(:catkey) { catkeys[0] }
     let(:barcode) { barcodes[0] }
     let(:client) { double(Dor::Services::Client) }
@@ -150,10 +150,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                              'label' => 'My Item',
                              'version' => 3,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pids[0],
+                             'externalIdentifier' => druids[0],
                              'description' => {
                                'title' => [{ 'value' => 'My Item1' }],
-                               'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -186,7 +186,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
       allow(StateService).to receive(:new).and_return(state_service)
       allow(subject.ability).to receive(:can?).and_return(true)
     end
@@ -223,7 +223,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it 'updates catkey and barcode and versions objects' do
-        expect(subject).to receive(:open_new_version).with(pid, 3, "Catkey updated to #{catkey}. Barcode updated to #{barcode}.")
+        expect(subject).to receive(:open_new_version).with(druid, 3, "Catkey updated to #{catkey}. Barcode updated to #{barcode}.")
         subject.send(:update_catkey_and_barcode, change_set, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -234,7 +234,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
       it 'updates catkey and barcode and does not version objects if not needed' do
-        expect(subject).not_to receive(:open_new_version).with(pid, 3, "Catkey updated to #{catkey}. Barcode updated to #{barcode}.")
+        expect(subject).not_to receive(:open_new_version).with(druid, 3, "Catkey updated to #{catkey}. Barcode updated to #{barcode}.")
         subject.send(:update_catkey_and_barcode, change_set, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -258,7 +258,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       end
 
       it 'removes catkey and barcode' do
-        expect(subject).to receive(:open_new_version).with(pid, 3, 'Catkey removed. Barcode removed.')
+        expect(subject).to receive(:open_new_version).with(druid, 3, 'Catkey removed. Barcode removed.')
         subject.send(:update_catkey_and_barcode, change_set, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)

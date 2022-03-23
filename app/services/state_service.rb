@@ -9,8 +9,8 @@ class StateService
   STATES = Types::Symbol.enum(:unlock, :lock, :lock_inactive, :unlock_inactive)
   UNLOCKED_STATES = [STATES[:unlock], STATES[:unlock_inactive]].freeze
 
-  def initialize(pid, version:)
-    @pid = pid
+  def initialize(druid, version:)
+    @druid = druid
     @version = version
   end
 
@@ -45,14 +45,14 @@ class StateService
 
   private
 
-  attr_reader :pid, :version
+  attr_reader :druid, :version
 
   def lifecycle(task)
-    workflow_client.lifecycle(druid: pid, milestone_name: task)
+    workflow_client.lifecycle(druid: druid, milestone_name: task)
   end
 
   def active_lifecycle(task)
-    workflow_client.active_lifecycle(druid: pid, milestone_name: task, version: version)
+    workflow_client.active_lifecycle(druid: druid, milestone_name: task, version: version)
   end
 
   def opened?
@@ -71,7 +71,7 @@ class StateService
   end
 
   def active_assembly_wf?
-    @active_assembly_wf ||= workflow_client.workflow_status(druid: pid, workflow: 'assemblyWF', process: 'accessioning-initiate') == 'waiting'
+    @active_assembly_wf ||= workflow_client.workflow_status(druid: druid, workflow: 'assemblyWF', process: 'accessioning-initiate') == 'waiting'
   end
 
   def workflow_client

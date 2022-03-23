@@ -10,7 +10,7 @@ class WorkflowPresenter
     @cocina_object = cocina_object
   end
 
-  delegate :pid, :workflow_name, to: :workflow_status
+  delegate :druid, :workflow_name, to: :workflow_status
 
   # @return [Array] all the steps in the workflow definition
   def processes

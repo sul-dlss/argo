@@ -9,7 +9,7 @@ class RemoteIndexingJob < GenericJob
     with_bulk_action_log do |log_buffer|
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         log_buffer.puts("#{Time.current} RemoteIndexingJob: Attempting to index #{current_druid} (bulk_action.id=#{bulk_action_id})")
         reindex_druid_safely(current_druid, log_buffer)
       end
@@ -19,7 +19,7 @@ class RemoteIndexingJob < GenericJob
   private
 
   def reindex_druid_safely(current_druid, log_buffer)
-    Argo::Indexer.reindex_pid_remotely(current_druid)
+    Argo::Indexer.reindex_druid_remotely(current_druid)
     log_buffer.puts("#{Time.current} RemoteIndexingJob: Successfully reindexed #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e

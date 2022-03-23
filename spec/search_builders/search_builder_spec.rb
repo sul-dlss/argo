@@ -24,16 +24,16 @@ RSpec.describe SearchBuilder do
         .count { |x| x == :add_access_controls_to_solr_params }).to eq 1
     end
 
-    it 'has pids_only in chain once' do
+    it 'has druids_only in chain once' do
       expect(subject.processor_chain)
-        .to include :pids_only
+        .to include :druids_only
       expect(subject.processor_chain
-        .count { |x| x == :pids_only }).to eq 1
+        .count { |x| x == :druids_only }).to eq 1
       new_search = described_class.new(subject.processor_chain, context)
       expect(new_search.processor_chain)
-        .to include :pids_only
+        .to include :druids_only
       expect(subject.processor_chain
-        .count { |x| x == :pids_only }).to eq 1
+        .count { |x| x == :druids_only }).to eq 1
     end
 
     it 'has add_date_field_queries in chain once' do

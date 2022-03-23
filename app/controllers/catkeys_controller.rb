@@ -23,7 +23,7 @@ class CatkeysController < ApplicationController
     change_set = change_set_class.new(@cocina)
     change_set.validate(catkey: update_params[:catkey].strip)
     change_set.save
-    Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
 
     msg = "Catkey for #{@cocina.externalIdentifier} has been updated!"
     redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg

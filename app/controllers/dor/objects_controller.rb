@@ -8,7 +8,7 @@ class Dor::ObjectsController < ApplicationController
     request_model = form.cocina_model # might raise Cocina::Models::ValidationError
     result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
     result.either(
-      ->(model) { render json: { pid: model.externalIdentifier }, status: :created, location: solr_document_url(model.externalIdentifier) },
+      ->(model) { render json: { druid: model.externalIdentifier }, status: :created, location: solr_document_url(model.externalIdentifier) },
       ->(message) { render_failure(message) }
     )
   rescue Cocina::Models::ValidationError => e

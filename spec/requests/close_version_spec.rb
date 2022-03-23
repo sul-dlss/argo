@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Close a version', type: :request do
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
@@ -11,10 +11,10 @@ RSpec.describe 'Close a version', type: :request do
                            'label' => 'My Item',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -24,7 +24,7 @@ RSpec.describe 'Close a version', type: :request do
   end
 
   before do
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(Dor::Services::Client).to receive(:object).and_return(object_service)
   end
 
@@ -37,9 +37,9 @@ RSpec.describe 'Close a version', type: :request do
     let(:version_service) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
     it 'calls dor-services to close the version' do
-      expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-      post "/items/#{pid}/versions/close", params: { significance: 'major', description: 'something' }
-      expect(flash[:notice]).to eq "Version 2 of #{pid} has been closed!"
+      expect(Argo::Indexer).to receive(:reindex_druid_remotely)
+      post "/items/#{druid}/versions/close", params: { significance: 'major', description: 'something' }
+      expect(flash[:notice]).to eq "Version 2 of #{druid} has been closed!"
       expect(version_service).to have_received(:close).with(description: 'something', significance: 'major', user_name: user.to_s)
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe 'Close a version', type: :request do
     let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
     it 'returns a 403' do
-      post "/items/#{pid}/versions/close"
+      post "/items/#{druid}/versions/close"
       expect(response.code).to eq('403')
     end
   end

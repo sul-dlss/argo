@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SetContentTypeJob, type: :job do
-  let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2233', 'druid:ff123gg4567'] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2233', 'druid:ff123gg4567'] }
   let(:groups) { [] }
   let(:bulk_action) do
     create(
@@ -13,7 +13,7 @@ RSpec.describe SetContentTypeJob, type: :job do
   end
   let(:params) do
     {
-      pids: [pids[0]],
+      druids: [druids[0]],
       current_resource_type: 'image',
       new_content_type: 'book (ltr)',
       new_resource_type: 'page'
@@ -25,7 +25,7 @@ RSpec.describe SetContentTypeJob, type: :job do
                            label: 'My Book Item',
                            version: 2,
                            type: Cocina::Models::ObjectType.book,
-                           externalIdentifier: pids[0],
+                           externalIdentifier: druids[0],
                            description: {
                              title: [{ value: 'my dro' }],
                              purl: 'https://purl.stanford.edu/bc234fg5678'
@@ -50,7 +50,7 @@ RSpec.describe SetContentTypeJob, type: :job do
                            label: 'My Map Item',
                            version: 3,
                            type: Cocina::Models::ObjectType.image,
-                           externalIdentifier: pids[1],
+                           externalIdentifier: druids[1],
                            description: {
                              title: [{ value: 'my dro' }],
                              purl: 'https://purl.stanford.edu/bc234fg5678'
@@ -70,7 +70,7 @@ RSpec.describe SetContentTypeJob, type: :job do
                            label: 'My Collection',
                            version: 1,
                            type: Cocina::Models::ObjectType.collection,
-                           externalIdentifier: pids[2],
+                           externalIdentifier: druids[2],
                            description: {
                              title: [{ value: 'my collection' }],
                              purl: 'https://purl.stanford.edu/bc234fg5678'
@@ -93,13 +93,13 @@ RSpec.describe SetContentTypeJob, type: :job do
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject.ability).to receive(:can?).and_return(true)
     allow(StateService).to receive(:new).and_return(state_service)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
-    allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
     allow(object_client1).to receive(:update)
     allow(object_client2).to receive(:update)
     allow(object_client3).to receive(:update)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when book object with image and page resource types' do
@@ -111,14 +111,14 @@ RSpec.describe SetContentTypeJob, type: :job do
             resource_types: [Cocina::Models::FileSetType.page, Cocina::Models::FileSetType.image]
           )
         )
-      expect(buffer.string).to include "Successfully updated content type of #{pids[0]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated content type of #{druids[0]} (bulk_action.id=#{bulk_action.id})"
     end
   end
 
   context 'when object resource types and content type are requested to change' do
     let(:params) do
       {
-        pids: [pids[1]],
+        druids: [druids[1]],
         current_resource_type: 'file',
         new_content_type: 'map',
         new_resource_type: 'image'
@@ -140,7 +140,7 @@ RSpec.describe SetContentTypeJob, type: :job do
   context 'when new content type is book (rtl)' do
     let(:params) do
       {
-        pids: [pids[0]],
+        druids: [druids[0]],
         current_resource_type: 'page',
         new_content_type: 'book (rtl)',
         new_resource_type: 'page'
@@ -162,7 +162,7 @@ RSpec.describe SetContentTypeJob, type: :job do
   context 'when a new resource type is provided but not a new content type' do
     let(:params) do
       {
-        pids: [pids[0]],
+        druids: [druids[0]],
         current_resource_type: '',
         new_content_type: '',
         new_resource_type: 'page'
@@ -179,7 +179,7 @@ RSpec.describe SetContentTypeJob, type: :job do
   context 'when a no types are entered in the form' do
     let(:params) do
       {
-        pids: [pids[0]],
+        druids: [druids[0]],
         current_resource_type: '',
         new_content_type: '',
         new_resource_type: ''
@@ -197,7 +197,7 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:structural) { {} }
     let(:params) do
       {
-        pids: [pids[0]],
+        druids: [druids[0]],
         current_resource_type: '',
         new_content_type: 'map',
         new_resource_type: ''
@@ -236,7 +236,7 @@ RSpec.describe SetContentTypeJob, type: :job do
   context 'when druid is for a collection' do
     let(:params) do
       {
-        pids: ['druid:ff123gg4567'],
+        druids: ['druid:ff123gg4567'],
         current_resource_type: '',
         new_content_type: 'media',
         new_resource_type: ''

@@ -38,7 +38,7 @@ class AccessForm
   def save
     sync
     Dor::Services::Client.object(model.externalIdentifier).update(params: model)
-    Argo::Indexer.reindex_pid_remotely(model.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(model.externalIdentifier)
   end
 
   private

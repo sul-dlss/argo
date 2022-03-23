@@ -58,7 +58,7 @@ RSpec.describe 'Create collections' do
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(CollectionForm).to receive(:new).and_return(form)
-      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
     it 'creates a collection using the form' do
@@ -68,7 +68,7 @@ RSpec.describe 'Create collections' do
       expect(response).to be_redirect # redirects to catalog page
       expect(form).to have_received(:save)
       expect(object_client).to have_received(:update).with(params: cocina_admin_policy_with_registration_collections([collection_id]))
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(apo_id)
+      expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(apo_id)
     end
   end
 

@@ -116,7 +116,7 @@ class TrackSheet
     doc = SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
 
-    Argo::Indexer.reindex_pid_remotely("druid:#{druid}")
+    Argo::Indexer.reindex_druid_remotely("druid:#{druid}")
     SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
   end
 end

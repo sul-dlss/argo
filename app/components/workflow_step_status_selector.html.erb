@@ -1,5 +1,5 @@
 <%# workflow update requires id, workflow, process, and status parameters %>
-<%= form_tag item_workflow_path(pid, workflow_name),
+<%= form_tag item_workflow_path(druid, workflow_name),
              method: 'put',
              data: { turbo_confirm: confirm } do %>
   <%= hidden_field_tag('process', name) %>

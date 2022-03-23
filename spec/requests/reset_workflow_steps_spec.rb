@@ -12,16 +12,16 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
   let(:step) { 'descriptive-metadata' }
   let(:workflow_client) { instance_double(Dor::Workflow::Client, update_status: true) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:pid) { 'druid:xb482bw3979' }
+  let(:druid) { 'druid:xb482bw3979' }
   let(:cocina_model) do
     Cocina::Models.build({
                            'label' => 'My ETD',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -36,7 +36,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
   end
 
   context 'as an admin' do
-    let(:report) { instance_double(Report, pids: %w[xb482ww9999]) }
+    let(:report) { instance_double(Report, druids: %w[xb482ww9999]) }
 
     before do
       sign_in user, groups: ['sdr:administrator-role']
@@ -58,7 +58,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
   end
 
   context 'a non admin who has access' do
-    let(:report) { instance_double(Report, pids: %w[xb482ww9999]) }
+    let(:report) { instance_double(Report, druids: %w[xb482ww9999]) }
 
     before do
       sign_in user, groups: ['sdr:manager-role']
@@ -75,7 +75,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
   end
 
   context 'a non admin who has no access' do
-    let(:report) { instance_double(Report, pids: %w[xb482ww9999]) }
+    let(:report) { instance_double(Report, druids: %w[xb482ww9999]) }
 
     before do
       sign_in user, groups: []

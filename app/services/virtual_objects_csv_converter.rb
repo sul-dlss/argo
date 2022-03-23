@@ -20,7 +20,7 @@ class VirtualObjectsCsvConverter
     CSV
       .parse(csv_string) # parses CSV string into an array of rows, each row an array of cell values
       .map(&:compact) # makes sure CSVs with blanks can be processed successfully
-      .map { |row| row.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" } } # prepend "druid:" prefix if absent
+      .map { |row| row.map { |druid| druid.start_with?('druid:') ? druid : "druid:#{druid}" } } # prepend "druid:" prefix if absent
       .map { |row| { virtual_object_id: row.first, constituent_ids: row.drop(1) } } # put in hash shape as required by dor-services-app
   end
 end

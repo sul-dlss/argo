@@ -9,7 +9,7 @@ class RefreshModsJob < GenericJob
     with_bulk_action_log do |log_buffer|
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         log_buffer.puts("#{Time.current} #{self.class}: Attempting #{current_druid} (bulk_action.id=#{bulk_action_id})")
         refresh_mods(current_druid, log_buffer)
       end

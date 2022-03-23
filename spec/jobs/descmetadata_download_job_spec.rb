@@ -12,9 +12,9 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
   let(:output_directory) { bulk_action.output_directory }
   let(:output_zip_filename) { File.join(output_directory, Settings.bulk_metadata.zip) }
-  let(:pid_list) { ['druid:hj185xx2222', 'druid:kv840xx0000'] }
+  let(:druid_list) { ['druid:hj185xx2222', 'druid:kv840xx0000'] }
   let(:dl_job_params) do
-    { pids: pid_list }
+    { druids: druid_list }
   end
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_model1, metadata: metadata_client1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2, metadata: metadata_client2) }
@@ -24,8 +24,8 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   let(:cocina_model2) { instance_double(Cocina::Models::DRO) }
 
   before do
-    allow(Dor::Services::Client).to receive(:object).with(pid_list[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pid_list[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druid_list[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druid_list[1]).and_return(object_client2)
   end
 
   after do
@@ -90,7 +90,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       download_job.perform(bulk_action.id, dl_job_params)
       expect(File).to be_exist(output_zip_filename)
       Zip::File.open(output_zip_filename) do |open_file|
-        expect(open_file.glob('*').map(&:name).sort).to eq ["#{pid_list.first}.xml", "#{pid_list.second}.xml"].sort
+        expect(open_file.glob('*').map(&:name).sort).to eq ["#{druid_list.first}.xml", "#{druid_list.second}.xml"].sort
       end
     end
 
@@ -114,10 +114,10 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
         expect(bulk_action).to have_received(:increment).with(:druid_count_fail).twice
         expect(download_job).to have_received(:bulk_action).at_least(:once)
         expect(File).to be_exist(output_zip_filename)
-        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{pid_list.first}").twice
-        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{pid_list.first}").once
-        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{pid_list.last}").twice
-        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{pid_list.last}").once
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{druid_list.first}").twice
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{druid_list.first}").once
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{druid_list.last}").twice
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{druid_list.last}").once
 
         Zip::File.open(output_zip_filename) do |open_file|
           expect(open_file.glob('*').length).to eq 0
@@ -138,9 +138,9 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
         expect(File).to be_exist(output_zip_filename)
         Zip::File.open(output_zip_filename) do |open_file|
-          expect(open_file.glob('*').map(&:name)).to eq ["#{pid_list.first}.xml"]
+          expect(open_file.glob('*').map(&:name)).to eq ["#{druid_list.first}.xml"]
         end
-        expect(File.read(bulk_action.log_name)).to match(/Not authorized for #{pid_list.second}/)
+        expect(File.read(bulk_action.log_name)).to match(/Not authorized for #{druid_list.second}/)
       end
     end
   end
@@ -165,7 +165,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       end
 
       it 'returns nil' do
-        result = download_job.query_dor(pid_list.first, log)
+        result = download_job.query_dor(druid_list.first, log)
         expect(result).to be_nil
       end
     end

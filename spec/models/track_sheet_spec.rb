@@ -28,7 +28,7 @@ RSpec.describe TrackSheet do
 
     context 'when the doc is not in the search results' do
       before do
-        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
 
         allow(SearchService).to receive(:query)
           .with('id:"druid:xb482ww9999"', rows: 1)

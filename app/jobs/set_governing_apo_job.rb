@@ -7,7 +7,7 @@ class SetGoverningApoJob < GenericJob
 
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of pids
+  # @option params [Array] :druids required list of druids
   # @option params [String] :new_apo_id
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
@@ -17,7 +17,7 @@ class SetGoverningApoJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         log.puts("#{Time.current} SetGoverningApoJob: Starting update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
         set_governing_apo_and_index_safely(current_druid, log)
         log.puts("#{Time.current} SetGoverningApoJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")

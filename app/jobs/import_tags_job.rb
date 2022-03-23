@@ -13,7 +13,7 @@ class ImportTagsJob < GenericJob
       druids_with_tags = ImportTagsCsvConverter.convert(csv_string: params[:csv_file])
 
       # NOTE: We use this instead of `update_druid_count` because import
-      #       tags does not use the `pids` form field.
+      #       tags does not use the `druids` form field.
       bulk_action.update(druid_count_total: druids_with_tags.count)
 
       druids_with_tags.each do |druid, tags|
@@ -36,7 +36,7 @@ class ImportTagsJob < GenericJob
     end
     # tags require immediate reindexing since they do not touch Fedora (and thus do
     # not send messages to Solr)
-    Argo::Indexer.reindex_pid_remotely(druid)
+    Argo::Indexer.reindex_druid_remotely(druid)
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e
     log_buffer.puts("#{Time.current} #{self.class}: Unexpected error importing tags for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe PrepareJob, type: :job do
-  let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:workflow_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
   let(:bulk_action) { create(:bulk_action) }
@@ -14,10 +14,10 @@ RSpec.describe PrepareJob, type: :job do
                            'label' => 'My Item',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[0],
+                           'externalIdentifier' => druids[0],
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -30,10 +30,10 @@ RSpec.describe PrepareJob, type: :job do
                            'label' => 'My Item',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[1],
+                           'externalIdentifier' => druids[1],
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[1].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -46,7 +46,7 @@ RSpec.describe PrepareJob, type: :job do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
   let(:params) do
     {
-      pids: pids,
+      druids: druids,
       groups: groups,
       user: user,
       version_description: 'Changed dates',
@@ -58,8 +58,8 @@ RSpec.describe PrepareJob, type: :job do
     allow(Ability).to receive(:new).and_return(ability)
     allow(VersionService).to receive(:open)
     allow(DorObjectWorkflowStatus).to receive(:new).and_return(workflow_status)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
   end
 
   after do

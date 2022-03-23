@@ -13,7 +13,7 @@ class ExportStructuralJob < GenericJob
 
       CSV.open(csv_download_path, 'w', headers: true) do |csv|
         csv << ['druid', *StructureSerializer::HEADERS]
-        pids.each do |druid|
+        druids.each do |druid|
           rows_for_file = item_to_rows(druid, log_buffer)
           rows_for_file.each do |row|
             csv << [druid.delete_prefix('druid:'), *row]

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CollectionChangeSet do
   let(:instance) { described_class.new(collection) }
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
 
   describe 'loading from cocina' do
     let(:collection) do
@@ -12,10 +12,10 @@ RSpec.describe CollectionChangeSet do
                              'label' => 'My Collection',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.collection,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My Collection' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {
                                view: 'world',

@@ -7,7 +7,7 @@ class WorkflowUpdateButton < ApplicationComponent
     @process = process
   end
 
-  delegate :pid, :workflow_name, :name, to: :process
+  delegate :workflow_name, :name, to: :process
 
   def label
     "Set to #{next_status}"
@@ -26,6 +26,10 @@ class WorkflowUpdateButton < ApplicationComponent
   attr_reader :process
 
   delegate :status, to: :process
+
+  def druid
+    process.pid
+  end
 
   def error_state?
     process.status == 'error'

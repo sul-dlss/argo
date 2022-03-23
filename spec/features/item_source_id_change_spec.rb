@@ -67,7 +67,7 @@ RSpec.describe 'Item source id change' do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       solr_conn.add(id: druid, objectType_ssim: 'item',
                     SolrDocument::FIELD_CATKEY_ID => 'catkey:99999')
       solr_conn.commit
@@ -79,7 +79,7 @@ RSpec.describe 'Item source id change' do
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Source Id for ' \
         "#{druid} has been updated!"
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end
   end
 end

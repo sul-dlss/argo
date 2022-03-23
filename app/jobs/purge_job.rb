@@ -9,7 +9,7 @@ class PurgeJob < GenericJob
     with_bulk_action_log do |log_buffer|
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         log_buffer.puts("#{Time.current} #{self.class}: Attempting to purge #{current_druid} (bulk_action.id=#{bulk_action_id})")
         purge(current_druid, log_buffer)
       end

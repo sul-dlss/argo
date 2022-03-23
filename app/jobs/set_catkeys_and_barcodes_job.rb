@@ -4,23 +4,23 @@
 # Job to update/add catkey/barcodes to objects
 class SetCatkeysAndBarcodesJob < GenericJob
   ##
-  # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
+  # A job that allows a user to specify a list of druids and a list of catkeys to be associated with these druids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of
-  # @option params [String] :catkeys list of catkeys to be associated 1:1 with pids in order
+  # @option params [Array] :druids required list of
+  # @option params [String] :catkeys list of catkeys to be associated 1:1 with druids in order
   # @option params [String] :use_catkeys_option option to update the catkeys
-  # @option params [String] :barcodes list of barcodes to be associated 1:1 with pids in order
+  # @option params [String] :barcodes list of barcodes to be associated 1:1 with druids in order
   # @option params [String] :use_barcodes_option option to update the barcodes
   def perform(bulk_action_id, params)
     super
 
     # Catkeys, barcodes are nil if not selected for use.
-    update_pids, catkeys, barcodes = params_from(params)
+    update_druids, catkeys, barcodes = params_from(params)
 
     with_bulk_action_log do |log|
-      update_druid_count(count: update_pids.count)
-      update_pids.each_with_index do |current_druid, i|
+      update_druid_count(count: update_druids.count)
+      update_druids.each_with_index do |current_druid, i|
         cocina_object = Dor::Services::Client.object(current_druid).find
         args = {}
         args[:catkey] = catkeys[i] if catkeys
@@ -37,7 +37,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
   def params_from(params)
     catkeys = dig_from_params_if_option_set(params, :catkeys)
     barcodes = dig_from_params_if_option_set(params, :barcodes)
-    [pids, catkeys, barcodes]
+    [druids, catkeys, barcodes]
   end
 
   private

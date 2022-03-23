@@ -24,7 +24,7 @@ RSpec.describe 'workflows/_show' do
 
   let(:presenter) do
     instance_double(WorkflowPresenter,
-                    pid: druid,
+                    druid: druid,
                     workflow_name: workflow_name,
                     processes: [process_status],
                     cocina_object: item)

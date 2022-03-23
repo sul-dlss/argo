@@ -9,7 +9,7 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
   end
 
   let(:user) { create(:user) }
-  let(:pid) { 'druid:zt570qh4444' }
+  let(:druid) { 'druid:zt570qh4444' }
   let(:collection_id) { 'druid:bq377wp9578' }
   let(:collection) do
     Cocina::Models::Collection.new(externalIdentifier: collection_id,
@@ -25,7 +25,7 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
                            'label' => 'The APO',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'administrative' => {
                              hasAdminPolicy: 'druid:hv992ry2431',
                              hasAgreement: 'druid:hp308wm0436',
@@ -40,7 +40,7 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
                            'label' => 'The APO',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'administrative' => {
                              hasAdminPolicy: 'druid:hv992ry2431',
                              hasAgreement: 'druid:hp308wm0436',
@@ -51,7 +51,7 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
   end
 
   it 'calls remove_default_collection' do
-    get "/apo/#{pid}/delete_collection?collection=#{collection_id}"
+    get "/apo/#{druid}/delete_collection?collection=#{collection_id}"
     expect(object_client).to have_received(:update)
       .with(params: expected)
   end

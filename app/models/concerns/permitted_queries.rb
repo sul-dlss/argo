@@ -46,14 +46,14 @@ class PermittedQueries
   # Ported over code from `app/models/user.rb`
   # Queries Solr yet again! But in a different way! Doesn't use filter query.
   # FIXME: seems to include display logic
-  # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (PID)", "PID"]
+  # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (DRUID)", "DRUID"]
   def permitted_collections
     q = if admin?
           '*:*'
         elsif permitted_apos.empty?
           '-id:*'
         else
-          permitted_apos.map { |pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\"" }.join(' OR ')
+          permitted_apos.map { |druid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{druid}\"" }.join(' OR ')
         end
 
     # Note that if there are more than PERMITTED_COLLECTIONS_LIMIT collections, not all collections may be returned,

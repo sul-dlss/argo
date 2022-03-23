@@ -2,7 +2,7 @@
   <h1>New Bulk Action</h1>
 
   <div class='mb-3' data-controller="bulk-actions"
-       data-bulk-actions-populate-url-value="<%= search_catalog_path(search_of_pids) %>">
+       data-bulk-actions-populate-url-value="<%= search_catalog_path(search_of_druids) %>">
       <%= select_tag(:action_type, action_types,
                      class: 'form-select mb-3',
                      data: { action: 'change->bulk-actions#showTab', bulk_actions_target: 'selector' }) %>

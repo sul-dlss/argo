@@ -403,7 +403,7 @@ RSpec.describe ExportStructuralJob, type: :job do
   end
 
   describe '#perform_now' do
-    let(:pids) { [druid1, druid2] }
+    let(:druids) { [druid1, druid2] }
     let(:druid1) { 'druid:bc123df4567' }
     let(:druid2) { 'druid:bd123fg5678' }
     let(:groups) { [] }
@@ -412,14 +412,14 @@ RSpec.describe ExportStructuralJob, type: :job do
     context 'when happy path' do
       before do
         job.perform(bulk_action.id,
-                    pids: pids,
+                    druids: druids,
                     groups: groups,
                     user: user)
       end
 
       it 'logs messages and creates a file' do
-        expect(bulk_action.druid_count_total).to eq pids.length
-        expect(bulk_action.druid_count_success).to eq pids.length
+        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.druid_count_success).to eq druids.length
         expect(bulk_action.druid_count_fail).to be_zero
         expect(log_buffer.string).to include "Exporting structural metadata for #{druid1}"
         expect(log_buffer.string).to include "Exporting structural metadata for #{druid2}"
@@ -440,15 +440,15 @@ RSpec.describe ExportStructuralJob, type: :job do
         allow(object_client1).to receive(:find).and_raise(StandardError, 'ruh roh')
         allow(object_client2).to receive(:find).and_raise(StandardError, 'ruh roh')
         job.perform(bulk_action.id,
-                    pids: pids,
+                    druids: druids,
                     groups: groups,
                     user: user)
       end
 
       it 'records all failures and creates an empty file' do
-        expect(bulk_action.druid_count_total).to eq pids.length
+        expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
-        expect(bulk_action.druid_count_fail).to eq pids.length
+        expect(bulk_action.druid_count_fail).to eq druids.length
         expect(log_buffer.string).to include "Unexpected error exporting structural metadata for #{druid1}: ruh roh"
         expect(log_buffer.string).to include "Unexpected error exporting structural metadata for #{druid2}: ruh roh"
         expect(File).to exist(csv_path)
@@ -520,15 +520,15 @@ RSpec.describe ExportStructuralJob, type: :job do
 
       before do
         job.perform(bulk_action.id,
-                    pids: pids,
+                    druids: druids,
                     groups: groups,
                     user: user)
       end
 
       it 'records all failures and creates an empty file' do
-        expect(bulk_action.druid_count_total).to eq pids.length
+        expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
-        expect(bulk_action.druid_count_fail).to eq pids.length
+        expect(bulk_action.druid_count_fail).to eq druids.length
         expect(log_buffer.string).to include 'Object druid:bc123df4567 has no structural metadata to export'
         expect(log_buffer.string).to include 'Object druid:bd123fg5678 has no structural metadata to export'
         expect(File).to exist(csv_path)

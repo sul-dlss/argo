@@ -5,14 +5,14 @@ require 'rails_helper'
 RSpec.describe 'datastreams/show' do
   before do
     params[:id] = dsid
-    params[:item_id] = pid
+    params[:item_id] = druid
     allow(view).to receive(:can?).and_return(true)
     @cocina = cocina
     @content = '<identityMetadata></identityMetadata>'
   end
 
-  let(:pid) { 'druid:abc123' }
-  let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: pid) }
+  let(:druid) { 'druid:abc123' }
+  let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: druid) }
 
   context 'with an editable datastream' do
     let(:dsid) { 'identityMetadata' }

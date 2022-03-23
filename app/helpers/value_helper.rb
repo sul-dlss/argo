@@ -17,7 +17,7 @@ module ValueHelper
   # @see Blacklight::DocumentPresenter#get_field_values
   # @return [String]
   def link_to_admin_policy(args)
-    link_to args[:document].apo_title, solr_document_path(args[:document].apo_pid)
+    link_to args[:document].apo_title, solr_document_path(args[:document].apo_druid)
   end
 
   # Links to an admin policy for a given document and objects that have that policy. This can be abstracted away
@@ -30,7 +30,7 @@ module ValueHelper
   def link_to_admin_policy_with_objs(args)
     policy_link = link_to_admin_policy(args)
     facet_config = facet_configuration_for_field('is_governed_by_ssim')
-    path_for_facet = facet_item_presenter(facet_config, "info:fedora/#{args[:document].apo_pid}", 'is_governed_by_ssim').href
+    path_for_facet = facet_item_presenter(facet_config, "info:fedora/#{args[:document].apo_druid}", 'is_governed_by_ssim').href
     objs_link = link_to 'All objects with this APO', path_for_facet
     "#{policy_link} (#{objs_link})".html_safe
   end

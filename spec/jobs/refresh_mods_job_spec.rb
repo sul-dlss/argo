@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe RefreshModsJob, type: :job do
-  let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
@@ -17,7 +17,7 @@ RSpec.describe RefreshModsJob, type: :job do
                            'label' => 'My Item',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[0],
+                           'externalIdentifier' => druids[0],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
@@ -30,7 +30,7 @@ RSpec.describe RefreshModsJob, type: :job do
                            'label' => 'My Item',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[1],
+                           'externalIdentifier' => druids[1],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
@@ -45,12 +45,12 @@ RSpec.describe RefreshModsJob, type: :job do
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(BulkJobLog).to receive(:open).and_yield(logger)
 
     described_class.perform_now(bulk_action.id,
-                                pids: pids,
+                                druids: druids,
                                 groups: groups,
                                 user: user)
   end
