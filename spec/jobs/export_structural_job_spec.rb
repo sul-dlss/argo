@@ -424,8 +424,13 @@ RSpec.describe ExportStructuralJob, type: :job do
         expect(log_buffer.string).to include "Exporting structural metadata for #{druid1}"
         expect(log_buffer.string).to include "Exporting structural metadata for #{druid2}"
         expect(File).to exist(csv_path)
-        File.open(csv_path, 'r') do |file|
-          expect(file.readlines.size).to eq 9 # one row for each file plus the headers.
+      end
+
+      it 'is valid csv and druids are prefixless' do
+        output = CSV.read(csv_path, headers: true)
+        expect(output.size).to eq 8
+        output.each do |row|
+          expect(row['druid']).not_to match(/^druid:/)
         end
       end
     end
