@@ -17,13 +17,13 @@ RSpec.describe BulkActionsFormComponent, type: :component do
     context 'when last search is nil' do
       let(:search_params) { nil }
 
-      it 'returns an empty string' do
-        expect(instance.search_of_druids).to eq ''
+      it 'returns an empty hash' do
+        expect(instance.search_of_druids).to eq({})
       end
     end
 
     context 'when a Blacklight::Search is present' do
-      let(:search_params) { { q: 'cool catz' } }
+      let(:search_params) { { q: 'cool catz', controller: 'catalog' } }
 
       it 'adds a druids_only param' do
         expect(instance.search_of_druids).to include(q: 'cool catz', 'druids_only' => true)
