@@ -41,15 +41,13 @@ module Contents
     end
 
     def height
-      # still need to account for no presentation
-      return '' if presentation.height.blank?
+      return '' if presentation&.height.blank?
 
       "#{presentation.height} px"
     end
 
     def width
-      # still need to account for no presentation
-      return '' if presentation.width.blank?
+      return '' if presentation&.width.blank?
 
       "#{presentation.width} px"
     end

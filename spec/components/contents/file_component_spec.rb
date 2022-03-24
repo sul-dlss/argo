@@ -38,4 +38,12 @@ RSpec.describe Contents::FileComponent, type: :component do
       expect(rendered.to_html).to include 'No role'
     end
   end
+
+  context 'with no presentation' do
+    let(:presentation) { nil }
+
+    it 'renders the component' do
+      expect(rendered.to_html).to include 'World'
+    end
+  end
 end
