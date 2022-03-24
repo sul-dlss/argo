@@ -6,47 +6,14 @@ class RefreshModsJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    with_bulk_action_log do |log_buffer|
-      update_druid_count
+    with_items(params[:druids], name: 'Refresh MODS') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-      druids.each do |current_druid|
-        log_buffer.puts("#{Time.current} #{self.class}: Attempting #{current_druid} (bulk_action.id=#{bulk_action_id})")
-        refresh_mods(current_druid, log_buffer)
-      end
+      catkey = cocina_object.identification&.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
+      next failure.call("Did not update metadata because it doesn't have a catkey") if catkey.blank?
+
+      Dor::Services::Client.object(cocina_object.externalIdentifier).refresh_descriptive_metadata_from_ils
+      success.call('Successfully updated metadata')
     end
-  end
-
-  private
-
-  def refresh_mods(current_druid, log_buffer)
-    object_client = Dor::Services::Client.object(current_druid)
-    cocina_object = object_client.find
-
-    return unless verify_access(cocina_object, log_buffer) && verify_catkey(cocina_object, log_buffer)
-
-    object_client.refresh_descriptive_metadata_from_ils
-    log_buffer.puts("#{Time.current} #{self.class}: Successfully updated metadata #{current_druid} (bulk_action.id=#{bulk_action.id})")
-    bulk_action.increment(:druid_count_success).save
-  rescue StandardError => e
-    log_buffer.puts "#{Time.current} #{self.class}: Unexpected error for #{current_druid}: (bulk_action.id=#{bulk_action.id}): #{e.message}"
-    bulk_action.increment(:druid_count_fail).save
-  end
-
-  def verify_access(cocina_object, log_buffer)
-    return true if ability.can?(:manage_item, cocina_object)
-
-    log_buffer.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
-    bulk_action.increment(:druid_count_fail).save
-    false
-  end
-
-  def verify_catkey(cocina_object, log_buffer)
-    catkey = cocina_object.identification&.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
-    return true if catkey.present?
-
-    log_buffer.puts("#{Time.current} #{self.class}: Did not update metadata for #{cocina_object.externalIdentifier} because it " \
-                    "doesn't have a catkey (bulk_action.id=#{bulk_action.id})")
-    bulk_action.increment(:druid_count_fail).save
-    false
   end
 end

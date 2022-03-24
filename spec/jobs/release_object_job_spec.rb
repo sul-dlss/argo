@@ -95,12 +95,6 @@ RSpec.describe ReleaseObjectJob do
         it 'logs information to the logfile' do
           subject.perform(bulk_action.id, params)
           expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
-          druids.each do |druid|
-            expect(buffer.string).to include "Beginning ReleaseObjectJob for #{druid}"
-          end
-          expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
-          expect(buffer.string).to include 'Release tag added successfully'
-          expect(buffer.string).to include 'Trying to start release workflow'
           expect(buffer.string).to include 'Workflow creation successful'
           expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
         end
@@ -131,13 +125,7 @@ RSpec.describe ReleaseObjectJob do
           buffer = StringIO.new
           expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
-          druids.each do |druid|
-            expect(buffer.string).to include "Beginning ReleaseObjectJob for #{druid}"
-            expect(buffer.string).to include 'Release tag failed POST Dor::Services::Client::UnexpectedResponse : 500 (Response from dor-services-app did not contain a body.'
-          end
-          expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
-          expect(buffer.string).not_to include 'Release tag added successfully'
-          expect(buffer.string).not_to include 'Trying to start release workflow'
+          expect(buffer.string).to include 'Release tag failed Dor::Services::Client::UnexpectedResponse : 500 (Response from dor-services-app did not contain a body.'
         end
       end
 
@@ -164,13 +152,7 @@ RSpec.describe ReleaseObjectJob do
           buffer = StringIO.new
           expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
-          druids.each do |druid|
-            expect(buffer.string).to include "Beginning ReleaseObjectJob for #{druid}"
-            expect(buffer.string).to include 'Workflow creation failed POST Dor::WorkflowException Dor::WorkflowException'
-          end
-          expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
-          expect(buffer.string).to include 'Release tag added successfully'
-          expect(buffer.string).to include 'Trying to start release workflow'
+          expect(buffer.string).to include 'Release tag failed Dor::WorkflowException Dor::WorkflowException'
         end
       end
 
@@ -191,9 +173,7 @@ RSpec.describe ReleaseObjectJob do
           subject.perform(bulk_action.id, params)
           expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
           druids.each do |druid|
-            expect(buffer.string).to include "Beginning ReleaseObjectJob for #{druid}"
             expect(buffer.string).to include "Not authorized for #{druid}"
-            expect(buffer.string).not_to include 'Adding release tag for'
           end
           expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
         end

@@ -18,36 +18,21 @@ class PrepareJob < GenericJob
     significance = params['significance']
     description = params['version_description']
 
-    with_bulk_action_log do |log|
-      update_druid_count
+    with_items(params[:druids], name: 'Open version') do |cocina_object, success, failure|
+      return failure.call("State isn't openable") unless openable?(cocina_object)
+      return failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-      druids.each do |current_druid|
-        open_object(current_druid, significance, description, @current_user.to_s, log)
-      end
+      VersionService.open(identifier: cocina_object.externalIdentifier,
+                          significance: significance,
+                          description: description,
+                          opening_user_name: @current_user.to_s)
+      success.call('Version successfully opened')
     end
   end
 
   private
 
-  def open_object(druid, significance, description, user_name, log)
-    cocina = Dor::Services::Client.object(druid).find
-
-    return log.puts("#{Time.current} #{druid} is not openable") unless openable?(druid, version: cocina.version)
-
-    return log.puts("#{Time.current} Not authorized for #{druid}") unless ability.can?(:manage_item, cocina)
-
-    VersionService.open(identifier: druid,
-                        significance: significance,
-                        description: description,
-                        opening_user_name: user_name)
-    bulk_action.increment(:druid_count_success).save
-    log.puts("#{Time.current} Object successfully opened #{druid}")
-  rescue StandardError => e
-    log.puts("#{Time.current} Opening #{druid} failed #{e.class} #{e.message}")
-    bulk_action.increment(:druid_count_fail).save
-  end
-
-  def openable?(druid, version:)
-    DorObjectWorkflowStatus.new(druid, version: version).can_open_version?
+  def openable?(cocina)
+    DorObjectWorkflowStatus.new(cocina.externalIdentifier, version: cocina.version).can_open_version?
   end
 end

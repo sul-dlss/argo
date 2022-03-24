@@ -3,21 +3,18 @@
 ##
 # A job that exports structural metadata to CSV for one or more objects
 # @param [Integer] bulk_action_id GlobalID for a BulkAction object
-# @param [Hash] _params additional parameters that an Argo job may need
+# @param [Hash] params additional parameters that an Argo job may need
 class ExportStructuralJob < GenericJob
-  def perform(bulk_action_id, _params)
+  def perform(bulk_action_id, params)
     super
 
-    with_bulk_action_log do |log_buffer|
-      update_druid_count
-
-      CSV.open(csv_download_path, 'w', headers: true) do |csv|
-        csv << ['druid', *StructureSerializer::HEADERS]
-        druids.each do |druid|
-          rows_for_file = item_to_rows(druid, log_buffer)
-          rows_for_file.each do |row|
-            csv << [druid.delete_prefix('druid:'), *row]
-          end
+    CSV.open(csv_download_path, 'w', headers: true) do |csv|
+      csv << ['druid', *StructureSerializer::HEADERS]
+      with_items(params[:druids], name: 'Export structural metadata') do |cocina_object, success, failure|
+        rows_for_file = item_to_rows(cocina_object, success, failure)
+        druid = cocina_object.externalIdentifier.delete_prefix('druid:')
+        rows_for_file.each do |row|
+          csv << [druid, *row]
         end
       end
     end
@@ -26,30 +23,22 @@ class ExportStructuralJob < GenericJob
   private
 
   # @return [Array<Array>] Returns an array of rows for the object
-  def item_to_rows(druid, log_buffer)
+  def item_to_rows(item, success, failure)
     result = []
-    log_buffer.puts("#{Time.current} #{self.class}: Loading #{druid}")
-    item = Dor::Services::Client.object(druid).find
     if !item.dro? || Array(item.structural&.contains).empty?
-      log_failure("Object #{druid} has no structural metadata to export", log_buffer)
+      failure.call('No structural metadata to export')
       return []
     end
 
-    log_buffer.puts("#{Time.current} #{self.class}: Exporting structural metadata for #{druid}")
     StructureSerializer.new(item.structural).rows do |row|
       result << row
     end
-    bulk_action.increment(:druid_count_success).save
+    success.call('Exported structural metadata')
     result
   rescue StandardError => e
-    log_buffer.puts("#{Time.current} #{self.class}: Unexpected error exporting structural metadata for #{druid}: #{e}")
-    bulk_action.increment(:druid_count_fail).save
+    failure.call("Unexpected error exporting structural metadata: #{e.message}")
+    Honeybadger.notify(e)
     result
-  end
-
-  def log_failure(message, log_buffer)
-    log_buffer.puts("#{Time.current} #{self.class}: #{message}")
-    bulk_action.increment(:druid_count_fail).save
   end
 
   def csv_download_path

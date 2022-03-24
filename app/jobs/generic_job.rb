@@ -56,6 +56,46 @@ class GenericJob < ActiveJob::Base
     end
   end
 
+  ##
+  # Loops over the list of druids and loads the cocina item for each. This takes
+  # care of incrementing success and fail counts in the job. It also rescues errors
+  # and records them as failures.
+  # @param [Array<String>] druids the list of identifiers to operate on
+  # @param [String] name the name of the operation for logging
+  # @yieldparam [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] cocina_object
+  # @yieldparam [Proc] success call this with a message if the operation was successful
+  # @yieldparam [Proc] failure call this with a message if the operation was unsuccessful
+  # @yieldparam [Integer] index
+  # @example
+  #   with_items(druids, name: 'my operation') do |cocina_object, success, failure|
+  #     if operate_on(cocina_object)
+  #       success.call("Looks good")
+  #     else
+  #       failure.call("Something went wrong")
+  #     end
+  #   end
+  def with_items(druids, name:)
+    update_druid_count(count: druids.length)
+    with_bulk_action_log do |log|
+      druids.each_with_index do |druid, idx|
+        success = lambda { |message|
+          bulk_action.increment(:druid_count_success).save
+          log.puts("#{Time.current} #{message} for #{druid}")
+        }
+        failure = lambda { |message|
+          bulk_action.increment(:druid_count_fail).save
+          log.puts("#{Time.current} #{message} for #{druid}")
+        }
+
+        cocina_object = Dor::Services::Client.object(druid).find
+        yield(cocina_object, success, failure, idx)
+      rescue StandardError => e
+        failure.call("#{name} failed #{e.class} #{e.message}")
+        Honeybadger.notify(e, context: { druid: druid })
+      end
+    end
+  end
+
   def ability
     @ability ||= begin
       user = bulk_action.user

@@ -36,26 +36,11 @@ RSpec.describe SetGoverningApoJob do
     end
 
     context 'when the user can modify all items' do
-      it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
-        druids.each do |druid|
-          expect(subject).to receive(:set_governing_apo_and_index_safely).with(druid, buffer)
-        end
+      it 'logs info about progress' do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq druids.length
-      end
-
-      it 'logs info about progress' do
-        allow(subject).to receive(:set_governing_apo_and_index_safely)
-
-        subject.perform(bulk_action.id, params)
-
-        bulk_action_id = bulk_action.id
-        expect(buffer.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action_id}"
-        druids.each do |druid|
-          expect(buffer.string).to include "SetGoverningApoJob: Starting update for #{druid} (bulk_action.id=#{bulk_action_id})"
-          expect(buffer.string).to include "SetGoverningApoJob: Finished update for #{druid} (bulk_action.id=#{bulk_action_id})"
-        end
-        expect(buffer.string).to include "Finished SetGoverningApoJob for BulkAction #{bulk_action_id}"
+        expect(buffer.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action.id}"
+        expect(buffer.string).to include "Finished SetGoverningApoJob for BulkAction #{bulk_action.id}"
       end
     end
 
@@ -114,12 +99,9 @@ RSpec.describe SetGoverningApoJob do
         expect(bulk_action.druid_count_success).to eq 1
         expect(bulk_action.druid_count_fail).to eq 2
 
-        bulk_action_id = bulk_action.id
-        expect(buffer.string).to include "SetGoverningApoJob: Successfully updated #{druids[0]} (bulk_action.id=#{bulk_action_id})"
-        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{druids[1]} (bulk_action.id=#{bulk_action_id}): " \
-                                         'Dor::Services::Client::NotFoundResponse'
-        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{druids[2]} (bulk_action.id=#{bulk_action_id}): " \
-                                         'user not authorized to move druid:dd111ff2222 to druid:bc111bb2222'
+        expect(buffer.string).to include "Governing APO updated for #{druids[0]}"
+        expect(buffer.string).to include "Set governing APO failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
+        expect(buffer.string).to include 'user not authorized to move item to druid:bc111bb2222 for druid:dd111ff2222'
       end
     end
   end

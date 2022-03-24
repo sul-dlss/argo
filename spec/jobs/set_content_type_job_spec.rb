@@ -111,7 +111,7 @@ RSpec.describe SetContentTypeJob, type: :job do
             resource_types: [Cocina::Models::FileSetType.page, Cocina::Models::FileSetType.image]
           )
         )
-      expect(buffer.string).to include "Successfully updated content type of #{druids[0]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated content type for #{druids[0]}"
     end
   end
 
@@ -169,9 +169,8 @@ RSpec.describe SetContentTypeJob, type: :job do
       }
     end
 
-    it 'logs an error' do
-      subject.perform(bulk_action.id, params)
-      expect(buffer.string).to include 'Must provide a new content type when changing resource type.'
+    it 'raises an error' do
+      expect { subject.perform(bulk_action.id, params) }.to raise_error 'Must provide a new content type when changing resource type.'
       expect(object_client1).not_to have_received(:update)
     end
   end
@@ -186,9 +185,8 @@ RSpec.describe SetContentTypeJob, type: :job do
       }
     end
 
-    it 'logs an error' do
-      subject.perform(bulk_action.id, params)
-      expect(buffer.string).to include 'Must provide values for types.'
+    it 'raises an error' do
+      expect { subject.perform(bulk_action.id, params) }.to raise_error 'Must provide values for types.'
       expect(object_client1).not_to have_received(:update)
     end
   end
@@ -245,7 +243,7 @@ RSpec.describe SetContentTypeJob, type: :job do
 
     it 'does not update and logs an error' do
       subject.perform(bulk_action.id, params)
-      expect(buffer.string).to include 'Could not update content type'
+      expect(buffer.string).to include 'Object is a https://cocina.sul.stanford.edu/models/collection and cannot be updated'
       expect(object_client3).not_to have_received(:update)
     end
   end

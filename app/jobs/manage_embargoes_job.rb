@@ -11,12 +11,9 @@ class ManageEmbargoesJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    with_bulk_action_log do |log|
-      update_druids, embargo_release_dates, rights = params_from_csv(params)
-      update_druid_count(count: update_druids.count)
-      update_druids.each_with_index do |current_druid, i|
-        update_embargo(current_druid, embargo_release_dates[i], rights[i], log) unless current_druid.nil?
-      end
+    update_druids, embargo_release_dates, rights = params_from_csv(params)
+    with_items(update_druids, name: 'Embargo') do |cocina_object, success, failure, index|
+      update_embargo(cocina_object, embargo_release_dates[index], rights[index], success, failure)
     end
   end
 
@@ -36,49 +33,29 @@ class ManageEmbargoesJob < GenericJob
 
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
-  def update_embargo(current_druid, embargo_release_date_param, rights_param, log)
-    log.puts("#{Time.current} Beginning ManageEmbargoesJob for #{current_druid}")
-
+  def update_embargo(cocina_object, embargo_release_date_param, rights_param, success, failure)
     begin
       embargo_release_date = embargo_release_date_param.present? ? DateTime.parse(embargo_release_date_param) : nil
     rescue Date::Error
-      log.puts("#{Time.current} #{embargo_release_date_param} is not a valid date")
-      bulk_action.increment(:druid_count_fail).save
-      return
+      return failure.call("#{embargo_release_date_param} is not a valid date")
     end
 
-    cocina_object = Dor::Services::Client.object(current_druid).find
+    return failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-    unless ability.can?(:manage_item, cocina_object)
-      log.puts("#{Time.current} Not authorized for #{current_druid}")
-      bulk_action.increment(:druid_count_fail).save
-      return
-    end
-
+    state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
     msg = "Setting embargo to #{rights_param} to be released on #{embargo_release_date_param}."
-    log.puts("#{Time.current} #{msg}")
+    open_new_version(cocina_object.externalIdentifier, cocina_object.version, msg) unless state_service.allows_modification?
 
-    begin
-      state_service = StateService.new(current_druid, version: cocina_object.version)
-      open_new_version(cocina_object.externalIdentifier, cocina_object.version, msg) unless state_service.allows_modification?
+    changes = {}
+    changes[:embargo_release_date] = embargo_release_date if embargo_release_date
+    changes[:embargo_access] = rights_param if rights_param
+    return success.call('no changes') if changes.empty?
 
-      changes = {}
-      changes[:embargo_release_date] = embargo_release_date if embargo_release_date
-      changes[:embargo_access] = rights_param if rights_param
-      unless changes.empty?
-        change_set = ItemChangeSet.new(cocina_object)
-        if change_set.validate(changes) && change_set.save
-          bulk_action.increment(:druid_count_success).save
-          log.puts("#{Time.current} Embargo set successfully")
-        else
-          log.puts("#{Time.current} #{rights_param} is not a valid right")
-          bulk_action.increment(:druid_count_fail).save
-        end
-      end
-    rescue StandardError => e
-      log.puts("#{Time.current} Embargo failed #{e.class} #{e.message}")
-      bulk_action.increment(:druid_count_fail).save
-      nil
+    change_set = ItemChangeSet.new(cocina_object)
+    if change_set.validate(changes) && change_set.save
+      success.call("Embargo set to #{rights_param} to be released on #{embargo_release_date_param}.")
+    else
+      failure.call("#{rights_param} is not a valid right")
     end
   end
   # rubocop:enable Metrics/CyclomaticComplexity

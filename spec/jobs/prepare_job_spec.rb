@@ -62,10 +62,6 @@ RSpec.describe PrepareJob, type: :job do
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
   end
 
-  after do
-    FileUtils.rm(bulk_action.log_name)
-  end
-
   context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
 

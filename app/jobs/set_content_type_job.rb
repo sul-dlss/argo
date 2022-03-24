@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/CyclomaticComplexity
 # job to set new content type and resource type
 class SetContentTypeJob < GenericJob
   def perform(bulk_action_id, params)
@@ -11,60 +10,33 @@ class SetContentTypeJob < GenericJob
     @new_content_type = params[:new_content_type]
     @new_resource_type = params[:new_resource_type]
 
-    with_bulk_action_log do |log_buffer|
-      raise StandardError, 'Must provide values for types.' if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?
-      raise StandardError, 'Must provide a new content type when changing resource type.' if @new_content_type.blank? && @new_resource_type.present?
+    raise 'Must provide values for types.' if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?
+    raise 'Must provide a new content type when changing resource type.' if @new_content_type.blank? && @new_resource_type.present?
 
-      update_druid_count
-
-      druids.each do |current_druid|
-        log_buffer.puts("#{Time.current} #{self.class}: Attempting #{current_druid} (bulk_action.id=#{bulk_action_id})")
-        set_content_type(current_druid, log_buffer)
-      end
-    rescue StandardError => e
-      log_buffer.puts "#{Time.current} #{self.class}: Error with form values provided: #{e.message}"
+    with_items(params[:druids], name: 'Set content types') do |cocina_object, success, failure|
+      set_content_type(cocina_object, success, failure)
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   private
 
   attr_reader :current_resource_type, :new_content_type, :new_resource_type
 
-  def set_content_type(current_druid, log_buffer)
-    object_client = Dor::Services::Client.object(current_druid)
-    cocina_object = object_client.find
-
+  def set_content_type(cocina_object, success, failure)
     # collections, APOs, and agreements do not have content types
     if [Cocina::Models::ObjectType.collection, Cocina::Models::ObjectType.admin_policy].include? cocina_object.type
-      log_buffer.puts "#{Time.current} #{self.class}: Could not update content type for #{current_druid}: object is a #{cocina_object.type}"
-      bulk_action.increment(:druid_count_fail).save
-      return
+      return failure.call("Object is a #{cocina_object.type} and cannot be updated")
     end
 
-    return unless verify_access(cocina_object, log_buffer)
+    return failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
     # use dor services client to pass a hash for structural metadata and update the cocina object
-    begin
-      state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
-      raise StandardError, 'Object cannot be modified in its current state.' unless state_service.allows_modification?
+    state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
+    return failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?
 
-      object_client.update(params: cocina_object.new(cocina_update_attributes(cocina_object)))
-      Argo::Indexer.reindex_druid_remotely(cocina_object.externalIdentifier)
-      log_buffer.puts("#{Time.current} #{self.class}: Successfully updated content type of #{current_druid} (bulk_action.id=#{bulk_action.id})")
-      bulk_action.increment(:druid_count_success).save
-    rescue StandardError => e
-      log_buffer.puts "#{Time.current} #{self.class}: Unexpected error for #{current_druid}: (bulk_action.id=#{bulk_action.id}): #{e.message}"
-      bulk_action.increment(:druid_count_fail).save
-    end
-  end
-
-  def verify_access(cocina_object, log_buffer)
-    return true if ability.can?(:manage_item, cocina_object)
-
-    log_buffer.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
-    bulk_action.increment(:druid_count_fail).save
-    false
+    new_model = cocina_object.new(cocina_update_attributes(cocina_object))
+    Dor::Services::Client.object(cocina_object.externalIdentifier).update(params: new_model)
+    success.call('Successfully updated content type')
   end
 
   def cocina_update_attributes(cocina_object)

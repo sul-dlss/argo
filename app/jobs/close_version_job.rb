@@ -12,29 +12,12 @@ class CloseVersionJob < GenericJob
   # @option params [Array] :user the user
   def perform(bulk_action_id, params)
     super
-    with_bulk_action_log do |log|
-      update_druid_count
 
-      druids.each do |current_druid|
-        close_object(current_druid, log)
-      end
+    with_items(params[:druids], name: 'Close version') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+
+      VersionService.close(identifier: cocina_object.externalIdentifier)
+      success.call('Object successfully closed')
     end
-  end
-
-  private
-
-  def close_object(druid, log)
-    cocina = Dor::Services::Client.object(druid).find
-
-    unless ability.can?(:manage_item, cocina)
-      log.puts("#{Time.current} Not authorized for #{druid}")
-      return
-    end
-    VersionService.close(identifier: druid)
-    bulk_action.increment(:druid_count_success).save
-    log.puts("#{Time.current} Object successfully closed #{druid}")
-  rescue StandardError => e
-    log.puts("#{Time.current} Closing #{druid} failed #{e.class} #{e.message}")
-    bulk_action.increment(:druid_count_fail).save
   end
 end

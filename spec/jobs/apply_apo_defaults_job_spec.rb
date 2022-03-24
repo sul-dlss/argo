@@ -62,8 +62,8 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
 
     it 'refreshes' do
       expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
-      expect(logger).to have_received(:puts).with(/Successfully applied defaults to druid:bb111cc2222/)
-      expect(logger).to have_received(:puts).with(/Successfully applied defaults to druid:cc111dd2222/)
+      expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
+      expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
 
       expect(object_client1).to have_received(:apply_admin_policy_defaults)
       expect(object_client2).to have_received(:apply_admin_policy_defaults)
@@ -85,8 +85,8 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
 
     it 'tries again and logs messages' do
       expect(bulk_action.reload.druid_count_fail).to eq 2
-      expect(logger).to have_received(:puts).with(/Unexpected error for druid:bb111cc2222/)
-      expect(logger).to have_received(:puts).with(/Unexpected error for druid:cc111dd2222/)
+      expect(logger).to have_received(:puts).with(/Apply defaults failed Faraday::TimeoutError timeout for druid:bb111cc2222/)
+      expect(logger).to have_received(:puts).with(/Apply defaults failed Faraday::TimeoutError timeout for druid:cc111dd2222/)
     end
   end
 
