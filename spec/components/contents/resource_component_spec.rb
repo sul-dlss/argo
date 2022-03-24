@@ -34,10 +34,12 @@ RSpec.describe Contents::ResourceComponent, type: :component do
   let(:type) { 'https://cocina.sul.stanford.edu/models/resources/image' }
   let(:presentation) { { height: 11_839, width: 19_380 } }
 
-  it 'renders the component' do
-    expect(rendered.to_html).to include 'Type'
-    expect(rendered.to_html).to include 'Height'
-    expect(rendered.to_html).to include 'Width'
+  context 'with an image' do
+    it 'renders the component' do
+      expect(rendered.to_html).to include 'Type'
+      expect(rendered.to_html).to include 'Height'
+      expect(rendered.to_html).to include 'Width'
+    end
   end
 
   context 'with no presentation' do

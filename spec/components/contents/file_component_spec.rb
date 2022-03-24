@@ -7,7 +7,7 @@ RSpec.describe Contents::FileComponent, type: :component do
   let(:rendered) { render_inline(component) }
   let(:file) do
     instance_double(Cocina::Models::File,
-                    filename: '0220_MLK_Kids_Gadson_459-25.tif',
+                    filename: 'example.tif',
                     externalIdentifier: 'https://cocina.sul.stanford.edu/file/b7cdfa7a-6e1f-484b-bbb0-f9a46c40dbb4',
                     hasMimeType: 'image/tiff',
                     size: 99,
@@ -22,13 +22,15 @@ RSpec.describe Contents::FileComponent, type: :component do
   let(:presentation) { instance_double(Cocina::Models::Presentation, height: 11_839, width: 19_380) }
   let(:use) { 'transcription' }
 
-  it 'renders the component' do
-    expect(rendered.css('a[href="/items/druid:kb487gt5106/files?id=0220_MLK_Kids_Gadson_459-25.tif"]').to_html)
-      .to include('0220_MLK_Kids_Gadson_459-25.tif')
-    expect(rendered.to_html).to include 'World'
-    expect(rendered.to_html).to include 'Stanford'
-    expect(rendered.to_html).to include 'Transcription'
-    expect(rendered.to_html).to include '11839 px'
+  context 'with an image fileset' do
+    it 'renders the component' do
+      expect(rendered.css('a[href="/items/druid:kb487gt5106/files?id=example.tif"]').to_html)
+        .to include('example.tif')
+      expect(rendered.to_html).to include 'World'
+      expect(rendered.to_html).to include 'Stanford'
+      expect(rendered.to_html).to include 'Transcription'
+      expect(rendered.to_html).to include '11839 px'
+    end
   end
 
   context 'with no file use set' do
@@ -44,6 +46,15 @@ RSpec.describe Contents::FileComponent, type: :component do
 
     it 'renders the component' do
       expect(rendered.to_html).to include 'World'
+    end
+  end
+
+  context 'with a fileset that is not an image' do
+    let(:component) { described_class.new(file: file, object_id: 'druid:kb487gt5106', viewable: true, image: false) }
+
+    it 'renders the component without height' do
+      expect(rendered.to_html).to include 'World'
+      expect(rendered.to_html).not_to include '11839 px'
     end
   end
 end
