@@ -1,8 +1,0 @@
-<%= form_with model: @form,
-              url: set_rights_item_path(@cocina.externalIdentifier),
-              local: true do |f| %>
-  <div class='mb-3'>
-    <%= f.select :rights, f.object.rights_list, {}, class: 'form-select' %>
-  </div>
-  <button class='btn btn-primary'>Update</button>
-<% end %>

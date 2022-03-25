@@ -180,6 +180,8 @@ Rails.application.routes.draw do
       get 'show_barcode'
       get 'edit_copyright'
       get 'show_copyright'
+      get 'edit_rights'
+      get 'show_rights'
       get 'edit_use_statement'
       get 'show_use_statement'
       get 'edit_license'
@@ -187,8 +189,6 @@ Rails.application.routes.draw do
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'
       delete 'purge', action: :purge_object
-      get  'rights'
-      post 'set_rights'
       get 'set_governing_apo_ui'
       post 'set_governing_apo'
       post :apply_apo_defaults

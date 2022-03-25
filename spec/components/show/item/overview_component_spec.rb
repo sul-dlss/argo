@@ -30,7 +30,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }
   let(:edit_use_statement_button) { rendered.css("a[aria-label='Edit use and reproduction']") }
   let(:edit_governing_apo_button) { rendered.css("a[aria-label='Set governing APO']") }
-  let(:edit_rights_button) { rendered.css("a[aria-label='Set rights']") }
+  let(:edit_rights_button) { rendered.css("a[aria-label='Edit rights']") }
 
   let(:doc) do
     SolrDocument.new('id' => 'druid:kv840xx0000',
