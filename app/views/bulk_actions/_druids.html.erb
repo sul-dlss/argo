@@ -1,7 +1,9 @@
 <div data-bulk-actions-target="commonFields">
-  <button class='btn btn-primary' data-action="click->bulk-actions#populateDruids">
-    Populate with previous search
-  </button>
+  <% if search_state.has_constraints? %>
+    <button class='btn btn-primary' data-action="click->bulk-actions#populateDruids">
+      Populate with previous search
+    </button>
+  <% end %>
   <div class='mb-3'>
     <label for='druids'>Druids to perform bulk action on</label>
     <textarea id='druids' name='druids' class='form-control' rows='10' data-bulk-actions-target="druids"></textarea>
