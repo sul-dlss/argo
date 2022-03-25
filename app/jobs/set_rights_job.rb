@@ -10,8 +10,8 @@ class SetRightsJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    new_rights = params[:rights]
-    raise 'Must provide rights' if new_rights.blank?
+    access_params = params.slice(:view_access, :download_access, :controlled_digital_lending, :access_location)
+    raise 'Must provide rights' if access_params.blank?
 
     with_items(params[:druids], name: 'Set rights') do |cocina_object, success, failure|
       next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
@@ -19,10 +19,17 @@ class SetRightsJob < GenericJob
       state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
       next failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?
 
-      form_type = cocina_object.collection? ? CollectionRightsForm : DroRightsForm
-      form = form_type.new(cocina_object)
-      form.validate(rights: new_rights)
-      form.save
+      change_set = if cocina_object.collection?
+                     # Collection only allows setting view access to dark or world
+                     view_access = access_params[:view_access] == 'dark' ? 'dark' : 'world'
+                     access_params = { view_access: view_access }
+                     CollectionChangeSet.new(cocina_object)
+                   else
+                     ItemChangeSet.new(cocina_object)
+                   end
+
+      change_set.validate(**access_params)
+      change_set.save
 
       success.call('Successfully updated rights')
     end

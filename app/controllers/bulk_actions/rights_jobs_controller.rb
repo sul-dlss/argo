@@ -6,7 +6,7 @@ module BulkActions
     self.action_type = 'SetRightsJob'
 
     def job_params
-      super.merge(rights: params[:rights])
+      super.merge(params.slice(:view_access, :download_access, :controlled_digital_lending, :access_location).to_unsafe_h)
     end
   end
 end
