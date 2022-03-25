@@ -15,7 +15,7 @@ module CreatesBulkActions
     if bulk_action.save
       bulk_action.enqueue_job(job_params)
 
-      redirect_to bulk_actions_path, status: :see_other, notice: success_message
+      redirect_to bulk_actions_path(Blacklight::Parameters.sanitize(search_state.to_h.except(:authenticity_token))), status: :see_other, notice: success_message
     else
       render :new, status: :unprocessable_entity
     end

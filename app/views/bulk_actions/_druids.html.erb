@@ -1,5 +1,6 @@
 <div data-bulk-actions-target="commonFields">
   <% if search_state.has_constraints? %>
+    <%= render Blacklight::HiddenSearchStateComponent.new(params: Blacklight::Parameters.sanitize(search_state.to_h)) %>
     <button class='btn btn-primary' data-action="click->bulk-actions#populateDruids">
       Populate with previous search
     </button>
