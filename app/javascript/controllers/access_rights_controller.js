@@ -59,9 +59,13 @@ export default class extends Controller {
     this.maybeEnableLocation()
 
     if (this.currentDownload() == 'none')
-      this.enableCdl()
-    else
-      this.disableCdl()
+      return this.enableCdl()
+
+    this.disableCdl()
+
+    // This has to come after enableDownload
+    if (this.currentDownload() == 'world')
+      this.activateWorldDownload(false)
   }
 
   maybeEnableLocation() {
@@ -76,18 +80,36 @@ export default class extends Controller {
     this.downloadTarget.disabled = true
   }
 
+  worldDownloadOption() {
+    return this.downloadTarget.querySelector('[value="world"]')
+  }
+
+  stanfordDownloadOption() {
+    return this.downloadTarget.querySelector('[value="stanford"]')
+  }
+  // **
+  // * @param {bool} state If true, then the World option can be selected
+  activateWorldDownload(state) {
+    const option = this.worldDownloadOption()
+    option.disabled = !state
+    if (!state)
+      option.selected = false
+  }
+
+  // **
+  // * @param {bool} state If true, then the Stanford option can be selected
+  activateStanfordDownload(state) {
+    const option = this.stanfordDownloadOption()
+    option.disabled = !state
+    if (!state)
+      option.selected = false
+  }
+
   // **
   // * @param {bool} forLocation If true, then the download menu prevents World or Stanford from being selected.
   enableDownload(forLocation) {
-    const world = this.downloadTarget.querySelector('[value="world"]')
-    const stanford = this.downloadTarget.querySelector('[value="stanford"]')
-    world.disabled = forLocation
-    stanford.disabled = forLocation
-
-    if (forLocation) {
-      world.selected = false
-      stanford.selected = false
-    }
+    this.activateWorldDownload(!forLocation)
+    this.activateStanfordDownload(!forLocation)
 
     this.downloadRowTarget.hidden = false
     this.downloadTarget.disabled = false
