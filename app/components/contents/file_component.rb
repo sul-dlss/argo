@@ -2,10 +2,11 @@
 
 module Contents
   class FileComponent < ViewComponent::Base
-    def initialize(file:, object_id:, viewable:)
+    def initialize(file:, object_id:, viewable:, image:)
       @file = file
       @object_id = object_id
       @viewable = viewable
+      @image = image
     end
 
     attr_reader :file, :object_id
@@ -14,7 +15,11 @@ module Contents
       @viewable
     end
 
-    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, :use, to: :file
+    def image?
+      @image
+    end
+
+    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, :use, :presentation, to: :file
     delegate :publish, :shelve, :sdrPreserve, to: :administrative
 
     def view_access
@@ -33,6 +38,18 @@ module Contents
 
     def link_attrs
       { item_id: object_id, id: filename }
+    end
+
+    def height
+      return '' if presentation&.height.blank?
+
+      "#{presentation.height} px"
+    end
+
+    def width
+      return '' if presentation&.width.blank?
+
+      "#{presentation.width} px"
     end
   end
 end
