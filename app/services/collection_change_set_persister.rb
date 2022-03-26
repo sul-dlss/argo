@@ -15,11 +15,11 @@ class CollectionChangeSetPersister
   end
 
   def update
-    updated = model
-    updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey)
-    updated = updated_access(updated) if access_changed?
-    updated = updated_administrative(updated) if changed?(:admin_policy_id)
-    object_client.update(params: updated)
+    updated_model = update_identification(model)
+                    .then { |updated| updated_access(updated) }
+                    .then { |updated| updated_administrative(updated) }
+
+    object_client.update(params: updated_model)
   end
 
   private
@@ -41,6 +41,8 @@ class CollectionChangeSetPersister
   end
 
   def updated_access(updated)
+    return updated unless access_changed?
+
     updated.new(access: updated.access.new(updated_access_properties))
   end
 
@@ -53,12 +55,16 @@ class CollectionChangeSetPersister
   end
 
   def update_identification(updated)
+    return updated unless changed?(:source_id) || changed?(:catkey)
+
     identification_props = updated.identification&.to_h || {}
     identification_props[:catalogLinks] = Catkey.serialize(model, catkey) if changed?(:catkey)
     updated.new(identification: identification_props.compact.presence)
   end
 
   def updated_administrative(updated)
+    return updated unless changed?(:admin_policy_id)
+
     updated_administrative = updated.administrative.new(hasAdminPolicy: admin_policy_id)
     updated.new(administrative: updated_administrative)
   end
