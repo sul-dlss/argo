@@ -22,10 +22,10 @@ class DescriptiveMetadataExportJob < GenericJob
       end
 
       log_buffer.puts("#{Time.current} #{self.class}: Writing to file")
-      ordered_headers = (headers - ['source_id']).sort
-      CSV.open(csv_download_path, 'w', write_headers: true, headers: %w[druid source_id] + ordered_headers) do |csv|
+      ordered_headers = ['source_id'] + (headers - ['source_id']).sort
+      CSV.open(csv_download_path, 'w', write_headers: true, headers: %w[druid] + ordered_headers) do |csv|
         descriptions.each do |druid, description|
-          csv << [druid, description['source_id'], *ordered_headers.map { |header| description[header] }]
+          csv << ([druid] + description.values_at(*ordered_headers))
         end
       end
 

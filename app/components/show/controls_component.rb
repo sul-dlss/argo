@@ -41,6 +41,11 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
+    delegate :allows_modification?, to: :state_service
+
+    def button_disabled?
+      !allows_modification?
+    end
 
     private
 
@@ -55,14 +60,17 @@ module Show
         url: apply_apo_defaults_item_path(id: druid),
         method: 'post',
         label: 'Apply APO defaults',
-        disabled: !state_service.allows_modification?
+        disabled: button_disabled?
       )
     end
 
     def create_embargo
       return if !item? || embargoed?
 
-      render ActionButton.new(url: new_item_embargo_path(druid), label: 'Create embargo', open_modal: true, disabled: !state_service.allows_modification?)
+      render ActionButton.new url: new_item_embargo_path(druid),
+                              label: 'Create embargo',
+                              open_modal: true,
+                              disabled: button_disabled?
     end
 
     def edit_apo
@@ -75,15 +83,6 @@ module Show
       render ActionButton.new(
         url: new_apo_collection_path(apo_id: druid), label: 'Create Collection',
         open_modal: true
-      )
-    end
-
-    def refresh_metadata
-      render ActionButton.new(
-        url: refresh_metadata_item_path(id: druid),
-        method: 'post',
-        label: 'Refresh descMetadata',
-        disabled: !state_service.allows_modification?
       )
     end
 
