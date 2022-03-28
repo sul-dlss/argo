@@ -2,16 +2,17 @@
 
 # This exports the cocina description to a rectangularized data structure
 class DescriptionExport
-  def self.export(description)
-    new(description).export
+  def self.export(source_id:, description:)
+    new(source_id: source_id, description: description).export
   end
 
-  def initialize(description)
+  def initialize(source_id:, description:)
     @description = description
+    @source_id = source_id.presence || '' # identification.sourceId is not a required property.
   end
 
   def export
-    flatten(squish(description.to_h))
+    flatten(squish(description.to_h).merge('source_id' => @source_id))
   end
 
   # Transform the COCINA datastructure into a hash structure (converting arrays to hashes with index for keys)

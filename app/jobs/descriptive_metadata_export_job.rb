@@ -15,17 +15,17 @@ class DescriptiveMetadataExportJob < GenericJob
       descriptions = druids.each_with_object({}) do |druid, out|
         log_buffer.puts("#{Time.current} #{self.class}: Exporting description for #{druid} (bulk_action.id=#{bulk_action_id})")
         item = Dor::Services::Client.object(druid).find
-        description = DescriptionExport.export(item.description)
+        description = DescriptionExport.export(source_id: item.identification.sourceId, description: item.description)
         out[druid] = description
         headers.merge(description.keys)
         bulk_action.increment(:druid_count_success).save
       end
 
       log_buffer.puts("#{Time.current} #{self.class}: Writing to file")
-      ordered_headers = headers.to_a # Set doesn't have an order, but array does
-      CSV.open(csv_download_path, 'w', write_headers: true, headers: %w[druid] + ordered_headers) do |csv|
+      ordered_headers = headers.to_a - ['source_id'] # Set doesn't have an order, but array does
+      CSV.open(csv_download_path, 'w', write_headers: true, headers: %w[druid source_id] + ordered_headers) do |csv|
         descriptions.each do |druid, description|
-          csv << ([druid] + ordered_headers.map { |header| description[header] })
+          csv << [druid, description['source_id'], *ordered_headers.map { |header| description[header] }]
         end
       end
 
