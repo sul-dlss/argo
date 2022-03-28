@@ -13,10 +13,10 @@
       <%= manage_release %>
     <% end %>
     <div class="dropdown d-inline-block">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown-purl" data-bs-toggle="dropdown" aria-expanded="false">
         Manage PURL
       </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <ul class="dropdown-menu" aria-labelledby="dropdown-purl">
         <li><%= link_to 'Publish', item_publish_path(doc), class: "dropdown-item disabled",
                         data: {
                           turbo_method: 'post',
@@ -32,9 +32,21 @@
       </ul>
     </div>
     <%= add_workflow_button %>
+    <div class="dropdown d-inline-block">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown-descriptive" data-bs-toggle="dropdown" aria-expanded="false">
+        Manage description
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdown-descriptive">
+        <% if symphony_record? %>
+          <li><%= link_to 'Refresh', refresh_metadata_item_path(id: druid),
+                                     class: "dropdown-item #{'disabled' if button_disabled?}",
+                                     data: { turbo_method: 'post' } %></li>
+        <% end %>
+        <li><%= link_to 'Download CSV', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>
+      </ul>
+    </div>
     <%= purge_button %>
     <%= apply_apo_defaults %>
-    <%= refresh_metadata if symphony_record? %>
     <%= create_embargo %>
   <% end %>
 </div>

@@ -27,9 +27,12 @@
 
   .argo-show-btn-group {
     .btn {
-      width: $button-width;
+      min-width: $button-width;
       margin-right: .5rem;
       margin-bottom: .5rem;
+      &.small {
+        @extend .small;
+      }
     }
   }
 

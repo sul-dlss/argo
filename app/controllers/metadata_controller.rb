@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MetadataController < ApplicationController
+  # Shows the modal with the MODS XML. This is triggered by the "MODS" button on
+  # the item show page.
   def descriptive
     xml = metadata_service.descriptive
     @mods_display = ModsDisplay::Record.new(xml).mods_display_html
