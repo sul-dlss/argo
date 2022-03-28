@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 ##
-# Job to add release and then release a Dor Object
+# A background job to add a release tag and then start the release workflow
 class ReleaseObjectJob < GenericJob
   attr_reader :manage_release
 
   ##
-  # This is a shameless green approach to a job that calls release from dor
-  # services app and then kicks off release WF.
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :druids required list of druids
