@@ -22,8 +22,7 @@ gem 'cssbundling-rails', '~> 1.1'
 gem 'jsbundling-rails', '~> 1.0'
 gem 'sprockets-rails'
 
-# Pinned due to: https://github.com/github/view_component/issues/1315
-gem 'view_component', '2.50.0'
+gem 'view_component', '~> 2.52'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
