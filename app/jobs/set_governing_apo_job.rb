@@ -14,34 +14,16 @@ class SetGoverningApoJob < GenericJob
     super
     @new_apo_id = params['new_apo_id']
 
-    with_bulk_action_log do |log|
-      update_druid_count
+    with_items(params[:druids], name: 'Set governing APO') do |cocina_item, success, failure|
+      next failure.call("user not authorized to move item to #{new_apo_id}") unless ability.can?(:manage_governing_apo, cocina_item, new_apo_id)
 
-      druids.each do |current_druid|
-        log.puts("#{Time.current} SetGoverningApoJob: Starting update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
-        set_governing_apo_and_index_safely(current_druid, log)
-        log.puts("#{Time.current} SetGoverningApoJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
-      end
+      state_service = StateService.new(cocina_item.externalIdentifier, version: cocina_item.version)
+      open_new_version(cocina_item.externalIdentifier, cocina_item.version, 'Set new governing APO') unless state_service.allows_modification?
+
+      change_set = ItemChangeSet.new(cocina_item)
+      change_set.validate(admin_policy_id: new_apo_id)
+      change_set.save
+      success.call('Governing APO updated')
     end
-  end
-
-  private
-
-  def set_governing_apo_and_index_safely(current_druid, log)
-    cocina_item = Dor::Services::Client.object(current_druid).find
-    state_service = StateService.new(current_druid, version: cocina_item.version)
-    raise "user not authorized to move #{current_druid} to #{new_apo_id}" unless ability.can?(:manage_governing_apo, cocina_item, new_apo_id)
-
-    open_new_version(current_druid, cocina_item.version, 'Set new governing APO') unless state_service.allows_modification?
-
-    change_set = ItemChangeSet.new(cocina_item)
-    change_set.validate(admin_policy_id: new_apo_id)
-    change_set.save
-
-    log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
-    bulk_action.increment(:druid_count_success).save
-  rescue StandardError => e
-    log.puts("#{Time.current} SetGoverningApoJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e} #{e.backtrace}")
-    bulk_action.increment(:druid_count_fail).save
   end
 end

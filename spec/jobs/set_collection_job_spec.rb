@@ -77,8 +77,7 @@ RSpec.describe SetCollectionJob do
         allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
         allow(StateService).to receive(:new).and_return(state_service)
-        allow(subject).to receive(:check_can_set_collection!).with(cocina1, state_service).and_return true
-        allow(subject).to receive(:check_can_set_collection!).with(cocina2, state_service).and_return true
+        allow(subject.ability).to receive(:can?).and_return true
       end
 
       context 'when no collections are selected' do
@@ -131,16 +130,15 @@ RSpec.describe SetCollectionJob do
           subject.perform(bulk_action.id, params)
           expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(druids.length)
-          expect(buffer.string).to include "SetCollectionJob: Unexpected error for #{druids[0]} (bulk_action.id=#{bulk_action.id}): Dor::Services::Client::NotFoundResponse"
-          expect(buffer.string).to include "SetCollectionJob: Unexpected error for #{druids[1]} (bulk_action.id=#{bulk_action.id}): Dor::Services::Client::NotFoundResponse"
+          expect(buffer.string).to include "Set collection failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[0]}"
+          expect(buffer.string).to include "Set collection failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
         end
       end
     end
 
     context 'without authorization' do
       before do
-        allow(subject).to receive(:check_can_set_collection!).with(cocina1, state_service).and_return false
-        allow(subject).to receive(:check_can_set_collection!).with(cocina2, state_service).and_return false
+        allow(subject.ability).to receive(:can?).and_return false
       end
 
       it 'does not set the new collection on an object and increments failure count' do

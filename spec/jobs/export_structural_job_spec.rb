@@ -421,8 +421,8 @@ RSpec.describe ExportStructuralJob, type: :job do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to eq druids.length
         expect(bulk_action.druid_count_fail).to be_zero
-        expect(log_buffer.string).to include "Exporting structural metadata for #{druid1}"
-        expect(log_buffer.string).to include "Exporting structural metadata for #{druid2}"
+        expect(log_buffer.string).to include "Exported structural metadata for #{druid1}"
+        expect(log_buffer.string).to include "Exported structural metadata for #{druid2}"
         expect(File).to exist(csv_path)
       end
 
@@ -449,8 +449,8 @@ RSpec.describe ExportStructuralJob, type: :job do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(log_buffer.string).to include "Unexpected error exporting structural metadata for #{druid1}: ruh roh"
-        expect(log_buffer.string).to include "Unexpected error exporting structural metadata for #{druid2}: ruh roh"
+        expect(log_buffer.string).to include "Export structural metadata failed StandardError ruh roh for #{druid1}"
+        expect(log_buffer.string).to include "Export structural metadata failed StandardError ruh roh for #{druid2}"
         expect(File).to exist(csv_path)
         File.open(csv_path, 'r') do |file|
           expect(file.readlines.size).to eq 1 # just a header row
@@ -529,8 +529,8 @@ RSpec.describe ExportStructuralJob, type: :job do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(log_buffer.string).to include 'Object druid:bc123df4567 has no structural metadata to export'
-        expect(log_buffer.string).to include 'Object druid:bd123fg5678 has no structural metadata to export'
+        expect(log_buffer.string).to include 'No structural metadata to export for druid:bc123df4567'
+        expect(log_buffer.string).to include 'No structural metadata to export for druid:bd123fg5678'
         expect(File).to exist(csv_path)
         File.open(csv_path, 'r') do |file|
           expect(file.readlines.size).to eq 1 # just a header row

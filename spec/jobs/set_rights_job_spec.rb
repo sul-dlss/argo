@@ -211,7 +211,7 @@ RSpec.describe SetRightsJob, type: :job do
           )
         )
       expect(object_client2).not_to have_received(:update)
-      expect(buffer.string).to include "Successfully updated rights of #{druids[0]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated rights for #{druids[0]}"
     end
   end
 
@@ -246,8 +246,8 @@ RSpec.describe SetRightsJob, type: :job do
           )
         )
 
-      expect(buffer.string).to include "Successfully updated rights of #{druids[0]} (bulk_action.id=#{bulk_action.id})"
-      expect(buffer.string).to include "Successfully updated rights of #{druids[1]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated rights for #{druids[0]}"
+      expect(buffer.string).to include "Successfully updated rights for #{druids[1]}"
     end
   end
 end

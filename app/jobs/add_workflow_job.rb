@@ -13,41 +13,20 @@ class AddWorkflowJob < GenericJob
   def perform(bulk_action_id, params)
     super
     @workflow_name = params.fetch(:workflow)
-    with_bulk_action_log do |log|
-      update_druid_count
+    with_items(params[:druids], name: 'Workflow creation') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-      druids.each { |current_druid| start_workflow(current_druid, log) }
+      # check the workflow is present and active (not archived)
+      next failure.call("#{workflow_name} already exists") if workflow_active?(cocina_object.externalIdentifier, cocina_object.version)
+
+      client.create_workflow_by_name(cocina_object.externalIdentifier,
+                                     workflow_name,
+                                     version: cocina_object.version)
+      success.call("started #{workflow_name}")
     end
   end
 
   private
-
-  def start_workflow(current_druid, log)
-    cocina_object = Dor::Services::Client.object(current_druid).find
-
-    unless ability.can?(:manage_item, cocina_object)
-      bulk_action.increment(:druid_count_fail).save
-      log.puts("#{Time.current} Not authorized for #{current_druid}")
-      return
-    end
-
-    # check the workflow is present and active (not archived)
-    if workflow_active?(cocina_object.externalIdentifier, cocina_object.version)
-      bulk_action.increment(:druid_count_fail).save
-      log.puts("#{Time.current} #{workflow_name} already exists for #{current_druid}")
-      return
-    end
-
-    client.create_workflow_by_name(cocina_object.externalIdentifier,
-                                   workflow_name,
-                                   version: cocina_object.version)
-    log.puts("#{Time.current} started #{workflow_name} for #{current_druid}")
-
-    bulk_action.increment(:druid_count_success).save
-  rescue StandardError => e
-    log.puts("#{Time.current} Workflow creation failed #{e.class} #{e.message}")
-    bulk_action.increment(:druid_count_fail).save
-  end
 
   # Fetches the workflow from the workflow service and checks to see if it's active
   def workflow_active?(druid, version)

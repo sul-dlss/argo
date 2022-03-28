@@ -65,8 +65,8 @@ RSpec.describe RefreshModsJob, type: :job do
 
       it 'logs errors' do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata for druid:bb111cc2222 because it doesn't have a catkey/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata for druid:cc111dd2222 because it doesn't have a catkey/)
+        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a catkey for druid:bb111cc2222/)
+        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a catkey for druid:cc111dd2222/)
 
         expect(object_client1).not_to have_received(:refresh_descriptive_metadata_from_ils)
         expect(object_client2).not_to have_received(:refresh_descriptive_metadata_from_ils)
@@ -76,8 +76,8 @@ RSpec.describe RefreshModsJob, type: :job do
     context 'with catkey' do
       it 'refreshes' do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Successfully updated metadata druid:bb111cc2222/)
-        expect(logger).to have_received(:puts).with(/Successfully updated metadata druid:cc111dd2222/)
+        expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)
+        expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:cc111dd2222/)
 
         expect(object_client1).to have_received(:refresh_descriptive_metadata_from_ils)
         expect(object_client2).to have_received(:refresh_descriptive_metadata_from_ils)

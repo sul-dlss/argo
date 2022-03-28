@@ -10,50 +10,21 @@ class SetRightsJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    @new_rights = params[:rights]
+    new_rights = params[:rights]
+    raise 'Must provide rights' if new_rights.blank?
 
-    with_bulk_action_log do |log|
-      raise StandardError, 'Must provide rights' if @new_rights.blank?
+    with_items(params[:druids], name: 'Set rights') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-      update_druid_count
-
-      druids.each do |druid|
-        log.puts("#{Time.current} #{self.class}: Attempting #{druid} (bulk_action.id=#{bulk_action_id})")
-        set_rights(druid, log)
-      end
-    end
-  end
-
-  private
-
-  def set_rights(druid, log)
-    object_client = Dor::Services::Client.object(druid)
-    cocina_object = object_client.find
-    return unless verify_access(cocina_object, log)
-
-    # use dor services client to update the access
-    begin
-      state_service = StateService.new(druid, version: cocina_object.version)
-      raise StandardError, 'Object cannot be modified in its current state.' unless state_service.allows_modification?
+      state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
+      next failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?
 
       form_type = cocina_object.collection? ? CollectionRightsForm : DroRightsForm
       form = form_type.new(cocina_object)
-      form.validate(rights: @new_rights)
+      form.validate(rights: new_rights)
       form.save
 
-      log.puts("#{Time.current} #{self.class}: Successfully updated rights of #{druid} (bulk_action.id=#{bulk_action.id})")
-      bulk_action.increment(:druid_count_success).save
-    rescue StandardError => e
-      log.puts("#{Time.current} SetRights failed #{e.class} #{e.message}")
-      bulk_action.increment(:druid_count_fail).save
+      success.call('Successfully updated rights')
     end
-  end
-
-  def verify_access(cocina_object, log)
-    return true if ability.can?(:manage_item, cocina_object)
-
-    log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
-    bulk_action.increment(:druid_count_fail).save
-    false
   end
 end
