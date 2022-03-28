@@ -15,14 +15,15 @@ class DescriptionExport
     flatten(squish(description.to_h).merge('source_id' => @source_id))
   end
 
-  # Transform the COCINA datastructure into a hash structure (converting arrays to hashes with index for keys)
+  # Transform the COCINA datastructure into a hash structure by converting
+  # arrays to hashes with index (starting at 1) as the key
   def squish(source)
     return source unless source.is_a? Hash
 
     source.each_with_object({}) do |(k, value), sink|
       new_value = if value.is_a? Array
                     # Transform to hash
-                    value.each_with_object({}).with_index { |(el, acc), i| acc[i] = squish(el) }
+                    value.each_with_object({}).with_index { |(el, acc), index| acc[index + 1] = squish(el) }
                   else
                     squish(value)
                   end
