@@ -23,7 +23,7 @@ class DescriptionExport
     source.each_with_object({}) do |(k, value), sink|
       new_value = if value.is_a? Array
                     # Transform to hash
-                    value.each_with_object({}).with_index { |(el, acc), index| acc[index + 1] = squish(el) }
+                    value.each_with_object({}).with_index(1) { |(el, acc), index| acc[index] = squish(el) }
                   else
                     squish(value)
                   end
