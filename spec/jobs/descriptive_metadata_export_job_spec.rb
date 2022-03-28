@@ -59,7 +59,9 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
                               },
-                              identification: {},
+                              identification: {
+                                sourceId: 'sul:123'
+                              },
                               structural: {})
     end
 
@@ -73,9 +75,11 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
 
       it 'writes a CSV file' do
         csv = CSV.read(csv_path, headers: true)
+        expect(csv.headers).to eq ['druid', 'source_id', 'title0:value', 'purl']
         expect(csv[0][0]).to eq 'druid:bc123df4567'
         expect(csv[1][0]).to eq 'druid:bd123fg5678'
-        expect(csv.headers).to eq ['druid', 'title0:value', 'purl']
+        expect(csv[0][1]).to eq ''
+        expect(csv[1][1]).to eq 'sul:123'
         expect(csv[1]['title0:value']).to eq 'Test DRO #2'
       end
     end
