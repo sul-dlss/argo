@@ -25,6 +25,7 @@ class BulkAction < ApplicationRecord
                      ExportTagsJob
                      ImportTagsJob
                      ExportStructuralJob
+                     ImportStructuralJob
                      RegisterDruidsJob
                      SetLicenseAndRightsStatementsJob
                      SetSourceIdsCsvJob

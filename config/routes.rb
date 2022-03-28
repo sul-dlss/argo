@@ -36,6 +36,7 @@ Rails.application.routes.draw do
         resource :export_tag_job, only: %i[new create]
         resource :import_tag_job, only: %i[new create]
         resource :export_structural_job, only: %i[new create]
+        resource :import_structural_job, only: %i[new create]
         resource :manage_embargo_job, only: %i[new create]
         resource :register_druid_job, only: %i[new create]
 
