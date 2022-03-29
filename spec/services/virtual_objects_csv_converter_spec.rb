@@ -96,5 +96,20 @@ RSpec.describe VirtualObjectsCsvConverter do
         )
       end
     end
+
+    context 'with no constituents' do
+      let(:csv) { 'parent1,,' }
+
+      it 'returns empty constituents array' do
+        expect(subject.convert).to eq(
+          [
+            {
+              virtual_object_id: 'druid:parent1',
+              constituent_ids: []
+            }
+          ]
+        )
+      end
+    end
   end
 end
