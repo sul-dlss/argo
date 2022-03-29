@@ -11,7 +11,7 @@ class CatkeysController < ApplicationController
   end
 
   def edit
-    @change_set = change_set_class.new(@cocina)
+    @change_set = CatkeyForm.new(@cocina)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -20,9 +20,9 @@ class CatkeysController < ApplicationController
   def update
     return unless enforce_versioning
 
-    change_set = change_set_class.new(@cocina)
-    change_set.validate(catkey: update_params[:catkey].strip)
-    change_set.save
+    form = CatkeyForm.new(@cocina)
+    form.validate(catkey: update_params[:catkey].strip)
+    form.save
     Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
 
     msg = "Catkey for #{@cocina.externalIdentifier} has been updated!"
@@ -31,21 +31,12 @@ class CatkeysController < ApplicationController
 
   private
 
-  def change_set_class
-    case @cocina
-    when Cocina::Models::DRO
-      ItemChangeSet
-    when Cocina::Models::Collection
-      CollectionChangeSet
-    end
-  end
-
   def load_and_authorize_resource
     @cocina = maybe_load_cocina(params[:item_id])
     authorize! :manage_item, @cocina
   end
 
   def update_params
-    params[change_set_class.model_name.param_key]
+    params[CatkeyForm.model_name.param_key]
   end
 end

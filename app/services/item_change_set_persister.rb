@@ -38,7 +38,7 @@ class ItemChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :barcode, :catkey, :source_id, :collection_ids,
+  delegate :admin_policy_id, :barcode, :catkeys, :source_id, :collection_ids,
            :embargo_release_date, :embargo_access,
            *ACCESS_FIELDS.keys,
            :changed?, to: :change_set
@@ -77,7 +77,7 @@ class ItemChangeSetPersister
   end
 
   def identification_changed?
-    changed?(:source_id) || changed?(:catkey) || changed?(:barcode)
+    changed?(:source_id) || changed?(:catkeys) || changed?(:barcode)
   end
 
   def embargo_changed?
@@ -124,10 +124,10 @@ class ItemChangeSetPersister
   def update_identification(updated)
     return updated unless identification_changed?
 
-    identification_props = updated.identification&.to_h || {}
+    identification_props = updated.identification.to_h
     identification_props[:sourceId] = source_id if changed?(:source_id)
     identification_props[:barcode] = barcode.presence if changed?(:barcode)
-    identification_props[:catalogLinks] = Catkey.serialize(model, catkey) if changed?(:catkey)
+    identification_props[:catalogLinks] = Catkey.serialize(model, catkeys) if changed?(:catkeys)
     updated.new(identification: identification_props.presence)
   end
 end
