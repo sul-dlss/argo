@@ -68,7 +68,7 @@ class FilesController < ApplicationController
   def download
     authorize! :view_content, @cocina_model
 
-    response.headers['Content-Disposition'] = "attachment; filename=#{@cocina_model.externalIdentifier.delete_prefix('druid:')}.zip"
+    response.headers['Content-Disposition'] = "attachment; filename=#{Druid.new(@cocina_model).without_namespace}.zip"
     zip_tricks_stream do |zip|
       preserved_files(@cocina_model).each do |filename|
         zip.write_deflated_file(filename) do |sink|

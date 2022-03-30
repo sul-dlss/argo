@@ -50,7 +50,7 @@ class Report
     },
     {
       field: SolrDocument::FIELD_APO_ID, label: 'Admin Policy ID',
-      proc: ->(doc) { doc[SolrDocument::FIELD_APO_ID].first.delete_prefix('druid:') },
+      proc: ->(doc) { Druid.new(doc[SolrDocument::FIELD_APO_ID].first).without_namespace },
       sort: false, default: false, width: 100, download_default: false
     },
     {
@@ -59,7 +59,7 @@ class Report
     },
     {
       field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
-      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.delete_prefix('druid:') } },
+      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| Druid.new(id).without_namespace } },
       sort: false, default: false, width: 100, download_default: false
     },
     {

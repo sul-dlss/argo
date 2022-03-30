@@ -17,17 +17,11 @@ class ImportTagsCsvConverter
   def convert
     # NOTE: Enumerable#filter_map was added in Ruby 2.7
     CSV.parse(csv_string).filter_map do |druid, *tags|
-      [prefix_if_missing(druid), tags.compact] if druid.present?
+      [Druid.new(druid).with_namespace, tags.compact] if druid.present?
     end.to_h
   end
 
   private
 
   attr_reader :csv_string
-
-  def prefix_if_missing(druid)
-    return druid if druid.start_with?('druid:')
-
-    "druid:#{druid}"
-  end
 end

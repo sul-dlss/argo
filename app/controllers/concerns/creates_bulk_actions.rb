@@ -36,6 +36,6 @@ module CreatesBulkActions
   def identifiers
     return [] if params[:druids].blank?
 
-    params[:druids].split.map { |druid| druid.start_with?('druid:') ? druid : "druid:#{druid}" }
+    params[:druids].split.map { |druid| Druid.new(druid).with_namespace }
   end
 end

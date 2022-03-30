@@ -48,7 +48,7 @@ class ReportController < CatalogController
     step = params[:reset_step]
     ids = Report.new(params, current_user: current_user).druids
     ids.each do |druid|
-      druid = "druid:#{druid}"
+      druid = Druid.new(druid).with_namespace
       cocina = Dor::Services::Client.object(druid).find
       next unless current_ability.can_update_workflow?('waiting', cocina)
 

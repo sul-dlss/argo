@@ -9,7 +9,7 @@ class DescriptivesController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        filename = "descriptive-#{@cocina.externalIdentifier.delete_prefix('druid:')}.csv"
+        filename = "descriptive-#{Druid.new(@cocina).without_namespace}.csv"
         send_data create_csv, filename: filename
       end
     end

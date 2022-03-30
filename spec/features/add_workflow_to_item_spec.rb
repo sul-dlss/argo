@@ -34,7 +34,7 @@ RSpec.describe 'Add a workflow to an item' do
                            'externalIdentifier' => item_id,
                            'description' => {
                              'title' => [{ 'value' => 'The model' }],
-                             'purl' => "https://purl.stanford.edu/#{item_id.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{Druid.new(item_id).without_namespace}"
                            },
                            'administrative' => { hasAdminPolicy: uber_apo_id },
                            'access' => {},
