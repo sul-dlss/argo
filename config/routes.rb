@@ -142,6 +142,7 @@ Rails.application.routes.draw do
     resource :content_type, only: %i[show update]
     resource :structure, only: %i[show update]
     resource :descriptive, only: %i[show]
+    resource :technical, only: %i[show]
     resource :serials, only: %i[edit update]
 
     resources :workflows, only: %i[new create show update] do

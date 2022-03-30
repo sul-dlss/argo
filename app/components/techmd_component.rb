@@ -1,24 +1,10 @@
 # frozen_string_literal: true
 
 class TechmdComponent < ViewComponent::Base
-  # @params [Dry::Result] result
-  def initialize(result:)
-    @wrapped_result = result
+  # @params [String] view_token
+  def initialize(view_token:)
+    @view_token = view_token
   end
 
-  attr_reader :wrapped_result
-
-  delegate :failure?, to: :wrapped_result
-
-  def failure_message
-    wrapped_result.failure
-  end
-
-  def results?
-    results.present?
-  end
-
-  def results
-    wrapped_result.value!
-  end
+  attr_reader :view_token
 end

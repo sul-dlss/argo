@@ -222,7 +222,13 @@ class CatalogController < ApplicationController
                                                     versions: object_client.version.inventory)
 
     @datastreams = object_client.metadata.datastreams
-    @techmd = TechmdService.techmd_for(druid: params[:id])
+
+    # If you have this token, it indicates you have view_metadata access to the object
+    @verified_token_with_expiration = Argo.verifier.generate(
+      { key: params[:id] },
+      expires_in: 1.hour,
+      purpose: :view_token
+    )
 
     respond_to do |format|
       format.html { @search_context = setup_next_and_previous_documents }

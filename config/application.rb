@@ -9,6 +9,8 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Argo
+  mattr_accessor :verifier
+
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
@@ -18,6 +20,10 @@ module Argo
 
     # Configure action_dispatch to handle not found errors
     config.action_dispatch.rescue_responses['Blacklight::Exceptions::RecordNotFound'] = :not_found
+
+    config.after_initialize do |app|
+      Argo.verifier = app.message_verifier('Argo')
+    end
   end
 
   ARGO_VERSION = File.read(File.join(Rails.root, 'VERSION'))
