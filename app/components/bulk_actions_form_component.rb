@@ -41,6 +41,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Export tags to CSV', new_export_tag_job_path(search_of_druids)],
         ['Import tags from CSV', new_import_tag_job_path],
         ['Export structural metadata', new_export_structural_job_path(search_of_druids)],
+        ['Import structural metadata', new_import_structural_job_path],
         ['Manage embargo', new_manage_embargo_job_path],
         ['Register druids', new_register_druid_job_path]
       ]],

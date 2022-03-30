@@ -11,7 +11,7 @@
 #
 # because, if a job fails, it gets re-run, and if that job had been partially successful, some
 # objects in the batch might undergo the same action more than once.
-class GenericJob < ActiveJob::Base
+class GenericJob < ApplicationJob
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
