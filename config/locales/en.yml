@@ -15,6 +15,9 @@ en:
       item:
         embargo_release_date: 'Enter the date when this embargo ends'
         embargo_access: 'Once embargo ends, these rights are applied'
+      serials:
+        part_number2: Part number 2
+
 
   date:
       formats:

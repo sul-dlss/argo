@@ -60,8 +60,10 @@ RSpec.describe Show::ControlsComponent, type: :component do
         let(:catkey) { 'catkey:1234567' }
 
         it 'includes the descriptive metadata refresh button and the correct count of actions' do
-          expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh'
-          expect(rendered.css('a').size).to eq 10
+          expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
+          expect(page).to have_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
+
+          expect(rendered.css('a').size).to eq 11
         end
       end
     end
