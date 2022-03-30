@@ -17,7 +17,7 @@ class ImportTagsCsvConverter
   def convert
     # NOTE: Enumerable#filter_map was added in Ruby 2.7
     CSV.parse(csv_string).filter_map do |druid, *tags|
-      [Druid.new(druid).with_namespace, tags.compact] if druid.present?
+      [druid, tags.compact] if druid.present?
     end.to_h
   end
 

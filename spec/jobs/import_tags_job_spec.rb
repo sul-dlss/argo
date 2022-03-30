@@ -21,7 +21,7 @@ RSpec.describe ImportTagsJob, type: :job do
   end
 
   describe '#perform_now' do
-    let(:csv_string) { "bc123df4567\n\ndruid:bc234fg7890,Tag : One,Tag : Two" }
+    let(:csv_string) { "druid:bc123df4567\n\ndruid:bc234fg7890,Tag : One,Tag : Two" }
     let(:druid1) { 'druid:bc123df4567' }
     let(:tags1) { ['First : Tag'] }
     let(:druid2) { 'druid:bc234fg7890' }

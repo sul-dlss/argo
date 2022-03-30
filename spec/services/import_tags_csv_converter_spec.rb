@@ -38,19 +38,6 @@ RSpec.describe ImportTagsCsvConverter do
       )
     end
 
-    context 'with bare druids' do
-      let(:csv) { "bc123df4567,Tag : One\ndf324kj9785,Tag : Uno : Dos,Something : Else" }
-
-      it 'prefixes druids and works as expected' do
-        expect(subject.convert).to eq(
-          {
-            'druid:bc123df4567' => ['Tag : One'],
-            'druid:df324kj9785' => ['Tag : Uno : Dos', 'Something : Else']
-          }
-        )
-      end
-    end
-
     context 'with a mix of druids with tags and druids without tags' do
       let(:csv) { "druid:bc123df4567,Tag : One\ndruid:df324kj9785" }
 
@@ -65,7 +52,7 @@ RSpec.describe ImportTagsCsvConverter do
     end
 
     context 'with a mix of conditions' do
-      let(:csv) { "bc123df4567,Tag : One\n\n\ndruid:bc234fg7890\ndruid:df324kj9785,Tag : Uno : Dos,Something : Else" }
+      let(:csv) { "druid:bc123df4567,Tag : One\n\n\ndruid:bc234fg7890\ndruid:df324kj9785,Tag : Uno : Dos,Something : Else" }
 
       it 'filters out blank rows and works as expected' do
         expect(subject.convert).to eq(
@@ -79,7 +66,7 @@ RSpec.describe ImportTagsCsvConverter do
     end
 
     context 'with a mix of conditions including multiple commas' do
-      let(:csv) { "bc123df4567,Tag : One,,,,\n\n\ndruid:bc234fg7890\ndruid:df324kj9785,Tag : Uno : Dos,Something : Else" }
+      let(:csv) { "druid:bc123df4567,Tag : One,,,,\n\n\ndruid:bc234fg7890\ndruid:df324kj9785,Tag : Uno : Dos,Something : Else" }
 
       it 'filters out blank rows and works as expected' do
         expect(subject.convert).to eq(
@@ -93,7 +80,7 @@ RSpec.describe ImportTagsCsvConverter do
     end
 
     context 'with a one-row CSV' do
-      let(:csv) { 'bc123df4567,Tag : One' }
+      let(:csv) { 'druid:bc123df4567,Tag : One' }
 
       it 'works as expected' do
         expect(subject.convert).to eq(
