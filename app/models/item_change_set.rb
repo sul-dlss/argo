@@ -6,7 +6,7 @@ require 'reform/form/coercion'
 class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
   feature Coercion # Casts properties to a specific type
   property :admin_policy_id, virtual: true
-  property :catkey, virtual: true
+  property :catkeys, virtual: true
   property :collection_ids, virtual: true
   property :copyright, virtual: true
   property :embargo_release_date, virtual: true
@@ -52,7 +52,7 @@ class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
     if model.identification
-      self.catkey = Catkey.deserialize(model)
+      self.catkeys = Catkey.symphony_links(model)
       self.barcode = model.identification.barcode
       self.source_id = model.identification.sourceId
     end

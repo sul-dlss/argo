@@ -19,7 +19,7 @@ class SetCatkeysAndBarcodesCsvJob < SetCatkeysAndBarcodesJob
       update_druids << row['Druid']
       if row.header?('Catkey')
         catkeys ||= []
-        catkeys << row['Catkey'].presence
+        catkeys << catkey_cols(row)
       end
       if row.header?('Barcode')
         barcodes ||= []
@@ -27,5 +27,10 @@ class SetCatkeysAndBarcodesCsvJob < SetCatkeysAndBarcodesJob
       end
     end
     [update_druids, catkeys, barcodes]
+  end
+
+  def catkey_cols(row)
+    catkey_cols = row.headers.flat_map.with_index { |header, index| index if header == 'Catkey' }.compact
+    row.values_at(*catkey_cols).compact
   end
 end

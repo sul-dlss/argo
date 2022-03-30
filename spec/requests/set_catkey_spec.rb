@@ -16,7 +16,7 @@ RSpec.describe 'Set catkey' do
     end
 
     it 'returns a 403' do
-      patch "/items/#{druid}/catkey", params: { item: { catkey: '12345' } }
+      patch "/items/#{druid}/catkey", params: { catkey: { catkey: '12345' } }
 
       expect(response.code).to eq('403')
     end
@@ -146,7 +146,7 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'updates the catkey, trimming whitespace' do
-          patch "/items/#{druid}/catkey", params: { item: { catkey: '   12345 ' } }
+          patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
@@ -174,7 +174,7 @@ RSpec.describe 'Set catkey' do
         end
 
         it 'updates the catkey, trimming whitespace' do
-          patch "/items/#{druid}/catkey", params: { collection: { catkey: '   12345 ' } }
+          patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)

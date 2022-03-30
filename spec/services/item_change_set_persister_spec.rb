@@ -315,10 +315,10 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed catkey' do
-      let(:new_catkey) { '367269' }
+      let(:new_catkeys) { ['367269'] }
 
       before do
-        change_set.validate(catkey: new_catkey)
+        change_set.validate(catkeys: new_catkeys)
         instance.update
       end
 
@@ -329,7 +329,7 @@ RSpec.describe ItemChangeSetPersister do
               barcode: barcode_before,
               catalogLinks: [
                 { catalog: 'previous symphony', catalogRecordId: catkey_before },
-                { catalog: 'symphony', catalogRecordId: new_catkey }
+                { catalog: 'symphony', catalogRecordId: new_catkeys.first }
               ]
             }
           )
@@ -339,7 +339,7 @@ RSpec.describe ItemChangeSetPersister do
 
     context 'when change set has removed catkey' do
       before do
-        change_set.validate(catkey: nil)
+        change_set.validate(catkeys: [])
         instance.update
       end
 

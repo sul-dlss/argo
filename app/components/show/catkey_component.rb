@@ -8,7 +8,7 @@ module Show
     end
 
     def catkey
-      @change_set.catkey.presence || 'None assigned'
+      @change_set.catkeys.presence&.join(', ') || 'None assigned'
     end
 
     delegate :allows_modification?, to: :@state_service

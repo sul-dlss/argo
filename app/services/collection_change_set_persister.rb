@@ -34,7 +34,7 @@ class CollectionChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :catkey, *ACCESS_FIELDS.keys, :changed?, to: :change_set
+  delegate :admin_policy_id, :catkeys, *ACCESS_FIELDS.keys, :changed?, to: :change_set
 
   def access_changed?
     ACCESS_FIELDS.keys.any? { |field| changed?(field) }
@@ -55,10 +55,10 @@ class CollectionChangeSetPersister
   end
 
   def update_identification(updated)
-    return updated unless changed?(:source_id) || changed?(:catkey)
+    return updated unless changed?(:source_id) || changed?(:catkeys)
 
     identification_props = updated.identification&.to_h || {}
-    identification_props[:catalogLinks] = Catkey.serialize(model, catkey) if changed?(:catkey)
+    identification_props[:catalogLinks] = Catkey.serialize(model, catkeys) if changed?(:catkeys)
     updated.new(identification: identification_props.compact.presence)
   end
 

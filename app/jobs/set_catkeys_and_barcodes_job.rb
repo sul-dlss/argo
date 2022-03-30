@@ -23,7 +23,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
       update_druids.each_with_index do |current_druid, i|
         cocina_object = Dor::Services::Client.object(current_druid).find
         args = {}
-        args[:catkey] = catkeys[i] if catkeys
+        args[:catkeys] = catkeys[i] if catkeys
         args[:barcode] = barcodes[i] if barcodes
         change_set = ItemChangeSet.new(cocina_object)
         change_set.validate(args)
@@ -35,8 +35,8 @@ class SetCatkeysAndBarcodesJob < GenericJob
   protected
 
   def params_from(params)
-    catkeys = dig_from_params_if_option_set(params, :catkeys)
-    barcodes = dig_from_params_if_option_set(params, :barcodes)
+    catkeys = catkeys_from_params(params)
+    barcodes = barcodes_from_params(params)
     [druids, catkeys, barcodes]
   end
 
@@ -68,16 +68,28 @@ class SetCatkeysAndBarcodesJob < GenericJob
     end
   end
 
-  def dig_from_params_if_option_set(params, key)
-    # This will preserve the blank lines as nils, which indicate that a catkey/barcode should be removed.
-    params.fetch(key).split("\n").map(&:strip).map(&:presence) if params["use_#{key}_option"] == '1'
+  def catkeys_from_params(params)
+    return unless params['use_catkeys_option'] == '1'
+
+    lines_for(params, :catkeys).map { |val| Array(val.presence) }
+  end
+
+  def barcodes_from_params(params)
+    return unless params['use_barcodes_option'] == '1'
+
+    lines_for(params, :barcodes).map(&:strip).map(&:presence)
+  end
+
+  # This will preserve the blank lines as nils, which indicate that a catkey/barcode should be removed.
+  def lines_for(params, key)
+    params.fetch(key).split("\n")
   end
 
   # rubocop:disable Style/GuardClause
   def log_update(change_set, log)
-    if change_set.changed?(:catkey)
-      if change_set.catkey
-        log.puts("#{Time.current} Adding catkey of #{change_set.catkey}")
+    if change_set.changed?(:catkeys)
+      if change_set.catkeys.present?
+        log.puts("#{Time.current} Adding catkey of #{change_set.catkeys.join(', ')}")
       else
         log.puts("#{Time.current} Removing catkey")
       end
@@ -94,9 +106,9 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   def version_message(change_set)
     msgs = []
-    if change_set.changed?(:catkey)
-      msgs << if change_set.catkey
-                "Catkey updated to #{change_set.catkey}."
+    if change_set.changed?(:catkeys)
+      msgs << if change_set.catkeys.present?
+                "Catkey updated to #{change_set.catkeys.join(', ')}."
               else
                 'Catkey removed.'
               end
