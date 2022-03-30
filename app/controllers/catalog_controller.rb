@@ -128,11 +128,7 @@ class CatalogController < ApplicationController
                                       query: {
                                         no_source_id: { label: 'No Source ID', fq: '-source_id_ssim:*' },
                                         no_rights_characteristics: { label: 'No Rights Characteristics', fq: '-rights_characteristics_ssim:*' },
-                                        no_content_type: { label: 'No Content Type', fq: '-content_type_ssim:*' },
-                                        no_has_model: { label: 'No Object Model', fq: '-has_model_ssim:*' },
-                                        no_objectType: { label: 'No Object Type', fq: "-#{SolrDocument::FIELD_OBJECT_TYPE}:*" },
                                         no_object_title: { label: 'No Object Title', fq: "-#{SolrDocument::FIELD_TITLE}:*" },
-                                        no_is_governed_by: { label: 'No APO', fq: "-#{SolrDocument::FIELD_APO_ID}:*" },
                                         no_collection_title: { label: 'No Collection Title', fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
                                         no_copyright: { label: 'No Copyright', fq: "-#{SolrDocument::FIELD_COPYRIGHT}:*" },
                                         no_license: { label: 'No License', fq: '-use_license_machine_ssi:*' },
