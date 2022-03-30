@@ -19,5 +19,5 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
 
   delegate :allows_modification?, to: :state_service
 
-  attr_accessor :techmd, :cocina, :state_service
+  attr_accessor :cocina, :view_token, :state_service
 end
