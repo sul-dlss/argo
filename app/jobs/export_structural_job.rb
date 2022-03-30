@@ -12,7 +12,7 @@ class ExportStructuralJob < GenericJob
       csv << ['druid', *StructureSerializer::HEADERS]
       with_items(params[:druids], name: 'Export structural metadata') do |cocina_object, success, failure|
         rows_for_file = item_to_rows(cocina_object, success, failure)
-        druid = cocina_object.externalIdentifier.delete_prefix('druid:')
+        druid = Druid.new(cocina_object).without_namespace
         rows_for_file.each do |row|
           csv << [druid, *row]
         end

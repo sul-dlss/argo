@@ -83,7 +83,7 @@ class ModsulatorJob < ActiveJob::Base
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |xmldoc_node|
-      item_druid = "druid:#{xmldoc_node.attr('objectId')}"
+      item_druid = Druid.new(xmldoc_node.attr('objectId')).with_namespace
 
       unless DruidTools::Druid.valid? item_druid
         log.puts("argo.bulk_metadata.bulk_log_invalid_druid #{item_druid}")

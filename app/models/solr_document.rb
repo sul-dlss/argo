@@ -135,7 +135,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
 
     @thumbnail_url ||= begin
       file_id = File.basename(first_shelved_image, '.*')
-      druid = id.delete_prefix('druid:')
+      druid = Druid.new(id).without_namespace
       "#{Settings.stacks_url}/iiif/#{druid}%2F#{ERB::Util.url_encode(file_id)}/full/!400,400/0/default.jpg"
     end
   end
@@ -151,7 +151,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   # Access a SolrDocument's druid parsed from the id format of 'druid:abc123'
   # @return [String]
   def druid
-    id.delete_prefix('druid:')
+    Druid.new(id).without_namespace
   end
 
   def title

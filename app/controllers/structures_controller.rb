@@ -9,7 +9,7 @@ class StructuresController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        filename = "structure-#{@cocina.externalIdentifier.delete_prefix('druid:')}.csv"
+        filename = "structure-#{Druid.new(@cocina).without_namespace}.csv"
         send_data StructureSerializer.as_csv(@cocina.structural), filename: filename
       end
     end

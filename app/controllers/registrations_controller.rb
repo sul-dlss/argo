@@ -102,9 +102,7 @@ class RegistrationsController < ApplicationController
     druid = params[:apo_id]
     raise ArgumentError if druid.nil?
 
-    return druid if druid.starts_with?('druid:')
-
-    "druid:#{druid}"
+    Druid.new(druid).with_namespace
   end
 
   def object_client
