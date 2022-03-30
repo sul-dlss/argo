@@ -3,8 +3,8 @@
     Edit rights
   </span>
 
-  <div class='mb-3'>
-    <%= f.select(:rights, Constants::REGISTRATION_RIGHTS_OPTIONS) %>
+  <div class='mb-3' data-controller="access-rights">
+    <%= render Edit::Item::AccessRightsComponent.new(form_builder: f) %>
   </div>
 
   <%= render 'bulk_actions/druids', f: f %>

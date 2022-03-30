@@ -195,7 +195,9 @@ RSpec.describe SetRightsJob, type: :job do
     let(:params) do
       {
         druids: [druids[0]],
-        rights: 'world'
+        view_access: 'world',
+        download_access: 'world',
+        controlled_digital_lending: '0'
       }
     end
 
@@ -219,7 +221,9 @@ RSpec.describe SetRightsJob, type: :job do
     let(:params) do
       {
         druids: druids,
-        rights: 'world'
+        view_access: 'world',
+        download_access: 'world',
+        controlled_digital_lending: '0'
       }
     end
 
