@@ -26,9 +26,10 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {
+                           identification: {
                              barcode: '36105014757519',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
+                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
+                             sourceId: 'sul:123'
                            }
                          })
   end
@@ -49,7 +50,8 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
                            'structural' => {},
                            'identification' => {
                              barcode: '36105014757510',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }]
+                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }],
+                             sourceId: 'sul:123'
                            }
                          })
   end
@@ -68,7 +70,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
 

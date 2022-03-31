@@ -89,7 +89,7 @@ RSpec.describe SetRightsJob, type: :job do
             }
           ]
         },
-        identification: {}
+        identification: { sourceId: 'sul:1234' }
       }
     )
   end
@@ -168,7 +168,7 @@ RSpec.describe SetRightsJob, type: :job do
             }
           ]
         },
-        identification: {}
+        identification: { sourceId: 'sul:1234' }
       }
     )
   end

@@ -21,7 +21,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
                                      useAndReproductionStatement: 'Must be used underwater',
                                      license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'
                                    },
-                                   identification: {},
+                                   identification: { sourceId: 'sul:1234' },
                                    administrative: {
                                      hasAdminPolicy: 'druid:hv992ry2431'
                                    })

@@ -31,7 +31,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'structural' => {},
                            'identification' => {
                              barcode: '36105014757519',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
+                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
+                             sourceId: 'sul:1234'
                            }
                          })
   end
@@ -50,7 +51,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'structural' => {},
                            'identification' => {
                              barcode: '36105014757510',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }]
+                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }],
+                             sourceId: 'sul:1234'
                            }
                          })
   end
@@ -67,7 +69,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
 
@@ -160,7 +162,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                              'structural' => {},
                              'identification' => {
                                barcode: '36105014757519',
-                               catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
+                               catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
+                               sourceId: 'sul:1234'
                              }
                            })
     end
@@ -168,12 +171,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:updated_model) do
       item1.new(
         {
-          'identification' => {
-            'barcode' => barcode,
-            'catalogLinks' => [
+          identification: {
+            barcode: barcode,
+            catalogLinks: [
               { catalog: 'previous symphony', catalogRecordId: '12346' },
               { catalog: 'symphony', catalogRecordId: catkeys[0] }
-            ]
+            ],
+            sourceId: 'sul:1234'
           }
         }
       )
@@ -251,7 +255,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
           {
             identification: {
               barcode: nil,
-              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: '12346' }]
+              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: '12346' }],
+              sourceId: 'sul:1234'
             }
           }
         )

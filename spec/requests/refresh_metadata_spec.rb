@@ -19,8 +19,9 @@ RSpec.describe 'Refresh metadata', type: :request do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {
-                             'catalogLinks' => catalog_links
+                           identification: {
+                             catalogLinks: catalog_links,
+                             sourceId: 'sul:1234'
                            }
                          })
   end

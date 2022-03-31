@@ -9,7 +9,10 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
   let(:user) { bulk_action.user }
 
   let(:identification) do
-    { catalogLinks: [{ catalog: 'symphony', catalogRecordId: '123' }] }
+    {
+      catalogLinks: [{ catalog: 'symphony', catalogRecordId: '123' }],
+      sourceId: 'sul:1234'
+    }
   end
 
   let(:cocina1) do

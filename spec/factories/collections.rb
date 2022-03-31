@@ -11,7 +11,7 @@ FactoryBot.define do
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
                                        },
-                                       'identification' => {},
+                                       identification: { sourceId: 'sul:1234' },
                                        'access' => {}
                                      })
       )

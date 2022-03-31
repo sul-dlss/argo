@@ -55,7 +55,7 @@ RSpec.describe SetSourceIdsCsvJob do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/dd111ff2222' },
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
 

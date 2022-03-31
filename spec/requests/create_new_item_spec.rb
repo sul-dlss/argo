@@ -84,7 +84,7 @@ RSpec.describe 'Create a new item', type: :request do
                                 purl: 'https://purl.stanford.edu/bc234fg5678'
                               },
                               access: {},
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
@@ -141,7 +141,7 @@ RSpec.describe 'Create a new item', type: :request do
                                 view: 'stanford',
                                 download: 'stanford'
                               },
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
@@ -199,7 +199,7 @@ RSpec.describe 'Create a new item', type: :request do
                                 download: 'location-based',
                                 location: 'music'
                               },
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
@@ -258,7 +258,7 @@ RSpec.describe 'Create a new item', type: :request do
                                 view: 'world',
                                 download: 'none'
                               },
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
@@ -316,7 +316,7 @@ RSpec.describe 'Create a new item', type: :request do
                                 view: 'dark',
                                 download: 'none'
                               },
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
@@ -398,7 +398,7 @@ RSpec.describe 'Create a new item', type: :request do
                                 download: 'none',
                                 controlledDigitalLending: true
                               },
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'

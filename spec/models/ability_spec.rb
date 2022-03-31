@@ -16,7 +16,7 @@ RSpec.describe Ability do
                               purl: "https://purl.stanford.edu/#{new_cocina_object_id.delete_prefix('druid:')}"
                             },
                             access: {},
-                            identification: {},
+                            identification: { sourceId: 'sul:1234' },
                             structural: {},
                             administrative: {
                               hasAdminPolicy: apo_id
@@ -45,7 +45,7 @@ RSpec.describe Ability do
                                      purl: "https://purl.stanford.edu/#{new_cocina_object_id.delete_prefix('druid:')}"
                                    },
                                    access: {},
-                                   identification: {},
+                                   identification: { sourceId: 'sul:1234' },
                                    administrative: {
                                      hasAdminPolicy: apo_id
                                    })

@@ -22,7 +22,7 @@ RSpec.describe 'Update a datastream' do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
   let(:druid) { 'druid:bc123df4567' }
