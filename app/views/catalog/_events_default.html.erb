@@ -6,17 +6,7 @@
   </h2>
   <div id="document-events-section" class="accordion-collapse collapse" aria-labelledby="document-events-heading">
     <div class="accordion-body">
-
-      <table class="detail">
-        <thead>
-          <tr><th>When</th><th>Event type</th><th>Data</th></tr>
-        </thead>
-        <tbody>
-        <% @events.each do |event| %>
-          <tr><td><time-ago datetime="<%= event.timestamp %>"><%= event.timestamp %></time-ago></td><td><%= event.event_type %></td><td><pre><%= JSON.pretty_generate(event.data) %></pre></td></tr>
-        <% end %>
-        </tbody>
-      </table>
+      <turbo-frame id="events" src="<%= item_events_path(view_token) %>" loading="lazy"></turbo-frame>
     </div>
   </div>
 </div>
