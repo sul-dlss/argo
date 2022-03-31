@@ -22,7 +22,7 @@ RSpec.describe CloseVersionJob, type: :job do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
   let(:item2) do
@@ -38,7 +38,7 @@ RSpec.describe CloseVersionJob, type: :job do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }

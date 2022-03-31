@@ -31,7 +31,7 @@ RSpec.describe 'Edit use statement' do
                                'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {},
-                               'identification' => {}
+                               identification: { sourceId: 'sul:1234' }
                              })
       end
 
@@ -88,7 +88,7 @@ RSpec.describe 'Edit use statement' do
                                'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {},
-                               'identification' => {}
+                               identification: { sourceId: 'sul:1234' }
                              })
       end
 
@@ -111,7 +111,7 @@ RSpec.describe 'Edit use statement' do
                                  'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {},
-                               'identification' => {},
+                               identification: { sourceId: 'sul:1234' },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                              })
       end

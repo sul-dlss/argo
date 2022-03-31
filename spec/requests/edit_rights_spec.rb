@@ -34,7 +34,7 @@ RSpec.describe 'Edit rights' do
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {},
-                               'identification' => {}
+                               identification: { sourceId: 'sul:1234' }
                              })
       end
 
@@ -60,7 +60,7 @@ RSpec.describe 'Edit rights' do
                                  'view' => 'world'
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'identification' => {}
+                               identification: { sourceId: 'sul:1234' }
                              })
       end
 
@@ -86,7 +86,7 @@ RSpec.describe 'Edit rights' do
                                'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {},
-                               'identification' => {}
+                               identification: { sourceId: 'sul:1234' }
                              })
       end
 
@@ -109,7 +109,7 @@ RSpec.describe 'Edit rights' do
                                  'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {},
-                               'identification' => {},
+                               identification: { sourceId: 'sul:1234' },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                              })
       end

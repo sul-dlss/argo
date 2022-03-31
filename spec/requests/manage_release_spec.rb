@@ -27,7 +27,7 @@ RSpec.describe 'Draw the manage release form' do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
 

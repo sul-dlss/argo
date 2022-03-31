@@ -42,7 +42,7 @@ RSpec.describe CocinaHashPresenter do
             ],
             purl: 'https://purl.stanford.edu/zt570qh4444'
           },
-          identification: {},
+          identification: { sourceId: 'sul:1234' },
           access: {}
         )
       end
@@ -62,7 +62,8 @@ RSpec.describe CocinaHashPresenter do
                                  releaseTags: []
                                },
                                identification: {
-                                 catalogLinks: []
+                                 catalogLinks: [],
+                                 sourceId: 'sul:1234'
                                },
                                description: {
                                  title: [

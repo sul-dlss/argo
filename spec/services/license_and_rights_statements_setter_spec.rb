@@ -35,7 +35,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
           purl: 'https://purl.stanford.edu/bc123df4567'
         },
         access: {},
-        identification: {},
+        identification: { sourceId: 'sul:1234' },
         structural: {},
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
@@ -101,7 +101,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
               purl: 'https://purl.stanford.edu/bc123df4567'
             },
             version: 1,
-            identification: {},
+            identification: { sourceId: 'sul:1234' },
             access: {},
             administrative: { hasAdminPolicy: 'druid:bc123df4569' }
           )

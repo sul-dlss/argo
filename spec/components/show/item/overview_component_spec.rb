@@ -16,7 +16,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
                               purl: 'https://purl.stanford.edu/bc234fg5678'
                             },
                             access: {},
-                            identification: {},
+                            identification: { sourceId: 'sul:1234' },
                             structural: {},
                             administrative: {
                               hasAdminPolicy: 'druid:hv992ry2431'
@@ -57,7 +57,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
                               access: {
                                 license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode'
                               },
-                              identification: {},
+                              identification: { sourceId: 'sul:1234' },
                               structural: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'

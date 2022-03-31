@@ -26,7 +26,7 @@ RSpec.describe CollectionChangeSet do
                              'administrative' => {
                                hasAdminPolicy: 'druid:cg532dg5405'
                              },
-                             'identification' => {}
+                             identification: { sourceId: 'sul:1234' }
                            })
     end
 

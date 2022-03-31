@@ -18,7 +18,7 @@ RSpec.describe AddWorkflowJob, type: :job do
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/bb111cc2222' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
   let(:cocina2) do
@@ -31,7 +31,7 @@ RSpec.describe AddWorkflowJob, type: :job do
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/cc111dd2222' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
 

@@ -24,7 +24,7 @@ RSpec.describe 'Set content type for an item', type: :request do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => structural,
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
   let(:cocina_model_with_member_order) do
@@ -40,7 +40,7 @@ RSpec.describe 'Set content type for an item', type: :request do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => structural_with_member_orders,
-                           'identification' => {}
+                           identification: { sourceId: 'sul:1234' }
                          })
   end
   let(:contains) do

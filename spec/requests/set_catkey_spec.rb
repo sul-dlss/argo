@@ -45,7 +45,7 @@ RSpec.describe 'Set catkey' do
                                  'access' => {},
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                  'structural' => {},
-                                 'identification' => {}
+                                 identification: { sourceId: 'sul:1234' }
                                })
         end
 
@@ -68,7 +68,7 @@ RSpec.describe 'Set catkey' do
                                    'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
-                                 'identification' => {},
+                                 identification: { sourceId: 'sul:1234' },
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                                })
         end
@@ -91,13 +91,14 @@ RSpec.describe 'Set catkey' do
                                    'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
-                                 'identification' => {
-                                   'catalogLinks' => [
+                                 identification: {
+                                   catalogLinks: [
                                      {
-                                       'catalog' => 'symphony',
-                                       'catalogRecordId' => '10448742'
+                                       catalog: 'symphony',
+                                       catalogRecordId: '10448742'
                                      }
-                                   ]
+                                   ],
+                                   sourceId: 'sul:1234'
                                  },
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                                })
@@ -116,8 +117,9 @@ RSpec.describe 'Set catkey' do
       let(:updated_model) do
         cocina_model.new(
           {
-            'identification' => {
-              'catalogLinks' => [{ catalog: 'symphony', catalogRecordId: '12345' }]
+            identification: {
+              catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12345' }],
+              sourceId: 'sul:1234'
             }
           }
         )
@@ -141,7 +143,7 @@ RSpec.describe 'Set catkey' do
                                  'access' => {},
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                  'structural' => {},
-                                 'identification' => {}
+                                 identification: { sourceId: 'sul:1234' }
                                })
         end
 
@@ -168,7 +170,7 @@ RSpec.describe 'Set catkey' do
                                  'access' => {
                                    'view' => 'world'
                                  },
-                                 'identification' => {},
+                                 identification: { sourceId: 'sul:1234' },
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                                })
         end

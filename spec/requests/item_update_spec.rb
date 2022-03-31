@@ -32,7 +32,7 @@ RSpec.describe 'Set the properties for an item' do
                              'access' => existing_access,
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => existing_structural,
-                             'identification' => {}
+                             identification: { sourceId: 'sul:1234' }
                            })
     end
 
@@ -40,8 +40,9 @@ RSpec.describe 'Set the properties for an item' do
       let(:updated_model) do
         cocina_model.new(
           {
-            'identification' => {
-              'barcode' => '36105010362304'
+            identification: {
+              barcode: '36105010362304',
+              sourceId: 'sul:1234'
             }
           }
         )

@@ -45,7 +45,7 @@ RSpec.describe SetCollectionJob do
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
-                             'identification' => {},
+                             identification: { sourceId: 'sul:1234' },
                              'description' => {
                                'title' => [{ 'value' => 'Cocina Object 1' }],
                                'purl' => 'https://purl.standford.edu/cc111dd2222'
@@ -61,7 +61,7 @@ RSpec.describe SetCollectionJob do
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
-                             'identification' => {},
+                             identification: { sourceId: 'sul:1234' },
                              'description' => {
                                'title' => [{ 'value' => 'Cocina object 2' }],
                                'purl' => 'https://purl.standford.edu/dd111ff2222'

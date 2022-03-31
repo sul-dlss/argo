@@ -18,7 +18,7 @@ RSpec.describe Show::Item::AccessRightsComponent, type: :component do
                             administrative: {
                               hasAdminPolicy: 'druid:hv992ry2431'
                             },
-                            identification: {},
+                            identification: { sourceId: 'sul:1234' },
                             structural: {})
   end
   let(:rendered) { render_inline(component) }

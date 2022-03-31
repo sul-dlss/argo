@@ -37,7 +37,7 @@ RSpec.describe 'Upload the structural CSV' do
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
-                             'identification' => {}
+                             identification: { sourceId: 'sul:1234' }
                            })
     end
     let(:file) { fixture_file_upload('structure-upload.csv') }

@@ -29,7 +29,7 @@ RSpec.describe 'Set the properties for a collection' do
                              'externalIdentifier' => druid,
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'identification' => {}
+                             identification: { sourceId: 'sul:1234' }
                            })
     end
 

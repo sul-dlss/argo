@@ -42,7 +42,7 @@ RSpec.describe 'Item catkey change' do
                              },
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
-                             'identification' => {}
+                             identification: { sourceId: 'sul:1234' }
                            })
     end
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
