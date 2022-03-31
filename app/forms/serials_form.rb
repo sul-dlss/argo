@@ -19,7 +19,7 @@ class SerialsForm < ApplicationChangeSet
     title_to_change ||= titles.first
 
     setup_from_structured_value(title_to_change.structuredValue) if title_to_change.structuredValue.present?
-    self.sort_field = title_to_change.note.find { |note| note.type == NOTE_TYPE }&.value
+    self.sort_field = model.description.note.find { |note| note.type == NOTE_TYPE }&.value
   end
 
   def setup_from_structured_value(structured_value)
@@ -35,7 +35,7 @@ class SerialsForm < ApplicationChangeSet
   end
 
   def save_model
-    updated_description = model.description.new(title: updated_title)
+    updated_description = model.description.new(title: updated_title, note: updated_note)
     updated_model = model.new(description: updated_description)
     object_client.update(params: updated_model)
   end
@@ -49,9 +49,15 @@ class SerialsForm < ApplicationChangeSet
     model.description.title.map(&:to_h).tap do |titles|
       title_to_change = titles.find { |title| title[:status] == PRIMARY }
       title_to_change ||= titles.first
-      title_to_change[:note].delete_if { |note| note[:type] == NOTE_TYPE }
-      title_to_change[:note] << { type: NOTE_TYPE, value: sort_field } if sort_field.present?
       title_to_change[:structuredValue] = update_or_create_structured_value(title_to_change)
+    end
+  end
+
+  def updated_note
+    # Convert to hash so we can mutate.
+    model.description.note.map(&:to_h).tap do |notes|
+      notes.delete_if { |note| note[:type] == NOTE_TYPE }
+      notes << { type: NOTE_TYPE, value: sort_field } if sort_field.present?
     end
   end
 
