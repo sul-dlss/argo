@@ -7,20 +7,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, change_set: change_set, state_service: state_service) }
   let(:change_set) { ItemChangeSet.new(cocina) }
   let(:cocina) do
-    Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                            type: Cocina::Models::ObjectType.document,
-                            label: 'my dro',
-                            version: 1,
-                            description: {
-                              title: [{ value: 'my dro' }],
-                              purl: 'https://purl.stanford.edu/bc234fg5678'
-                            },
-                            access: {},
-                            identification: { sourceId: 'sul:1234' },
-                            structural: {},
-                            administrative: {
-                              hasAdminPolicy: 'druid:hv992ry2431'
-                            })
+    Cocina::Models::Factories.build(:dro)
   end
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }

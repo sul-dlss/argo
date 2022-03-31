@@ -10,36 +10,10 @@ RSpec.describe PrepareJob, type: :job do
   let(:user) { bulk_action.user }
 
   let(:cocina1) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[0])
   end
   let(:cocina2) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[1])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }

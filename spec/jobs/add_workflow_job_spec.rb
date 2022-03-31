@@ -9,30 +9,10 @@ RSpec.describe AddWorkflowJob, type: :job do
   let(:user) { bulk_action.user }
 
   let(:cocina1) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/bb111cc2222' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[0])
   end
   let(:cocina2) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/cc111dd2222' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[1])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }

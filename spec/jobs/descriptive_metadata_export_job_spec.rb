@@ -30,39 +30,11 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
     let(:user) { instance_double(User, to_s: 'jcoyne85') }
 
     let(:item1) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc123df4567',
-                              type: Cocina::Models::ObjectType.document,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO #1' }],
-                                purl: 'https://purl.stanford.edu/bc123df4567'
-                              },
-                              access: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              },
-                              identification: { sourceId: 'sul:4444' },
-                              structural: {})
+      Cocina::Models::Factories.build(:dro, id: 'druid:bc123df4567', source_id: 'sul:4444')
     end
 
     let(:item2) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bd123fg5678',
-                              type: Cocina::Models::ObjectType.document,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO #2' }],
-                                purl: 'https://purl.stanford.edu/bd123fg5678'
-                              },
-                              access: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              },
-                              identification: {
-                                sourceId: 'sul:123'
-                              },
-                              structural: {})
+      Cocina::Models::Factories.build(:dro, id: 'druid:bd123fg5678', title: 'Test DRO #2')
     end
 
     context 'when happy path' do
@@ -79,7 +51,7 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
         expect(csv[0][0]).to eq 'druid:bc123df4567'
         expect(csv[1][0]).to eq 'druid:bd123fg5678'
         expect(csv[0][1]).to eq 'sul:4444'
-        expect(csv[1][1]).to eq 'sul:123'
+        expect(csv[1][1]).to eq 'sul:1234'
         expect(csv[1]['title1:value']).to eq 'Test DRO #2'
       end
     end

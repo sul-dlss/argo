@@ -7,20 +7,7 @@ RSpec.describe 'Serials', type: :request do
   let(:druid) { 'druid:dc243mg0841' }
 
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My Serial',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Serial' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druid, label: 'My Serial', title: 'My Serial')
   end
 
   before do
@@ -61,7 +48,7 @@ RSpec.describe 'Serials', type: :request do
                                },
                                'access' => {},
                                identification: { sourceId: 'sul:1234' },
-                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                               'administrative' => { 'hasAdminPolicy' => 'druid:hv992ry2431' },
                                'structural' => {}
                              })
       end

@@ -27,23 +27,7 @@ RSpec.describe 'Item source id change' do
     let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
     let(:druid) { 'druid:kv840xx0000' }
     let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => {
-                               'view' => 'world',
-                               'download' => 'world'
-                             },
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => { sourceId: 'some:thing' }
-                           })
+      Cocina::Models::Factories.build(:dro, id: druid)
     end
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }

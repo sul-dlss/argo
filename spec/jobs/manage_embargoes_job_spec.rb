@@ -17,52 +17,13 @@ RSpec.describe ManageEmbargoesJob do
   let(:rights) { ['world', '', 'stanford-nd'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models.build({
-                           'label' => 'My Item1',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item1' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[0])
   end
   let(:item2) do
-    Cocina::Models.build({
-                           'label' => 'My Item2',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item2' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[1])
   end
   let(:item3) do
-    Cocina::Models.build({
-                           'label' => 'My Item3',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[2],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item3' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[2])
   end
 
   let(:csv_file) do

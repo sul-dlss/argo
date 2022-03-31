@@ -9,6 +9,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'cocina/rspec'
 require 'capybara/rspec'
+require 'cocina/models/factories'
 require 'equivalent-xml/rspec_matchers'
 require 'view_component/test_helpers'
 require 'webmock/rspec'
