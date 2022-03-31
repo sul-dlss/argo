@@ -19,7 +19,7 @@ RSpec.describe 'Serials', type: :request do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:123' }
                          })
   end
 
@@ -60,7 +60,7 @@ RSpec.describe 'Serials', type: :request do
                                  'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {},
-                               'identification' => {},
+                               identification: { sourceId: 'sul:123' },
                                'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                'structural' => {}
                              })

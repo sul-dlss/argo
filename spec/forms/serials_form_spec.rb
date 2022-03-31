@@ -16,7 +16,7 @@ RSpec.describe SerialsForm do
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
-                           'identification' => {}
+                           identification: { sourceId: 'sul:123' }
                          })
   end
 
@@ -30,13 +30,13 @@ RSpec.describe SerialsForm do
                 { value: 'My Serial', type: 'main title' },
                 { value: '7', type: 'part number' },
                 { value: 'samurai', type: 'part name' }
-              ],
-              note: [
-                { value: '1990', type: 'date/sequential designation' }
               ]
             }
           ],
-          'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+          note: [
+            { value: '1990', type: 'date/sequential designation' }
+          ],
+          purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
         }
       end
 
@@ -100,14 +100,14 @@ RSpec.describe SerialsForm do
                                          { value: 'My Serial', type: 'main title' },
                                          { value: '7', type: 'part number' },
                                          { value: 'samurai', type: 'part name' }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }]
+                                       ]
                                      }
                                    ],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                                   note: [{ value: 'something', type: 'date/sequential designation' }],
+                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
-                                 'identification' => {},
+                                 identification: { sourceId: 'sul:123' },
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => {}
                                })
@@ -137,14 +137,14 @@ RSpec.describe SerialsForm do
                                          { value: 'My Serial', type: 'main title' },
                                          { value: 'samurai', type: 'part name' },
                                          { value: '7', type: 'part number' }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }]
+                                       ]
                                      }
                                    ],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                                   note: [{ value: 'something', type: 'date/sequential designation' }],
+                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
-                                 'identification' => {},
+                                 identification: { sourceId: 'sul:123' },
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => {}
                                })
@@ -194,14 +194,14 @@ RSpec.describe SerialsForm do
                                          { type: 'main title', value: 'Frog' },
                                          { value: '7', type: 'part number' },
                                          { value: 'samurai', type: 'part name' }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }]
+                                       ]
                                      }
                                    ],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                                   note: [{ value: 'something', type: 'date/sequential designation' }],
+                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
-                                 'identification' => {},
+                                 identification: { sourceId: 'sul:123' },
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => {}
                                })
@@ -232,14 +232,14 @@ RSpec.describe SerialsForm do
                                          { type: 'main title', value: 'Frog' },
                                          { value: 'samurai', type: 'part name' },
                                          { value: '7', type: 'part number' }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }]
+                                       ]
                                      }
                                    ],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                                   note: [{ value: 'something', type: 'date/sequential designation' }],
+                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
-                                 'identification' => {},
+                                 identification: { sourceId: 'sul:123' },
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => {}
                                })
