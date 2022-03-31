@@ -5,7 +5,7 @@ class BulkJobsController < ApplicationController
   include Blacklight::Searchable
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
-    params[:apo_id] = 'druid:' + params[:apo_id] unless params[:apo_id].include? 'druid'
+    params[:apo_id] = Druid.new(params[:apo_id]).with_namespace
 
     @cocina =  Dor::Services::Client.object(params[:apo_id]).find
     authorize! :view_metadata, @cocina
