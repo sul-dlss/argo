@@ -13,7 +13,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   end
 
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:catkeys) { ['12345', '', '44444'] }
+  let(:catkeys) { ['12345,66233', '', '44444'] }
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
@@ -115,7 +115,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
         expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
-        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkeys: [catkeys[0]])
+        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkeys: %w[12345 66233])
         expect(change_set2).to have_received(:validate).with(barcode: nil, catkeys: [])
         expect(change_set3).to have_received(:validate).with(barcode: barcodes[2], catkeys: [catkeys[2]])
       end
