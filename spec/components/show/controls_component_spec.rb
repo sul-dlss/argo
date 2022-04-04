@@ -42,7 +42,9 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
         expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
         expect(page).to have_link 'Download CSV', href: '/items/druid:kv840xx0000/descriptive.csv'
-        expect(rendered.css('a').size).to eq 9
+        expect(page).to have_link 'Upload CSV', href: '/items/druid:kv840xx0000/descriptive/new'
+
+        expect(rendered.css('a').size).to eq 10
         expect(rendered.css('a.disabled').size).to eq 3 # purge, publish/unpublish are disabled
       end
 
@@ -61,7 +63,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
           expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
           expect(page).to have_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
 
-          expect(rendered.css('a').size).to eq 11
+          expect(rendered.css('a').size).to eq 12
         end
       end
     end
@@ -77,12 +79,13 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Download CSV', href: '/items/druid:kv840xx0000/descriptive.csv'
+        expect(page).to have_link 'Upload CSV', href: '/items/druid:kv840xx0000/descriptive/new'
 
         # these buttons are disabled since object is locked
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
 
-        expect(rendered.css('a').size).to eq 9
+        expect(rendered.css('a').size).to eq 10
         expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, purge, publish/unpublish are disabled
       end
     end

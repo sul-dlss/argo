@@ -43,6 +43,9 @@
                                      data: { turbo_method: 'post' } %></li>
         <% end %>
         <li><%= link_to 'Download CSV', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>
+        <li><%= link_to 'Upload CSV', new_item_descriptive_path(doc),
+                                      class: 'dropdown-item',
+                                      data: { controller: 'button', action: 'click->button#open'} %></li>
         <% if symphony_record? %>
           <li><%= link_to 'Manage serials', edit_item_serials_path(doc),
                                             class: 'dropdown-item',
