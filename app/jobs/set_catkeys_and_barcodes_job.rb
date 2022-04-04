@@ -71,7 +71,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
   def catkeys_from_params(params)
     return unless params['use_catkeys_option'] == '1'
 
-    lines_for(params, :catkeys).map { |val| Array(val.presence) }
+    lines_for(params, :catkeys).map { |line| line.split(',') }
   end
 
   def barcodes_from_params(params)
