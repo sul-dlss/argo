@@ -12,7 +12,7 @@ module ItemsHelper
       presenter.view_token = @verified_token_with_expiration if presenter.respond_to? :view_token
       if presenter.respond_to? :cocina
         presenter.cocina = @cocina
-        presenter.state_service = StateService.new(document.id, version: document.current_version)
+        presenter.state_service = StateService.new(@cocina)
       end
       # rubocop:enable Rails/HelperInstanceVariable
     end

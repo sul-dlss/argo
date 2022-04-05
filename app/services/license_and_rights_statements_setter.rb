@@ -67,7 +67,7 @@ class LicenseAndRightsStatementsSetter
   end
 
   def state_service
-    StateService.new(druid, version: cocina_object.version)
+    StateService.new(cocina_object)
   end
 
   def change_set

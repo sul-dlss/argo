@@ -11,8 +11,8 @@ RSpec.describe StateService do
 
   let(:druid) { 'ab12cd3456' }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
-
-  let(:service) { described_class.new(druid, version: 3) }
+  let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version: 3) }
+  let(:service) { described_class.new(cocina) }
 
   describe '#allows_modification?' do
     subject(:allows_modification?) { service.allows_modification? }

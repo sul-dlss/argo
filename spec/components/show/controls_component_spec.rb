@@ -4,18 +4,16 @@ require 'rails_helper'
 
 RSpec.describe Show::ControlsComponent, type: :component do
   let(:component) do
-    described_class.new(manager: manager,
-                        solr_document: doc)
+    described_class.new(manager: manager, presenter: presenter)
   end
 
   let(:url_helpers) { Rails.application.routes.url_helpers }
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, allows_modification?: allows_modification) }
 
   before do
-    allow(StateService).to receive(:new).and_return(state_service)
     rendered
   end
 
