@@ -7,22 +7,32 @@ RSpec.describe 'BulkActionsController' do
     create(:user)
   end
 
+  let(:rendered) do
+    Capybara::Node::Simple.new(response.body)
+  end
+
   before do
     sign_in current_user
   end
 
   describe 'GET index' do
-    it 'lists the BulkActions from current_user' do
+    before do
       create(:bulk_action, user_id: current_user.id + 1, description: 'not mine') # Not current_user's
       create(:bulk_action, user: current_user, description: 'Belongs to me')
+    end
+
+    it 'lists the BulkActions from current_user' do
       get '/bulk_actions'
+      expect(response.status).to eq 200
       expect(response.body).to include 'Belongs to me'
       expect(response.body).not_to include 'not mine'
     end
 
-    it 'has a 200 status code' do
-      get '/bulk_actions'
-      expect(response.status).to eq 200
+    it 'shows a button to create a new one' do
+      get '/bulk_actions?action=index&controller=catalog&f[current_version_isi][]=3&f[is_governed_by_ssim][]=info%3Afedora%2Fdruid%3Azw306xn5593&f[objectType_ssim][]=item&page=3'
+      # this tests that page, action and controller are stripped out of the parameters
+      url = '/bulk_actions/new?f%5Bcurrent_version_isi%5D%5B%5D=3&f%5Bis_governed_by_ssim%5D%5B%5D=info%3Afedora%2Fdruid%3Azw306xn5593&f%5BobjectType_ssim%5D%5B%5D=item'
+      expect(rendered).to have_link 'New Bulk Action', href: url
     end
   end
 
