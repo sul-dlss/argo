@@ -11,7 +11,7 @@ RSpec.describe 'content_types/_content_type' do
   end
 
   it 'renders the partial content' do
-    assign(:cocina_object, cocina_object)
+    assign(:cocina, cocina_object)
     render
     expect(rendered).to have_css 'form label', text: 'Old resource type'
     expect(rendered).to have_css 'select#old_resource_type'

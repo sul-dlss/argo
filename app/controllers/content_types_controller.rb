@@ -11,15 +11,15 @@ class ContentTypesController < ApplicationController
 
   # set the content type in the content metadata
   def update
-    authorize! :manage_item, @cocina_object
+    authorize! :manage_item, @cocina
 
     # if this object has been submitted and doesnt have an open version, they cannot change it.
-    state_service = StateService.new(@cocina_object.externalIdentifier, version: @cocina_object.version)
-    return render_error('Object cannot be modified in its current state.') unless state_service.allows_modification?
+    return unless enforce_versioning
+
     return render_error('Invalid new content type.') unless valid_content_type?
 
-    object_client.update(params: @cocina_object.new(cocina_update_attributes))
-    Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
+    object_client.update(params: @cocina.new(cocina_update_attributes))
+    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
 
     redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
   end
@@ -36,15 +36,15 @@ class ContentTypesController < ApplicationController
       attributes[:structural] = if resource_types_should_change?
                                   structural_with_resource_type_changes
                                 else
-                                  @cocina_object.structural.new(hasMemberOrders: member_orders)
+                                  @cocina.structural.new(hasMemberOrders: member_orders)
                                 end
     end
   end
 
   def old_resource_type
-    return '' if [Cocina::Models::ObjectType.collection, Cocina::Models::ObjectType.admin_policy].include? @cocina_object.type
+    return '' if [Cocina::Models::ObjectType.collection, Cocina::Models::ObjectType.admin_policy].include? @cocina.type
 
-    Constants::RESOURCE_TYPES.key(@cocina_object.structural.contains&.first&.type) || ''
+    Constants::RESOURCE_TYPES.key(@cocina.structural.contains&.first&.type) || ''
   end
 
   def new_content_type
@@ -64,9 +64,9 @@ class ContentTypesController < ApplicationController
   end
 
   def structural_with_resource_type_changes
-    @cocina_object.structural.new(
+    @cocina.structural.new(
       hasMemberOrders: member_orders,
-      contains: Array(@cocina_object.structural&.contains).map do |resource|
+      contains: Array(@cocina.structural&.contains).map do |resource|
         next resource unless resource.type == Constants::RESOURCE_TYPES[params[:old_resource_type]]
 
         resource.new(type: Constants::RESOURCE_TYPES[params[:new_resource_type]])
@@ -75,7 +75,7 @@ class ContentTypesController < ApplicationController
   end
 
   def resource_types_should_change?
-    Array(@cocina_object.structural&.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
+    Array(@cocina.structural&.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
   end
 
   def valid_content_type?
@@ -89,7 +89,7 @@ class ContentTypesController < ApplicationController
   def load_resource
     raise 'missing druid' if params[:item_id].blank?
 
-    @cocina_object = object_client.find
+    @cocina = object_client.find
     @old_resource_type = old_resource_type
   end
 end

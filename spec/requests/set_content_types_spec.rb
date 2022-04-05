@@ -195,8 +195,8 @@ RSpec.describe 'Set content type for an item', type: :request do
         it 'is forbidden' do
           patch "/items/#{druid}/content_type", params: { new_content_type: 'media' }
 
-          expect(response).to be_forbidden
-          expect(response.body).to eq('Object cannot be modified in its current state.')
+          expect(response).to redirect_to("/view/#{druid}")
+          expect(flash[:error]).to eq 'Object cannot be modified in its current state.'
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
         end
       end
