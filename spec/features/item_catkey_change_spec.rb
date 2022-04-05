@@ -18,7 +18,7 @@ RSpec.describe 'Item catkey change' do
       fill_in 'Catkey', with: '12345'
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Object cannot be modified in ' \
-        'its current state.'
+                                             'its current state.'
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe 'Item catkey change' do
       fill_in 'Catkey', with: '12345, 99912'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \
-        "#{druid} has been updated!"
+                                                          "#{druid} has been updated!"
       expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end
   end
