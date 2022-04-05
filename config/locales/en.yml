@@ -12,9 +12,8 @@ en:
         source_id: Source ID
         agreement_file1: Agreement File (1/2)
         agreement_file2: Agreement File (2/2)
-      item:
-        embargo_release_date: 'Enter the date when this embargo ends'
-        embargo_access: 'Once embargo ends, these rights are applied'
+      embargo:
+        release_date: 'Enter the date when this embargo ends'
       serials:
         part_number2: Part number 2
 
