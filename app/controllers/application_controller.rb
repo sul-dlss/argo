@@ -21,6 +21,11 @@ class ApplicationController < ActionController::Base
     NilModel.new(druid)
   end
 
+  def allows_modification?(cocina_object)
+    state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
+    state_service.allows_modification?
+  end
+
   def current_user
     super.tap do |cur_user|
       break unless cur_user
@@ -45,10 +50,8 @@ class ApplicationController < ActionController::Base
   def enforce_versioning
     return redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
 
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
-
     # if this object has been submitted and doesn't have an open version, they cannot change it.
-    return true if state_service.allows_modification?
+    return true if allows_modification?(@cocina)
 
     redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Object cannot be modified in its current state.' }
     false
