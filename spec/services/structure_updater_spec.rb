@@ -267,7 +267,7 @@ RSpec.describe StructureUpdater do
         Image 1,image,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,image/tiff,
         Image 1,image,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
         Image 2,image,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,image/tiff,
-        Image 2,image,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+        Image 2,paper,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
       CSV
     end
 
@@ -276,7 +276,8 @@ RSpec.describe StructureUpdater do
         'On row 2 found bb045jk_0001.tiff, which appears to be a new file',
         'On row 3 found bb045jk_0001.jp2, which appears to be a new file',
         'On row 4 found bb045jk_0002.tiff, which appears to be a new file',
-        'On row 5 found bb045jk_0002.jp2, which appears to be a new file'
+        'On row 5 found bb045jk_0002.jp2, which appears to be a new file',
+        'On row 5 found "paper", which is not a valid resource type'
       ]
     end
   end
