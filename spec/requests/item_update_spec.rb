@@ -149,7 +149,8 @@ RSpec.describe 'Set the properties for an item' do
                 ]
               }
             }
-          ]
+          ],
+          isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
         }
       end
 
@@ -201,13 +202,14 @@ RSpec.describe 'Set the properties for an item' do
                       ]
                     }
                   }
-                ]
+                ],
+                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
               }
             }
           )
         end
 
-        it 'sets the new access rights' do
+        it 'sets the new access rights (without overwriting collection)' do
           patch "/items/#{druid}", params: {
             item: {
               view_access: 'world',
@@ -279,7 +281,8 @@ RSpec.describe 'Set the properties for an item' do
                       ]
                     }
                   }
-                ]
+                ],
+                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
               }
             }
           )
@@ -356,7 +359,8 @@ RSpec.describe 'Set the properties for an item' do
                       ]
                     }
                   }
-                ]
+                ],
+                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
               }
             }
           )
@@ -417,7 +421,8 @@ RSpec.describe 'Set the properties for an item' do
                       ]
                     }
                   }
-                ]
+                ],
+                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
               }
             }
           )

@@ -54,11 +54,9 @@ class ItemChangeSetPersister
     updated.new(administrative: updated_administrative)
   end
 
-  # NOTE: This must be called after updating the access
   def update_structural(updated)
-    return updated unless changed?(:collection_ids) || object_permissions_changed?
+    return updated unless changed?(:collection_ids)
 
-    # updated = update_files(updated)
     updated_structural = if collection_ids
                            updated.structural.new(isMemberOf: collection_ids)
                          else
