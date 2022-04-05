@@ -4,16 +4,39 @@ class ContentTypeForm < ApplicationChangeSet
   property :old_resource_type, virtual: true
   property :new_resource_type, virtual: true
   property :new_content_type, virtual: true
+  property :viewing_direction, virtual: true
+
+  CONTENT_TYPES = {
+    'book' => Cocina::Models::ObjectType.book,
+    'file' => Cocina::Models::ObjectType.object,
+    'image' => Cocina::Models::ObjectType.image,
+    'map' => Cocina::Models::ObjectType.map,
+    'media' => Cocina::Models::ObjectType.media,
+    '3d' => Cocina::Models::ObjectType.three_dimensional,
+    'document' => Cocina::Models::ObjectType.document,
+    'geo' => Cocina::Models::ObjectType.geo,
+    'webarchive-seed' => Cocina::Models::ObjectType.webarchive_seed
+  }.freeze
+
+  DIRECTIONS = %w[right-to-left left-to-right].freeze
 
   validates :new_content_type, inclusion: {
-    in: Constants::CONTENT_TYPES.keys,
+    in: CONTENT_TYPES.values,
     allow_blank: false
+  }
+
+  validates :viewing_direction, inclusion: {
+    in: DIRECTIONS,
+    allow_blank: true
   }
 
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    self.old_resource_type = model.respond_to?(:structural) ? Constants::RESOURCE_TYPES.key(model.structural.contains.first&.type) : nil
+    return unless model.respond_to?(:structural)
+
+    self.old_resource_type = Constants::RESOURCE_TYPES.key(model.structural.contains.first&.type)
     self.new_resource_type = old_resource_type
+    self.viewing_direction = model.structural.hasMemberOrders.first&.viewingDirection
   end
 
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
@@ -28,7 +51,7 @@ class ContentTypeForm < ApplicationChangeSet
 
   def cocina_update_attributes
     {}.tap do |attributes|
-      attributes[:type] = Constants::CONTENT_TYPES[new_content_type]
+      attributes[:type] = new_content_type
       attributes[:structural] = if resource_types_should_change?
                                   structural_with_resource_type_changes
                                 else
@@ -39,23 +62,22 @@ class ContentTypeForm < ApplicationChangeSet
 
   # If the new content type is a book, we need to set the viewing direction attribute in the cocina model
   def member_orders
-    return [] unless new_content_type.start_with?('book')
+    return [] unless may_have_direction? && viewing_direction.present?
 
-    viewing_direction = if new_content_type == 'book (ltr)'
-                          'left-to-right'
-                        else
-                          'right-to-left'
-                        end
     [{ viewingDirection: viewing_direction }]
+  end
+
+  def may_have_direction?
+    [Cocina::Models::ObjectType.book, Cocina::Models::ObjectType.image].include?(new_content_type)
   end
 
   def structural_with_resource_type_changes
     model.structural.new(
       hasMemberOrders: member_orders,
       contains: model.structural.contains.map do |resource|
-        next resource unless resource.type == Constants::RESOURCE_TYPES[old_resource_type]
+        next resource unless resource.type == old_resource_type
 
-        resource.new(type: Constants::RESOURCE_TYPES[new_resource_type])
+        resource.new(type: new_resource_type)
       end
     )
   end
@@ -63,7 +85,7 @@ class ContentTypeForm < ApplicationChangeSet
   def resource_types_should_change?
     new_resource_type.present? &&
       model.structural.contains
-         .map(&:type)
-         .any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[old_resource_type] }
+           .map(&:type)
+           .any? { |resource_type| resource_type == old_resource_type }
   end
 end

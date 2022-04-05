@@ -16,11 +16,11 @@ class ContentTypesController < ApplicationController
     return unless enforce_versioning
 
     form = ContentTypeForm.new(@cocina)
-    if form.validate(params)
+    if form.validate(params[:content_type])
       form.save
       redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
     else
-      render_error('Invalid new content type.')
+      render_error(form.errors.full_messages.to_sentence)
     end
   end
 
