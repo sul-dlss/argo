@@ -18,7 +18,7 @@ RSpec.describe 'Item source id change' do
       fill_in 'new_id', with: 'sulair:newSource'
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Object cannot be modified in ' \
-        'its current state.'
+                                             'its current state.'
     end
   end
 
@@ -78,7 +78,7 @@ RSpec.describe 'Item source id change' do
       fill_in 'new_id', with: 'sulair:newSource'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Source Id for ' \
-        "#{druid} has been updated!"
+                                                          "#{druid} has been updated!"
       expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end
   end

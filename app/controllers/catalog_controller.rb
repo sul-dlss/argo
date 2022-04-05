@@ -93,9 +93,9 @@ class CatalogController < ApplicationController
                                        other: {
                                          label: 'DOR',
                                          fq: '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
-                                           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
-                                           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
-                                           ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
+                                             ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
+                                             ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
+                                             ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
                                        },
 
                                        google: { label: 'Google', fq: 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
@@ -103,8 +103,8 @@ class CatalogController < ApplicationController
                                        hydrus: {
                                          label: 'Hydrus/SDR',
                                          fq: 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
-            ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
-            ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
+                                             ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
+                                             ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
                                        }
                                      }
 
