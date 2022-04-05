@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class ContentTypesController < ApplicationController
-  before_action :load_resource
+  before_action :load_and_authorize_resource
 
   def show
+    @form = ContentTypeForm.new(@cocina_object)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -11,17 +12,16 @@ class ContentTypesController < ApplicationController
 
   # set the content type in the content metadata
   def update
-    authorize! :manage_item, @cocina
-
     # if this object has been submitted and doesnt have an open version, they cannot change it.
     return unless enforce_versioning
 
-    return render_error('Invalid new content type.') unless valid_content_type?
-
-    object_client.update(params: @cocina.new(cocina_update_attributes))
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
-
-    redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
+    form = ContentTypeForm.new(@cocina)
+    if form.validate(params)
+      form.save
+      redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
+    else
+      render_error('Invalid new content type.')
+    end
   end
 
   private
@@ -30,68 +30,8 @@ class ContentTypesController < ApplicationController
     render status: :forbidden, plain: msg
   end
 
-  def cocina_update_attributes
-    {}.tap do |attributes|
-      attributes[:type] = Constants::CONTENT_TYPES[new_content_type]
-      attributes[:structural] = if resource_types_should_change?
-                                  structural_with_resource_type_changes
-                                else
-                                  @cocina.structural.new(hasMemberOrders: member_orders)
-                                end
-    end
-  end
-
-  def old_resource_type
-    return '' if [Cocina::Models::ObjectType.collection, Cocina::Models::ObjectType.admin_policy].include? @cocina.type
-
-    Constants::RESOURCE_TYPES.key(@cocina.structural.contains&.first&.type) || ''
-  end
-
-  def new_content_type
-    params[:new_content_type]
-  end
-
-  # If the new content type is a book, we need to set the viewing direction attribute in the cocina model
-  def member_orders
-    return [] unless new_content_type.start_with?('book')
-
-    viewing_direction = if new_content_type == 'book (ltr)'
-                          'left-to-right'
-                        else
-                          'right-to-left'
-                        end
-    [{ viewingDirection: viewing_direction }]
-  end
-
-  def structural_with_resource_type_changes
-    @cocina.structural.new(
-      hasMemberOrders: member_orders,
-      contains: Array(@cocina.structural&.contains).map do |resource|
-        next resource unless resource.type == Constants::RESOURCE_TYPES[params[:old_resource_type]]
-
-        resource.new(type: Constants::RESOURCE_TYPES[params[:new_resource_type]])
-      end
-    )
-  end
-
-  def resource_types_should_change?
-    params[:new_resource_type].present? &&
-      @cocina.structural.contains.map(&:type)
-             .any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
-  end
-
-  def valid_content_type?
-    Constants::CONTENT_TYPES.keys.include?(new_content_type)
-  end
-
-  def object_client
-    Dor::Services::Client.object(params[:item_id])
-  end
-
-  def load_resource
-    raise 'missing druid' if params[:item_id].blank?
-
-    @cocina = object_client.find
-    @old_resource_type = old_resource_type
+  def load_and_authorize_resource
+    @cocina = Dor::Services::Client.object(params[:item_id]).find
+    authorize! :manage_item, @cocina
   end
 end

@@ -73,7 +73,7 @@ RSpec.describe 'Set content type for an item', type: :request do
 
   describe 'show the form' do
     before do
-      sign_in user, groups: []
+      sign_in user, groups: ['sdr:administrator-role']
     end
 
     let(:content_type) { Cocina::Models::ObjectType.image }
@@ -87,7 +87,6 @@ RSpec.describe 'Set content type for an item', type: :request do
   describe 'save the updated value' do
     before do
       allow(StateService).to receive(:new).and_return(state_service)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -103,7 +102,6 @@ RSpec.describe 'Set content type for an item', type: :request do
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
           .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       it 'is successful at changing the content type to book (ltr)' do
@@ -113,7 +111,6 @@ RSpec.describe 'Set content type for an item', type: :request do
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
           .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       it 'is successful at changing the content type to book (rtl)' do
@@ -123,7 +120,6 @@ RSpec.describe 'Set content type for an item', type: :request do
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
           .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       it 'is successful at changing the resource type' do
@@ -137,7 +133,6 @@ RSpec.describe 'Set content type for an item', type: :request do
               without_order: true
             )
           ).once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       context "when the values don't change from the original" do
@@ -152,8 +147,6 @@ RSpec.describe 'Set content type for an item', type: :request do
                 resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
               )
             )
-            .once
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
         end
       end
 
@@ -169,8 +162,6 @@ RSpec.describe 'Set content type for an item', type: :request do
                 resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
               )
             )
-            .once
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
         end
       end
 
@@ -194,7 +185,6 @@ RSpec.describe 'Set content type for an item', type: :request do
 
           expect(response).to redirect_to("/view/#{druid}")
           expect(flash[:error]).to eq 'Object cannot be modified in its current state.'
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
         end
       end
 
@@ -204,7 +194,6 @@ RSpec.describe 'Set content type for an item', type: :request do
 
           expect(response).to be_forbidden
           expect(response.body).to eq('Invalid new content type.')
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
         end
       end
     end
@@ -219,7 +208,6 @@ RSpec.describe 'Set content type for an item', type: :request do
 
         expect(response).to be_forbidden
         expect(response.body).to eq('forbidden')
-        expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
       end
     end
   end
