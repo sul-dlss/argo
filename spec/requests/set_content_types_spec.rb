@@ -27,22 +27,6 @@ RSpec.describe 'Set content type for an item', type: :request do
                            identification: { sourceId: 'sul:1234' }
                          })
   end
-  let(:cocina_model_with_member_order) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 1,
-                           'type' => content_type,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => structural_with_member_orders,
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
   let(:contains) do
     [
       Cocina::Models::FileSet.new(
@@ -83,12 +67,6 @@ RSpec.describe 'Set content type for an item', type: :request do
   end
   let(:structural) do
     Cocina::Models::DROStructural.new(
-      contains: contains
-    )
-  end
-  let(:structural_with_member_orders) do
-    Cocina::Models::DROStructural.new(
-      hasMemberOrders: [{ viewingDirection: reading_order }],
       contains: contains
     )
   end
