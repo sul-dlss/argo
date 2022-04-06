@@ -17,60 +17,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models.build({
-                           'label' => 'My Item1',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item1' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           'identification' => {
-                             barcode: '36105014757519',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
-                             sourceId: 'sul:1234'
-                           }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
   end
   let(:item2) do
-    Cocina::Models.build({
-                           'label' => 'My Item2',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item2' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           'identification' => {
-                             barcode: '36105014757510',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }],
-                             sourceId: 'sul:1234'
-                           }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
   end
   let(:item3) do
-    Cocina::Models.build({
-                           'label' => 'My Item3',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[2],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item3' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[2])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }

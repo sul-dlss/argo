@@ -37,36 +37,10 @@ RSpec.describe SetCollectionJob do
       }.with_indifferent_access
     end
     let(:cocina1) do
-      Cocina::Models.build({
-                             'label' => 'My First Item',
-                             'version' => 2,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druids[0],
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             identification: { sourceId: 'sul:1234' },
-                             'description' => {
-                               'title' => [{ 'value' => 'Cocina Object 1' }],
-                               'purl' => 'https://purl.standford.edu/cc111dd2222'
-                             }
-                           })
+      Cocina::Models::Factories.build(:dro, id: druids[0])
     end
     let(:cocina2) do
-      Cocina::Models.build({
-                             'label' => 'My Second Item',
-                             'version' => 2,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druids[1],
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             identification: { sourceId: 'sul:1234' },
-                             'description' => {
-                               'title' => [{ 'value' => 'Cocina object 2' }],
-                               'purl' => 'https://purl.standford.edu/dd111ff2222'
-                             }
-                           })
+      Cocina::Models::Factories.build(:dro, id: druids[1])
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
     let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }

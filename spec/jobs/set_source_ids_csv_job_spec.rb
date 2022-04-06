@@ -17,46 +17,13 @@ RSpec.describe SetSourceIdsCsvJob do
   end
   let(:log_buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models.build({
-                           'label' => 'My Item1',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/bb111cc2222' },
-                           'structural' => {},
-                           'identification' => {
-                             sourceId: 'sul:36105014757519'
-                           }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[0], source_id: 'sul:36105014757519')
   end
   let(:item2) do
-    Cocina::Models.build({
-                           'label' => 'My Item2',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/cc111dd2222' },
-                           'structural' => {},
-                           'identification' => {
-                             sourceId: 'sul:36105014757510'
-                           }
-                         })
+    Cocina::Models::Factories.build(:dro, id: druids[1], source_id: 'sul:36105014757510')
   end
   let(:item3) do
-    Cocina::Models.build({
-                           'label' => 'My Item3',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.collection,
-                           'externalIdentifier' => druids[2],
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/dd111ff2222' },
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    Cocina::Models::Factories.build(:collection, id: druids[2], source_id: 'sul:1234')
   end
 
   let(:csv_file) do
