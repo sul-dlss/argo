@@ -140,19 +140,38 @@ RSpec.describe 'Set content type for an item', type: :request do
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
-      it 'is successful when effectively a no-op' do
-        patch "/items/#{druid}/content_type", params: { new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
+      context "when the values don't change from the original" do
+        it 'is successful' do
+          patch "/items/#{druid}/content_type", params: { new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
 
-        expect(response).to redirect_to solr_document_path(druid)
-        expect(object_client).to have_received(:update)
-          .with(
-            params: cocina_object_with_types(
-              content_type: Cocina::Models::ObjectType.image,
-              resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
+          expect(response).to redirect_to solr_document_path(druid)
+          expect(object_client).to have_received(:update)
+            .with(
+              params: cocina_object_with_types(
+                content_type: Cocina::Models::ObjectType.image,
+                resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
+              )
             )
-          )
-          .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
+            .once
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
+        end
+      end
+
+      context 'when the new resource type is none' do
+        it "doesn't change the value" do
+          patch "/items/#{druid}/content_type", params: { new_content_type: 'image', old_resource_type: 'document', new_resource_type: '' }
+
+          expect(response).to redirect_to solr_document_path(druid)
+          expect(object_client).to have_received(:update)
+            .with(
+              params: cocina_object_with_types(
+                content_type: Cocina::Models::ObjectType.image,
+                resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
+              )
+            )
+            .once
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
+        end
       end
 
       context 'without structural metadata' do
