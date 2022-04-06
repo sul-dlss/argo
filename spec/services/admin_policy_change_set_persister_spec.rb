@@ -39,7 +39,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
     let(:default_workflows) { ['registrationWF'] }
 
     let(:change_set) do
-      instance_double(AdminPolicyChangeSet,
+      instance_double(ApoForm,
                       copyright_statement: copyright_statement,
                       use_statement: use_statement,
                       title: 'My title',
@@ -114,7 +114,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
         instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:999')
       end
       let(:change_set) do
-        instance_double(AdminPolicyChangeSet,
+        instance_double(ApoForm,
                         copyright_statement: copyright_statement,
                         use_statement: use_statement,
                         title: 'My title',

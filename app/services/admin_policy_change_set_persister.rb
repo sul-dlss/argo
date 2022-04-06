@@ -3,20 +3,20 @@
 # Writes changes on an AdminPolicy to the to the dor-services-app API
 class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   # @param [Cocina::Models::AdminPolicy] model the orignal state of the model
-  # @param [AdminPolicyChangeSet] change_set the values to update.
+  # @param [ApoForm] form the values to update.
   # @return [Cocina::Models::AdminPolicy] the model with updates applied
-  def self.update(model, change_set)
-    new(model, change_set).update
+  def self.update(model, form)
+    new(model, form).update
   end
 
-  # @param [AdminPolicyChangeSet] change_set the values to update.
+  # @param [ApoForm] form the values to update.
   # @return [Cocina::Models::AdminPolicy] the model with updates applied
-  def self.create(change_set)
-    new(nil, change_set).create
+  def self.create(form)
+    new(nil, form).create
   end
 
-  def initialize(model, change_set)
-    @change_set = change_set
+  def initialize(model, form)
+    @form = form
     @model = model || model_for_registration
   end
 
@@ -68,12 +68,12 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
 
   private
 
-  attr_reader :model, :change_set
+  attr_reader :model, :form
 
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
            :default_rights, :title, :default_workflows, :permissions,
            :collection_radio, :collections_for_registration, :collection,
-           :registered_by, to: :change_set
+           :registered_by, to: :form
 
   def tag_registered_by(druid)
     return unless registered_by
@@ -120,7 +120,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   # @returns [Array<String>] a list of collection druids for this AdminPolicy
   def collection_ids
     # Get the ids of the existing collections from the form.
-    collection_ids = collections_for_registration.values.map { |elem| elem.fetch(:id) }
+    collection_ids = Hash(collections_for_registration).values.map { |elem| elem.fetch(:id) }
     if collection_radio == 'create'
       collection_ids << create_collection(model.externalIdentifier)
     elsif collection[:collection].present? # guard against empty string
@@ -146,7 +146,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   }.freeze
 
   def roles
-    return [] unless permissions
+    return [] if permissions.blank?
 
     attributes = permissions.values
     ungrouped_perms = attributes.each_with_object({}) do |perm, grouped|

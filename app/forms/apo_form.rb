@@ -1,65 +1,75 @@
 # frozen_string_literal: true
 
-# Inspired by Reform, but not exactly reform, because of existing deficiencies
-# in dor-services:
-#  https://github.com/sul-dlss/dor-services/pull/360
-class ApoForm
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
+class ApoForm < ApplicationChangeSet
+  property :title, virtual: true
+  property :agreement_object_id, virtual: true
+  property :default_rights, virtual: true
+  property :use_statement, virtual: true
+  property :copyright_statement, virtual: true
+  property :use_license, virtual: true
+  property :default_workflows, virtual: true
+
+  property :collection_radio, virtual: true
+  property :collections_for_registration, virtual: true
+  property :collection, virtual: true # These attributes get passed to the CollectionForm
+  property :registered_by, virtual: true
+  property :permissions, virtual: true
+
+  validates :title, presence: true
+  validates :agreement_object_id, presence: true
 
   DEFAULT_MANAGER_WORKGROUPS = %w[developer service-manager metadata-staff].freeze
 
-  attr_reader :model, :params, :default_collection_druid, :search_service
-
-  # needed so that the form routes to `/apo` rather than '/apo_form'
   def self.model_name
-    Struct.new(:param_key, :route_key, :i18n_key, :name).new('apo_form', 'apo', 'apo', 'Apo')
+    ::ActiveModel::Name.new(nil, nil, 'Apo')
   end
 
   # needed for generating the update route
   def to_key
-    Array(@model&.externalIdentifier)
+    Array(model&.externalIdentifier)
   end
 
   # @param [Cocina::Models::AdminPolicy,NilClass] model the object to update or nil for a new item
   # @param [Blacklight::SearchService] search_service a way to search solr
   def initialize(model, search_service:)
-    @model = model
+    super(model)
     @search_service = search_service
-    self.default_rights = 'world'
-    self.default_workflows = ['registrationWF']
-    populate_from_model if model
-    @errors = []
   end
 
-  def populate_from_model
-    self.title = model.description.title.first.value
-    self.agreement_object_id = model.administrative.hasAgreement
-    self.default_rights = default_access
-    self.use_statement = model.administrative.accessTemplate&.useAndReproductionStatement
-    self.copyright_statement = model.administrative.accessTemplate&.copyright
-    self.use_license = model.administrative.accessTemplate&.license
-    self.default_workflows = model.administrative.registrationWorkflow
+  def setup_properties!(_options)
+    if model
+      self.title = model.description.title.first.value
+      self.agreement_object_id = model.administrative.hasAgreement
+      self.default_rights = default_access
+      self.use_statement = model.administrative.accessTemplate&.useAndReproductionStatement
+      self.copyright_statement = model.administrative.accessTemplate&.copyright
+      self.use_license = model.administrative.accessTemplate&.license
+      self.default_workflows = model.administrative.registrationWorkflow
+      self.permissions = manage_permissions + view_permissions
+    else
+      self.default_rights = 'world'
+      self.collection_radio = 'none'
+      self.default_workflows = ['registrationWF']
+      self.permissions = default_permissions
+    end
   end
 
-  attr_accessor :use_license, :agreement_object_id, :use_statement, :copyright_statement,
-                :default_rights, :title, :default_workflows
-
-  def persisted?
-    !model.nil?
+  def save_model
+    @model = if persisted?
+               AdminPolicyChangeSetPersister.update(model, self)
+             else
+               AdminPolicyChangeSetPersister.create(self)
+             end
   end
 
-  # @return [Array<Hash>] the list of permissions (grants for users/groups) on this object
-  def permissions
-    return default_permissions unless persisted?
-
-    manage_permissions + view_permissions
+  def id
+    model.externalIdentifier
   end
 
   # @return [Array<SolrDocument>]
   def default_collection_objects
     @default_collection_objects ||=
-      search_service
+      @search_service
       .fetch(default_collections, rows: default_collections.size)
       .last
       .sort_by do |solr_doc|
@@ -73,10 +83,6 @@ class ApoForm
 
   def license_options
     [['-- none --', '']] + options_for_use_license_type(use_license)
-  end
-
-  def collection_radio
-    'none'
   end
 
   private
