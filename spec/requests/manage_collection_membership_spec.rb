@@ -11,45 +11,10 @@ RSpec.describe 'Collection membership', type: :request do
 
   let(:druid) { 'druid:bc123df4567' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
-  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
-  let(:cocina) do
-    Cocina::Models.build({
-                           'label' => 'My ETD',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           'identification' => {
-                             'catalogLinks' => catalog_links
-                           }
-                         })
-  end
-  let(:catalog_links) { [{ catalog: 'symphony', catalogRecordId: '12345' }] }
 
   describe 'adding a new collection' do
-    let(:cocina_collection) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => {},
-                             identification: { sourceId: 'sul:1234' },
-                             'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                             'structural' => structural
-                           })
-    end
-    let(:structural) { { 'isMemberOf' => ['druid:gg333xx4444'] } }
+    let(:cocina_collection) { build(:dro, id: druid, collection_ids: collection_ids) }
+    let(:collection_ids) { ['druid:gg333xx4444'] }
     let(:object_service) do
       instance_double(Dor::Services::Client::Object,
                       find: cocina_collection,
@@ -64,20 +29,7 @@ RSpec.describe 'Collection membership', type: :request do
 
       context 'when collections already exist' do
         let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 identification: { sourceId: 'sul:1234' },
-                                 'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
-                               })
+          build(:dro, id: druid, collection_ids: ['druid:gg333xx4444', 'druid:bc555gh3434'])
         end
 
         it 'adds a collection' do
@@ -94,23 +46,8 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       context 'when the object is not currently in a collection' do
-        let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => { 'isMemberOf' => ['druid:bc555gh3434'] }
-                               })
-        end
-        let(:structural) { {} }
+        let(:expected) { build(:dro, id: druid, collection_ids: ['druid:bc555gh3434']) }
+        let(:collection_ids) { [] }
 
         it 'adds a collection' do
           post "/items/#{druid}/collection/add?collection=druid:bc555gh3434"
@@ -133,22 +70,7 @@ RSpec.describe 'Collection membership', type: :request do
   end
 
   describe 'removing a collection' do
-    let(:cocina) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => {},
-                             identification: { sourceId: 'sul:1234' },
-                             'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                             'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
-                           })
-    end
+    let(:cocina) { build(:dro, id: druid, collection_ids: ['druid:gg333xx4444', 'druid:bc555gh3434']) }
 
     let(:object_service) do
       instance_double(Dor::Services::Client::Object,
@@ -163,22 +85,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       context 'when the item is a member of the collection' do
-        let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
-                               })
-        end
+        let(:expected) { build(:dro, id: druid, collection_ids: ['druid:gg333xx4444']) }
 
         it 'removes a collection' do
           get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"
@@ -188,22 +95,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       context 'when the object is not in any collections' do
-        let(:cocina) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => {}
-                               })
-        end
+        let(:cocina) { build(:dro, id: druid) }
 
         it 'does an update with no changes' do
           get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"

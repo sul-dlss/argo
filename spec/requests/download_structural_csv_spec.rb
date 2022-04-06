@@ -19,20 +19,7 @@ RSpec.describe 'Download the structural CSV' do
     end
 
     let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             identification: { sourceId: 'sul:1234' }
-                           })
+      build(:dro, id: druid)
     end
 
     it 'returns the csv' do

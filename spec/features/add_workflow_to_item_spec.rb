@@ -26,23 +26,7 @@ RSpec.describe 'Add a workflow to an item' do
                     metadata: metadata_client,
                     version: version_client)
   end
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The model',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => item_id,
-                           'description' => {
-                             'title' => [{ 'value' => 'The model' }],
-                             'purl' => "https://purl.stanford.edu/#{Druid.new(item_id).without_namespace}"
-                           },
-                           'administrative' => { hasAdminPolicy: uber_apo_id },
-                           'access' => {},
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
-  let(:uber_apo_id) { 'druid:hv992ry2431' }
+  let(:cocina_model) { build(:dro, id: item_id) }
   let(:item_id) { 'druid:bg444xg6666' }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }

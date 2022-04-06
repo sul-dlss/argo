@@ -17,21 +17,7 @@ RSpec.describe 'Set the properties for a collection' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.collection,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'externalIdentifier' => druid,
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             identification: { sourceId: 'sul:1234' }
-                           })
-    end
+    let(:cocina_model) { build(:collection, id: druid) }
 
     let(:updated_model) do
       cocina_model.new(

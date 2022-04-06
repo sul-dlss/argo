@@ -8,26 +8,12 @@ RSpec.describe CollectionChangeSet do
 
   describe 'loading from cocina' do
     let(:collection) do
-      Cocina::Models.build({
-                             'label' => 'My Collection',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.collection,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My Collection' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => {
+      build(:collection).new(access: {
                                view: 'world',
                                copyright: 'This collection is in the Public Domain.',
                                useAndReproductionStatement: 'Must be used underwater',
                                license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'
-                             },
-                             'administrative' => {
-                               hasAdminPolicy: 'druid:cg532dg5405'
-                             },
-                             identification: { sourceId: 'sul:1234' }
-                           })
+                             })
     end
 
     describe '#copyright' do

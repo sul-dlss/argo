@@ -6,36 +6,10 @@ RSpec.describe ReleaseObjectJob do
   let(:buffer) { StringIO.new }
 
   let(:item1) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:dro, id: druids[0], version: 2)
   end
   let(:item2) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:dro, id: druids[1], version: 3)
   end
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, update: double) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, update: double) }

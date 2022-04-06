@@ -13,22 +13,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
   let(:workflow_client) { instance_double(Dor::Workflow::Client, update_status: true) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:druid) { 'druid:xb482bw3979' }
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My ETD',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
+  let(:cocina_model) { build(:dro) }
 
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)

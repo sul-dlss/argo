@@ -20,29 +20,13 @@ RSpec.describe 'Enable buttons' do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
+  let(:cocina_model) { build(:dro, id: item_id) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
                     events: events_client,
                     metadata: metadata_client,
                     version: version_client)
-  end
-
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.book,
-                           'externalIdentifier' => item_id,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{item_id.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
   end
 
   it 'buttons are enabled if the state services return unlock', js: true do

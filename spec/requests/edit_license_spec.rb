@@ -18,22 +18,7 @@ RSpec.describe 'Edit license' do
 
   describe 'display the form' do
     context 'with an item' do
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => druid,
-                               'description' => {
-                                 'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'structural' => {},
-                               identification: { sourceId: 'sul:1234' }
-                             })
-      end
+      let(:cocina_model) { build(:dro, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/edit_license", headers: turbo_stream_headers
@@ -43,28 +28,7 @@ RSpec.describe 'Edit license' do
     end
 
     context 'with a collection that has identification' do
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.collection,
-                               'externalIdentifier' => druid,
-                               'description' => {
-                                 'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'identification' => {
-                                 'catalogLinks' => [
-                                   {
-                                     'catalog' => 'symphony',
-                                     'catalogRecordId' => '10448742'
-                                   }
-                                 ]
-                               },
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
-                             })
-      end
+      let(:cocina_model) { build(:collection, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/edit_license", headers: turbo_stream_headers
@@ -75,22 +39,7 @@ RSpec.describe 'Edit license' do
 
   describe 'display the show view (after cancel)' do
     context 'with an item' do
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => druid,
-                               'description' => {
-                                 'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'structural' => {},
-                               identification: { sourceId: 'sul:1234' }
-                             })
-      end
+      let(:cocina_model) { build(:dro, id: druid) }
 
       it 'draws the component' do
         get "/items/#{druid}/show_license", headers: turbo_stream_headers
@@ -100,21 +49,7 @@ RSpec.describe 'Edit license' do
     end
 
     context 'with a collection' do
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.collection,
-                               'externalIdentifier' => druid,
-                               'description' => {
-                                 'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               identification: { sourceId: 'sul:1234' },
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
-                             })
-      end
+      let(:cocina_model) { build(:collection, id: druid) }
 
       it 'draws the component' do
         get "/items/#{druid}/show_license", headers: turbo_stream_headers

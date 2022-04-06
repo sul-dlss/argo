@@ -7,22 +7,7 @@ RSpec.describe 'Download the descriptive CSV', type: :request do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My ETD',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           'identification' => {
-                             sourceId: 'sul:91919'
-                           }
-                         })
+    build(:dro, id: druid, source_id: 'sul:91919', title: 'My ETD')
   end
 
   before do

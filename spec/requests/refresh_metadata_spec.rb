@@ -6,26 +6,7 @@ RSpec.describe 'Refresh metadata', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The item',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'The item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: {
-                             catalogLinks: catalog_links,
-                             sourceId: 'sul:1234'
-                           }
-                         })
-  end
-  let(:catalog_links) { [{ catalog: 'symphony', catalogRecordId: '12345' }] }
+  let(:cocina_model) { build(:dro, id: druid, catkeys: ['12345']) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
@@ -38,7 +19,7 @@ RSpec.describe 'Refresh metadata', type: :request do
     end
 
     context 'when the object has no catkey' do
-      let(:catalog_links) { [] }
+      let(:cocina_model) { build(:dro, id: druid, catkeys: []) }
 
       it 'returns a 400 with an error message' do
         post "/items/#{druid}/refresh_metadata"

@@ -13,22 +13,7 @@ RSpec.describe 'WorkflowServiceController', type: :request do
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
-  let(:cocina) do
-    Cocina::Models.build({
-                           'label' => 'My ETD',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
+  let(:cocina) { build(:dro) }
 
   describe 'GET published' do
     context 'when published' do

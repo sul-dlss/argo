@@ -17,24 +17,7 @@ RSpec.describe 'Set the properties for an item' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:existing_access) { {} }
-    let(:existing_structural) { {} }
-    let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => existing_access,
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => existing_structural,
-                             identification: { sourceId: 'sul:1234' }
-                           })
-    end
+    let(:cocina_model) { build(:dro) }
 
     context 'when barcode is passed' do
       let(:updated_model) do
@@ -122,6 +105,11 @@ RSpec.describe 'Set the properties for an item' do
     end
 
     describe 'access rights' do
+      let(:cocina_model) do
+        build(:dro).new(access: existing_access, structural: existing_structural)
+      end
+
+      let(:existing_access) { {} }
       let(:existing_structural) do
         {
           contains: [
