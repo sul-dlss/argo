@@ -44,7 +44,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'returns 403' do
-        patch "/items/#{druid}/embargo", params: { item: { embargo_release_date: '2100-01-01' } }
+        patch "/items/#{druid}/embargo", params: { embargo: { release_date: '2100-01-01' } }
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'calls Dor::Services::Client::Embargo#update' do
-        patch "/items/#{druid}/embargo", params: { item: { embargo_release_date: '2100-01-01' } }
+        patch "/items/#{druid}/embargo", params: { embargo: { release_date: '2100-01-01' } }
         expect(response).to have_http_status(:found) # redirect to catalog page
         expect(object_service).to have_received(:update)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
@@ -68,7 +68,7 @@ RSpec.describe 'Set embargo for an object' do
 
       context 'when the date is malformed' do
         it 'shows the error' do
-          patch "/items/#{druid}/embargo", params: { item: { embargo_release_date: 'not-a-date' } }
+          patch "/items/#{druid}/embargo", params: { embargo: { release_date: 'not-a-date' } }
           expect(flash[:error]).to eq 'Invalid date'
         end
       end
@@ -100,7 +100,6 @@ RSpec.describe 'Set embargo for an object' do
 
       it 'renders the form' do
         get "/items/#{druid}/embargo/edit"
-
         expect(response).to have_http_status(:ok)
         expect(rendered).to have_css 'form label', text: 'Enter the date when this embargo ends'
         expect(rendered)
