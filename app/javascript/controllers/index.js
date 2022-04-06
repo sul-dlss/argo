@@ -3,6 +3,7 @@ import CollectionEditor from './collection_editor'
 import BulkActions from './bulk_actions'
 import BulkUpload from './bulk_upload'
 import Button from './button'
+import ContentTypeController from './content_type_controller'
 import FacetFilter from './facet_filter'
 import JSONRenderer from './json_renderer'
 import Tokens from './tokens'
@@ -21,6 +22,7 @@ const application = Application.start()
 application.register("bulk-actions", BulkActions)
 application.register("bulk-upload", BulkUpload)
 application.register("button", Button)
+application.register("content-type", ContentTypeController)
 application.register("facet-filter", FacetFilter)
 application.register('json-renderer', JSONRenderer)
 application.register("workflow-grid", WorkflowGrid)

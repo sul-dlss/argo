@@ -73,7 +73,7 @@ RSpec.describe 'Set content type for an item', type: :request do
 
   describe 'show the form' do
     before do
-      sign_in user, groups: []
+      sign_in user, groups: ['sdr:administrator-role']
     end
 
     let(:content_type) { Cocina::Models::ObjectType.image }
@@ -87,7 +87,6 @@ RSpec.describe 'Set content type for an item', type: :request do
   describe 'save the updated value' do
     before do
       allow(StateService).to receive(:new).and_return(state_service)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -98,36 +97,38 @@ RSpec.describe 'Set content type for an item', type: :request do
       end
 
       it 'is successful at changing the content type to media' do
-        patch "/items/#{druid}/content_type", params: { new_content_type: 'media' }
+        patch "/items/#{druid}/content_type",
+              params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
           .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       it 'is successful at changing the content type to book (ltr)' do
-        patch "/items/#{druid}/content_type", params: { new_content_type: 'book (ltr)' }
+        patch "/items/#{druid}/content_type",
+              params: { content_type: { new_content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right' } }
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
           .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       it 'is successful at changing the content type to book (rtl)' do
-        patch "/items/#{druid}/content_type", params: { new_content_type: 'book (rtl)' }
+        patch "/items/#{druid}/content_type",
+              params: { content_type: { new_content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left' } }
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
           .once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       it 'is successful at changing the resource type' do
-        patch "/items/#{druid}/content_type", params: { old_resource_type: 'document', new_resource_type: 'file', new_content_type: 'image' }
+        patch "/items/#{druid}/content_type",
+              params: { content_type: { old_resource_type: Cocina::Models::FileSetType.document, new_resource_type: Cocina::Models::FileSetType.file,
+                                        new_content_type: Cocina::Models::ObjectType.image } }
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
@@ -137,12 +138,14 @@ RSpec.describe 'Set content type for an item', type: :request do
               without_order: true
             )
           ).once
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
       end
 
       context "when the values don't change from the original" do
         it 'is successful' do
-          patch "/items/#{druid}/content_type", params: { new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
+          patch "/items/#{druid}/content_type",
+                params: { content_type: { new_content_type: Cocina::Models::ObjectType.image,
+                                          old_resource_type: Cocina::Models::FileSetType.file,
+                                          new_resource_type: Cocina::Models::FileSetType.document } }
 
           expect(response).to redirect_to solr_document_path(druid)
           expect(object_client).to have_received(:update)
@@ -152,14 +155,15 @@ RSpec.describe 'Set content type for an item', type: :request do
                 resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
               )
             )
-            .once
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
         end
       end
 
       context 'when the new resource type is none' do
         it "doesn't change the value" do
-          patch "/items/#{druid}/content_type", params: { new_content_type: 'image', old_resource_type: 'document', new_resource_type: '' }
+          patch "/items/#{druid}/content_type",
+                params: { content_type: { new_content_type: Cocina::Models::ObjectType.image,
+                                          old_resource_type: Cocina::Models::FileSetType.document,
+                                          new_resource_type: '' } }
 
           expect(response).to redirect_to solr_document_path(druid)
           expect(object_client).to have_received(:update)
@@ -169,8 +173,6 @@ RSpec.describe 'Set content type for an item', type: :request do
                 resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
               )
             )
-            .once
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).once
         end
       end
 
@@ -178,7 +180,8 @@ RSpec.describe 'Set content type for an item', type: :request do
         let(:structural) { Cocina::Models::DROStructural.new({}) }
 
         it 'changes the content type only' do
-          patch "/items/#{druid}/content_type", params: { new_content_type: 'media' }
+          patch "/items/#{druid}/content_type",
+                params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
 
           expect(response).to redirect_to solr_document_path(druid)
           expect(object_client).to have_received(:update)
@@ -190,21 +193,21 @@ RSpec.describe 'Set content type for an item', type: :request do
         let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
         it 'is forbidden' do
-          patch "/items/#{druid}/content_type", params: { new_content_type: 'media' }
+          patch "/items/#{druid}/content_type",
+                params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
 
           expect(response).to redirect_to("/view/#{druid}")
           expect(flash[:error]).to eq 'Object cannot be modified in its current state.'
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
         end
       end
 
       context 'with an invalid content_type' do
         it 'is forbidden' do
-          patch "/items/#{druid}/content_type", params: { new_content_type: 'frog' }
+          patch "/items/#{druid}/content_type",
+                params: { content_type: { new_content_type: 'https://cocina.sul.stanford.edu/models/frog' } }
 
           expect(response).to be_forbidden
-          expect(response.body).to eq('Invalid new content type.')
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
+          expect(response.body).to eq 'New content type is not included in the list'
         end
       end
     end
@@ -215,11 +218,10 @@ RSpec.describe 'Set content type for an item', type: :request do
       end
 
       it 'is forbidden' do
-        patch "/items/#{druid}/content_type", params: { new_content_type: 'media' }
+        patch "/items/#{druid}/content_type", params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
 
         expect(response).to be_forbidden
         expect(response.body).to eq('forbidden')
-        expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
       end
     end
   end
