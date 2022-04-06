@@ -12,11 +12,7 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
   let(:druid) { 'druid:zt570qh4444' }
   let(:collection_id) { 'druid:bq377wp9578' }
   let(:collection) do
-    Cocina::Models::Collection.new(externalIdentifier: collection_id,
-                                   type: Cocina::Models::ObjectType.collection,
-                                   label: '',
-                                   version: 1,
-                                   access: {})
+    build(:collection, id: collection_id)
   end
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }

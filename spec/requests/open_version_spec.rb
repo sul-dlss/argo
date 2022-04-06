@@ -6,22 +6,7 @@ RSpec.describe 'Open a version', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
+  let(:cocina_model) { build(:dro, id: druid) }
 
   before do
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)

@@ -46,36 +46,10 @@ RSpec.describe SetGoverningApoJob do
 
     context 'when the user lacks the ability to manage an item and items are not found' do
       let(:cocina1) do
-        Cocina::Models.build({
-                               'label' => 'My Item',
-                               'version' => 2,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => druids[0],
-                               'description' => {
-                                 'title' => [{ 'value' => 'My Item' }],
-                                 'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'structural' => {},
-                               identification: { sourceId: 'sul:1234' }
-                             })
+        build(:dro, id: druids[0])
       end
       let(:cocina3) do
-        Cocina::Models.build({
-                               'label' => 'My Item',
-                               'version' => 3,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => druids[2],
-                               'description' => {
-                                 'title' => [{ 'value' => 'My Item' }],
-                                 'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'structural' => {},
-                               identification: { sourceId: 'sul:1234' }
-                             })
+        build(:dro, id: druids[2])
       end
 
       let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }

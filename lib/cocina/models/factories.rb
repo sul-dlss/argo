@@ -33,7 +33,8 @@ module Cocina
       COLLECTION_DEFAULTS = DRO_DEFAULTS.except(:source_id).merge(type: Cocina::Models::ObjectType.collection)
 
       # rubocop:disable Metrics/ParameterLists
-      def self.build_dro_properties(type:, id:, version:, label:, title:, source_id:, admin_policy_id:, barcode: nil, catkeys: [])
+      def self.build_dro_properties(type:, id:, version:, label:, title:, source_id:, admin_policy_id:,
+                                    barcode: nil, catkeys: [], collection_ids: [])
         {
           type: type,
           externalIdentifier: id,
@@ -48,7 +49,9 @@ module Cocina
           identification: {
             sourceId: source_id
           },
-          structural: {}
+          structural: {
+            isMemberOf: collection_ids
+          }
         }.tap do |props|
           props[:identification][:catalogLinks] = catkeys.map { |catkey| { catalog: 'symphony', catalogRecordId: catkey } } if catkeys.present?
           props[:identification][:barcode] = barcode if barcode

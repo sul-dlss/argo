@@ -8,22 +8,7 @@ RSpec.describe 'Apply APO defaults' do
   let(:object_client) do
     instance_double(Dor::Services::Client::Object, find: cocina_model, apply_admin_policy_defaults: true)
   end
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The item',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'The item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
+  let(:cocina_model) { build(:dro, id: druid) }
 
   before do
     sign_in user

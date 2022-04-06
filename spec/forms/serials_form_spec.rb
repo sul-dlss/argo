@@ -5,20 +5,8 @@ require 'rails_helper'
 RSpec.describe SerialsForm do
   let(:instance) { described_class.new(cocina_item) }
   let(:druid) { 'druid:bc123df4567' }
-
-  let(:cocina_item) do
-    Cocina::Models.build({
-                           'label' => 'My Serial',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => description,
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
+  let(:purl) { 'https://purl.stanford.edu/bc123df4567' }
+  let(:cocina_item) { build(:dro, id: druid).new(description: description) }
 
   describe 'loading from cocina' do
     context 'when the number is before the title' do
@@ -36,7 +24,7 @@ RSpec.describe SerialsForm do
           note: [
             { value: '1990', type: 'date/sequential designation' }
           ],
-          purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+          purl: purl
         }
       end
 
@@ -60,7 +48,7 @@ RSpec.describe SerialsForm do
               ]
             }
           ],
-          'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+          purl: purl
         }
       end
 
@@ -77,7 +65,7 @@ RSpec.describe SerialsForm do
       let(:description) do
         {
           title: [{ value: 'My Serial' }],
-          'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+          purl: purl
         }
       end
       let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
@@ -88,29 +76,20 @@ RSpec.describe SerialsForm do
 
       context 'when part_number is set' do
         let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My Serial',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   title: [
-                                     {
-                                       structuredValue: [
-                                         { value: 'My Serial', type: 'main title' },
-                                         { value: '7', type: 'part number' },
-                                         { value: 'samurai', type: 'part name' }
-                                       ]
-                                     }
-                                   ],
-                                   note: [{ value: 'something', type: 'date/sequential designation' }],
-                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => {}
-                               })
+          build(:dro, id: druid).new(description:
+            {
+              title: [
+                {
+                  structuredValue: [
+                    { value: 'My Serial', type: 'main title' },
+                    { value: '7', type: 'part number' },
+                    { value: 'samurai', type: 'part name' }
+                  ]
+                }
+              ],
+              note: [{ value: 'something', type: 'date/sequential designation' }],
+              purl: purl
+            })
         end
 
         before do
@@ -125,29 +104,19 @@ RSpec.describe SerialsForm do
 
       context 'when part_number2 is set' do
         let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My Serial',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   title: [
-                                     {
-                                       structuredValue: [
-                                         { value: 'My Serial', type: 'main title' },
-                                         { value: 'samurai', type: 'part name' },
-                                         { value: '7', type: 'part number' }
-                                       ]
-                                     }
-                                   ],
-                                   note: [{ value: 'something', type: 'date/sequential designation' }],
-                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => {}
-                               })
+          build(:dro, id: druid).new(description: {
+                                       title: [
+                                         {
+                                           structuredValue: [
+                                             { value: 'My Serial', type: 'main title' },
+                                             { value: 'samurai', type: 'part name' },
+                                             { value: '7', type: 'part number' }
+                                           ]
+                                         }
+                                       ],
+                                       note: [{ value: 'something', type: 'date/sequential designation' }],
+                                       purl: purl
+                                     })
         end
 
         before do
@@ -170,7 +139,7 @@ RSpec.describe SerialsForm do
               { type: 'main title', value: 'Frog' }
             ]
           }],
-          'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+          purl: purl
         }
       end
       let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
@@ -181,30 +150,20 @@ RSpec.describe SerialsForm do
 
       context 'when part_number is set' do
         let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My Serial',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   title: [
-                                     {
-                                       structuredValue: [
-                                         { type: 'odd thing', value: '99' },
-                                         { type: 'main title', value: 'Frog' },
-                                         { value: '7', type: 'part number' },
-                                         { value: 'samurai', type: 'part name' }
-                                       ]
-                                     }
-                                   ],
-                                   note: [{ value: 'something', type: 'date/sequential designation' }],
-                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => {}
-                               })
+          build(:dro, id: druid).new(description: {
+                                       title: [
+                                         {
+                                           structuredValue: [
+                                             { type: 'odd thing', value: '99' },
+                                             { type: 'main title', value: 'Frog' },
+                                             { value: '7', type: 'part number' },
+                                             { value: 'samurai', type: 'part name' }
+                                           ]
+                                         }
+                                       ],
+                                       note: [{ value: 'something', type: 'date/sequential designation' }],
+                                       purl: purl
+                                     })
         end
 
         before do
@@ -219,30 +178,20 @@ RSpec.describe SerialsForm do
 
       context 'when part_number2 is set' do
         let(:expected) do
-          Cocina::Models.build({
-                                 'label' => 'My Serial',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   title: [
-                                     {
-                                       structuredValue: [
-                                         { type: 'odd thing', value: '99' },
-                                         { type: 'main title', value: 'Frog' },
-                                         { value: 'samurai', type: 'part name' },
-                                         { value: '7', type: 'part number' }
-                                       ]
-                                     }
-                                   ],
-                                   note: [{ value: 'something', type: 'date/sequential designation' }],
-                                   purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                                 'structural' => {}
-                               })
+          build(:dro, id: druid).new(description: {
+                                       title: [
+                                         {
+                                           structuredValue: [
+                                             { type: 'odd thing', value: '99' },
+                                             { type: 'main title', value: 'Frog' },
+                                             { value: 'samurai', type: 'part name' },
+                                             { value: '7', type: 'part number' }
+                                           ]
+                                         }
+                                       ],
+                                       note: [{ value: 'something', type: 'date/sequential designation' }],
+                                       purl: purl
+                                     })
         end
 
         before do

@@ -29,28 +29,18 @@ RSpec.describe 'Serials', type: :request do
 
     describe 'update the form' do
       let(:expected) do
-        Cocina::Models.build({
-                               'label' => 'My Serial',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => druid,
-                               'description' => {
-                                 title: [
-                                   {
-                                     structuredValue: [
-                                       { value: 'My Serial', type: 'main title' },
-                                       { value: '7', type: 'part number' },
-                                       { value: 'samurai', type: 'part name' }
-                                     ]
-                                   }
-                                 ],
-                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               identification: { sourceId: 'sul:1234' },
-                               'administrative' => { 'hasAdminPolicy' => 'druid:hv992ry2431' },
-                               'structural' => {}
-                             })
+        cocina_model.new(description: {
+                           title: [
+                             {
+                               structuredValue: [
+                                 { value: 'My Serial', type: 'main title' },
+                                 { value: '7', type: 'part number' },
+                                 { value: 'samurai', type: 'part name' }
+                               ]
+                             }
+                           ],
+                           'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                         })
       end
 
       it 'updates the form' do

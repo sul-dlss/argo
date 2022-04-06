@@ -11,23 +11,7 @@ RSpec.describe 'WorkflowsController', type: :request do
     Capybara::Node::Simple.new(response.body)
   end
 
-  let(:cocina) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
-
+  let(:cocina) { build(:dro, id: druid, version: 2) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
 
   before do

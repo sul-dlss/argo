@@ -7,23 +7,7 @@ RSpec.describe 'Set source id for an object' do
     let(:user) { create(:user) }
     let(:druid) { 'druid:cc243mg0841' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-
-    let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druid,
-                             'description' => {
-                               'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                             },
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => { sourceId: 'some:thing' }
-                           })
-    end
+    let(:cocina_model) { build(:dro, id: druid) }
 
     let(:updated_model) do
       cocina_model.new(

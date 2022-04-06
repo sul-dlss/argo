@@ -26,139 +26,105 @@ RSpec.describe ImportStructuralJob, type: :job do
     let(:druid1) { 'druid:zp968gy7494' }
     let(:druid2) { 'druid:bc234fg7890' }
     let(:cocina1) do
-      Cocina::Models.build({
-                             type: Cocina::Models::ObjectType.map,
-                             externalIdentifier: druid1,
-                             label: 'PROVINCIæ | BOREALIS | AMERICÆ | NON ITAPRI- | DEM DETE | CTÆ AVT | MAGIS AB | EVROPÆIS | EXCVLTÆ.',
-                             version: 6,
-                             access: {
-                               view: 'world',
-                               download: 'world'
-                             },
-                             administrative: {
-                               hasAdminPolicy: 'druid:nk327xn8125'
-                             },
-                             description: {
-                               title: [{ value: 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.' }],
-                               purl: 'https://purl.stanford.edu/jt667tw2770'
-                             },
-                             identification: { sourceId: 'sul:36105223351979' },
-                             structural: {
-                               contains: [
-                                 {
-                                   type: Cocina::Models::FileSetType.image,
-                                   externalIdentifier: 'https://cocina.sul.stanford.edu/fileSet/jt667tw2770-0001',
-                                   label: '',
-                                   version: 6,
-                                   structural: {
-                                     contains: [
-                                       {
-                                         type: Cocina::Models::ObjectType.file,
-                                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_00_0001.tif',
-                                         label: 'jt667tw2770_00_0001.tif',
-                                         filename: 'jt667tw2770_00_0001.tif',
-                                         size: 193_090_740,
-                                         version: 6,
-                                         hasMimeType: 'image/tiff',
-                                         hasMessageDigests: [
-                                           { type: 'sha1', digest: 'd71f1b739d4b3ff2bf199c8e3452a16c7a6609f0' },
-                                           { type: 'md5', digest: 'a695ccc6ed7a9c905ba917d7c284854e' }
-                                         ],
-                                         access: { view: 'world', download: 'world' },
-                                         administrative: { publish: false, sdrPreserve: true, shelve: false },
-                                         presentation: { height: 6610, width: 9736 }
-                                       }, {
-                                         type: Cocina::Models::ObjectType.file,
-                                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_05_0001.jp2',
-                                         label: 'jt667tw2770_05_0001.jp2',
-                                         filename: 'jt667tw2770_05_0001.jp2',
-                                         size: 12_141_770,
-                                         version: 6,
-                                         hasMimeType: 'image/jp2',
-                                         hasMessageDigests: [
-                                           { type: 'sha1', digest: 'b6632c33619e3dd6268eb1504580285670f4c3b8' },
-                                           { type: 'md5', digest: '9f74085aa752de7404d31cb6bcc38a56' }
-                                         ],
-                                         access: { view: 'world', download: 'world' },
-                                         administrative: { publish: true, sdrPreserve: true, shelve: true },
-                                         presentation: { height: 6610, width: 9736 }
-                                       }
-                                     ]
-                                   }
-                                 }
-                               ],
-                               hasMemberOrders: [],
-                               isMemberOf: ['druid:zb871zd0767']
-                             }
-                           })
+      build(:dro, id: druid1, version: 6, type: Cocina::Models::ObjectType.map)
+        .new(structural: {
+               contains: [
+                 {
+                   type: Cocina::Models::FileSetType.image,
+                   externalIdentifier: 'https://cocina.sul.stanford.edu/fileSet/jt667tw2770-0001',
+                   label: '',
+                   version: 6,
+                   structural: {
+                     contains: [
+                       {
+                         type: Cocina::Models::ObjectType.file,
+                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_00_0001.tif',
+                         label: 'jt667tw2770_00_0001.tif',
+                         filename: 'jt667tw2770_00_0001.tif',
+                         size: 193_090_740,
+                         version: 6,
+                         hasMimeType: 'image/tiff',
+                         hasMessageDigests: [
+                           { type: 'sha1', digest: 'd71f1b739d4b3ff2bf199c8e3452a16c7a6609f0' },
+                           { type: 'md5', digest: 'a695ccc6ed7a9c905ba917d7c284854e' }
+                         ],
+                         access: { view: 'world', download: 'world' },
+                         administrative: { publish: false, sdrPreserve: true, shelve: false },
+                         presentation: { height: 6610, width: 9736 }
+                       }, {
+                         type: Cocina::Models::ObjectType.file,
+                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_05_0001.jp2',
+                         label: 'jt667tw2770_05_0001.jp2',
+                         filename: 'jt667tw2770_05_0001.jp2',
+                         size: 12_141_770,
+                         version: 6,
+                         hasMimeType: 'image/jp2',
+                         hasMessageDigests: [
+                           { type: 'sha1', digest: 'b6632c33619e3dd6268eb1504580285670f4c3b8' },
+                           { type: 'md5', digest: '9f74085aa752de7404d31cb6bcc38a56' }
+                         ],
+                         access: { view: 'world', download: 'world' },
+                         administrative: { publish: true, sdrPreserve: true, shelve: true },
+                         presentation: { height: 6610, width: 9736 }
+                       }
+                     ]
+                   }
+                 }
+               ],
+               hasMemberOrders: [],
+               isMemberOf: ['druid:zb871zd0767']
+             })
     end
 
     let(:cocina2) do
-      Cocina::Models.build({
-                             type: Cocina::Models::ObjectType.map,
-                             externalIdentifier: druid2,
-                             label: 'PROVINCIæ | BOREALIS | AMERICÆ | NON ITAPRI- | DEM DETE | CTÆ AVT | MAGIS AB | EVROPÆIS | EXCVLTÆ.',
-                             version: 6,
-                             access: {
-                               view: 'world',
-                               download: 'world'
-                             },
-                             administrative: {
-                               hasAdminPolicy: 'druid:nk327xn8125'
-                             },
-                             description: {
-                               title: [{ value: 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.' }],
-                               purl: 'https://purl.stanford.edu/jt667tw2770'
-                             },
-                             identification: { sourceId: 'sul:36105223351979' },
-                             structural: {
-                               contains: [
-                                 {
-                                   type: Cocina::Models::FileSetType.image,
-                                   externalIdentifier: 'https://cocina.sul.stanford.edu/fileSet/jt667tw2770-0001',
-                                   label: '',
-                                   version: 6,
-                                   structural: {
-                                     contains: [
-                                       {
-                                         type: Cocina::Models::ObjectType.file,
-                                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_00_0001.tif',
-                                         label: 'jt667tw2770_00_0001.tif',
-                                         filename: 'jt667tw2770_00_0001.tif',
-                                         size: 193_090_740,
-                                         version: 6,
-                                         hasMimeType: 'image/tiff',
-                                         hasMessageDigests: [
-                                           { type: 'sha1', digest: 'd71f1b739d4b3ff2bf199c8e3452a16c7a6609f0' },
-                                           { type: 'md5', digest: 'a695ccc6ed7a9c905ba917d7c284854e' }
-                                         ],
-                                         access: { view: 'world', download: 'world' },
-                                         administrative: { publish: false, sdrPreserve: true, shelve: false },
-                                         presentation: { height: 6610, width: 9736 }
-                                       }, {
-                                         type: Cocina::Models::ObjectType.file,
-                                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_05_0001.jp2',
-                                         label: 'jt667tw2770_05_0001.jp2',
-                                         filename: 'jt667tw2770_05_0001.jp2',
-                                         size: 12_141_770,
-                                         version: 6,
-                                         hasMimeType: 'image/jp2',
-                                         hasMessageDigests: [
-                                           { type: 'sha1', digest: 'b6632c33619e3dd6268eb1504580285670f4c3b8' },
-                                           { type: 'md5', digest: '9f74085aa752de7404d31cb6bcc38a56' }
-                                         ],
-                                         access: { view: 'world', download: 'world' },
-                                         administrative: { publish: true, sdrPreserve: true, shelve: true },
-                                         presentation: { height: 6610, width: 9736 }
-                                       }
-                                     ]
-                                   }
-                                 }
-                               ],
-                               hasMemberOrders: [],
-                               isMemberOf: ['druid:zb871zd0767']
-                             }
-                           })
+      build(:dro, id: druid2, version: 6, type: Cocina::Models::ObjectType.map)
+        .new(structural: {
+               contains: [
+                 {
+                   type: Cocina::Models::FileSetType.image,
+                   externalIdentifier: 'https://cocina.sul.stanford.edu/fileSet/jt667tw2770-0001',
+                   label: '',
+                   version: 6,
+                   structural: {
+                     contains: [
+                       {
+                         type: Cocina::Models::ObjectType.file,
+                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_00_0001.tif',
+                         label: 'jt667tw2770_00_0001.tif',
+                         filename: 'jt667tw2770_00_0001.tif',
+                         size: 193_090_740,
+                         version: 6,
+                         hasMimeType: 'image/tiff',
+                         hasMessageDigests: [
+                           { type: 'sha1', digest: 'd71f1b739d4b3ff2bf199c8e3452a16c7a6609f0' },
+                           { type: 'md5', digest: 'a695ccc6ed7a9c905ba917d7c284854e' }
+                         ],
+                         access: { view: 'world', download: 'world' },
+                         administrative: { publish: false, sdrPreserve: true, shelve: false },
+                         presentation: { height: 6610, width: 9736 }
+                       }, {
+                         type: Cocina::Models::ObjectType.file,
+                         externalIdentifier: 'https://cocina.sul.stanford.edu/file/jt667tw2770-0001/jt667tw2770_05_0001.jp2',
+                         label: 'jt667tw2770_05_0001.jp2',
+                         filename: 'jt667tw2770_05_0001.jp2',
+                         size: 12_141_770,
+                         version: 6,
+                         hasMimeType: 'image/jp2',
+                         hasMessageDigests: [
+                           { type: 'sha1', digest: 'b6632c33619e3dd6268eb1504580285670f4c3b8' },
+                           { type: 'md5', digest: '9f74085aa752de7404d31cb6bcc38a56' }
+                         ],
+                         access: { view: 'world', download: 'world' },
+                         administrative: { publish: true, sdrPreserve: true, shelve: true },
+                         presentation: { height: 6610, width: 9736 }
+                       }
+                     ]
+                   }
+                 }
+               ],
+               hasMemberOrders: [],
+               isMemberOf: ['druid:zb871zd0767']
+             })
     end
 
     context 'when happy path' do

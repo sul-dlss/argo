@@ -32,22 +32,7 @@ RSpec.describe 'Set catkey' do
 
     describe 'display the form' do
       context 'with an item' do
-        let(:cocina_model) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                                 'structural' => {},
-                                 identification: { sourceId: 'sul:1234' }
-                               })
-        end
+        let(:cocina_model) { build(:dro, id: druid) }
 
         it 'draws the form' do
           get "/items/#{druid}/catkey/edit"
@@ -56,22 +41,8 @@ RSpec.describe 'Set catkey' do
         end
       end
 
-      context 'with a collection that has no identification' do
-        let(:cocina_model) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.collection,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
-                               })
-        end
+      context 'with a collection that has no existing catkeys' do
+        let(:cocina_model) { build(:collection, id: druid) }
 
         it 'draws the form' do
           get "/items/#{druid}/catkey/edit"
@@ -80,29 +51,8 @@ RSpec.describe 'Set catkey' do
         end
       end
 
-      context 'with a collection that has identification' do
-        let(:cocina_model) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.collection,
-                                 'externalIdentifier' => druid, 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 identification: {
-                                   catalogLinks: [
-                                     {
-                                       catalog: 'symphony',
-                                       catalogRecordId: '10448742'
-                                     }
-                                   ],
-                                   sourceId: 'sul:1234'
-                                 },
-                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
-                               })
-        end
+      context 'with a collection that has existing catkeys' do
+        let(:cocina_model) { build(:collection, id: druid, catkeys: ['10448742']) }
 
         it 'draws the form' do
           get "/items/#{druid}/catkey/edit"
@@ -130,22 +80,7 @@ RSpec.describe 'Set catkey' do
       end
 
       context 'with an item' do
-        let(:cocina_model) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {},
-                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                                 'structural' => {},
-                                 identification: { sourceId: 'sul:1234' }
-                               })
-        end
+        let(:cocina_model) { build(:dro, id: druid) }
 
         it 'updates the catkey, trimming whitespace' do
           patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
@@ -156,24 +91,8 @@ RSpec.describe 'Set catkey' do
         end
       end
 
-      context 'with a collection that has no identification' do
-        let(:cocina_model) do
-          Cocina::Models.build({
-                                 'label' => 'My ETD',
-                                 'version' => 1,
-                                 'type' => Cocina::Models::ObjectType.collection,
-                                 'externalIdentifier' => druid,
-                                 'description' => {
-                                   'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                                 },
-                                 'access' => {
-                                   'view' => 'world'
-                                 },
-                                 identification: { sourceId: 'sul:1234' },
-                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
-                               })
-        end
+      context 'with a collection that has no existing catkeys' do
+        let(:cocina_model) { build(:collection, id: druid, source_id: 'sul:1234') }
 
         it 'updates the catkey, trimming whitespace' do
           patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }

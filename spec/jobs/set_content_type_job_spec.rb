@@ -21,64 +21,29 @@ RSpec.describe SetContentTypeJob, type: :job do
   end
   let(:user) { bulk_action.user }
   let(:cocina1) do
-    Cocina::Models.build({
-                           label: 'My Book Item',
-                           version: 2,
-                           type: Cocina::Models::ObjectType.book,
-                           externalIdentifier: druids[0],
-                           description: {
-                             title: [{ value: 'my dro' }],
-                             purl: 'https://purl.stanford.edu/bc234fg5678'
-                           },
-                           access: {},
-                           administrative: { hasAdminPolicy: 'druid:cg532dg5405' },
-                           structural: { contains: [{ type: Cocina::Models::FileSetType.page,
-                                                      label: 'Book page',
-                                                      version: 1,
-                                                      externalIdentifier: 'abc123456',
-                                                      structural: {} },
-                                                    { type: Cocina::Models::FileSetType.image,
-                                                      label: 'Book page 2',
-                                                      version: 1,
-                                                      externalIdentifier: 'abc789012',
-                                                      structural: {} }] },
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:dro, id: druids[0], type: Cocina::Models::ObjectType.book)
+      .new(structural: { contains: [{ type: Cocina::Models::FileSetType.page,
+                                      label: 'Book page',
+                                      version: 1,
+                                      externalIdentifier: 'abc123456',
+                                      structural: {} },
+                                    { type: Cocina::Models::FileSetType.image,
+                                      label: 'Book page 2',
+                                      version: 1,
+                                      externalIdentifier: 'abc789012',
+                                      structural: {} }] })
   end
   let(:cocina2) do
-    Cocina::Models.build({
-                           label: 'My Map Item',
-                           version: 3,
-                           type: Cocina::Models::ObjectType.image,
-                           externalIdentifier: druids[1],
-                           description: {
-                             title: [{ value: 'my dro' }],
-                             purl: 'https://purl.stanford.edu/bc234fg5678'
-                           },
-                           access: {},
-                           administrative: { hasAdminPolicy: 'druid:cg532dg5405' },
-                           structural: { contains: [{ type: Cocina::Models::FileSetType.file,
-                                                      label: 'Map label',
-                                                      version: 1,
-                                                      externalIdentifier: 'xyz012345',
-                                                      structural: {} }] },
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:dro, id: druids[1], type: Cocina::Models::ObjectType.image)
+      .new(structural:
+                      { contains: [{ type: Cocina::Models::FileSetType.file,
+                                     label: 'Map label',
+                                     version: 1,
+                                     externalIdentifier: 'xyz012345',
+                                     structural: {} }] })
   end
   let(:cocina3) do
-    Cocina::Models.build({
-                           label: 'My Collection',
-                           version: 1,
-                           type: Cocina::Models::ObjectType.collection,
-                           externalIdentifier: druids[2],
-                           description: {
-                             title: [{ value: 'my collection' }],
-                             purl: 'https://purl.stanford.edu/bc234fg5678'
-                           },
-                           access: {},
-                           administrative: { hasAdminPolicy: 'druid:cg532dg5405' },
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:collection, id: druids[2])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }

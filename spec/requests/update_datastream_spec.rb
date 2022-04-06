@@ -9,22 +9,7 @@ RSpec.describe 'Update a datastream' do
   end
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
-  end
+  let(:cocina_model) { build(:dro) }
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }

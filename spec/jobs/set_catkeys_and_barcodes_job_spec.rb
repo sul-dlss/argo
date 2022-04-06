@@ -101,24 +101,11 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:client) { double(Dor::Services::Client) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
     let(:item1) do
-      Cocina::Models.build({
-                             'label' => 'My Item',
-                             'version' => 3,
-                             'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => druids[0],
-                             'description' => {
-                               'title' => [{ 'value' => 'My Item1' }],
-                               'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                             },
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => {
-                               barcode: '36105014757519',
-                               catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
-                               sourceId: 'sul:1234'
-                             }
-                           })
+      build(:dro, id: druids[0], version: 3).new(identification: {
+                                                   barcode: '36105014757519',
+                                                   catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
+                                                   sourceId: 'sul:1234'
+                                                 })
     end
 
     let(:updated_model) do

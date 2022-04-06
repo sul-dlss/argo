@@ -12,20 +12,7 @@ RSpec.describe 'Set content type for an item', type: :request do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:content_type) { Cocina::Models::ObjectType.image }
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My Item',
-                           'version' => 1,
-                           'type' => content_type,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => structural,
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:dro, id: druid, type: content_type).new(structural: structural)
   end
   let(:contains) do
     [

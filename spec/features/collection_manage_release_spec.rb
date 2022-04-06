@@ -27,19 +27,7 @@ RSpec.describe 'Collection manage release' do
                     version: version_client)
   end
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The model',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.collection,
-                           'externalIdentifier' => collection_id,
-                           'description' => {
-                             'title' => [{ 'value' => 'The model' }],
-                             'purl' => "https://purl.stanford.edu/#{collection_id.delete_prefix('druid:')}"
-                           },
-                           identification: { sourceId: 'sul:1234' },
-                           'administrative' => { hasAdminPolicy: uber_apo_id },
-                           'access' => {}
-                         })
+    build(:collection, id: collection_id)
   end
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_id) { 'druid:gg232vv1111' }

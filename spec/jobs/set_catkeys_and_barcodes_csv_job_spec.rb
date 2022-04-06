@@ -14,64 +14,17 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
 
   # Replace catkey on this item
   let(:item1) do
-    Cocina::Models.build({
-                           'label' => 'My Item1',
-                           'version' => 2,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[0],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item1' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: {
-                             barcode: '36105014757519',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
-                             sourceId: 'sul:123'
-                           }
-                         })
+    build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
   end
 
   # Remove catkey on this item
   let(:item2) do
-    Cocina::Models.build({
-                           'label' => 'My Item2',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[1],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item2' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           'identification' => {
-                             barcode: '36105014757510',
-                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }],
-                             sourceId: 'sul:123'
-                           }
-                         })
+    build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
   end
 
   # Add catkey on this item
   let(:item3) do
-    Cocina::Models.build({
-                           'label' => 'My Item3',
-                           'version' => 3,
-                           'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => druids[2],
-                           'description' => {
-                             'title' => [{ 'value' => 'My Item3' }],
-                             'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
-                           },
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           identification: { sourceId: 'sul:1234' }
-                         })
+    build(:dro, id: druids[2])
   end
 
   let(:csv_file) do
