@@ -13,10 +13,10 @@ RSpec.describe RefreshModsJob, type: :job do
   end
 
   let(:cocina1) do
-    Cocina::Models::Factories.build(:dro, id: druids[0], catkeys: catkeys)
+    build(:dro, id: druids[0], catkeys: catkeys)
   end
   let(:cocina2) do
-    Cocina::Models::Factories.build(:dro, id: druids[1], catkeys: catkeys)
+    build(:dro, id: druids[1], catkeys: catkeys)
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, refresh_descriptive_metadata_from_ils: true) }

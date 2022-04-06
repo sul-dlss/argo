@@ -17,13 +17,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models::Factories.build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
+    build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
   end
   let(:item2) do
-    Cocina::Models::Factories.build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
+    build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
   end
   let(:item3) do
-    Cocina::Models::Factories.build(:dro, id: druids[2])
+    build(:dro, id: druids[2])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }

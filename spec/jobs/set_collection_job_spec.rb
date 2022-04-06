@@ -37,10 +37,10 @@ RSpec.describe SetCollectionJob do
       }.with_indifferent_access
     end
     let(:cocina1) do
-      Cocina::Models::Factories.build(:dro, id: druids[0])
+      build(:dro, id: druids[0])
     end
     let(:cocina2) do
-      Cocina::Models::Factories.build(:dro, id: druids[1])
+      build(:dro, id: druids[1])
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
     let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }

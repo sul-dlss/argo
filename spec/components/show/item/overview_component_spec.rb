@@ -7,7 +7,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, change_set: change_set, state_service: state_service) }
   let(:change_set) { ItemChangeSet.new(cocina) }
   let(:cocina) do
-    Cocina::Models::Factories.build(:dro)
+    build(:dro)
   end
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }
