@@ -11,7 +11,7 @@ RSpec.describe 'Create a new Admin Policy' do
 
   context 'when the parameters are invalid' do
     it 'redraws the form' do
-      post '/apo', params: { apo_form: { title: '' } }
+      post '/apo', params: { apo: { title: '' } }
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end

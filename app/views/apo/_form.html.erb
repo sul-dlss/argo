@@ -17,7 +17,7 @@
     <fieldset>
       <legend>Default Collections</legend>
       <% @form.default_collection_objects.each_with_index do |solr_doc, index| %>
-        <%= hidden_field_tag "apo_form[collections_for_registration][#{index}][id]", solr_doc.id %>
+        <%= hidden_field_tag "apo[collections_for_registration][#{index}][id]", solr_doc.id %>
         <%= link_to solr_doc.label, solr_doc %> <%= link_to('(remove)', delete_collection_apo_path(collection: solr_doc.id, id: @form), data: { turbo_confirm: 'You are about to leave the page, are you sure?' }) %><br>
       <% end %>
     </fieldset>

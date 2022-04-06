@@ -47,7 +47,7 @@ RSpec.describe 'Create an apo', js: true do
 
     select('Dark (Preserve Only)', from: 'Default Object Rights')
     select('Attribution Share Alike 3.0 Unported', from: 'Default use license')
-    select('accessionWF', from: 'apo_form_default_workflows')
+    select('accessionWF', from: 'Default workflows')
 
     choose 'Create a Collection'
     fill_in 'Collection Title', with: 'New Testing Collection'
@@ -100,7 +100,7 @@ RSpec.describe 'Create an apo', js: true do
     expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/legalcode')
 
     choose 'Choose a Default Collection'
-    select preexisting_collection.externalIdentifier, from: 'apo_form_collection_collection'
+    select preexisting_collection.externalIdentifier, from: 'apo_collection_collection'
     click_button 'Update APO'
     expect(page).to have_text 'Actions' # wait for form to render
 

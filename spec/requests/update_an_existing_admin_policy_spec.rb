@@ -36,7 +36,7 @@ RSpec.describe 'Update an existing Admin Policy' do
     let(:workflow_service) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
 
     it 'redraws the form' do
-      patch "/apo/#{druid}", params: { apo_form: { title: '' } }
+      patch "/apo/#{druid}", params: { apo: { title: '' } }
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe 'Update an existing Admin Policy' do
 
     let(:params) do
       {
-        apo_form: {
+        apo: {
           title: 'my title',
           agreement_object_id: 'druid:dd327rv8888',
           default_rights: rights,

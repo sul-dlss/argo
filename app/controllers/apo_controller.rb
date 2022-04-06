@@ -25,31 +25,28 @@ class ApoController < ApplicationController
 
   def create
     authorize! :create, Cocina::Models::AdminPolicy
-
-    change_set = AdminPolicyChangeSet.new
-    unless change_set.validate(params[:apo_form].merge(registered_by: current_user.login))
-      @form = ApoForm.new(nil, search_service: search_service)
+    @form = ApoForm.new(nil, search_service: search_service)
+    unless @form.validate(params.require(:apo).to_unsafe_h.merge(registered_by: current_user.login))
       respond_to do |format|
-        format.json { render status: :bad_request, json: { errors: form.errors } }
+        format.json { render status: :bad_request, json: { errors: @form.errors } }
         format.html { render 'new', status: :unprocessable_entity }
       end
       return
     end
 
-    change_set.save
-    notice = "APO #{change_set.model.externalIdentifier} created."
+    @form.save
+    notice = "APO #{@form.model.externalIdentifier} created."
 
     # register a collection and make it the default if requested
-    notice += " Collection #{change_set.model.administrative.collectionsForRegistration.first} created." if change_set.model.administrative.collectionsForRegistration.present?
+    notice += " Collection #{@form.model.administrative.collectionsForRegistration.first} created." if @form.model.administrative.collectionsForRegistration.present?
 
-    redirect_to solr_document_path(change_set.model.externalIdentifier), notice: notice
+    redirect_to solr_document_path(@form.model.externalIdentifier), notice: notice
   end
 
   def update
     authorize! :manage_item, @cocina
-    change_set = AdminPolicyChangeSet.new(model: @cocina)
-    unless change_set.validate(params[:apo_form])
-      @form = ApoForm.new(@cocina, search_service: search_service)
+    @form = ApoForm.new(@cocina, search_service: search_service)
+    unless @form.validate(params.require(:apo).to_unsafe_h)
       respond_to do |format|
         format.json { render status: :unprocessable_entity, json: { errors: @form.errors } }
         format.html { render 'edit', status: :unprocessable_entity }
@@ -57,8 +54,8 @@ class ApoController < ApplicationController
       return
     end
 
-    change_set.save
-    redirect_to solr_document_path(change_set.model.externalIdentifier)
+    @form.save
+    redirect_to solr_document_path(@form.model.externalIdentifier)
   end
 
   def delete_collection

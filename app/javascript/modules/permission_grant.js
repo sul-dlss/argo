@@ -34,9 +34,9 @@ export default class {
      * write out the row as a hidden html field
      */
     serialize(idx) {
-      return `<input type="hidden" name="apo_form[permissions][${idx}][name]" value="${this.data.name}">` +
-      `<input type="hidden" name="apo_form[permissions][${idx}][access]" value="${this.data.access}">` +
-      `<input type="hidden" name="apo_form[permissions][${idx}][type]" value="group">`
+      return `<input type="hidden" name="apo[permissions][${idx}][name]" value="${this.data.name}">` +
+      `<input type="hidden" name="apo[permissions][${idx}][access]" value="${this.data.access}">` +
+      `<input type="hidden" name="apo[permissions][${idx}][type]" value="group">`
 
     }
 
