@@ -18,13 +18,14 @@ module Show
     # you should not need to use both fields, since use of `check_url` disables the button at
     # first anyway.
     # @param [Boolean] manager
-    # @param [SolrDocument] solr_document
-    def initialize(manager:, solr_document:)
+    # @param [ArgoShowPresenter] presenter
+    def initialize(manager:, presenter:)
       @manager = manager
-      @doc = solr_document
+      @presenter = presenter
+      @doc = presenter.document
     end
 
-    attr_reader :doc
+    attr_reader :doc, :presenter
 
     def manager?
       @manager
@@ -41,7 +42,7 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :allows_modification?, to: :state_service
+    delegate :allows_modification?, to: :presenter
 
     def button_disabled?
       !allows_modification?
@@ -115,10 +116,6 @@ module Show
 
     def druid
       @druid ||= doc['id']
-    end
-
-    def state_service
-      @state_service ||= StateService.new(druid, version: doc.current_version)
     end
 
     def registered_only?

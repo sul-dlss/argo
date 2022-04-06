@@ -42,7 +42,7 @@ class ManageEmbargoesJob < GenericJob
 
     return failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-    state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
+    state_service = StateService.new(cocina_object)
     msg = "Setting embargo to #{rights_param} to be released on #{embargo_release_date_param}."
     open_new_version(cocina_object.externalIdentifier, cocina_object.version, msg) unless state_service.allows_modification?
 

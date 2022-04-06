@@ -12,6 +12,10 @@ class NilModel
   end
   # rubocop:enable Naming/MethodName
 
+  def version
+    1
+  end
+
   def administrative
     NilAdministrative.new
   end

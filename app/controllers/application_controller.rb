@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def allows_modification?(cocina_object)
-    state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
+    state_service = StateService.new(cocina_object)
     state_service.allows_modification?
   end
 

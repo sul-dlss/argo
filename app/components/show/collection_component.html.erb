@@ -3,7 +3,8 @@
 <div class="row">
   <div class="col">
     <%= render Show::ExternalLinksComponent.new(document: document) %>
-    <%= render Show::ControlsComponent.new(solr_document: document, manager: helpers.can?(:manage_item, cocina)) %>
+    <%= render Show::ControlsComponent.new(presenter: presenter,
+                                           manager: helpers.can?(:manage_item, cocina)) %>
   </div>
 </div>
 

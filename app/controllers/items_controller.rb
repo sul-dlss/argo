@@ -160,7 +160,7 @@ class ItemsController < ApplicationController
 
   def show_barcode
     change_set = ItemChangeSet.new(@cocina)
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    state_service = StateService.new(@cocina)
     render Show::BarcodeComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -171,7 +171,7 @@ class ItemsController < ApplicationController
 
   def show_copyright
     change_set = build_change_set
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    state_service = StateService.new(@cocina)
     render Show::CopyrightComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -182,7 +182,7 @@ class ItemsController < ApplicationController
 
   def show_use_statement
     change_set = build_change_set
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    state_service = StateService.new(@cocina)
     render Show::UseStatementComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -193,7 +193,7 @@ class ItemsController < ApplicationController
 
   def show_license
     change_set = build_change_set
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    state_service = StateService.new(@cocina)
     render Show::LicenseComponent.new(change_set: change_set, state_service: state_service)
   end
 
@@ -222,7 +222,7 @@ class ItemsController < ApplicationController
 
   def show_rights
     @change_set = build_change_set
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    state_service = StateService.new(@cocina)
     if @cocina.collection?
       change_set = CollectionChangeSet.new(@cocina)
       render Show::Collection::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
