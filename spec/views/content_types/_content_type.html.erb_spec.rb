@@ -3,15 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'content_types/_content_type' do
-  let(:cocina_object) do
-    instance_double(Cocina::Models::DRO,
-                    externalIdentifier: 'druid:abc123',
-                    type: Cocina::Models::ObjectType.book,
-                    structural: {})
-  end
-
   it 'renders the partial content' do
-    assign(:cocina, cocina_object)
+    @cocina = Cocina::Models::Factories.build(:dro)
     render
     expect(rendered).to have_css 'form label', text: 'Old resource type'
     expect(rendered).to have_css 'select#old_resource_type'
