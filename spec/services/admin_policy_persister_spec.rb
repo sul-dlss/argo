@@ -28,7 +28,10 @@ RSpec.describe AdminPolicyPersister do
                       title: 'My title',
                       agreement_object_id: agreement_object_id,
                       default_workflows: default_workflows,
-                      default_rights: 'world',
+                      view_access: 'world',
+                      download_access: 'world',
+                      access_location: nil,
+                      controlled_digital_lending: false,
                       use_license: use_license,
                       permissions: { '0' => { name: 'developer', access: 'manage', type: 'group' },
                                      '1' => { name: 'service-manager', access: 'manage', type: 'group' },
@@ -36,7 +39,8 @@ RSpec.describe AdminPolicyPersister do
                                      '3' => { name: 'justins', access: 'view', type: 'group' } },
                       collections_for_registration: { '0' => { id: 'druid:zj785yp4820' } },
                       collection_radio: 'none',
-                      collection: {})
+                      collection: {},
+                      changed?: true)
     end
 
     describe '#sync' do
@@ -103,13 +107,17 @@ RSpec.describe AdminPolicyPersister do
                         title: 'My title',
                         agreement_object_id: agreement_object_id,
                         default_workflows: default_workflows,
-                        default_rights: 'world',
+                        view_access: 'world',
+                        download_access: 'world',
+                        access_location: nil,
+                        controlled_digital_lending: false,
                         use_license: use_license,
                         permissions: {},
                         registered_by: 'jcoyne85',
                         collection_radio: 'none',
                         collections_for_registration: {},
-                        collection: {})
+                        collection: {},
+                        changed?: true)
       end
 
       before do

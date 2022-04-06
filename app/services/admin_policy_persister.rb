@@ -71,9 +71,10 @@ class AdminPolicyPersister # rubocop:disable Metrics/ClassLength
   attr_reader :model, :form
 
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
-           :default_rights, :title, :default_workflows, :permissions,
+           :title, :default_workflows, :permissions,
+           :view_access, :download_access, :access_location, :controlled_digital_lending,
            :collection_radio, :collections_for_registration, :collection,
-           :registered_by, to: :form
+           :registered_by, :changed?, to: :form
 
   def tag_registered_by(druid)
     return unless registered_by
@@ -92,21 +93,39 @@ class AdminPolicyPersister # rubocop:disable Metrics/ClassLength
   end
 
   def updated_administrative(updated)
-    rights = CocinaDroAccess.from_form_value(default_rights)
+    updated_template = updated.administrative.accessTemplate.new(access_template)
+
     administrative = {
       hasAgreement: agreement_object_id,
       registrationWorkflow: registration_workflow,
       collectionsForRegistration: collection_ids,
-      accessTemplate: rights.value!.merge(
-        license: use_license,
-        copyright: copyright_statement,
-        useAndReproductionStatement: use_statement
-      ),
+      accessTemplate: updated_template,
       roles: roles
     }.compact
 
     updated_administrative = updated.administrative.new(administrative)
     updated.new(administrative: updated_administrative)
+  end
+
+  # The map between the change set fields and the Cocina field names
+  ACCESS_FIELDS = {
+    copyright_statement: :copyright, # TODO: Change to copyright to match ItemChangeSet
+    use_license: :license, # TODO: Change to license to match ItemChangeSet
+    use_statement: :useAndReproductionStatement,
+    view_access: :view,
+    download_access: :download,
+    access_location: :location,
+    controlled_digital_lending: :controlledDigitalLending
+  }.freeze
+
+  # TODO: dedupliate with ItemChangeSetPersister
+  def access_template
+    {}.tap do |access_properties|
+      ACCESS_FIELDS.filter { |field, _cocina_field| changed?(field) }.each do |field, cocina_field|
+        val = public_send(field)
+        access_properties[cocina_field] = val.is_a?(String) ? val.presence : val # allow boolean false
+      end
+    end
   end
 
   # Rails adds a hidden item with blank on the form so that we know they wanted to

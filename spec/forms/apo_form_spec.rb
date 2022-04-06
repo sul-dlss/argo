@@ -98,55 +98,107 @@ RSpec.describe ApoForm do
       it { is_expected.to eq 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode' }
     end
 
-    describe '#default_rights' do
-      subject { instance.default_rights }
+    describe '#view_access' do
+      subject { instance.view_access }
 
       let(:default_access) { { view: 'world' } }
 
       it { is_expected.to eq 'world' }
 
       describe 'stanford variation' do
-        let(:administrative) do
-          {
-            hasAdminPolicy: 'druid:xx666zz7777',
-            hasAgreement: 'druid:hp308wm0436',
-            accessTemplate: {
-              view: 'stanford',
-              download: 'none'
-            }
-          }
-        end
+        let(:default_access) { { view: 'stanford', download: 'none' } }
 
-        it { is_expected.to eq 'stanford-nd' }
+        it { is_expected.to eq 'stanford' }
       end
 
       describe 'location based' do
-        let(:administrative) do
-          {
-            hasAdminPolicy: 'druid:xx666zz7777',
-            hasAgreement: 'druid:hp308wm0436',
-            accessTemplate: {
-              view: 'location-based',
-              location: 'ars'
-            }
-          }
-        end
+        let(:default_access) { { view: 'location-based', download: 'none', location: 'ars' } }
 
-        it { is_expected.to eq 'loc:ars' }
+        it { is_expected.to eq 'location-based' }
       end
 
       describe 'controlled digital lending' do
-        let(:administrative) do
-          {
-            hasAdminPolicy: 'druid:xx666zz7777',
-            hasAgreement: 'druid:hp308wm0436',
-            accessTemplate: {
-              controlledDigitalLending: true
-            }
-          }
-        end
+        let(:default_access) { { view: 'stanford', download: 'none', controlledDigitalLending: true } }
 
-        it { is_expected.to eq 'cdl-stanford-nd' }
+        it { is_expected.to eq 'stanford' }
+      end
+    end
+
+    describe '#download_access' do
+      subject { instance.download_access }
+
+      let(:default_access) { { view: 'world', download: 'world' } }
+
+      it { is_expected.to eq 'world' }
+
+      describe 'stanford variation' do
+        let(:default_access) { { view: 'stanford', download: 'none' } }
+
+        it { is_expected.to eq 'none' }
+      end
+
+      describe 'location based' do
+        let(:default_access) { { view: 'stanford', download: 'location-based', location: 'ars' } }
+
+        it { is_expected.to eq 'location-based' }
+      end
+
+      describe 'controlled digital lending' do
+        let(:default_access) { { view: 'stanford', download: 'none', controlledDigitalLending: true } }
+
+        it { is_expected.to eq 'none' }
+      end
+    end
+
+    describe '#access_location' do
+      subject { instance.access_location }
+
+      let(:default_access) { { view: 'world' } }
+
+      it { is_expected.to be_nil }
+
+      describe 'stanford variation' do
+        let(:default_access) { { view: 'stanford', download: 'none' } }
+
+        it { is_expected.to be_nil }
+      end
+
+      describe 'location based' do
+        let(:default_access) { { view: 'stanford', download: 'location-based', location: 'ars' } }
+
+        it { is_expected.to eq 'ars' }
+      end
+
+      describe 'controlled digital lending' do
+        let(:default_access) { { view: 'stanford', download: 'none', controlledDigitalLending: true } }
+
+        it { is_expected.to be_nil }
+      end
+    end
+
+    describe '#controlled_digital_lending' do
+      subject { instance.controlled_digital_lending }
+
+      let(:default_access) { { view: 'world' } }
+
+      it { is_expected.to be_nil }
+
+      describe 'stanford variation' do
+        let(:default_access) { { view: 'stanford', download: 'none' } }
+
+        it { is_expected.to be_nil }
+      end
+
+      describe 'location based' do
+        let(:default_access) { { view: 'stanford', download: 'location-based', location: 'ars' } }
+
+        it { is_expected.to be_nil }
+      end
+
+      describe 'controlled digital lending' do
+        let(:default_access) { { view: 'stanford', download: 'none', controlledDigitalLending: true } }
+
+        it { is_expected.to be true }
       end
     end
 
@@ -214,12 +266,6 @@ RSpec.describe ApoForm do
       subject { instance.use_license }
 
       it { is_expected.to be_nil }
-    end
-
-    describe '#default_rights' do
-      subject { instance.default_rights }
-
-      it { is_expected.to eq 'world' }
     end
 
     describe '#use_statement' do

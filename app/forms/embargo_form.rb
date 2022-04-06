@@ -2,26 +2,7 @@
 
 class EmbargoForm < ApplicationChangeSet
   property :release_date, virtual: true
-  # TODO: Deduplicate with item_change_set
-  property :view_access, virtual: true
-  property :download_access, virtual: true
-  property :access_location, virtual: true
-
-  # TODO: Deduplicate with item_change_set
-  validates :view_access, inclusion: {
-    in: %w[world stanford location-based citation-only dark],
-    allow_blank: true
-  }
-
-  validates :download_access, inclusion: {
-    in: %w[world stanford location-based none],
-    allow_blank: true
-  }
-
-  validates :access_location, inclusion: {
-    in: %w[spec music ars art hoover m&m],
-    allow_blank: true
-  }
+  include HasViewAccess
 
   def self.model_name
     ::ActiveModel::Name.new(nil, nil, 'Embargo')
@@ -37,9 +18,7 @@ class EmbargoForm < ApplicationChangeSet
     return unless embargo
 
     self.release_date = embargo.releaseDate.to_date.to_fs(:default)
-    self.view_access = embargo.view
-    self.download_access = embargo.download
-    self.access_location = embargo.location
+    setup_view_access_properties(embargo)
   end
 
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
