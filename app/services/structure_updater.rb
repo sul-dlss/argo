@@ -26,7 +26,9 @@ class StructureUpdater
     # 1. Ensure all files in the csv are present in the existing object
     csv.each.with_index(2) do |row, index|
       errors << "On row #{index} found #{row['filename']}, which appears to be a new file" unless existing_files_by_filename.key?(row['filename'])
-      errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type" unless Cocina::Models::FileSetType.respond_to?(row['resource_type'])
+      unless Cocina::Models::FileSetType.properties.key?(row['resource_type'].to_sym)
+        errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type"
+      end
     end
     csv.rewind
     errors.empty?
@@ -83,6 +85,6 @@ class StructureUpdater
 
   # Change the short resource type into a url
   def type(resource_type)
-    Cocina::Models::FileSetType.public_send(resource_type)
+    Cocina::Models::FileSetType.properties[resource_type.to_sym]
   end
 end
