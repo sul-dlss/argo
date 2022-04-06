@@ -19,7 +19,6 @@ module Show
     # first anyway.
     # @param [Boolean] manager
     # @param [ArgoShowPresenter] presenter
-    # @param [SolrDocument] solr_document
     def initialize(manager:, presenter:)
       @manager = manager
       @presenter = presenter
