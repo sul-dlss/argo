@@ -10,10 +10,10 @@ RSpec.describe CloseVersionJob, type: :job do
   let(:bulk_action) { create(:bulk_action) }
 
   let(:item1) do
-    Cocina::Models::Factories.build(:dro, id: druids[0])
+    build(:dro, id: druids[0])
   end
   let(:item2) do
-    Cocina::Models::Factories.build(:dro, id: druids[1])
+    build(:dro, id: druids[1])
   end
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, version: version_client) }

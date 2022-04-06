@@ -17,13 +17,13 @@ RSpec.describe ManageEmbargoesJob do
   let(:rights) { ['world', '', 'stanford-nd'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models::Factories.build(:dro, id: druids[0])
+    build(:dro, id: druids[0])
   end
   let(:item2) do
-    Cocina::Models::Factories.build(:dro, id: druids[1])
+    build(:dro, id: druids[1])
   end
   let(:item3) do
-    Cocina::Models::Factories.build(:dro, id: druids[2])
+    build(:dro, id: druids[2])
   end
 
   let(:csv_file) do

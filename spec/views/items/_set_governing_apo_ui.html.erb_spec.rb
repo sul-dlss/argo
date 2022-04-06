@@ -8,7 +8,7 @@ RSpec.describe 'items/_set_governing_apo_ui' do
   let(:apo_list) { [['APO 1', 'druid:tv123km1122'], ['APO 2', 'druid:234']] }
 
   before do
-    @cocina = Cocina::Models::Factories.build(:dro, id: 'druid:bh987zz0000', admin_policy_id: 'druid:tv123km1122')
+    @cocina = build(:dro, id: 'druid:bh987zz0000', admin_policy_id: 'druid:tv123km1122')
 
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:apo_list).with(groups).and_return(apo_list)

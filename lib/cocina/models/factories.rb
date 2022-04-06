@@ -3,15 +3,21 @@
 module Cocina
   module Models
     class Factories
-      def self.build(type, attributes = {})
-        case type
-        when :dro
-          build_dro(attributes)
-        when :collection
-          build_collection(attributes)
-        else
-          raise "Unsupported factory type #{type}"
+      module Methods
+        def build(type, ...)
+          # If we don't support this factory, maybe factory_bot does.
+          Factories.supported_type?(type) ? Factories.build(type, ...) : super
         end
+      end
+
+      def self.supported_type?(type)
+        %i[dro collection].include?(type)
+      end
+
+      def self.build(type, attributes = {})
+        raise "Unsupported factory type #{type}" unless supported_type?(type)
+
+        public_send("build_#{type}".to_sym, attributes)
       end
 
       DRO_DEFAULTS = {

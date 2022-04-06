@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'content_types/_content_type' do
   it 'renders the partial content' do
-    @cocina = Cocina::Models::Factories.build(:dro)
+    @cocina = build(:dro)
     render
     expect(rendered).to have_css 'form label', text: 'Old resource type'
     expect(rendered).to have_css 'select#old_resource_type'

@@ -11,10 +11,10 @@ RSpec.describe PurgeJob, type: :job do
   let(:bulk_action) { create(:bulk_action) }
 
   let(:cocina1) do
-    Cocina::Models::Factories.build(:dro, id: druids[0])
+    build(:dro, id: druids[0])
   end
   let(:cocina2) do
-    Cocina::Models::Factories.build(:dro, id: druids[1])
+    build(:dro, id: druids[1])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }

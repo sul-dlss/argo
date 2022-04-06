@@ -6,7 +6,7 @@ RSpec.describe 'datastreams/show' do
   before do
     params[:id] = dsid
     allow(view).to receive(:can?).and_return(true)
-    @cocina = Cocina::Models::Factories.build(:dro)
+    @cocina = build(:dro)
     @content = '<identityMetadata></identityMetadata>'
   end
 
