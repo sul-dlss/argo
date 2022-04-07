@@ -23,9 +23,14 @@ class StructureUpdater
   # @return [Bool] true if there are no problems
   def validate
     @errors = []
-    # 1. Ensure all files in the csv are present in the existing object
+    # Ensure all files in the csv are present in the existing object and ensure no existing files change preserve from no to yes
     csv.each.with_index(2) do |row, index|
-      errors << "On row #{index} found #{row['filename']}, which appears to be a new file" unless existing_files_by_filename.key?(row['filename'])
+      if !existing_files_by_filename.key?(row['filename'])
+        errors << "On row #{index} found #{row['filename']}, which appears to be a new file"
+      elsif !existing_files_by_filename[row['filename']].administrative.sdrPreserve && row['preserve'] == 'yes'
+        errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported"
+      end
+      # ensure all supplied resource types are valid
       unless Cocina::Models::FileSetType.properties.key?(row['resource_type'].to_sym)
         errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type"
       end

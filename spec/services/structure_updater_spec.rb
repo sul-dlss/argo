@@ -204,9 +204,9 @@ RSpec.describe StructureUpdater do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
         Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/one,
-        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/two,transcription
+        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/two,transcription
         Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/three,
-        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/four,
+        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/four,
       CSV
     end
 
@@ -217,9 +217,9 @@ RSpec.describe StructureUpdater do
       new_file_routing = new_files.map { |file| [file.administrative.publish, file.administrative.shelve, file.administrative.sdrPreserve] }
       expect(new_file_routing).to eq [
         [true, true, true],
+        [true, true, false],
         [true, true, true],
-        [true, true, true],
-        [true, true, true]
+        [true, true, false]
       ]
 
       new_file_mime = new_files.map(&:hasMimeType)
@@ -240,9 +240,9 @@ RSpec.describe StructureUpdater do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
         Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
         Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/jp2,
       CSV
     end
 
@@ -278,6 +278,24 @@ RSpec.describe StructureUpdater do
         'On row 4 found bb045jk_0002.tiff, which appears to be a new file',
         'On row 5 found bb045jk_0002.jp2, which appears to be a new file',
         'On row 5 found "paper", which is not a valid resource type'
+      ]
+    end
+  end
+
+  context 'with switching preservation from no to yes for a file in the csv' do
+    let(:csv) do
+      <<~CSV
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
+        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/tiff,
+        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+      CSV
+    end
+
+    it 'returns errors' do
+      expect(result.failure).to eq [
+        'On row 5 found bb045jk9908_0002.jp2, which changed preserve from no to yes, which is not supported'
       ]
     end
   end
