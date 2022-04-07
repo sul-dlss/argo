@@ -135,8 +135,8 @@ RSpec.describe ImportStructuralJob, type: :job do
       end
 
       it 'updates the structural for each druid' do
-        expect(object_client1).to have_received(:update)
-        expect(object_client2).to have_received(:update)
+        expect(object_client1).to have_received(:update).with(params: Cocina::Models::DRO)
+        expect(object_client2).to have_received(:update).with(params: Cocina::Models::DRO)
         expect(bulk_action.druid_count_total).to eq 2
         expect(bulk_action.druid_count_success).to eq 2
         expect(bulk_action.druid_count_fail).to eq 0

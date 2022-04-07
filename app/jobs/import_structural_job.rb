@@ -16,7 +16,7 @@ class ImportStructuralJob < GenericJob
       result = StructureUpdater.from_csv(cocina_item, item_csv(csv.headers, grouped.fetch(druid)))
 
       if result.success?
-        Dor::Services::Client.object(druid).update(params: result.value!)
+        Dor::Services::Client.object(druid).update(params: cocina_item.new(structural: result.value!))
         success.call("Updated #{druid}")
       else
         failure.call("Unable to update #{druid}")
