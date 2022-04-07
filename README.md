@@ -29,6 +29,22 @@ bundle install
 
 Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
 
+Install foreman for local development (foreman is not supposed to be in the Gemfile, See this [wiki article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman)):
+
+```bash
+bundle install foreman
+```
+
+## Local Development TLDR
+
+Brings up app at localhost:3000 with some test data:
+
+```
+docker compose up -d
+docker compose stop web
+bin/dev
+bin/rake argo:seed_data # run in separate terminal window
+```
 
 ## Run the tests locally
 
@@ -70,15 +86,22 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     bin/rake
     ```
 
-## Run the servers
+## Docker
+
+This will spin up all of the docker containers in the background.  Note that docker compose will spin up an Argo web container and apply the administrator role to you.  You will need to stop this web container if you use a local rails server instead.  See the "Recommended Local Development" section below.
 
 ```
 docker compose up -d
 ```
 
-Note that docker compose will spin up Argo and apply the administrator role to you.
+If you want to run the web container in interactive mode, stop it first and then run it so it will show interactive live output:
 
-If you want to use the rails console use:
+```
+docker compose stop web
+docker compose run --service-ports web
+```
+
+If you want to use the rails console from the web container use:
 
 ```
 docker compose run --rm web bin/rails console
@@ -90,38 +113,48 @@ If you want to run background jobs, which are necessary for spreadsheet bulk upl
 docker compose run web sidekiq start
 ```
 
-Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container.
+## Recommended Local Development
+
+Be sure all of the docker containers for dependent services are running in the background (e.g. solr, DSA) and stop the web container:
+
+```
+docker compose up -d
+docker compose stop web
+```
+
+Start the development server - this should give you the Argo app on port 3000 mocking an admin login:
+
+```
+bin/dev
+```
+
+Most of the time (unless you already have data), you will want seed data and a single item.  Note tha all servers must be running first, including web, and this will clear solr:
+
+```
+bin/rake argo:seed_data
+```
+
+For creating additional test data, see the section below "Creating fixture data".
+
+If you want to use an interactive debugging session (e.g. by adding byebug to your code), stop any existing web servers (e.g. if you had been running the web docker container or the `bin/dev` script), and instead start the app using `bin/rails s` - this should give you the Argo app on port 3000 mocking an admin login.
+
+```
+bin/server
+```
+
+## Local Development Troubleshooting
+
+If you get an error starting the local server (e.g. with `bin/dev`) first be sure you have all the dependent docker containers running, and the web container stopped.
+
+If you update the Gemfile and you are using the `web` container, you will need to rebuild it:
 
 ```
 docker compose build web
 ```
 
-### Debugging
-
-It can be useful when debugging to see the local rails server output in realtime and pause with 'byebug'.  You can do
-this while running in the app in the web container.  First stop any existing web container (if running already):
-
-```
-docker compose stop web
-```
-
-Then start it in a mode that is interactive:
-
-```
-docker compose run --service-ports web
-```
-
-This will allow you to view rails output in real-time.  You can also add 'byebug' inline in your code to pause for inspection on the console.
-
-
-### Note
-
 If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
 
-You may also need to rebuild your web container without using Docker's cache (which may
-have the older version of bundler in it).  This will ensure the web container
-has the latest version of the bundler gem installed.  You may then also need to update the
-bundler version in the Gemfile.lock to match.
+You may also need to rebuild your web container without using Docker's cache (which may have the older version of bundler in it).  This will ensure the web container has the latest version of the bundler gem installed.  You may then also need to update the bundler version in the Gemfile.lock to match.
 
 ```
 gem update --system && gem install bundler # get the latest version of bundler locally
@@ -129,34 +162,40 @@ bundle update --bundler  # update the Gemfile.lock to match this while not updat
 docker-compose build --no-cache web # rebuild the docker container to match the latest bundler
 ```
 
-Also, if you run into asset related issues, you may need to manually install yarn and compile assets in your Docker container (or local laptop if you running that way):
+If you run into asset related issues, you may need to manually install yarn and compile assets in your Docker container (or local laptop by leaving off the `docker compose run --rm`):
 
 ```
 docker compose run --rm web yarn install
 docker compose run --rm web bin/rails assets:precompile
 ```
 
-## Running locally
-
-First install foreman (foreman is not supposed to be in the Gemfile, See this [wiki article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman) ):
-
-```
-gem install foreman
-```
-
-Then you can run
-```
-bin/dev
-```
-This starts css/js bundling and the development server
-
 ## Creating fixture data
 
 To begin registering items in the Argo UI, there will need to be at least one agreement object and one APO object in the index. To create and index one of each of these objects, run the following command:
 
 ```
+bin/rails db:seed
+```
+
+or if running on the docker container:
+
+```
 docker compose exec web bin/rails db:seed
 ```
+
+To get these objects, in addition to a single item object (useful for development purposes), run this command (assumes local rails server):
+
+```
+bin/rake argo:seed_data
+```
+
+To register an arbitrary number of test item objects, specify the number you want:
+
+```
+bin/rake argo:register_items[1]
+```
+
+Note that in all cases, you will need a web server of some kind running (either in web docker container or a local rails server).  Also note that creating the seed data will clear the existing Solr instance out (and you will have to confirm this).
 
 ## Internals
 

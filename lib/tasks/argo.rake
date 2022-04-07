@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require_relative '../../spec/support/create_strategy_repository_pattern'
+require_relative '../../spec/support/item_method_sender'
+require_relative '../../spec/support/apo_method_sender'
+require_relative '../../spec/support/reset_solr'
+
 def apo_field_default
   'apo_register_permissions_ssim'
 end
@@ -22,6 +27,29 @@ task :app_version do
 end
 
 namespace :argo do
+  desc 'Create test items, specify number to create as argument'
+  task :register_items, [:n] => :environment do |t, args|
+    n = args[:n].to_i
+    raise '*** Only works in development mode!' unless Rails.env.development?
+
+    n.times { FactoryBot.create_for_repository(:item) }
+  end
+
+  desc 'Seed APO, collection and item, useful for local development'
+  task seed_data: :environment do
+    raise '*** Only works in development mode!' unless Rails.env.development?
+
+    $stdout.puts 'This will clear the Solr repo. Are you sure? [y/n]:'
+    if $stdin.gets.chomp == 'y'
+      ResetSolr.reset_solr
+      FactoryBot.create_for_repository(:agreement)
+      FactoryBot.create_for_repository(:item)
+      FactoryBot.create_for_repository(:apo, roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
+    else
+      $stdout.puts 'stopping'
+    end
+  end
+
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
     levels = %w[major minor patch rc]
