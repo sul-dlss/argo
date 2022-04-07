@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe WorkflowProcessRow, type: :component do
-  subject(:instance) { described_class.new(process: process_status, index: 1, cocina_object: cocina_object) }
+  subject(:instance) { described_class.new(process: process, index: 1, item: item) }
 
-  let(:cocina_object) { instance_double(Cocina::Models::DRO) }
+  let(:item) { instance_double(Item) }
 
   describe 'render' do
-    subject(:body) { render_inline(described_class.new(process: process, index: 1, cocina_object: cocina_object)) }
+    subject(:body) { render_inline(instance) }
 
     let(:process) do
       instance_double(Dor::Workflow::Response::Process,
@@ -38,19 +38,19 @@ RSpec.describe WorkflowProcessRow, type: :component do
     subject { instance.elapsed }
 
     context 'for nil' do
-      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: nil) }
+      let(:process) { instance_double(Dor::Workflow::Response::Process, elapsed: nil) }
 
       it { is_expected.to be_nil }
     end
 
     context 'for empty string' do
-      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: '') }
+      let(:process) { instance_double(Dor::Workflow::Response::Process, elapsed: '') }
 
       it { is_expected.to eq '0.000' }
     end
 
     context 'for a float' do
-      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: '2.25743') }
+      let(:process) { instance_double(Dor::Workflow::Response::Process, elapsed: '2.25743') }
 
       it { is_expected.to eq '2.257' }
     end
@@ -59,7 +59,7 @@ RSpec.describe WorkflowProcessRow, type: :component do
   describe '#note' do
     subject { instance.note }
 
-    let(:process_status) { instance_double(Dor::Workflow::Response::Process, note: 'hi') }
+    let(:process) { instance_double(Dor::Workflow::Response::Process, note: 'hi') }
 
     it { is_expected.to eq 'hi' }
   end
@@ -67,7 +67,7 @@ RSpec.describe WorkflowProcessRow, type: :component do
   describe '#error_message' do
     subject { instance.error_message }
 
-    let(:process_status) { instance_double(Dor::Workflow::Response::Process, error_message: "it's a bad day") }
+    let(:process) { instance_double(Dor::Workflow::Response::Process, error_message: "it's a bad day") }
 
     it { is_expected.to eq "it's a bad day" }
   end

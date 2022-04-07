@@ -15,7 +15,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
       object_type: object_type
     )
   end
-  let(:presenter) { instance_double(ArgoShowPresenter, document: document, cocina: nil) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: document, item: nil) }
   let(:rendered) { render_inline(component) }
 
   before do

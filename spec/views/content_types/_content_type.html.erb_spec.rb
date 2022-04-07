@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'content_types/_content_type' do
   before do
     # rubocop:disable RSpec/InstanceVariable
-    @cocina = build(:dro)
-    @form = ContentTypeForm.new(@cocina)
+    @item = build(:item)
+    @form = ContentTypeForm.new(@item)
     # rubocop:enable RSpec/InstanceVariable
 
     render

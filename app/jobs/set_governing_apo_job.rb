@@ -20,7 +20,7 @@ class SetGoverningApoJob < GenericJob
       state_service = StateService.new(cocina_item)
       open_new_version(cocina_item.externalIdentifier, cocina_item.version, 'Set new governing APO') unless state_service.allows_modification?
 
-      change_set = ItemChangeSet.new(cocina_item)
+      change_set = ItemChangeSet.new(Item.new(cocina_item))
       change_set.validate(admin_policy_id: new_apo_id)
       change_set.save
       success.call('Governing APO updated')

@@ -6,19 +6,19 @@ RSpec.describe 'Edit use statement' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:dc243mg0841' }
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:turbo_stream_headers) do
     { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}" }
   end
 
   before do
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Repository).to receive(:find).and_return(item)
+    allow(item).to receive(:save)
     sign_in user, groups: ['sdr:administrator-role']
   end
 
   describe 'display the form' do
     context 'with an item' do
-      let(:cocina_model) { build(:dro, id: druid) }
+      let(:item) { build(:item, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/edit_use_statement", headers: turbo_stream_headers
@@ -28,7 +28,7 @@ RSpec.describe 'Edit use statement' do
     end
 
     context 'with a collection' do
-      let(:cocina_model) { build(:collection, id: druid) }
+      let(:item) { build(:collection, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/edit_use_statement", headers: turbo_stream_headers
@@ -39,7 +39,7 @@ RSpec.describe 'Edit use statement' do
 
   describe 'display the show view (after cancel)' do
     context 'with an item' do
-      let(:cocina_model) { build(:dro, id: druid) }
+      let(:item) { build(:item, id: druid) }
 
       it 'draws the component' do
         get "/items/#{druid}/show_use_statement", headers: turbo_stream_headers
@@ -49,7 +49,7 @@ RSpec.describe 'Edit use statement' do
     end
 
     context 'with a collection' do
-      let(:cocina_model) { build(:collection, id: druid) }
+      let(:item) { build(:collection, id: druid) }
 
       it 'draws the component' do
         get "/items/#{druid}/show_use_statement", headers: turbo_stream_headers

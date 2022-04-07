@@ -27,13 +27,13 @@ RSpec.describe 'Item view', js: true do
                     workflow_status: nil)
   end
 
-  context 'when navigating to an object' do
+  context 'when the item is in solr' do
     before do
       solr_conn.add(solr_doc)
       solr_conn.commit
     end
 
-    context 'when displaying the catalog view' do
+    context 'when displaying the index view' do
       let(:solr_doc) do
         {
           id: 'druid:hj185xx2222',

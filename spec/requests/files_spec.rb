@@ -5,18 +5,13 @@ require 'rails_helper'
 RSpec.describe 'Files', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
-  let(:cocina_model) do
-    instance_double(Cocina::Models::DRO, externalIdentifier: druid, structural: structural)
+  let(:item) do
+    build(:item, id: druid)
   end
   let(:file_set) do
-    instance_double(Cocina::Models::FileSet, structural: fs_structural)
+    instance_double(FileSet, files: [ManagedFile.new(file)])
   end
-  let(:structural) do
-    instance_double(Cocina::Models::DROStructural, contains: [file_set])
-  end
-  let(:fs_structural) do
-    instance_double(Cocina::Models::FileSetStructural, contains: [file])
-  end
+
   let(:file) do
     Cocina::Models::File.new(
       type: Cocina::Models::ObjectType.file,
@@ -51,10 +46,10 @@ RSpec.describe 'Files', type: :request do
       }
     )
   end
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   before do
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Repository).to receive(:find).and_return(item)
+    allow(item).to receive(:file_sets).and_return([file_set])
     sign_in user
   end
 

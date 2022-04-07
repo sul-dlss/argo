@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe Show::Item::DetailsComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set: change_set, cocina: cocina, state_service: state_service) }
-  let(:cocina) { instance_double(Cocina::Models::DRO) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set: change_set, item: item, state_service: state_service) }
+  let(:item) { instance_double(Item) }
 
   let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id, catkeys: []) }
   let(:rendered) { render_inline(component) }

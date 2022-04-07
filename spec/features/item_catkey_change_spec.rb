@@ -9,7 +9,7 @@ RSpec.describe 'Item catkey change' do
   end
 
   describe 'when modification is not allowed' do
-    let(:item) { FactoryBot.create_for_repository(:item) }
+    let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
 

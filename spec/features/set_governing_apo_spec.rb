@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Set governing APO' do
   let(:groups) { ['sdr:administrator-role', 'dlss:dor-admin', 'dlss:developers'] }
   let(:new_apo) do
-    FactoryBot.create_for_repository(:apo, title: 'Stanford University Libraries - Special Collections',
-                                           roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
+    FactoryBot.create_for_repository(:persisted_apo, title: 'Stanford University Libraries - Special Collections',
+                                                     roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
   end
 
   let(:identity_md) { instance_double(Nokogiri::XML::Document, xpath: []) }
@@ -14,7 +14,7 @@ RSpec.describe 'Set governing APO' do
 
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item) do
-    FactoryBot.create_for_repository(:item, label: 'Foo', source_id: 'sauce:99', admin_policy_id: uber_apo_id, title: 'Test')
+    FactoryBot.create_for_repository(:persisted_item, label: 'Foo', source_id: 'sauce:99', admin_policy_id: uber_apo_id, title: 'Test')
   end
   let(:item_id) { item.externalIdentifier }
   let(:blacklight_config) { CatalogController.blacklight_config }

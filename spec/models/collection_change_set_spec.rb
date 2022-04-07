@@ -8,12 +8,9 @@ RSpec.describe CollectionChangeSet do
 
   describe 'loading from cocina' do
     let(:collection) do
-      build(:collection).new(access: {
-                               view: 'world',
-                               copyright: 'This collection is in the Public Domain.',
-                               useAndReproductionStatement: 'Must be used underwater',
-                               license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'
-                             })
+      build(:collection, copyright: 'This collection is in the Public Domain.',
+                         use_statement: 'Must be used underwater',
+                         license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode')
     end
 
     describe '#copyright' do

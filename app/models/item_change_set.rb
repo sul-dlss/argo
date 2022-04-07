@@ -3,22 +3,24 @@
 require 'reform/form/coercion'
 
 # Represents a set of changes to an item.
-class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
+class ItemChangeSet < ApplicationChangeSet
   feature Coercion # Casts properties to a specific type
-  property :admin_policy_id, virtual: true
-  property :catkeys, virtual: true
-  property :collection_ids, virtual: true
-  property :copyright, virtual: true
+
+  property :admin_policy_id
+  property :catkeys
+  property :collection_ids
+  property :copyright
   property :embargo_release_date, virtual: true
   property :embargo_access, virtual: true
-  property :license, virtual: true
-  property :source_id, virtual: true
-  property :use_statement, virtual: true
-  property :barcode, virtual: true
-  property :view_access, virtual: true
-  property :download_access, virtual: true
-  property :access_location, virtual: true
-  property :controlled_digital_lending, virtual: true, type: Dry::Types['params.nil'] | Dry::Types['params.bool']
+  property :license
+  property :source_id
+  property :use_statement
+  property :barcode
+  property :view_access
+  property :download_access
+  property :access_location
+  property :controlled_digital_lending, type: Dry::Types['params.nil'] | Dry::Types['params.bool']
+  property :file_sets
 
   validates :source_id, presence: true, if: -> { changed?(:source_id) }
   validates :embargo_access, inclusion: {
@@ -45,71 +47,47 @@ class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
     ::ActiveModel::Name.new(nil, nil, 'Item')
   end
 
-  def id
-    model.externalIdentifier
-  end
-
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    if model.identification
-      self.catkeys = Catkey.symphony_links(model)
-      self.barcode = model.identification.barcode
-      self.source_id = model.identification.sourceId
-    end
+    super
+    embargo = model.embargo
+    return unless embargo
 
-    self.copyright = model.access.copyright
-    self.use_statement = model.access.useAndReproductionStatement
-    self.license = model.access.license
-    self.view_access = model.access.view
-    self.download_access = model.access.download
-    self.access_location = model.access.location
-    self.controlled_digital_lending = model.access.controlledDigitalLending
-
-    setup_embargo_properties! if model.access.embargo
-  end
-
-  def setup_embargo_properties!
-    embargo = model.access.embargo
-    self.embargo_release_date = embargo.releaseDate.to_date.to_fs(:default)
-    self.embargo_access = if embargo.view == 'location-based'
-                            "loc:#{embargo.location}"
-                          elsif embargo.download == 'none' && embargo.view.in?(%w[stanford world])
-                            "#{embargo.view}-nd"
+    self.embargo_release_date = embargo.release_date
+    self.embargo_access = if embargo.view_access == 'location-based'
+                            "loc:#{embargo.access_location}"
+                          elsif embargo.download_access == 'none' && embargo.view_access.in?(%w[stanford world])
+                            "#{embargo.view_access}-nd"
                           else
-                            embargo.view
+                            embargo.view_access
                           end
   end
 
-  # @param structural [Cocina::Models::DRO] the DRO metadata to modify
-  # @return [Cocina::Models::DRO] a copy of the the Cocina model, with the new structural overlaid
-  def update_files(updated)
+  # Copies access onto the files
+  def update_files
     # Convert to hash so we can mutate it
-    structure_hash = updated.structural.to_h
-    Array(structure_hash[:contains]).each do |fileset|
-      fileset[:structural][:contains].each do |file|
+    file_sets.each do |file_set|
+      file_set.files.each do |managed_file|
         case view_access
         when 'dark'
-          # Ensure files attached to dark objects are neither published nor shelved
-          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
-          file[:administrative].merge!(publish: false)
-          file[:administrative].merge!(shelve: false)
+          managed_file.dark!
         when 'citation-only'
-          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
+          managed_file.citation_only!
         else
-          file[:access].merge!(view: view_access,
-                               download: download_access,
-                               controlledDigitalLending: controlled_digital_lending,
-                               location: access_location)
+          managed_file.view_access = view_access
+          managed_file.download_access = download_access
+          managed_file.controlled_digital_lending = controlled_digital_lending
+          managed_file.access_location = access_location
         end
       end
     end
-    updated.new(structural: structure_hash)
   end
 
   def sync
-    super
     self.download_access = 'none' if clear_download? # This must be before clearing location
     self.access_location = nil if clear_location?
+    update_files if rights_changed?
+    super # call super last, so all the changs are copied to the Item
   end
 
   def clear_download?
@@ -118,14 +96,6 @@ class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
 
   def clear_location?
     (changed?(:view_access) || changed?(:download_access)) && view_access != 'location-based' && download_access != 'location-based'
-  end
-
-  # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
-  # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
-  def save_model
-    updated = model
-    updated = update_files(updated) if rights_changed? # This would ideally live in #sync, but reform doesn't support immutable models.
-    ItemChangeSetPersister.update(updated, self)
   end
 
   def rights_changed?

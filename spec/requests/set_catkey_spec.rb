@@ -6,12 +6,14 @@ RSpec.describe 'Set catkey' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:dc243mg0841' }
 
+  before do
+    allow(Repository).to receive(:find).with(druid).and_return(item)
+  end
+
   context 'without manage content access' do
-    let(:cocina) { instance_double(Cocina::Models::DRO) }
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
+    let(:item) { build(:item, id: druid) }
 
     before do
-      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
       sign_in user
     end
 
@@ -23,16 +25,13 @@ RSpec.describe 'Set catkey' do
   end
 
   context 'when they have manage access' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-
     before do
-      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       sign_in user, groups: ['sdr:administrator-role']
     end
 
     describe 'display the form' do
       context 'with an item' do
-        let(:cocina_model) { build(:dro, id: druid) }
+        let(:item) { build(:item, id: druid) }
 
         it 'draws the form' do
           get "/items/#{druid}/catkey/edit"
@@ -42,7 +41,7 @@ RSpec.describe 'Set catkey' do
       end
 
       context 'with a collection that has no existing catkeys' do
-        let(:cocina_model) { build(:collection, id: druid) }
+        let(:item) { build(:collection, id: druid) }
 
         it 'draws the form' do
           get "/items/#{druid}/catkey/edit"
@@ -52,7 +51,7 @@ RSpec.describe 'Set catkey' do
       end
 
       context 'with a collection that has existing catkeys' do
-        let(:cocina_model) { build(:collection, id: druid, catkeys: ['10448742']) }
+        let(:item) { build(:collection, id: druid, catkeys: ['10448742']) }
 
         it 'draws the form' do
           get "/items/#{druid}/catkey/edit"
@@ -64,41 +63,29 @@ RSpec.describe 'Set catkey' do
     end
 
     describe 'submitting changes' do
-      let(:updated_model) do
-        cocina_model.new(
-          {
-            identification: {
-              catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12345' }],
-              sourceId: 'sul:1234'
-            }
-          }
-        )
-      end
-
       before do
+        allow(item).to receive(:save)
         allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
       context 'with an item' do
-        let(:cocina_model) { build(:dro, id: druid) }
+        let(:item) { build(:item, id: druid) }
 
         it 'updates the catkey, trimming whitespace' do
           patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
 
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
+          expect(item).to have_received(:save)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
       context 'with a collection that has no existing catkeys' do
-        let(:cocina_model) { build(:collection, id: druid, source_id: 'sul:1234') }
+        let(:item) { build(:collection, id: druid) }
 
         it 'updates the catkey, trimming whitespace' do
           patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
 
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
+          expect(item).to have_received(:save)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end

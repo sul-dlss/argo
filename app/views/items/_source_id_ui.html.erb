@@ -1,6 +1,6 @@
-<%= form_tag source_id_item_path(@cocina.externalIdentifier) do %>
+<%= form_tag source_id_item_path(@item.id) do %>
   <div class="mb-3">
-    <input class="form-control" name="new_id" id="new_id" type="text" value="<%= @cocina.identification.sourceId %>">
+    <input class="form-control" name="new_id" id="new_id" type="text" value="<%= @item.source_id %>">
     <p class='form-text'>
       <em>entries should be of the form</em> source:value
     </p>

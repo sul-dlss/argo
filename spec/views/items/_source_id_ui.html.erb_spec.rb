@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'items/_source_id_ui' do
   before do
-    @cocina = build(:dro, source_id: 'sul:99999')
+    @item = build(:item, source_id: 'sul:99999')
   end
 
   it 'renders the partial content' do

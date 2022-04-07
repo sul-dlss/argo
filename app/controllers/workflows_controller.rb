@@ -104,7 +104,7 @@ class WorkflowsController < ApplicationController
                                 workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context,
                           workflow_status: status,
-                          cocina_object: maybe_load_cocina(params[:item_id]))
+                          item: Repository.find(params[:item_id]))
   end
 
   def workflow_processes(workflow_name)

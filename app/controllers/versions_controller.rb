@@ -30,13 +30,13 @@ class VersionsController < ApplicationController
   end
 
   def open
-    VersionService.open(identifier: @cocina_object.externalIdentifier,
+    VersionService.open(identifier: @item.id,
                         significance: params[:significance],
                         description: params[:description],
                         opening_user_name: current_user.to_s)
-    msg = "#{@cocina_object.externalIdentifier} is open for modification!"
+    msg = "#{@item.id} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
-    Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@item.id)
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
 
@@ -48,14 +48,14 @@ class VersionsController < ApplicationController
   # values, update those fields on the version metadata datastream
   def close
     VersionService.close(
-      identifier: @cocina_object.externalIdentifier,
+      identifier: @item.id,
       description: params[:description],
       significance: params[:significance],
       user_name: current_user.to_s
     )
-    msg = "Version #{@cocina_object.version} of #{@cocina_object.externalIdentifier} has been closed!"
+    msg = "Version #{@item.version} of #{@item.id} has been closed!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
-    Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@item.id)
   end
 
   private
@@ -78,7 +78,7 @@ class VersionsController < ApplicationController
   end
 
   def load_and_authorize_resource
-    @cocina_object = maybe_load_cocina(params[:item_id])
-    authorize! :manage_item, @cocina_object
+    @item = Repository.find(params[:item_id])
+    authorize! :manage_item, @item
   end
 end

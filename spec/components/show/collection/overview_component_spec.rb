@@ -4,27 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, change_set: change_set, state_service: state_service) }
-  let(:change_set) { CollectionChangeSet.new(cocina) }
-  let(:cocina) do
-    Cocina::Models::Collection.new(externalIdentifier: 'druid:bc234fg5678',
-                                   type: Cocina::Models::ObjectType.collection,
-                                   label: 'my collection',
-                                   version: 1,
-                                   description: {
-                                     title: [{ value: 'my collection' }],
-                                     purl: 'https://purl.stanford.edu/bc234fg5678'
-                                   },
-                                   access: {
-                                     view: 'world',
-                                     copyright: 'This collection is in the Public Domain.',
-                                     useAndReproductionStatement: 'Must be used underwater',
-                                     license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'
-                                   },
-                                   identification: { sourceId: 'sul:1234' },
-                                   administrative: {
-                                     hasAdminPolicy: 'druid:hv992ry2431'
-                                   })
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, item: collection, change_set: change_set, state_service: state_service) }
+  let(:change_set) { CollectionChangeSet.new(collection) }
+  let(:collection) do
+    build(:collection, view_access: 'world',
+                       copyright: 'This collection is in the Public Domain.',
+                       use_statement: 'Must be used underwater',
+                       license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode')
   end
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }

@@ -28,22 +28,22 @@ class SetSourceIdsCsvJob < GenericJob
   private
 
   def update_one(current_druid, source_id, log)
-    cocina_object = Dor::Services::Client.object(current_druid).find
+    item = Repository.find(current_druid)
 
-    unless ability.can?(:manage_item, cocina_object)
-      log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
+    unless ability.can?(:manage_item, item)
+      log.puts("#{Time.current} Not authorized for #{item.id}")
       bulk_action.increment(:druid_count_fail).save
       return
     end
 
-    state_service = StateService.new(cocina_object)
+    state_service = StateService.new(item)
     unless state_service.allows_modification?
-      new_version = open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(source_id))
-      cocina_object = cocina_object.new(version: new_version.to_i)
+      new_version = open_new_version(item.id, item.version, version_message(source_id))
+      item.version = new_version.to_i
     end
 
-    change_set_class = cocina_object.collection? ? CollectionChangeSet : ItemChangeSet
-    change_set = change_set_class.new(cocina_object)
+    change_set_class = item.is_a?(Collection) ? CollectionChangeSet : ItemChangeSet
+    change_set = change_set_class.new(item)
     if change_set.validate(source_id: source_id)
       update_source_ids(change_set, log) if change_set.changed?
     else
@@ -63,8 +63,8 @@ class SetSourceIdsCsvJob < GenericJob
   end
 
   def update_source_ids(change_set, log)
-    cocina_object = change_set.model
-    log.puts("#{Time.current} Beginning set source_id for #{cocina_object.externalIdentifier}")
+    item = change_set.model
+    log.puts("#{Time.current} Beginning set source_id for #{item.id}")
 
     log_update(change_set, log)
 

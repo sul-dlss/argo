@@ -10,19 +10,10 @@ class ApplicationController < ActionController::Base
 
   layout :determine_layout
 
-  # Currently we know that not all objects are Cocina compliant, this ensures that we can at least
-  # receive some object and so, at least administrators can be authorized to operate on it.
-  # See: https://argo.stanford.edu/catalog?f[data_quality_ssim][]=Cocina+conversion+failed
-  # @return [Cocina::Models::DRO,NilModel]
-  def maybe_load_cocina(druid)
-    object_client = Dor::Services::Client.object(druid)
-    object_client.find
-  rescue Dor::Services::Client::UnexpectedResponse
-    NilModel.new(druid)
-  end
+  delegate :maybe_load_cocina, to: :Repository
 
-  def allows_modification?(cocina_object)
-    state_service = StateService.new(cocina_object)
+  def allows_modification?(item)
+    state_service = StateService.new(item)
     state_service.allows_modification?
   end
 
@@ -47,13 +38,11 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def enforce_versioning
-    return redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
-
+  def enforce_versioning(item = @item)
     # if this object has been submitted and doesn't have an open version, they cannot change it.
-    return true if allows_modification?(@cocina)
+    return true if allows_modification?(item)
 
-    redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Object cannot be modified in its current state.' }
+    redirect_to solr_document_path(item.id), flash: { error: 'Object cannot be modified in its current state.' }
     false
   end
 end

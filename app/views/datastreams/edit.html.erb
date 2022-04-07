@@ -1,9 +1,9 @@
 <%= render BlacklightModalComponent.new do |component| %>
   <% component.header { params[:id] } %>
   <% component.body do %>
-    <% if can?(:manage_item, @cocina) %>
-      <%= form_tag item_datastream_path(@cocina.externalIdentifier, params[:id]), data: { turbo: false }, id: 'xmlEditForm', method: :patch do %>
-          <input type="hidden" name="id" value="<%= @cocina.externalIdentifier %>">
+    <% if can?(:manage_item, @item) %>
+      <%= form_tag item_datastream_path(@item.id, params[:id]), data: { turbo: false }, id: 'xmlEditForm', method: :patch do %>
+          <input type="hidden" name="id" value="<%= @item.id %>">
           <input name="dsid" id="datastream" type="hidden" value="<%= params[:id] %>">
           <div class="mb-3">
             <textarea name="content" id="content" class='form-control'><%= @content %></textarea>

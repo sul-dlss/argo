@@ -2,13 +2,13 @@
 
 class ContentsComponent < ApplicationComponent
   def initialize(presenter:)
+    @item = presenter.item
     @document = presenter.document
-    @cocina = presenter.cocina
     @state_service = presenter.state_service
   end
 
   def render?
-    @cocina.respond_to?(:structural)
+    @item.is_a? Item
   end
 
   delegate :allows_modification?, to: :@state_service

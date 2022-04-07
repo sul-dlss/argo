@@ -7,7 +7,7 @@ RSpec.describe 'View Cocina model' do
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: item) }
   let(:item) do
-    FactoryBot.create_for_repository(:item)
+    FactoryBot.create_for_repository(:persisted_item)
   end
 
   before do

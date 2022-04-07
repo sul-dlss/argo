@@ -17,18 +17,14 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
+    build(:item, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
   end
   let(:item2) do
-    build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
+    build(:item, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
   end
   let(:item3) do
-    build(:dro, id: druids[2])
+    build(:item, id: druids[2])
   end
-
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
-  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
 
   let(:change_set1) { instance_double(ItemChangeSet, validate: true, model: item1, changed?: true) }
   let(:change_set2) { instance_double(ItemChangeSet, validate: true, model: item2, changed?: false) }
@@ -36,13 +32,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
   end
 
   describe '#perform' do
     before do
-      allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-      allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
+      allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
+      allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
+      allow(Repository).to receive(:find).with(druids[2]).and_return(item3)
     end
 
     context 'when catkey and barcode selected' do
@@ -99,8 +95,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:catkeys_arg) { [catkeys[0]] }
     let(:barcode) { barcodes[0] }
     let(:client) { double(Dor::Services::Client) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
-    let(:item1) do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
+    let(:previous_version) do
       build(:dro, id: druids[0], version: 3).new(identification: {
                                                    barcode: '36105014757519',
                                                    catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
@@ -109,7 +105,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     let(:updated_model) do
-      item1.new(
+      previous_version.new(
         {
           identification: {
             barcode: barcode,
@@ -124,7 +120,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     let(:change_set) do
-      ItemChangeSet.new(item1).tap do |change_set|
+      ItemChangeSet.new(Item.new(previous_version)).tap do |change_set|
         change_set.validate(catkeys: catkeys_arg, barcode: barcode)
       end
     end
@@ -191,7 +187,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:barcode) { nil }
 
       let(:updated_model) do
-        item1.new(
+        previous_version.new(
           {
             identification: {
               barcode: nil,

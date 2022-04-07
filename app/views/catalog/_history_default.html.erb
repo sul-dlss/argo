@@ -27,13 +27,13 @@
         </dl>
       </div>
 
-      <% if @cocina.administrative.respond_to? :releaseTags %>
-        <% if @cocina.administrative.releaseTags.present? %>
+      <% if @item.respond_to?(:release_tags) %>
+        <% if @item.release_tags.present? %>
           <div class="col-sm-12">
             <dl>
               <dt>Releases</dt>
               <dd>
-                <%= render 'show_releases', release_tags: @cocina.administrative.releaseTags %>
+                <%= render 'show_releases', release_tags: @item.release_tags %>
               </dd>
             </dl>
           </div>

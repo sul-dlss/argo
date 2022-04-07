@@ -4,7 +4,7 @@
     If you are unsure of what the issue is, you can ask for help on the #dlss-aaas Slack channel or email <a href="mailto:argo-feedback@lists.stanford.edu">argo-feedback@lists.stanford.edu</a>
   </div>
 <% else %>
-  <%= form_with url: close_item_versions_path(@cocina_object.externalIdentifier),
+  <%= form_with url: close_item_versions_path(@item.id),
                 method: :post,
                 local: true do %>
     <div class='mb-3'>
