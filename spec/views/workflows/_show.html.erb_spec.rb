@@ -5,8 +5,6 @@ require 'rails_helper'
 RSpec.describe 'workflows/_show' do
   let(:druid) { 'druid:aa111bb2222' }
   let(:workflow_name) { 'accessionWF' }
-  let(:item) { instance_double(Cocina::Models::DRO) }
-
   let(:process_status) do
     instance_double(Dor::Workflow::Response::Process,
                     name: 'descriptive-metadata',
@@ -27,7 +25,7 @@ RSpec.describe 'workflows/_show' do
                     druid: druid,
                     workflow_name: workflow_name,
                     processes: [process_status],
-                    cocina_object: item)
+                    cocina_object: nil)
   end
 
   before do
