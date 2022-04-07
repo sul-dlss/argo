@@ -99,8 +99,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:catkeys_arg) { [catkeys[0]] }
     let(:barcode) { barcodes[0] }
     let(:client) { double(Dor::Services::Client) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
-    let(:item1) do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
+    let(:previous_version) do
       build(:dro, id: druids[0], version: 3).new(identification: {
                                                    barcode: '36105014757519',
                                                    catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
@@ -109,7 +109,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     let(:updated_model) do
-      item1.new(
+      previous_version.new(
         {
           identification: {
             barcode: barcode,
@@ -124,7 +124,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     let(:change_set) do
-      ItemChangeSet.new(item1).tap do |change_set|
+      ItemChangeSet.new(previous_version).tap do |change_set|
         change_set.validate(catkeys: catkeys_arg, barcode: barcode)
       end
     end
@@ -191,7 +191,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:barcode) { nil }
 
       let(:updated_model) do
-        item1.new(
+        previous_version.new(
           {
             identification: {
               barcode: nil,
