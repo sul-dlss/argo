@@ -78,7 +78,7 @@ class VersionsController < ApplicationController
   end
 
   def load_and_authorize_resource
-    @cocina_object = maybe_load_cocina(params[:item_id])
+    @cocina_object = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina_object
   end
 end

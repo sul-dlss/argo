@@ -207,7 +207,7 @@ class CatalogController < ApplicationController
     params[:id] = Druid.new(params[:id]).with_namespace
     _deprecated_response, @document = search_service.fetch(params[:id])
 
-    @cocina = maybe_load_cocina(params[:id])
+    @cocina = Repository.find(params[:id])
     flash[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
 
     authorize! :view_metadata, @cocina

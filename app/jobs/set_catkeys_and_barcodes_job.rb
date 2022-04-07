@@ -21,7 +21,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count(count: update_druids.count)
       update_druids.each_with_index do |current_druid, i|
-        cocina_object = Dor::Services::Client.object(current_druid).find
+        cocina_object = Repository.find(current_druid)
         args = {}
         args[:catkeys] = catkeys[i] if catkeys
         args[:barcode] = barcodes[i] if barcodes

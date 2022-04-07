@@ -3,7 +3,7 @@
 class ApoController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
-  before_action :create_obj, except: %i[
+  before_action :load_resource, except: %i[
     new
     create
     spreadsheet_template
@@ -63,7 +63,7 @@ class ApoController < ApplicationController
     collection_ids = @cocina.administrative.collectionsForRegistration - [params[:collection]]
     updated_administrative = @cocina.administrative.new(collectionsForRegistration: collection_ids)
     updated = @cocina.new(administrative: updated_administrative)
-    Dor::Services::Client.object(@cocina.externalIdentifier).update(params: updated)
+    Repository.store(updated)
 
     redirect_to solr_document_path(params[:id]), notice: 'APO updated.'
   end
@@ -123,9 +123,7 @@ class ApoController < ApplicationController
     @solr_conn ||= blacklight_config.repository_class.new(blacklight_config).connection
   end
 
-  def create_obj
-    raise 'missing druid' unless params[:id]
-
-    @cocina = maybe_load_cocina(params[:id])
+  def load_resource
+    @cocina = Repository.find(params[:id])
   end
 end

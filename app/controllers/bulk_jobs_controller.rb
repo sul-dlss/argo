@@ -7,7 +7,7 @@ class BulkJobsController < ApplicationController
   def index
     params[:apo_id] = Druid.new(params[:apo_id]).with_namespace
 
-    @cocina =  Dor::Services::Client.object(params[:apo_id]).find
+    @cocina =  Repository.find(params[:apo_id])
     authorize! :view_metadata, @cocina
 
     @document = find(params[:apo_id])

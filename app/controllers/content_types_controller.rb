@@ -31,7 +31,7 @@ class ContentTypesController < ApplicationController
   end
 
   def load_and_authorize_resource
-    @cocina = Dor::Services::Client.object(params[:item_id]).find
+    @cocina = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina
   end
 end

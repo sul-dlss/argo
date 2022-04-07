@@ -17,10 +17,6 @@ class CatkeyForm < ApplicationChangeSet
     identification_props = updated.identification.new(catalogLinks: Catkey.serialize(model, catkey.split(/\s*,\s*/)))
     updated = updated.new(identification: identification_props)
 
-    object_client.update(params: updated)
-  end
-
-  def object_client
-    Dor::Services::Client.object(model.externalIdentifier)
+    Repository.store(updated)
   end
 end

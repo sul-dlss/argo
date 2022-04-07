@@ -22,7 +22,7 @@ class ReleaseObjectJob < GenericJob
       next failure.call('Object has never been published and cannot be released') unless WorkflowService.published?(druid: cocina_object.externalIdentifier)
       next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-      Dor::Services::Client.object(cocina_object.externalIdentifier).update(params: model_with_new_release_tag(cocina_object))
+      Repository.store(model_with_new_release_tag(cocina_object))
 
       WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier, 'releaseWF', version: cocina_object.version)
       success.call('Workflow creation successful')

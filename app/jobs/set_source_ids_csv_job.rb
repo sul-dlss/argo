@@ -28,7 +28,7 @@ class SetSourceIdsCsvJob < GenericJob
   private
 
   def update_one(current_druid, source_id, log)
-    cocina_object = Dor::Services::Client.object(current_druid).find
+    cocina_object = Repository.find(current_druid)
 
     unless ability.can?(:manage_item, cocina_object)
       log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")

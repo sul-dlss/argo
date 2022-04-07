@@ -42,11 +42,7 @@ class ContentTypeForm < ApplicationChangeSet
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
   def save_model
-    object_client.update(params: model.new(cocina_update_attributes))
-  end
-
-  def object_client
-    Dor::Services::Client.object(model.externalIdentifier)
+    Repository.store(model.new(cocina_update_attributes))
   end
 
   def cocina_update_attributes

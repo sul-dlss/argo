@@ -32,7 +32,7 @@ class CatkeysController < ApplicationController
   private
 
   def load_and_authorize_resource
-    @cocina = maybe_load_cocina(params[:item_id])
+    @cocina = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina
   end
 

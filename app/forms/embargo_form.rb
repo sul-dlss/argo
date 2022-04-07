@@ -58,10 +58,6 @@ class EmbargoForm < ApplicationChangeSet
     updated_access = updated.access.new(embargo: embargo)
     updated = updated.new(access: updated_access)
 
-    object_client.update(params: updated)
-  end
-
-  def object_client
-    Dor::Services::Client.object(model.externalIdentifier)
+    Repository.store(updated)
   end
 end

@@ -32,7 +32,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:status` The status to which we want to reset the workflow.
   def update
     params.require %i[process status]
-    cocina = Dor::Services::Client.object(params[:item_id]).find
+    cocina = Repository.find(params[:item_id])
 
     return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], cocina)
 
@@ -51,7 +51,7 @@ class WorkflowsController < ApplicationController
 
   # add a workflow to an object if the workflow is not present in the active table
   def create
-    cocina_object = maybe_load_cocina(params[:item_id])
+    cocina_object = Repository.find(params[:item_id])
 
     unless params[:wf]
       return respond_to do |format|
@@ -104,7 +104,7 @@ class WorkflowsController < ApplicationController
                                 workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context,
                           workflow_status: status,
-                          cocina_object: maybe_load_cocina(params[:item_id]))
+                          cocina_object: Repository.find(params[:item_id]))
   end
 
   def workflow_processes(workflow_name)

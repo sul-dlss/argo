@@ -87,7 +87,7 @@ class GenericJob < ApplicationJob
           log.puts("#{Time.current} #{message} for #{druid}")
         }
 
-        cocina_object = Dor::Services::Client.object(druid).find
+        cocina_object = Repository.find(druid)
         yield(cocina_object, success, failure, idx)
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")

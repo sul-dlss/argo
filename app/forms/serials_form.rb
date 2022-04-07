@@ -37,11 +37,7 @@ class SerialsForm < ApplicationChangeSet
   def save_model
     updated_description = model.description.new(title: updated_title, note: updated_note)
     updated_model = model.new(description: updated_description)
-    object_client.update(params: updated_model)
-  end
-
-  def object_client
-    Dor::Services::Client.object(model.externalIdentifier)
+    Repository.store(updated_model)
   end
 
   def updated_title
