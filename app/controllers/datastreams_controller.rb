@@ -27,7 +27,7 @@ class DatastreamsController < ApplicationController
   # @option params [String] `:id` the identifier for the datastream, e.g., `identityMetadata`
   # @option params [String] `:item_id` the druid to modify
   def update
-    cocina = maybe_load_cocina(params[:item_id])
+    cocina = Repository.find(params[:item_id])
     authorize! :manage_item, cocina
 
     raise ArgumentError, 'Missing content' if params[:content].blank?
@@ -77,7 +77,7 @@ class DatastreamsController < ApplicationController
   def show_aspect
     druid = Druid.new(params[:item_id]).with_namespace
     @response, @document = search_service.fetch druid # this does the authorization
-    @cocina = maybe_load_cocina(druid)
+    @cocina = Repository.find(druid)
     @object_client = Dor::Services::Client.object(druid)
   end
 end

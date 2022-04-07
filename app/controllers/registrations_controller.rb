@@ -15,7 +15,7 @@ class RegistrationsController < ApplicationController
   end
 
   def workflow_list
-    cocina_admin_policy = object_client.find
+    cocina_admin_policy = Repository.find(apo_id)
     workflows = ([Settings.apo.default_workflow_option] + Array(cocina_admin_policy.administrative.registrationWorkflow)).uniq
 
     respond_to do |format|
@@ -54,7 +54,7 @@ class RegistrationsController < ApplicationController
   end
 
   def rights_list
-    cocina_admin_policy = object_client.find
+    cocina_admin_policy = Repository.find(apo_id)
     default_opt = RightsLabeler.label(cocina_admin_policy.administrative.accessTemplate)
 
     # iterate through the default version of the rights list.  if we found a default option
@@ -99,17 +99,10 @@ class RegistrationsController < ApplicationController
   end
 
   def apo_id
-    druid = params[:apo_id]
-    raise ArgumentError if druid.nil?
-
-    Druid.new(druid).with_namespace
-  end
-
-  def object_client
-    Dor::Services::Client.object(apo_id)
+    @apo_id ||= Druid.new(params.require(:apo_id)).with_namespace
   end
 
   def registration_collection_ids_for_apo
-    Array(object_client.find.administrative.collectionsForRegistration)
+    Array(Repository.find(apo_id).administrative.collectionsForRegistration)
   end
 end

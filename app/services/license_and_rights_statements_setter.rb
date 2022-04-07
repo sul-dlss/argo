@@ -90,7 +90,7 @@ class LicenseAndRightsStatementsSetter
   end
 
   def cocina_object
-    @cocina_object ||= Dor::Services::Client.object(druid).find
+    @cocina_object ||= Repository.find(druid)
   end
 
   def new_version_message

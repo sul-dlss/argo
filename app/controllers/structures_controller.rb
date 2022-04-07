@@ -20,7 +20,7 @@ class StructuresController < ApplicationController
     status = StructureUpdater.from_csv(@cocina, params[:csv].read)
 
     if status.success?
-      object_client.update(params: @cocina.new(structural: status.value!))
+      Repository.store(@cocina.new(structural: status.value!))
       redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Structural metadata updated'
     else
       redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: status.failure.join('\n') }
@@ -30,11 +30,7 @@ class StructuresController < ApplicationController
   private
 
   def load_and_authorize_cocina
-    @cocina = object_client.find
+    @cocina = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina
-  end
-
-  def object_client
-    @object_client ||= Dor::Services::Client.object(params[:item_id])
   end
 end

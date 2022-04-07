@@ -26,7 +26,7 @@ class OCRExporter
         next
       end
 
-      obj = Dor::Services::Client.object(druid).find
+      obj = Repository.find(druid)
       Downloader.new(directory, druid, obj.version, filenames(obj)).download_files
     end
   end

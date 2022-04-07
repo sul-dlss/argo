@@ -20,7 +20,6 @@ RSpec.describe ItemChangeSetPersister do
 
   describe '#update' do
     let(:copyright_statement_before) { 'My First Copyright Statement' }
-    let(:fake_client) { instance_double(Dor::Services::Client::Object, update: nil) }
     let(:instance) do
       described_class.new(model, change_set)
     end
@@ -55,7 +54,7 @@ RSpec.describe ItemChangeSetPersister do
     let(:change_set) { ItemChangeSet.new(model) }
 
     before do
-      allow(instance).to receive(:object_client).and_return(fake_client)
+      allow(Repository).to receive(:store)
     end
 
     context 'when change set has changed copyright statement' do
@@ -67,8 +66,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new copyright statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: new_copyright_statement,
               license: license_before,
@@ -88,8 +87,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new license' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: copyright_statement_before,
               license: new_license,
@@ -109,8 +108,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new use statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: copyright_statement_before,
               license: license_before,
@@ -154,8 +153,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new use statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               embargo: {
                 releaseDate: DateTime.parse('2055-07-17'),
@@ -204,8 +203,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new use statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               embargo: { releaseDate: DateTime.parse('2055-07-17'), view: 'stanford', download: 'stanford' },
               view: 'dark',
@@ -248,8 +247,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new use statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               license: license_before,
               useAndReproductionStatement: new_use_statement
@@ -265,8 +264,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO as before' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: copyright_statement_before,
               license: license_before,
@@ -286,8 +285,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new barcode' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             identification: {
               barcode: new_barcode,
               catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
@@ -304,8 +303,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has no barcode' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             identification: {
               barcode: nil,
               catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
@@ -324,8 +323,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has new catkey' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             identification: {
               barcode: barcode_before,
               catalogLinks: [
@@ -345,8 +344,8 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       it 'invokes object client with item/DRO that has no catkey' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             identification: {
               catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: catkey_before }],
               barcode: barcode_before
@@ -365,8 +364,8 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_apo) { 'druid:dc123df4569' }
 
       it 'invokes object client with collection that has new APO' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             administrative: {
               hasAdminPolicy: new_apo
             }

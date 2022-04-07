@@ -41,7 +41,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
     updated = sync
 
     # TODO: If update went through sdr-api, we wouldn't have to start accessioning separately.
-    response = Dor::Services::Client.object(updated.externalIdentifier).update(params: updated)
+    response = Repository.store(updated)
     tag_registered_by(response.externalIdentifier)
 
     response

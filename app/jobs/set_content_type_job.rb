@@ -35,7 +35,7 @@ class SetContentTypeJob < GenericJob
 
     # use dor services client to pass a hash for structural metadata and update the cocina object
     new_model = cocina_object.new(cocina_update_attributes(cocina_object))
-    Dor::Services::Client.object(cocina_object.externalIdentifier).update(params: new_model)
+    Repository.store(new_model)
     success.call('Successfully updated content type')
   end
 

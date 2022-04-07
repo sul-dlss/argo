@@ -20,7 +20,6 @@ RSpec.describe CollectionChangeSetPersister do
 
   describe '#update' do
     let(:copyright_statement_before) { 'My First Copyright Statement' }
-    let(:fake_client) { instance_double(Dor::Services::Client::Object, update: nil) }
     let(:instance) do
       described_class.new(model, change_set)
     end
@@ -48,7 +47,7 @@ RSpec.describe CollectionChangeSetPersister do
     let(:use_statement_before) { 'My First Use Statement' }
 
     before do
-      allow(instance).to receive(:object_client).and_return(fake_client)
+      allow(Repository).to receive(:store)
     end
 
     context 'when change set has changed copyright statement' do
@@ -60,8 +59,8 @@ RSpec.describe CollectionChangeSetPersister do
       let(:new_copyright_statement) { 'A Changed Copyright Statement' }
 
       it 'invokes object client with collection that has new copyright statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: new_copyright_statement,
               license: license_before,
@@ -81,8 +80,8 @@ RSpec.describe CollectionChangeSetPersister do
       let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' }
 
       it 'invokes object client with collection that has new license' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: copyright_statement_before,
               license: new_license,
@@ -102,8 +101,8 @@ RSpec.describe CollectionChangeSetPersister do
       let(:new_use_statement) { 'A Changed Use Statement' }
 
       it 'invokes object client with collection that has new use statement' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: copyright_statement_before,
               license: license_before,
@@ -120,8 +119,8 @@ RSpec.describe CollectionChangeSetPersister do
       end
 
       it 'invokes object client with collection as before' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             access: {
               copyright: copyright_statement_before,
               license: license_before,
@@ -141,8 +140,8 @@ RSpec.describe CollectionChangeSetPersister do
       let(:new_apo) { 'druid:dc123df4569' }
 
       it 'invokes object client with collection that has new APO' do
-        expect(fake_client).to have_received(:update).with(
-          params: cocina_object_with(
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
             administrative: {
               hasAdminPolicy: new_apo
             }

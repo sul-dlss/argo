@@ -5,7 +5,7 @@ class CollectionsController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
   def new
-    @cocina = maybe_load_cocina(params[:apo_id])
+    @cocina = Repository.find(params[:apo_id])
     authorize! :manage_item, @cocina
 
     respond_to do |format|
@@ -14,8 +14,8 @@ class CollectionsController < ApplicationController
   end
 
   def create
-    cocina = maybe_load_cocina(params[:apo_id])
-    authorize! :manage_item, cocina
+    cocina_admin_policy = Repository.find(params[:apo_id])
+    authorize! :manage_item, cocina_admin_policy
 
     form = CollectionForm.new
     return render 'new' unless form.validate(params.merge(apo_druid: params[:apo_id]))
@@ -23,7 +23,6 @@ class CollectionsController < ApplicationController
     form.save
     collection_druid = form.model.externalIdentifier
 
-    cocina_admin_policy = object_client.find
     collections = Array(cocina_admin_policy.administrative.collectionsForRegistration).dup
     # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
     # 1. If collection is already listed, remove it temporarily
@@ -35,14 +34,14 @@ class CollectionsController < ApplicationController
         collectionsForRegistration: collections
       )
     )
-    object_client.update(params: updated_cocina_admin_policy)
+    Repository.store(updated_cocina_admin_policy)
     Argo::Indexer.reindex_druid_remotely(params[:apo_id])
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_druid}"
   end
 
   # save the form
   def update
-    @cocina = maybe_load_cocina(params[:id])
+    @cocina = Repository.find(params[:id])
     authorize! :manage_item, @cocina
     return unless enforce_versioning
 
@@ -98,9 +97,5 @@ class CollectionsController < ApplicationController
 
   def solr_conn
     @solr_conn ||= blacklight_config.repository_class.new(blacklight_config).connection
-  end
-
-  def object_client
-    Dor::Services::Client.object(params[:apo_id])
   end
 end

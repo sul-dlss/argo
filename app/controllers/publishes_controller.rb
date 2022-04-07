@@ -23,6 +23,6 @@ class PublishesController < ApplicationController
   private
 
   def load_cocina
-    @cocina = Dor::Services::Client.object(params[:item_id]).find
+    @cocina = Repository.find(params[:item_id])
   end
 end

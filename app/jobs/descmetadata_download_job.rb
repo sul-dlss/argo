@@ -62,7 +62,7 @@ class DescmetadataDownloadJob < GenericJob
   # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy,nil] cocina model instance corresponding to the given druid, or nil if none was found.
   def query_dor(druid, log)
     attempts ||= MAX_TRIES
-    Dor::Services::Client.object(druid).find
+    Repository.find(druid)
   rescue Faraday::TimeoutError
     if (attempts -= 1) > 0
       log.puts "argo.bulk_metadata.bulk_log_retry #{druid}"

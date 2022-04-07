@@ -21,8 +21,6 @@ class WorkflowServiceController < ApplicationController
   private
 
   def load_cocina
-    raise 'missing druid' unless params[:id]
-
-    @cocina = maybe_load_cocina(params[:id])
+    @cocina = Repository.find(params[:id])
   end
 end

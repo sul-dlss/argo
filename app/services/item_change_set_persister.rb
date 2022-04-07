@@ -20,7 +20,7 @@ class ItemChangeSetPersister
                     .then { |updated| updated_administrative(updated) }
                     .then { |updated| updated_access(updated) }
                     .then { |updated| update_structural(updated) }
-    object_client.update(params: updated_model)
+    Repository.store(updated_model)
   end
 
   private

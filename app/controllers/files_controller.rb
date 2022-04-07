@@ -103,6 +103,6 @@ class FilesController < ApplicationController
   end
 
   def load_resource
-    @cocina_model = Dor::Services::Client.object(params[:item_id]).find
+    @cocina_model = Repository.find(params[:item_id])
   end
 end

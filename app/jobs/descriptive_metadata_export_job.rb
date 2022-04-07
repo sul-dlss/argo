@@ -14,7 +14,7 @@ class DescriptiveMetadataExportJob < GenericJob
       headers = Set.new
       descriptions = druids.each_with_object({}) do |druid, out|
         log_buffer.puts("#{Time.current} #{self.class}: Exporting description for #{druid} (bulk_action.id=#{bulk_action_id})")
-        item = Dor::Services::Client.object(druid).find
+        item = Repository.find(druid)
         description = DescriptionExport.export(source_id: item.identification.sourceId, description: item.description)
         out[druid] = description
         headers.merge(description.keys)

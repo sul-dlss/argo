@@ -19,7 +19,7 @@ class CollectionChangeSetPersister
                     .then { |updated| updated_access(updated) }
                     .then { |updated| updated_administrative(updated) }
 
-    object_client.update(params: updated_model)
+    Repository.store(updated_model)
   end
 
   private
@@ -67,9 +67,5 @@ class CollectionChangeSetPersister
 
     updated_administrative = updated.administrative.new(hasAdminPolicy: admin_policy_id)
     updated.new(administrative: updated_administrative)
-  end
-
-  def object_client
-    Dor::Services::Client.object(model.externalIdentifier)
   end
 end
