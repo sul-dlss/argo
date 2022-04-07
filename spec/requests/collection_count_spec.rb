@@ -4,15 +4,15 @@ require 'rails_helper'
 
 RSpec.describe 'Count the members of a collection' do
   let(:user) { create(:user) }
-  let(:collection) { FactoryBot.create_for_repository(:collection) }
+  let(:collection) { FactoryBot.create_for_repository(:persisted_collection) }
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
 
   before do
     sign_in user, groups: ['sdr:administrator-role']
-    FactoryBot.create_for_repository(:item, collection_id: collection.externalIdentifier)
-    FactoryBot.create_for_repository(:item, collection_id: collection.externalIdentifier)
+    FactoryBot.create_for_repository(:persisted_item, collection_id: collection.externalIdentifier)
+    FactoryBot.create_for_repository(:persisted_item, collection_id: collection.externalIdentifier)
   end
 
   it 'returns the count' do
