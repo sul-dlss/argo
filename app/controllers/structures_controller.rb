@@ -2,14 +2,20 @@
 
 # dispatches to the dor-services-app to (re/un)publish
 class StructuresController < ApplicationController
-  before_action :load_and_authorize_cocina
+  before_action :load_and_authorize_cocina, only: :update
   before_action :enforce_versioning, only: :update
 
   def show
     respond_to do |format|
       format.csv do
+        # Download the structural spreadsheet
+        load_and_authorize_cocina
         filename = "structure-#{Druid.new(@cocina).without_namespace}.csv"
         send_data StructureSerializer.as_csv(@cocina.structural), filename: filename
+      end
+      format.html do
+        # Lazy loading of the structural part of the show page
+        @cocina_item = Repository.find(decrypted_token.fetch(:key))
       end
     end
   end
@@ -32,5 +38,10 @@ class StructuresController < ApplicationController
   def load_and_authorize_cocina
     @cocina = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina
+  end
+
+  # decode the token that grants view access
+  def decrypted_token
+    Argo.verifier.verified(params[:item_id], purpose: :view_token)
   end
 end
