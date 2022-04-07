@@ -266,6 +266,7 @@ RSpec.describe 'Item view', js: true do
             expect(page).to have_css 'tr td', text: /Searchworks/
             expect(page).to have_css 'tr td', text: /pjreed/
 
+            click_button 'Datastreams' # Open the datastream accordion
             click_link 'descMetadata' # Open the datastream modal
             within '.code' do
               expect(page).to have_content '<title>Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</title>'
