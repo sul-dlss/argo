@@ -56,9 +56,9 @@ class ApoForm < ApplicationChangeSet
 
   def save_model
     @model = if persisted?
-               AdminPolicyChangeSetPersister.update(model, self)
+               AdminPolicyPersister.update(model, self)
              else
-               AdminPolicyChangeSetPersister.create(self)
+               AdminPolicyPersister.create(self)
              end
   end
 
