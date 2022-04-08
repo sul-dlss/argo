@@ -23,20 +23,34 @@ class StructureUpdater
   # @return [Bool] true if there are no problems
   def validate
     @errors = []
-    # Ensure all files in the csv are present in the existing object and ensure no existing files change preserve from no to yes
     csv.each.with_index(2) do |row, index|
-      if !existing_files_by_filename.key?(row['filename'])
-        errors << "On row #{index} found #{row['filename']}, which appears to be a new file"
-      elsif !existing_files_by_filename[row['filename']].administrative.sdrPreserve && row['preserve'] == 'yes'
-        errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported"
-      end
-      # ensure all supplied resource types are valid
-      unless Cocina::Models::FileSetType.properties.key?(row['resource_type'].to_sym)
-        errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type"
-      end
+      errors << "On row #{index} found #{row['filename']}, which appears to be a new file" unless existing_file?(row)
+      errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported" if invalid_preservation_change?(row)
+      errors << "On row #{index} found #{row['filename']}, which set view or download rights to location-based but did not specify a location" if invalid_location_rights?(row)
+      errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type" if invalid_resource_type?(row)
     end
     csv.rewind
     errors.empty?
+  end
+
+  # Ensure all files in the csv are present in the existing object
+  def existing_file?(row)
+    existing_files_by_filename.key?(row['filename'])
+  end
+
+  # Ensure no existing files change preserve from no to yes
+  def invalid_preservation_change?(row)
+    existing_file?(row) && existing_files_by_filename[row['filename']].administrative.sdrPreserve == false && row['preserve'] == 'yes'
+  end
+
+  # Ensure no existing files set location-based access without specifying a location
+  def invalid_location_rights?(row)
+    existing_file?(row) && [row['rights_view'], row['rights_download']].include?('location-based') && row['rights_location'].blank?
+  end
+
+  # Ensure all supplied resource types are valid
+  def invalid_resource_type?(row)
+    !Cocina::Models::FileSetType.properties.key?(row['resource_type'].to_sym)
   end
 
   def existing_files_by_filename
@@ -57,8 +71,9 @@ class StructureUpdater
         sdrPreserve: row['preserve'] == 'yes'
       ),
       access: existing_file.access.new(
-        view: row['rights_access'],
-        download: row['rights_download']
+        view: row['rights_view'],
+        download: row['rights_download'],
+        location: row['rights_location']
       )
     }
     attributes[:use] = row['role'] if row['role'] # nil is not permitted

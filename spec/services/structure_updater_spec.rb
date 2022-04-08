@@ -202,11 +202,11 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that has file properties changed' do
     let(:csv) do
       <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/one,
-        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/two,transcription
-        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/three,
-        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/four,
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/one,
+        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription
+        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,
+        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,location-based,music,image/four,
       CSV
     end
 
@@ -225,9 +225,9 @@ RSpec.describe StructureUpdater do
       new_file_mime = new_files.map(&:hasMimeType)
       expect(new_file_mime).to eq ['image/one', 'image/two', 'image/three', 'image/four']
 
-      access = new_files.map { |file| [file.access.view, file.access.download] }
+      access = new_files.map { |file| [file.access.view, file.access.download, file.access.location] }
       expect(access).to eq [
-        %w[stanford none], %w[world world], %w[stanford none], %w[world world]
+        ['stanford', 'none', nil], ['world', 'world', nil], ['stanford', 'none', nil], %w[location-based location-based music]
       ]
 
       use = new_files.map(&:use)
@@ -238,11 +238,11 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that has fileset properties changed' do
     let(:csv) do
       <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
-        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/jp2,
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
       CSV
     end
 
@@ -263,11 +263,11 @@ RSpec.describe StructureUpdater do
   context 'with invalid csv' do
     let(:csv) do
       <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Image 1,image,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,image/tiff,
-        Image 1,image,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
-        Image 2,image,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,image/tiff,
-        Image 2,paper,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Image 1,image,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,,image/tiff,
+        Image 1,image,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,,image/jp2,
+        Image 2,image,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,,image/tiff,
+        Image 2,paper,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,,image/jp2,
       CSV
     end
 
@@ -285,17 +285,35 @@ RSpec.describe StructureUpdater do
   context 'with switching preservation from no to yes for a file in the csv' do
     let(:csv) do
       <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
-        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,,image/jp2,
       CSV
     end
 
     it 'returns errors' do
       expect(result.failure).to eq [
         'On row 5 found bb045jk9908_0002.jp2, which changed preserve from no to yes, which is not supported'
+      ]
+    end
+  end
+
+  context 'with specify location-based rights and no location' do
+    let(:csv) do
+      <<~CSV
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,world,,image/jp2,
+      CSV
+    end
+
+    it 'returns errors' do
+      expect(result.failure).to eq [
+        'On row 5 found bb045jk9908_0002.jp2, which set view or download rights to location-based but did not specify a location'
       ]
     end
   end
