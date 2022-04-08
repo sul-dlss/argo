@@ -10,7 +10,7 @@ class DescriptivesController < ApplicationController
   # Handle upload of the spreadsheet
   def create
     csv = CSV.read(params[:data].tempfile, headers: true)
-    mapping_result = DescriptionImport.import(description: @cocina.description, csv_row: csv.first)
+    mapping_result = DescriptionImport.import(csv_row: csv.first)
     mapping_result.either(->(description) { convert_metdata_success(description: description) },
                           ->(error) { convert_metadata_fail(error) })
   end

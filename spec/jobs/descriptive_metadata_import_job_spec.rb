@@ -11,9 +11,9 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
 
   let(:csv_file) do
     [
-      'druid,source_id,title1:value',
-      [item1.externalIdentifier, item1.identification.sourceId, 'new title 1'].join(','),
-      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2'].join(',')
+      'druid,source_id,title1:value,purl',
+      [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'https://purl'].join(','),
+      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'https://purl'].join(',')
     ].join("\n")
   end
 
@@ -38,11 +38,11 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       let(:ability) { instance_double(Ability, can?: true) }
 
       let(:expected1) do
-        item1.new(description: item1.description.new(title: [{ value: 'new title 1' }]))
+        item1.new(description: item1.description.new(title: [{ value: 'new title 1' }], purl: 'https://purl'))
       end
 
       let(:expected2) do
-        item2.new(description: item2.description.new(title: [{ value: 'new title 2' }]))
+        item2.new(description: item2.description.new(title: [{ value: 'new title 2' }], purl: 'https://purl'))
       end
 
       it 'updates the descriptive metadata for each item' do
