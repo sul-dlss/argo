@@ -3,8 +3,19 @@
     Set collection
   </span>
   <div class='mb-3'>
+    <template data-nested-form-target='template'>
+      <%= f.label :new_collection_id, 'Collection:' %>
+      <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: 'form-select') %>
+    </template>
+
     <%= f.label :new_collection_id, 'Collection:' %>
     <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: 'form-select') %>
+
+    <div data-nested-form-target="add_collection">
+      <button class='btn btn-primary' data-action="nested-form#addAssociation">
+        Add Collection
+      </button>
+    </div>
   </div>
   <%= render 'bulk_actions/druids', f: f %>
   <%= render 'bulk_actions/common_fields', f: f %>

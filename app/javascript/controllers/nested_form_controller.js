@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = ["add_item", "template"]
+  static targets = ["add_item", "template", "add_collection"]
   static values = { selector: String }
 
   addAssociation(event) {
