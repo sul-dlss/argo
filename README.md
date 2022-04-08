@@ -32,7 +32,7 @@ Note that `bundle install` may complain if MySQL isn't installed.  You can eithe
 Install foreman for local development (foreman is not supposed to be in the Gemfile, See this [wiki article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman)):
 
 ```bash
-bundle install foreman
+gem install foreman
 ```
 
 ## Local Development TLDR
@@ -40,6 +40,7 @@ bundle install foreman
 Brings up app at localhost:3000 with some test data:
 
 ```
+gem install foreman
 docker compose up -d
 docker compose stop web
 bin/dev
