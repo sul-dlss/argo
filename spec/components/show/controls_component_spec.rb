@@ -41,8 +41,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
         expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
-        expect(page).to have_link 'Download CSV', href: '/items/druid:kv840xx0000/descriptive.csv'
-        expect(page).to have_link 'Upload CSV', href: '/items/druid:kv840xx0000/descriptive/new'
+        expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
+        expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/new'
 
         expect(rendered.css('a').size).to eq 10
         expect(rendered.css('a.disabled').size).to eq 3 # purge, publish/unpublish are disabled
@@ -78,8 +78,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
-        expect(page).to have_link 'Download CSV', href: '/items/druid:kv840xx0000/descriptive.csv'
-        expect(page).to have_link 'Upload CSV', href: '/items/druid:kv840xx0000/descriptive/new'
+        expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
+        expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/new'
 
         # these buttons are disabled since object is locked
         expect(page).to have_css 'a.disabled', text: 'Create embargo'

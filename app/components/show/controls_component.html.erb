@@ -42,8 +42,8 @@
                                      class: "dropdown-item #{'disabled' if button_disabled?}",
                                      data: { turbo_method: 'post' } %></li>
         <% end %>
-        <li><%= link_to 'Download CSV', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>
-        <li><%= link_to 'Upload CSV', new_item_descriptive_path(doc),
+        <li><%= link_to 'Download Cocina spreadsheet', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>
+        <li><%= link_to 'Upload Cocina spreadsheet', new_item_descriptive_path(doc),
                                       class: 'dropdown-item',
                                       data: { controller: 'button', action: 'click->button#open'} %></li>
         <% if symphony_record? %>
