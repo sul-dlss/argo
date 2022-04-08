@@ -3,13 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DescriptionImport do
-  subject(:updated) { described_class.import(description: description, csv_row: csv.first) }
-
-  let(:description) do
-    Cocina::Models::Description.new(
-      { title: [{ value: 'Original title' }], purl: 'https://bad.stanford.edu/zt570qh4444' }
-    )
-  end
+  subject(:updated) { described_class.import(csv_row: csv.first) }
 
   let(:expected_json) do
     <<~JSON
@@ -194,6 +188,21 @@ RSpec.describe DescriptionImport do
 
     it 'returns an error' do
       expect(updated).to be_failure
+    end
+  end
+
+  context 'with a csv that has nil values' do
+    # This case occurs when you do a bulk export of a dense and a sparse object on the same sheet
+    let(:csv) do
+      CSV.parse("access:accessContact1:source:code,title1:value,purl\n,my title,https://purl\n", headers: true)
+    end
+
+    let(:expected) do
+      Cocina::Models::Description.new(title: [{ value: 'my title' }], purl: 'https://purl')
+    end
+
+    it 'ignores the empty field' do
+      expect(updated.value!).to eq expected
     end
   end
 end
