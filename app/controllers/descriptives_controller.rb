@@ -10,21 +10,9 @@ class DescriptivesController < ApplicationController
   # Handle upload of the spreadsheet
   def create
     csv = CSV.read(params[:data].tempfile, headers: true)
-    updated_description = DescriptionImport.import(description: @cocina.description, csv: csv)
-    if updated_description.success?
-      begin
-        Repository.store(@cocina.new(description: updated_description.value!))
-        redirect_to solr_document_path(@cocina.externalIdentifier),
-                    status: :see_other,
-                    notice: 'Descriptive metadata has been updated.'
-      rescue Dor::Services::Client::UnexpectedResponse => e
-        @error = "unexpected response from dor-services-app: #{e.message}"
-        render :new, status: :unprocessable_entity
-      end
-    else
-      @error = "There was a problem processing the spreadsheet: #{updated_description.failure}"
-      render :new, status: :unprocessable_entity
-    end
+    mapping_result = DescriptionImport.import(description: @cocina.description, csv_row: csv.first)
+    mapping_result.either(->(description) { convert_metdata_success(description: description) },
+                          ->(error) { convert_metadata_fail(error) })
   end
 
   # Handle download of the spreadsheet
@@ -38,6 +26,21 @@ class DescriptivesController < ApplicationController
   end
 
   private
+
+  def convert_metdata_success(description:)
+    Repository.store(@cocina.new(description: description))
+    redirect_to solr_document_path(@cocina.externalIdentifier),
+                status: :see_other,
+                notice: 'Descriptive metadata has been updated.'
+  rescue Dor::Services::Client::UnexpectedResponse => e
+    @error = "unexpected response from dor-services-app: #{e.message}"
+    render :new, status: :unprocessable_entity
+  end
+
+  def convert_metadata_fail(failure)
+    @error = "There was a problem processing the spreadsheet: #{failure}"
+    render :new, status: :unprocessable_entity
+  end
 
   def load_and_authorize_cocina
     @cocina = Repository.find(params[:item_id])

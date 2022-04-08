@@ -41,6 +41,7 @@ Rails.application.routes.draw do
         resource :register_druid_job, only: %i[new create]
 
         resource :descriptive_metadata_export_job, only: %i[new create]
+        resource :descriptive_metadata_import_job, only: %i[new create]
         resource :download_mods_job, only: %i[new create]
         resource :checksum_report_job, only: %i[new create]
       end

@@ -3,26 +3,26 @@
 class DescriptionImport
   include Dry::Monads[:result]
 
-  def self.import(description:, csv:)
-    new(description: description, csv: csv).import
+  def self.import(description:, csv_row:)
+    new(description: description, csv_row: csv_row).import
   end
 
-  def initialize(description:, csv:)
+  def initialize(description:, csv_row:)
     @description = description
-    @csv = csv
+    @csv_row = csv_row
   end
 
   def import
     params = @description.to_h
 
-    row = @csv.first
-    # The source_id is only there for the user to reference and should be ignored for data processing
-    headers = row.headers.excluding('source_id')
+    # The source_id and druid are only there for the user to reference and should be ignored for data processing
+    # druid is only on the bulk sheet
+    headers = @csv_row.headers.excluding('source_id', 'druid')
 
     headers.each do |address|
       split_address = address.scan(/[[:alpha:]]+|[[:digit:]]+/)
                              .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
-      visit(params, split_address, row[address])
+      visit(params, split_address, @csv_row[address])
     end
 
     Success(Cocina::Models::Description.new(params))
