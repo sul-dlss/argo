@@ -62,10 +62,10 @@ class GenericJob < ApplicationJob
   # and records them as failures.
   # @param [Array<String>] druids the list of identifiers to operate on
   # @param [String] name the name of the operation for logging
-  # @yieldparam [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] cocina_object
-  # @yieldparam [Proc] success call this with a message if the operation was successful
-  # @yieldparam [Proc] failure call this with a message if the operation was unsuccessful
-  # @yieldparam [Integer] index
+  # @yieldparam [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] the cocina item
+  # @yieldparam [Proc] call this with a message if the operation was successful
+  # @yieldparam [Proc] call this with a message if the operation was unsuccessful
+  # @yieldparam [Integer] the current index of the druid being processed
   # @example
   #   with_items(druids, name: 'my operation') do |cocina_object, success, failure|
   #     if operate_on(cocina_object)
@@ -91,6 +91,50 @@ class GenericJob < ApplicationJob
         yield(cocina_object, success, failure, idx)
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
+        Honeybadger.notify(e, context: { druid: druid })
+      end
+    end
+  end
+
+  ##
+  # Loops through a csv containing a druid and loads the cocina item for each. This takes
+  # care of incrementing success and fail counts in the job. It also rescues errors
+  # and records them as failures.
+  # @param [CSV] csv the spreadsheet to operate on
+  # @param [String] druid_column ('druid') the header of the column that holds the druid
+  # @param [String] name the name of the operation for logging
+  # @yieldparam [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] the cocina item
+  # @yieldparam [CSV::Row] one line from the spreadsheet
+  # @yieldparam [Proc] call this proc with a message if the operation was successful
+  # @yieldparam [Proc] call this proc with a message if the operation was unsuccessful
+  # @yieldparam [Integer] the row number being processed
+  # @example
+  #   with_csv_items(csv, name: 'my operation') do |cocina_object, csv_row, success, failure|
+  #     if operate_on(cocina_object)
+  #       success.call("Looks good")
+  #     else
+  #       failure.call("Something went wrong")
+  #     end
+  #   end
+  def with_csv_items(csv, name:, druid_column: 'druid')
+    update_druid_count(count: csv.size)
+    with_bulk_action_log do |log|
+      csv.each.with_index(2) do |csv_row, row_num|
+        druid = csv_row.fetch(druid_column)
+
+        success = lambda { |message|
+          bulk_action.increment(:druid_count_success).save
+          log.puts("Line #{row_num}: #{message} for #{druid} (#{Time.current})")
+        }
+        failure = lambda { |message|
+          bulk_action.increment(:druid_count_fail).save
+          log.puts("Line #{row_num}: #{message} for #{druid} (#{Time.current})")
+        }
+
+        cocina_object = Repository.find(druid)
+        yield(cocina_object, csv_row, success, failure, row_num)
+      rescue StandardError => e
+        failure.call("Line #{row_num}: #{name} failed #{e.class} #{e.message}")
         Honeybadger.notify(e, context: { druid: druid })
       end
     end

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DescriptionImport do
-  subject(:updated) { described_class.import(description: description, csv: csv) }
+  subject(:updated) { described_class.import(description: description, csv_row: csv.first) }
 
   let(:description) do
     Cocina::Models::Description.new(

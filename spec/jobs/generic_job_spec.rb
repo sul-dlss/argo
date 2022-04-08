@@ -12,14 +12,11 @@ class GenericTestJob < GenericJob
 end
 
 RSpec.describe GenericJob do
-  let(:bulk_action) do
-    create(
-      :bulk_action,
-      action_type: 'GenericJob'
-    )
-  end
+  let(:bulk_action) { create(:bulk_action) }
 
   before do
+    # Load up a decendant of GenericJob. Needed for validating the action_type (since lazy loading is used in the test env)
+    RemoteIndexingJob # rubocop:disable Lint/Void
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
   end
 
