@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AdminPolicyChangeSetPersister do
+RSpec.describe AdminPolicyPersister do
   let(:fake_tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:instance) { described_class.new(apo, change_set) }
 

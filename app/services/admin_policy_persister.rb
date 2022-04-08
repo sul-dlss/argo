@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Writes changes on an AdminPolicy to the to the dor-services-app API
-class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
+class AdminPolicyPersister # rubocop:disable Metrics/ClassLength
   # @param [Cocina::Models::AdminPolicy] model the orignal state of the model
   # @param [ApoForm] form the values to update.
   # @return [Cocina::Models::AdminPolicy] the model with updates applied
