@@ -23,6 +23,8 @@ export_structural_job:
   csv_filename: 'structural_metadata.csv'
 register_druids_job:
   csv_filename: 'registration_report.csv'
+tracking_sheet_report_job:
+  pdf_filename: 'tracking_sheet.pdf'
 
 descriptive_metadata_export_job:
   csv_filename: 'descriptive.csv'
