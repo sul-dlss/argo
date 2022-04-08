@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../spec/support/create_strategy_repository_pattern'
-require_relative '../../spec/support/item_method_sender'
-require_relative '../../spec/support/apo_method_sender'
-require_relative '../../spec/support/reset_solr'
-
 def apo_field_default
   'apo_register_permissions_ssim'
 end
@@ -29,15 +24,23 @@ end
 namespace :argo do
   desc 'Create test items, specify number to create as argument'
   task :register_items, [:n] => :environment do |t, args|
-    n = args[:n].to_i
     raise '*** Only works in development mode!' unless Rails.env.development?
 
+    require_relative '../../spec/support/create_strategy_repository_pattern'
+    require_relative '../../spec/support/item_method_sender'
+
+    n = args[:n].to_i
     n.times { FactoryBot.create_for_repository(:item) }
   end
 
   desc 'Seed APO, collection and item, useful for local development'
   task seed_data: :environment do
     raise '*** Only works in development mode!' unless Rails.env.development?
+
+    require_relative '../../spec/support/create_strategy_repository_pattern'
+    require_relative '../../spec/support/item_method_sender'
+    require_relative '../../spec/support/apo_method_sender'
+    require_relative '../../spec/support/reset_solr'
 
     $stdout.puts 'This will clear the Solr repo. Are you sure? [y/n]:'
     if $stdin.gets.chomp == 'y'
