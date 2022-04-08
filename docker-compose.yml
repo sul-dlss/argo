@@ -29,6 +29,8 @@ services:
       SOLR_URL: http://solr:8983/solr/argo
     depends_on:
       - dor-indexing-app
+    # To allow yarn --watch from Procfile.dev to continue after stdin is closed
+    tty: true
 
   dor-indexing-app:
     image: suldlss/dor-indexing-app:latest

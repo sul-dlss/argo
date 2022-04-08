@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # Provide some default values that allow the user to login.
 # In a production like environment these are provided by the webserver/Shibboleth/LDAP
