@@ -51,7 +51,7 @@ RSpec.describe StructureSerializer do
 
     it 'serializes to CSV' do
       expect(csv).to eq <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
       CSV
     end
   end
@@ -223,8 +223,9 @@ RSpec.describe StructureSerializer do
                         }
                       ],
                       "access": {
-                        "view": "world",
-                        "download": "world"
+                        "view": "location-based",
+                        "download": "location-based",
+                        "location": "music"
                       },
                       "administrative": {
                         "publish": true,
@@ -247,11 +248,11 @@ RSpec.describe StructureSerializer do
 
     it 'serializes to CSV' do
       expect(csv).to eq <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,image/tiff,
-        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
-        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,image/tiff,
-        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/jp2,
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,,image/tiff,
+        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,,image/tiff,
+        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,location-based,music,image/jp2,
       CSV
     end
   end

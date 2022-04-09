@@ -2,7 +2,7 @@
 
 class StructureSerializer
   HEADERS = %w[resource_label resource_type sequence filename file_label publish
-               shelve preserve rights_access rights_download mimetype role].freeze
+               shelve preserve rights_view rights_download rights_location mimetype role].freeze
 
   def self.as_csv(structural)
     new(structural).as_csv
@@ -27,7 +27,7 @@ class StructureSerializer
         yield [resource.label, type(resource), n, file.filename, file.label,
                to_yes_no(file.administrative.publish), to_yes_no(file.administrative.shelve),
                to_yes_no(file.administrative.sdrPreserve), file.access.view,
-               file.access.download, file.hasMimeType, file.use]
+               file.access.download, file.access.location, file.hasMimeType, file.use]
       end
     end
   end
