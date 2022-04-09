@@ -6,16 +6,7 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, state_service: state_service) }
   let(:cocina) do
-    Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bc234fg5678',
-                                    type: Cocina::Models::ObjectType.admin_policy,
-                                    label: '',
-                                    version: 1,
-                                    administrative: {
-                                      hasAdminPolicy: 'druid:hv992ry2431',
-                                      hasAgreement: 'druid:hp308wm0436',
-                                      accessTemplate: { view: 'world', download: 'world' },
-                                      registrationWorkflow: %w[registrationWF goobiWF]
-                                    })
+    build(:admin_policy, registration_workflow: %w[registrationWF goobiWF])
   end
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }
@@ -38,16 +29,7 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
 
   context 'when the APO has no registration workflow' do
     let(:cocina) do
-      Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bc234fg5678',
-                                      type: Cocina::Models::ObjectType.admin_policy,
-                                      label: '',
-                                      version: 1,
-                                      administrative: {
-                                        hasAdminPolicy: 'druid:hv992ry2431',
-                                        hasAgreement: 'druid:hp308wm0436',
-                                        accessTemplate: { view: 'world', download: 'world' },
-                                        registrationWorkflow: []
-                                      })
+      build(:admin_policy)
     end
 
     it 'renders "None"' do

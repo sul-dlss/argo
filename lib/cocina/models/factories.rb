@@ -2,7 +2,7 @@
 
 module Cocina
   module Models
-    class Factories
+    class Factories # rubocop:disable Metrics/ClassLength
       module Methods
         def build(type, ...)
           # If we don't support this factory, maybe factory_bot does.
@@ -11,7 +11,7 @@ module Cocina
       end
 
       def self.supported_type?(type)
-        %i[dro collection].include?(type)
+        %i[dro collection admin_policy].include?(type)
       end
 
       def self.build(type, attributes = {})
@@ -31,6 +31,16 @@ module Cocina
       }.freeze
 
       COLLECTION_DEFAULTS = DRO_DEFAULTS.except(:source_id).merge(type: Cocina::Models::ObjectType.collection)
+
+      ADMIN_POLICY_DEFAULTS = {
+        type: Cocina::Models::ObjectType.admin_policy,
+        id: 'druid:bc234fg5678',
+        version: 1,
+        label: 'test admin policy',
+        title: 'test admin policy',
+        admin_policy_id: 'druid:hv992ry2431',
+        agreement_id: 'druid:hp308wm0436'
+      }.freeze
 
       # rubocop:disable Metrics/ParameterLists
       def self.build_dro_properties(type:, id:, version:, label:, title:, source_id:, admin_policy_id:,
@@ -87,6 +97,42 @@ module Cocina
       def self.build_collection(attributes)
         Cocina::Models.build(build_collection_properties(**COLLECTION_DEFAULTS.merge(attributes)))
       end
+
+      def self.build_admin_policy(attributes)
+        Cocina::Models.build(build_admin_policy_properties(**ADMIN_POLICY_DEFAULTS.merge(attributes)))
+      end
+
+      # rubocop:disable Metrics/ParameterLists
+      def self.build_admin_policy_properties(type:, id:, version:, label:, title:,
+                                             admin_policy_id:, agreement_id:,
+                                             use_statement: nil, copyright: nil, license: nil,
+                                             registration_workflow: nil, collections_for_registration: nil)
+        {
+          type: type,
+          externalIdentifier: id,
+          version: version,
+          label: label,
+          administrative: {
+            hasAdminPolicy: admin_policy_id,
+            hasAgreement: agreement_id,
+            accessTemplate: {
+              view: 'world',
+              download: 'world'
+            }
+          },
+          description: {
+            title: [{ value: title }],
+            purl: "https://purl.stanford.edu/#{id.delete_prefix('druid:')}"
+          }
+        }.tap do |props|
+          props[:administrative][:accessTemplate][:useAndReproductionStatement] = use_statement if use_statement
+          props[:administrative][:accessTemplate][:copyright] = copyright if copyright
+          props[:administrative][:accessTemplate][:license] = license if license
+          props[:administrative][:registrationWorkflow] = registration_workflow if registration_workflow
+          props[:administrative][:collectionsForRegistration] = collections_for_registration if collections_for_registration
+        end
+      end
+      # rubocop:enable Metrics/ParameterLists
     end
   end
 end

@@ -24,15 +24,7 @@ RSpec.describe Ability do
   end
 
   let(:admin_policy) do
-    Cocina::Models::AdminPolicy.new(externalIdentifier: new_cocina_object_id,
-                                    label: 'test',
-                                    type: Cocina::Models::ObjectType.admin_policy,
-                                    version: 1,
-                                    administrative: {
-                                      hasAdminPolicy: apo_id,
-                                      hasAgreement: 'druid:hp308wm0436',
-                                      accessTemplate: { view: 'world', download: 'world' }
-                                    })
+    build(:admin_policy, id: new_cocina_object_id, admin_policy_id: apo_id)
   end
 
   let(:collection) do

@@ -12,24 +12,7 @@ RSpec.describe AdminPolicyPersister do
 
   context 'with a persisted model (update)' do
     let(:apo) do
-      Cocina::Models::AdminPolicy.new(
-        externalIdentifier: 'druid:zt570qh4444',
-        version: 1,
-        administrative: administrative,
-        label: 'My title',
-        type: Cocina::Models::ObjectType.admin_policy,
-        description: {
-          title: [{ value: 'Exsiting title' }],
-          purl: 'https://purl.stanford.edu/zt570qh4444'
-        }
-      )
-    end
-    let(:administrative) do
-      {
-        hasAdminPolicy: 'druid:xx666zz7777',
-        hasAgreement: 'druid:hp308wm0436',
-        accessTemplate: { view: 'world', download: 'world' }
-      }
+      build(:admin_policy, id: 'druid:zt570qh4444', admin_policy_id: 'druid:xx666zz7777')
     end
 
     let(:use_statement) { 'My use and reproduction statement' }

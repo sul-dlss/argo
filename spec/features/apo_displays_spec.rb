@@ -14,17 +14,7 @@ RSpec.describe 'Viewing an Admin policy' do
     ]
   end
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The APO',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => apo_druid,
-                           'administrative' => {
-                             hasAdminPolicy: 'druid:hv992ry2431',
-                             hasAgreement: 'druid:hp308wm0436',
-                             accessTemplate: { view: 'world', download: 'world' }
-                           }
-                         })
+    build(:admin_policy)
   end
 
   let(:solr_doc) { { id: apo_druid } }

@@ -17,33 +17,11 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The APO',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => druid,
-                           'administrative' => {
-                             hasAdminPolicy: 'druid:hv992ry2431',
-                             hasAgreement: 'druid:hp308wm0436',
-                             collectionsForRegistration: ['druid:1', collection_id],
-                             accessTemplate: { view: 'world', download: 'world' }
-                           }
-                         })
+    build(:admin_policy, collections_for_registration: ['druid:1', collection_id])
   end
 
   let(:expected) do
-    Cocina::Models.build({
-                           'label' => 'The APO',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => druid,
-                           'administrative' => {
-                             hasAdminPolicy: 'druid:hv992ry2431',
-                             hasAgreement: 'druid:hp308wm0436',
-                             collectionsForRegistration: ['druid:1'], # only one collection now
-                             accessTemplate: { view: 'world', download: 'world' }
-                           }
-                         })
+    build(:admin_policy, collections_for_registration: ['druid:1']) # only one collection now
   end
 
   it 'calls remove_default_collection' do
