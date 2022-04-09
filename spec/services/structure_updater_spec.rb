@@ -276,8 +276,8 @@ RSpec.describe StructureUpdater do
         'On row 2 found bb045jk_0001.tiff, which appears to be a new file',
         'On row 3 found bb045jk_0001.jp2, which appears to be a new file',
         'On row 4 found bb045jk_0002.tiff, which appears to be a new file',
-        'On row 5 found bb045jk_0002.jp2, which appears to be a new file',
-        'On row 5 found "paper", which is not a valid resource type'
+        'On row 5 found "paper", which is not a valid resource type',
+        'On row 5 found bb045jk_0002.jp2, which appears to be a new file'
       ]
     end
   end

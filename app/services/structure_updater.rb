@@ -24,10 +24,13 @@ class StructureUpdater
   def validate
     @errors = []
     csv.each.with_index(2) do |row, index|
-      errors << "On row #{index} found #{row['filename']}, which appears to be a new file" unless existing_file?(row)
+      errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type" if invalid_resource_type?(row)
+      unless existing_file?(row)
+        errors << "On row #{index} found #{row['filename']}, which appears to be a new file"
+        next
+      end
       errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported" if invalid_preservation_change?(row)
       errors << "On row #{index} found #{row['filename']}, which set view or download rights to location-based but did not specify a location" if invalid_location_rights?(row)
-      errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type" if invalid_resource_type?(row)
     end
     csv.rewind
     errors.empty?
@@ -40,12 +43,12 @@ class StructureUpdater
 
   # Ensure no existing files change preserve from no to yes
   def invalid_preservation_change?(row)
-    existing_file?(row) && existing_files_by_filename[row['filename']].administrative.sdrPreserve == false && row['preserve'] == 'yes'
+    existing_files_by_filename[row['filename']].administrative.sdrPreserve == false && row['preserve'] == 'yes'
   end
 
   # Ensure no existing files set location-based access without specifying a location
   def invalid_location_rights?(row)
-    existing_file?(row) && [row['rights_view'], row['rights_download']].include?('location-based') && row['rights_location'].blank?
+    [row['rights_view'], row['rights_download']].include?('location-based') && row['rights_location'].blank?
   end
 
   # Ensure all supplied resource types are valid
