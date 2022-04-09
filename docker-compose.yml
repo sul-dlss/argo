@@ -27,6 +27,8 @@ services:
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
       SOLR_URL: http://solr:8983/solr/argo
+      # Docker doesn't allow rails server to remove PID on shutdown
+      PID_FILE: /dev/null
     depends_on:
       - dor-indexing-app
     # To allow yarn --watch from Procfile.dev to continue after stdin is closed
