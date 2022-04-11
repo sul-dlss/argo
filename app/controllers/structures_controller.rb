@@ -2,14 +2,14 @@
 
 # dispatches to the dor-services-app to (re/un)publish
 class StructuresController < ApplicationController
-  before_action :load_and_authorize_cocina, only: :update
+  before_action :load_and_authorize_resource, only: :update
   before_action :enforce_versioning, only: :update
 
   def show
     respond_to do |format|
       format.csv do
         # Download the structural spreadsheet
-        load_and_authorize_cocina
+        load_and_authorize_resource
         filename = "structure-#{Druid.new(@cocina).without_namespace}.csv"
         send_data StructureSerializer.as_csv(@cocina.structural), filename: filename
       end
@@ -21,8 +21,6 @@ class StructuresController < ApplicationController
   end
 
   def update
-    authorize! :manage_item, @cocina
-
     status = StructureUpdater.from_csv(@cocina, params[:csv].read)
 
     if status.success?
@@ -35,7 +33,7 @@ class StructuresController < ApplicationController
 
   private
 
-  def load_and_authorize_cocina
+  def load_and_authorize_resource
     @cocina = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina
   end

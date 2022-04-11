@@ -2,7 +2,7 @@
 
 # Download the CSV descriptive metadata
 class DescriptivesController < ApplicationController
-  before_action :load_and_authorize_cocina
+  before_action :load_and_authorize_resource
 
   # Display the form for uploading the descriptive metadata spreadsheet
   def new; end
@@ -42,7 +42,7 @@ class DescriptivesController < ApplicationController
     render :new, status: :unprocessable_entity
   end
 
-  def load_and_authorize_cocina
+  def load_and_authorize_resource
     @cocina = Repository.find(params[:item_id])
     authorize! :manage_item, @cocina
   end
