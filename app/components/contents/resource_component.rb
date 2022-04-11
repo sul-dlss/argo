@@ -2,9 +2,9 @@
 
 module Contents
   class ResourceComponent < ViewComponent::Base
-    def initialize(resource:, resource_counter:, object_id:, viewable:)
+    def initialize(resource:, resource_counter:, counter_offset:, object_id:, viewable:)
       @resource = resource
-      @resource_counter = resource_counter
+      @resource_counter = resource_counter + counter_offset
       @object_id = object_id
       @viewable = viewable
     end

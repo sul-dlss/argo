@@ -3,7 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Contents::ResourceComponent, type: :component do
-  let(:component) { described_class.new(resource: resource, resource_counter: 1, object_id: 'druid:kb487gt5106', viewable: true) }
+  let(:component) do
+    described_class.new(resource: resource,
+                        resource_counter: 1,
+                        counter_offset: 50,
+                        object_id: 'druid:kb487gt5106',
+                        viewable: true)
+  end
   let(:rendered) { render_inline(component) }
   let(:resource) do
     instance_double(Cocina::Models::FileSet,
@@ -36,6 +42,7 @@ RSpec.describe Contents::ResourceComponent, type: :component do
 
   context 'with an image' do
     it 'renders the component' do
+      expect(rendered.to_html).to include 'Resource (51)'
       expect(rendered.to_html).to include 'Type'
       expect(rendered.to_html).to include 'Height'
       expect(rendered.to_html).to include 'Width'
