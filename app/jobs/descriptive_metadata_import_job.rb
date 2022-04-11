@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'roo'
+
 class DescriptiveMetadataImportJob < GenericJob
   queue_as :default
 
@@ -14,7 +16,14 @@ class DescriptiveMetadataImportJob < GenericJob
   # @option params [String] :use_barcodes_option option to update the barcodes
   def perform(bulk_action_id, params)
     super
-    csv = CSV.parse(params[:csv_file], headers: true)
+    # uploaded_file is the file provided by the user, it can be a CSV, ODS or Excel file (xls or xlsx)
+    uploaded_file = params[:uploaded_file]
+
+    raise 'Unsupported upload file type' unless %w[.csv .ods .xls .xlsx].include? File.extname(uploaded_file)
+
+    spreadsheet = Roo::Spreadsheet.open(uploaded_file) # open the spreadsheet
+
+    csv = CSV.parse(spreadsheet.to_csv, headers: true) # convert data to CSV and then parse by the CSV library as done in other parts of Argo
     with_csv_items(csv, name: 'Import descriptive metadata') do |cocina_object, csv_row, success, failure|
       next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 

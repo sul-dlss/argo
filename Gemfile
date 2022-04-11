@@ -52,6 +52,9 @@ gem 'honeybadger', '~> 4.1'
 gem 'lograge'
 gem 'sidekiq', '~> 6.0'
 
+gem 'roo', '~> 2.9.0' # work with newer Excel files and other types (xlsx, ods, csv)
+gem 'roo-xls' # needed to work with legacy Excel files (xls)
+
 gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.12'
 # Prawn is used to create "tracksheets"
