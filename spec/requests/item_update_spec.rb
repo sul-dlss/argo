@@ -109,7 +109,7 @@ RSpec.describe 'Set the properties for an item' do
         build(:dro).new(access: existing_access, structural: existing_structural)
       end
 
-      let(:existing_access) { {} }
+      let(:existing_access) { { view: 'world', download: 'none'} }
       let(:existing_structural) do
         {
           contains: [

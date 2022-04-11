@@ -21,9 +21,9 @@ class Catkey
   # @return [Array<Hash>] a list of catalog links
   def serialize(new_catkeys)
     removed_links = symphony_links - new_catkeys
-    links = (previous_links + removed_links).map { |record_id| { catalog: PREVIOUS_CATKEY, catalogRecordId: record_id } }.uniq
+    links = (previous_links + removed_links).map { |record_id| { catalog: PREVIOUS_CATKEY, catalogRecordId: record_id, refresh: false } }.uniq
 
-    links + new_catkeys.map { |record_id| { catalog: SYMPHONY, catalogRecordId: record_id } }
+    links + new_catkeys.map.with_index { |record_id, index| { catalog: SYMPHONY, catalogRecordId: record_id, refresh: index.zero? } }
   end
 
   def symphony_links

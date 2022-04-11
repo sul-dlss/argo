@@ -41,7 +41,7 @@ RSpec.describe ItemChangeSetPersister do
         },
         identification: {
           barcode: barcode_before,
-          catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }],
+          catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before, refresh: true }],
           sourceId: 'sul:1234'
         },
         structural: {},
@@ -289,7 +289,7 @@ RSpec.describe ItemChangeSetPersister do
           cocina_object_with(
             identification: {
               barcode: new_barcode,
-              catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+              catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before, refresh: true }]
             }
           )
         )
@@ -307,7 +307,7 @@ RSpec.describe ItemChangeSetPersister do
           cocina_object_with(
             identification: {
               barcode: nil,
-              catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+              catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before, refresh: true }]
             }
           )
         )
@@ -328,8 +328,8 @@ RSpec.describe ItemChangeSetPersister do
             identification: {
               barcode: barcode_before,
               catalogLinks: [
-                { catalog: 'previous symphony', catalogRecordId: catkey_before },
-                { catalog: 'symphony', catalogRecordId: new_catkeys.first }
+                { catalog: 'previous symphony', catalogRecordId: catkey_before, refresh: false },
+                { catalog: 'symphony', catalogRecordId: new_catkeys.first, refresh: true }
               ]
             }
           )
@@ -347,7 +347,7 @@ RSpec.describe ItemChangeSetPersister do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             identification: {
-              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: catkey_before }],
+              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: catkey_before, refresh: false }],
               barcode: barcode_before
             }
           )

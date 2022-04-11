@@ -46,7 +46,7 @@ class AgreementForm < Reform::Form
                                          'label' => 'Agreement',
                                          'version' => 1,
                                          'structural' => {
-                                           'contains' => agreement_files.map { |file| file_structure(file) }
+                                           'contains' => agreement_files.map { |file| file_structure(file).to_h }
                                          }
                                        }
                                      ]

@@ -103,7 +103,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:previous_version) do
       build(:dro, id: druids[0], version: 3).new(identification: {
                                                    barcode: '36105014757519',
-                                                   catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }],
+                                                   catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346', refresh: true }],
                                                    sourceId: 'sul:1234'
                                                  })
     end
@@ -114,8 +114,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
           identification: {
             barcode: barcode,
             catalogLinks: [
-              { catalog: 'previous symphony', catalogRecordId: '12346' },
-              { catalog: 'symphony', catalogRecordId: catkeys[0] }
+              { catalog: 'previous symphony', catalogRecordId: '12346', refresh: false },
+              { catalog: 'symphony', catalogRecordId: catkeys[0], refresh: true }
             ],
             sourceId: 'sul:1234'
           }
@@ -195,7 +195,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
           {
             identification: {
               barcode: nil,
-              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: '12346' }],
+              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: '12346', refresh: false }],
               sourceId: 'sul:1234'
             }
           }

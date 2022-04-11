@@ -34,7 +34,7 @@ class RegistrationCsvConverter
   end
 
   def convert_row(row)
-    catalog_links = row['Catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['Catkey'] }] : []
+    catalog_links = row['Catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['Catkey'], refresh: true }] : []
 
     model_params = {
       type: dro_type(row.fetch('Content Type')),
