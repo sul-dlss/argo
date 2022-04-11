@@ -8,14 +8,7 @@ RSpec.describe Show::Apo::RolesComponent, type: :component do
   let(:rendered) { render_inline(component) }
 
   let(:apo) do
-    Cocina::Models::AdminPolicy.new(
-      type: Cocina::Models::ObjectType.admin_policy,
-      externalIdentifier: 'druid:zt570qh4444',
-      version: 1,
-      administrative: administrative,
-      label: 'My title',
-      description: { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/zt570qh4444' }
-    )
+    build(:admin_policy).new(administrative: administrative)
   end
 
   let(:administrative) do

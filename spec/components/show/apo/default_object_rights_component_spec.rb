@@ -6,22 +6,9 @@ RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina) }
   let(:cocina) do
-    Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bb663yf7144',
-                                    type: Cocina::Models::ObjectType.admin_policy,
-                                    label: 'An APO',
-                                    version: 1,
-                                    administrative: {
-                                      hasAdminPolicy: 'druid:hv992ry2431',
-                                      hasAgreement: 'druid:hp308wm0436',
-                                      accessTemplate: {
-                                        view: 'location-based',
-                                        download: 'location-based',
-                                        location: 'spec',
-                                        useAndReproductionStatement: 'Use and reproduction statement.',
-                                        copyright: 'This is the copyright.',
-                                        license: 'A license goes here.'
-                                      }
-                                    })
+    build(:admin_policy, use_statement: 'Use and reproduction statement.',
+                         copyright: 'This is the copyright.',
+                         license: 'A license goes here.')
   end
   let(:doc) do
     SolrDocument.new('id' => 'druid:bb663yf7144',

@@ -9,22 +9,7 @@ RSpec.describe 'Update an existing Admin Policy' do
     instance_double(Dor::Services::Client::Object, find: cocina_model)
   end
   let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'The item',
-                           'version' => 1,
-                           'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => druid,
-                           'description' => {
-                             'title' => [{ value: 'My APO' }],
-                             'purl' => 'https://purl.stanford.edu/bc123df4567'
-                           },
-                           administrative: {
-                             hasAdminPolicy: 'druid:cg532dg5405',
-                             hasAgreement: 'druid:hp308wm0436',
-                             registrationWorkflow: ['registrationWF'],
-                             accessTemplate: { view: 'world', download: 'world' }
-                           }
-                         })
+    build(:admin_policy, id: druid)
   end
 
   before do

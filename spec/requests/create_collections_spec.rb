@@ -15,17 +15,7 @@ RSpec.describe 'Create collections' do
   describe 'show the form' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'The APO',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.admin_policy,
-                             'externalIdentifier' => apo_id,
-                             'administrative' => {
-                               hasAdminPolicy: 'druid:hv992ry2431',
-                               hasAgreement: 'druid:hp308wm0436',
-                               accessTemplate: { view: 'world', download: 'world' }
-                             }
-                           })
+      build(:admin_policy)
     end
 
     before do
@@ -42,17 +32,7 @@ RSpec.describe 'Create collections' do
     let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'The APO',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.admin_policy,
-                             'externalIdentifier' => apo_id,
-                             'administrative' => {
-                               hasAdminPolicy: 'druid:hv992ry2431',
-                               hasAgreement: 'druid:hp308wm0436',
-                               accessTemplate: { view: 'world', download: 'world' }
-                             }
-                           })
+      build(:admin_policy)
     end
 
     before do

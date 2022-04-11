@@ -116,17 +116,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
 
     context 'with an unsupported object type' do
       let(:cocina_object) do
-        Cocina::Models::AdminPolicy.new(
-          externalIdentifier: 'druid:bc123df4570',
-          label: 'test',
-          type: Cocina::Models::ObjectType.admin_policy,
-          version: 1,
-          administrative: {
-            hasAdminPolicy: 'druid:bc123df4570',
-            hasAgreement: 'druid:hp308wm0436',
-            accessTemplate: { view: 'world', download: 'world' }
-          }
-        )
+        build(:admin_policy)
       end
 
       it 'raises' do
