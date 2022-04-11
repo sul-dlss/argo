@@ -4,10 +4,10 @@
   </span>
 
   <div class='mb-3' id="import-csv">
-    <%= f.label :uploaded_file, 'Upload a CSV or Excel file' %>
+    <%= f.label :csv_file, 'Upload a CSV or Excel file' %>
       <br>
       <small>Each row in the spreadsheet should start with the druid in the first field, followed by the descriptive metadata columns.</small>
-    <%= f.file_field :uploaded_file, class: 'form-control', accept: '.csv, .xls, .ods, .xlsx' %>
+    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv, .xls, .ods, .xlsx' %>
   </div>
   <%= render 'bulk_actions/common_fields', f: f %>
 <% end %>
