@@ -10,7 +10,7 @@ RSpec.describe 'Update serials metadata', js: true do
   # because we don't have symphony running in our test environment. If you register
   # an object with a catkey, then DSA tries to connect to symphony to get the metadata.
   let(:item) do
-    FactoryBot.create_for_repository(:item)
+    FactoryBot.create_for_repository(:persisted_item)
   end
 
   before do

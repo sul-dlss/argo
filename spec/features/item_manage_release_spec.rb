@@ -22,7 +22,7 @@ RSpec.describe 'Item manage release' do
                     version: version_client)
   end
   let(:item) do
-    FactoryBot.create_for_repository(:item)
+    FactoryBot.create_for_repository(:persisted_item)
   end
 
   it 'has a manage release button' do

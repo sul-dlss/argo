@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :collection, class: 'Cocina::Models::RequestCollection' do
+  factory :persisted_collection, class: 'Cocina::Models::RequestCollection' do
     initialize_with do |*_args|
       CollectionMethodSender.new(
         Cocina::Models.build_request({
