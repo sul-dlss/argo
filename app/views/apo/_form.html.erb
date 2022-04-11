@@ -97,36 +97,40 @@
     </div>
   <% end %>
 
-  <div class="mb-3" style="clear: both; border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
-    <label style="font-size:1.2em">Object defaults</label>
+
+  <fieldset class="mt-5">
+    <legend>Object defaults</legend>
     <p>The following defaults will apply to all newly registered objects.</p>
-  </div>
 
-  <div class="mb-3">
-    <%= f.label :default_rights, "Default Object Rights" %>
-    <%= f.select :default_rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS, @form.default_rights), {}, class: 'form-select' %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :use_statement, "Default Use and Reproduction statement" %>
-    <p>See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Use and Reproduction statements.</p>
-    <%= f.text_area :use_statement, class: "form-control", rows:"2" %>
-  </div>
+    <fieldset data-controller="access-rights">
+      <legend class="h6">Default Object Rights</legend>
+      <%= render Edit::Item::AccessRightsComponent.new(form_builder: f) %>
+    </fieldset>
 
-  <div class="mb-3">
-    <%= f.label :copyright_statement, "Default Copyright statement" %>
-    <p>See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Copyright statements.</p>
-    <%= f.text_area :copyright_statement, class: "form-control", rows:"2" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :use_license, "Default use license" %>
-    <%= f.select :use_license, options_for_select(@form.license_options, @form.use_license), {}, class: 'form-select' %>
-  </div>
+    <div class="mb-3">
+      <%= f.label :use_statement, "Default Use and Reproduction statement", class: 'form-label' %>
+      <p class="form-text">See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Use and Reproduction statements.</p>
+      <%= f.text_area :use_statement, class: "form-control", rows:"2" %>
+    </div>
 
-  <div class="mb-3">
-    <%= f.label :default_workflows %>
-    <%= f.select :default_workflows, options_for_select(workflow_options, @form.default_workflows),
-                                    {}, multiple: true, class: 'form-select' %>
-  </div>
+    <div class="mb-3">
+      <%= f.label :copyright_statement, "Default Copyright statement", class: 'form-label' %>
+      <p class="form-text">See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Copyright statements.</p>
+      <%= f.text_area :copyright_statement, class: "form-control", rows:"2" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :use_license, "Default use license", class: 'form-label' %>
+      <%= f.select :use_license, options_for_select(@form.license_options, @form.use_license), {}, class: 'form-select' %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :default_workflows, class: 'form-label' %>
+      <%= f.select :default_workflows, options_for_select(workflow_options, @form.default_workflows),
+                                      {}, multiple: true, class: 'form-select' %>
+    </div>
+
+  </fieldset>
+
   <div class="mb-3">
     <% unless @form.persisted? %>
       <%= submit_tag 'Register APO', class: 'btn btn-primary' %>

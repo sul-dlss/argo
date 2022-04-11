@@ -69,11 +69,6 @@ class ItemChangeSetPersister
     embargo_changed? || ACCESS_FIELDS.keys.any? { |field| changed?(field) }
   end
 
-  # This is a subset of access_changed? that ignores copyright, license, use_statement, and embargo.
-  def object_permissions_changed?
-    %i[view_access download_access access_location controlled_digital_lending].any? { |field| changed?(field) }
-  end
-
   def identification_changed?
     changed?(:source_id) || changed?(:catkeys) || changed?(:barcode)
   end

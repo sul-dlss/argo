@@ -40,7 +40,10 @@ RSpec.describe 'Update an existing Admin Policy' do
         apo: {
           title: 'my title',
           agreement_object_id: 'druid:dd327rv8888',
-          default_rights: rights,
+          view_access: view_access,
+          download_access: download_access,
+          access_location: access_location,
+          controlled_digital_lending: controlled_digital_lending,
           default_workflows: ['registrationWF'],
           collection: { collection: '' }
         }
@@ -53,7 +56,10 @@ RSpec.describe 'Update an existing Admin Policy' do
     end
 
     context 'with controlledDigitalLending' do
-      let(:rights) { 'cdl-stanford-nd' }
+      let(:view_access) { 'stanford' }
+      let(:download_access) { 'none' }
+      let(:controlled_digital_lending) { '1' }
+      let(:access_location) { nil }
 
       it 'updates the record and does not re-register' do
         patch "/apo/#{druid}", params: params
@@ -67,6 +73,10 @@ RSpec.describe 'Update an existing Admin Policy' do
 
     context 'with citation-only' do
       let(:rights) { 'citation-only' }
+      let(:view_access) { 'citation-only' }
+      let(:download_access) { 'none' }
+      let(:controlled_digital_lending) { '0' }
+      let(:access_location) { nil }
 
       it 'updates the record and does not re-register' do
         patch "/apo/#{druid}", params: params

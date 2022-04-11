@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class ApoForm < ApplicationChangeSet
+  include HasViewAccessWithCdl
   property :title, virtual: true
   property :agreement_object_id, virtual: true
-  property :default_rights, virtual: true
+
   property :use_statement, virtual: true
   property :copyright_statement, virtual: true
   property :use_license, virtual: true
@@ -40,14 +41,13 @@ class ApoForm < ApplicationChangeSet
     if model
       self.title = model.description.title.first.value
       self.agreement_object_id = model.administrative.hasAgreement
-      self.default_rights = default_access
       self.use_statement = model.administrative.accessTemplate&.useAndReproductionStatement
       self.copyright_statement = model.administrative.accessTemplate&.copyright
       self.use_license = model.administrative.accessTemplate&.license
       self.default_workflows = model.administrative.registrationWorkflow
       self.permissions = manage_permissions + view_permissions
+      setup_view_access_with_cdl_properties(model.administrative.accessTemplate)
     else
-      self.default_rights = 'world'
       self.collection_radio = 'none'
       self.default_workflows = ['registrationWF']
       self.permissions = default_permissions
@@ -106,19 +106,6 @@ class ApoForm < ApplicationChangeSet
         [attributes.fetch(:label), attributes.fetch(:uri)]
       end
     end
-  end
-
-  def default_access
-    default_access = model&.administrative&.accessTemplate
-    return default_rights if default_access.nil?
-    return 'cdl-stanford-nd' if default_access.controlledDigitalLending
-
-    view = default_access.view
-    return default_rights unless view
-    return "loc:#{default_access.location}" if view == 'location-based'
-    return "#{view}-nd" if default_access.download == 'none' && view.in?(%w[stanford world])
-
-    view
   end
 
   def manage_permissions

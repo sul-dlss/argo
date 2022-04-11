@@ -45,7 +45,7 @@ RSpec.describe 'Create an apo', js: true do
     select 'View', from: 'permissionRole'
     click_button 'Add'
 
-    select('Dark (Preserve Only)', from: 'Default Object Rights')
+    select('Dark', from: 'View access')
     select('Attribution Share Alike 3.0 Unported', from: 'Default use license')
     select('accessionWF', from: 'Default workflows')
 
@@ -58,7 +58,7 @@ RSpec.describe 'Create an apo', js: true do
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
     expect(find_field('Title').value).to eq('APO Title')
-    expect(find_field('Default Object Rights').value).to eq('dark')
+    expect(find_field('View access').value).to eq('dark')
     expect(find_field('Default Copyright statement').value).to eq('Copyright statement')
     expect(find_field('Default Use and Reproduction statement').value).to eq('Use statement')
     expect(page).to have_selector('.permissionName', text: 'developers')
@@ -77,7 +77,7 @@ RSpec.describe 'Create an apo', js: true do
     click_button 'Add'
 
     fill_in 'Title', with: 'New APO Title'
-    select 'Stanford', from: 'Default Object Rights'
+    select 'Stanford', from: 'View access'
     fill_in 'Default Copyright statement', with: 'New copyright statement'
     fill_in 'Default Use and Reproduction statement', with: 'New use statement'
     select 'Attribution No Derivatives 3.0 Unported', from: 'Default use license'
@@ -87,7 +87,7 @@ RSpec.describe 'Create an apo', js: true do
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
     expect(find_field('Title').value).to eq('New APO Title')
-    # expect(find_field('Default Object Rights').value).to eq('stanford') # should work, but flaky and fails often
+    # expect(find_field('View access').value).to eq('stanford') # should work, but flaky and fails often
     expect(find_field('Default Copyright statement').value).to eq('New copyright statement')
     expect(find_field('Default Use and Reproduction statement').value).to eq('New use statement')
     within_fieldset 'Default Collections' do
@@ -102,8 +102,7 @@ RSpec.describe 'Create an apo', js: true do
     choose 'Choose a Default Collection'
     select preexisting_collection.externalIdentifier, from: 'apo_collection_collection'
     click_button 'Update APO'
-    expect(page).to have_text 'Actions' # wait for form to render
-
+    expect(page).to have_text 'View in new window' # wait for show page to render
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
 

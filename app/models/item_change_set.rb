@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-require 'reform/form/coercion'
-
 # Represents a set of changes to an item.
-class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
-  feature Coercion # Casts properties to a specific type
+class ItemChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
   property :catkeys, virtual: true
   property :collection_ids, virtual: true
@@ -15,29 +12,12 @@ class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
   property :source_id, virtual: true
   property :use_statement, virtual: true
   property :barcode, virtual: true
-  property :view_access, virtual: true
-  property :download_access, virtual: true
-  property :access_location, virtual: true
-  property :controlled_digital_lending, virtual: true, type: Dry::Types['params.nil'] | Dry::Types['params.bool']
+
+  include HasViewAccessWithCdl
 
   validates :source_id, presence: true, if: -> { changed?(:source_id) }
   validates :embargo_access, inclusion: {
     in: Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:second),
-    allow_blank: true
-  }
-
-  validates :view_access, inclusion: {
-    in: %w[world stanford location-based citation-only dark],
-    allow_blank: true
-  }
-
-  validates :download_access, inclusion: {
-    in: %w[world stanford location-based none],
-    allow_blank: true
-  }
-
-  validates :access_location, inclusion: {
-    in: %w[spec music ars art hoover m&m],
     allow_blank: true
   }
 
@@ -60,10 +40,7 @@ class ItemChangeSet < ApplicationChangeSet # rubocop:disable Metrics/ClassLength
     self.copyright = model.access.copyright
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license
-    self.view_access = model.access.view
-    self.download_access = model.access.download
-    self.access_location = model.access.location
-    self.controlled_digital_lending = model.access.controlledDigitalLending
+    setup_view_access_with_cdl_properties(model.access)
 
     setup_embargo_properties! if model.access.embargo
   end
