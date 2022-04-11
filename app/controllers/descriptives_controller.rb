@@ -42,11 +42,6 @@ class DescriptivesController < ApplicationController
     render :new, status: :unprocessable_entity
   end
 
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, @cocina
-  end
-
   def create_csv
     description = DescriptionExport.export(source_id: @cocina.identification.sourceId,
                                            description: @cocina.description)

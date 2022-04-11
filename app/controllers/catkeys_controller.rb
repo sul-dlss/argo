@@ -31,11 +31,6 @@ class CatkeysController < ApplicationController
 
   private
 
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, @cocina
-  end
-
   def update_params
     params[CatkeyForm.model_name.param_key]
   end

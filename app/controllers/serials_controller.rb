@@ -17,11 +17,4 @@ class SerialsController < ApplicationController
     msg = 'Serials metadata has been updated!'
     redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
   end
-
-  private
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, @cocina
-  end
 end

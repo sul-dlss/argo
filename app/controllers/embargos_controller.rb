@@ -39,12 +39,6 @@ class EmbargosController < ApplicationController
 
   private
 
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-
-    authorize! :manage_item, @cocina
-  end
-
   def update_params
     params.require(EmbargoForm.model_name.param_key).permit(:release_date, :view_access, :download_access, :access_location)
   end

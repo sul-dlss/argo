@@ -15,6 +15,11 @@ class ApplicationController < ActionController::Base
     state_service.allows_modification?
   end
 
+  def load_and_authorize_resource
+    @cocina = Repository.find(params[:item_id])
+    authorize! :manage_item, @cocina
+  end
+
   def current_user
     super.tap do |cur_user|
       break unless cur_user

@@ -29,9 +29,4 @@ class ContentTypesController < ApplicationController
   def render_error(msg)
     render status: :forbidden, plain: msg
   end
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, @cocina
-  end
 end
