@@ -413,3 +413,7 @@ Rails/MigrationClassName: # new in 2.14
   Enabled: true
 Rails/TransactionExitStatement: # new in 2.14
   Enabled: true
+Lint/RefinementImportMethods: # new in 1.27
+  Enabled: true
+Style/RedundantInitialize: # new in 1.27
+  Enabled: true
