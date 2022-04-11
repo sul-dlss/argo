@@ -3,6 +3,10 @@
     Upload descriptive metadata for objects.
   </span>
 
+  <% if @errors.present? %>
+    <div class="alert alert-danger"><%= @errors.to_sentence %></div>
+  <% end %>
+
   <div class='mb-3' id="import-csv">
     <%= f.label :csv_file, 'Upload a CSV file' %>
       <br>
