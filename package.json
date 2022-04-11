@@ -12,7 +12,6 @@
     "jquery": "^3.4.1",
     "renderjson": "^1.4.0",
     "sass": "^1.41.1",
-    "slim-select": "^1.27.1",
     "stimulus": "^3.0.0"
   },
   "devDependencies": {},
