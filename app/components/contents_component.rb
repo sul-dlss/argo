@@ -5,10 +5,15 @@ class ContentsComponent < ApplicationComponent
     @document = presenter.document
     @cocina = presenter.cocina
     @state_service = presenter.state_service
+    @view_token = presenter.view_token
   end
 
   def render?
     @cocina.respond_to?(:structural)
+  end
+
+  def number_of_file_sets
+    @cocina.structural.contains.size
   end
 
   delegate :allows_modification?, to: :@state_service

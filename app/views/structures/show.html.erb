@@ -1,0 +1,3 @@
+<turbo-frame id="structure">
+  <%= render Contents::StructuralComponent.new(structural: @cocina_item.structural, object_id: @cocina_item.externalIdentifier, viewable: can?(:view_content, @cocina_item)) %>
+</turbo-frame>
