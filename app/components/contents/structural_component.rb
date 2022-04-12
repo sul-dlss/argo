@@ -16,5 +16,9 @@ module Contents
     def viewable?
       @viewable
     end
+
+    def paginatable_array
+      @paginatable_array ||= Kaminari.paginate_array(structural.contains).page(params[:page]).per(50)
+    end
   end
 end
