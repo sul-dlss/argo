@@ -2,7 +2,7 @@
   <% if @errors.present? %>
     <div class="alert alert-danger"><%= @errors.to_sentence %></div>
   <% end %>
-  <%= form_with url: item_descriptive_path(item_id: @cocina.externalIdentifier), local: true, multipart: true, html: { class: 'col-lg-8 mb-5' } do |f| %>
+  <%= form_with url: item_descriptive_path(item_id: @cocina.externalIdentifier), method: :put, local: true, multipart: true, html: { class: 'col-lg-8 mb-5' } do |f| %>
     <div class="mb-3">
       <%= f.label :data, class: 'form-label' do %>
         Upload Cocina descriptive metadata spreadsheet for <%= @cocina.externalIdentifier %>

@@ -44,7 +44,7 @@ RSpec.describe 'Upload the descriptive CSV' do
       let(:result) { Success(cocina_model.description) }
 
       it 'updates the descriptive' do
-        post "/items/#{druid}/descriptive", params: { data: file }
+        put "/items/#{druid}/descriptive", params: { data: file }
         expect(object_client).to have_received(:update)
         expect(response).to have_http_status(:see_other)
       end
@@ -54,7 +54,7 @@ RSpec.describe 'Upload the descriptive CSV' do
       let(:result) { Failure("didn't map") }
 
       it "doesn't updates the descriptive" do
-        post "/items/#{druid}/descriptive", params: { data: file }
+        put "/items/#{druid}/descriptive", params: { data: file }
         expect(object_client).not_to have_received(:update)
         expect(response).to have_http_status(:unprocessable_entity)
       end

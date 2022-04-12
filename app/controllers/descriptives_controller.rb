@@ -5,10 +5,10 @@ class DescriptivesController < ApplicationController
   before_action :load_and_authorize_resource
 
   # Display the form for uploading the descriptive metadata spreadsheet
-  def new; end
+  def edit; end
 
   # Handle upload of the spreadsheet
-  def create
+  def update
     csv = CSV.read(params[:data].tempfile, headers: true)
     validator = DescriptionValidator.new(csv)
     if validator.valid?
@@ -17,7 +17,7 @@ class DescriptivesController < ApplicationController
                             ->(error) { convert_metadata_fail(error) })
     else
       @errors = validator.errors
-      render :new, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -40,12 +40,12 @@ class DescriptivesController < ApplicationController
                 notice: 'Descriptive metadata has been updated.'
   rescue Dor::Services::Client::UnexpectedResponse => e
     @errors = ["unexpected response from dor-services-app: #{e.message}"]
-    render :new, status: :unprocessable_entity
+    render :edit, status: :unprocessable_entity
   end
 
   def convert_metadata_fail(failure)
     @errors = ["There was a problem processing the spreadsheet: #{failure}"]
-    render :new, status: :unprocessable_entity
+    render :edit, status: :unprocessable_entity
   end
 
   def load_and_authorize_resource
