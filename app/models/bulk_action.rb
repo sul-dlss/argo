@@ -3,7 +3,38 @@
 # Stores data about an asynchonous background job
 class BulkAction < ApplicationRecord
   belongs_to :user
-  validates :action_type, inclusion: { in: GenericJob.descendants.map(&:to_s) }
+  validates :action_type,
+            inclusion: {
+              in: %w[GenericJob
+                     AddWorkflowJob
+                     ApplyApoDefaultsJob
+                     DescmetadataDownloadJob
+                     DescriptiveMetadataExportJob
+                     DescriptiveMetadataImportJob
+                     ReleaseObjectJob
+                     RemoteIndexingJob
+                     PurgeJob
+                     SetGoverningApoJob
+                     SetCatkeysAndBarcodesJob
+                     SetCatkeysAndBarcodesCsvJob
+                     PrepareJob
+                     RefreshModsJob
+                     RepublishJob
+                     CloseVersionJob
+                     ChecksumReportJob
+                     CreateVirtualObjectsJob
+                     ExportTagsJob
+                     ImportTagsJob
+                     ExportStructuralJob
+                     ImportStructuralJob
+                     RegisterDruidsJob
+                     SetLicenseAndRightsStatementsJob
+                     SetSourceIdsCsvJob
+                     SetContentTypeJob
+                     ManageEmbargoesJob
+                     SetCollectionJob
+                     SetRightsJob]
+            }
 
   after_create :create_output_directory, :create_log_file
   before_destroy :remove_output_directory
