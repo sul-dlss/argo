@@ -135,7 +135,7 @@ RSpec.describe SerialsForm do
         {
           title: [{
             structuredValue: [
-              { type: 'odd thing', value: '99' },
+              { type: 'subtitle', value: '99' },
               { type: 'main title', value: 'Frog' }
             ]
           }],
@@ -154,7 +154,7 @@ RSpec.describe SerialsForm do
                                        title: [
                                          {
                                            structuredValue: [
-                                             { type: 'odd thing', value: '99' },
+                                             { type: 'subtitle', value: '99' },
                                              { type: 'main title', value: 'Frog' },
                                              { value: '7', type: 'part number' },
                                              { value: 'samurai', type: 'part name' }
@@ -182,7 +182,7 @@ RSpec.describe SerialsForm do
                                        title: [
                                          {
                                            structuredValue: [
-                                             { type: 'odd thing', value: '99' },
+                                             { type: 'subtitle', value: '99' },
                                              { type: 'main title', value: 'Frog' },
                                              { value: 'samurai', type: 'part name' },
                                              { value: '7', type: 'part number' }
