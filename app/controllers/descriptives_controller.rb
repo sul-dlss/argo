@@ -2,7 +2,7 @@
 
 # Download the CSV descriptive metadata
 class DescriptivesController < ApplicationController
-  before_action :load_and_authorize_resource
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
   # Display the form for uploading the descriptive metadata spreadsheet
   def edit; end
@@ -46,11 +46,6 @@ class DescriptivesController < ApplicationController
   def convert_metadata_fail(failure)
     @errors = ["There was a problem processing the spreadsheet: #{failure}"]
     render :edit, status: :unprocessable_entity
-  end
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :update, @cocina
   end
 
   def create_csv

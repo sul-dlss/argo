@@ -27,7 +27,7 @@ RSpec.describe 'Set catkey' do
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      sign_in user, groups: ['sdr:administrator-role']
+      sign_in user, groups: ['sdr:manager-role']
     end
 
     describe 'display the form' do

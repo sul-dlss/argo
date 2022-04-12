@@ -2,16 +2,17 @@
 
 # dispatches to the dor-services-app to (re/un)publish
 class StructuresController < ApplicationController
-  before_action :load_and_authorize_resource, only: :update
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id', only: :update
   before_action :enforce_versioning, only: :update
 
   def show
     respond_to do |format|
       format.csv do
         # Download the structural spreadsheet
-        load_and_authorize_resource
-        filename = "structure-#{Druid.new(@cocina).without_namespace}.csv"
-        send_data StructureSerializer.as_csv(@cocina.structural), filename: filename
+        cocina = Repository.find(params[:item_id])
+        authorize! :update, cocina
+        filename = "structure-#{Druid.new(cocina).without_namespace}.csv"
+        send_data StructureSerializer.as_csv(cocina.structural), filename: filename
       end
       format.html do
         # Lazy loading of the structural part of the show page
@@ -32,11 +33,6 @@ class StructuresController < ApplicationController
   end
 
   private
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :update, @cocina
-  end
 
   # decode the token that grants view access
   def decrypted_token

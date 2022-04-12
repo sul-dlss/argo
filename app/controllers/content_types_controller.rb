@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContentTypesController < ApplicationController
-  before_action :load_and_authorize_resource
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
   def edit
     @form = ContentTypeForm.new(@cocina_object)
@@ -28,10 +28,5 @@ class ContentTypesController < ApplicationController
 
   def render_error(msg)
     render status: :forbidden, plain: msg
-  end
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :update, @cocina
   end
 end

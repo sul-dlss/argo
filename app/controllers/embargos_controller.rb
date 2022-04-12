@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class EmbargosController < ApplicationController
-  before_action :load_and_authorize_resource
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id', only: %i[edit update]
 
   def new
-    @change_set = EmbargoForm.new(@cocina)
+    cocina = Repository.find(params[:item_id])
+    authorize! :update, cocina
+    @change_set = EmbargoForm.new(cocina)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -38,12 +40,6 @@ class EmbargosController < ApplicationController
   end
 
   private
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-
-    authorize! :update, @cocina
-  end
 
   def update_params
     params.require(EmbargoForm.model_name.param_key).permit(:release_date, :view_access, :download_access, :access_location)

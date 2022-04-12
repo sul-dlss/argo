@@ -2,7 +2,7 @@
 
 # Handle editing the serials properties
 class SerialsController < ApplicationController
-  before_action :load_and_authorize_resource
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
   def edit
     @form = SerialsForm.new(@cocina)
@@ -16,12 +16,5 @@ class SerialsController < ApplicationController
 
     msg = 'Serials metadata has been updated!'
     redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
-  end
-
-  private
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :update, @cocina
   end
 end
