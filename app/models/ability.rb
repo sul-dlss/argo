@@ -23,7 +23,7 @@ class Ability
     cannot :impersonate, User unless current_user.webauth_admin?
 
     if current_user.manager?
-      can %i[update manage_desc_metadata manage_governing_apo view_content view_metadata],
+      can %i[update manage_governing_apo view_content view_metadata],
           [NilModel, Cocina::Models::DRO, Cocina::Models::Collection]
       can :create, Cocina::Models::AdminPolicy
     end
@@ -36,14 +36,6 @@ class Ability
 
     can :update, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
       can_manage_items? current_user.roles(cocina_object.administrative.hasAdminPolicy)
-    end
-
-    can :manage_desc_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
-      can_edit_desc_metadata? current_user.roles(cocina_admin_policy.externalIdentifier)
-    end
-
-    can :manage_desc_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
-      can_edit_desc_metadata? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
     can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object, new_apo_id|
@@ -77,7 +69,6 @@ class Ability
   # We compare the roles a user has on a AdminPolicy, with these roles to determine
   # what sort of access to grant the user:
   MANAGE_ITEM_ROLES = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
-  EDIT_DESC_METADATA_ROLES = (MANAGE_ITEM_ROLES + %w[dor-apo-metadata]).freeze
   VIEW_ROLES = (MANAGE_ITEM_ROLES + %w[dor-viewer sdr-viewer]).freeze
 
   def can_manage_items?(user_roles)

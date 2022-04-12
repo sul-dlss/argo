@@ -7,7 +7,7 @@ class RefreshModsJob < GenericJob
     super
 
     with_items(params[:druids], name: 'Refresh MODS') do |cocina_object, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_desc_metadata, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       catkey = cocina_object.identification&.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
       next failure.call("Did not update metadata because it doesn't have a catkey") if catkey.blank?

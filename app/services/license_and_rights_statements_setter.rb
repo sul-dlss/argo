@@ -10,7 +10,7 @@ class LicenseAndRightsStatementsSetter
   # @raise [Dor::Services::Client::UnexpectedResponse] when dor-services-app barfs for some reason
   # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the given object ID
   # @raise [RuntimeError] when given identifer does not correspond to an item or collection, when given
-  #                       ability lacks manage_item permission, or when an underlying exception is raised
+  #                       ability lacks update permission, or when an underlying exception is raised
   # @return [Cocina::Models::Collection,Cocina::Models::DRO] the cocina object with updates applied
   def self.set(ability:, druid:, copyright: nil, license: nil, use_statement: nil)
     new(ability: ability,
@@ -37,7 +37,7 @@ class LicenseAndRightsStatementsSetter
   # @raise [Dor::Services::Client::UnexpectedResponse] when dor-services-app barfs for some reason
   # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the given object ID
   # @raise [RuntimeError] when given identifer does not correspond to an item or collection, when given
-  #                       ability lacks manage_item permission, or when an underlying exception is raised
+  #                       ability lacks update permission, or when an underlying exception is raised
   # @return [Cocina::Models::Collection,Cocina::Models::DRO,nil] the cocina object with updates applied or `nil` if no changes
   def set
     raise "#{druid} cannot be changed by #{ability.current_user}" unless ability.can?(:update, cocina_object)

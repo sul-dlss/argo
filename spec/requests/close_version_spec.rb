@@ -13,7 +13,7 @@ RSpec.describe 'Close a version', type: :request do
     allow(Dor::Services::Client).to receive(:object).and_return(object_service)
   end
 
-  context 'when they have manage_item access' do
+  context 'when they have update access' do
     before do
       sign_in user, groups: ['sdr:administrator-role']
     end
