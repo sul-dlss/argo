@@ -12,8 +12,8 @@ class SetCollectionJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    @new_collection_ids = Array(params['new_collection_id'].presence)
-
+    @new_collection_ids = Array(params['new_collection_id'].presence).reject(&:empty?)
+    byebug
     with_items(params[:druids], name: 'Set collection') do |cocina_object, success, _failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
