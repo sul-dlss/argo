@@ -74,20 +74,22 @@ class Ability
 
   private
 
-  GROUPS_WHICH_MANAGE_ITEMS = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
-  GROUPS_WHICH_EDIT_DESC_METADATA = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-apo-metadata]).freeze
-  GROUPS_WHICH_VIEW = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-viewer sdr-viewer]).freeze
+  # We compare the roles a user has on a AdminPolicy, with these roles to determine
+  # what sort of access to grant the user:
+  MANAGE_ITEM_ROLES = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
+  EDIT_DESC_METADATA_ROLES = (MANAGE_ITEM_ROLES + %w[dor-apo-metadata]).freeze
+  VIEW_ROLES = (MANAGE_ITEM_ROLES + %w[dor-viewer sdr-viewer]).freeze
 
-  def can_manage_items?(roles)
-    intersect roles, GROUPS_WHICH_MANAGE_ITEMS
+  def can_manage_items?(user_roles)
+    intersect user_roles, MANAGE_ITEM_ROLES
   end
 
-  def can_edit_desc_metadata?(roles)
-    intersect roles, GROUPS_WHICH_EDIT_DESC_METADATA
+  def can_edit_desc_metadata?(user_roles)
+    intersect user_roles, EDIT_DESC_METADATA_ROLES
   end
 
-  def can_view?(roles)
-    intersect roles, GROUPS_WHICH_VIEW
+  def can_view?(user_roles)
+    intersect user_roles, VIEW_ROLES
   end
 
   def intersect(arr1, arr2)
