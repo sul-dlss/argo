@@ -2,7 +2,6 @@
 
 ##
 # Job to create downloadable tracking sheets
-# rubocop:disable Metrics/ClassLength
 class TrackingSheetReportJob < GenericJob
   ##
   # A job that...
@@ -14,18 +13,17 @@ class TrackingSheetReportJob < GenericJob
 
     druids = params[:druids]
 
-    with_bulk_action_log do |_log|
+    with_bulk_action_log do |log|
       update_druid_count
       begin
         pdf = Prawn::Document.new(page_size: [5.5.in, 8.5.in])
         pdf.font('Courier')
         druids.each_with_index do |druid, i|
-          find_or_create_in_solr_by_id(druid)
           generate_tracking_sheet(druid, pdf)
           pdf.start_new_page unless i + 1 == druids.length
         end
-        bulk_action.update(druid_count_success: druids.length)
         pdf.render_file(generate_report_filename(bulk_action.output_directory))
+        bulk_action.update(druid_count_success: druids.length)
       rescue StandardError => e
         bulk_action.update(druid_count_fail: druids.length)
         error_message = "#{Time.current} TrackingSheetReportJob creation failed #{e.class} #{e.message}"
@@ -142,4 +140,3 @@ class TrackingSheetReportJob < GenericJob
     File.join(output_dir, Settings.tracking_sheet_report_job.pdf_filename)
   end
 end
-# rubocop:enable Metrics/ClassLength
