@@ -66,8 +66,9 @@ RSpec.describe 'Set content type for an item', type: :request do
     let(:content_type) { Cocina::Models::ObjectType.image }
 
     it 'is successful' do
-      get "/items/#{druid}/content_type"
+      get "/items/#{druid}/content_type/edit"
       expect(response).to be_successful
+      expect(response.body).to include('Set content type')
     end
   end
 

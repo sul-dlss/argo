@@ -3,7 +3,7 @@
 class ContentTypesController < ApplicationController
   before_action :load_and_authorize_resource
 
-  def show
+  def edit
     @form = ContentTypeForm.new(@cocina_object)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
