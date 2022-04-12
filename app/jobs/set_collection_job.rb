@@ -15,7 +15,7 @@ class SetCollectionJob < GenericJob
     @new_collection_ids = Array(params['new_collection_id'].presence)
 
     with_items(params[:druids], name: 'Set collection') do |cocina_object, success, _failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       state_service = StateService.new(cocina_object)
       unless state_service.allows_modification?

@@ -7,7 +7,7 @@ class PurgeJob < GenericJob
     super
 
     with_items(params[:druids], name: 'Purge') do |cocina_object, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       next failure.call('Cannot purge item because it has already been submitted') if WorkflowService.submitted?(druid: cocina_object.externalIdentifier)
 

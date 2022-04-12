@@ -5,7 +5,7 @@ class PublishesController < ApplicationController
   before_action :load_cocina
 
   def create
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
 
     Dor::Services::Client.object(@cocina.externalIdentifier).publish
     redirect_to solr_document_path(@cocina.externalIdentifier),
@@ -14,7 +14,7 @@ class PublishesController < ApplicationController
   end
 
   def destroy
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
 
     Dor::Services::Client.object(@cocina.externalIdentifier).unpublish
     redirect_to solr_document_path(@cocina.externalIdentifier), notice: 'Object unpublished!'

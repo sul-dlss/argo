@@ -8,7 +8,7 @@ class ImportStructuralJob < GenericJob
     # Group the rows by druid
     grouped = csv.group_by { |row| "druid:#{row['druid']}" }
     with_items(grouped.keys, name: 'Import structural') do |cocina_item, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_item)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_item)
 
       state_service = StateService.new(cocina_item)
       next failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?

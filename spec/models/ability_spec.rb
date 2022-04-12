@@ -68,7 +68,7 @@ RSpec.describe Ability do
     let(:admin) { true }
 
     it { is_expected.to be_able_to(:manage, :everything) }
-    it { is_expected.to be_able_to(:manage_item, dro) }
+    it { is_expected.to be_able_to(:update, dro) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
@@ -80,7 +80,7 @@ RSpec.describe Ability do
     let(:manager) { true }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.to be_able_to(:manage_item, dro) }
+    it { is_expected.to be_able_to(:update, dro) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
 
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
@@ -92,7 +92,7 @@ RSpec.describe Ability do
   context 'as a viewer' do
     let(:viewer) { true }
 
-    it { is_expected.not_to be_able_to(:manage_item, dro) }
+    it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
@@ -104,7 +104,7 @@ RSpec.describe Ability do
   end
 
   context 'for items without an APO' do
-    it { is_expected.not_to be_able_to(:manage_item, dro) }
+    it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
@@ -114,7 +114,7 @@ RSpec.describe Ability do
     let(:apo_roles) { ['dor-apo-manager'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.to be_able_to(:manage_item, dro) }
+    it { is_expected.to be_able_to(:update, dro) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
@@ -129,7 +129,7 @@ RSpec.describe Ability do
     let(:new_cocina_object_roles) { ['dor-apo-manager'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.not_to be_able_to(:manage_item, dro) }
+    it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
@@ -144,7 +144,7 @@ RSpec.describe Ability do
     let(:apo_roles) { ['dor-apo-metadata'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.not_to be_able_to(:manage_item, dro) }
+    it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
@@ -155,7 +155,7 @@ RSpec.describe Ability do
     let(:apo_roles) { ['dor-viewer'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.not_to be_able_to(:manage_item, dro) }
+    it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, dro) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }

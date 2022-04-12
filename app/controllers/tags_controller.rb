@@ -11,7 +11,7 @@ class TagsController < ApplicationController
 
   def update
     cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, cocina
+    authorize! :update, cocina
 
     current_tags = tags_client.list
 

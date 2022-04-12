@@ -7,7 +7,7 @@ class ApplyApoDefaultsJob < GenericJob
     super
 
     with_items(params[:druids], name: 'Apply defaults') do |cocina_object, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       Dor::Services::Client.object(cocina_object.externalIdentifier).apply_admin_policy_defaults
       success.call('Successfully applied defaults')

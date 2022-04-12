@@ -25,7 +25,7 @@ class WorkflowProcessRow < ApplicationComponent
   end
 
   def show_reset_button?
-    error? && can?(:manage_item, cocina_object)
+    error? && can?(:update, cocina_object)
   end
 
   attr_reader :process, :index, :cocina_object

@@ -28,7 +28,7 @@ class ProblematicDruidFinder
 
     druids.each do |druid|
       cocina_object = Repository.find(druid)
-      unauthorized_druids << druid unless ability.can?(:manage_item, cocina_object)
+      unauthorized_druids << druid unless ability.can?(:update, cocina_object)
     rescue Dor::Services::Client::NotFoundResponse
       not_found_druids << druid
     end

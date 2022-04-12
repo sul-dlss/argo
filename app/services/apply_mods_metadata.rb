@@ -33,7 +33,7 @@ class ApplyModsMetadata
 
     return unless status_ok?
 
-    return unless ability.can? :manage_item, cocina
+    return unless ability.can? :update, cocina
 
     # We only update objects if the descMetadata XML is different
     if equivalent_xml?(existing_mods, mods)

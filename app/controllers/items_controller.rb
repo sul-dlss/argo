@@ -266,7 +266,7 @@ class ItemsController < ApplicationController
   # Permissions
 
   def authorize_manage!
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
   end
 
   def build_change_set

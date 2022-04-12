@@ -14,7 +14,7 @@ class SetRightsJob < GenericJob
     raise 'Must provide rights' if access_params.blank?
 
     with_items(params[:druids], name: 'Set rights') do |cocina_object, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       state_service = StateService.new(cocina_object)
       next failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?

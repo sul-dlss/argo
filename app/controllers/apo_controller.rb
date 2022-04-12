@@ -10,7 +10,7 @@ class ApoController < ApplicationController
   ]
 
   def edit
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
     @form = ApoForm.new(@cocina, search_service: search_service)
 
     render layout: 'one_column'
@@ -44,7 +44,7 @@ class ApoController < ApplicationController
   end
 
   def update
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
     @form = ApoForm.new(@cocina, search_service: search_service)
     unless @form.validate(params.require(:apo).to_unsafe_h)
       respond_to do |format|
@@ -59,7 +59,7 @@ class ApoController < ApplicationController
   end
 
   def delete_collection
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
     collection_ids = @cocina.administrative.collectionsForRegistration - [params[:collection]]
     updated_administrative = @cocina.administrative.new(collectionsForRegistration: collection_ids)
     updated = @cocina.new(administrative: updated_administrative)
