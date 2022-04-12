@@ -23,7 +23,7 @@ class Ability
     cannot :impersonate, User unless current_user.webauth_admin?
 
     if current_user.manager?
-      can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata],
+      can %i[manage_item refresh_descriptive_metadata manage_governing_apo view_content view_metadata],
           [NilModel, Cocina::Models::DRO, Cocina::Models::Collection]
       can :create, Cocina::Models::AdminPolicy
     end
@@ -38,12 +38,12 @@ class Ability
       can_manage_items? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :manage_desc_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
-      can_edit_desc_metadata? current_user.roles(cocina_admin_policy.externalIdentifier)
+    can :refresh_descriptive_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
+      can_refresh_descriptive_metadata? current_user.roles(cocina_admin_policy.externalIdentifier)
     end
 
-    can :manage_desc_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
-      can_edit_desc_metadata? current_user.roles(cocina_object.administrative.hasAdminPolicy)
+    can :refresh_descriptive_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+      can_refresh_descriptive_metadata? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
     can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object, new_apo_id|
@@ -75,15 +75,15 @@ class Ability
   private
 
   GROUPS_WHICH_MANAGE_ITEMS = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
-  GROUPS_WHICH_EDIT_DESC_METADATA = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-apo-metadata]).freeze
+  GROUPS_WHICH_REFRESH_DESCRIPTIVE_METADATA = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-apo-metadata]).freeze
   GROUPS_WHICH_VIEW = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-viewer sdr-viewer]).freeze
 
   def can_manage_items?(roles)
     intersect roles, GROUPS_WHICH_MANAGE_ITEMS
   end
 
-  def can_edit_desc_metadata?(roles)
-    intersect roles, GROUPS_WHICH_EDIT_DESC_METADATA
+  def can_refresh_descriptive_metadata?(roles)
+    intersect roles, GROUPS_WHICH_REFRESH_DESCRIPTIVE_METADATA
   end
 
   def can_view?(roles)

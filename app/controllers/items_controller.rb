@@ -104,7 +104,7 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
-    authorize! :manage_desc_metadata, @cocina
+    authorize! :refresh_descriptive_metadata, @cocina
 
     catkey = @cocina.identification&.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
     if catkey.blank?
