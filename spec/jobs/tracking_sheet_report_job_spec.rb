@@ -39,10 +39,7 @@ RSpec.describe TrackingSheetReportJob, type: :job do
 
       context 'happy path' do
         it 'writes a pdf tracking sheet' do
-          subject.perform(bulk_action.id,
-                          druids: druids,
-                          groups: groups,
-                          user: user)
+          subject.perform(bulk_action.id, druids:, groups:, user:)
           expect(File).to exist(File.join(output_directory, Settings.tracking_sheet_report_job.pdf_filename))
           expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(0)
@@ -62,10 +59,7 @@ RSpec.describe TrackingSheetReportJob, type: :job do
         end
 
         it 'updates the failed druid count' do
-          subject.perform(bulk_action.id,
-                          druids: druids,
-                          groups: groups,
-                          user: user)
+          subject.perform(bulk_action.id, druids:, groups:, user:)
           expect(Rails.logger).to have_received(:error)
           expect(Honeybadger).to have_received(:context)
           expect(Honeybadger).to have_received(:notify)

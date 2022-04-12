@@ -29,7 +29,7 @@ class TrackingSheetReportJob < GenericJob
         error_message = "#{Time.current} TrackingSheetReportJob creation failed #{e.class} #{e.message}"
         log.puts(error_message) # this one goes to the user via the bulk action log
         logger.error(error_message) # this is for later archaeological digs
-        Honeybadger.context(bulk_action_id: bulk_action_id, params: params)
+        Honeybadger.context(bulk_action_id:, params:)
         Honeybadger.notify(error_message) # this is so the devs see it ASAP
       end
     end
@@ -49,7 +49,7 @@ class TrackingSheetReportJob < GenericJob
 
     doc = nil
     begin
-      doc = find_or_create_in_solr_by_id(druid)
+      doc = find_by_id(druid)
     rescue StandardError
       pdf.text "DRUID #{druid} not found in index", size: 15, style: :bold, align: :center
       return pdf
@@ -126,12 +126,8 @@ class TrackingSheetReportJob < GenericJob
   # @return [Hash] doc from Solr or to_solr
   # @note To the extent we use Solr input filters or copyField(s), the Solr version will differ from the to_solr hash.
   # @note That difference shouldn't be important for the few known fields we use here.
-  def find_or_create_in_solr_by_id(druid)
+  def find_by_id(druid)
     namespaced_druid = Druid.new(druid).with_namespace
-    doc = SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
-    return doc unless doc.nil?
-
-    Argo::Indexer.reindex_druid_remotely(namespaced_druid)
     SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
   end
 
