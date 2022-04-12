@@ -2,9 +2,8 @@
 
 ##
 # Job to create downloadable tracking sheets
+# rubocop:disable Metrics/ClassLength
 class TrackingSheetReportJob < GenericJob
-  attr_reader :druids
-
   ##
   # A job that...
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
@@ -13,28 +12,32 @@ class TrackingSheetReportJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    @druids = params[:druids]
-    generate_tracking_pdf
+    druids = params[:druids]
+
+    with_bulk_action_log do |_log|
+      update_druid_count
+      begin
+        pdf = Prawn::Document.new(page_size: [5.5.in, 8.5.in])
+        pdf.font('Courier')
+        druids.each_with_index do |druid, i|
+          find_or_create_in_solr_by_id(druid)
+          generate_tracking_sheet(druid, pdf)
+          pdf.start_new_page unless i + 1 == druids.length
+        end
+        bulk_action.update(druid_count_success: druids.length)
+        pdf.render_file(generate_report_filename(bulk_action.output_directory))
+      rescue StandardError => e
+        bulk_action.update(druid_count_fail: druids.length)
+        error_message = "#{Time.current} TrackingSheetReportJob creation failed #{e.class} #{e.message}"
+        log.puts(error_message) # this one goes to the user via the bulk action log
+        logger.error(error_message) # this is for later archaeological digs
+        Honeybadger.context(bulk_action_id: bulk_action_id, params: params)
+        Honeybadger.notify(error_message) # this is so the devs see it ASAP
+      end
+    end
   end
 
   protected
-
-  # @FIXME: This code needs to separate data and query logic from presentation.
-
-  # @param [Array<String>] druids unqualified DRUID identifiers
-  # @return [Prawn::Document] PDF document for the DRUIDs
-  def generate_tracking_pdf
-    # FIXME: why not search for all druids in one query?
-    # FIXME: how about a MAX number of druids? And/Or a chunky use of enumeration?
-    druids.each { |druid| find_or_create_in_solr_by_id(druid) }
-    pdf = Prawn::Document.new(page_size: [5.5.in, 8.5.in])
-    pdf.font('Courier')
-    druids.each_with_index do |druid, i|
-      generate_tracking_sheet(druid, pdf)
-      pdf.start_new_page unless i + 1 == druids.length
-    end
-    pdf.render_file(generate_report_filename(bulk_action.output_directory))
-  end
 
   # Adds one DRUID page to the PDF document
   # @param [String] druid unqualified DRUID identifier
@@ -139,3 +142,4 @@ class TrackingSheetReportJob < GenericJob
     File.join(output_dir, Settings.tracking_sheet_report_job.pdf_filename)
   end
 end
+# rubocop:enable Metrics/ClassLength
