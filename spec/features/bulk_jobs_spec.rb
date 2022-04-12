@@ -13,7 +13,7 @@ RSpec.describe 'Bulk jobs view', js: true do
 
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, metadata: nil) }
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
   let(:apo_id) { 'druid:hv992yv2222' }
 
