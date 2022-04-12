@@ -11,10 +11,14 @@ class CsvUploadNormalizer
     @druid_headers = druid_headers
   end
 
-  # Reads and normalizes CSV.
+  # Reads uploaded file (could be csv or Excel) and normalizes to CSV.
   # This includes handling BOM and druids without prefixes.
   def read
-    table = CSV.open(path, 'rb:bom|utf-8', headers: true).read
+    raise 'Unsupported upload file type' unless %w[.csv .ods .xls .xlsx].include? File.extname(path)
+
+    spreadsheet = Roo::Spreadsheet.open(path, { csv_options: { encoding: 'bom|utf-8' } }) # open the spreadsheet
+    table = CSV.parse(spreadsheet.to_csv, headers: true) # convert spreadsheet to CSV and then parse by the CSV library
+
     table.each do |row|
       druid_headers.each { |header| row[header] = Druid.new(row[header]).with_namespace if row[header].present? }
     end
