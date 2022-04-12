@@ -32,6 +32,6 @@ class ContentTypesController < ApplicationController
 
   def load_and_authorize_resource
     @cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
   end
 end

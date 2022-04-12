@@ -16,7 +16,7 @@ class DescriptiveMetadataImportJob < GenericJob
     super
     csv = CSV.parse(params[:csv_file], headers: true)
     with_csv_items(csv, name: 'Import descriptive metadata') do |cocina_object, csv_row, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       DescriptionImport.import(csv_row: csv_row).either(
         ->(description) { Repository.store(cocina_object.new(description: description)) && success.call('Successfully updated') },

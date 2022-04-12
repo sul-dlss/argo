@@ -40,7 +40,7 @@ class ManageEmbargoesJob < GenericJob
       return failure.call("#{embargo_release_date_param} is not a valid date")
     end
 
-    return failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+    return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
     state_service = StateService.new(cocina_object)
     msg = "Setting embargo to #{rights_param} to be released on #{embargo_release_date_param}."

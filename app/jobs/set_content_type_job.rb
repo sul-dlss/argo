@@ -28,7 +28,7 @@ class SetContentTypeJob < GenericJob
       return failure.call("Object is a #{cocina_object.type} and cannot be updated")
     end
 
-    return failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+    return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
     state_service = StateService.new(cocina_object)
     return failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?

@@ -1,5 +1,5 @@
 <header class="document-header row mb-5 pb-3">
-  <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:manage_item, @presenter.cocina) %>
+  <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) %>
 
   <%= content_tag @as, class: @classes do %>
     <%= title -%>

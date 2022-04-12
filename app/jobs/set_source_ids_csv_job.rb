@@ -30,7 +30,7 @@ class SetSourceIdsCsvJob < GenericJob
   def update_one(current_druid, source_id, log)
     cocina_object = Repository.find(current_druid)
 
-    unless ability.can?(:manage_item, cocina_object)
+    unless ability.can?(:update, cocina_object)
       log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
       bulk_action.increment(:druid_count_fail).save
       return

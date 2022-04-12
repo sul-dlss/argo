@@ -23,18 +23,18 @@ class Ability
     cannot :impersonate, User unless current_user.webauth_admin?
 
     if current_user.manager?
-      can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata],
+      can %i[update manage_desc_metadata manage_governing_apo view_content view_metadata],
           [NilModel, Cocina::Models::DRO, Cocina::Models::Collection]
       can :create, Cocina::Models::AdminPolicy
     end
 
     can %i[view_metadata view_content], [Cocina::Models::DRO, Cocina::Models::Collection, Cocina::Models::AdminPolicy] if current_user.viewer?
 
-    can :manage_item, Cocina::Models::AdminPolicy do |cocina_object|
+    can :update, Cocina::Models::AdminPolicy do |cocina_object|
       can_manage_items? current_user.roles(cocina_object.externalIdentifier)
     end
 
-    can :manage_item, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+    can :update, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
       can_manage_items? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
@@ -48,7 +48,7 @@ class Ability
 
     can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object, new_apo_id|
       # user must have management privileges on both the target APO and the APO currently governing the item
-      can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, cocina_object)
+      can_manage_items?(current_user.roles(new_apo_id)) && can?(:update, cocina_object)
     end
 
     can :view_content, Cocina::Models::DRO do |cocina_item|
@@ -69,7 +69,7 @@ class Ability
   # The status is currently "waiting" and they can manage that item
   def can_update_workflow?(status, cocina_object)
     can?(:update, :workflow) ||
-      (status == 'waiting' && can?(:manage_item, cocina_object))
+      (status == 'waiting' && can?(:update, cocina_object))
   end
 
   private

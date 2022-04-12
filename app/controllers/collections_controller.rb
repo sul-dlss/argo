@@ -6,7 +6,7 @@ class CollectionsController < ApplicationController
 
   def new
     @cocina = Repository.find(params[:apo_id])
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -15,7 +15,7 @@ class CollectionsController < ApplicationController
 
   def create
     cocina_admin_policy = Repository.find(params[:apo_id])
-    authorize! :manage_item, cocina_admin_policy
+    authorize! :update, cocina_admin_policy
 
     form = CollectionForm.new
     return render 'new' unless form.validate(params.merge(apo_druid: params[:apo_id]))
@@ -42,7 +42,7 @@ class CollectionsController < ApplicationController
   # save the form
   def update
     @cocina = Repository.find(params[:id])
-    authorize! :manage_item, @cocina
+    authorize! :update, @cocina
     return unless enforce_versioning
 
     change_set = CollectionChangeSet.new(@cocina)

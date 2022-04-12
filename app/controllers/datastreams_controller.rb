@@ -28,7 +28,7 @@ class DatastreamsController < ApplicationController
   # @option params [String] `:item_id` the druid to modify
   def update
     cocina = Repository.find(params[:item_id])
-    authorize! :manage_item, cocina
+    authorize! :update, cocina
 
     raise ArgumentError, 'Missing content' if params[:content].blank?
 

@@ -40,7 +40,7 @@ class LicenseAndRightsStatementsSetter
   #                       ability lacks manage_item permission, or when an underlying exception is raised
   # @return [Cocina::Models::Collection,Cocina::Models::DRO,nil] the cocina object with updates applied or `nil` if no changes
   def set
-    raise "#{druid} cannot be changed by #{ability.current_user}" unless ability.can?(:manage_item, cocina_object)
+    raise "#{druid} cannot be changed by #{ability.current_user}" unless ability.can?(:update, cocina_object)
     raise "#{druid} is not an item or collection (#{cocina_object.type})" unless cocina_object.dro? || cocina_object.collection?
     return unless change_set.changed?
 

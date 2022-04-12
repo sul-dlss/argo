@@ -20,7 +20,7 @@ class ReleaseObjectJob < GenericJob
 
     with_items(params[:druids], name: 'Release tag') do |cocina_object, success, failure|
       next failure.call('Object has never been published and cannot be released') unless WorkflowService.published?(druid: cocina_object.externalIdentifier)
-      next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       Repository.store(model_with_new_release_tag(cocina_object))
 

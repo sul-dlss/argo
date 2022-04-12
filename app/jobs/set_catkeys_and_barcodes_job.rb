@@ -46,7 +46,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
     cocina_object = change_set.model
     log.puts("#{Time.current} Beginning SetCatkeysAndBarcodesJob for #{cocina_object.externalIdentifier}")
 
-    unless ability.can?(:manage_item, cocina_object)
+    unless ability.can?(:update, cocina_object)
       log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
       bulk_action.increment(:druid_count_fail).save
       return
