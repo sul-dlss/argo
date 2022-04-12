@@ -142,7 +142,7 @@ Rails.application.routes.draw do
     resource :publish, only: %i[create destroy]
     resource :content_type, only: %i[edit update]
     resource :structure, only: %i[show update]
-    resource :descriptive, only: %i[show new create]
+    resource :descriptive, only: %i[show edit update]
     resource :technical, only: %i[show]
     resource :events, only: %i[show]
     resource :serials, only: %i[edit update]
