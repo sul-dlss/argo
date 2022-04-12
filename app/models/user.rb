@@ -10,13 +10,11 @@ class User < ApplicationRecord
   MANAGER_GROUPS = %w[workgroup:sdr:manager-role].freeze
   VIEWER_GROUPS = %w[workgroup:sdr:viewer-role].freeze
 
-  # @return [Array<String>] list of roles the user can adopt
+  # @return [Array<String>] list of roles the user can adopt. These must match the roles that Ability looks for.
+  # NOTE: 'sdr-administrator' and 'sdr-viewer' may be removed in the future. See https://github.com/sul-dlss/dor-services-app/issues/3856
   KNOWN_ROLES = %w[
-    dor-apo-creator
     dor-apo-depositor
     dor-apo-manager
-    dor-apo-metadata
-    dor-apo-reviewer
     dor-apo-viewer
     sdr-administrator
     sdr-viewer
