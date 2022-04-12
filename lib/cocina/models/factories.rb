@@ -63,7 +63,11 @@ module Cocina
             isMemberOf: collection_ids
           }
         }.tap do |props|
-          props[:identification][:catalogLinks] = catkeys.map { |catkey| { catalog: 'symphony', catalogRecordId: catkey } } if catkeys.present?
+          if catkeys.present?
+            props[:identification][:catalogLinks] = catkeys.map.with_index do |catkey, index|
+              { catalog: 'symphony', catalogRecordId: catkey, refresh: index.zero? }
+            end
+          end
           props[:identification][:barcode] = barcode if barcode
         end
       end
@@ -88,7 +92,11 @@ module Cocina
           },
           identification: {}
         }.tap do |props|
-          props[:identification][:catalogLinks] = catkeys.map { |catkey| { catalog: 'symphony', catalogRecordId: catkey } } if catkeys.present?
+          if catkeys.present?
+            props[:identification][:catalogLinks] = catkeys.map.with_index do |catkey, index|
+              { catalog: 'symphony', catalogRecordId: catkey, refresh: index.zero? }
+            end
+          end
           props[:identification][:sourceId] = source_id if source_id
         end
       end

@@ -68,7 +68,7 @@ RSpec.describe 'Set catkey' do
         cocina_model.new(
           {
             identification: {
-              catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12345' }],
+              catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12345', refresh: true }],
               sourceId: 'sul:1234'
             }
           }

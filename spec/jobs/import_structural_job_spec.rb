@@ -48,7 +48,7 @@ RSpec.describe ImportStructuralJob, type: :job do
                            { type: 'sha1', digest: 'd71f1b739d4b3ff2bf199c8e3452a16c7a6609f0' },
                            { type: 'md5', digest: 'a695ccc6ed7a9c905ba917d7c284854e' }
                          ],
-                         access: { view: 'world', download: 'world' },
+                         access: { view: 'dark', download: 'none' },
                          administrative: { publish: false, sdrPreserve: true, shelve: false },
                          presentation: { height: 6610, width: 9736 }
                        }, {
@@ -63,8 +63,8 @@ RSpec.describe ImportStructuralJob, type: :job do
                            { type: 'sha1', digest: 'b6632c33619e3dd6268eb1504580285670f4c3b8' },
                            { type: 'md5', digest: '9f74085aa752de7404d31cb6bcc38a56' }
                          ],
-                         access: { view: 'world', download: 'world' },
-                         administrative: { publish: true, sdrPreserve: true, shelve: true },
+                         access: { view: 'dark', download: 'none' },
+                         administrative: { publish: false, sdrPreserve: true, shelve: false },
                          presentation: { height: 6610, width: 9736 }
                        }
                      ]
@@ -99,7 +99,7 @@ RSpec.describe ImportStructuralJob, type: :job do
                            { type: 'sha1', digest: 'd71f1b739d4b3ff2bf199c8e3452a16c7a6609f0' },
                            { type: 'md5', digest: 'a695ccc6ed7a9c905ba917d7c284854e' }
                          ],
-                         access: { view: 'world', download: 'world' },
+                         access: { view: 'dark', download: 'none' },
                          administrative: { publish: false, sdrPreserve: true, shelve: false },
                          presentation: { height: 6610, width: 9736 }
                        }, {
@@ -114,8 +114,8 @@ RSpec.describe ImportStructuralJob, type: :job do
                            { type: 'sha1', digest: 'b6632c33619e3dd6268eb1504580285670f4c3b8' },
                            { type: 'md5', digest: '9f74085aa752de7404d31cb6bcc38a56' }
                          ],
-                         access: { view: 'world', download: 'world' },
-                         administrative: { publish: true, sdrPreserve: true, shelve: true },
+                         access: { view: 'dark', download: 'none' },
+                         administrative: { publish: false, sdrPreserve: true, shelve: false },
                          presentation: { height: 6610, width: 9736 }
                        }
                      ]

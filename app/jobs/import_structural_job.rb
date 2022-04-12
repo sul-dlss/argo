@@ -3,6 +3,7 @@
 class ImportStructuralJob < GenericJob
   def perform(_batch_id, params)
     super
+
     csv = CSV.parse(params[:csv_file], headers: true)
     # Group the rows by druid
     grouped = csv.group_by { |row| "druid:#{row['druid']}" }
