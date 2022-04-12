@@ -66,13 +66,6 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'content type' do
-      it 'renders the edit content type ui' do
-        visit "/items/#{apo_druid}/content_type"
-        expect(page).to have_content('Set content type')
-      end
-    end
-
     context 'tag ui' do
       let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
       let(:object_client) do
