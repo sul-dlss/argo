@@ -71,7 +71,10 @@ class DescriptionImport
 
   def compact_params(params)
     params.each do |key, value|
-      params[key].compact! if value.is_a?(Array)
+      next unless value.is_a?(Array)
+
+      params[key].compact!
+      params[key].map { |param| compact_params(param) }
     end
   end
 end
