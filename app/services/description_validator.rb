@@ -13,7 +13,7 @@ class DescriptionValidator
 
   def valid?
     validate_headers
-    validate_rows
+    validate_druid_in_rows if @bulk_job
     errors.empty?
   end
 
@@ -22,12 +22,9 @@ class DescriptionValidator
       errors << "Duplicate column headers: The header #{header} should occur only once."
     end
     errors << 'Druid column not found.' if @bulk_job && @headers.exclude?('druid')
-    invalid_headers.each do |invalid_header|
-      errors << "Column header invalid: #{invalid_header}."
-    end
   end
 
-  def validate_rows
+  def validate_druid_in_rows
     duplicate_druids.each do |druid|
       errors << "Duplicate druids: The druid \"#{druid}\" should occur only once."
     end
@@ -40,15 +37,6 @@ class DescriptionValidator
 
   def duplicate_headers
     @headers.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
-  end
-
-  def invalid_headers
-    # The source_id and druid are only there for the user to reference, and we already validate the druid column is present
-    @headers.excluding('source_id', 'druid').map do |address|
-      split_address = address.scan(/[[:alpha:]]+|[[:digit:]]+/)
-                             .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
-      address unless Cocina::Models::Description.has_attribute? split_address[0].to_sym
-    end.compact
   end
 
   def duplicate_druids
