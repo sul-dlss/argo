@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe DescriptionValidator do
   describe '#valid?' do
-    let(:instance) { described_class.new(CSV.parse(csv, headers: true)) }
+    let(:instance) { described_class.new(CSV.parse(csv, headers: true), bulk_job: bulk_job) }
+    let(:bulk_job) { true }
 
     context 'with duplicate columns' do
       let(:csv) { 'druid,title1:value,title2:value,title1:value,title2:value,title3:value' }
@@ -18,12 +19,30 @@ RSpec.describe DescriptionValidator do
       end
     end
 
-    context 'with missing druid header' do
+    context 'with missing druid header in a bulk job' do
       let(:csv) { 'title1:value,title2:value,title3:value' }
 
       it 'finds errors' do
         expect(instance.valid?).to be false
-        expect(instance.errors).to eq ['druid column not found.']
+        expect(instance.errors).to eq ['Druid column not found.']
+      end
+    end
+
+    context 'with missing druid header not in a bulk job' do
+      let(:csv) { 'title1:value,title2:value,title3:value' }
+      let(:bulk_job) { false }
+
+      it 'validates' do
+        expect(instance.valid?).to be true
+      end
+    end
+
+    context 'with headers that do not map to cocina model' do
+      let(:csv) { 'druid,title1:value,title2:value,title3:value,bogus,event:contributor' }
+
+      it 'finds errors' do
+        expect(instance.valid?).to be false
+        expect(instance.errors).to eq ['Column header invalid: bogus.']
       end
     end
 
