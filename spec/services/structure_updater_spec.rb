@@ -99,8 +99,9 @@ RSpec.describe StructureUpdater do
                       }
                     ],
                     "access": {
-                      "view": "world",
-                      "download": "world"
+                      "view": "location-based",
+                      "download": "location-based",
+                      "location": "music"
                     },
                     "administrative": {
                       "publish": true,
@@ -203,7 +204,7 @@ RSpec.describe StructureUpdater do
     let(:csv) do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
-        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/one,
+        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/one,
         Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription
         Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,
         Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,location-based,music,image/four,
@@ -227,11 +228,15 @@ RSpec.describe StructureUpdater do
 
       access = new_files.map { |file| [file.access.view, file.access.download, file.access.location] }
       expect(access).to eq [
-        ['stanford', 'none', nil], ['world', 'world', nil], ['stanford', 'none', nil], %w[location-based location-based music]
+        ['stanford', 'stanford', nil], ['world', 'world', nil], ['stanford', 'none', nil], %w[location-based location-based music]
       ]
 
       use = new_files.map(&:use)
       expect(use).to eq [nil, 'transcription', nil, nil]
+    end
+
+    it 'produces valid cocina' do
+      cocina.new(structural: result.value!)
     end
   end
 
@@ -239,9 +244,9 @@ RSpec.describe StructureUpdater do
     let(:csv) do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
-        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
-        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
+        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
       CSV
     end
@@ -257,6 +262,10 @@ RSpec.describe StructureUpdater do
         'Picture 1',
         'Picture 2'
       ]
+    end
+
+    it 'produces valid cocina' do
+      cocina.new(structural: result.value!)
     end
   end
 
