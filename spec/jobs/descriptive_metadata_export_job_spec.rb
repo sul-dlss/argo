@@ -47,7 +47,7 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
 
       it 'writes a CSV file' do
         csv = CSV.read(csv_path, headers: true)
-        expect(csv.headers).to eq ['druid', 'source_id', 'purl', 'title1.value']
+        expect(csv.headers).to eq ['druid', 'source_id', 'title1.value', 'purl']
         expect(csv[0][0]).to eq 'druid:bc123df4567'
         expect(csv[1][0]).to eq 'druid:bd123fg5678'
         expect(csv[0][1]).to eq 'sul:4444'
