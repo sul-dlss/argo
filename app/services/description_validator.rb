@@ -14,11 +14,23 @@ class DescriptionValidator
   def valid?
     validate_duplicate_headers
     validate_title_headers
+    validate_cell_values
     if @bulk_job
       validate_druid_headers
       validate_druid_rows
     end
     errors.empty?
+  end
+
+  def validate_cell_values
+    @csv.each.with_index(2) do |row, i|
+      @headers.excluding('druid').each do |header|
+        location = row['druid'] || "row #{i}"
+        cell_value = row[header]&.strip
+        errors << "Value error: #{location} has 0 value in #{header}." if cell_value == '0'
+        errors << "Value error: #{location} has spreadsheet formula error in #{header}." if %w[#NA #REF! #VALUE? #NAME?].include? cell_value
+      end
+    end
   end
 
   def validate_duplicate_headers
