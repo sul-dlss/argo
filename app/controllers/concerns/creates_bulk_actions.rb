@@ -15,7 +15,11 @@ module CreatesBulkActions
     if bulk_action.save
       bulk_action.enqueue_job(job_params)
 
-      redirect_to bulk_actions_path(Blacklight::Parameters.sanitize(search_state.to_h.except(:authenticity_token))), status: :see_other, notice: success_message
+      # strip the CSRF token, and the parameters that happened to be in the bulk job creation form
+      # this can be removed when this is resolved: https://github.com/projectblacklight/blacklight/issues/2683
+      search_state_subset = search_state.to_h.except(:authenticity_token, :druids, :druids_only, :description)
+      path_params = Blacklight::Parameters.sanitize(search_state_subset)
+      redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
     else
       render :new, status: :unprocessable_entity
     end
