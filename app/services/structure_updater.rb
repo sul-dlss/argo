@@ -73,10 +73,14 @@ class StructureUpdater
         shelve: row['shelve'] == 'yes',
         sdrPreserve: row['preserve'] == 'yes'
       ),
-      access: existing_file.access.new(
-        view: row['rights_view'],
-        download: row['rights_download'],
-        location: row['rights_location']
+      access: existing_file.access.class.new(
+        {
+          view: row['rights_view'],
+          download: row['rights_download'],
+          location: row['rights_location'],
+          # stanford/none required controlledDigitalLending set to false. All others should omit.
+          controlledDigitalLending: row['rights_view'] == 'stanford' && row['rights_download'] == 'none' ? false : nil
+        }.compact
       )
     }
     attributes[:use] = row['role'] if row['role'] # nil is not permitted
@@ -102,7 +106,6 @@ class StructureUpdater
                    .merge(structural: { contains: files_by_fileset[sequence] })
       existing_fileset.new(**attributes)
     end
-
     Success(model.structural.new(contains: contains))
   end
 
