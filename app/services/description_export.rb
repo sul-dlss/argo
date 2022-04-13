@@ -38,7 +38,7 @@ class DescriptionExport
         sink[key] = value
       else
         flatten(value).each do |k, v|
-          new_key = k.start_with?(/\d/) ? "#{key}#{k}" : "#{key}:#{k}"
+          new_key = k.start_with?(/\d/) ? "#{key}#{k}" : "#{key}.#{k}"
           sink[new_key] = v
         end
       end
