@@ -65,8 +65,7 @@ class DescriptivesController < ApplicationController
   def create_csv
     description = DescriptionExport.export(source_id: @cocina.identification.sourceId,
                                            description: @cocina.description)
-    headers = ['source_id'] + (description.keys - ['source_id']).sort
-
+    headers = DescriptionHeaders.create(headers: description.keys)
     CSV.generate(write_headers: true, headers: headers) do |body|
       body << description.values_at(*headers)
     end
