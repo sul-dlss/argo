@@ -33,19 +33,28 @@ class DescriptivesController < ApplicationController
 
   private
 
+  def display_error(error)
+    @errors = [error]
+    render :edit, status: :unprocessable_entity
+  end
+
   def convert_metdata_success(description:)
-    Repository.store(@cocina.new(description: description))
+    valid_model = begin
+      @cocina.new(description: description)
+    rescue Cocina::Models::ValidationError => e
+      return display_error(e.message) # rubocop:disable Lint/NoReturnInBeginEndBlocks
+    end
+
+    Repository.store(valid_model)
     redirect_to solr_document_path(@cocina.externalIdentifier),
                 status: :see_other,
                 notice: 'Descriptive metadata has been updated.'
   rescue Dor::Services::Client::UnexpectedResponse => e
-    @errors = ["unexpected response from dor-services-app: #{e.message}"]
-    render :edit, status: :unprocessable_entity
+    display_error("unexpected response from dor-services-app: #{e.message}")
   end
 
   def convert_metadata_fail(failure)
-    @errors = ["There was a problem processing the spreadsheet: #{failure}"]
-    render :edit, status: :unprocessable_entity
+    display_error("There was a problem processing the spreadsheet: #{failure}")
   end
 
   def load_and_authorize_resource
