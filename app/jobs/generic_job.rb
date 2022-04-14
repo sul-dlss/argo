@@ -134,7 +134,7 @@ class GenericJob < ApplicationJob
         cocina_object = Repository.find(druid)
         yield(cocina_object, csv_row, success, failure, row_num)
       rescue StandardError => e
-        failure.call("Line #{row_num}: #{name} failed #{e.class} #{e.message}")
+        failure.call("#{name} failed #{e.class} #{e.message}")
         Honeybadger.notify(e, context: { druid: druid })
       end
     end
