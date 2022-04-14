@@ -3,6 +3,8 @@
 ##
 # Job to update/add embargoes to objects
 class ManageEmbargoesJob < GenericJob
+  include Dry::Monads[:result]
+
   ##
   # A job that allows a user to provide a spreadsheet for managing embargoes.
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
@@ -11,53 +13,51 @@ class ManageEmbargoesJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    update_druids, embargo_release_dates, rights = params_from_csv(params)
-    with_items(update_druids, name: 'Embargo') do |cocina_object, success, failure, index|
-      update_embargo(cocina_object, embargo_release_dates[index], rights[index], success, failure)
+    csv = CSV.parse(params[:csv_file], headers: true)
+    with_csv_items(csv, name: 'Embargo') do |cocina_object, csv_row, success, failure|
+      update_embargo(cocina_object, csv_row, success, failure)
     end
   end
 
   private
 
-  def params_from_csv(params)
-    druids = []
-    release_dates = []
-    rights = []
-    CSV.parse(params[:csv_file], headers: true).each do |row|
-      druids << row['Druid']
-      release_dates << row['Release_date']
-      rights << row['Rights']
-    end
-    [druids, release_dates, rights]
-  end
-
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
-  def update_embargo(cocina_object, embargo_release_date_param, rights_param, success, failure)
-    begin
-      embargo_release_date = embargo_release_date_param.present? ? DateTime.parse(embargo_release_date_param) : nil
-    rescue Date::Error
-      return failure.call("#{embargo_release_date_param} is not a valid date")
-    end
-
+  def update_embargo(cocina_object, csv_row, success, failure)
     return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
     state_service = StateService.new(cocina_object)
-    msg = "Setting embargo to #{rights_param} to be released on #{embargo_release_date_param}."
+    msg = 'Manage embargo'
     open_new_version(cocina_object.externalIdentifier, cocina_object.version, msg) unless state_service.allows_modification?
 
-    changes = {}
-    changes[:embargo_release_date] = embargo_release_date if embargo_release_date
-    changes[:embargo_access] = rights_param if rights_param
-    return success.call('no changes') if changes.empty?
+    build_form(cocina_object, csv_row).either(
+      lambda { |form|
+        form.save
+        success.call('Embargo updated')
+      },
+      ->(error) { failure.call(error) }
+    )
+  end
 
-    change_set = ItemChangeSet.new(cocina_object)
-    if change_set.validate(changes) && change_set.save
-      success.call("Embargo set to #{rights_param} to be released on #{embargo_release_date_param}.")
+  def build_form(cocina_object, csv_row)
+    return Failure('Missing required value for "release_date"') unless csv_row['release_date']
+
+    begin
+      embargo_release_date = DateTime.parse(csv_row['release_date'])
+    rescue Date::Error
+      return Failure("#{csv_row['release_date']} is not a valid date")
+    end
+
+    changes = {
+      release_date: embargo_release_date,
+      view_access: csv_row['view'],
+      download_access: csv_row['download'],
+      access_location: csv_row['location']
+    }
+
+    form = EmbargoForm.new(cocina_object)
+    if form.validate(changes)
+      Success(form)
     else
-      failure.call("#{rights_param} is not a valid right")
+      Failure(form.errors.full_messages.join(','))
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
 end

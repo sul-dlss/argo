@@ -133,6 +133,8 @@ class GenericJob < ApplicationJob
 
         cocina_object = Repository.find(druid)
         yield(cocina_object, csv_row, success, failure, row_num)
+      rescue KeyError
+        raise "Column \"#{druid_column}\" not found"
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
         Honeybadger.notify(e, context: { druid: druid })
