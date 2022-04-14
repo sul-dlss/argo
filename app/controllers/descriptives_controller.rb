@@ -39,16 +39,15 @@ class DescriptivesController < ApplicationController
   end
 
   def convert_metdata_success(description:)
-    valid_model = begin
-      @cocina.new(description: description)
-    rescue Cocina::Models::ValidationError => e
-      return display_error(e.message) # rubocop:disable Lint/NoReturnInBeginEndBlocks
-    end
-
-    Repository.store(valid_model)
-    redirect_to solr_document_path(@cocina.externalIdentifier),
-                status: :see_other,
-                notice: 'Descriptive metadata has been updated.'
+    CocinaValidator.validate(@cocina, description: description).either(
+      lambda { |valid_model|
+        Repository.store(valid_model)
+        redirect_to solr_document_path(@cocina.externalIdentifier),
+                    status: :see_other,
+                    notice: 'Descriptive metadata has been updated.'
+      },
+      ->(message) { display_error(message) }
+    )
   rescue Dor::Services::Client::UnexpectedResponse => e
     display_error("unexpected response from dor-services-app: #{e.message}")
   end
