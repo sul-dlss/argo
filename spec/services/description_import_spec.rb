@@ -12,10 +12,9 @@ RSpec.describe DescriptionImport do
       		"value": "Concerto for piano, strings, brass and percussion!",
       		"status": "primary"
       	}, {
-      		"structuredValue": [{
-      			"value": "Concertos, piano, orchestra",
-      			"type": "title"
-      		}, {
+      		"value": "Concertos, piano, orchestra",
+      		"type": "uniform",
+      		"note": [{
       			"structuredValue": [{
       				"value": "Harvey, Robert Gibson",
       				"type": "name"
@@ -23,13 +22,12 @@ RSpec.describe DescriptionImport do
       				"value": "1951-",
       				"type": "life dates"
       			}],
-      			"type": "name"
-      		}],
-      		"type": "uniform"
+      			"type": "associated name"
+      		}]
       	}],
       	"contributor": [{
       		"name": [{
-      			"structuredValue": [{
+      			"structuredValue": [{#{'						'}
       				"value": "Harvey, Robert Gibson",
       				"type": "name"
       			}, {
@@ -40,13 +38,13 @@ RSpec.describe DescriptionImport do
       		"type": "person",
       		"status": "primary"
       	}],
-      	"event": [{
-      		"location": [{
+      	"event": [{#{'				'}
+      		"location": [{#{'					'}
       			"code": "xx",
       			"source": {
       				"code": "marccountry"
       			}
-      		}],
+      		}],#{'				'}
       		"note": [{
       			"value": "monographic",
       			"type": "issuance",
@@ -122,7 +120,7 @@ RSpec.describe DescriptionImport do
       				}]
       			}],
       			"type": "organization"
-      		}]
+      		}]#{'				'}
       	}],
       	"adminMetadata": {
       		"contributor": [{
