@@ -7,18 +7,18 @@ RSpec.describe 'Upload the structural CSV' do
 
   let(:user) { create(:user) }
   let(:druid) { 'druid:bc123df4567' }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:state_service) { instance_double(StateService) }
 
   before do
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Repository).to receive(:find).and_return(cocina_model)
+    allow(Repository).to receive(:store)
+
     allow(StateService).to receive(:new).and_return(state_service, allows_modification?: modifiable)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do
     before do
-      allow(StructureUpdater).to receive(:from_csv).and_return(Success(cocina_model.structural))
       allow(state_service).to receive(:allows_modification?).and_return(modifiable)
 
       sign_in user, groups: ['sdr:administrator-role']
@@ -30,10 +30,50 @@ RSpec.describe 'Upload the structural CSV' do
     context 'when object is unlocked' do
       let(:modifiable) { true }
 
-      it 'updates the structure' do
-        put "/items/#{druid}/structure", params: { csv: file }
-        expect(object_client).to have_received(:update)
-        expect(response).to have_http_status(:see_other)
+      context 'when valid' do
+        before do
+          allow(StructureUpdater).to receive(:from_csv).and_return(result)
+        end
+
+        let(:result) { Success(cocina_model.structural) }
+
+        it 'updates the structure' do
+          put "/items/#{druid}/structure", params: { csv: file }
+          expect(Repository).to have_received(:store)
+          expect(response).to have_http_status(:see_other)
+        end
+      end
+
+      context 'when the data is invalid' do
+        let(:cocina_model) do
+          build(:dro).new(structural: {
+                            contains: [
+                              {
+                                externalIdentifier: 'fs1',
+                                label: 'foo',
+                                version: 1,
+                                type: Cocina::Models::FileSetType.image,
+                                structural: {
+                                  contains: [
+                                    {
+                                      externalIdentifier: 'file1',
+                                      label: 'foo',
+                                      version: 1,
+                                      type: Cocina::Models::ObjectType.file,
+                                      filename: 'chocolate_cake.jpg'
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          })
+        end
+
+        it 'shows an error' do
+          put "/items/#{druid}/structure", params: { csv: file }
+          expect(Repository).not_to have_received(:store)
+          expect(response).to have_http_status(:see_other)
+        end
       end
     end
 
@@ -42,7 +82,7 @@ RSpec.describe 'Upload the structural CSV' do
 
       it 'updates the structure' do
         put "/items/#{druid}/structure", params: { csv: file }
-        expect(object_client).not_to have_received(:update)
+        expect(Repository).not_to have_received(:store)
         expect(response).to have_http_status(:found)
       end
     end

@@ -21,14 +21,18 @@ class StructuresController < ApplicationController
   end
 
   def update
-    status = StructureUpdater.from_csv(@cocina, params[:csv].read)
-
-    if status.success?
-      Repository.store(@cocina.new(structural: status.value!))
-      redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Structural metadata updated'
-    else
-      redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: status.failure.join('\n') }
-    end
+    StructureUpdater.from_csv(@cocina, params[:csv].read).either(
+      lambda { |structural|
+        CocinaValidator.validate(@cocina, structural: structural).either(
+          lambda { |updated|
+            Repository.store(updated)
+            redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Structural metadata updated'
+          },
+          ->(message) { redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, flash: { error: message } }
+        )
+      },
+      ->(errors) { redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: errors.join('\n') } }
+    )
   end
 
   private
