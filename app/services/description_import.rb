@@ -26,7 +26,7 @@ class DescriptionImport
 
     Success(Cocina::Models::Description.new(compact_params(params)))
   rescue Cocina::Models::ValidationError => e
-    Failure(e.message)
+    Failure([e.message])
   end
 
   private

@@ -51,7 +51,7 @@ RSpec.describe 'Upload the descriptive CSV' do
     end
 
     context 'when import was not successful' do
-      let(:result) { Failure("didn't map") }
+      let(:result) { Failure(["didn't map"]) }
 
       it "doesn't updates the descriptive" do
         put "/items/#{druid}/descriptive", params: { data: file }

@@ -22,21 +22,23 @@ class StructuresController < ApplicationController
   end
 
   def update
-    StructureUpdater.from_csv(@cocina, params[:csv].read).either(
-      lambda { |structural|
-        CocinaValidator.validate(@cocina, structural: structural).either(
-          lambda { |updated|
-            Repository.store(updated)
-            redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Structural metadata updated'
-          },
-          ->(message) { redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, flash: { error: message } }
-        )
-      },
-      ->(errors) { redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: errors.join('\n') } }
-    )
+    StructureUpdater.from_csv(@cocina, params[:csv].read)
+                    .bind { |structural| CocinaValidator.validate_and_save(@cocina, structural: structural) }
+                    .either(
+                      ->(_updated) { display_success('Structural metadata updated') },
+                      ->(messages) { display_error(messages) }
+                    )
   end
 
   private
+
+  def display_success(message)
+    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: message
+  end
+
+  def display_error(messages)
+    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, flash: { error: messages.join(', ') }
+  end
 
   # decode the token that grants view access
   def decrypted_token

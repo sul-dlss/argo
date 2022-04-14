@@ -2,11 +2,20 @@
 
 # Creates a updated instance of the model and handles validations
 class CocinaValidator
+  include Dry::Monads[:try]
   extend Dry::Monads[:result]
 
   def self.validate(model, **args)
-    Success(model.new(args))
-  rescue Cocina::Models::ValidationError => e
-    Failure(e.message)
+    Try[Cocina::Models::ValidationError] { model.new(args) }
+      .to_result
+      .or { |exception| Failure([exception.message]) }
+  end
+
+  def self.validate_and_save(model, **args)
+    validate(model, **args).bind do |updated|
+      Try[Dor::Services::Client::UnexpectedResponse] { Repository.store(updated) }
+        .to_result
+        .or { Failure(['unexpected response from dor-services-app']) }
+    end
   end
 end
