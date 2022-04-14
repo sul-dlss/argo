@@ -12,19 +12,35 @@ class DescriptionValidator
   attr_reader :errors
 
   def valid?
-    validate_headers
-    validate_druid_in_rows if @bulk_job
+    validate_duplicate_headers
+    validate_title_headers
+    if @bulk_job
+      validate_druid_headers
+      validate_druid_rows
+    end
     errors.empty?
   end
 
-  def validate_headers
+  def validate_duplicate_headers
     duplicate_headers.each do |header|
       errors << "Duplicate column headers: The header #{header} should occur only once."
     end
-    errors << 'Druid column not found.' if @bulk_job && @headers.exclude?('druid')
   end
 
-  def validate_druid_in_rows
+  def validate_title_headers
+    if @headers.include?('title1.value') ||
+       (@headers.exclude?('title1.value') && @headers.include?('title1.structureValue1.type') && @headers.include?('title1.structureValue1.value'))
+      return
+    end
+
+    errors << 'Title column not found.'
+  end
+
+  def validate_druid_headers
+    errors << 'Druid column not found.' if @headers.exclude?('druid')
+  end
+
+  def validate_druid_rows
     duplicate_druids.each do |druid|
       errors << "Duplicate druids: The druid \"#{druid}\" should occur only once."
     end

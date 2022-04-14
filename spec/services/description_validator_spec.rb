@@ -18,6 +18,49 @@ RSpec.describe DescriptionValidator do
           ]
         end
       end
+
+      context 'with missing title1.value column' do
+        let(:csv) { 'druid,event1.note1.source.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq ['Title column not found.']
+        end
+      end
+
+      context 'with missing title1.structureValue1.value column' do
+        let(:csv) { 'druid,title1.structureValue1.type' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq ['Title column not found.']
+        end
+      end
+
+      context 'with missing title1.structureValue1.type column' do
+        let(:csv) { 'druid,title1.structureValue1.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq ['Title column not found.']
+        end
+      end
+
+      context 'with a title1.structureValue1.value and a title1.structureValue1.type column' do
+        let(:csv) { 'druid,title1.structureValue1.type,title1.structureValue1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with a title1.value column' do
+        let(:csv) { 'druid,title1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
     end
 
     context 'for bulk jobs' do
