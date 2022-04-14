@@ -22,9 +22,7 @@ class DescriptiveMetadataExportJob < GenericJob
       end
 
       log_buffer.puts("#{Time.current} #{self.class}: Writing to file")
-      sort_order = %w[title contributor form event language note identifier access purl subject relatedResource adminMetadata geographic marcEncodedData valueAt]
-      headers = (headers - ['source_id']).sort
-      ordered_headers = ['source_id'] + headers.sort_by.with_index { |header, index| [sort_order.index(field_name(header)) || headers.length, index] }
+      ordered_headers = DescriptionHeaders.create(headers: headers)
 
       CSV.open(csv_download_path, 'w', write_headers: true, headers: %w[druid] + ordered_headers) do |csv|
         descriptions.each do |druid, description|
@@ -37,11 +35,6 @@ class DescriptiveMetadataExportJob < GenericJob
   end
 
   private
-
-  def field_name(key)
-    field = key.split(':').first
-    /[a-zA-Z]*/.match(field).to_s
-  end
 
   def csv_download_path
     FileUtils.mkdir_p(bulk_action.output_directory)
