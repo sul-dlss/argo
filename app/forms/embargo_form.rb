@@ -27,16 +27,24 @@ class EmbargoForm < ApplicationChangeSet
     return unless changed?(:release_date) || changed?(:view_access) || changed?(:download_access) || changed?(:access_location)
 
     updated = model
-    embargo_params = {
-      releaseDate: release_date,
-      view: view_access,
-      download: download_access,
-      location: access_location
-    }
+
     embargo = updated.access.embargo ? updated.access.embargo.new(embargo_params) : Cocina::Models::Embargo.new(embargo_params)
     updated_access = updated.access.new(embargo: embargo)
     updated = updated.new(access: updated_access)
 
     Repository.store(updated)
+  end
+
+  def embargo_params
+    {
+      releaseDate: release_date,
+      view: view_access,
+      download: download_access,
+      location: access_location
+    }.tap do |params|
+      # This is a hack to ensure controlledDigitalLending is set true/false
+      # see https://github.com/sul-dlss/cocina-models/issues/405
+      params[:controlledDigitalLending] = false if view_access == 'stanford' && download_access == 'none'
+    end
   end
 end
