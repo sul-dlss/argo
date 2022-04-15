@@ -3,11 +3,11 @@
 # Handles HTTP interaction that allows management of bulk jobs for an APO
 class BulkJobsController < ApplicationController
   include Blacklight::Searchable
+
+  load_resource :cocina, parent: false, class: 'Repository', id_param: 'apo_id', only: :index
+
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
-    params[:apo_id] = Druid.new(params[:apo_id]).with_namespace
-
-    @cocina =  Repository.find(params[:apo_id])
     authorize! :view_metadata, @cocina
 
     @document = find(params[:apo_id])
