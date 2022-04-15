@@ -30,7 +30,7 @@ namespace :argo do
     require_relative '../../spec/support/item_method_sender'
 
     n = args[:n].to_i
-    n.times { FactoryBot.create_for_repository(:item) }
+    n.times { FactoryBot.create_for_repository(:persisted_item) }
   end
 
   desc 'Seed APO, collection and item, useful for local development'
