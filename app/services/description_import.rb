@@ -24,7 +24,7 @@ class DescriptionImport
       visit(params, split_address, @csv_row[address]) if @csv_row[address]
     end
 
-    Success(Cocina::Models::Description.new(params))
+    Success(Cocina::Models::Description.new(compact_params(params)))
   rescue Cocina::Models::ValidationError => e
     Failure(e.message)
   end
@@ -66,6 +66,15 @@ class DescriptionImport
       (0...what.size).cover?(key)
     when Hash
       what.key?(key)
+    end
+  end
+
+  def compact_params(params)
+    params.each do |key, value|
+      next unless value.is_a?(Array)
+
+      params[key].compact!
+      params[key].map { |param| compact_params(param) }
     end
   end
 end

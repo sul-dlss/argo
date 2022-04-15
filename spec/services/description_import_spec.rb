@@ -203,4 +203,42 @@ RSpec.describe DescriptionImport do
       expect(updated.value!).to eq expected
     end
   end
+
+  context 'with a csv that has varied nested values' do
+    # This case occurs when you do a bulk import of different object structures
+    let(:csv_data) do
+      <<~CSV
+        druid,source_id,purl,title1.value,contributor3.name3.parallelValue3.structuredValue1.value,contributor3.name3.parallelValue3.structuredValue1.type,contributor3.name3.parallelValue3.structuredValue2.value,contributor3.name3.parallelValue3.structuredValue2.type,contributor3.name3.parallelValue4.structuredValue1.value,contributor3.name3.parallelValue4.structuredValue1.type,contributor3.name3.parallelValue4.structuredValue2.value,contributor3.name3.parallelValue4.structuredValue2.type
+        jr825qh8124,foo2:bar2,https://purl/jr825qh8124,Title 2,Parallel 1 part 1,name,1800-1900,life dates,Parallel 2 part 1,name,marchioness,term of address
+      CSV
+    end
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    let(:expected) do
+      Cocina::Models::Description.new(
+        title: [{ value: 'Title 2' }],
+        purl: 'https://purl/jr825qh8124',
+        contributor: [
+          { name: [
+            { parallelValue: [
+              { structuredValue: [
+                { value: 'Parallel 1 part 1', type: 'name' },
+                { value: '1800-1900', type: 'life dates' }
+              ] },
+              { structuredValue: [
+                { value: 'Parallel 2 part 1', type: 'name' },
+                { value: 'marchioness', type: 'term of address' }
+              ] }
+            ] }
+          ] }
+        ]
+      )
+    end
+
+    it 'ignores the empty field' do
+      expect(updated.value!).to eq expected
+    end
+  end
 end
