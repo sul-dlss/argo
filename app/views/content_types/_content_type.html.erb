@@ -1,6 +1,6 @@
 <p><%= I18n.t('argo.content_type.update_explanation_single') %></p>
 <p><%= I18n.t('argo.content_type.suggeted_mappings').html_safe %></p>
-<p>More complex updates should be executed by hand on the datastream XML.</p>
+<p>More complex updates should be executed through use of the structural metadata CSV.</p>
 
 <%= form_with model: @form, url: item_content_type_path(item_id: @cocina.externalIdentifier),
               method: :patch,
