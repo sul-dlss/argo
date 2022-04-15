@@ -23,7 +23,7 @@ RSpec.describe SetRightsJob, type: :job do
         type: Cocina::Models::ObjectType.book,
         description: {
           title: [{ value: 'Stanford Item' }],
-          purl: "https://purl.stanford.edu/#{druids[0]}"
+          purl: "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
         },
         externalIdentifier: druids[0],
         access: {
@@ -102,7 +102,7 @@ RSpec.describe SetRightsJob, type: :job do
         type: Cocina::Models::ObjectType.image,
         description: {
           title: [{ value: 'World Item' }],
-          purl: "https://purl.stanford.edu/#{druids[1]}"
+          purl: "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
         },
         externalIdentifier: druids[1],
         access: {

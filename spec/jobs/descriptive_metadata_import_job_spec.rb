@@ -12,8 +12,8 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:csv_file) do
     [
       'druid,source_id,title1:value,purl',
-      [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'https://purl'].join(','),
-      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'https://purl'].join(',')
+      [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(','),
+      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"].join(',')
     ].join("\n")
   end
 
@@ -38,11 +38,11 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       let(:ability) { instance_double(Ability, can?: true) }
 
       let(:expected1) do
-        item1.new(description: item1.description.new(title: [{ value: 'new title 1' }], purl: 'https://purl'))
+        item1.new(description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
       end
 
       let(:expected2) do
-        item2.new(description: item2.description.new(title: [{ value: 'new title 2' }], purl: 'https://purl'))
+        item2.new(description: item2.description.new(title: [{ value: 'new title 2' }], purl: "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"))
       end
 
       it 'updates the descriptive metadata for each item' do
@@ -67,7 +67,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       let(:csv_file) do
         [
           'druid,source_id,title1.structuredValue1.type,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'https://purl'].join(',')
+          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
         ].join("\n")
       end
       let(:ability) { instance_double(Ability, can?: true) }
