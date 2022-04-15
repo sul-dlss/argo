@@ -19,7 +19,14 @@ class DescriptiveMetadataImportJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       DescriptionImport.import(csv_row: csv_row).either(
-        ->(description) { Repository.store(cocina_object.new(description: description)) && success.call('Successfully updated') },
+        lambda { |description|
+          begin
+            Repository.store(cocina_object.new(description: description))
+            success.call('Successfully updated')
+          rescue Cocina::Models::ValidationError => e
+            failure.call(e.message)
+          end
+        },
         ->(error) { failure.call(error) }
       )
     end

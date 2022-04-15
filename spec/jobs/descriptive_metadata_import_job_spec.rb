@@ -62,5 +62,29 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         expect(Repository).not_to have_received(:store)
       end
     end
+
+    context 'when validation fails' do
+      let(:csv_file) do
+        [
+          'druid,source_id,title1.structuredValue1.type,purl',
+          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'https://purl'].join(',')
+        ].join("\n")
+      end
+      let(:ability) { instance_double(Ability, can?: true) }
+
+      before do
+        allow(Ability).to receive(:new).and_return(ability)
+        allow(Honeybadger).to receive(:notify)
+        subject.perform(bulk_action.id, { csv_file: csv_file })
+      end
+
+      it 'updates the error count without alerting honeybadger' do
+        expect(bulk_action.druid_count_total).to eq 1
+        expect(bulk_action.druid_count_fail).to eq 1
+        expect(bulk_action.druid_count_success).to eq 0
+        expect(Repository).not_to have_received(:store)
+        expect(Honeybadger).not_to have_received(:notify)
+      end
+    end
   end
 end
