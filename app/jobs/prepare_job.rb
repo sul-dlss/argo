@@ -19,8 +19,8 @@ class PrepareJob < GenericJob
     description = params['version_description']
 
     with_items(params[:druids], name: 'Open version') do |cocina_object, success, failure|
-      return failure.call("State isn't openable") unless openable?(cocina_object)
-      return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+      next failure.call("State isn't openable") unless openable?(cocina_object)
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       VersionService.open(identifier: cocina_object.externalIdentifier,
                           significance:,
