@@ -3,14 +3,10 @@
 class ApoController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
-  before_action :load_resource, except: %i[
-    new
-    create
-    spreadsheet_template
-  ]
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', only: %i[edit update]
+  load_resource :cocina, parent: false, class: 'Repository', only: :delete_collection
 
   def edit
-    authorize! :update, @cocina
     @form = ApoForm.new(@cocina, search_service: search_service)
 
     render layout: 'one_column'
@@ -44,7 +40,6 @@ class ApoController < ApplicationController
   end
 
   def update
-    authorize! :update, @cocina
     @form = ApoForm.new(@cocina, search_service: search_service)
     unless @form.validate(params.require(:apo).to_unsafe_h)
       respond_to do |format|
@@ -121,9 +116,5 @@ class ApoController < ApplicationController
 
   def solr_conn
     @solr_conn ||= blacklight_config.repository_class.new(blacklight_config).connection
-  end
-
-  def load_resource
-    @cocina = Repository.find(params[:id])
   end
 end
