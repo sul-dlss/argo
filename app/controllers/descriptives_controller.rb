@@ -12,9 +12,12 @@ class DescriptivesController < ApplicationController
     csv = CSV.read(params[:data].tempfile, headers: true)
     validator = DescriptionValidator.new(csv)
     if validator.valid?
-      mapping_result = DescriptionImport.import(csv_row: csv.first)
-      mapping_result.either(->(description) { convert_metdata_success(description: description) },
-                            ->(error) { convert_metadata_fail(error) })
+      DescriptionImport.import(csv_row: csv.first)
+                       .bind { |description| CocinaValidator.validate_and_save(@cocina, description: description) }
+                       .either(
+                         ->(_updated) { display_success },
+                         ->(messages) { display_error(messages) }
+                       )
     else
       @errors = validator.errors
       render :edit, status: :unprocessable_entity
@@ -33,27 +36,13 @@ class DescriptivesController < ApplicationController
 
   private
 
-  def display_error(error)
-    @errors = [error]
+  def display_success
+    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Descriptive metadata has been updated.'
+  end
+
+  def display_error(messages)
+    @errors = messages
     render :edit, status: :unprocessable_entity
-  end
-
-  def convert_metdata_success(description:)
-    CocinaValidator.validate(@cocina, description: description).either(
-      lambda { |valid_model|
-        Repository.store(valid_model)
-        redirect_to solr_document_path(@cocina.externalIdentifier),
-                    status: :see_other,
-                    notice: 'Descriptive metadata has been updated.'
-      },
-      ->(message) { display_error(message) }
-    )
-  rescue Dor::Services::Client::UnexpectedResponse => e
-    display_error("unexpected response from dor-services-app: #{e.message}")
-  end
-
-  def convert_metadata_fail(failure)
-    display_error("There was a problem processing the spreadsheet: #{failure}")
   end
 
   def create_csv

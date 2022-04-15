@@ -37,10 +37,24 @@ RSpec.describe 'Upload the structural CSV' do
 
         let(:result) { Success(cocina_model.structural) }
 
-        it 'updates the structure' do
-          put "/items/#{druid}/structure", params: { csv: file }
-          expect(Repository).to have_received(:store)
-          expect(response).to have_http_status(:see_other)
+        context 'when successfully saved' do
+          it 'updates the structure' do
+            put "/items/#{druid}/structure", params: { csv: file }
+            expect(Repository).to have_received(:store)
+            expect(response).to have_http_status(:see_other)
+          end
+        end
+
+        context 'when save failed' do
+          before do
+            allow(Repository).to receive(:store).and_raise(Dor::Services::Client::UnexpectedResponse)
+          end
+
+          it 'updates the structure' do
+            put "/items/#{druid}/structure", params: { csv: file }
+            expect(response).to have_http_status(:see_other)
+            expect(flash[:error]).to match 'unexpected response from dor-services-app'
+          end
         end
       end
 
