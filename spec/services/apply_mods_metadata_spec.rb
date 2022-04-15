@@ -52,7 +52,6 @@ RSpec.describe ApplyModsMetadata do
     end
 
     before do
-      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(workflow_client).to receive(:status).and_return(status_service)
     end
 
@@ -62,16 +61,47 @@ RSpec.describe ApplyModsMetadata do
         allow(action).to receive(:log_error!)
       end
 
-      it 'saves the metadata' do
-        apply
-        expect(metadata_client).to have_received(:update_mods)
-        expect(action).not_to have_received(:log_error!)
+      context 'when save works' do
+        before do
+          allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+        end
+
+        it 'saves the metadata' do
+          apply
+          expect(metadata_client).to have_received(:update_mods)
+          expect(action).not_to have_received(:log_error!)
+        end
+      end
+
+      context 'when save fails' do
+        before do
+          stub_request(:put, "#{Settings.dor_services.url}/v1/objects/#{druid}/metadata/mods")
+            .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
+        end
+
+        let(:json_response) do
+          <<~JSON
+            {"errors":
+              [{
+                "status":"422",
+                "title":"problem",
+                "detail":"broken"
+              }]
+            }
+          JSON
+        end
+
+        it 'logs the error' do
+          apply
+          expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_unexpected_response druid:bc123hv8998 problem (broken)')
+        end
       end
     end
 
     context 'without permission' do
       before do
         allow(ability).to receive(:can?).and_return(false)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
       it 'saves the metadata' do

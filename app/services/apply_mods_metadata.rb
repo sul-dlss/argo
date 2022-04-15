@@ -19,38 +19,48 @@ class ApplyModsMetadata
     @log = log
   end
 
-  def apply
+  def can_apply?
     # Only update objects that are governed by the correct APO
     unless cocina.administrative.hasAdminPolicy == apo_druid
       log.puts("argo.bulk_metadata.bulk_log_apo_fail #{cocina.externalIdentifier}")
-      return
+      return false
     end
 
     if in_accessioning?
       log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{cocina.externalIdentifier}")
-      return
+      return false
     end
 
-    return unless status_ok?
+    return false unless status_ok?
 
-    return unless ability.can? :update, cocina
+    return false unless ability.can? :update, cocina
 
     # We only update objects if the descMetadata XML is different
     if equivalent_xml?(existing_mods, mods)
       log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{cocina.externalIdentifier}")
-      return
+      return false
     end
 
     errors = ModsValidator.validate(Nokogiri::XML(mods))
     if errors.present?
       log.puts "argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{errors.join(';')}"
-      return
+      return false
     end
 
-    version_object
-    update_metadata
+    true
+  end
 
-    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{cocina.externalIdentifier}")
+  def apply
+    return unless can_apply?
+
+    version_object
+    begin
+      update_metadata
+
+      log.puts("argo.bulk_metadata.bulk_log_job_save_success #{cocina.externalIdentifier}")
+    rescue Dor::Services::Client::UnexpectedResponse => e
+      log.puts("argo.bulk_metadata.bulk_log_unexpected_response #{cocina.externalIdentifier} #{e.message}")
+    end
   rescue StandardError => e
     log_error!(e)
   end
