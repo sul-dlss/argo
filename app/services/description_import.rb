@@ -39,7 +39,7 @@ class DescriptionImport
     key.is_a?(Integer) ? [].tap { |arr| arr[key] = val } : { key => val }
   end
 
-  # @params [Array,Hash] what a tree or list like like data structure. It's one of the nodes in the Cocina descriptive
+  # @params [Array,Hash] what a tree or list like data structure. It's one of the nodes in the Cocina descriptive
   # @params [Array<Symbol,Integer>] rest the "path" we have to follow to get to the location in the tree/list.
   # @params [String] value the data to write
   # @params [Array] path address of the path we took to get to this node

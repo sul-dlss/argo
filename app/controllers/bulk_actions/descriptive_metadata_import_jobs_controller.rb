@@ -7,7 +7,7 @@ module BulkActions
 
     def create
       csv = CSV.parse(normalized_csv, headers: true)
-      validator = DescriptionValidator.new(csv)
+      validator = DescriptionValidator.new(csv, bulk_job: true)
       if validator.valid?
         super
       else
