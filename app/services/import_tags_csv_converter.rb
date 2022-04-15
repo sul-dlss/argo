@@ -5,7 +5,7 @@ class ImportTagsCsvConverter
   # @param [String] csv_string CSV string
   # @return [Hash] a hash of druids and associated tags to import
   def self.convert(csv_string:)
-    new(csv_string: csv_string).convert
+    new(csv_string:).convert
   end
 
   # @param [String] csv_string CSV string

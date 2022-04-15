@@ -29,7 +29,7 @@ RSpec.describe ManageEmbargoesJob do
   end
 
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
-  let(:params) { { csv_file: csv_file } }
+  let(:params) { { csv_file: } }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)

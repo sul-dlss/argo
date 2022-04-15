@@ -10,7 +10,7 @@ module CreatesBulkActions
   def new; end
 
   def create
-    bulk_action = BulkAction.new(user: current_user, action_type: action_type, description: params[:description])
+    bulk_action = BulkAction.new(user: current_user, action_type:, description: params[:description])
 
     if bulk_action.save
       bulk_action.enqueue_job(job_params)

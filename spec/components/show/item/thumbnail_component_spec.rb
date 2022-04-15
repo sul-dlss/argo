@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Show::Item::ThumbnailComponent, type: :component do
-  let(:component) { described_class.new(document: document) }
+  let(:component) { described_class.new(document:) }
   let(:rendered) { render_inline(component) }
 
   let(:document) do

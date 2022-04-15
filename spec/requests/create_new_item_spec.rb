@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Create a new item', type: :request do
   let(:druid) { 'druid:abc' }
   let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags: administrative_tags) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags:) }
   let(:administrative_tags) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:dor_registration) { instance_double(Cocina::Models::DRO, externalIdentifier: druid) }
 

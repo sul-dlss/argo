@@ -5,7 +5,7 @@ class VirtualObjectsCsvConverter
   # @param [String] csv_string CSV string
   # @return [Hash] a virtual_objects hash suitable for passing off to dor-services-app
   def self.convert(csv_string:)
-    new(csv_string: csv_string).convert
+    new(csv_string:).convert
   end
 
   attr_reader :csv_string

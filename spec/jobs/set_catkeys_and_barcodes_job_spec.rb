@@ -53,7 +53,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
       let(:params) do
         {
-          druids: druids,
+          druids:,
           catkeys: catkeys.join("\n"),
           barcodes: barcodes.join("\n"),
           use_catkeys_option: '1',
@@ -77,7 +77,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     context 'when catkey and barcode not selected' do
       let(:params) do
         {
-          druids: druids,
+          druids:,
           catkeys: catkeys.join("\n"),
           barcodes: barcodes.join("\n"),
           use_catkeys_option: '0',
@@ -112,7 +112,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       previous_version.new(
         {
           identification: {
-            barcode: barcode,
+            barcode:,
             catalogLinks: [
               { catalog: 'previous symphony', catalogRecordId: '12346', refresh: false },
               { catalog: 'symphony', catalogRecordId: catkeys[0], refresh: true }
@@ -125,7 +125,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
     let(:change_set) do
       ItemChangeSet.new(previous_version).tap do |change_set|
-        change_set.validate(catkeys: catkeys_arg, barcode: barcode)
+        change_set.validate(catkeys: catkeys_arg, barcode:)
       end
     end
 

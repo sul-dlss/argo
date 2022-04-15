@@ -40,9 +40,9 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
     context 'when happy path' do
       before do
         job.perform(bulk_action.id,
-                    druids: druids,
-                    groups: groups,
-                    user: user)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
       it 'writes a CSV file' do

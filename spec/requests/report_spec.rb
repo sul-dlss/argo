@@ -22,7 +22,7 @@ RSpec.describe 'Reports from a search', type: :request do
       allow(Report).to receive(:new).and_return(report)
     end
 
-    let(:report) { instance_double(Report, num_found: 15, report_data: report_data) }
+    let(:report) { instance_double(Report, num_found: 15, report_data:) }
     let(:report_data) { Array.new(10, double) }
 
     context 'with the rows parameter' do

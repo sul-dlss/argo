@@ -19,7 +19,7 @@ class WorkflowsController < ApplicationController
         @presenter = build_show_presenter(workflow)
         render 'show', layout: !request.xhr?
       end
-      format.xml { render xml: xml }
+      format.xml { render xml: }
     end
   end
 
@@ -94,13 +94,13 @@ class WorkflowsController < ApplicationController
   def workflow_active?(wf_name, druid, version)
     client = WorkflowClientFactory.build
     workflow = client.workflow(pid: druid, workflow_name: wf_name)
-    workflow.active_for?(version: version)
+    workflow.active_for?(version:)
   end
 
   def build_show_presenter(workflow)
     return WorkflowXmlPresenter.new(xml: workflow.xml) if params[:raw]
 
-    status = WorkflowStatus.new(workflow: workflow,
+    status = WorkflowStatus.new(workflow:,
                                 workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context,
                           workflow_status: status,

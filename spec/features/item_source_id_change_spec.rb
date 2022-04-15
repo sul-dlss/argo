@@ -42,7 +42,7 @@ RSpec.describe 'Item source id change' do
     end
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes: workflow_routes) }
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes:) }
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
 
     before do

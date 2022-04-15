@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ShowEmbargoComponent, type: :component do
-  let(:component) { described_class.new(presenter: presenter) }
+  let(:component) { described_class.new(presenter:) }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: document, state_service: state_service) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document:, state_service:) }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
   context 'embargoed with release date' do

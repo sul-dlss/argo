@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ManageRelease::FormComponent, type: :component do
-  subject(:component) { described_class.new(bulk_action: bulk_action, document: document) }
+  subject(:component) { described_class.new(bulk_action:, document:) }
 
   let(:document) { SolrDocument.new(id: 'druid:123', objectType_ssim: 'collection') }
   let(:bulk_action) { BulkAction.new }

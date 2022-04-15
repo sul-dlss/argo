@@ -4,7 +4,7 @@ class DescriptionImport
   include Dry::Monads[:result]
 
   def self.import(csv_row:)
-    new(csv_row: csv_row).import
+    new(csv_row:).import
   end
 
   def initialize(csv_row:)

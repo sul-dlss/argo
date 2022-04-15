@@ -21,9 +21,9 @@ RSpec.describe SetGoverningApoJob do
     let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ff2222'] }
     let(:params) do
       {
-        druids: druids,
-        new_apo_id: new_apo_id,
-        webauth: webauth
+        druids:,
+        new_apo_id:,
+        webauth:
       }.with_indifferent_access
     end
 

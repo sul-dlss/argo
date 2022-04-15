@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'retrieve a token for sdr-api', js: true do
   let(:groups) { ['sdr:administrator-role', 'dlss:dor-admin', 'dlss:developers'] }
   let(:conn) { instance_double(SdrClient::Connection, post: response) }
-  let(:response) { instance_double(Faraday::Response, status: 200, body: body) }
+  let(:response) { instance_double(Faraday::Response, status: 200, body:) }
   let(:body) do
     '{"token":"zaa","exp":"2020-04-19"}'
   end

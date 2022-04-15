@@ -20,7 +20,7 @@ RSpec.describe BulkAction do
   describe 'has_report?' do
     subject { bulk_action.has_report?(Settings.checksum_report_job.csv_filename) }
 
-    let(:bulk_action) { create(:bulk_action, action_type: 'ChecksumReportJob', status: status) }
+    let(:bulk_action) { create(:bulk_action, action_type: 'ChecksumReportJob', status:) }
 
     context 'when status completed and file exists' do
       before do

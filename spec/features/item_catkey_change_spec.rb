@@ -42,7 +42,7 @@ RSpec.describe 'Item catkey change' do
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes: workflow_routes) }
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes:) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)

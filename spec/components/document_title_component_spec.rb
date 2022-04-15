@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DocumentTitleComponent, type: :component do
-  subject(:component) { described_class.new(presenter: presenter, document: document) }
+  subject(:component) { described_class.new(presenter:, document:) }
 
   let(:ability_mock) { instance_double(Ability, can?: true) }
   let(:document) do
@@ -12,10 +12,10 @@ RSpec.describe DocumentTitleComponent, type: :component do
       id: 'druid:ab123cd3445',
       admin_policy?: admin_policy,
       virtual_object?: virtual_object,
-      object_type: object_type
+      object_type:
     )
   end
-  let(:presenter) { instance_double(ArgoShowPresenter, document: document, cocina: nil) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document:, cocina: nil) }
   let(:rendered) { render_inline(component) }
 
   before do

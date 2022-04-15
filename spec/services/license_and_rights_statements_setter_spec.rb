@@ -13,7 +13,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
 
     before do
       allow(described_class).to receive(:new).and_return(instance)
-      described_class.set(ability: ability, druid: druid)
+      described_class.set(ability:, druid:)
     end
 
     it 'invokes #set on a new instance' do
@@ -44,8 +44,8 @@ RSpec.describe LicenseAndRightsStatementsSetter do
     let(:fake_state_service) { instance_double(StateService, allows_modification?: allows_modification) }
     let(:instance) do
       described_class.new(
-        ability: ability,
-        druid: druid,
+        ability:,
+        druid:,
         **instance_args
       )
     end

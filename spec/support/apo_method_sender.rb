@@ -12,6 +12,6 @@ class ApoMethodSender
   end
 
   def roles=(roles)
-    @cocina_model = @cocina_model.new(administrative: @cocina_model.administrative.new(roles: roles))
+    @cocina_model = @cocina_model.new(administrative: @cocina_model.administrative.new(roles:))
   end
 end

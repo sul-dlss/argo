@@ -13,20 +13,20 @@ class WorkflowService
     all_workflows = workflow_client.workflow_routes.all_workflows pid: druid
     all_workflows.workflows.sort_by(&:workflow_name).map do |workflow|
       error_count = processes(workflow).select { |process| process.status == 'error' }.count
-      Workflow.new(name: workflow.workflow_name, complete: workflow.complete?, error_count: error_count)
+      Workflow.new(name: workflow.workflow_name, complete: workflow.complete?, error_count:)
     end
   end
 
   # @return [Boolean] if the object has been submitted or not before
   def self.submitted?(druid:)
-    return true if workflow_client.lifecycle(druid: druid, milestone_name: 'submitted')
+    return true if workflow_client.lifecycle(druid:, milestone_name: 'submitted')
 
     false
   end
 
   # @return [Boolean] if the object has been published or not before
   def self.published?(druid:)
-    return true if workflow_client.lifecycle(druid: druid, milestone_name: 'published')
+    return true if workflow_client.lifecycle(druid:, milestone_name: 'published')
 
     false
   end

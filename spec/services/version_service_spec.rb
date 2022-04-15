@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe VersionService do
-  subject(:service) { described_class.new(identifier: identifier) }
+  subject(:service) { described_class.new(identifier:) }
 
   let(:identifier) { 'druid:abc123xyz' }
 
@@ -14,7 +14,7 @@ RSpec.describe VersionService do
     end
 
     it 'calls #close on a new instance' do
-      described_class.close(identifier: identifier)
+      described_class.close(identifier:)
       expect(service).to have_received(:close).once
     end
   end

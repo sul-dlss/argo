@@ -89,7 +89,7 @@ module Show
 
     def reindex_button
       render ActionButton.new(
-        url: dor_reindex_path(druid: druid),
+        url: dor_reindex_path(druid:),
         label: 'Reindex'
       )
     end

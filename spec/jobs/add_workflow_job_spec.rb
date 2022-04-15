@@ -30,10 +30,10 @@ RSpec.describe AddWorkflowJob, type: :job do
     allow(BulkJobLog).to receive(:open).and_yield(logger)
 
     described_class.perform_now(bulk_action.id,
-                                druids: druids,
+                                druids:,
                                 workflow: 'accessionWF',
-                                groups: groups,
-                                user: user)
+                                groups:,
+                                user:)
   end
 
   context 'with manage ability' do

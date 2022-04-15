@@ -6,7 +6,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
   subject(:instance) do
     described_class.new(version: 2,
                         title: '2 (2.0.0) Add collection, set rights to citations',
-                        steps: steps)
+                        steps:)
   end
 
   context 'when the accessioned milestone has display' do

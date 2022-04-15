@@ -51,7 +51,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
     before do
       allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
       allow(subject).to receive(:update_catkey_and_barcode)
-      subject.perform(bulk_action.id, { csv_file: csv_file })
+      subject.perform(bulk_action.id, { csv_file: })
     end
 
     it 'attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode' do

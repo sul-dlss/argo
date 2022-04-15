@@ -13,7 +13,7 @@ class DescriptivesController < ApplicationController
     validator = DescriptionValidator.new(csv)
     if validator.valid?
       DescriptionImport.import(csv_row: csv.first)
-                       .bind { |description| CocinaValidator.validate_and_save(@cocina, description: description) }
+                       .bind { |description| CocinaValidator.validate_and_save(@cocina, description:) }
                        .either(
                          ->(_updated) { display_success },
                          ->(messages) { display_error(messages) }
@@ -29,7 +29,7 @@ class DescriptivesController < ApplicationController
     respond_to do |format|
       format.csv do
         filename = "descriptive-#{Druid.new(@cocina).without_namespace}.csv"
-        send_data create_csv, filename: filename
+        send_data create_csv, filename:
       end
     end
   end
@@ -49,7 +49,7 @@ class DescriptivesController < ApplicationController
     description = DescriptionExport.export(source_id: @cocina.identification.sourceId,
                                            description: @cocina.description)
     headers = DescriptionHeaders.create(headers: description.keys)
-    CSV.generate(write_headers: true, headers: headers) do |body|
+    CSV.generate(write_headers: true, headers:) do |body|
       body << description.values_at(*headers)
     end
   end

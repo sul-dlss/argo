@@ -40,10 +40,10 @@ RSpec.describe 'Update an existing Admin Policy' do
         apo: {
           title: 'my title',
           agreement_object_id: 'druid:dd327rv8888',
-          view_access: view_access,
-          download_access: download_access,
-          access_location: access_location,
-          controlled_digital_lending: controlled_digital_lending,
+          view_access:,
+          download_access:,
+          access_location:,
+          controlled_digital_lending:,
           default_workflows: ['registrationWF'],
           collection: { collection: '' }
         }

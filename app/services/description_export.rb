@@ -3,7 +3,7 @@
 # This exports the cocina description to a rectangularized data structure
 class DescriptionExport
   def self.export(source_id:, description:)
-    new(source_id: source_id, description: description).export
+    new(source_id:, description:).export
   end
 
   def initialize(source_id:, description:)

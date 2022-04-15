@@ -28,9 +28,9 @@ RSpec.describe PurgeJob, type: :job do
     allow(PurgeService).to receive(:purge)
 
     described_class.perform_now(bulk_action.id,
-                                druids: druids,
-                                groups: groups,
-                                user: user)
+                                druids:,
+                                groups:,
+                                user:)
   end
 
   after do

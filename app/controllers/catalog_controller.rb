@@ -216,7 +216,7 @@ class CatalogController < ApplicationController
 
     milestones = MilestoneService.milestones_for(druid: params[:id])
     object_client = Dor::Services::Client.object(params[:id])
-    @milestones_presenter = MilestonesPresenter.new(milestones: milestones,
+    @milestones_presenter = MilestonesPresenter.new(milestones:,
                                                     versions: object_client.version.inventory)
 
     @datastreams = object_client.metadata.datastreams
@@ -253,7 +253,7 @@ class CatalogController < ApplicationController
   # This overrides Blacklight to pass context to the search service
   # @return [Hash] a hash of context information to pass through to the search service
   def search_service_context
-    { current_user: current_user }
+    { current_user: }
   end
 end
 # rubocop:enable Metrics/ClassLength

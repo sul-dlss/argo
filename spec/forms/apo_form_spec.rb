@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe ApoForm do
   let(:search_service) { instance_double(Blacklight::SearchService) }
-  let(:instance) { described_class.new(apo, search_service: search_service) }
+  let(:instance) { described_class.new(apo, search_service:) }
   let(:apo) do
-    build(:admin_policy, id: 'druid:zt570qh4444', title: 'Stored title').new(administrative: administrative)
+    build(:admin_policy, id: 'druid:zt570qh4444', title: 'Stored title').new(administrative:)
   end
 
   let(:administrative) do
@@ -304,7 +304,7 @@ RSpec.describe ApoForm do
     let(:default_collection_objects) do
       default_collection_druids.map do |druid|
         label = druid[-1].to_i.even? ? druid : druid.upcase # introduce arbitrary mixed case to test sorting
-        instance_double(SolrDocument, label: label)
+        instance_double(SolrDocument, label:)
       end
     end
     let(:search_service_result) { [nil, default_collection_objects] }

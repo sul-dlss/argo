@@ -4,6 +4,6 @@
 class WorkflowClientFactory
   def self.build
     logger = Rails.logger
-    Dor::Workflow::Client.new(url: Settings.workflow_url, logger: logger, timeout: Settings.workflow.timeout)
+    Dor::Workflow::Client.new(url: Settings.workflow_url, logger:, timeout: Settings.workflow.timeout)
   end
 end

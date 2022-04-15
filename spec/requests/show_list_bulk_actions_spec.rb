@@ -9,9 +9,9 @@ RSpec.describe 'Draw a list of bulk actions' do
   end
 
   before do
-    BulkAction.create!(action_type: 'ExportTagsJob', status: 'Completed', user: user)
-    BulkAction.create!(action_type: 'ChecksumReportJob', status: 'Completed', user: user)
-    BulkAction.create!(action_type: 'RegisterDruidsJob', status: 'Completed', user: user)
+    BulkAction.create!(action_type: 'ExportTagsJob', status: 'Completed', user:)
+    BulkAction.create!(action_type: 'ChecksumReportJob', status: 'Completed', user:)
+    BulkAction.create!(action_type: 'RegisterDruidsJob', status: 'Completed', user:)
     allow_any_instance_of(BulkAction).to receive(:has_report?).and_return(true)
   end
 

@@ -131,7 +131,7 @@ RSpec.describe ImportStructuralJob, type: :job do
       let(:ability) { instance_double(Ability, can?: true) }
 
       before do
-        job.perform(bulk_action.id, csv_file: csv_file)
+        job.perform(bulk_action.id, csv_file:)
       end
 
       it 'updates the structural for each druid' do
@@ -147,7 +147,7 @@ RSpec.describe ImportStructuralJob, type: :job do
       let(:ability) { instance_double(Ability, can?: false) }
 
       before do
-        job.perform(bulk_action.id, csv_file: csv_file)
+        job.perform(bulk_action.id, csv_file:)
       end
 
       it 'does not update the structural for any druid' do
@@ -166,7 +166,7 @@ RSpec.describe ImportStructuralJob, type: :job do
         allow(object_client1).to receive(:update).and_raise('borkne')
         allow(object_client2).to receive(:update).and_raise('borkne')
 
-        job.perform(bulk_action.id, csv_file: csv_file)
+        job.perform(bulk_action.id, csv_file:)
       end
 
       it 'does not update the structural for any druid' do

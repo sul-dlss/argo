@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Show::Item::AccessRightsComponent, type: :component do
-  let(:component) { described_class.new(change_set: change_set, state_service: state_service) }
+  let(:component) { described_class.new(change_set:, state_service:) }
   let(:change_set) { ItemChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
@@ -14,7 +14,7 @@ RSpec.describe Show::Item::AccessRightsComponent, type: :component do
                               title: [{ value: 'my dro' }],
                               purl: 'https://purl.stanford.edu/bc234fg5678'
                             },
-                            access: access,
+                            access:,
                             administrative: {
                               hasAdminPolicy: 'druid:hv992ry2431'
                             },

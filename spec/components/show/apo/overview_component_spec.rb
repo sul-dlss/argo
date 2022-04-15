@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Show::Apo::OverviewComponent, type: :component do
-  let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, state_service: state_service) }
+  let(:component) { described_class.new(presenter:) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, state_service:) }
   let(:cocina) do
     build(:admin_policy, registration_workflow: %w[registrationWF goobiWF])
   end

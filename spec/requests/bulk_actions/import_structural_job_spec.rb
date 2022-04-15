@@ -13,7 +13,7 @@ RSpec.describe 'BulkActions::ImportStructuralJobs', type: :request do
     it 'creates a job' do
       params = { 'csv_file' => fixture_file_upload('bulk_upload_structural.csv', 'text/csv') }
 
-      expect { post '/bulk_actions/import_structural_job', params: params }.to have_enqueued_job(ImportStructuralJob)
+      expect { post '/bulk_actions/import_structural_job', params: }.to have_enqueued_job(ImportStructuralJob)
         .with(Integer, {
                 groups: ["sunetid:#{user.login}", 'workgroup:sdr:administrator-role'],
                 csv_file: String

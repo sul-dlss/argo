@@ -12,7 +12,7 @@ RSpec.describe 'Set content type for an item', type: :request do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:content_type) { Cocina::Models::ObjectType.image }
   let(:cocina_model) do
-    build(:dro, id: druid, type: content_type).new(structural: structural)
+    build(:dro, id: druid, type: content_type).new(structural:)
   end
   let(:contains) do
     [
@@ -54,7 +54,7 @@ RSpec.describe 'Set content type for an item', type: :request do
   end
   let(:structural) do
     Cocina::Models::DROStructural.new(
-      contains: contains
+      contains:
     )
   end
 

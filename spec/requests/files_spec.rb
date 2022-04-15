@@ -6,7 +6,7 @@ RSpec.describe 'Files', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:cocina_model) do
-    instance_double(Cocina::Models::DRO, externalIdentifier: druid, structural: structural)
+    instance_double(Cocina::Models::DRO, externalIdentifier: druid, structural:)
   end
   let(:file_set) do
     instance_double(Cocina::Models::FileSet, structural: fs_structural)
@@ -80,7 +80,7 @@ RSpec.describe 'Files', type: :request do
         expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"preserved+file.txt\"; filename*=UTF-8''preserved+file.txt"
         expect(response.code).to eq('200')
         expect(Preservation::Client.objects).to have_received(:content)
-          .with(druid: druid, filepath: mock_file_name, version: mock_version, on_data: Proc)
+          .with(druid:, filepath: mock_file_name, version: mock_version, on_data: Proc)
       end
 
       context 'when file not found in preservation' do

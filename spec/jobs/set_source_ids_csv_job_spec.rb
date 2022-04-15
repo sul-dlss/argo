@@ -60,9 +60,9 @@ RSpec.describe SetSourceIdsCsvJob do
       context 'when the version is open' do
         before do
           job.perform(bulk_action.id,
-                      csv_file: csv_file,
-                      groups: groups,
-                      user: user)
+                      csv_file:,
+                      groups:,
+                      user:)
         end
 
         it 'logs messages and creates a file' do
@@ -82,9 +82,9 @@ RSpec.describe SetSourceIdsCsvJob do
         before do
           allow(job).to receive(:open_new_version).and_return('3')
           job.perform(bulk_action.id,
-                      csv_file: csv_file,
-                      groups: groups,
-                      user: user)
+                      csv_file:,
+                      groups:,
+                      user:)
         end
 
         it 'logs messages and creates a file' do
@@ -104,9 +104,9 @@ RSpec.describe SetSourceIdsCsvJob do
           allow(object_client2).to receive(:find).and_raise(StandardError, 'ruh roh')
           allow(object_client3).to receive(:find).and_raise(StandardError, 'ruh roh')
           job.perform(bulk_action.id,
-                      csv_file: csv_file,
-                      groups: groups,
-                      user: user)
+                      csv_file:,
+                      groups:,
+                      user:)
         end
 
         it 'records all failures and creates an empty file' do
@@ -124,9 +124,9 @@ RSpec.describe SetSourceIdsCsvJob do
 
       before do
         job.perform(bulk_action.id,
-                    csv_file: csv_file,
-                    groups: groups,
-                    user: user)
+                    csv_file:,
+                    groups:,
+                    user:)
       end
 
       it 'records all failures and creates an empty file' do

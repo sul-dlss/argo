@@ -66,7 +66,7 @@ class CollectionsController < ApplicationController
 
     path_for_facet = link_to_collection
 
-    render partial: 'count', locals: { count: result.dig('response', 'numFound'), path_for_facet: path_for_facet }
+    render partial: 'count', locals: { count: result.dig('response', 'numFound'), path_for_facet: }
   end
 
   def search_action_path(*args)

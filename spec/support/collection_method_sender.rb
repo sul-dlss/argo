@@ -12,6 +12,6 @@ class CollectionMethodSender
   end
 
   def label=(label)
-    @cocina_model = @cocina_model.new(label: label)
+    @cocina_model = @cocina_model.new(label:)
   end
 end

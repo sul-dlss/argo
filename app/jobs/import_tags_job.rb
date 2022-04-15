@@ -29,10 +29,10 @@ class ImportTagsJob < GenericJob
     if tags.empty?
       # dor-services-app does not currently allow replacing tags with an empty list, so delete them manually
       Dor::Services::Client.object(druid).administrative_tags.list.each do |tag|
-        Dor::Services::Client.object(druid).administrative_tags.destroy(tag: tag)
+        Dor::Services::Client.object(druid).administrative_tags.destroy(tag:)
       end
     else
-      Dor::Services::Client.object(druid).administrative_tags.replace(tags: tags)
+      Dor::Services::Client.object(druid).administrative_tags.replace(tags:)
     end
     # tags require immediate reindexing since they do not touch Fedora (and thus do
     # not send messages to Solr)

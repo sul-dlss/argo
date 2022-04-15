@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DescriptionExport do
-  subject(:run) { described_class.export(source_id: source_id, description: description) }
+  subject(:run) { described_class.export(source_id:, description:) }
 
   let(:source_id) { 'sul:123' }
   let(:description) do

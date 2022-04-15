@@ -33,9 +33,9 @@ RSpec.describe CloseVersionJob, type: :job do
 
     it 'closes versions' do
       described_class.perform_now(bulk_action.id,
-                                  druids: druids,
-                                  groups: groups,
-                                  user: user)
+                                  druids:,
+                                  groups:,
+                                  user:)
 
       expect(version_client).to have_received(:close).twice
     end
@@ -46,9 +46,9 @@ RSpec.describe CloseVersionJob, type: :job do
 
     it 'does not close versions' do
       described_class.perform_now(bulk_action.id,
-                                  druids: druids,
-                                  groups: groups,
-                                  user: user)
+                                  druids:,
+                                  groups:,
+                                  user:)
 
       expect(version_client).not_to have_received(:close)
     end

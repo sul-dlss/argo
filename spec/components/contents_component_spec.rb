@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe ContentsComponent, type: :component do
   let(:presenter) do
     instance_double(ArgoShowPresenter,
-                    document: solr_doc, cocina: cocina,
+                    document: solr_doc, cocina:,
                     view_token: 'skret-t0k3n',
-                    state_service: state_service)
+                    state_service:)
   end
-  let(:component) { described_class.new(presenter: presenter) }
+  let(:component) { described_class.new(presenter:) }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
   let(:rendered) { render_inline(component) }

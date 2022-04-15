@@ -7,7 +7,7 @@ class VirtualObjectsCreator
   # @param [Array] virtual_objects an array of virtual object hashes
   # @return [Array] an array of errors (empty if no errors)
   def self.create(virtual_objects:)
-    new(virtual_objects: virtual_objects).create
+    new(virtual_objects:).create
   end
 
   attr_reader :virtual_objects
@@ -21,7 +21,7 @@ class VirtualObjectsCreator
 
   # @return [Array] an array of errors (empty if no errors)
   def create
-    background_result_url = Dor::Services::Client.virtual_objects.create(virtual_objects: virtual_objects)
+    background_result_url = Dor::Services::Client.virtual_objects.create(virtual_objects:)
     job_output = poll_until_complete(url: background_result_url)
     # If job output hash lacks an `:errors` key, we interpret that as complete success
     return [] if job_output[:errors].nil?
@@ -39,7 +39,7 @@ class VirtualObjectsCreator
   # @return [Hash] a hash of output from the background job
   def poll_until_complete(url:)
     loop do
-      results = Dor::Services::Client.background_job_results.show(job_id: job_id_from(url: url))
+      results = Dor::Services::Client.background_job_results.show(job_id: job_id_from(url:))
 
       if results[:status] != 'complete'
         sleep(SECONDS_BETWEEN_REQUESTS)

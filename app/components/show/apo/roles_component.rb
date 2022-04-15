@@ -33,9 +33,9 @@ module Show
       def build_permissions(role_list, access)
         role_list.map do |name|
           if name.starts_with? 'workgroup:'
-            { name: name.sub(/^workgroup:[^:]*:/, ''), type: 'group', access: access }
+            { name: name.sub(/^workgroup:[^:]*:/, ''), type: 'group', access: }
           else
-            { name: name.sub(/^sunetid:/, ''), type: 'person', access: access }
+            { name: name.sub(/^sunetid:/, ''), type: 'person', access: }
           end
         end
       end

@@ -31,9 +31,9 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
 
     before do
       described_class.perform_now(bulk_action.id,
-                                  druids: druids,
-                                  groups: groups,
-                                  user: user)
+                                  druids:,
+                                  groups:,
+                                  user:)
     end
 
     it 'refreshes' do
@@ -54,9 +54,9 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
       allow(object_client2).to receive(:find).and_raise(Faraday::TimeoutError)
 
       described_class.perform_now(bulk_action.id,
-                                  druids: druids,
-                                  groups: groups,
-                                  user: user)
+                                  druids:,
+                                  groups:,
+                                  user:)
     end
 
     it 'tries again and logs messages' do
@@ -71,9 +71,9 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
 
     before do
       described_class.perform_now(bulk_action.id,
-                                  druids: druids,
-                                  groups: groups,
-                                  user: user)
+                                  druids:,
+                                  groups:,
+                                  user:)
     end
 
     it 'does not refresh' do

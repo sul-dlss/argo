@@ -19,7 +19,7 @@ class ChecksumReportJob < GenericJob
       begin
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, Cocina::Models::DRO)
 
-        csv_report = Preservation::Client.objects.checksums(druids: druids)
+        csv_report = Preservation::Client.objects.checksums(druids:)
         File.write(report_filename, csv_report)
         bulk_action.update(druid_count_success: druids.length) # this whole job is run in one call, so it either all succeeds or fails
       rescue StandardError => e
@@ -27,7 +27,7 @@ class ChecksumReportJob < GenericJob
         message = exception_message_for(e)
         log.puts(message) # this one goes to the user via the bulk action log
         logger.error(message) # this is for later archaeological digs
-        Honeybadger.context(bulk_action_id: bulk_action_id, params: params)
+        Honeybadger.context(bulk_action_id:, params:)
         Honeybadger.notify(message) # this is so the devs see it ASAP
       end
     end

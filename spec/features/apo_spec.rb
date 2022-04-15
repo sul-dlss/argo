@@ -24,7 +24,7 @@ RSpec.describe 'Create an apo', js: true do
                                                lifecycle: [],
                                                active_lifecycle: [],
                                                milestones: [],
-                                               workflow_routes: workflow_routes,
+                                               workflow_routes:,
                                                workflow_status: nil)
 
     sign_in user, groups: ['sdr:administrator-role']

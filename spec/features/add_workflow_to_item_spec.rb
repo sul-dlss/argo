@@ -10,7 +10,7 @@ RSpec.describe 'Add a workflow to an item' do
     instance_double(Dor::Workflow::Client,
                     workflow: stub_workflow,
                     create_workflow_by_name: true,
-                    workflow_routes: workflow_routes,
+                    workflow_routes:,
                     milestones: [],
                     lifecycle: [],
                     workflow_templates: %w[assemblyWF registrationWF],

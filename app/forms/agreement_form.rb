@@ -21,11 +21,11 @@ class AgreementForm < Reform::Form
   end
 
   def sync!(_props)
-    @model = new_resource(title: title, source_id: source_id)
+    @model = new_resource(title:, source_id:)
   end
 
   def save_model
-    @model = Result.new(RegisterAgreement.register(model: model, uploaded_files: agreement_files))
+    @model = Result.new(RegisterAgreement.register(model:, uploaded_files: agreement_files))
   end
 
   Result = Struct.new(:externalIdentifier)

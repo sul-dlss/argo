@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe VirtualObjectsCreator do
-  subject(:creator) { described_class.new(virtual_objects: virtual_objects) }
+  subject(:creator) { described_class.new(virtual_objects:) }
 
   let(:virtual_objects) do
     [
@@ -32,7 +32,7 @@ RSpec.describe VirtualObjectsCreator do
 
     it 'creates an instance and calls `#create`' do
       allow(creator).to receive(:create)
-      described_class.create(virtual_objects: virtual_objects)
+      described_class.create(virtual_objects:)
       expect(creator).to have_received(:create).once
     end
   end
@@ -69,13 +69,13 @@ RSpec.describe VirtualObjectsCreator do
 
     it 'uses dor-services-client to create a virtual object creation background job' do
       creator.create
-      expect(Dor::Services::Client.virtual_objects).to have_received(:create).with(virtual_objects: virtual_objects).once
+      expect(Dor::Services::Client.virtual_objects).to have_received(:create).with(virtual_objects:).once
     end
 
     it 'calls `#poll_until_complete` to get job output' do
       allow(Dor::Services::Client.virtual_objects).to receive(:create).and_return(url)
       creator.create
-      expect(creator).to have_received(:poll_until_complete).with(url: url).once
+      expect(creator).to have_received(:poll_until_complete).with(url:).once
     end
 
     context 'when output has no errors' do

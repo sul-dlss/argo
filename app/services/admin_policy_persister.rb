@@ -100,7 +100,7 @@ class AdminPolicyPersister # rubocop:disable Metrics/ClassLength
       registrationWorkflow: registration_workflow,
       collectionsForRegistration: collection_ids,
       accessTemplate: updated_template,
-      roles: roles
+      roles:
     }.compact
 
     updated_administrative = updated.administrative.new(administrative)
@@ -153,7 +153,7 @@ class AdminPolicyPersister # rubocop:disable Metrics/ClassLength
   # @return [String] the druid for the newly created collection
   def create_collection(apo_druid)
     form = CollectionForm.new
-    form.validate(collection.merge(apo_druid: apo_druid))
+    form.validate(collection.merge(apo_druid:))
     form.save
     form.model.externalIdentifier
   end
@@ -174,6 +174,6 @@ class AdminPolicyPersister # rubocop:disable Metrics/ClassLength
       grouped[role_name] << { type: 'workgroup', identifier: "sdr:#{perm[:name]}" }
     end
 
-    ungrouped_perms.map { |name, members| { name: name, members: members } }
+    ungrouped_perms.map { |name, members| { name:, members: } }
   end
 end

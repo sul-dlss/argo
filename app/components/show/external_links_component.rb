@@ -24,7 +24,7 @@ module Show
       return tag.span('SearchWorks', class: 'external-link-button disabled btn') unless released_to_searchworks?
 
       id = document.catkey.presence || document.druid
-      url = Kernel.format(Settings.searchworks_url, id: id)
+      url = Kernel.format(Settings.searchworks_url, id:)
       link_to 'SearchWorks', url, target: '_blank', rel: 'noopener', class: 'external-link-button'
     end
 

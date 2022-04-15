@@ -22,7 +22,7 @@ RSpec.describe 'Set APO for an object' do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it 'redirects with an error' do
-        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: new_apo_id }
+        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: }
 
         expect(response).to redirect_to solr_document_path(druid)
       end
@@ -37,7 +37,7 @@ RSpec.describe 'Set APO for an object' do
       end
 
       it 'returns a 403' do
-        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: new_apo_id }
+        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: }
         expect(response).to have_http_status(:forbidden)
         expect(response.body).to eq 'forbidden'
       end
@@ -49,7 +49,7 @@ RSpec.describe 'Set APO for an object' do
       end
 
       it 'updates the governing APO' do
-        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: new_apo_id }
+        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: }
         expect(response).to redirect_to(solr_document_path(druid))
         expect(flash[:notice]).to eq 'Governing APO updated!'
 
@@ -66,7 +66,7 @@ RSpec.describe 'Set APO for an object' do
       end
 
       it 'updates the governing APO' do
-        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: new_apo_id }
+        post "/items/#{druid}/set_governing_apo", params: { new_apo_id: }
         expect(response).to redirect_to(solr_document_path(druid))
         expect(flash[:notice]).to eq 'Governing APO updated!'
 

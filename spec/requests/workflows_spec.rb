@@ -139,10 +139,10 @@ RSpec.describe 'WorkflowsController', type: :request do
 
   describe '#history' do
     let(:xml) { '<xml/>' }
-    let(:workflows) { instance_double(Dor::Workflow::Response::Workflows, xml: xml) }
+    let(:workflows) { instance_double(Dor::Workflow::Response::Workflows, xml:) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows) }
     let(:workflow_client) do
-      instance_double(Dor::Workflow::Client, workflow_routes: workflow_routes)
+      instance_double(Dor::Workflow::Client, workflow_routes:)
     end
 
     it 'fetches the workflow history' do
@@ -171,8 +171,8 @@ RSpec.describe 'WorkflowsController', type: :request do
       it 'changes the status' do
         put "/items/#{druid}/workflows/accessionWF", params: { process: 'publish', status: 'completed' }
         expect(subject).to redirect_to(solr_document_path(druid))
-        expect(workflow_client).to have_received(:workflow_status).with(druid: druid, workflow: 'accessionWF', process: 'publish')
-        expect(workflow_client).to have_received(:update_status).with(druid: druid, workflow: 'accessionWF', process: 'publish', status: 'completed')
+        expect(workflow_client).to have_received(:workflow_status).with(druid:, workflow: 'accessionWF', process: 'publish')
+        expect(workflow_client).to have_received(:update_status).with(druid:, workflow: 'accessionWF', process: 'publish', status: 'completed')
       end
     end
 

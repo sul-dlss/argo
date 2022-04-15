@@ -7,7 +7,7 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
   subject { page }
 
   let(:document) { instance_double(SolrDocument, preservation_size: 0) }
-  let(:component) { described_class.new(document: document) }
+  let(:component) { described_class.new(document:) }
 
   before do
     render_inline(component)
