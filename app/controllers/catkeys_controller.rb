@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CatkeysController < ApplicationController
-  before_action :load_and_authorize_resource
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
   rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
     md = /\((.*)\)/.match exception.message
@@ -30,11 +30,6 @@ class CatkeysController < ApplicationController
   end
 
   private
-
-  def load_and_authorize_resource
-    @cocina = Repository.find(params[:item_id])
-    authorize! :update, @cocina
-  end
 
   def update_params
     params[CatkeyForm.model_name.param_key]

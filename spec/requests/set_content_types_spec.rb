@@ -60,7 +60,7 @@ RSpec.describe 'Set content type for an item', type: :request do
 
   describe 'show the form' do
     before do
-      sign_in user, groups: ['sdr:administrator-role']
+      sign_in user, groups: ['sdr:manager-role']
     end
 
     let(:content_type) { Cocina::Models::ObjectType.image }
