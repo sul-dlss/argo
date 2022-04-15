@@ -106,7 +106,7 @@ class StructureUpdater
                    .merge(structural: { contains: files_by_fileset[sequence] })
       existing_fileset.new(**attributes)
     end
-    Success(model.structural.new(contains: contains))
+    Success(model.structural.new(contains:))
   end
 
   # Change the short resource type into a url

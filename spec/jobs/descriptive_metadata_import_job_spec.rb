@@ -32,7 +32,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
     context 'when authorized' do
       before do
         allow(Ability).to receive(:new).and_return(ability)
-        subject.perform(bulk_action.id, { csv_file: csv_file })
+        subject.perform(bulk_action.id, { csv_file: })
       end
 
       let(:ability) { instance_double(Ability, can?: true) }
@@ -54,7 +54,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
 
     context 'when not authorized' do
       before do
-        subject.perform(bulk_action.id, { csv_file: csv_file })
+        subject.perform(bulk_action.id, { csv_file: })
       end
 
       it 'does not update' do
@@ -75,7 +75,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       before do
         allow(Ability).to receive(:new).and_return(ability)
         allow(Honeybadger).to receive(:notify)
-        subject.perform(bulk_action.id, { csv_file: csv_file })
+        subject.perform(bulk_action.id, { csv_file: })
       end
 
       it 'updates the error count without alerting honeybadger' do

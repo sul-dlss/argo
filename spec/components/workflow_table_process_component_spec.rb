@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WorkflowTableProcessComponent, type: :component do
-  subject(:component) { described_class.new(workflow_table_process: [process, 'desc'], name: name, data: data) }
+  subject(:component) { described_class.new(workflow_table_process: [process, 'desc'], name:, data:) }
 
   describe '#workflow_reset_link' do
     subject { component.workflow_reset_link(status) }

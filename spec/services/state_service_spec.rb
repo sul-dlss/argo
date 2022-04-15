@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe StateService do
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-    allow(workflow_client).to receive(:workflow_status).with(druid: druid, process: 'accessioning-initiate', workflow: 'assemblyWF').and_return('completed')
-    allow(workflow_client).to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned').and_return(false)
+    allow(workflow_client).to receive(:workflow_status).with(druid:, process: 'accessioning-initiate', workflow: 'assemblyWF').and_return('completed')
+    allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(false)
   end
 
   let(:druid) { 'ab12cd3456' }
@@ -67,8 +67,8 @@ RSpec.describe StateService do
 
     context "if the object is not opened and hasn't been submitted" do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 3).and_return(false)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 3).and_return(false)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted', version: 3).and_return(false)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened', version: 3).and_return(false)
       end
 
       it 'returns unlock_inactive' do
@@ -78,8 +78,8 @@ RSpec.describe StateService do
 
     context "if the object is open and hasn't been submitted" do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 3).and_return(false)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 3).and_return(true)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted', version: 3).and_return(false)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened', version: 3).and_return(true)
       end
 
       it 'returns unlock' do
@@ -89,8 +89,8 @@ RSpec.describe StateService do
 
     context 'if there is not an open version' do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 3).and_return(true)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 3).and_return(false)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted', version: 3).and_return(true)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened', version: 3).and_return(false)
       end
 
       it 'returns lock_inactive' do
@@ -100,9 +100,9 @@ RSpec.describe StateService do
 
     context 'if the object is accessioned, not submitted and not opened' do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 3).and_return(false)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 3).and_return(false)
-        allow(workflow_client).to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned').and_return(true)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted', version: 3).and_return(false)
+        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened', version: 3).and_return(false)
+        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(true)
       end
 
       it 'returns lock' do
@@ -115,13 +115,13 @@ RSpec.describe StateService do
     subject(:published?) { service.published? }
 
     before do
-      allow(workflow_client).to receive(:workflow_status).with(druid: druid, process: 'accessioning-initiate', workflow: 'assemblyWF').and_return('completed')
-      allow(workflow_client).to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned').and_return(false)
+      allow(workflow_client).to receive(:workflow_status).with(druid:, process: 'accessioning-initiate', workflow: 'assemblyWF').and_return('completed')
+      allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(false)
     end
 
     context 'if the published lifecycle exists' do
       before do
-        allow(workflow_client).to receive(:lifecycle).with(druid: druid, milestone_name: 'published').and_return(true)
+        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'published').and_return(true)
       end
 
       it 'returns true' do
@@ -131,7 +131,7 @@ RSpec.describe StateService do
 
     context 'if the published lifecycle does not exist' do
       before do
-        allow(workflow_client).to receive(:lifecycle).with(druid: druid, milestone_name: 'published').and_return(false)
+        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'published').and_return(false)
       end
 
       it 'returns false' do

@@ -27,7 +27,7 @@ RSpec.describe 'Set governing APO' do
     item
 
     allow(StateService).to receive(:new).and_return(state_service)
-    sign_in create(:user), groups: groups
+    sign_in create(:user), groups:
   end
 
   context 'when modification is allowed' do

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CocinaHashPresenter do
-  subject(:presenter) { described_class.new(cocina_object: cocina_object) }
+  subject(:presenter) { described_class.new(cocina_object:) }
 
   describe '#render' do
     subject(:rendered) { presenter.render }

@@ -234,7 +234,7 @@ class Report
   def search_service(params)
     search_service_class.new(config: blacklight_config,
                              user_params: params,
-                             current_user: current_user)
+                             current_user:)
   end
 
   # We can remove this when https://github.com/projectblacklight/blacklight/pull/2320 is merged into Blacklight

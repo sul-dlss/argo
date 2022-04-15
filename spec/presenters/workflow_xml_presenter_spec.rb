@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe WorkflowXmlPresenter do
   subject(:presenter) do
-    described_class.new(xml: xml)
+    described_class.new(xml:)
   end
 
   describe '#pretty_xml' do

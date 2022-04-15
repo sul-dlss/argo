@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ProblematicDruidFinder do
-  subject(:finder) { described_class.new(druids: druids, ability: ability) }
+  subject(:finder) { described_class.new(druids:, ability:) }
 
   let(:ability) { instance_double(Ability, can?: can_manage) }
   let(:can_manage) { true }
@@ -16,7 +16,7 @@ RSpec.describe ProblematicDruidFinder do
 
     it 'creates an instance and calls `#find`' do
       allow(finder).to receive(:find)
-      described_class.find(druids: druids, ability: ability)
+      described_class.find(druids:, ability:)
       expect(finder).to have_received(:find).once
     end
   end

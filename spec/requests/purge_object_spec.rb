@@ -36,7 +36,7 @@ RSpec.describe 'Purge object', type: :request do
 
     context 'when the object has not been submitted' do
       before do
-        allow(WorkflowService).to receive(:submitted?).with(druid: druid).and_return(false)
+        allow(WorkflowService).to receive(:submitted?).with(druid:).and_return(false)
         allow(PurgeService).to receive(:purge)
       end
 
@@ -51,7 +51,7 @@ RSpec.describe 'Purge object', type: :request do
 
     context 'when the object has been submitted' do
       before do
-        allow(WorkflowService).to receive(:submitted?).with(druid: druid).and_return(true)
+        allow(WorkflowService).to receive(:submitted?).with(druid:).and_return(true)
       end
 
       it 'blocks purge' do

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe OCRExporter do
-  subject(:exporter) { described_class.new(filename, 'tmp/', finder: finder) }
+  subject(:exporter) { described_class.new(filename, 'tmp/', finder:) }
 
   let(:filename) { 'barcodes.txt' }
   let(:finder) { instance_double(described_class::DruidFinder, find_druid: []) }

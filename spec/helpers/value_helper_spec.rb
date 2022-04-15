@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ValueHelper do
   let(:document) { SolrDocument.new(document_attributes) }
-  let(:args) { { document: document, value: value } }
+  let(:args) { { document:, value: } }
   let(:blacklight_config) { Blacklight::Configuration.new }
   let(:search_state) { Blacklight::SearchState.new({}, blacklight_config) }
   let(:search_action_path) { '/search_action_path' }
@@ -88,7 +88,7 @@ RSpec.describe ValueHelper do
         SolrDocument::FIELD_WORKFLOW_ERRORS => ['accessionWF:technical-metadata:401 Unauthorized']
       }
     end
-    let(:args) { { document: document, field: SolrDocument::FIELD_WORKFLOW_ERRORS } }
+    let(:args) { { document:, field: SolrDocument::FIELD_WORKFLOW_ERRORS } }
 
     it 'returns a formatted wf error message' do
       expect(helper.value_for_wf_error(**args)).to eq 'technical-metadata : 401 Unauthorized'

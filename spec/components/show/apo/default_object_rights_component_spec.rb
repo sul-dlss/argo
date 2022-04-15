@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
-  let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina) }
+  let(:component) { described_class.new(presenter:) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:) }
   let(:cocina) do
     build(:admin_policy, use_statement: 'Use and reproduction statement.',
                          copyright: 'This is the copyright.',

@@ -30,10 +30,10 @@ RSpec.describe SetCollectionJob do
   describe '#perform_now' do
     let(:params) do
       {
-        druids: druids,
-        groups: groups,
-        user: user,
-        new_collection_id: new_collection_id
+        druids:,
+        groups:,
+        user:,
+        new_collection_id:
       }.with_indifferent_access
     end
     let(:cocina1) do

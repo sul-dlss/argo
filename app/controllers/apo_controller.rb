@@ -7,21 +7,21 @@ class ApoController < ApplicationController
   load_resource :cocina, parent: false, class: 'Repository', only: :delete_collection
 
   def edit
-    @form = ApoForm.new(@cocina, search_service: search_service)
+    @form = ApoForm.new(@cocina, search_service:)
 
     render layout: 'one_column'
   end
 
   def new
     authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(nil, search_service: search_service)
+    @form = ApoForm.new(nil, search_service:)
 
     render layout: 'one_column'
   end
 
   def create
     authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(nil, search_service: search_service)
+    @form = ApoForm.new(nil, search_service:)
     unless @form.validate(params.require(:apo).to_unsafe_h.merge(registered_by: current_user.login))
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: @form.errors } }
@@ -36,11 +36,11 @@ class ApoController < ApplicationController
     # register a collection and make it the default if requested
     notice += " Collection #{@form.model.administrative.collectionsForRegistration.first} created." if @form.model.administrative.collectionsForRegistration.present?
 
-    redirect_to solr_document_path(@form.model.externalIdentifier), notice: notice
+    redirect_to solr_document_path(@form.model.externalIdentifier), notice:
   end
 
   def update
-    @form = ApoForm.new(@cocina, search_service: search_service)
+    @form = ApoForm.new(@cocina, search_service:)
     unless @form.validate(params.require(:apo).to_unsafe_h)
       respond_to do |format|
         format.json { render status: :unprocessable_entity, json: { errors: @form.errors } }
@@ -80,7 +80,7 @@ class ApoController < ApplicationController
 
     path_for_search = link_to_members_with_type('collection')
 
-    render partial: 'count_collections', locals: { count: result.dig('response', 'numFound'), path_for_search: path_for_search }
+    render partial: 'count_collections', locals: { count: result.dig('response', 'numFound'), path_for_search: }
   end
 
   # Displays the turbo-frame that has a link to items governed by this APO
@@ -91,7 +91,7 @@ class ApoController < ApplicationController
 
     path_for_search = link_to_members_with_type('item')
 
-    render partial: 'count_items', locals: { count: result.dig('response', 'numFound'), path_for_search: path_for_search }
+    render partial: 'count_items', locals: { count: result.dig('response', 'numFound'), path_for_search: }
   end
 
   def search_action_path(*args)
@@ -102,7 +102,7 @@ class ApoController < ApplicationController
 
   def search_service
     @search_service ||= Blacklight::SearchService.new(config: CatalogController.blacklight_config,
-                                                      current_user: current_user)
+                                                      current_user:)
   end
 
   def link_to_members_with_type(type)

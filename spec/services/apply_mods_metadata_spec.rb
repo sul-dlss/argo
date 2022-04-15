@@ -20,18 +20,18 @@ RSpec.describe ApplyModsMetadata do
   let(:ability) { Ability.new(user) }
   let(:user) { build(:user) }
   let(:cocina) do
-    instance_double(Cocina::Models::DRO, administrative: administrative, externalIdentifier: druid, version: 1)
+    instance_double(Cocina::Models::DRO, administrative:, externalIdentifier: druid, version: 1)
   end
   let(:administrative) { instance_double(Cocina::Models::Administrative, hasAdminPolicy: apo_druid) }
 
   let(:action) do
-    described_class.new(apo_druid: apo_druid,
-                        mods: mods,
-                        cocina: cocina,
-                        existing_mods: existing_mods,
+    described_class.new(apo_druid:,
+                        mods:,
+                        cocina:,
+                        existing_mods:,
                         original_filename: 'testfile.xlsx',
-                        ability: ability,
-                        log: log)
+                        ability:,
+                        log:)
   end
 
   let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
@@ -86,7 +86,7 @@ RSpec.describe ApplyModsMetadata do
       allow(workflow_client).to receive(:status).and_return(status_service)
     end
 
-    let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: status_code }) }
+    let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: }) }
 
     let(:status_code) { 6 }
     let(:workflow) { instance_double(DorObjectWorkflowStatus) }

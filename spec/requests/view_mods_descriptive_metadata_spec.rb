@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'View MODS descriptive metadata' do
   let(:user) { create(:user) }
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: metadata) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, metadata:) }
   let(:metadata) { instance_double(Dor::Services::Client::Metadata, descriptive: xml) }
   let(:xml) do
     <<~XML

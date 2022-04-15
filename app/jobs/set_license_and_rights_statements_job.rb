@@ -18,14 +18,14 @@ class SetLicenseAndRightsStatementsJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count
 
-      args = { ability: ability }.tap do |argument_hash|
+      args = { ability: }.tap do |argument_hash|
         argument_hash[:copyright] = dig_from_params_if_option_set(params, :copyright_statement)
         argument_hash[:license] = dig_from_params_if_option_set(params, :license)
         argument_hash[:use_statement] = dig_from_params_if_option_set(params, :use_statement)
       end.compact
 
       druids.each do |druid|
-        LicenseAndRightsStatementsSetter.set(**args.merge(druid: druid))
+        LicenseAndRightsStatementsSetter.set(**args.merge(druid:))
         bulk_action.increment(:druid_count_success).save
         log.puts("#{Time.current} License/copyright/use statement(s) updated successfully")
       rescue StandardError => e
@@ -33,8 +33,8 @@ class SetLicenseAndRightsStatementsJob < GenericJob
         log.puts("#{Time.current} #{self.class} failed for #{druid}: (#{e.class}) #{e.message}")
         Honeybadger.notify(e,
                            context: {
-                             bulk_action_id: bulk_action_id,
-                             params: params,
+                             bulk_action_id:,
+                             params:,
                              service_args: args
                            })
       end

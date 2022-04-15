@@ -61,7 +61,7 @@ RSpec.describe 'BulkActionsController' do
   end
 
   describe 'GET file' do
-    let(:bulk_action) { create(:bulk_action, user_id: user_id) }
+    let(:bulk_action) { create(:bulk_action, user_id:) }
     let(:user_id) { current_user.id }
     let(:file) { bulk_action.file('test.log') }
 

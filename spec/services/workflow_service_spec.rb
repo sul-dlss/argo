@@ -70,9 +70,9 @@ RSpec.describe WorkflowService do
       ] }
     end
 
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_routes: workflow_routes) }
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_routes:) }
     let(:workflow_routes) do
-      instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: Dor::Workflow::Response::Workflows.new(xml: xml))
+      instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: Dor::Workflow::Response::Workflows.new(xml:))
     end
 
     before do

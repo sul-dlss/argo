@@ -17,13 +17,13 @@ RSpec.describe 'Item view', js: true do
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
-  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: all_workflows) }
+  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows:) }
   let(:workflow_client) do
     instance_double(Dor::Workflow::Client,
                     active_lifecycle: [],
                     lifecycle: [],
                     milestones: {},
-                    workflow_routes: workflow_routes,
+                    workflow_routes:,
                     workflow_status: nil)
   end
 
@@ -300,12 +300,12 @@ RSpec.describe 'Item view', js: true do
   end
 
   context 'for an adminPolicy' do
-    let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
+    let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative:, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
     let(:id) { 'druid:qv778ht9999' }
 
     before do
-      solr_conn.add(id: id)
+      solr_conn.add(id:)
       solr_conn.commit
     end
 

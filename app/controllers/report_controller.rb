@@ -13,7 +13,7 @@ class ReportController < CatalogController
     params[:sord] ||= 'asc'
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i, 1].max
-    @report = Report.new(params, current_user: current_user)
+    @report = Report.new(params, current_user:)
 
     respond_to do |format|
       format.json do
@@ -37,7 +37,7 @@ class ReportController < CatalogController
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = Report.new(params, fields, current_user: current_user).to_csv
+    self.response_body = Report.new(params, fields, current_user:).to_csv
   end
 
   # reset workflow states for objects
@@ -46,7 +46,7 @@ class ReportController < CatalogController
 
     workflow = params[:reset_workflow]
     step = params[:reset_step]
-    ids = Report.new(params, current_user: current_user).druids
+    ids = Report.new(params, current_user:).druids
     ids.each do |druid|
       druid = Druid.new(druid).with_namespace
       cocina = Repository.find(druid)
@@ -54,8 +54,8 @@ class ReportController < CatalogController
       next unless current_ability.can_update_workflow?('waiting', cocina)
 
       WorkflowClientFactory.build.update_status(
-        druid: druid,
-        workflow: workflow,
+        druid:,
+        workflow:,
         process: step,
         status: 'waiting'
       )

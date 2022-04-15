@@ -32,7 +32,7 @@ class CreateVirtualObjectsJob < GenericJob
       update_druid_count(count: virtual_objects.length)
 
       # NOTE: `ability` is defined in this job's superclass, `GenericJob`
-      not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(druids: virtual_object_ids_from(virtual_objects), ability: ability)
+      not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(druids: virtual_object_ids_from(virtual_objects), ability:)
       problematic_druids = not_found_druids + unauthorized_druids
 
       if problematic_druids.any?
@@ -51,7 +51,7 @@ class CreateVirtualObjectsJob < GenericJob
         virtual_objects.reject! { |virtual_object| problematic_druids.include?(virtual_object[:virtual_object_id]) }
       end
 
-      errors = VirtualObjectsCreator.create(virtual_objects: virtual_objects)
+      errors = VirtualObjectsCreator.create(virtual_objects:)
       # line below was added Jan 2020 because on very long running jobs, rails would drop the database connectinon and throw an exception instead of auto-reconnecting
       #   this would cause the entire job to fail (even though it may have actually completed), which would trigger another run of the job
       ActiveRecord::Base.clear_active_connections!

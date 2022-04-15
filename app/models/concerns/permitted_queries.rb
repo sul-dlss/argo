@@ -59,7 +59,7 @@ class PermittedQueries
     # Note that if there are more than PERMITTED_COLLECTIONS_LIMIT collections, not all collections may be returned,
     # especially for admins.
     result = repository.search(
-      q: q,
+      q:,
       defType: 'lucene',
       rows: PERMITTED_COLLECTIONS_LIMIT,
       fl: 'id,sw_display_title_tesim',

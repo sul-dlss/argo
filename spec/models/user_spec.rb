@@ -261,7 +261,7 @@ RSpec.describe User, type: :model do
   describe '#groups' do
     subject { user.groups }
 
-    let(:user) { build(:user, sunetid: 'asdf', webauth_groups: webauth_groups) }
+    let(:user) { build(:user, sunetid: 'asdf', webauth_groups:) }
 
     context 'specified' do
       let(:webauth_groups) { %w[dlss:testgroup1 dlss:testgroup2 dlss:testgroup3] }

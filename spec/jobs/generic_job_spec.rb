@@ -66,7 +66,7 @@ RSpec.describe GenericJob do
 
     it 'opens a new version if the workflow status allows' do
       expect(DorObjectWorkflowStatus).to receive(:new)
-        .with(druid, version: version).and_return(workflow)
+        .with(druid, version:).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(true)
 
       subject.send(:open_new_version, druid, version, 'Set new governing APO')
@@ -80,7 +80,7 @@ RSpec.describe GenericJob do
 
     it 'does not open a new version if rejected by the workflow status' do
       expect(DorObjectWorkflowStatus).to receive(:new)
-        .with(druid, version: version).and_return(workflow)
+        .with(druid, version:).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(false)
       expect { subject.send(:open_new_version, druid, version, 'Message') }.to raise_error(/Unable to open new version/)
 

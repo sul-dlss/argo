@@ -48,11 +48,11 @@ class StateService
   attr_reader :druid, :version
 
   def lifecycle(task)
-    workflow_client.lifecycle(druid: druid, milestone_name: task)
+    workflow_client.lifecycle(druid:, milestone_name: task)
   end
 
   def active_lifecycle(task)
-    workflow_client.active_lifecycle(druid: druid, milestone_name: task, version: version)
+    workflow_client.active_lifecycle(druid:, milestone_name: task, version:)
   end
 
   def opened?
@@ -71,7 +71,7 @@ class StateService
   end
 
   def active_assembly_wf?
-    @active_assembly_wf ||= workflow_client.workflow_status(druid: druid, workflow: 'assemblyWF', process: 'accessioning-initiate') == 'waiting'
+    @active_assembly_wf ||= workflow_client.workflow_status(druid:, workflow: 'assemblyWF', process: 'accessioning-initiate') == 'waiting'
   end
 
   def workflow_client

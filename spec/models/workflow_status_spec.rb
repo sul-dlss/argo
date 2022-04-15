@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe WorkflowStatus do
   subject(:workflow_status) do
-    described_class.new(workflow: workflow,
-                        workflow_steps: workflow_steps)
+    described_class.new(workflow:,
+                        workflow_steps:)
   end
 
-  let(:workflow) { Dor::Workflow::Response::Workflow.new(xml: xml) }
+  let(:workflow) { Dor::Workflow::Response::Workflow.new(xml:) }
   let(:workflow_name) { 'accessionWF' }
 
   let(:workflow_steps) do

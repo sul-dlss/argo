@@ -18,8 +18,8 @@ class DescriptiveMetadataImportJob < GenericJob
     with_csv_items(csv, name: 'Import descriptive metadata') do |cocina_object, csv_row, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      DescriptionImport.import(csv_row: csv_row)
-                       .bind { |description| CocinaValidator.validate_and_save(cocina_object, description: description) }
+      DescriptionImport.import(csv_row:)
+                       .bind { |description| CocinaValidator.validate_and_save(cocina_object, description:) }
                        .either(
                          ->(_updated) { success.call('Successfully updated') },
                          ->(messages) { failure.call(messages) }

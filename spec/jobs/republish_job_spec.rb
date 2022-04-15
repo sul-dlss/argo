@@ -17,9 +17,9 @@ RSpec.describe RepublishJob, type: :job do
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
     described_class.perform_now(bulk_action.id,
-                                druids: druids,
-                                groups: groups,
-                                user: user)
+                                druids:,
+                                groups:,
+                                user:)
   end
 
   after do

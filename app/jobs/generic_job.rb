@@ -91,7 +91,7 @@ class GenericJob < ApplicationJob
         yield(cocina_object, success, failure, idx)
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
-        Honeybadger.notify(e, context: { druid: druid })
+        Honeybadger.notify(e, context: { druid: })
       end
     end
   end
@@ -137,7 +137,7 @@ class GenericJob < ApplicationJob
         raise "Column \"#{druid_column}\" not found"
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
-        Honeybadger.notify(e, context: { druid: druid })
+        Honeybadger.notify(e, context: { druid: })
       end
     end
   end
@@ -157,12 +157,12 @@ class GenericJob < ApplicationJob
 
   # @returns [String] the current version
   def open_new_version(druid, version, description)
-    wf_status = DorObjectWorkflowStatus.new(druid, version: version)
+    wf_status = DorObjectWorkflowStatus.new(druid, version:)
     raise "#{Time.current} Unable to open new version for #{druid} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
 
     VersionService.open(identifier: druid,
                         significance: 'minor',
-                        description: description,
+                        description:,
                         opening_user_name: bulk_action.user.to_s)
   end
 end

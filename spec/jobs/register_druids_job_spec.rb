@@ -18,7 +18,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
     instance_double(Cocina::Models::DRO,
                     externalIdentifier: 'druid:123',
                     label: 'My object',
-                    identification: identification)
+                    identification:)
   end
 
   let(:csv_string) do

@@ -36,9 +36,9 @@ RSpec.describe ExportTagsJob, type: :job do
     context 'when happy path' do
       before do
         job.perform(bulk_action.id,
-                    druids: druids,
-                    groups: groups,
-                    user: user)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
       it 'collaborates with the tags client for each druid' do
@@ -68,9 +68,9 @@ RSpec.describe ExportTagsJob, type: :job do
         allow(tags_client1).to receive(:list).and_raise(StandardError, 'ruh roh')
         allow(tags_client2).to receive(:list).and_raise(StandardError, 'ruh roh')
         job.perform(bulk_action.id,
-                    druids: druids,
-                    groups: groups,
-                    user: user)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
       it 'collaborates with the tags client for each druid' do

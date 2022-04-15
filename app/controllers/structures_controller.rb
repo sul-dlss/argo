@@ -12,7 +12,7 @@ class StructuresController < ApplicationController
         cocina = Repository.find(params[:item_id])
         authorize! :update, cocina
         filename = "structure-#{Druid.new(cocina).without_namespace}.csv"
-        send_data StructureSerializer.as_csv(cocina.structural), filename: filename
+        send_data StructureSerializer.as_csv(cocina.structural), filename:
       end
       format.html do
         # Lazy loading of the structural part of the show page
@@ -23,7 +23,7 @@ class StructuresController < ApplicationController
 
   def update
     StructureUpdater.from_csv(@cocina, params[:csv].read)
-                    .bind { |structural| CocinaValidator.validate_and_save(@cocina, structural: structural) }
+                    .bind { |structural| CocinaValidator.validate_and_save(@cocina, structural:) }
                     .either(
                       ->(_updated) { display_success('Structural metadata updated') },
                       ->(messages) { display_error(messages) }

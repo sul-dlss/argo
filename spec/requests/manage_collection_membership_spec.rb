@@ -13,7 +13,7 @@ RSpec.describe 'Collection membership', type: :request do
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   describe 'adding a new collection' do
-    let(:cocina_collection) { build(:dro, id: druid, collection_ids: collection_ids) }
+    let(:cocina_collection) { build(:dro, id: druid, collection_ids:) }
     let(:collection_ids) { ['druid:gg333xx4444'] }
     let(:object_service) do
       instance_double(Dor::Services::Client::Object,

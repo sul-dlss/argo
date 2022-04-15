@@ -13,11 +13,11 @@ class LicenseAndRightsStatementsSetter
   #                       ability lacks update permission, or when an underlying exception is raised
   # @return [Cocina::Models::Collection,Cocina::Models::DRO] the cocina object with updates applied
   def self.set(ability:, druid:, copyright: nil, license: nil, use_statement: nil)
-    new(ability: ability,
-        druid: druid,
-        copyright: copyright,
-        license: license,
-        use_statement: use_statement)
+    new(ability:,
+        druid:,
+        copyright:,
+        license:,
+        use_statement:)
       .set
   end
 

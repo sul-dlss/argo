@@ -20,9 +20,9 @@ RSpec.describe PrepareJob, type: :job do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
   let(:params) do
     {
-      druids: druids,
-      groups: groups,
-      user: user,
+      druids:,
+      groups:,
+      user:,
       version_description: 'Changed dates',
       significance: 'major'
     }.with_indifferent_access

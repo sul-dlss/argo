@@ -68,7 +68,7 @@ class DatastreamsController < ApplicationController
     object_client.metadata.legacy_update(
       endpoint.to_sym => {
         updated: Time.zone.now,
-        content: content
+        content:
       }
     )
     Argo::Indexer.reindex_druid_remotely(druid)

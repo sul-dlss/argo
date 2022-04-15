@@ -220,7 +220,7 @@ RSpec.describe SetRightsJob, type: :job do
   context 'when updating two objects' do
     let(:params) do
       {
-        druids: druids,
+        druids:,
         view_access: 'world',
         download_access: 'world',
         controlled_digital_lending: '0'

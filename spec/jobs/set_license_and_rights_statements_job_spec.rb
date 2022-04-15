@@ -16,9 +16,9 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
     let(:license_uri) { 'http://my.license.example.com/' }
     let(:params) do
       {
-        druids: druids,
-        groups: groups,
-        user: user,
+        druids:,
+        groups:,
+        user:,
         copyright_statement_option: '0',
         copyright_statement: '',
         license_option: '1',
@@ -53,15 +53,15 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
     let(:copyright_statement) { 'new copyright statement' }
     let(:params) do
       {
-        druids: druids,
-        groups: groups,
-        user: user,
+        druids:,
+        groups:,
+        user:,
         copyright_statement_option: '1',
-        copyright_statement: copyright_statement,
+        copyright_statement:,
         license_option: '0',
         license: '',
         use_statement_option: '1',
-        use_statement: use_statement
+        use_statement:
       }.with_indifferent_access
     end
     let(:use_statement) { 'new use statement' }
@@ -81,7 +81,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
           ability: instance_of(Ability),
           druid: /druid:\d+/,
           copyright: copyright_statement,
-          use_statement: use_statement
+          use_statement:
         )
         .exactly(druids.size)
         .times

@@ -3,7 +3,7 @@
 # Recursively compact enumerables of blank values
 class DeepCompactBlank
   def self.run(enumerable:)
-    new(enumerable: enumerable).run
+    new(enumerable:).run
   end
 
   def initialize(enumerable:)

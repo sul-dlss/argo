@@ -30,8 +30,8 @@ class AddWorkflowJob < GenericJob
 
   # Fetches the workflow from the workflow service and checks to see if it's active
   def workflow_active?(druid, version)
-    workflow = client.workflow(pid: druid, workflow_name: workflow_name)
-    workflow.active_for?(version: version)
+    workflow = client.workflow(pid: druid, workflow_name:)
+    workflow.active_for?(version:)
   end
 
   def client

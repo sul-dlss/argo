@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'items/_set_governing_apo_ui' do
   let(:groups) { ['dlss-developers'] }
-  let(:current_user) { instance_double(User, groups: groups) }
+  let(:current_user) { instance_double(User, groups:) }
   let(:apo_list) { [['APO 1', 'druid:tv123km1122'], ['APO 2', 'druid:234']] }
 
   before do

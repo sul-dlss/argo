@@ -21,8 +21,8 @@ class RegisterDruidsJob < GenericJob
         report << ['Druid', 'Source Id', 'Label']
 
         results.each do |parse_result|
-          parse_result.either(->(value) { register(value, bulk_action: bulk_action, log: log, report: report) },
-                              ->(error) { log_error(error, bulk_action: bulk_action, log: log) })
+          parse_result.either(->(value) { register(value, bulk_action:, log:, report:) },
+                              ->(error) { log_error(error, bulk_action:, log:) })
         end
       end
     end
@@ -35,8 +35,8 @@ class RegisterDruidsJob < GenericJob
   def register(value, bulk_action:, log:, report:)
     log.puts("#{Time.current} #{self.class}: Registering with #{value.inspect}")
     registration_result = RegistrationService.register(**value)
-    registration_result.either(->(cocina_model) { log_success(cocina_model, bulk_action: bulk_action, log: log, report: report) },
-                               ->(error) { log_error(error, bulk_action: bulk_action, log: log) })
+    registration_result.either(->(cocina_model) { log_success(cocina_model, bulk_action:, log:, report:) },
+                               ->(error) { log_error(error, bulk_action:, log:) })
   end
 
   def log_success(model, bulk_action:, log:, report:)

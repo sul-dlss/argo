@@ -22,7 +22,7 @@ class SetRightsJob < GenericJob
       change_set = if cocina_object.collection?
                      # Collection only allows setting view access to dark or world
                      view_access = access_params[:view_access] == 'dark' ? 'dark' : 'world'
-                     access_params = { view_access: view_access }
+                     access_params = { view_access: }
                      CollectionChangeSet.new(cocina_object)
                    else
                      ItemChangeSet.new(cocina_object)

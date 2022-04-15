@@ -7,7 +7,7 @@ RSpec.describe MilestoneService do
   let(:druid2) { 'druid:ab123cd4567' }
   let(:args) do
     {
-      druid: druid
+      druid:
     }
   end
 

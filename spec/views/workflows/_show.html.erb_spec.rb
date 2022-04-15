@@ -10,7 +10,7 @@ RSpec.describe 'workflows/_show' do
                     name: 'descriptive-metadata',
                     status: 'error',
                     pid: druid,
-                    workflow_name: workflow_name,
+                    workflow_name:,
                     datetime: nil,
                     elapsed: nil,
                     attempts: nil,
@@ -22,8 +22,8 @@ RSpec.describe 'workflows/_show' do
 
   let(:presenter) do
     instance_double(WorkflowPresenter,
-                    druid: druid,
-                    workflow_name: workflow_name,
+                    druid:,
+                    workflow_name:,
                     processes: [process_status],
                     cocina_object: nil)
   end

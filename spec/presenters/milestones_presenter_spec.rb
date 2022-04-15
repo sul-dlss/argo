@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe MilestonesPresenter do
   subject(:presenter) do
-    described_class.new(milestones: milestones, versions: versions)
+    described_class.new(milestones:, versions:)
   end
 
   let(:milestone2) do

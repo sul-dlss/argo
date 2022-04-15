@@ -29,7 +29,7 @@ class EmbargoForm < ApplicationChangeSet
     updated = model
 
     embargo = updated.access.embargo ? updated.access.embargo.new(embargo_params) : Cocina::Models::Embargo.new(embargo_params)
-    updated_access = updated.access.new(embargo: embargo)
+    updated_access = updated.access.new(embargo:)
     updated = updated.new(access: updated_access)
 
     Repository.store(updated)

@@ -44,7 +44,7 @@ class SetSourceIdsCsvJob < GenericJob
 
     change_set_class = cocina_object.collection? ? CollectionChangeSet : ItemChangeSet
     change_set = change_set_class.new(cocina_object)
-    if change_set.validate(source_id: source_id)
+    if change_set.validate(source_id:)
       update_source_ids(change_set, log) if change_set.changed?
     else
       log.puts("#{Time.current} #{change_set.errors.full_messages.to_sentence}")

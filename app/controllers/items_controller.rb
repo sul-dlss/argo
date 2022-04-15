@@ -28,7 +28,7 @@ class ItemsController < ApplicationController
     Honeybadger.notify(exception)
     logger.error "Error connecting to DSA: #{detail}"
     if turbo_frame_request?
-      render 'error', locals: { message: message }
+      render 'error', locals: { message: }
     else
       redirect_to solr_document_path(params[:id]),
                   flash: { error: message }
@@ -40,7 +40,7 @@ class ItemsController < ApplicationController
     Honeybadger.notify(exception)
     logger.error(message)
     if turbo_frame_request?
-      render 'error', locals: { message: message }
+      render 'error', locals: { message: }
     else
       redirect_to solr_document_path(params[:id]),
                   flash: { error: message }
@@ -61,7 +61,7 @@ class ItemsController < ApplicationController
 
     object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     @collection_list = object_client.collections
-    render partial: 'collection_ui', locals: { response_message: response_message }
+    render partial: 'collection_ui', locals: { response_message: }
   end
 
   def remove_collection
@@ -161,7 +161,7 @@ class ItemsController < ApplicationController
   def show_barcode
     change_set = ItemChangeSet.new(@cocina)
     state_service = StateService.new(@cocina)
-    render Show::BarcodeComponent.new(change_set: change_set, state_service: state_service)
+    render Show::BarcodeComponent.new(change_set:, state_service:)
   end
 
   # Draw form for copyright
@@ -172,7 +172,7 @@ class ItemsController < ApplicationController
   def show_copyright
     change_set = build_change_set
     state_service = StateService.new(@cocina)
-    render Show::CopyrightComponent.new(change_set: change_set, state_service: state_service)
+    render Show::CopyrightComponent.new(change_set:, state_service:)
   end
 
   # Draw form for use and reproduction statement
@@ -183,7 +183,7 @@ class ItemsController < ApplicationController
   def show_use_statement
     change_set = build_change_set
     state_service = StateService.new(@cocina)
-    render Show::UseStatementComponent.new(change_set: change_set, state_service: state_service)
+    render Show::UseStatementComponent.new(change_set:, state_service:)
   end
 
   # Draw form for setting license
@@ -194,7 +194,7 @@ class ItemsController < ApplicationController
   def show_license
     change_set = build_change_set
     state_service = StateService.new(@cocina)
-    render Show::LicenseComponent.new(change_set: change_set, state_service: state_service)
+    render Show::LicenseComponent.new(change_set:, state_service:)
   end
 
   # save the form
@@ -207,7 +207,7 @@ class ItemsController < ApplicationController
     else
       message = change_set.errors.full_messages.to_sentence
       logger.error "Errors: #{message}"
-      render 'error', locals: { message: message }
+      render 'error', locals: { message: }
     end
   end
 
@@ -225,10 +225,10 @@ class ItemsController < ApplicationController
     state_service = StateService.new(@cocina)
     if @cocina.collection?
       change_set = CollectionChangeSet.new(@cocina)
-      render Show::Collection::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
+      render Show::Collection::AccessRightsComponent.new(change_set:, state_service:)
     else
       change_set = ItemChangeSet.new(@cocina)
-      render Show::Item::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
+      render Show::Item::AccessRightsComponent.new(change_set:, state_service:)
     end
   end
 

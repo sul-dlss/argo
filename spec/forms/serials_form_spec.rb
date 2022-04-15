@@ -6,7 +6,7 @@ RSpec.describe SerialsForm do
   let(:instance) { described_class.new(cocina_item) }
   let(:druid) { 'druid:bc123df4567' }
   let(:purl) { 'https://purl.stanford.edu/bc123df4567' }
-  let(:cocina_item) { build(:dro, id: druid).new(description: description) }
+  let(:cocina_item) { build(:dro, id: druid).new(description:) }
 
   describe 'loading from cocina' do
     context 'when the number is before the title' do
@@ -24,7 +24,7 @@ RSpec.describe SerialsForm do
           note: [
             { value: '1990', type: 'date/sequential designation' }
           ],
-          purl: purl
+          purl:
         }
       end
 
@@ -48,7 +48,7 @@ RSpec.describe SerialsForm do
               ]
             }
           ],
-          purl: purl
+          purl:
         }
       end
 
@@ -65,7 +65,7 @@ RSpec.describe SerialsForm do
       let(:description) do
         {
           title: [{ value: 'My Serial' }],
-          purl: purl
+          purl:
         }
       end
       let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
@@ -88,7 +88,7 @@ RSpec.describe SerialsForm do
                 }
               ],
               note: [{ value: 'something', type: 'date/sequential designation' }],
-              purl: purl
+              purl:
             })
         end
 
@@ -115,7 +115,7 @@ RSpec.describe SerialsForm do
                                          }
                                        ],
                                        note: [{ value: 'something', type: 'date/sequential designation' }],
-                                       purl: purl
+                                       purl:
                                      })
         end
 
@@ -139,7 +139,7 @@ RSpec.describe SerialsForm do
               { type: 'main title', value: 'Frog' }
             ]
           }],
-          purl: purl
+          purl:
         }
       end
       let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
@@ -162,7 +162,7 @@ RSpec.describe SerialsForm do
                                          }
                                        ],
                                        note: [{ value: 'something', type: 'date/sequential designation' }],
-                                       purl: purl
+                                       purl:
                                      })
         end
 
@@ -190,7 +190,7 @@ RSpec.describe SerialsForm do
                                          }
                                        ],
                                        note: [{ value: 'something', type: 'date/sequential designation' }],
-                                       purl: purl
+                                       purl:
                                      })
         end
 

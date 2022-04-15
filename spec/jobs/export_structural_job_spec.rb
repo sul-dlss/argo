@@ -412,9 +412,9 @@ RSpec.describe ExportStructuralJob, type: :job do
     context 'when happy path' do
       before do
         job.perform(bulk_action.id,
-                    druids: druids,
-                    groups: groups,
-                    user: user)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
       it 'logs messages and creates a file' do
@@ -440,9 +440,9 @@ RSpec.describe ExportStructuralJob, type: :job do
         allow(object_client1).to receive(:find).and_raise(StandardError, 'ruh roh')
         allow(object_client2).to receive(:find).and_raise(StandardError, 'ruh roh')
         job.perform(bulk_action.id,
-                    druids: druids,
-                    groups: groups,
-                    user: user)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
       it 'records all failures and creates an empty file' do
@@ -520,9 +520,9 @@ RSpec.describe ExportStructuralJob, type: :job do
 
       before do
         job.perform(bulk_action.id,
-                    druids: druids,
-                    groups: groups,
-                    user: user)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
       it 'records all failures and creates an empty file' do

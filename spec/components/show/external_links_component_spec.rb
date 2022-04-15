@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Show::ExternalLinksComponent, type: :component do
   before do
-    render_inline(described_class.new(document: document))
+    render_inline(described_class.new(document:))
   end
 
   context 'for a non-publishable item (adminPolicy)' do
@@ -32,7 +32,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
                                     to_param: 'druid:ab123cd3445',
                                     druid: 'ab123cd3445',
                                     publishable?: true,
-                                    catkey: catkey, released_to: released_to)
+                                    catkey:, released_to:)
     end
     let(:catkey) { nil }
 

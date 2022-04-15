@@ -5,15 +5,15 @@ class VersionService
   class << self
     # @returns [String] the current version
     def open(identifier:, **options)
-      new(identifier: identifier).open(**options)
+      new(identifier:).open(**options)
     end
 
     def close(identifier:, **options)
-      new(identifier: identifier).close(**options)
+      new(identifier:).close(**options)
     end
 
     def openable?(identifier:)
-      new(identifier: identifier).openable?
+      new(identifier:).openable?
     end
   end
 

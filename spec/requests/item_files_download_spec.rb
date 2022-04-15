@@ -150,13 +150,13 @@ RSpec.describe 'Download item files' do
       expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.jp2').once
       expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.tif').once
       expect(Preservation::Client.objects).to have_received(:content).with(
-        druid: druid,
+        druid:,
         filepath: 'M1090_S15_B01_F07_0106.jp2',
         version: 4,
         on_data: Proc
       )
       expect(Preservation::Client.objects).to have_received(:content).with(
-        druid: druid,
+        druid:,
         filepath: 'M1090_S15_B01_F07_0106.tif',
         version: 4,
         on_data: Proc

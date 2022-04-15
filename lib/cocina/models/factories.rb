@@ -46,10 +46,10 @@ module Cocina
       def self.build_dro_properties(type:, id:, version:, label:, title:, source_id:, admin_policy_id:,
                                     barcode: nil, catkeys: [], collection_ids: [])
         {
-          type: type,
+          type:,
           externalIdentifier: id,
-          version: version,
-          label: label,
+          version:,
+          label:,
           access: {},
           administrative: { hasAdminPolicy: admin_policy_id },
           description: {
@@ -80,10 +80,10 @@ module Cocina
       # rubocop:disable Metrics/ParameterLists
       def self.build_collection_properties(type:, id:, version:, label:, title:, admin_policy_id:, source_id: nil, catkeys: [])
         {
-          type: type,
+          type:,
           externalIdentifier: id,
-          version: version,
-          label: label,
+          version:,
+          label:,
           access: {},
           administrative: { hasAdminPolicy: admin_policy_id },
           description: {
@@ -116,10 +116,10 @@ module Cocina
                                              use_statement: nil, copyright: nil, license: nil,
                                              registration_workflow: nil, collections_for_registration: nil)
         {
-          type: type,
+          type:,
           externalIdentifier: id,
-          version: version,
-          label: label,
+          version:,
+          label:,
           administrative: {
             hasAdminPolicy: admin_policy_id,
             hasAgreement: agreement_id,

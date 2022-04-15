@@ -6,7 +6,7 @@ RSpec.describe 'View the full dublin core' do
   let(:user) { create(:user) }
 
   context 'as keys and values' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: metadata) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, metadata:) }
     let(:metadata) { instance_double(Dor::Services::Client::Metadata, dublin_core: xml) }
     let(:xml) do
       <<~XML
@@ -33,7 +33,7 @@ RSpec.describe 'View the full dublin core' do
   end
 
   context 'as xml' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: metadata) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, metadata:) }
     let(:metadata) { instance_double(Dor::Services::Client::Metadata, dublin_core: xml) }
     let(:xml) do
       <<~XML

@@ -31,9 +31,9 @@ class ModsulatorJob < ActiveJob::Base
 
       # If a modsulator request fails, the job will fail and automatically be retried
       response_xml = if method == 'normalize'
-                       ModsulatorClient.normalize_mods(uploaded_filename: uploaded_filename, pretty_filename: original_filename, log: log)
+                       ModsulatorClient.normalize_mods(uploaded_filename:, pretty_filename: original_filename, log:)
                      else
-                       ModsulatorClient.convert_spreadsheet_to_mods(uploaded_filename: uploaded_filename, pretty_filename: original_filename, log: log)
+                       ModsulatorClient.convert_spreadsheet_to_mods(uploaded_filename:, pretty_filename: original_filename, log:)
                      end
 
       if response_xml.nil?
@@ -97,11 +97,11 @@ class ModsulatorJob < ActiveJob::Base
 
         ApplyModsMetadata.new(apo_druid: druid,
                               mods: xmldoc_node.first_element_child.to_s,
-                              cocina: cocina,
+                              cocina:,
                               existing_mods: current_metadata,
-                              original_filename: original_filename,
-                              ability: ability,
-                              log: log).apply
+                              original_filename:,
+                              ability:,
+                              log:).apply
       rescue Dor::Services::Client::NotFoundResponse => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{item_druid}")
         log.puts(e.message.to_s)

@@ -9,7 +9,7 @@ class ProblematicDruidFinder
   # @param [#can?] ability a cancancan ability
   # @return [Hash] a hash containing not found and/or unauthorized druids
   def self.find(druids:, ability:)
-    new(druids: druids, ability: ability).find
+    new(druids:, ability:).find
   end
 
   attr_reader :druids, :ability

@@ -7,7 +7,7 @@ class RegistrationCsvConverter
   # @param [String] csv_string CSV string
   # @return [Array<Result>] a list of registration requests suitable for passing off to dor-services-client
   def self.convert(csv_string:)
-    new(csv_string: csv_string).convert
+    new(csv_string:).convert
   end
 
   attr_reader :csv_string
@@ -59,7 +59,7 @@ class RegistrationCsvConverter
     tag_count = row.headers.count('Tags')
     tag_count.times { |n| tags << row.field('Tags', n + row.index('Tags')) }
     model = Cocina::Models::RequestDRO.new(model_params)
-    Success(model: model,
+    Success(model:,
             workflow: row.fetch('Initial Workflow'),
             tags: tags.compact)
   rescue Cocina::Models::ValidationError => e

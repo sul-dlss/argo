@@ -3,7 +3,7 @@
 # Creates column headers for descriptive metadata exports
 class DescriptionHeaders
   def self.create(headers:)
-    new(headers: headers).create
+    new(headers:).create
   end
 
   def initialize(headers:)

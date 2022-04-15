@@ -16,7 +16,7 @@ RSpec.describe 'BulkActions::RightsJobs', type: :request do
                  'f' => { 'objectType_ssim' => ['agreement'] },
                  'q' => '', 'search_field' => 'text', 'druids' => 'druid:cf540ct6282', 'description' => '' }
 
-      expect { post '/bulk_actions/rights_job', params: params }.to have_enqueued_job(SetRightsJob)
+      expect { post '/bulk_actions/rights_job', params: }.to have_enqueued_job(SetRightsJob)
         .with(Integer, {
                 druids: ['druid:cf540ct6282'],
                 groups: ["sunetid:#{user.login}", 'workgroup:sdr:administrator-role'],

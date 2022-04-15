@@ -19,7 +19,7 @@ RSpec.describe RemoteIndexingJob do
 
   describe '#perform' do
     let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ee2222'] }
-    let(:params) { { druids: druids } }
+    let(:params) { { druids: } }
 
     context 'in a happy world' do
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do

@@ -15,7 +15,7 @@ class TagsController < ApplicationController
 
     current_tags = tags_client.list
 
-    @form = TagsForm.new(ModelProxy.new(id: params[:item_id], tags: current_tags.map { |name| Tag.new(name: name) }))
+    @form = TagsForm.new(ModelProxy.new(id: params[:item_id], tags: current_tags.map { |name| Tag.new(name:) }))
     respond_to do |format|
       if @form.validate(params[:tags]) && @form.save
         reindex
@@ -67,7 +67,7 @@ class TagsController < ApplicationController
     @form = TagsForm.new(
       ModelProxy.new(
         id: params[:item_id],
-        tags: tags.map { |name| Tag.new(name: name, id: name) }
+        tags: tags.map { |name| Tag.new(name:, id: name) }
       )
     )
   end

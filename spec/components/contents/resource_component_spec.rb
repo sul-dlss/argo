@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Contents::ResourceComponent, type: :component do
   let(:component) do
-    described_class.new(resource: resource,
+    described_class.new(resource:,
                         resource_counter: 1,
                         counter_offset: 50,
                         object_id: 'druid:kb487gt5106',
@@ -13,7 +13,7 @@ RSpec.describe Contents::ResourceComponent, type: :component do
   let(:rendered) { render_inline(component) }
   let(:resource) do
     instance_double(Cocina::Models::FileSet,
-                    type: type,
+                    type:,
                     externalIdentifier: 'https://cocina.sul.stanford.edu/fileSet/bb573tm8486-bc91c072-3b0f-4338-a9b2-0f85e1b98e00',
                     version: 3,
                     label: 'Object 1',
@@ -35,7 +35,7 @@ RSpec.describe Contents::ResourceComponent, type: :component do
                                sdrPreserve: true,
                                shelve: true
                              },
-                             presentation: presentation)
+                             presentation:)
   end
   let(:type) { 'https://cocina.sul.stanford.edu/models/resources/image' }
   let(:presentation) { { height: 11_839, width: 19_380 } }

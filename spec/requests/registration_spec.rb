@@ -131,7 +131,7 @@ RSpec.describe 'Registration', type: :request do
     let(:default_access) { '' }
 
     it 'handles invalid parameters' do
-      expect { get '/registration/collection_list', headers: headers }.to raise_error(ActionController::ParameterMissing)
+      expect { get '/registration/collection_list', headers: }.to raise_error(ActionController::ParameterMissing)
     end
 
     context 'when there are no collections' do

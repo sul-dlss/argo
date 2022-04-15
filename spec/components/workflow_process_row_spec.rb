@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe WorkflowProcessRow, type: :component do
-  subject(:instance) { described_class.new(process: process_status, index: 1, cocina_object: cocina_object) }
+  subject(:instance) { described_class.new(process: process_status, index: 1, cocina_object:) }
 
   let(:cocina_object) { instance_double(Cocina::Models::DRO) }
 
   describe 'render' do
-    subject(:body) { render_inline(described_class.new(process: process, index: 1, cocina_object: cocina_object)) }
+    subject(:body) { render_inline(described_class.new(process:, index: 1, cocina_object:)) }
 
     let(:process) do
       instance_double(Dor::Workflow::Response::Process,

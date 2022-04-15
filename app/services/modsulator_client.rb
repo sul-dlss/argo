@@ -11,7 +11,7 @@ class ModsulatorClient
   # @param [#puts] log the logger to write to
   # @return [String] XML generated from a given spreadsheet
   def self.convert_spreadsheet_to_mods(uploaded_filename:, pretty_filename:, log:)
-    new(uploaded_filename: uploaded_filename, pretty_filename: pretty_filename, log: log).convert_spreadsheet_to_mods
+    new(uploaded_filename:, pretty_filename:, log:).convert_spreadsheet_to_mods
   end
 
   # Normalizes MODS by calling the remote modsulator service
@@ -20,7 +20,7 @@ class ModsulatorClient
   # @param [#puts] log the logger to write to
   # @return [String] a normalized version of a given XML file.
   def self.normalize_mods(uploaded_filename:, pretty_filename:, log:)
-    new(uploaded_filename: uploaded_filename, pretty_filename: pretty_filename, log: log).normalize_mods
+    new(uploaded_filename:, pretty_filename:, log:).normalize_mods
   end
 
   # @param [String] uploaded_filename The full path to the Spreadsheet/XML file.
@@ -54,7 +54,7 @@ class ModsulatorClient
     response_xml = nil
     payload = Faraday::Multipart::FilePart.new(uploaded_filename, content_type)
 
-    connection = Faraday.new(url: url) do |faraday|
+    connection = Faraday.new(url:) do |faraday|
       faraday.use Faraday::Response::RaiseError
       faraday.request :multipart
       faraday.request :url_encoded

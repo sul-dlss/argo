@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Show::ControlsComponent, type: :component do
   let(:component) do
-    described_class.new(manager: manager, presenter: presenter)
+    described_class.new(manager:, presenter:)
   end
 
   let(:url_helpers) { Rails.application.routes.url_helpers }

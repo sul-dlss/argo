@@ -2,7 +2,7 @@
 
 class RegisterAgreement
   def self.register(model:, uploaded_files:)
-    new(model: model, uploaded_files: uploaded_files).register
+    new(model:, uploaded_files:).register
   end
 
   def initialize(model:, uploaded_files:)
@@ -17,7 +17,7 @@ class RegisterAgreement
       checksum: md5,
       byte_size: file.size,
       content_type: file.content_type,
-      filename: filename
+      filename:
     )
   end
 
@@ -28,18 +28,18 @@ class RegisterAgreement
     SdrClient::Login.run(url: Settings.sdr_api.url, login_service: TokensController::LoginFromSettings)
 
     connection = SdrClient::Connection.new(url: Settings.sdr_api.url, token: SdrClient::Credentials.read)
-    upload_responses = SdrClient::Deposit::UploadFiles.upload(file_metadata: file_metadata,
+    upload_responses = SdrClient::Deposit::UploadFiles.upload(file_metadata:,
                                                               logger: Rails.logger,
-                                                              connection: connection)
+                                                              connection:)
 
     new_request_dro = SdrClient::Deposit::UpdateDroWithFileIdentifiers.update(request_dro: model,
-                                                                              upload_responses: upload_responses)
+                                                                              upload_responses:)
     job_id = SdrClient::Deposit::CreateResource.run(accession: true,
                                                     metadata: new_request_dro,
                                                     logger: Rails.logger,
-                                                    connection: connection)
+                                                    connection:)
 
-    poll_for_job_complete(job_id: job_id)
+    poll_for_job_complete(job_id:)
   end
 
   private
@@ -49,7 +49,7 @@ class RegisterAgreement
   def poll_for_job_complete(job_id:)
     result = nil
     1.upto(5) do |_n|
-      result = SdrClient::BackgroundJobResults.show(url: Settings.sdr_api.url, job_id: job_id)
+      result = SdrClient::BackgroundJobResults.show(url: Settings.sdr_api.url, job_id:)
       break unless %w[pending processing].include? result['status']
 
       sleep 5

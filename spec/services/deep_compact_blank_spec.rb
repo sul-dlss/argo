@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DeepCompactBlank do
-  subject(:compacted) { described_class.run(enumerable: enumerable) }
+  subject(:compacted) { described_class.run(enumerable:) }
 
   describe '.run' do
     context 'with a string' do

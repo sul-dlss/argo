@@ -4,7 +4,7 @@
 # This generates a File for a work
 class FileGenerator
   def self.generate(uploaded_file:, label:, md5:, sha1:)
-    new(uploaded_file: uploaded_file, label: label, md5: md5, sha1: sha1).generate
+    new(uploaded_file:, label:, md5:, sha1:).generate
   end
 
   def initialize(uploaded_file:, label:, md5:, sha1:)
@@ -24,10 +24,10 @@ class FileGenerator
     {
       type: Cocina::Models::ObjectType.file,
       version: 1,
-      label: label,
+      label:,
       filename: uploaded_file.original_filename,
-      access: access,
-      administrative: administrative,
+      access:,
+      administrative:,
       hasMimeType: uploaded_file.content_type,
       hasMessageDigests: message_digests,
       size: uploaded_file.size

@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Show::Apo::RolesComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, cocina: apo) }
-  let(:component) { described_class.new(presenter: presenter) }
+  let(:component) { described_class.new(presenter:) }
   let(:rendered) { render_inline(component) }
 
   let(:apo) do
-    build(:admin_policy).new(administrative: administrative)
+    build(:admin_policy).new(administrative:)
   end
 
   let(:administrative) do

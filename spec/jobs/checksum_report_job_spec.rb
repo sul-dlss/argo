@@ -32,15 +32,15 @@ RSpec.describe ChecksumReportJob, type: :job do
 
       context 'happy path' do
         before do
-          allow(Preservation::Client.objects).to receive(:checksums).with(druids: druids).and_return(csv_response)
+          allow(Preservation::Client.objects).to receive(:checksums).with(druids:).and_return(csv_response)
         end
 
         it 'calls the presevation_catalog API, writes a CSV file, and records success counts' do
           subject.perform(bulk_action.id,
-                          druids: druids,
-                          groups: groups,
-                          user: user)
-          expect(Preservation::Client.objects).to have_received(:checksums).with(druids: druids)
+                          druids:,
+                          groups:,
+                          user:)
+          expect(Preservation::Client.objects).to have_received(:checksums).with(druids:)
           expect(File).to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))
           expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(0)
@@ -50,7 +50,7 @@ RSpec.describe ChecksumReportJob, type: :job do
 
       context 'Preservation::Client throws error' do
         before do
-          allow(Preservation::Client.objects).to receive(:checksums).with(druids: druids).and_raise(Preservation::Client::UnexpectedResponseError, 'ruh roh')
+          allow(Preservation::Client.objects).to receive(:checksums).with(druids:).and_raise(Preservation::Client::UnexpectedResponseError, 'ruh roh')
           allow(Honeybadger).to receive(:context)
           allow(Honeybadger).to receive(:notify)
           allow(Rails.logger).to receive(:error)
@@ -60,14 +60,14 @@ RSpec.describe ChecksumReportJob, type: :job do
           exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\ \(Preservation::Client::UnexpectedResponseError\): ruh roh/
           expect do
             subject.perform(bulk_action.id,
-                            druids: druids,
-                            groups: groups,
-                            user: user)
+                            druids:,
+                            groups:,
+                            user:)
           end.not_to raise_error
-          expect(Preservation::Client.objects).to have_received(:checksums).with(druids: druids)
+          expect(Preservation::Client.objects).to have_received(:checksums).with(druids:)
           expect(File).not_to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))
           expect(Rails.logger).to have_received(:error).with(exp_msg_regex).once
-          expect(Honeybadger).to have_received(:context).with(bulk_action_id: bulk_action.id, params: hash_including(druids: druids)).once
+          expect(Honeybadger).to have_received(:context).with(bulk_action_id: bulk_action.id, params: hash_including(druids:)).once
           expect(Honeybadger).to have_received(:notify).with(exp_msg_regex).once
           expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(druids.length)
@@ -90,14 +90,14 @@ RSpec.describe ChecksumReportJob, type: :job do
         exp_msg_regex = /ChecksumReportJob not authorized to view all content/
         expect do
           subject.perform(bulk_action.id,
-                          druids: druids,
-                          groups: groups,
-                          user: user)
+                          druids:,
+                          groups:,
+                          user:)
         end.not_to raise_error
         expect(Preservation::Client.objects).not_to have_received(:checksums)
         expect(File).not_to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))
         expect(Rails.logger).to have_received(:error).with(exp_msg_regex).once
-        expect(Honeybadger).to have_received(:context).with(bulk_action_id: bulk_action.id, params: hash_including(druids: druids)).once
+        expect(Honeybadger).to have_received(:context).with(bulk_action_id: bulk_action.id, params: hash_including(druids:)).once
         expect(Honeybadger).to have_received(:notify).with(exp_msg_regex).once
         expect(bulk_action.druid_count_total).to eq(druids.length)
         expect(bulk_action.druid_count_fail).to eq(druids.length)

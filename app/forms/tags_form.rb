@@ -30,7 +30,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     return if tags_to_add.blank?
 
     tags = tags_to_add.map(&:name).compact_blank
-    tags_client.create(tags: tags) if tags.any?
+    tags_client.create(tags:) if tags.any?
   end
 
   def remove_tags

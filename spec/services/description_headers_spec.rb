@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DescriptionHeaders do
-  subject(:run) { described_class.create(headers: headers) }
+  subject(:run) { described_class.create(headers:) }
 
   let(:source_id) { 'sul:123' }
   let(:headers) do
