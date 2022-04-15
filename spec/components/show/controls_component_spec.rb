@@ -118,6 +118,45 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
   end
 
+  context 'when the object is a Collection the user can manage' do
+    let(:view_collection_id) { 'druid:kv840xx0000' }
+    let(:allows_modification) { true }
+
+    let(:doc) do
+      SolrDocument.new('id' => view_collection_id,
+                       'processing_status_text_ssi' => 'not registered',
+                       SolrDocument::FIELD_OBJECT_TYPE => 'collection',
+                       SolrDocument::FIELD_CATKEY_ID => catkey,
+                       SolrDocument::FIELD_APO_ID => [governing_apo_id])
+    end
+    let(:catkey) { nil }
+
+    it 'renders the appropriate buttons' do
+      expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
+      expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+      expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
+      expect(page).to have_link 'Publish'
+      expect(page).to have_link 'Unpublish'
+      expect(page).to have_text 'Manage description'
+      expect(page).to have_link 'Purge', href: '/items/druid:kv840xx0000/purge'
+      expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
+      expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
+
+      expect(rendered.css('a').size).to eq 9
+    end
+
+    context 'when the collection has a catkey' do
+      let(:catkey) { 'catkey:1234567' }
+
+      it 'includes the descriptive metadata refresh button without "Manage Serials" and the correct count of actions' do
+        expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
+        expect(page).not_to have_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
+
+        expect(rendered.css('a').size).to eq 10
+      end
+    end
+  end
+
   describe '#registered_only?' do
     subject { component.send(:registered_only?) }
 
