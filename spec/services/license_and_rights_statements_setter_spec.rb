@@ -32,7 +32,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
         version: 1,
         description: {
           title: [{ value: 'test' }],
-          purl: 'https://purl.stanford.edu/bc123df4567'
+          purl: 'https://purl.stanford.edu/bc123df4568'
         },
         access: {},
         identification: { sourceId: 'sul:1234' },
@@ -98,7 +98,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
             type: Cocina::Models::ObjectType.collection,
             description: {
               title: [{ value: 'test' }],
-              purl: 'https://purl.stanford.edu/bc123df4567'
+              purl: 'https://purl.stanford.edu/bc123df4568'
             },
             version: 1,
             identification: { sourceId: 'sul:1234' },
