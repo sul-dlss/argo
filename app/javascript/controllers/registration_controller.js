@@ -2,18 +2,10 @@ import { Controller } from "stimulus"
 import DorRegistration from '../registration/register'
 
 export default class extends Controller {
-  static targets = ["lockButton", "unlockButton", "gridShowLabel", "textShowLabel"]
+  static targets = ["gridShowLabel", "textShowLabel"]
 
     connect() {
         this.rc = this.createRegistrationContext()
-    }
-
-    lock(event) {
-        this.toggleEditing(false)
-    }
-
-    unlock(event) {
-        this.toggleEditing(true)
     }
 
     addRow(column_data) {
@@ -212,9 +204,6 @@ export default class extends Controller {
         $('#data').jqGrid('setColProp','barcode_id',{ editable: edit });
         $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
         $('#data').jqGrid('setColProp','label',{ editable: edit });
-
-        this.lockButtonTarget.hidden = !edit
-        this.unlockButtonTarget.hidden = edit
       }
 
       stopEditing(autoSave) {

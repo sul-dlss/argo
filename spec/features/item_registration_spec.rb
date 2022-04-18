@@ -61,7 +61,6 @@ RSpec.describe 'Item registration page', js: true do
     end
 
     find('#jqg_data_0').set(true)
-    find('button.action-lock').click
     find('button.action-register').click
 
     # This lets us test that a failed registration results in an exclamation icon on the item row.  But

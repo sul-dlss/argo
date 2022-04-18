@@ -22,18 +22,6 @@
   }
 }
 
-.icon-lock {
-  &::before {
-    content: '🔒';
-  }
-}
-
-.icon-unlock {
-  &::before {
-    content: '🔓';
-  }
-}
-
 .icon-minus {
   &::before {
     content: '-';
