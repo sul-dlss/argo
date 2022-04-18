@@ -17,7 +17,7 @@ class BulkAction < ApplicationRecord
                      SetGoverningApoJob
                      SetCatkeysAndBarcodesJob
                      SetCatkeysAndBarcodesCsvJob
-                     PrepareJob
+                     OpenVersionJob
                      RefreshModsJob
                      RepublishJob
                      CloseVersionJob

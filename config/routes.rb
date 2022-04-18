@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         resource :purge_job, only: %i[new create]
         resource :add_workflow_job, only: %i[new create]
 
-        resource :prepare_job, only: %i[new create]
+        resource :open_version_job, only: %i[new create]
         resource :close_version_job, only: %i[new create]
         resource :governing_apo_job, only: %i[new create]
         resource :apply_apo_defaults_job, only: %i[new create]

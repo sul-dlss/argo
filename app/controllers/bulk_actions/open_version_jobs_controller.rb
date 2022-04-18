@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module BulkActions
-  class PrepareJobsController < ApplicationController
+  class OpenVersionJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = 'PrepareJob'
+    self.action_type = 'OpenVersionJob'
 
     def job_params
       super.merge(significance: params[:significance],

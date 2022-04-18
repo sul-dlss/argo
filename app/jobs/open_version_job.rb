@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 ##
-# Job to open objects
-class PrepareJob < GenericJob
+# Job to open a new version for objects
+class OpenVersionJob < GenericJob
   ##
   # A job that allows a user to specify a list of druids of objects to open
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
