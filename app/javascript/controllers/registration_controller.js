@@ -37,6 +37,7 @@ export default class extends Controller {
     register() {
         var cells = $('#data').jqGrid('getGridParam','savedRow');
         if (cells.length > 0) {
+          console.log("still editin")
           this.rc.displayRequirements('You are still editing a cell. Please use tab or enter to finish editing before trying to register items.')
           return;
         }
