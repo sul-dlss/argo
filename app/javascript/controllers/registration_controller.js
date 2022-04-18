@@ -168,11 +168,8 @@ export default class extends Controller {
           displayRequirements : function(text) {
             document.querySelector('#gridErrorModal .modal-body p').innerHTML = text;
 
-            // Bootstrap 5 will be like this:
-            // var myModal = new bootstrap.Modal(document.getElementById('gridErrorModal'), {})
-            // myModal.show()
-
-            $('#gridErrorModal').modal({ show: true })
+            const myModal = new bootstrap.Modal(document.getElementById('gridErrorModal'), {})
+            myModal.show()
           },
           progressDialog : function(numItems) {
             // Bootstrap 5 will be like this:
