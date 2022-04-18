@@ -1,31 +1,61 @@
 <% @title = 'Register DOR Objects' %>
 
-<div id='properties' class="ui-widget" style="display: none">
-  <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId' %></div>
-  <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', 'data-rcparam': 'collection' %></div>
-
-  <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS) %></div>
-  <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', 'data-rcparam': 'workflowId' %></div>
-  <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), class: 'tag-field', 'data-tagname': 'Process : Content Type' %></div>
-  <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, data: { rcparam: 'projectName', project_autocomplete: true } %></div>
-  <div class="property-item wide"><label for='tag_1'>Tags</label>
-    <span id="tags" style="width: auto">
-      <%= text_field_tag :'tags[]', nil, id: 'tags_0', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= text_field_tag :'tags[]', nil, id: 'tags_1', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= text_field_tag :'tags[]', nil, id: 'tags_2', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= text_field_tag :'tags[]', nil, id: 'tags_3', class: 'free tag-field', data: { tag_autocomplete: true } %>
-    </span>
-    <div class="break"></div>
-    <label for='tag_4'>&nbsp;</label>
-    <span id="tags" style="width: auto">
-      <%= text_field_tag :'tags[]', nil, id: 'tags_4', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= text_field_tag :'tags[]', nil, id: 'tags_5', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= text_field_tag :'tags[]', nil, id: 'tags_6', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= text_field_tag :'tags[]', nil, id: 'tags_7', class: 'free tag-field', data: { tag_autocomplete: true } %>
-      <%= hidden_field_tag :registered_by, current_user.login, class: 'tag-field ', 'data-tagname': 'Registered By' %>
-    </span>
+<div id='properties' class="container row mt-3" style="display: none">
+  <div class="col-md-5">
+    <div class="row mb-3">
+      <label for="apo_id" class="col-sm-3 col-form-label">Admin Policy</label>
+      <div class="col-sm-9">
+        <%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId', class: 'form-select' %>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="collection" class="col-sm-3 col-form-label">Collection</label>
+      <div class="col-sm-9">
+        <%= select_tag :collection, '', 'data-rcparam': 'collection', class: 'form-select' %>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="rights" class="col-sm-3 col-form-label">Rights</label>
+      <div class="col-sm-9">
+        <%= select_tag :rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS), class: 'form-select' %>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="workflow_id" class="col-sm-3 col-form-label">Initial Workflow</label>
+      <div class="col-sm-9">
+        <%= select_tag :workflow_id, '', 'data-rcparam': 'workflowId', class: 'form-select' %>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="content_type" class="col-sm-3 col-form-label">Content Type</label>
+      <div class="col-sm-9">
+        <%= select_tag :content_type, options_for_select(valid_content_types), class: 'tag-field form-select', 'data-tagname': 'Process : Content Type' %>
+      </div>
+    </div>
   </div>
-  <div class="break"></div>
+
+  <div class="col-md-5 offset-md-2">
+    <div class="row mb-3">
+      <label for="project" class="col-sm-3 col-form-label">Project Name</label>
+      <div class="col-sm-9">
+        <%= text_field_tag :project, nil, data: { rcparam: 'projectName', project_autocomplete: true }, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="tags_0" class="col-sm-3 col-form-label">Tags</label>
+      <div class="col-sm-9">
+        <span id="tags" style="width: auto">
+          <%= text_field_tag :'tags[]', nil, id: 'tags_0', class: 'free tag-field form-control mb-2', data: { tag_autocomplete: true } %>
+          <%= text_field_tag :'tags[]', nil, id: 'tags_1', class: 'free tag-field form-control mb-2', data: { tag_autocomplete: true } %>
+          <%= text_field_tag :'tags[]', nil, id: 'tags_2', class: 'free tag-field form-control mb-2', data: { tag_autocomplete: true } %>
+          <%= text_field_tag :'tags[]', nil, id: 'tags_3', class: 'free tag-field form-control mb-2', data: { tag_autocomplete: true } %>
+          <%= text_field_tag :'tags[]', nil, id: 'tags_4', class: 'free tag-field form-control mb-2', data: { tag_autocomplete: true } %>
+          <%= text_field_tag :'tags[]', nil, id: 'tags_5', class: 'free tag-field form-control mb-2', data: { tag_autocomplete: true } %>
+          <%= hidden_field_tag :registered_by, current_user.login, class: 'tag-field ', 'data-tagname': 'Registered By' %>
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
 
 

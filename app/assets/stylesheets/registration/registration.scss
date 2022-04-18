@@ -31,9 +31,7 @@
 }
 
 .invalid {
-  border-color: red;
-  border-width: 2px;
-  color: red;
+  @extend .is-invalid;
 }
 
 .invalidDisplay {
@@ -50,35 +48,6 @@
   position: absolute;
   display: none;
   resize: none;
-}
-
-#properties {
-  background-color: #FDF3F1;
-  padding: 1em 0.5em;
-
-  .break {
-    clear: left;
-  }
-
-  div.property-item {
-    float: left;
-    font: inherit;
-    white-space: nowrap;
-
-    input, select {
-      width: 18em;
-      margin-right: 0.5em;
-    }
-
-    label {
-      font-weight: bold;
-      color: gray;
-      display: inline-block;
-      text-align: right;
-      width: 10em;
-      padding-right: 1em;
-    }
-  }
 }
 
 .button-group {
