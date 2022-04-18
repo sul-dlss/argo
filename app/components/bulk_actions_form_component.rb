@@ -23,7 +23,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Add workflow', new_add_workflow_job_path(search_of_druids)]
       ]],
       ['Modify objects (via form)', [
-        ['Open new object versions', new_prepare_job_path(search_of_druids)],
+        ['Open new object versions', new_open_version_job_path(search_of_druids)],
         ['Close objects', new_close_version_job_path(search_of_druids)],
         ['Update governing APO', new_governing_apo_job_path(search_of_druids)],
         ['Apply APO defaults', new_apply_apo_defaults_job_path(search_of_druids)],
