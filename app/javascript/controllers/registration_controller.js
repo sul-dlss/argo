@@ -13,10 +13,7 @@ export default class extends Controller {
     }
 
     deleteRows(event) {
-        const selection = $('#data').jqGrid('getGridParam','selarrrow');
-        for (let i = selection.length-1; i >= 0; i--) {
-          $('#data').jqGrid('delRowData',selection[i]);
-        }
+      $('#data').jqGrid('delRowData', event.target.closest("tr.jqgrow").id);
     }
 
     resetDialog() {
@@ -29,7 +26,6 @@ export default class extends Controller {
     register() {
         var cells = $('#data').jqGrid('getGridParam','savedRow');
         if (cells.length > 0) {
-          console.log("still editin")
           this.rc.displayRequirements('You are still editing a cell. Please use tab or enter to finish editing before trying to register items.')
           return;
         }
@@ -53,15 +49,23 @@ export default class extends Controller {
         this.gridShowLabelTarget.classList.add("ui-state-active")
         this.textShowLabelTarget.classList.remove("ui-state-active")
 
-        $('#id_list').hide();
+        document.querySelector('.ui-jqgrid-hdiv').hidden = false
+        document.querySelector('.ui-jqgrid-bdiv').hidden = false
+        document.querySelector('#id_list').hidden = true
         this.element.querySelectorAll('button').forEach((button) => button.disabled = false)
     }
 
     enableTextView() {
+        if (this.textShowLabelTarget.classList.contains("ui-state-active"))
+          return // Already in this state.
+
         this.stopEditing(true);
         this.gridToText();
         this.resizeIdList();
-        $('#id_list').show();
+        document.querySelector('.ui-jqgrid-hdiv').hidden = true
+        document.querySelector('.ui-jqgrid-bdiv').hidden = true
+        document.querySelector('#id_list').hidden = false
+
         this.textShowLabelTarget.classList.add("ui-state-active")
         this.gridShowLabelTarget.classList.remove("ui-state-active")
         this.element.querySelectorAll('button').forEach((button) => button.disabled = true)
@@ -70,13 +74,8 @@ export default class extends Controller {
     // private methods
 
     resizeIdList() {
-        const boxHeight = Math.max($('#gbox_data .ui-jqgrid-bdiv').height(), 150)
-        $('#id_list').animate({
-          'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3,
-          'left': 3,
-          'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4,
-          'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + boxHeight - 4
-        }, 0);
+        const gridHeight = document.querySelector('.ui-jqgrid-bdiv').getBoundingClientRect().height + 23
+        document.querySelector('#id_list').style.height = `${gridHeight}px`
     }
 
     formatDruids(index) {
@@ -93,34 +92,34 @@ export default class extends Controller {
         } else {
           checkRow(index)
         }
-      }
+    }
 
     addIdentifiers(identifiers) {
         identifiers.map((newId) => {
           if (newId.trim() != '') {
-            var params = newId.split('\t');
+            const params = newId.split('\t');
             this.addRowWithData(params);
           }
         })
-      }
+    }
 
-      textToGrid() {
+    textToGrid() {
         $('#data').jqGrid('clearGridData');
         $('#data').data('nextId',0);
-        var textData = $('#id_list').val().replace(/^\t*\n$/,'');
+        const textData = $('#id_list').val().replace(/^\t*\n$/,'');
         this.addIdentifiers(textData.split('\n'));
         this.formatDruids();
-      }
+    }
 
-      gridToText() {
+    gridToText() {
         var text = '';
         var gridData = $('#data').jqGrid('getRowData');
         for (var i = 0; i < gridData.length; i++) {
-          var rowData = gridData[i];
+          const rowData = gridData[i];
           text += [rowData.barcode_id, rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
         }
         $('#id_list').val(text);
-      }
+    }
 
     allValid() {
         return $('#properties .invalid').length == 0 && $('#data .invalid').length == 0
@@ -175,14 +174,13 @@ export default class extends Controller {
         var newId = $('#data').data('nextId') || 0;
         var newRow = { id: newId };
         var columns = $('#data').jqGrid('getGridParam','colModel');
+        columns.filter(column => column.label != ' ').forEach((column, index) => {
+          newRow[column.name] = this.processValue(column.name, column_data[index]);
+        })
 
-        for (var i = 2; i < columns.length; i++) {
-            var value = this.processValue(columns[i].name, column_data[i-2]);
-            newRow[columns[i].name] = value;
-        }
-        $('#data').jqGrid('addRowData',newId, newRow, 'last');
-        $('#data').jqGrid('setRowData',newId, newRow);
-        $('#data').data('nextId',newId+1)
+        $('#data').jqGrid('addRowData', newId, newRow, 'last');
+        $('#data').jqGrid('setRowData', newId, newRow);
+        $('#data').data('nextId', newId+1)
     }
 
     // Strip leading and trailing punctuation from everything but label

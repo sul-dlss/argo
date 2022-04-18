@@ -29,7 +29,7 @@ RSpec.describe 'Item registration page', js: true do
     fill_in 'tags_0', with: 'tag : test'
 
     # click the button to add a row for a new item
-    find('button.action-add', text: 'Add Row').click
+    click_button 'Add another row'
     find_all("tr.ui-widget-content[role='row']") # try to wait for the item entry row to show up, since it's added dynamically after clicking the add btn
 
     # fill out the barcode field
@@ -47,6 +47,9 @@ RSpec.describe 'Item registration page', js: true do
     find("td[aria-describedby='data_label'] input[name='label']") # wait for the editable field to show up in the table cell
     fill_in 'label', with: 'object title'
 
+    # Change focus off of the label
+    find("td[aria-describedby='data_label'] input[name='label']").native.send_keys :tab
+
     registration_params = {}
     expect_any_instance_of(Dor::ObjectsController).to receive(:create) do |arg|
       # If parameter expectations are put in here, and an expectation fails, the controller
@@ -60,14 +63,13 @@ RSpec.describe 'Item registration page', js: true do
       arg.render json: { error: 'errror' }.to_json, status: 500 # test error presentation
     end
 
-    find('#jqg_data_0').set(true)
-    find('button.action-register').click
+    click_button 'Register'
 
     # This lets us test that a failed registration results in an exclamation icon on the item row.  But
     # it also forces capybara to wait for the Dor::ObjectsController#create call to finish, meaning the
     # block we fed to expect_any_instance_of (to mock #create) can set registration_params, allowing us
     # to check the params below.
-    expect(page).to have_css('span.icon-exclamation-sign', visible: true)
+    expect(page).to have_css('span.icon-exclamation-sign', visible: true, wait: 50)
     expect(registration_params).to include(
       'admin_policy' => ur_apo_id,
       'barcode_id' => barcode,
