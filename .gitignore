@@ -6,7 +6,7 @@
 .*.swp
 config/certs
 coverage/
-db/*.sqlite3
+db/*.sqlite3*
 examples.txt
 
 /public/assets
