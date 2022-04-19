@@ -23,6 +23,7 @@ class DescriptiveMetadataImportJob < GenericJob
                        .bind { |description| validate_changed(cocina_object, description) }
                        .bind { |description| open_version(cocina_object, description) }
                        .bind { |description, new_cocina_object| CocinaValidator.validate_and_save(new_cocina_object, description:) }
+                       .bind { VersionService.close(identifier: cocina_object.externalIdentifier) }
                        .either(
                          ->(_updated) { success.call('Successfully updated') },
                          ->(messages) { failure.call(messages.to_sentence) }

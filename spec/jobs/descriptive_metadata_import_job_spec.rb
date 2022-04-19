@@ -8,6 +8,9 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:item1) { build(:dro_with_metadata, id: druids[0]) }
   let(:item2) { build(:dro_with_metadata, id: druids[1]) }
   let(:logger) { instance_double(File, puts: nil) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, version: version_client) }
 
   let(:csv_file) do
     [
@@ -25,6 +28,8 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
     allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
     allow(StateService).to receive(:new).and_return(state_service)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
   end
 
   describe '#perform' do
@@ -48,11 +53,12 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         item2.new(description: item2.description.new(title: [{ value: 'new title 2' }], purl: "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"))
       end
 
-      it 'updates the descriptive metadata for each item' do
+      it 'updates the descriptive metadata for each item and closes each item' do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(Repository).to have_received(:store).with(expected1)
         expect(Repository).to have_received(:store).with(expected2)
         expect(state_service).to have_received(:allows_modification?).twice
+        expect(version_client).to have_received(:close).twice
       end
     end
 
@@ -61,9 +67,10 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         subject.perform(bulk_action.id, { csv_file: })
       end
 
-      it 'does not update' do
+      it 'does not update or close items' do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(Repository).not_to have_received(:store)
+        expect(version_client).not_to have_received(:close)
       end
     end
 
@@ -82,12 +89,13 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         subject.perform(bulk_action.id, { csv_file: })
       end
 
-      it 'updates the error count without alerting honeybadger' do
+      it 'updates the error count without alerting honeybadger, updating or closing' do
         expect(bulk_action.druid_count_total).to eq 1
         expect(bulk_action.druid_count_fail).to eq 1
         expect(bulk_action.druid_count_success).to eq 0
         expect(Repository).not_to have_received(:store)
         expect(Honeybadger).not_to have_received(:notify)
+        expect(version_client).not_to have_received(:close)
       end
     end
 
@@ -134,11 +142,12 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         ].join("\n")
       end
 
-      it 'does not update the descriptive metadata' do
+      it 'does not update the descriptive metadata or close the items' do
         expect(bulk_action.druid_count_total).to eq 1
         expect(bulk_action.druid_count_fail).to eq 1
         expect(bulk_action.druid_count_success).to eq 0
         expect(Repository).not_to have_received(:store)
+        expect(version_client).not_to have_received(:close)
       end
     end
 
@@ -167,12 +176,13 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         item1.new(version: 2, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
       end
 
-      it 'updates the descriptive metadata for each item' do
+      it 'opens the item, updates the descriptive metadata and then closes the item' do
         expect(bulk_action.druid_count_total).to eq 1
         expect(Repository).to have_received(:store).with(expected1)
         expect(state_service).to have_received(:allows_modification?)
         expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, significance: 'minor', opening_user_name: bulk_action.user.to_s,
                                                             description: 'Descriptive metadata upload')
+        expect(version_client).to have_received(:close).once
       end
     end
   end
