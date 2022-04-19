@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DescriptiveMetadataImportJob < GenericJob
+  include Dry::Monads[:result]
   queue_as :default
 
   ##
@@ -19,11 +20,32 @@ class DescriptiveMetadataImportJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       DescriptionImport.import(csv_row:)
-                       .bind { |description| CocinaValidator.validate_and_save(cocina_object, description:) }
+                       .bind { |description| validate_changed(cocina_object, description) }
+                       .bind { |description| open_version_if_needed(cocina_object, description) }
+                       .bind { |description, new_cocina_object| CocinaValidator.validate_and_save(new_cocina_object, description:) }
                        .either(
                          ->(_updated) { success.call('Successfully updated') },
                          ->(messages) { failure.call(messages) }
                        )
     end
+  end
+
+  private
+
+  def validate_changed(cocina_object, description)
+    return Failure('Description unchanged') if cocina_object.description == description
+
+    Success(description)
+  end
+
+  def open_version_if_needed(cocina_object, description)
+    state_service = StateService.new(cocina_object)
+    unless state_service.allows_modification?
+      new_version = open_new_version(cocina_object.externalIdentifier, cocina_object.version, 'Descriptive metadata upload')
+      cocina_object = cocina_object.new(version: new_version.to_i)
+    end
+    Success([description, cocina_object])
+  rescue RuntimeError => e
+    Failure([e.message])
   end
 end
