@@ -30,6 +30,7 @@ FactoryBot.define do
 
     factory :agreement do
       type { Cocina::Models::ObjectType.agreement }
+      label { 'Test Agreement' }
     end
   end
 end
