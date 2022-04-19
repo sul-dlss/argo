@@ -5,16 +5,18 @@ require 'rails_helper'
 # Feature tests for the spreadsheet bulk uploads view.
 RSpec.describe 'Bulk jobs view', js: true do
   before do
-    solr_conn.add(id: apo_id, objectType_ssim: 'adminPolicy')
+    solr_conn.add(id: apo_id, objectType_ssim: 'adminPolicy', 'apo_role_dor-apo-manager_ssim': ['workgroup:sdr:map-staff'])
     solr_conn.commit
-    sign_in create(:user), groups: ['sdr:administrator-role']
+    sign_in create(:user), groups: ['sdr:map-staff']
+
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Repository).to receive(:find).and_return(cocina_model)
   end
 
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, metadata: nil) }
-  let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: nil) }
+  let(:cocina_model) { build(:admin_policy, id: apo_id) }
   let(:apo_id) { 'druid:hv992yv2222' }
 
   context 'on the page with the list of bulk jobs' do
