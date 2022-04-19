@@ -36,11 +36,7 @@ class SetSourceIdsCsvJob < GenericJob
       return
     end
 
-    state_service = StateService.new(cocina_object)
-    unless state_service.allows_modification?
-      new_version = open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(source_id))
-      cocina_object = cocina_object.new(version: new_version.to_i)
-    end
+    cocina_object = open_new_version_if_needed(cocina_object, version_message(source_id))
 
     change_set_class = cocina_object.collection? ? CollectionChangeSet : ItemChangeSet
     change_set = change_set_class.new(cocina_object)

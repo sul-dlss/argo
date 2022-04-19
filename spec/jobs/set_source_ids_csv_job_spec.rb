@@ -80,7 +80,7 @@ RSpec.describe SetSourceIdsCsvJob do
         let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
         before do
-          allow(job).to receive(:open_new_version).and_return('3')
+          allow(job).to receive(:open_new_version).and_return(item1.new(version: 2), item2.new(version: 2), item3.new(version: 2))
           job.perform(bulk_action.id,
                       csv_file:,
                       groups:,
