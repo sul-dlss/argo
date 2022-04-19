@@ -170,17 +170,4 @@ RSpec.describe ApplyModsMetadata do
       end
     end
   end
-
-  describe 'accessioned?' do
-    (0..9).each do |i|
-      it "returns true for DOR objects that are accessioned, false otherwise (:status_code #{i})" do
-        allow(action).to receive(:status).and_return(i)
-        if [6, 7, 8].include?(i)
-          expect(action.send(:accessioned?)).to be_truthy
-        else
-          expect(action.send(:accessioned?)).to be_falsy
-        end
-      end
-    end
-  end
 end

@@ -47,7 +47,7 @@ class ApplyModsMetadata
       return
     end
 
-    version_object
+    @updated_cocina = open_new_version_if_needed
     update_metadata
 
     log.puts("argo.bulk_metadata.bulk_log_job_save_success #{cocina.externalIdentifier}")
@@ -58,6 +58,7 @@ class ApplyModsMetadata
   private
 
   attr_reader :apo_druid, :mods, :existing_mods, :cocina, :original_filename, :ability, :log
+  attr_accessor :updated_cocina
 
   # Log the error
   def log_error!(exception)
@@ -66,28 +67,26 @@ class ApplyModsMetadata
     log.puts(exception.backtrace.to_s)
   end
 
-  # Open a new version for the given object if it is in the accessioned state.
-  def version_object
-    return unless accessioned?
-
-    unless DorObjectWorkflowStatus.new(cocina.externalIdentifier, version: cocina.version).can_open_version?
-      log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{cocina.externalIdentifier}") # totally unexpected
-      return
-    end
-    commit_new_version
-  end
-
   def update_metadata
-    object_client = Dor::Services::Client.object(cocina.externalIdentifier)
+    object_client = Dor::Services::Client.object(updated_cocina.externalIdentifier)
     object_client.metadata.update_mods(mods)
   end
 
-  # Open a new version for the given object.
-  def commit_new_version
-    VersionService.open(identifier: cocina.externalIdentifier,
-                        significance: 'minor',
-                        description: "Descriptive metadata upload from #{original_filename}",
-                        opening_user_name: ability.current_user.sunetid)
+  # @returns [Cocina::Models::DRO|Collection|AdminPolicy] cocina object with the new version
+  def open_new_version_if_needed
+    state_service = StateService.new(cocina)
+    return cocina if state_service.allows_modification? # open already, so just return the original object
+
+    wf_status = DorObjectWorkflowStatus.new(cocina.externalIdentifier, version: cocina.version)
+    unless wf_status.can_open_version?
+      log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{cocina.externalIdentifier}")
+      return cocina
+    end
+    new_version = VersionService.open(identifier: cocina.externalIdentifier,
+                                      significance: 'minor',
+                                      description: "Descriptive metadata upload from #{original_filename}",
+                                      opening_user_name: ability.current_user.sunetid)
+    cocina.new(version: new_version.to_i) # return the newly opened object
   end
 
   # Check if two MODS XML nodes are equivalent.
@@ -101,11 +100,6 @@ class ApplyModsMetadata
                               element_order: false,
                               normalize_whitespace: true,
                               ignore_attr_values: ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
-  end
-
-  # Returns true if the given object is accessioned, false otherwise.
-  def accessioned?
-    (6..8).cover?(status)
   end
 
   # Checks whether or not a DOR object is in accessioning or not.
