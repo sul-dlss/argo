@@ -14,9 +14,10 @@ RSpec.describe SetContentTypeJob, type: :job do
   let(:params) do
     {
       druids: [druids[0]],
-      current_resource_type: 'image',
-      new_content_type: 'book (ltr)',
-      new_resource_type: 'page'
+      current_resource_type: 'https://cocina.sul.stanford.edu/models/resources/image',
+      new_content_type: 'https://cocina.sul.stanford.edu/models/book',
+      viewing_direction: 'left-to-right',
+      new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page'
     }
   end
   let(:user) { bulk_action.user }
@@ -84,9 +85,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         druids: [druids[1]],
-        current_resource_type: 'file',
-        new_content_type: 'map',
-        new_resource_type: 'image'
+        current_resource_type: 'https://cocina.sul.stanford.edu/models/resources/file',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/map',
+        new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/image'
       }
     end
 
@@ -102,13 +103,14 @@ RSpec.describe SetContentTypeJob, type: :job do
     end
   end
 
-  context 'when new content type is book (rtl)' do
+  context 'when new content type is book (with a right-to-left reading direction)' do
     let(:params) do
       {
         druids: [druids[0]],
-        current_resource_type: 'page',
-        new_content_type: 'book (rtl)',
-        new_resource_type: 'page'
+        current_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/book',
+        viewing_direction: 'right-to-left',
+        new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page'
       }
     end
 
@@ -124,13 +126,58 @@ RSpec.describe SetContentTypeJob, type: :job do
     end
   end
 
+  context 'when new content type is image (with a right-to-left reading direction)' do
+    let(:params) do
+      {
+        druids: [druids[0]],
+        current_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/image',
+        viewing_direction: 'right-to-left',
+        new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page'
+      }
+    end
+
+    it 'sets the viewing direction' do
+      subject.perform(bulk_action.id, params)
+      expect(object_client1).to have_received(:update)
+        .with(
+          params: cocina_object_with_types(
+            content_type: Cocina::Models::ObjectType.image,
+            viewing_direction: 'right-to-left'
+          )
+        )
+    end
+  end
+
+  context 'when new content type is map' do
+    let(:params) do
+      {
+        druids: [druids[0]],
+        current_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/map',
+        viewing_direction: 'right-to-left',
+        new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page'
+      }
+    end
+
+    it 'does not set any viewing direction' do
+      subject.perform(bulk_action.id, params)
+      expect(object_client1).to have_received(:update)
+        .with(
+          params: cocina_object_with_types(
+            content_type: Cocina::Models::ObjectType.map
+          )
+        )
+    end
+  end
+
   context 'when a new resource type is provided but not a new content type' do
     let(:params) do
       {
         druids: [druids[0]],
         current_resource_type: '',
         new_content_type: '',
-        new_resource_type: 'page'
+        new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/page'
       }
     end
 
@@ -162,7 +209,7 @@ RSpec.describe SetContentTypeJob, type: :job do
       {
         druids: [druids[0]],
         current_resource_type: '',
-        new_content_type: 'map',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/map',
         new_resource_type: ''
       }
     end
@@ -201,7 +248,7 @@ RSpec.describe SetContentTypeJob, type: :job do
       {
         druids: ['druid:ff123gg4567'],
         current_resource_type: '',
-        new_content_type: 'media',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/media',
         new_resource_type: ''
       }
     end

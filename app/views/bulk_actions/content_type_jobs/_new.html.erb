@@ -1,4 +1,4 @@
-<%= form_with url: content_type_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+<%= form_with url: content_type_job_path, class: 'new_bulk_action', data: { controller: 'content-type', turbo_frame: '_top' } do |f| %>
   <span class='help-block'>
     Set content type
   </span>
@@ -14,19 +14,22 @@
       <li>Document: document</li>
     </ul>
 
-    <% current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys
-      new_content_types = [['none', '']] + Constants::CONTENT_TYPES.keys
-      new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys %>
-
     <%= f.label :current_resource_type, 'Current resource type' %>
-    <%= f.select :current_resource_type, current_resource_types, {}, class: 'form-select' %>
+    <%= f.select :current_resource_type, options_for_select(Constants::RESOURCE_TYPES), { include_blank: 'none' }, class: 'form-select' %>
 
-    <%= f.label :new_content_type, 'New content type' %>
-    <%= f.select :new_content_type, new_content_types, {}, class: 'form-select' %>
+    <%= f.label :new_content_type %>
+    <%= f.select :new_content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), { include_blank: 'none' },
+                 class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' }  %>
+
+    <span data-content-type-target="directionRow">
+      <%= f.label :viewing_direction %>
+      <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), { include_blank: 'none' },
+                  class: 'form-select', data: { content_type_target: 'direction' } %>
+    </span>
 
     <%= f.label :new_resource_type, 'New resource type' %>
-    <%= f.select :new_resource_type, new_resource_types, {}, class: 'form-select' %>
-  </div>
+    <%= f.select :new_resource_type, options_for_select(Constants::RESOURCE_TYPES), { include_blank: 'none' }, class: 'form-select' %>
+  </span>
 
   <%= render 'bulk_actions/druids', f: f %>
   <%= render 'bulk_actions/common_fields', f: f %>

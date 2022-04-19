@@ -5,10 +5,11 @@ class SetContentTypeJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    # types are the label for content types, e.g. book (ltr)
+    # types are the label for content types, e.g. book
     @current_resource_type = params[:current_resource_type]
     @new_content_type = params[:new_content_type]
     @new_resource_type = params[:new_resource_type]
+    @viewing_direction = params[:viewing_direction]
 
     raise 'Must provide values for types.' if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?
     raise 'Must provide a new content type when changing resource type.' if @new_content_type.blank? && @new_resource_type.present?
@@ -41,7 +42,7 @@ class SetContentTypeJob < GenericJob
 
   def cocina_update_attributes(cocina_object)
     {}.tap do |attributes|
-      attributes[:type] = Constants::CONTENT_TYPES[@new_content_type]
+      attributes[:type] = @new_content_type
       attributes[:structural] = if resource_types_should_change?(cocina_object)
                                   structural_with_resource_type_changes(cocina_object)
                                 else
@@ -50,30 +51,29 @@ class SetContentTypeJob < GenericJob
     end
   end
 
-  # If the new content type is a book, we need to set the viewing direction attribute in the cocina model
+  # If the new content type is a book or image, we need to set the viewing direction attribute in the cocina model
   def member_orders
-    return [] unless @new_content_type.start_with?('book')
+    return [] unless may_have_direction? && @viewing_direction.present?
 
-    viewing_direction = if @new_content_type == 'book (ltr)'
-                          'left-to-right'
-                        else
-                          'right-to-left'
-                        end
-    [{ viewingDirection: viewing_direction }]
+    [{ viewingDirection: @viewing_direction }]
+  end
+
+  def may_have_direction?
+    [Cocina::Models::ObjectType.book, Cocina::Models::ObjectType.image].include?(@new_content_type)
   end
 
   def structural_with_resource_type_changes(cocina_object)
     cocina_object.structural.new(
       hasMemberOrders: member_orders,
       contains: Array(cocina_object.structural&.contains).map do |resource|
-        next resource unless resource.type == Constants::RESOURCE_TYPES[@current_resource_type]
+        next resource unless resource.type == @current_resource_type
 
-        resource.new(type: Constants::RESOURCE_TYPES[@new_resource_type])
+        resource.new(type: @new_resource_type)
       end
     )
   end
 
   def resource_types_should_change?(cocina_object)
-    Array(cocina_object.structural&.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[@current_resource_type] }
+    Array(cocina_object.structural&.contains).map(&:type).any? { |resource_type| resource_type == @current_resource_type }
   end
 end
