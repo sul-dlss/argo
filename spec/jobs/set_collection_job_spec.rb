@@ -17,6 +17,12 @@ RSpec.describe SetCollectionJob do
       log_name: 'tmp/set_collection_job_log.txt'
     )
   end
+  let(:cocina1) do
+    build(:dro, id: druids[0])
+  end
+  let(:cocina2) do
+    build(:dro, id: druids[1])
+  end
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
@@ -35,12 +41,6 @@ RSpec.describe SetCollectionJob do
         user:,
         new_collection_id:
       }.with_indifferent_access
-    end
-    let(:cocina1) do
-      build(:dro, id: druids[0])
-    end
-    let(:cocina2) do
-      build(:dro, id: druids[1])
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
     let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }
@@ -79,7 +79,7 @@ RSpec.describe SetCollectionJob do
           let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
           before do
-            allow(job).to receive(:open_new_version).and_return('3')
+            allow(job).to receive(:open_new_version).and_return(cocina1.new(version: 2))
           end
 
           it 'opens a new version sets the new collection on an object' do

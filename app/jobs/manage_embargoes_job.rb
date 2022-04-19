@@ -17,7 +17,7 @@ class ManageEmbargoesJob < GenericJob
     with_csv_items(csv, name: 'Embargo') do |cocina_object, csv_row, success, failure|
       return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      open_version_if_needed(cocina_object)
+      cocina_object = open_new_version_if_needed(cocina_object, 'Manage embargo')
       update_embargo(cocina_object, csv_row)
         .either(
           ->(_val) { success.call('Embargo updated') },
@@ -27,12 +27,6 @@ class ManageEmbargoesJob < GenericJob
   end
 
   private
-
-  def open_version_if_needed(cocina_object)
-    state_service = StateService.new(cocina_object)
-    msg = 'Manage embargo'
-    open_new_version(cocina_object.externalIdentifier, cocina_object.version, msg) unless state_service.allows_modification?
-  end
 
   def update_embargo(cocina_object, csv_row)
     validate_required_field(csv_row).bind do

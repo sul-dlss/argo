@@ -58,7 +58,9 @@ RSpec.describe GenericJob do
     let(:log) { double('log') }
     let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
     let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
-    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: '2') }
+    let(:cocina_object) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version:, new: new_cocina_object) }
+    let(:new_cocina_object) { instance_double(Cocina::Models::DRO) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(client)
@@ -69,20 +71,22 @@ RSpec.describe GenericJob do
         .with(druid, version:).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(true)
 
-      subject.send(:open_new_version, druid, version, 'Set new governing APO')
+      expect(subject.send(:open_new_version, cocina_object, 'Set new governing APO')).to eq(new_cocina_object)
 
       expect(version_client).to have_received(:open).with(
         significance: 'minor',
         description: 'Set new governing APO',
         opening_user_name: subject.bulk_action.user.to_s
       )
+
+      expect(cocina_object).to have_received(:new).with(version: 2)
     end
 
     it 'does not open a new version if rejected by the workflow status' do
       expect(DorObjectWorkflowStatus).to receive(:new)
         .with(druid, version:).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(false)
-      expect { subject.send(:open_new_version, druid, version, 'Message') }.to raise_error(/Unable to open new version/)
+      expect { subject.send(:open_new_version, cocina_object, 'Message') }.to raise_error(/Unable to open new version/)
 
       expect(version_client).not_to have_received(:open)
     end

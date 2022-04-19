@@ -41,7 +41,7 @@ RSpec.describe ManageEmbargoesJob do
     allow(StateService).to receive(:new).and_return(state_service)
     allow(subject.ability).to receive(:can?).and_return(true)
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
-    allow(subject).to receive(:open_new_version)
+    allow(subject).to receive(:open_new_version).and_return(item1.new(version: 2), item2.new(version: 2), item3.new(version: 2))
   end
 
   describe '#perform' do

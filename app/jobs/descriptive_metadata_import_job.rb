@@ -21,7 +21,7 @@ class DescriptiveMetadataImportJob < GenericJob
 
       DescriptionImport.import(csv_row:)
                        .bind { |description| validate_changed(cocina_object, description) }
-                       .bind { |description| open_version_if_needed(cocina_object, description) }
+                       .bind { |description| open_version(cocina_object, description) }
                        .bind { |description, new_cocina_object| CocinaValidator.validate_and_save(new_cocina_object, description:) }
                        .either(
                          ->(_updated) { success.call('Successfully updated') },
@@ -38,12 +38,9 @@ class DescriptiveMetadataImportJob < GenericJob
     Success(description)
   end
 
-  def open_version_if_needed(cocina_object, description)
-    state_service = StateService.new(cocina_object)
-    unless state_service.allows_modification?
-      new_version = open_new_version(cocina_object.externalIdentifier, cocina_object.version, 'Descriptive metadata upload')
-      cocina_object = cocina_object.new(version: new_version.to_i)
-    end
+  def open_version(cocina_object, description)
+    cocina_object = open_new_version_if_needed(cocina_object, 'Descriptive metadata upload')
+
     Success([description, cocina_object])
   rescue RuntimeError => e
     Failure([e.message])
