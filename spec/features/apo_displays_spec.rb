@@ -56,7 +56,7 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'open version ui' do
+    context 'open collection ui' do
       let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, collections: []) }
 
       it 'renders the add collection ui' do

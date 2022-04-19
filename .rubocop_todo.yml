@@ -118,11 +118,6 @@ RSpec/DescribedClass:
   Exclude:
     - 'spec/jobs/modsulator_job_spec.rb'
 
-# Offense count: 189
-# Configuration parameters: CountAsOne.
-RSpec/ExampleLength:
-  Max: 61
-
 # Offense count: 20
 RSpec/ExpectInHook:
   Exclude:

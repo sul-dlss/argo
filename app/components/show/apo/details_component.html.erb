@@ -23,6 +23,15 @@
       </tr>
 
       <tr>
+         <th class="col-3" scope="row">Agreement</th>
+         <td>
+             <%= link_to solr_document_path(agreement_id) do %>
+               <turbo-frame id="agreement-title" src="<%= agreement_path(agreement_id) %>"><%= agreement_id %></turbo-frame>
+             <% end %>
+         </td>
+      </tr>
+
+      <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>
           <%= render Show::TagsComponent.new(document: @presenter.document) %>

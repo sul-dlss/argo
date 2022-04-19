@@ -10,6 +10,14 @@ module Show
       end
 
       delegate :created_date, :id, to: :@solr_document
+
+      def admin_policy
+        @presenter.cocina
+      end
+
+      def agreement_id
+        admin_policy.administrative.hasAgreement
+      end
     end
   end
 end

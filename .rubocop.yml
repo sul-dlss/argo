@@ -45,6 +45,15 @@ Naming/PredicateName:
   ForbiddenPrefixes:
     - is_
 
+# Offense count: 189
+# Configuration parameters: CountAsOne.
+# We exclude feature specs here because they have a lot of setup overhead, so
+# testing a bunch of things in one go is more efficient.
+RSpec/ExampleLength:
+  Exclude:
+    - 'spec/features/**/*_spec.rb'
+  Max: 43
+
 RSpec/MultipleExpectations:
   Enabled: false
 

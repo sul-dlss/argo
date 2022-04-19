@@ -202,7 +202,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :agreements, only: %i[new create]
+  resources :agreements, only: %i[show new create]
 
   resource :registration, only: :show do
     collection do
