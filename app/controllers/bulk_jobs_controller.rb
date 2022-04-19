@@ -4,7 +4,7 @@
 class BulkJobsController < ApplicationController
   include Blacklight::Searchable
 
-  load_resource :cocina, parent: false, class: 'Repository', id_param: 'apo_id', only: :index
+  load_resource :cocina, class: 'Repository', id_param: 'apo_id', only: :index
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
