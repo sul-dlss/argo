@@ -56,7 +56,7 @@ class ContentTypeForm < ApplicationChangeSet
     end
   end
 
-  # If the new content type is a book, we need to set the viewing direction attribute in the cocina model
+  # If the new content type is a book or image, we need to set the viewing direction attribute in the cocina model
   def member_orders
     return [] unless may_have_direction? && viewing_direction.present?
 
