@@ -8,6 +8,14 @@ RSpec.describe 'Create a new item', type: :request do
   let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags:) }
   let(:administrative_tags) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:dor_registration) { instance_double(Cocina::Models::DRO, externalIdentifier: druid) }
+  let(:headers) do
+    {
+      'Last-Modified' => 'Wed, 03 Mar 2021 18:58:00 GMT',
+      'X-Created-At' => 'Wed, 01 Jan 2021 12:58:00 GMT',
+      'X-Served-By' => 'Awesome webserver',
+      'ETag' => 'W/"d41d8cd98f00b204e9800998ecf8427e"'
+    }
+  end
 
   before do
     sign_in(create(:user))
@@ -102,7 +110,7 @@ RSpec.describe 'Create a new item', type: :request do
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: request_json)
-        .to_return(status: 200, body: json, headers: {})
+        .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
@@ -159,7 +167,7 @@ RSpec.describe 'Create a new item', type: :request do
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: request_json)
-        .to_return(status: 200, body: json, headers: {})
+        .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
@@ -191,7 +199,7 @@ RSpec.describe 'Create a new item', type: :request do
                               label: 'Test DRO',
                               version: 1,
                               description: {
-                                title: [{ value: 'Test DRO' }],
+                                title: [{ value: 'xTest DRO' }],
                                 purl: 'https://purl.stanford.edu/bc234fg5678'
                               },
                               access: {
@@ -219,7 +227,7 @@ RSpec.describe 'Create a new item', type: :request do
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: request_json)
-        .to_return(status: 200, body: json, headers: {})
+        .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
@@ -277,7 +285,7 @@ RSpec.describe 'Create a new item', type: :request do
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: request_json)
-        .to_return(status: 200, body: json, headers: {})
+        .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
@@ -335,7 +343,7 @@ RSpec.describe 'Create a new item', type: :request do
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: request_json)
-        .to_return(status: 200, body: json, headers: {})
+        .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
@@ -416,7 +424,7 @@ RSpec.describe 'Create a new item', type: :request do
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: request_json)
-        .to_return(status: 200, body: json, headers: {})
+        .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
