@@ -56,7 +56,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
 
     it 'attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode' do
       expect(bulk_action.druid_count_total).to eq druids.length
-      expect(subject).to have_received(:update_catkey_and_barcode).with(ItemChangeSet, buffer).exactly(3).times
+      expect(subject).to have_received(:update_catkey_and_barcode).with(ItemChangeSet, Hash, buffer).exactly(3).times
     end
   end
 end
