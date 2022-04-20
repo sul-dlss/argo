@@ -10,6 +10,7 @@ class Repository
     maybe_load_cocina(id)
   end
 
+  # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy,NilModel] the updated cocina model instance
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   def self.store(cocina_object)
     object_client = Dor::Services::Client.object(cocina_object.externalIdentifier)
