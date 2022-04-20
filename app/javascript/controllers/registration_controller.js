@@ -172,12 +172,8 @@ export default class extends Controller {
             myModal.show()
           },
           progressDialog : function(numItems) {
-            // Bootstrap 5 will be like this:
-            // var myModal = new bootstrap.Modal(document.getElementById('progressModal'), {})
-            // myModal.show()
-
-            document.querySelector('#progressModal .modal-title').innerHTML = `Registering ${numItems} items`;
-            $('#progressModal').modal({ show: true })
+            const myModal = new bootstrap.Modal(document.getElementById('progressModal'), {})
+            myModal.show()
           }
         });
       }
