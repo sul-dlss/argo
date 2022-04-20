@@ -4,87 +4,192 @@ require 'rails_helper'
 
 RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
   let(:bulk_action) { create(:bulk_action) }
-  let(:groups) { [] }
+  let(:groups) { ['workgroup:sdr:administrator-role'] }
+
   let(:druids) { ['druid:123', 'druid:456'] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
+  let(:logger) { instance_double(File, puts: nil) }
 
-  before do
-    allow(BulkAction).to receive(:find).and_return(bulk_action)
-  end
-
-  context 'when setter runs without raising' do
-    let(:license_uri) { 'http://my.license.example.com/' }
+  describe '#perform' do
+    let(:allows_modification) { true }
     let(:params) do
       {
-        druids:,
-        groups:,
-        user:,
-        copyright_statement_option: '0',
-        copyright_statement: '',
-        license_option: '1',
-        license: license_uri,
-        use_statement_option: '0',
-        use_statement: ''
-      }.with_indifferent_access
-    end
-
-    before do
-      allow(LicenseAndRightsStatementsSetter).to receive(:set).and_return(nil)
-      described_class.perform_now(bulk_action.id, params)
-    end
-
-    it 'increments the success counter' do
-      expect(bulk_action.druid_count_success).to eq(druids.size)
-    end
-
-    it 'invokes the license setter as expected' do
-      expect(LicenseAndRightsStatementsSetter).to have_received(:set)
-        .with(
-          ability: instance_of(Ability),
-          druid: /druid:\d+/,
-          license: license_uri
-        )
-        .exactly(druids.size)
-        .times
-    end
-  end
-
-  context 'when setter raises exceptions' do
-    let(:copyright_statement) { 'new copyright statement' }
-    let(:params) do
-      {
-        druids:,
-        groups:,
-        user:,
         copyright_statement_option: '1',
         copyright_statement:,
-        license_option: '0',
-        license: '',
-        use_statement_option: '1',
-        use_statement:
+        druids:,
+        groups:
       }.with_indifferent_access
     end
-    let(:use_statement) { 'new use statement' }
+    let(:cocina_object) do
+      Cocina::Models::DRO.new(
+        externalIdentifier: 'druid:bc123df4568',
+        label: 'test',
+        type: Cocina::Models::ObjectType.object,
+        version: 1,
+        description: {
+          title: [{ value: 'test' }],
+          purl: 'https://purl.stanford.edu/bc123df4568'
+        },
+        access: {},
+        identification: { sourceId: 'sul:1234' },
+        structural: {},
+        administrative: { hasAdminPolicy: 'druid:bc123df4569' }
+      )
+    end
+    let(:copyright_statement) { 'the new hotness' }
+    let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+    let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
 
     before do
-      allow(LicenseAndRightsStatementsSetter).to receive(:set).and_raise(RuntimeError)
-      described_class.perform_now(bulk_action.id, params)
+      allow(BulkJobLog).to receive(:open).and_yield(logger)
+      allow(Repository).to receive(:find).and_return(cocina_object)
+      allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
+      allow(CollectionChangeSetPersister).to receive(:update)
+      allow(ItemChangeSetPersister).to receive(:update)
+      allow(VersionService).to receive(:open)
+      allow(StateService).to receive(:new).and_return(state_service)
     end
 
-    it 'increments the failure counter' do
-      expect(bulk_action.druid_count_fail).to eq(druids.size)
+    context 'when happy path' do
+      let(:groups) { ['workgroup:sdr:administrator-role'] }
+
+      before do
+        described_class.perform_now(bulk_action.id, params)
+      end
+
+      context 'with an item that is already opened' do
+        it 'updates via item change set persister' do
+          expect(VersionService).not_to have_received(:open)
+          expect(ItemChangeSetPersister).to have_received(:update).twice
+        end
+      end
+
+      context 'with an item that needs to be opened first' do
+        let(:allows_modification) { false }
+
+        it 'updates via item change set persister' do
+          expect(VersionService).to have_received(:open).twice
+          expect(ItemChangeSetPersister).to have_received(:update).twice
+        end
+      end
+
+      context 'with an item and the none license URI' do
+        let(:instance_args) { { license: '' } }
+        let(:params) do
+          {
+            license_option: '1',
+            license: '',
+            druids:,
+            groups:
+          }.with_indifferent_access
+        end
+
+        it 'updates via item change set persister' do
+          expect(VersionService).not_to have_received(:open)
+          expect(ItemChangeSetPersister).to have_received(:update).twice
+        end
+      end
+
+      context 'with a collection' do
+        let(:cocina_object) do
+          Cocina::Models::Collection.new(
+            externalIdentifier: 'druid:bc123df4568',
+            label: 'test',
+            type: Cocina::Models::ObjectType.collection,
+            description: {
+              title: [{ value: 'test' }],
+              purl: 'https://purl.stanford.edu/bc123df4568'
+            },
+            version: 1,
+            identification: { sourceId: 'sul:1234' },
+            access: {},
+            administrative: { hasAdminPolicy: 'druid:bc123df4569' }
+          )
+        end
+
+        it 'updates via collection change set persister' do
+          expect(VersionService).not_to have_received(:open)
+          expect(CollectionChangeSetPersister).to have_received(:update).twice
+        end
+      end
     end
 
-    it 'invokes the license setter as expected' do
-      expect(LicenseAndRightsStatementsSetter).to have_received(:set)
-        .with(
-          ability: instance_of(Ability),
-          druid: /druid:\d+/,
-          copyright: copyright_statement,
-          use_statement:
-        )
-        .exactly(druids.size)
-        .times
+    context 'with an unsupported object type' do
+      let(:cocina_object) { build(:admin_policy) }
+
+      before do
+        described_class.perform_now(bulk_action.id, params)
+        bulk_action.reload
+      end
+
+      it 'logs errors' do
+        expect(logger).to have_received(:puts).with(%r{Not an item or collection \(https://cocina.sul.stanford.edu/models/admin_policy\)}).twice
+        expect(bulk_action.druid_count_total).to eq(druids.length)
+        expect(bulk_action.druid_count_fail).to eq(druids.length)
+      end
+    end
+
+    context 'when no changes' do
+      let(:params) do
+        {
+          copyright_statement_option: '',
+          druids:,
+          groups:
+        }.with_indifferent_access
+      end
+
+      before do
+        described_class.perform_now(bulk_action.id, params)
+        bulk_action.reload
+      end
+
+      it 'logs errors' do
+        expect(VersionService).not_to have_received(:open)
+        expect(CollectionChangeSetPersister).not_to have_received(:update)
+        expect(logger).to have_received(:puts).with(/No changes made/).twice
+        expect(bulk_action.druid_count_total).to eq(druids.length)
+        expect(bulk_action.druid_count_success).to eq(druids.length)
+      end
+    end
+
+    context 'when user is unauthorized' do
+      let(:groups) { [] }
+
+      let(:params) do
+        {
+          copyright_statement_option: '1',
+          copyright_statement: 'test',
+          druids:,
+          groups:
+        }.with_indifferent_access
+      end
+
+      before do
+        described_class.perform_now(bulk_action.id, params)
+        bulk_action.reload
+      end
+
+      it 'logs errors' do
+        expect(logger).to have_received(:puts).with(/Not authorized/).twice
+        expect(bulk_action.druid_count_total).to eq(druids.length)
+        expect(bulk_action.druid_count_fail).to eq(druids.length)
+      end
+    end
+
+    context 'when item cannot be opened' do
+      let(:allows_modification) { false }
+      let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: false) }
+
+      before do
+        described_class.perform_now(bulk_action.id, params)
+        bulk_action.reload
+      end
+
+      it 'logs errors' do
+        expect(logger).to have_received(:puts).with(/Unable to open new version/).twice
+        expect(bulk_action.druid_count_total).to eq(druids.length)
+        expect(bulk_action.druid_count_fail).to eq(druids.length)
+      end
     end
   end
 end

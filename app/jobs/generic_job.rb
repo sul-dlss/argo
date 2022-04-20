@@ -158,7 +158,7 @@ class GenericJob < ApplicationJob
   # @returns [Cocina::Models::DRO|Collection|AdminPolicy] cocina object with the new version
   def open_new_version(cocina_object, description)
     wf_status = DorObjectWorkflowStatus.new(cocina_object.externalIdentifier, version: cocina_object.version)
-    raise "#{Time.current} Unable to open new version for #{cocina_object.externalIdentifier} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
+    raise 'Unable to open new version' unless wf_status.can_open_version?
 
     new_version = VersionService.open(identifier: cocina_object.externalIdentifier,
                                       significance: 'minor',
