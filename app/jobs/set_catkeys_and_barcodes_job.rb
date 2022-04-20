@@ -27,7 +27,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
         args[:barcode] = barcodes[i] if barcodes
         change_set = ItemChangeSet.new(cocina_object)
         change_set.validate(args)
-        update_catkey_and_barcode(change_set, log) if change_set.changed?
+        update_catkey_and_barcode(change_set, args, log) if change_set.changed?
       end
     end
   end
@@ -42,7 +42,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   private
 
-  def update_catkey_and_barcode(change_set, log)
+  def update_catkey_and_barcode(change_set, args, log)
     cocina_object = change_set.model
     log.puts("#{Time.current} Beginning SetCatkeysAndBarcodesJob for #{cocina_object.externalIdentifier}")
 
@@ -55,9 +55,10 @@ class SetCatkeysAndBarcodesJob < GenericJob
     log_update(change_set, log)
 
     begin
-      state_service = StateService.new(cocina_object)
-      open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(change_set)) unless state_service.allows_modification?
-      change_set.save
+      new_cocina_model = open_new_version_if_needed(cocina_object, version_message(change_set))
+      new_change_set = ItemChangeSet.new(new_cocina_model)
+      new_change_set.validate(args)
+      new_change_set.save
 
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey/barcode added/updated/removed successfully")
