@@ -3,6 +3,7 @@ export function gridContext() {
 
   var statusFormatter = function(val, opts, rowObj) {
     if (val in $t.statusIcons) {
+      console.error("hey")
       var result = '<span class="' + $t.statusIcons[val] + '" title="' +
         (rowObj.error||val)+'" aria-hidden="true"></span>';
       if (rowObj.druid) {
@@ -41,26 +42,7 @@ export function gridContext() {
     },
 
     resizeGrid: function() {
-      var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
-      $('#tabs').height(tabDivHeight);
-      var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
-      $('#id_list').height(tabDivHeight - tabHeadHeight);
       $('#data').setGridWidth($('#main-container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100 + $('#properties').outerHeight()));
-      // Make up for width calculation error in jqgrid header code.
-      $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
-      if ($('#id_list').css('display') != 'none') {
-        this.resizeIdList();
-      }
-    },
-
-    resizeIdList: function() {
-      const boxHeight = Math.max($('#gbox_data .ui-jqgrid-bdiv').height(), 150)
-      $('#id_list').animate({
-        'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3,
-        'left': 3,
-        'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4,
-        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + boxHeight - 4
-      }, 0);
     },
 
     formatDruids: function(index) {
@@ -137,22 +119,27 @@ export function gridContext() {
       $('#data').jqGrid({
         data: [],
         datatype: "local",
-        caption: "Register DOR Items",
+        caption: "",
         cellEdit: true,
         autoencode: true,
         cellsubmit: 'clientArray',
         colModel: [
-          {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
-          {label:'Barcode',name:'barcode_id',index:'barcode_id',width:150,editable:true},
-          {label:'Catkey',name:'metadata_id',index:'metadata_id',width:150,editable:true,formatter:metadataIdFormatter},
-          {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true,formatter:sourceIdFormatter},
-          {label:'DRUID',name:'druid',index:'druid',width:150,editable:true,formatter:druidFormatter},
-          {label:'Label',name:'label',index:'label', width:($('#dynamic').width() - 468),editable:true,formatter:labelFormatter },
-          {label:'Error',name:'error',index:'error',hidden:true}
+          {label:' ',name:'status',index:'status',width:45, sortable:false,formatter: statusFormatter },
+          {label:'Barcode',name:'barcode_id',index:'barcode_id',width:100,editable:true},
+          {label:'Catkey',name:'metadata_id',index:'metadata_id',width:100,editable:true,formatter:metadataIdFormatter},
+          {label:'Source ID',name:'source_id',index:'source_id',width:100,editable:true,formatter:sourceIdFormatter},
+          {label:'DRUID',name:'druid',index:'druid',width:100,editable:true,formatter:druidFormatter},
+          {label:'Label',name:'label',index:'label', width: $('#dynamic').width() - 400,editable:true,formatter:labelFormatter },
+          {label:'Error',name:'error',index:'error',hidden:true},
+          {
+            label: ' ', name:'action', index:'action',
+            width: 45, sortable: false,
+            formatter: () => `<button class="btn" data-action="click->registration#deleteRows"><span class="bi bi-trash"></span></button>`
+          }
         ],
         hidegrid: false,
         loadonce: true,
-        multiselect: true,
+        multiselect: false,
         scroll: true,
         toolbar: [true, "top"],
         viewrecords: true,
@@ -162,12 +149,11 @@ export function gridContext() {
       });
       $('#gbox_data').addClass('col-md-12');
       $(window).trigger('resize')
+      $('#properties').show().insertBefore($('#dynamic .ui-userdata'))
 
       const template = document.getElementById('table-header')
       const clone = template.content.cloneNode(true)
-      document.getElementById("t_data").appendChild(clone)
-
-      $('#properties').show().insertBefore($('#dynamic .ui-userdata'))
+      document.getElementById("properties").after(clone)
 
       return(this);
     },

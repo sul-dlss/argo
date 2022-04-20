@@ -58,55 +58,42 @@
   </div>
 </div>
 
+<div class='row' data-controller="registration">
+  <div id='dynamic' data-controller="grid">
+    <table id='data'></table>
+    <div id='pdata'></div>
+    <%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, hidden: true %>
+  </div>
 
-<div id='dynamic' class='row' data-controller="grid">
-  <table id='data'></table>
-  <div id='pdata'></div><%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, rows: 7 %>
+  <div class="mt-3">
+    <button class="btn btn-sm btn-outline-primary" data-action="click->registration#addRow">
+      <span class="bi bi-plus"></span>Add another row
+    </button>
+  </div>
+
+  <div class="mt-3">
+    <button class="btn btn-primary" data-action="click->registration#register">
+      Register
+    </button>
+  </div>
 </div>
+
 <template id="table-header">
-  <div id="icons" data-controller="registration">
-    <span class="button-group">
-      <button class="action-lock ui-button ui-corner-all ui-widget" data-action="click->registration#lock" data-registration-target="lockButton">
-        <span class="icon-lock"></span>
-        <span class="ui-button-icon-space"> </span>Lock
-      </button>
-      <button class="action-unlock ui-button ui-corner-all ui-widget enabled-grid-locked" hidden="true" data-action="click->registration#unlock" data-registration-target="unlockButton">
-        <span class="icon-unlock"></span>
-        <span class="ui-button-icon-space"> </span>Unlock
-      </button>
-    </span>
-
-    <span class="button-group">
-      <button class="action-add ui-button ui-corner-all ui-widget" data-action="click->registration#addRow">
-        <span class="icon-plus"></span>
-        <span class="ui-button-icon-space"> </span>Add Row
-      </button>
-      <button class="action-delete ui-button ui-corner-all ui-widget" data-action="click->registration#deleteRows">
-        <span class="icon-minus"></span>
-        <span class="ui-button-icon-space"> </span>Delete Rows
-      </button>
-      <button class="action-clear ui-button ui-corner-all ui-widget" data-action="click->registration#resetDialog">
-        <span class="icon-refresh"></span>
-        <span class="ui-button-icon-space"> </span>Reset
-      </button>
-    </span>
-
-    <span class="button-group">
-      <button class="action-register ui-button ui-corner-all ui-widget enabled-grid-locked" data-action="click->registration#register">
-        <span class="icon-register"></span><span class="ui-button-icon-space"> </span>Register
-      </button>
-      <button class="action-pdf ui-button ui-corner-all ui-widget enabled-grid-locked" data-action="click->registration#trackingSheet">
-        <span class="icon-tracking"></span>
-        <span class="ui-button-icon-space"> </span>Tracking Sheets
-      </button>
-    </span>
-
+  <div class="my-3">
     <span class="button-group ui-controlgroup ui-controlgroup-horizontal ui-helper-clearfix" id="view-toggle" role="toolbar">
       <input type="radio" id="grid-view" name="view" checked="checked" class="ui-checkboxradio ui-helper-hidden-accessible" data-action="click->registration#enableGridView">
       <label for="grid-view" class="ui-button ui-widget ui-checkboxradio-radio-label ui-checkboxradio-checked ui-state-active ui-controlgroup-item ui-checkboxradio-label ui-corner-left" data-registration-target="gridShowLabel">Grid</label>
       <input type="radio" id="text-view" name="view" class="ui-checkboxradio ui-helper-hidden-accessible" data-action="click->registration#enableTextView">
       <label for="text-view" class="ui-button ui-widget ui-checkboxradio-radio-label ui-controlgroup-item ui-checkboxradio-label ui-corner-right" data-registration-target="textShowLabel">Text</label>
     </span>
+
+    <div class="float-end">
+      <button class="btn btn-link" data-action="click->registration#resetDialog">Reset</button>
+
+      <button class="btn btn-outline-primary" data-action="click->registration#trackingSheet">
+        Tracking sheets
+      </button>
+    </div>
   </div>
 </template>
 

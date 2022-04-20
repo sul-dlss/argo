@@ -1,19 +1,5 @@
-#data {
-  thead {
-    font-weight: bold;
-  }
-}
-
 #t_data {
-  height: 28px;
-}
-
-#icons {
-  padding: 0;
-
-  button {
-    margin: 2px;
-  }
+  display: none;
 }
 
 #register-progress {
@@ -22,12 +8,12 @@
   width: 100%;
 }
 
-.full-width {
-  width: 100%;
+.ui-widget-content {
+  border: none !important;
 }
 
-.full-height {
-  height: 100%;
+.full-width {
+  width: 100%;
 }
 
 .invalid {
@@ -40,16 +26,10 @@
   border-style: solid;
 }
 
-#dynamic {
-  position: relative;
+.ui-jqgrid-view {
+  font-size: var(--bs-body-font-size) !important;
 }
 
 #id_list {
-  position: absolute;
-  display: none;
-  resize: none;
-}
-
-.button-group {
-  margin-right: 4px;
+  line-height: 2.4;
 }
