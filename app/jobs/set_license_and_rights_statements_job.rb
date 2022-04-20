@@ -15,33 +15,43 @@ class SetLicenseAndRightsStatementsJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    with_bulk_action_log do |log|
-      update_druid_count
+    args = {}.tap do |argument_hash|
+      argument_hash[:copyright] = dig_from_params_if_option_set(params, :copyright_statement)
+      argument_hash[:license] = dig_from_params_if_option_set(params, :license)
+      argument_hash[:use_statement] = dig_from_params_if_option_set(params, :use_statement)
+    end.compact
 
-      args = { ability: }.tap do |argument_hash|
-        argument_hash[:copyright] = dig_from_params_if_option_set(params, :copyright_statement)
-        argument_hash[:license] = dig_from_params_if_option_set(params, :license)
-        argument_hash[:use_statement] = dig_from_params_if_option_set(params, :use_statement)
-      end.compact
+    with_items(params[:druids], name: 'Set license and rights statement') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+      next failure.call("Not an item or collection (#{cocina_object.type})") unless cocina_object.dro? || cocina_object.collection?
 
-      druids.each do |druid|
-        LicenseAndRightsStatementsSetter.set(**args.merge(druid:))
-        bulk_action.increment(:druid_count_success).save
-        log.puts("#{Time.current} License/copyright/use statement(s) updated successfully")
-      rescue StandardError => e
-        bulk_action.increment(:druid_count_fail).save
-        log.puts("#{Time.current} #{self.class} failed for #{druid}: (#{e.class}) #{e.message}")
-        Honeybadger.notify(e,
-                           context: {
-                             bulk_action_id:,
-                             params:,
-                             service_args: args
-                           })
-      end
+      klass = change_set_class(cocina_object)
+      change_set = klass.new(cocina_object)
+      change_set.validate(args)
+
+      next success.call('No changes made') unless change_set.changed?
+
+      updated_object = open_new_version_if_needed(cocina_object,
+                                                  'updated license, copyright statement, and/or use and reproduction statement')
+
+      change_set = klass.new(updated_object)
+      change_set.validate(args)
+      change_set.save
+
+      success.call('License/copyright/use statement(s) updated successfully')
     end
   end
 
   private
+
+  def change_set_class(cocina_object)
+    case cocina_object
+    when Cocina::Models::DRO
+      ItemChangeSet
+    when Cocina::Models::Collection
+      CollectionChangeSet
+    end
+  end
 
   def dig_from_params_if_option_set(params, key)
     params.fetch(key) if params["#{key}_option"] == '1'
