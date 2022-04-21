@@ -6,15 +6,15 @@ RSpec.describe ReleaseObjectJob do
   let(:buffer) { StringIO.new }
 
   let(:item1) do
-    build(:dro, id: druids[0], version: 2)
+    Cocina::Models.with_metadata(build(:dro, id: druids[0], version: 2), 'nnan')
   end
   let(:item2) do
-    build(:dro, id: druids[1], version: 3)
+    Cocina::Models.with_metadata(build(:dro, id: druids[1], version: 3), 'naun')
   end
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, update: double) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, update: double) }
 
   before do
+    allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
+    allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
     # Stub out the file, and send it to a string buffer instead
@@ -42,13 +42,13 @@ RSpec.describe ReleaseObjectJob do
     context 'with already published objects' do
       let(:client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil, lifecycle: Time.zone.now) }
 
-      before do
-        allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-        allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-      end
-
       context 'in a happy world' do
+        let(:object_client1) { instance_double(Dor::Services::Client::Object, update: true) }
+        let(:object_client2) { instance_double(Dor::Services::Client::Object, update: true) }
+
         before do
+          allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+          allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
           expect(subject.ability).to receive(:can?).and_return(true).exactly(druids.length).times
         end
@@ -79,8 +79,23 @@ RSpec.describe ReleaseObjectJob do
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
           expect(subject.ability).to receive(:can?).and_return(true).exactly(druids.length).times
           # no stubbed release wf calls (they should never get called)
-          allow(object_client1).to receive(:update).and_raise Dor::Services::Client::UnexpectedResponse, ': 500 (Response from dor-services-app did not contain a body.'
-          allow(object_client2).to receive(:update).and_raise Dor::Services::Client::UnexpectedResponse, ': 500 (Response from dor-services-app did not contain a body.'
+
+          stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/#{druids[0]}")
+            .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
+          stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/#{druids[1]}")
+            .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
+        end
+
+        let(:json_response) do
+          <<~JSON
+            {"errors":
+              [{
+                "status":"422",
+                "title":"problem",
+                "detail":"broken"
+              }]
+            }
+          JSON
         end
 
         it 'updates the total druid count' do
@@ -99,12 +114,17 @@ RSpec.describe ReleaseObjectJob do
           buffer = StringIO.new
           expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
-          expect(buffer.string).to include 'Release tag failed Dor::Services::Client::UnexpectedResponse : 500 (Response from dor-services-app did not contain a body.'
+          expect(buffer.string).to include 'Release tag failed Dor::Services::Client::UnexpectedResponse problem (broken)'
         end
       end
 
       context 'when a release wf fails' do
+        let(:object_client1) { instance_double(Dor::Services::Client::Object, update: true) }
+        let(:object_client2) { instance_double(Dor::Services::Client::Object, update: true) }
+
         before do
+          allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+          allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
           expect(subject.ability).to receive(:can?).and_return(true).exactly(druids.length).times
           allow(client).to receive(:create_workflow_by_name).and_raise(Dor::WorkflowException)

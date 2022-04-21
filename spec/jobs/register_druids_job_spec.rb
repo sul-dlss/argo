@@ -54,7 +54,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
     end
 
     context 'when registration fails' do
-      let(:response) { Failure('connection problem') }
+      let(:response) { Failure(RuntimeError.new('connection problem')) }
       let(:csv_string) do
         <<~CSV
           APO,Rights,Initial Workflow,Content Type,Source ID,Label,Tags,Tags

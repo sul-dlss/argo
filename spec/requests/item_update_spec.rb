@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Set the properties for an item' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:bc123df4567' }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
 
   before do
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Repository).to receive(:find).and_return(cocina_model)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
@@ -17,7 +17,7 @@ RSpec.describe 'Set the properties for an item' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:cocina_model) { build(:dro) }
+    let(:cocina_model) { Cocina::Models.with_metadata(build(:dro), 'asdf') }
 
     context 'when barcode is passed' do
       let(:updated_model) do
@@ -29,6 +29,10 @@ RSpec.describe 'Set the properties for an item' do
             }
           }
         )
+      end
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
       it 'sets the new barcode' do
@@ -52,6 +56,10 @@ RSpec.describe 'Set the properties for an item' do
         )
       end
 
+      before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      end
+
       it 'sets the new copyright' do
         patch "/items/#{druid}", params: { item: { copyright: 'in public domain' } }
 
@@ -73,6 +81,10 @@ RSpec.describe 'Set the properties for an item' do
         )
       end
 
+      before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      end
+
       it 'sets the new use and reproduction statement' do
         patch "/items/#{druid}", params: { item: { use_statement: 'call before using' } }
 
@@ -92,6 +104,10 @@ RSpec.describe 'Set the properties for an item' do
             }
           }
         )
+      end
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
       it 'sets the new license statement' do
@@ -147,6 +163,10 @@ RSpec.describe 'Set the properties for an item' do
           view: 'world',
           download: 'world'
         }
+      end
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
       context 'when they are location access' do
@@ -442,9 +462,25 @@ RSpec.describe 'Set the properties for an item' do
       end
     end
 
-    context 'when there is an error retrieving the Cocina' do
+    context 'when there is an error saving the Cocina' do
+      let(:json_response) do
+        <<~JSON
+          {"errors":
+            [{
+              "status":"422",
+              "title":"problem",
+              "detail":"broken"
+            }]
+          }
+        JSON
+      end
+
+      before do
+        stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/druid:bc234fg5678")
+          .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
+      end
+
       it 'draws the error' do
-        allow(object_client).to receive(:update).and_raise(Dor::Services::Client::BadRequestError, '({"errors":[{"detail":"broken"}]})')
         patch "/items/#{druid}", params: { item: { barcode: '36105010362304' } }, headers: { 'Turbo-Frame' => 'barcode' }
 
         expect(response).to have_http_status(:ok)

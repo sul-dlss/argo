@@ -43,7 +43,7 @@ RSpec.describe 'Draw the edit datastream form' do
 
     context 'when dsa returns an UnexpectedResponse' do
       before do
-        allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
+        allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ''))
       end
 
       it 'authorizes the view' do

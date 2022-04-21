@@ -40,7 +40,7 @@ class DatastreamsController < ApplicationController
       # if the content is not well-formed xml, inform the user rather than raising an exception
       error_msg = 'The datastream could not be saved due to malformed XML.'
     rescue Dor::Services::Client::UnexpectedResponse => e
-      error_msg = e.message
+      error_msg = e.errors.first['detail']
     end
 
     respond_to do |format|

@@ -5,10 +5,9 @@ require 'rails_helper'
 RSpec.describe 'Update a datastream' do
   before do
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Repository).to receive(:find).and_return(cocina_model)
   end
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) { build(:dro) }
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
@@ -41,6 +40,10 @@ RSpec.describe 'Update a datastream' do
         instance_double(Dor::Services::Client::Metadata, legacy_update: true)
       end
 
+      before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      end
+
       it 'updates the datastream' do
         patch "/items/#{druid}/datastreams/contentMetadata", params: { content: xml }
         expect(response).to redirect_to "/view/#{druid}"
@@ -60,20 +63,27 @@ RSpec.describe 'Update a datastream' do
     end
 
     context 'for a datastream that fails validation' do
-      let(:object_client) do
-        instance_double(Dor::Services::Client::Object, find: cocina_model, metadata: metadata_client)
-      end
-      let(:metadata_client) do
-        instance_double(Dor::Services::Client::Metadata, legacy_update: true)
+      let(:json_response) do
+        <<~JSON
+          {"errors":
+            [{
+              "status":"422",
+              "title":"problem",
+              "detail":"MODS is not valid: details"
+            }]
+          }
+        JSON
       end
 
       before do
-        allow(metadata_client).to receive(:legacy_update).and_raise(Dor::Services::Client::UnexpectedResponse)
+        stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/druid:bc123df4567/metadata/legacy")
+          .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
       end
 
       it 'does not update the datastream' do
         patch "/items/#{druid}/datastreams/contentMetadata", params: { content: xml }
         expect(response).to redirect_to "/view/#{druid}"
+        expect(flash[:error]).to eq 'MODS is not valid: details'
         expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
       end
     end

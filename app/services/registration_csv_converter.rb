@@ -63,7 +63,7 @@ class RegistrationCsvConverter
             workflow: row.fetch('Initial Workflow'),
             tags: tags.compact)
   rescue Cocina::Models::ValidationError => e
-    Failure(e.message)
+    Failure(e)
   end
 
   def dro_type(content_type)

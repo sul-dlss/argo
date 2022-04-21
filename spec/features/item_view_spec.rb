@@ -66,7 +66,7 @@ RSpec.describe 'Item view', js: true do
         end
 
         before do
-          allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
+          allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ''))
         end
 
         it 'shows the page' do
