@@ -3,7 +3,6 @@ export function gridContext() {
 
   var statusFormatter = function(val, opts, rowObj) {
     if (val in $t.statusIcons) {
-      console.error("hey")
       var result = '<span class="' + $t.statusIcons[val] + '" title="' +
         (rowObj.error||val)+'" aria-hidden="true"></span>';
       if (rowObj.druid) {

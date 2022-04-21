@@ -202,6 +202,7 @@ export default class extends Controller {
         $('#data').jqGrid('setColProp','barcode_id',{ editable: edit });
         $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
         $('#data').jqGrid('setColProp','label',{ editable: edit });
+        document.querySelector("#tracking-sheet-btn").disabled = edit;
       }
 
       stopEditing(autoSave) {
