@@ -46,7 +46,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
       allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
       allow(CollectionChangeSetPersister).to receive(:update)
       allow(ItemChangeSetPersister).to receive(:update)
-      allow(VersionService).to receive(:open)
+      allow(VersionService).to receive(:open).and_return(cocina_object)
       allow(StateService).to receive(:new).and_return(state_service)
     end
 
