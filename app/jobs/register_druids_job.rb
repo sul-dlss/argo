@@ -46,7 +46,7 @@ class RegisterDruidsJob < GenericJob
   end
 
   def log_error(error, bulk_action:, log:)
-    log.puts("#{Time.current} #{self.class}: #{error}")
+    log.puts("#{Time.current} #{self.class}: #{error.message}")
     bulk_action.increment!(:druid_count_fail)
   end
 

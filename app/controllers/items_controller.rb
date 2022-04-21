@@ -22,8 +22,7 @@ class ItemsController < ApplicationController
   ]
 
   rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
-    md = /\((.*)\)/.match exception.message
-    detail = JSON.parse(md[1])['errors'].first['detail']
+    detail = exception.errors.first['detail']
     message = "Unable to retrieve the cocina model: #{detail.truncate(200)}"
     Honeybadger.notify(exception)
     logger.error "Error connecting to DSA: #{detail}"

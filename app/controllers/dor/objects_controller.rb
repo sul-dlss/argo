@@ -9,7 +9,7 @@ class Dor::ObjectsController < ApplicationController
     result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
     result.either(
       ->(model) { render json: { druid: model.externalIdentifier }, status: :created, location: solr_document_url(model.externalIdentifier) },
-      ->(message) { render_failure(message) }
+      ->(error) { render_failure(error) }
     )
   rescue Cocina::Models::ValidationError => e
     render plain: e.message, status: :bad_request
@@ -17,10 +17,10 @@ class Dor::ObjectsController < ApplicationController
 
   private
 
-  def render_failure(message)
-    return render plain: message, status: :conflict if message.start_with?('Conflict')
+  def render_failure(error)
+    return render plain: error.message, status: :conflict if error.errors.first&.fetch('status') == '422'
 
-    render plain: message, status: :bad_request
+    render plain: error.message, status: :bad_request
   end
 
   def munge_parameters

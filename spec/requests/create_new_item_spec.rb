@@ -355,12 +355,21 @@ RSpec.describe 'Create a new item', type: :request do
   end
 
   context 'when register is a conflict' do
-    let(:message) { "Conflict: 409 (An object with the source ID 'sul:36105226711146' has already been registered" }
+    let(:json_response) do
+      <<~JSON
+        {"errors":
+          [{
+            "status":"422",
+            "title":"Conflict",
+            "detail":"An object (druid:abc123) with the source ID 'googlebooks:999999' has already been registered."
+          }]
+        }
+      JSON
+    end
 
     before do
-      allow(Dor::Services::Client.objects)
-        .to receive(:register)
-        .and_raise(Dor::Services::Client::UnexpectedResponse, message)
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+        .to_return(status: 409, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
     end
 
     it 'shows an error' do
@@ -373,7 +382,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Book (ltr)']
       }
       expect(response.status).to eq 409
-      expect(response.body).to eq message
+      expect(response.body).to eq "Conflict (An object (druid:abc123) with the source ID 'googlebooks:999999' has already been registered.)"
     end
   end
 

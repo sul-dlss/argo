@@ -47,7 +47,7 @@ RSpec.describe 'Upload the structural CSV' do
 
         context 'when save failed' do
           before do
-            allow(Repository).to receive(:store).and_raise(Dor::Services::Client::UnexpectedResponse)
+            allow(Repository).to receive(:store).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ''))
           end
 
           it 'updates the structure' do
