@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import DorRegistration from '../registration/register'
 
 export default class extends Controller {
-  static targets = ["gridShowLabel", "textShowLabel"]
+  static targets = ["gridShowLabel", "textShowLabel", "trackingSheetButton"]
 
     connect() {
         this.rc = this.createRegistrationContext()
@@ -202,6 +202,7 @@ export default class extends Controller {
         $('#data').jqGrid('setColProp','barcode_id',{ editable: edit });
         $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
         $('#data').jqGrid('setColProp','label',{ editable: edit });
+        this.trackingSheetButtonTarget.disabled = edit;
       }
 
       stopEditing(autoSave) {
