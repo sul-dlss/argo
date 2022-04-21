@@ -13,7 +13,7 @@ class RegistrationService
 
     Dor::Services::Client.object(druid).administrative_tags.create(tags:) unless tags.empty?
     Success(response)
-  rescue Cocina::Models::ValidationError, Dor::Services::Client::UnexpectedResponse => e
+  rescue Dor::Services::Client::UnexpectedResponse => e
     Failure(e.message)
   end
 end
