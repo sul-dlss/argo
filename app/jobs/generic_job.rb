@@ -155,19 +155,24 @@ class GenericJob < ApplicationJob
     bulk_action.update(druid_count_total: count)
   end
 
-  # @returns [Cocina::Models::DRO|Collection|AdminPolicy] cocina object with the new version
+  # Opens a new minor version of the provided cocina object.
+  # @param [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata]
+  # @param [String] description for new version
+  # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with the new version
   def open_new_version(cocina_object, description)
     wf_status = DorObjectWorkflowStatus.new(cocina_object.externalIdentifier, version: cocina_object.version)
     raise 'Unable to open new version' unless wf_status.can_open_version?
 
-    new_version = VersionService.open(identifier: cocina_object.externalIdentifier,
-                                      significance: 'minor',
-                                      description:,
-                                      opening_user_name: bulk_action.user.to_s)
-    cocina_object.new(version: new_version.to_i)
+    VersionService.open(identifier: cocina_object.externalIdentifier,
+                        significance: 'minor',
+                        description:,
+                        opening_user_name: bulk_action.user.to_s)
   end
 
-  # @returns [Cocina::Models::DRO|Collection|AdminPolicy] cocina object with the new version
+  # Opens a new minor version of the provided cocina object unless the object is already open for modification.
+  # @param [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata]
+  # @param [String] description for new version
+  # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with the new/existing version
   def open_new_version_if_needed(cocina_object, description)
     state_service = StateService.new(cocina_object)
     return cocina_object if state_service.allows_modification?

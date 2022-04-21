@@ -118,7 +118,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       before do
         allow(Ability).to receive(:new).and_return(ability)
         allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
-        allow(VersionService).to receive(:open).and_return('2')
+        allow(VersionService).to receive(:open).and_return(item1.new(version: 2))
         subject.perform(bulk_action.id, { csv_file: })
       end
 

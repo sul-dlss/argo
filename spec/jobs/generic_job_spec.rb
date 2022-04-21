@@ -58,8 +58,8 @@ RSpec.describe GenericJob do
     let(:log) { double('log') }
     let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
     let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
-    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: '2') }
-    let(:cocina_object) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version:, new: new_cocina_object) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: new_cocina_object) }
+    let(:cocina_object) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version:) }
     let(:new_cocina_object) { instance_double(Cocina::Models::DRO) }
 
     before do
@@ -78,8 +78,6 @@ RSpec.describe GenericJob do
         description: 'Set new governing APO',
         opening_user_name: subject.bulk_action.user.to_s
       )
-
-      expect(cocina_object).to have_received(:new).with(version: 2)
     end
 
     it 'does not open a new version if rejected by the workflow status' do

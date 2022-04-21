@@ -3,7 +3,7 @@
 # Encapsulates all version-related functionality
 class VersionService
   class << self
-    # @returns [String] the current version
+    # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with updated version
     def open(identifier:, **options)
       new(identifier:).open(**options)
     end
