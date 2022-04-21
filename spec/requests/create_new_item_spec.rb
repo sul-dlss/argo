@@ -34,6 +34,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Book (ltr)',
               'Registered By : jcoyne85'],
         rights: 'default',
+        content_type: 'https://cocina.sul.stanford.edu/models/book',
         other_id: 'label:'
       }
     end
@@ -55,6 +56,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Book (ltr)',
               'Registered By : jcoyne85'],
         rights: 'default',
+        content_type: 'https://cocina.sul.stanford.edu/models/book',
         other_id: 'label:',
         source_id: 'foo:bar',
         barcode_id: '36105010362304'
@@ -77,6 +79,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Document',
               'Registered By : jcoyne85'],
         rights: 'default',
+        content_type: 'https://cocina.sul.stanford.edu/models/document',
         source_id: 'foo:bar',
         other_id: 'label:'
       }
@@ -131,6 +134,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Image',
               'Registered By : jcoyne85'],
         rights: 'stanford',
+        content_type: 'https://cocina.sul.stanford.edu/models/image',
         source_id: 'foo:bar',
         other_id: 'label:'
       }
@@ -188,6 +192,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Book (ltr)',
               'Registered By : jcoyne85'],
         rights: 'loc:music',
+        content_type: 'https://cocina.sul.stanford.edu/models/book',
         source_id: 'foo:bar',
         other_id: 'label:'
       }
@@ -238,7 +243,7 @@ RSpec.describe 'Create a new item', type: :request do
     end
   end
 
-  context 'when register is successful with no-download' do
+  context 'when register is successful with no-download and viewing direction set' do
     let(:submitted) do
       {
         admin_policy: 'druid:hv992ry2431',
@@ -248,6 +253,8 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Image',
               'Registered By : jcoyne85'],
         rights: 'world-nd',
+        content_type: 'https://cocina.sul.stanford.edu/models/image',
+        viewing_direction: 'left-to-right',
         source_id: 'foo:bar',
         other_id: 'label:'
       }
@@ -278,7 +285,7 @@ RSpec.describe 'Create a new item', type: :request do
         '"label":"test parameters for registration","version":1,"access":{"view":' \
         '"world","download":"none","location":null,"controlledDigitalLending":false},' \
         '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
-        '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
+        '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":["left-to-right"],' \
         '"isMemberOf":["druid:hv992ry7777"]}}'
     end
 
@@ -306,6 +313,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Image',
               'Registered By : jcoyne85'],
         rights: 'dark',
+        content_type: 'https://cocina.sul.stanford.edu/models/image',
         source_id: 'foo:bar',
         other_id: 'label:'
       }
@@ -396,6 +404,7 @@ RSpec.describe 'Create a new item', type: :request do
         tag: ['Process : Content Type : Book (ltr)',
               'Registered By : jcoyne85'],
         rights: 'cdl-stanford-nd',
+        content_type: 'https://cocina.sul.stanford.edu/models/book',
         source_id: 'foo:bar',
         other_id: 'label:'
       }

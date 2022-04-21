@@ -115,19 +115,6 @@ module Constants
       code: 'PDM' }
   ].freeze
 
-  CONTENT_TYPES = {
-    'book (ltr)' => Cocina::Models::ObjectType.book,
-    'book (rtl)' => Cocina::Models::ObjectType.book,
-    'file' => Cocina::Models::ObjectType.object,
-    'image' => Cocina::Models::ObjectType.image,
-    'map' => Cocina::Models::ObjectType.map,
-    'media' => Cocina::Models::ObjectType.media,
-    '3d' => Cocina::Models::ObjectType.three_dimensional,
-    'document' => Cocina::Models::ObjectType.document,
-    'geo' => Cocina::Models::ObjectType.geo,
-    'webarchive-seed' => Cocina::Models::ObjectType.webarchive_seed
-  }.freeze
-
   RESOURCE_TYPES = {
     'image' => Cocina::Models::FileSetType.image,
     'page' => Cocina::Models::FileSetType.page,
