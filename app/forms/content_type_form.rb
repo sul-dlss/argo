@@ -18,7 +18,7 @@ class ContentTypeForm < ApplicationChangeSet
     'webarchive-seed' => Cocina::Models::ObjectType.webarchive_seed
   }.freeze
 
-  DIRECTIONS = %w[right-to-left left-to-right].freeze
+  DIRECTIONS = %w[left-to-right right-to-left].freeze
 
   validates :new_content_type, inclusion: {
     in: CONTENT_TYPES.values,

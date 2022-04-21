@@ -26,6 +26,14 @@ export default function DorRegistration(initOpts) {
       return document.querySelector('[data-rcparam="workflowId"]').value
     },
 
+    contentType : function() {
+      return document.querySelector('[data-rcparam="contentType"]').value
+    },
+
+    viewingDirection : function() {
+      return document.querySelector('[data-rcparam="viewingDirection"]').value
+    },
+
     rights: function() {
       return document.getElementById('rights').value
     },
@@ -50,6 +58,8 @@ export default function DorRegistration(initOpts) {
         'admin_policy' : this.apoId(),
         'project' : this.projectName(),
         'workflow_id' : this.workflowId(),
+        'content_type': this.contentType(),
+        'viewing_direction': this.viewingDirection(),
         'label' : data.label || ':auto',
         'tag' : tags,
         'rights' : this.rights(),

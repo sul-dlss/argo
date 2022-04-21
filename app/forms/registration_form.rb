@@ -15,7 +15,7 @@ class RegistrationForm
     end
 
     model_params = {
-      type: dro_type,
+      type: params[:content_type],
       label: params.require(:label),
       version: 1,
       administrative: {
@@ -33,12 +33,8 @@ class RegistrationForm
 
     structural = {}
     structural[:isMemberOf] = [params[:collection]] if params[:collection].present?
-    case content_type_tag
-    when 'Book (ltr)'
-      structural[:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
-    when 'Book (rtl)'
-      structural[:hasMemberOrders] = [{ viewingDirection: 'right-to-left' }]
-    end
+    structural[:hasMemberOrders] = [{ viewingDirection: params[:viewing_direction] }] if params[:viewing_direction].present?
+
     model_params[:structural] = structural
     model_params[:administrative][:partOfProject] = params[:project] if params[:project].present?
 
@@ -50,38 +46,5 @@ class RegistrationForm
     params[:tag].filter { |t| !t.start_with?('Process : Content Type') }
   end
 
-  private
-
   attr_reader :params
-
-  def dro_type
-    case content_type_tag
-    when 'Image'
-      Cocina::Models::ObjectType.image
-    when '3D'
-      Cocina::Models::ObjectType.three_dimensional
-    when 'Map'
-      Cocina::Models::ObjectType.map
-    when 'Media'
-      Cocina::Models::ObjectType.media
-    when 'Document'
-      Cocina::Models::ObjectType.document
-    when /^Manuscript/
-      Cocina::Models::ObjectType.manuscript
-    when 'Book (ltr)', 'Book (rtl)'
-      Cocina::Models::ObjectType.book
-    when 'Webarchive-seed'
-      Cocina::Models::ObjectType.webarchive_seed
-    when 'Geo'
-      Cocina::Models::ObjectType.geo
-    else
-      Cocina::Models::ObjectType.object
-    end
-  end
-
-  # helper method to get just the content type tag
-  def content_type_tag
-    content_tag = params[:tag].find { |tag| tag.start_with?('Process : Content Type') }
-    content_tag.split(':').last.strip
-  end
 end
