@@ -91,7 +91,8 @@ class TrackSheet
 
   # @param [Hash] doc Solr document or to_solr Hash
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
-  def doc_to_table(doc)
+  def doc_to_table(solr_doc)
+    doc = solr_doc.with_indifferent_access # solr doc always has string keys, SolrDocument::FIELDS can be strings or symbols
     table_data = []
     labels = doc[SolrDocument::FIELD_TITLE]
     label = labels.blank? ? '' : labels.first.truncate(110)
