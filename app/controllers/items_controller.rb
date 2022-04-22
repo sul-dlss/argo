@@ -22,8 +22,8 @@ class ItemsController < ApplicationController
   ]
 
   rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
-    detail = exception.errors.first['detail']
-    message = "Unable to retrieve the cocina model: #{detail.truncate(200)}"
+    detail = exception.errors.first['detail']&.truncate(1024) # Truncate to avoid cookie overflow. Cookies can hold 4k.
+    message = "Unable to retrieve the cocina model: #{detail}"
     Honeybadger.notify(exception)
     logger.error "Error connecting to DSA: #{detail}"
     if turbo_frame_request?

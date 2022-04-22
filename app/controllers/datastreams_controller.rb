@@ -40,11 +40,11 @@ class DatastreamsController < ApplicationController
       # if the content is not well-formed xml, inform the user rather than raising an exception
       error_msg = 'The datastream could not be saved due to malformed XML.'
     rescue Dor::Services::Client::UnexpectedResponse => e
-      error_msg = e.errors.first['detail']
+      error_msg = e.errors.first['detail']&.truncate(1024) # Truncate to avoid cookie overflow. Cookies can hold 4k.
     end
 
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:item_id]), notice: msg, flash: { error: error_msg&.truncate(254) } }
+      format.any { redirect_to solr_document_path(params[:item_id]), notice: msg, flash: { error: error_msg } }
     end
   end
 
