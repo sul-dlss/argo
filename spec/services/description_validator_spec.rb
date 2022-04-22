@@ -106,6 +106,44 @@ RSpec.describe DescriptionValidator do
           expect(instance.errors).to eq ['Duplicate druids: The druid "druid:ab123cd4567" should occur only once.']
         end
       end
+
+      context 'with cell values that have a 0' do
+        let(:csv) do
+          <<~CSV
+            druid,title1.value,title2.value
+            druid:cd456de6677,allgood,stuff
+            druid:cd456de6678,0,stuff
+          CSV
+        end
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq ['Value error: druid:cd456de6678 has 0 value in title1.value.']
+        end
+      end
+
+      context 'with cell values that look like formulas' do
+        let(:csv) do
+          <<~CSV
+            druid,title1.value,title2.value
+            druid:ab123cd4567,cool,#NA
+            druid:cd456de5670,#REF!,stuff
+            druid:cd456de8678,what,#VALUE?
+            druid:cd456de6677,allgood,stuff
+            druid:cd456de6678,#NAME?,stuff
+          CSV
+        end
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Value error: druid:ab123cd4567 has spreadsheet formula error in title2.value.',
+            'Value error: druid:cd456de5670 has spreadsheet formula error in title1.value.',
+            'Value error: druid:cd456de8678 has spreadsheet formula error in title2.value.',
+            'Value error: druid:cd456de6678 has spreadsheet formula error in title1.value.'
+          ]
+        end
+      end
     end
 
     context 'for non bulk jobs' do
@@ -130,6 +168,36 @@ RSpec.describe DescriptionValidator do
 
         it 'validates' do
           expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with cell values that have a 0' do
+        let(:csv) do
+          <<~CSV
+            title1.value,title2.value
+            0,stuff
+          CSV
+        end
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq ['Value error: row 2 has 0 value in title1.value.']
+        end
+      end
+
+      context 'with cell values that look like formulas' do
+        let(:csv) do
+          <<~CSV
+            title1.value,title2.value
+            cool,#NA
+          CSV
+        end
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Value error: row 2 has spreadsheet formula error in title2.value.'
+          ]
         end
       end
     end
