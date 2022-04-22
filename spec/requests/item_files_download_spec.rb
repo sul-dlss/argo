@@ -4,7 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Download item files' do
   let(:druid) { cocina_model.externalIdentifier }
-  let(:cocina_model) { Cocina::Models.build(cocina_params.stringify_keys) }
+  let(:cocina_model) do
+    model = Cocina::Models.build(cocina_params.stringify_keys)
+    Cocina::Models.with_metadata(model, 'abc123')
+  end
   let(:cocina_params) do
     {
       type: Cocina::Models::ObjectType.image,

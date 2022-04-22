@@ -6,7 +6,7 @@ RSpec.describe ApoForm do
   let(:search_service) { instance_double(Blacklight::SearchService) }
   let(:instance) { described_class.new(apo, search_service:) }
   let(:apo) do
-    build(:admin_policy, id: 'druid:zt570qh4444', title: 'Stored title').new(administrative:)
+    build(:admin_policy_with_metadata, id: 'druid:zt570qh4444', title: 'Stored title').new(administrative:)
   end
 
   let(:administrative) do

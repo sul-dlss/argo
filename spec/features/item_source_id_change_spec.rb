@@ -27,7 +27,7 @@ RSpec.describe 'Item source id change' do
     let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
     let(:druid) { 'druid:kv840xx0000' }
     let(:cocina_model) do
-      build(:dro, id: druid)
+      build(:dro_with_metadata, id: druid)
     end
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }

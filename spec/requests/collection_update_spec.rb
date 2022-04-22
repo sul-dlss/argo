@@ -17,7 +17,7 @@ RSpec.describe 'Set the properties for a collection' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:cocina_model) { build(:collection, id: druid) }
+    let(:cocina_model) { build(:collection_with_metadata, id: druid) }
 
     let(:updated_model) do
       cocina_model.new(

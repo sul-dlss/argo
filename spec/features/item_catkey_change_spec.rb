@@ -26,7 +26,7 @@ RSpec.describe 'Item catkey change' do
     let(:blacklight_config) { CatalogController.blacklight_config }
     let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
     let(:druid) { 'druid:kv840xx0000' }
-    let(:cocina_model) { build(:dro, id: druid) }
+    let(:cocina_model) { build(:dro_with_metadata, id: druid) }
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }

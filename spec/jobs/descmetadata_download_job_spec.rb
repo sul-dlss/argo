@@ -20,8 +20,8 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2, metadata: metadata_client2) }
   let(:metadata_client1) { instance_double(Dor::Services::Client::Metadata, mods: '<mods/>') }
   let(:metadata_client2) { instance_double(Dor::Services::Client::Metadata, mods: '<mods/>') }
-  let(:cocina_model1) { instance_double(Cocina::Models::DRO) }
-  let(:cocina_model2) { instance_double(Cocina::Models::DRO) }
+  let(:cocina_model1) { instance_double(Cocina::Models::DROWithMetadata) }
+  let(:cocina_model2) { instance_double(Cocina::Models::DROWithMetadata) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid_list[0]).and_return(object_client1)

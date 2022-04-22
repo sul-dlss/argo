@@ -15,7 +15,7 @@ RSpec.describe 'Create collections' do
   describe 'show the form' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) do
-      build(:admin_policy)
+      build(:admin_policy_with_metadata)
     end
 
     before do
@@ -32,7 +32,7 @@ RSpec.describe 'Create collections' do
     let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
-      build(:admin_policy)
+      build(:admin_policy_with_metadata)
     end
 
     before do

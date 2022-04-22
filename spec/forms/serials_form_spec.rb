@@ -6,7 +6,7 @@ RSpec.describe SerialsForm do
   let(:instance) { described_class.new(cocina_item) }
   let(:druid) { 'druid:bc123df4567' }
   let(:purl) { 'https://purl.stanford.edu/bc123df4567' }
-  let(:cocina_item) { build(:dro, id: druid).new(description:) }
+  let(:cocina_item) { build(:dro_with_metadata, id: druid).new(description:) }
 
   describe 'loading from cocina' do
     context 'when the number is before the title' do
@@ -76,7 +76,7 @@ RSpec.describe SerialsForm do
 
       context 'when part_number is set' do
         let(:expected) do
-          build(:dro, id: druid).new(description:
+          build(:dro_with_metadata, id: druid).new(description:
             {
               title: [
                 {
@@ -104,19 +104,19 @@ RSpec.describe SerialsForm do
 
       context 'when part_number2 is set' do
         let(:expected) do
-          build(:dro, id: druid).new(description: {
-                                       title: [
-                                         {
-                                           structuredValue: [
-                                             { value: 'My Serial', type: 'main title' },
-                                             { value: 'samurai', type: 'part name' },
-                                             { value: '7', type: 'part number' }
-                                           ]
-                                         }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }],
-                                       purl:
-                                     })
+          build(:dro_with_metadata, id: druid).new(description: {
+                                                     title: [
+                                                       {
+                                                         structuredValue: [
+                                                           { value: 'My Serial', type: 'main title' },
+                                                           { value: 'samurai', type: 'part name' },
+                                                           { value: '7', type: 'part number' }
+                                                         ]
+                                                       }
+                                                     ],
+                                                     note: [{ value: 'something', type: 'date/sequential designation' }],
+                                                     purl:
+                                                   })
         end
 
         before do
@@ -150,20 +150,20 @@ RSpec.describe SerialsForm do
 
       context 'when part_number is set' do
         let(:expected) do
-          build(:dro, id: druid).new(description: {
-                                       title: [
-                                         {
-                                           structuredValue: [
-                                             { type: 'subtitle', value: '99' },
-                                             { type: 'main title', value: 'Frog' },
-                                             { value: '7', type: 'part number' },
-                                             { value: 'samurai', type: 'part name' }
-                                           ]
-                                         }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }],
-                                       purl:
-                                     })
+          build(:dro_with_metadata, id: druid).new(description: {
+                                                     title: [
+                                                       {
+                                                         structuredValue: [
+                                                           { type: 'subtitle', value: '99' },
+                                                           { type: 'main title', value: 'Frog' },
+                                                           { value: '7', type: 'part number' },
+                                                           { value: 'samurai', type: 'part name' }
+                                                         ]
+                                                       }
+                                                     ],
+                                                     note: [{ value: 'something', type: 'date/sequential designation' }],
+                                                     purl:
+                                                   })
         end
 
         before do
@@ -178,20 +178,20 @@ RSpec.describe SerialsForm do
 
       context 'when part_number2 is set' do
         let(:expected) do
-          build(:dro, id: druid).new(description: {
-                                       title: [
-                                         {
-                                           structuredValue: [
-                                             { type: 'subtitle', value: '99' },
-                                             { type: 'main title', value: 'Frog' },
-                                             { value: 'samurai', type: 'part name' },
-                                             { value: '7', type: 'part number' }
-                                           ]
-                                         }
-                                       ],
-                                       note: [{ value: 'something', type: 'date/sequential designation' }],
-                                       purl:
-                                     })
+          build(:dro_with_metadata, id: druid).new(description: {
+                                                     title: [
+                                                       {
+                                                         structuredValue: [
+                                                           { type: 'subtitle', value: '99' },
+                                                           { type: 'main title', value: 'Frog' },
+                                                           { value: 'samurai', type: 'part name' },
+                                                           { value: '7', type: 'part number' }
+                                                         ]
+                                                       }
+                                                     ],
+                                                     note: [{ value: 'something', type: 'date/sequential designation' }],
+                                                     purl:
+                                                   })
         end
 
         before do

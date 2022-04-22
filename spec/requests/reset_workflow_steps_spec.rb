@@ -13,7 +13,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
   let(:workflow_client) { instance_double(Dor::Workflow::Client, update_status: true) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:druid) { 'druid:xb482bw3979' }
-  let(:cocina_model) { build(:dro) }
+  let(:cocina_model) { build(:dro_with_metadata) }
 
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)

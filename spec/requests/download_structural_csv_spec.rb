@@ -19,7 +19,7 @@ RSpec.describe 'Download the structural CSV' do
     end
 
     let(:cocina_model) do
-      build(:dro, id: druid)
+      build(:dro_with_metadata, id: druid)
     end
 
     it 'returns the csv' do

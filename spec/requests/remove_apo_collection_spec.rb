@@ -17,11 +17,11 @@ RSpec.describe 'Removing a collection from the registration list', type: :reques
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:cocina_model) do
-    build(:admin_policy, collections_for_registration: ['druid:1', collection_id])
+    build(:admin_policy_with_metadata, collections_for_registration: ['druid:1', collection_id])
   end
 
   let(:expected) do
-    build(:admin_policy, collections_for_registration: ['druid:1']) # only one collection now
+    build(:admin_policy_with_metadata, collections_for_registration: ['druid:1']) # only one collection now
   end
 
   it 'calls remove_default_collection' do

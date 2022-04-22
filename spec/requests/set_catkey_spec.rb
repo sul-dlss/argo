@@ -7,7 +7,7 @@ RSpec.describe 'Set catkey' do
   let(:druid) { 'druid:dc243mg0841' }
 
   context 'without manage content access' do
-    let(:cocina) { instance_double(Cocina::Models::DRO) }
+    let(:cocina) { instance_double(Cocina::Models::DROWithMetadata) }
     let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
 
     before do
@@ -80,7 +80,7 @@ RSpec.describe 'Set catkey' do
       end
 
       context 'with an item' do
-        let(:cocina_model) { build(:dro, id: druid) }
+        let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
         it 'updates the catkey, trimming whitespace' do
           patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
@@ -92,7 +92,7 @@ RSpec.describe 'Set catkey' do
       end
 
       context 'with a collection that has no existing catkeys' do
-        let(:cocina_model) { build(:collection, id: druid, source_id: 'sul:1234') }
+        let(:cocina_model) { build(:collection_with_metadata, id: druid, source_id: 'sul:1234') }
 
         it 'updates the catkey, trimming whitespace' do
           patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }

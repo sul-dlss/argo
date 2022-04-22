@@ -15,7 +15,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
   end
 
   let(:model) do
-    instance_double(Cocina::Models::DRO,
+    instance_double(Cocina::Models::DROWithMetadata,
                     externalIdentifier: 'druid:123',
                     label: 'My object',
                     identification:)

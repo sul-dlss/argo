@@ -6,7 +6,7 @@ RSpec.describe 'Files', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:cocina_model) do
-    instance_double(Cocina::Models::DRO, externalIdentifier: druid, structural:)
+    instance_double(Cocina::Models::DROWithMetadata, externalIdentifier: druid, structural:)
   end
   let(:file_set) do
     instance_double(Cocina::Models::FileSet, structural: fs_structural)

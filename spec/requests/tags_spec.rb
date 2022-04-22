@@ -38,7 +38,7 @@ RSpec.describe 'Tags', type: :request do
     let(:object_client) do
       instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
     end
-    let(:cocina_model) { build(:dro) }
+    let(:cocina_model) { build(:dro_with_metadata) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)

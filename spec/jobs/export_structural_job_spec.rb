@@ -198,7 +198,8 @@ RSpec.describe ExportStructuralJob, type: :job do
     JSON
   end
   let(:obj1) do
-    Cocina::Models.build(JSON.parse(json1))
+    obj = Cocina::Models.build(JSON.parse(json1))
+    Cocina::Models.with_metadata(obj, 'abc123')
   end
   let(:json2) do
     <<~JSON
@@ -388,7 +389,8 @@ RSpec.describe ExportStructuralJob, type: :job do
     JSON
   end
   let(:obj2) do
-    Cocina::Models.build(JSON.parse(json2))
+    obj = Cocina::Models.build(JSON.parse(json2))
+    Cocina::Models.with_metadata(obj, 'abc123')
   end
 
   before do

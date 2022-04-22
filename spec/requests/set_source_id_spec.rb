@@ -7,7 +7,7 @@ RSpec.describe 'Set source id for an object' do
     let(:user) { create(:user) }
     let(:druid) { 'druid:cc243mg0841' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-    let(:cocina_model) { build(:dro, id: druid) }
+    let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
     let(:updated_model) do
       cocina_model.new(

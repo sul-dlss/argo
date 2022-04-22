@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
-  let(:item1) { build(:dro, id: druids[0]) }
-  let(:item2) { build(:dro, id: druids[1]) }
+  let(:item1) { build(:dro_with_metadata, id: druids[0]) }
+  let(:item2) { build(:dro_with_metadata, id: druids[1]) }
   let(:logger) { instance_double(File, puts: nil) }
 
   let(:csv_file) do

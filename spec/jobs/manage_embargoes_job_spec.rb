@@ -10,13 +10,13 @@ RSpec.describe ManageEmbargoesJob do
 
   let(:buffer) { StringIO.new }
   let(:item1) do
-    build(:dro, id: druids[0])
+    build(:dro_with_metadata, id: druids[0])
   end
   let(:item2) do
-    build(:dro, id: druids[1])
+    build(:dro_with_metadata, id: druids[1])
   end
   let(:item3) do
-    build(:dro, id: druids[2])
+    build(:dro_with_metadata, id: druids[2])
   end
 
   let(:csv_file) do

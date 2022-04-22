@@ -6,7 +6,7 @@ RSpec.describe 'Close a version', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) { build(:dro, id: druid, version: 2) }
+  let(:cocina_model) { build(:dro_with_metadata, id: druid, version: 2) }
 
   before do
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)

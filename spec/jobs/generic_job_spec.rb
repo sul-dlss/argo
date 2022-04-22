@@ -59,8 +59,8 @@ RSpec.describe GenericJob do
     let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
     let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: new_cocina_object) }
-    let(:cocina_object) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version:) }
-    let(:new_cocina_object) { instance_double(Cocina::Models::DRO) }
+    let(:cocina_object) { instance_double(Cocina::Models::DROWithMetadata, externalIdentifier: druid, version:) }
+    let(:new_cocina_object) { instance_double(Cocina::Models::DROWithMetadata) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(client)

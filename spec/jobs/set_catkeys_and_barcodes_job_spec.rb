@@ -17,13 +17,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
+    build(:dro_with_metadata, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
   end
   let(:item2) do
-    build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
+    build(:dro_with_metadata, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
   end
   let(:item3) do
-    build(:dro, id: druids[2])
+    build(:dro_with_metadata, id: druids[2])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
@@ -101,11 +101,11 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:client) { double(Dor::Services::Client) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
     let(:previous_version) do
-      build(:dro, id: druids[0], version: 3).new(identification: {
-                                                   barcode: '36105014757519',
-                                                   catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346', refresh: true }],
-                                                   sourceId: 'sul:1234'
-                                                 })
+      build(:dro_with_metadata, id: druids[0], version: 3).new(identification: {
+                                                                 barcode: '36105014757519',
+                                                                 catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346', refresh: true }],
+                                                                 sourceId: 'sul:1234'
+                                                               })
     end
 
     let(:updated_model) do

@@ -8,7 +8,7 @@ RSpec.describe 'Apply APO defaults' do
   let(:object_client) do
     instance_double(Dor::Services::Client::Object, find: cocina_model, apply_admin_policy_defaults: true)
   end
-  let(:cocina_model) { build(:dro, id: druid) }
+  let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
   before do
     sign_in user

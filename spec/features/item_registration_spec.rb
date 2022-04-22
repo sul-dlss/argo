@@ -10,7 +10,7 @@ RSpec.describe 'Item registration page', js: true do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
-    build(:admin_policy, registration_workflow: %w[dpgImageWF goobiWF])
+    build(:admin_policy_with_metadata, registration_workflow: %w[dpgImageWF goobiWF])
   end
 
   before do

@@ -13,7 +13,7 @@ RSpec.describe 'Add collection' do
   let(:solr_client) { instance_double(RSolr::Client, get: result) }
   let(:result) { { 'response' => { 'numFound' => 1 } } }
   let(:apo_id) { 'druid:vt333hq2222' }
-  let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, label: 'hey', externalIdentifier: apo_id) }
+  let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, label: 'hey', externalIdentifier: apo_id) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   describe 'when collection catkey is provided', js: true do

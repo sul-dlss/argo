@@ -8,9 +8,7 @@ RSpec.describe 'Update an existing Admin Policy' do
   let(:object_client) do
     instance_double(Dor::Services::Client::Object, find: cocina_model)
   end
-  let(:cocina_model) do
-    build(:admin_policy, id: druid)
-  end
+  let(:cocina_model) { build(:admin_policy_with_metadata, id: druid) }
 
   before do
     sign_in user, groups: ['sdr:administrator-role']

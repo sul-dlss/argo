@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Edit barcode' do
   let(:user) { create(:user) }
-  let(:cocina_model) { build(:dro, id: druid) }
+  let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
   let(:druid) { 'druid:dc243mg0841' }
 

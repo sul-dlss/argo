@@ -14,17 +14,17 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
 
   # Replace catkey on this item
   let(:item1) do
-    build(:dro, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
+    build(:dro_with_metadata, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
   end
 
   # Remove catkey on this item
   let(:item2) do
-    build(:dro, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
+    build(:dro_with_metadata, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
   end
 
   # Add catkey on this item
   let(:item3) do
-    build(:dro, id: druids[2])
+    build(:dro_with_metadata, id: druids[2])
   end
 
   let(:csv_file) do

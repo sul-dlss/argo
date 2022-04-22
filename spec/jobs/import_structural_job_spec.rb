@@ -26,7 +26,7 @@ RSpec.describe ImportStructuralJob, type: :job do
     let(:druid1) { 'druid:zp968gy7494' }
     let(:druid2) { 'druid:bc234fg7890' }
     let(:cocina1) do
-      build(:dro, id: druid1, version: 6, type: Cocina::Models::ObjectType.map)
+      build(:dro_with_metadata, id: druid1, version: 6, type: Cocina::Models::ObjectType.map)
         .new(structural: {
                contains: [
                  {
@@ -77,7 +77,7 @@ RSpec.describe ImportStructuralJob, type: :job do
     end
 
     let(:cocina2) do
-      build(:dro, id: druid2, version: 6, type: Cocina::Models::ObjectType.map)
+      build(:dro_with_metadata, id: druid2, version: 6, type: Cocina::Models::ObjectType.map)
         .new(structural: {
                contains: [
                  {
@@ -135,8 +135,8 @@ RSpec.describe ImportStructuralJob, type: :job do
       end
 
       it 'updates the structural for each druid' do
-        expect(object_client1).to have_received(:update).with(params: Cocina::Models::DRO)
-        expect(object_client2).to have_received(:update).with(params: Cocina::Models::DRO)
+        expect(object_client1).to have_received(:update).with(params: Cocina::Models::DROWithMetadata)
+        expect(object_client2).to have_received(:update).with(params: Cocina::Models::DROWithMetadata)
         expect(bulk_action.druid_count_total).to eq 2
         expect(bulk_action.druid_count_success).to eq 2
         expect(bulk_action.druid_count_fail).to eq 0
