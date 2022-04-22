@@ -11,13 +11,20 @@ module Cocina
       end
 
       def self.supported_type?(type)
-        %i[dro collection admin_policy].include?(type)
+        %i[dro collection admin_policy dro_with_metadata collection_with_metadata admin_policy_with_metadata].include?(type)
       end
+
+      WITH_METADATA_SUFFIX = '_with_metadata'
 
       def self.build(type, attributes = {})
         raise "Unsupported factory type #{type}" unless supported_type?(type)
 
-        public_send("build_#{type}".to_sym, attributes)
+        build_type = type.to_s.delete_suffix(WITH_METADATA_SUFFIX)
+
+        fixture = public_send("build_#{build_type}".to_sym, attributes)
+        return fixture unless type.ends_with?(WITH_METADATA_SUFFIX)
+
+        Cocina::Models.with_metadata(fixture, 'abc123')
       end
 
       DRO_DEFAULTS = {

@@ -20,7 +20,7 @@ RSpec.describe 'Draw the edit datastream form' do
                       metadata: metadata_client)
     end
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:bc123df4567') }
+    let(:cocina_model) { instance_double(Cocina::Models::DROWithMetadata, externalIdentifier: 'druid:bc123df4567') }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)

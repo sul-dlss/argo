@@ -17,7 +17,7 @@ RSpec.describe 'Set the properties for an item' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:cocina_model) { Cocina::Models.with_metadata(build(:dro), 'asdf') }
+    let(:cocina_model) { build(:dro_with_metadata) }
 
     context 'when barcode is passed' do
       let(:updated_model) do
@@ -122,7 +122,7 @@ RSpec.describe 'Set the properties for an item' do
 
     describe 'access rights' do
       let(:cocina_model) do
-        build(:dro).new(access: existing_access, structural: existing_structural)
+        build(:dro_with_metadata).new(access: existing_access, structural: existing_structural)
       end
 
       let(:existing_access) { { view: 'world', download: 'none' } }

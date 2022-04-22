@@ -14,7 +14,7 @@ RSpec.describe 'Draw the manage release form' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) { build(:dro, id: druid) }
+  let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)

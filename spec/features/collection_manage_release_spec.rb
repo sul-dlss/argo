@@ -27,7 +27,7 @@ RSpec.describe 'Collection manage release' do
                     version: version_client)
   end
   let(:cocina_model) do
-    build(:collection, id: collection_id)
+    build(:collection_with_metadata, id: collection_id)
   end
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_id) { 'druid:gg232vv1111' }

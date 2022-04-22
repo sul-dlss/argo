@@ -8,7 +8,7 @@ RSpec.describe 'Set APO for an object' do
     let(:druid) { 'druid:dc243mg0841' }
     let(:new_apo_id) { 'druid:bc123cd4567' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-    let(:cocina_model) { build(:dro, id: druid) }
+    let(:cocina_model) { build(:dro_with_metadata, id: druid) }
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     before do
@@ -60,7 +60,7 @@ RSpec.describe 'Set APO for an object' do
     end
 
     context 'when a collection' do
-      let(:cocina_model) { build(:collection, id: druid) }
+      let(:cocina_model) { build(:collection_with_metadata, id: druid) }
       let(:updated_model) do
         cocina_model.new('administrative' => { 'hasAdminPolicy' => new_apo_id })
       end

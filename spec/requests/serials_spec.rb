@@ -7,7 +7,7 @@ RSpec.describe 'Serials', type: :request do
   let(:druid) { 'druid:dc243mg0841' }
 
   let(:cocina_model) do
-    build(:dro, id: druid, label: 'My Serial', title: 'My Serial')
+    build(:dro_with_metadata, id: druid, label: 'My Serial', title: 'My Serial')
   end
 
   before do

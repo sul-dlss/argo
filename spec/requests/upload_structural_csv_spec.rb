@@ -24,7 +24,7 @@ RSpec.describe 'Upload the structural CSV' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:cocina_model) { build(:dro) }
+    let(:cocina_model) { build(:dro_with_metadata) }
     let(:file) { fixture_file_upload('structure-upload.csv') }
 
     context 'when object is unlocked' do
@@ -60,27 +60,27 @@ RSpec.describe 'Upload the structural CSV' do
 
       context 'when the data is invalid' do
         let(:cocina_model) do
-          build(:dro).new(structural: {
-                            contains: [
-                              {
-                                externalIdentifier: 'fs1',
-                                label: 'foo',
-                                version: 1,
-                                type: Cocina::Models::FileSetType.image,
-                                structural: {
-                                  contains: [
-                                    {
-                                      externalIdentifier: 'file1',
-                                      label: 'foo',
-                                      version: 1,
-                                      type: Cocina::Models::ObjectType.file,
-                                      filename: 'chocolate_cake.jpg'
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          })
+          build(:dro_with_metadata).new(structural: {
+                                          contains: [
+                                            {
+                                              externalIdentifier: 'fs1',
+                                              label: 'foo',
+                                              version: 1,
+                                              type: Cocina::Models::FileSetType.image,
+                                              structural: {
+                                                contains: [
+                                                  {
+                                                    externalIdentifier: 'file1',
+                                                    label: 'foo',
+                                                    version: 1,
+                                                    type: Cocina::Models::ObjectType.file,
+                                                    filename: 'chocolate_cake.jpg'
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          ]
+                                        })
         end
 
         it 'shows an error' do

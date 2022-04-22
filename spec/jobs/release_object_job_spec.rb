@@ -5,12 +5,8 @@ require 'rails_helper'
 RSpec.describe ReleaseObjectJob do
   let(:buffer) { StringIO.new }
 
-  let(:item1) do
-    Cocina::Models.with_metadata(build(:dro, id: druids[0], version: 2), 'nnan')
-  end
-  let(:item2) do
-    Cocina::Models.with_metadata(build(:dro, id: druids[1], version: 3), 'naun')
-  end
+  let(:item1) { build(:dro_with_metadata, id: druids[0], version: 2) }
+  let(:item2) { build(:dro_with_metadata, id: druids[1], version: 3) }
 
   before do
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)

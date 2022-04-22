@@ -19,7 +19,7 @@ RSpec.describe 'Edit copyright' do
 
   describe 'display the form' do
     context 'with an item' do
-      let(:cocina_model) { build(:dro, id: druid) }
+      let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/edit_copyright", headers: turbo_stream_headers
@@ -29,7 +29,7 @@ RSpec.describe 'Edit copyright' do
     end
 
     context 'with a collection' do
-      let(:cocina_model) { build(:collection, id: druid) }
+      let(:cocina_model) { build(:collection_with_metadata, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/edit_copyright", headers: turbo_stream_headers
@@ -40,7 +40,7 @@ RSpec.describe 'Edit copyright' do
 
   describe 'display the show view (after cancel)' do
     context 'with an item' do
-      let(:cocina_model) { build(:dro, id: druid) }
+      let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
       it 'draws the component' do
         get "/items/#{druid}/show_copyright", headers: turbo_stream_headers
@@ -50,7 +50,7 @@ RSpec.describe 'Edit copyright' do
     end
 
     context 'with a collection' do
-      let(:cocina_model) { build(:collection, id: druid) }
+      let(:cocina_model) { build(:collection_with_metadata, id: druid) }
 
       it 'draws the form' do
         get "/items/#{druid}/show_copyright", headers: turbo_stream_headers

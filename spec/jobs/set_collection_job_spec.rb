@@ -18,10 +18,10 @@ RSpec.describe SetCollectionJob do
     )
   end
   let(:cocina1) do
-    build(:dro, id: druids[0])
+    build(:dro_with_metadata, id: druids[0])
   end
   let(:cocina2) do
-    build(:dro, id: druids[1])
+    build(:dro_with_metadata, id: druids[1])
   end
 
   before do

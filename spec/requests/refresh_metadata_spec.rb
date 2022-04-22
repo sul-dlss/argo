@@ -6,7 +6,7 @@ RSpec.describe 'Refresh metadata', type: :request do
   let(:druid) { 'druid:bc123df4567' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }
-  let(:cocina_model) { build(:dro, id: druid, catkeys: ['12345']) }
+  let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: ['12345']) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)

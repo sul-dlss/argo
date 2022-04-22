@@ -6,7 +6,7 @@ RSpec.describe ItemChangeSetPersister do
   describe '.update' do
     let(:change_set) { instance_double(ItemChangeSet) }
     let(:instance) { instance_double(described_class, update: nil) }
-    let(:model) { instance_double(Cocina::Models::DRO) }
+    let(:model) { instance_double(Cocina::Models::DROWithMetadata) }
 
     before do
       allow(described_class).to receive(:new).and_return(instance)
@@ -25,7 +25,7 @@ RSpec.describe ItemChangeSetPersister do
     end
     let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
-      Cocina::Models::DRO.new(
+      model = Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
         label: 'test',
         type: Cocina::Models::ObjectType.object,
@@ -47,6 +47,7 @@ RSpec.describe ItemChangeSetPersister do
         structural: {},
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
+      Cocina::Models.with_metadata(model, 'abc123')
     end
     let(:use_statement_before) { 'My First Use Statement' }
     let(:barcode_before) { '36105014757517' }
@@ -123,7 +124,7 @@ RSpec.describe ItemChangeSetPersister do
     context 'when change set has changed embargo' do
       let(:new_embargo_release_date) { '2055-07-17' }
       let(:model) do
-        Cocina::Models::DRO.new(
+        model = Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
           label: 'test',
           type: Cocina::Models::ObjectType.object,
@@ -144,6 +145,7 @@ RSpec.describe ItemChangeSetPersister do
           structural: {},
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
+        Cocina::Models.with_metadata(model, 'abc123')
       end
 
       before do
@@ -175,7 +177,7 @@ RSpec.describe ItemChangeSetPersister do
     context 'when change set has new embargo' do
       let(:new_embargo_release_date) { '2055-07-17' }
       let(:model) do
-        Cocina::Models::DRO.new(
+        model = Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
           label: 'test',
           type: Cocina::Models::ObjectType.object,
@@ -195,6 +197,7 @@ RSpec.describe ItemChangeSetPersister do
           structural: {},
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
+        Cocina::Models.with_metadata(model, 'abc123')
       end
 
       before do
@@ -220,7 +223,7 @@ RSpec.describe ItemChangeSetPersister do
 
     context 'when change set has one changed property and another nil' do
       let(:model) do
-        Cocina::Models::DRO.new(
+        model = Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
           label: 'test',
           type: Cocina::Models::ObjectType.object,
@@ -238,6 +241,7 @@ RSpec.describe ItemChangeSetPersister do
           structural: {},
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
+        Cocina::Models.with_metadata(model, 'abc123')
       end
       let(:new_use_statement) { 'A Changed Use Statement' }
 

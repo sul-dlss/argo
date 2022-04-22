@@ -83,7 +83,10 @@ RSpec.describe 'Item view', js: true do
                           events: events_client,
                           metadata: metadata_client)
         end
-        let(:cocina_model) { Cocina::Models::DRO.new(props) }
+        let(:cocina_model) do
+          model = Cocina::Models::DRO.new(props)
+          Cocina::Models.with_metadata(model, 'abc123')
+        end
 
         let(:props) do
           {
@@ -300,7 +303,7 @@ RSpec.describe 'Item view', js: true do
   end
 
   context 'for an adminPolicy' do
-    let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative:, as_json: {}) }
+    let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, administrative:, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
     let(:id) { 'druid:qv778ht9999' }
 

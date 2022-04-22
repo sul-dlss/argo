@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Registration', type: :request do
   let(:bare_druid) { 'bc123df4567' }
   let(:cocina_admin_policy) do
-    instance_double(Cocina::Models::AdminPolicy,
+    instance_double(Cocina::Models::AdminPolicyWithMetadata,
                     externalIdentifier: druid,
                     administrative: cocina_admin_policy_administrative)
   end
@@ -180,18 +180,14 @@ RSpec.describe 'Registration', type: :request do
   describe '#workflow_list' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'The APO',
-                             'version' => 1,
-                             'type' => Cocina::Models::ObjectType.admin_policy,
-                             'externalIdentifier' => apo_id,
-                             'administrative' => {
-                               hasAdminPolicy: 'druid:hv992ry2431',
-                               hasAgreement: 'druid:hp308wm0436',
-                               registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'],
-                               accessTemplate: { view: 'world', download: 'world' }
-                             }
-                           })
+      build(:admin_policy_with_metadata, id: apo_id).new(
+        administrative: {
+          hasAdminPolicy: 'druid:hv992ry2431',
+          hasAgreement: 'druid:hp308wm0436',
+          registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'],
+          accessTemplate: { view: 'world', download: 'world' }
+        }
+      )
     end
     let(:apo_id) { 'druid:zt570tx3016' }
 

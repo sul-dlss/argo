@@ -13,7 +13,7 @@ RSpec.describe 'WorkflowServiceController', type: :request do
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
-  let(:cocina) { build(:dro) }
+  let(:cocina) { build(:dro_with_metadata) }
 
   describe 'GET published' do
     context 'when published' do

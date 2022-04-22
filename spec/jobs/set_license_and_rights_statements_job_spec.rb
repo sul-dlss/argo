@@ -20,23 +20,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
         groups:
       }.with_indifferent_access
     end
-    let(:cocina_object) do
-      cocina_object = Cocina::Models::DRO.new(
-        externalIdentifier: 'druid:bc123df4568',
-        label: 'test',
-        type: Cocina::Models::ObjectType.object,
-        version: 1,
-        description: {
-          title: [{ value: 'test' }],
-          purl: 'https://purl.stanford.edu/bc123df4568'
-        },
-        access: {},
-        identification: { sourceId: 'sul:1234' },
-        structural: {},
-        administrative: { hasAdminPolicy: 'druid:bc123df4569' }
-      )
-      Cocina::Models.with_metadata(cocina_object, 'abc123')
-    end
+    let(:cocina_object) { build(:dro_with_metadata) }
     let(:copyright_statement) { 'the new hotness' }
     let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
     let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
@@ -92,22 +76,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
       end
 
       context 'with a collection' do
-        let(:cocina_object) do
-          cocina_object = Cocina::Models::Collection.new(
-            externalIdentifier: 'druid:bc123df4568',
-            label: 'test',
-            type: Cocina::Models::ObjectType.collection,
-            description: {
-              title: [{ value: 'test' }],
-              purl: 'https://purl.stanford.edu/bc123df4568'
-            },
-            version: 1,
-            identification: { sourceId: 'sul:1234' },
-            access: {},
-            administrative: { hasAdminPolicy: 'druid:bc123df4569' }
-          )
-          Cocina::Models.with_metadata(cocina_object, 'abc123')
-        end
+        let(:cocina_object) { build(:collection_with_metadata) }
 
         it 'updates via collection change set persister' do
           expect(VersionService).not_to have_received(:open)

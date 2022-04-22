@@ -9,10 +9,10 @@ RSpec.describe ApplyApoDefaultsJob, type: :job do
   let(:user) { bulk_action.user }
 
   let(:cocina1) do
-    build(:dro, id: druids[0])
+    build(:dro_with_metadata, id: druids[0])
   end
   let(:cocina2) do
-    build(:dro, id: druids[1])
+    build(:dro_with_metadata, id: druids[1])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, apply_admin_policy_defaults: true) }

@@ -22,7 +22,7 @@ RSpec.describe SetContentTypeJob, type: :job do
   end
   let(:user) { bulk_action.user }
   let(:cocina1) do
-    build(:dro, id: druids[0], type: Cocina::Models::ObjectType.book)
+    build(:dro_with_metadata, id: druids[0], type: Cocina::Models::ObjectType.book)
       .new(structural: { contains: [{ type: Cocina::Models::FileSetType.page,
                                       label: 'Book page',
                                       version: 1,
@@ -35,7 +35,7 @@ RSpec.describe SetContentTypeJob, type: :job do
                                       structural: {} }] })
   end
   let(:cocina2) do
-    build(:dro, id: druids[1], type: Cocina::Models::ObjectType.image)
+    build(:dro_with_metadata, id: druids[1], type: Cocina::Models::ObjectType.image)
       .new(structural:
                       { contains: [{ type: Cocina::Models::FileSetType.file,
                                      label: 'Map label',
@@ -44,7 +44,7 @@ RSpec.describe SetContentTypeJob, type: :job do
                                      structural: {} }] })
   end
   let(:cocina3) do
-    build(:collection, id: druids[2])
+    build(:collection_with_metadata, id: druids[2])
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }

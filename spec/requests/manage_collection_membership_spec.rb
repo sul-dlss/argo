@@ -13,7 +13,7 @@ RSpec.describe 'Collection membership', type: :request do
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   describe 'adding a new collection' do
-    let(:cocina_collection) { build(:dro, id: druid, collection_ids:) }
+    let(:cocina_collection) { build(:dro_with_metadata, id: druid, collection_ids:) }
     let(:collection_ids) { ['druid:gg333xx4444'] }
     let(:object_service) do
       instance_double(Dor::Services::Client::Object,
@@ -29,7 +29,7 @@ RSpec.describe 'Collection membership', type: :request do
 
       context 'when collections already exist' do
         let(:expected) do
-          build(:dro, id: druid, collection_ids: ['druid:gg333xx4444', 'druid:bc555gh3434'])
+          build(:dro_with_metadata, id: druid, collection_ids: ['druid:gg333xx4444', 'druid:bc555gh3434'])
         end
 
         it 'adds a collection' do
@@ -46,7 +46,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       context 'when the object is not currently in a collection' do
-        let(:expected) { build(:dro, id: druid, collection_ids: ['druid:bc555gh3434']) }
+        let(:expected) { build(:dro_with_metadata, id: druid, collection_ids: ['druid:bc555gh3434']) }
         let(:collection_ids) { [] }
 
         it 'adds a collection' do
@@ -70,7 +70,7 @@ RSpec.describe 'Collection membership', type: :request do
   end
 
   describe 'removing a collection' do
-    let(:cocina) { build(:dro, id: druid, collection_ids: ['druid:gg333xx4444', 'druid:bc555gh3434']) }
+    let(:cocina) { build(:dro_with_metadata, id: druid, collection_ids: ['druid:gg333xx4444', 'druid:bc555gh3434']) }
 
     let(:object_service) do
       instance_double(Dor::Services::Client::Object,
@@ -85,7 +85,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       context 'when the item is a member of the collection' do
-        let(:expected) { build(:dro, id: druid, collection_ids: ['druid:gg333xx4444']) }
+        let(:expected) { build(:dro_with_metadata, id: druid, collection_ids: ['druid:gg333xx4444']) }
 
         it 'removes a collection' do
           get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"
@@ -95,7 +95,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       context 'when the object is not in any collections' do
-        let(:cocina) { build(:dro, id: druid) }
+        let(:cocina) { build(:dro_with_metadata, id: druid) }
 
         it 'does an update with no changes' do
           get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"

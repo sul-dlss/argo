@@ -16,159 +16,135 @@ RSpec.describe SetRightsJob, type: :job do
   let(:user) { bulk_action.user }
 
   let(:cocina1) do
-    Cocina::Models::DRO.new(
-      {
-        label: 'Stanford Item',
-        version: 2,
-        type: Cocina::Models::ObjectType.book,
-        description: {
-          title: [{ value: 'Stanford Item' }],
-          purl: "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
-        },
-        externalIdentifier: druids[0],
-        access: {
-          view: 'stanford',
-          download: 'stanford'
-        },
-        administrative: { hasAdminPolicy: 'druid:cg532dg5405' },
-        structural: {
-          contains: [
-            {
-              type: Cocina::Models::FileSetType.page,
-              label: 'Book page',
-              version: 1,
-              externalIdentifier: 'abc123456',
-              structural: {
-                contains: [
-                  {
-                    filename: 'p1.jpg',
-                    externalIdentifier: 'abc123456',
-                    label: 'p1.jpg',
-                    type: Cocina::Models::ObjectType.file,
-                    version: 1,
-                    administrative: {
-                      publish: true,
-                      sdrPreserve: true,
-                      shelve: true
-                    },
-                    hasMessageDigests: [],
-                    access: {
-                      view: 'stanford',
-                      download: 'stanford'
-                    }
+    build(:dro_with_metadata, id: druids[0]).new(
+      access: {
+        view: 'stanford',
+        download: 'stanford'
+      },
+      structural: {
+        contains: [
+          {
+            type: Cocina::Models::FileSetType.page,
+            label: 'Book page',
+            version: 1,
+            externalIdentifier: 'abc123456',
+            structural: {
+              contains: [
+                {
+                  filename: 'p1.jpg',
+                  externalIdentifier: 'abc123456',
+                  label: 'p1.jpg',
+                  type: Cocina::Models::ObjectType.file,
+                  version: 1,
+                  administrative: {
+                    publish: true,
+                    sdrPreserve: true,
+                    shelve: true
+                  },
+                  hasMessageDigests: [],
+                  access: {
+                    view: 'stanford',
+                    download: 'stanford'
                   }
-                ]
-              }
-            },
-            {
-              type: Cocina::Models::FileSetType.image,
-              label: 'Book page 2',
-              version: 1,
-              externalIdentifier: 'abc789012',
-              structural: {
-                contains: [
-                  {
-                    filename: 'p2.jpg',
-                    externalIdentifier: 'abc123456',
-                    label: 'p2.jpg',
-                    type: Cocina::Models::ObjectType.file,
-                    version: 1,
-                    administrative: {
-                      publish: true,
-                      sdrPreserve: true,
-                      shelve: true
-                    },
-                    hasMessageDigests: [],
-                    access: {
-                      view: 'stanford',
-                      download: 'stanford'
-                    }
-                  }
-                ]
-              }
+                }
+              ]
             }
-          ]
-        },
-        identification: { sourceId: 'sul:1234' }
+          },
+          {
+            type: Cocina::Models::FileSetType.image,
+            label: 'Book page 2',
+            version: 1,
+            externalIdentifier: 'abc789012',
+            structural: {
+              contains: [
+                {
+                  filename: 'p2.jpg',
+                  externalIdentifier: 'abc123456',
+                  label: 'p2.jpg',
+                  type: Cocina::Models::ObjectType.file,
+                  version: 1,
+                  administrative: {
+                    publish: true,
+                    sdrPreserve: true,
+                    shelve: true
+                  },
+                  hasMessageDigests: [],
+                  access: {
+                    view: 'stanford',
+                    download: 'stanford'
+                  }
+                }
+              ]
+            }
+          }
+        ]
       }
     )
   end
 
   let(:cocina2) do
-    Cocina::Models::DRO.new(
-      {
-        label: 'World Item',
-        version: 3,
-        type: Cocina::Models::ObjectType.image,
-        description: {
-          title: [{ value: 'World Item' }],
-          purl: "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
-        },
-        externalIdentifier: druids[1],
-        access: {
-          view: 'world',
-          download: 'world'
-        },
-        administrative: { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-        structural: {
-          contains: [
-            {
-              type: Cocina::Models::FileSetType.page,
-              label: 'Book page',
-              version: 1,
-              externalIdentifier: 'abc123456',
-              structural: {
-                contains: [
-                  {
-                    filename: 'p1.jpg',
-                    externalIdentifier: 'abc123456',
-                    label: 'p1.jpg',
-                    type: Cocina::Models::ObjectType.file,
-                    version: 1,
-                    administrative: {
-                      publish: true,
-                      sdrPreserve: true,
-                      shelve: true
-                    },
-                    hasMessageDigests: [],
-                    access: {
-                      view: 'stanford',
-                      download: 'stanford'
-                    }
+    build(:dro_with_metadata, id: druids[1]).new(
+      access: {
+        view: 'world',
+        download: 'world'
+      },
+      structural: {
+        contains: [
+          {
+            type: Cocina::Models::FileSetType.page,
+            label: 'Book page',
+            version: 1,
+            externalIdentifier: 'abc123456',
+            structural: {
+              contains: [
+                {
+                  filename: 'p1.jpg',
+                  externalIdentifier: 'abc123456',
+                  label: 'p1.jpg',
+                  type: Cocina::Models::ObjectType.file,
+                  version: 1,
+                  administrative: {
+                    publish: true,
+                    sdrPreserve: true,
+                    shelve: true
+                  },
+                  hasMessageDigests: [],
+                  access: {
+                    view: 'stanford',
+                    download: 'stanford'
                   }
-                ]
-              }
-            },
-            {
-              type: Cocina::Models::FileSetType.image,
-              label: 'Book page 2',
-              version: 1,
-              externalIdentifier: 'abc789012',
-              structural: {
-                contains: [
-                  {
-                    filename: 'p2.jpg',
-                    externalIdentifier: 'abc789012',
-                    label: 'p2.jpg',
-                    type: Cocina::Models::ObjectType.file,
-                    version: 1,
-                    administrative: {
-                      publish: true,
-                      sdrPreserve: true,
-                      shelve: true
-                    },
-                    hasMessageDigests: [],
-                    access: {
-                      view: 'stanford',
-                      download: 'stanford'
-                    }
-                  }
-                ]
-              }
+                }
+              ]
             }
-          ]
-        },
-        identification: { sourceId: 'sul:1234' }
+          },
+          {
+            type: Cocina::Models::FileSetType.image,
+            label: 'Book page 2',
+            version: 1,
+            externalIdentifier: 'abc789012',
+            structural: {
+              contains: [
+                {
+                  filename: 'p2.jpg',
+                  externalIdentifier: 'abc789012',
+                  label: 'p2.jpg',
+                  type: Cocina::Models::ObjectType.file,
+                  version: 1,
+                  administrative: {
+                    publish: true,
+                    sdrPreserve: true,
+                    shelve: true
+                  },
+                  hasMessageDigests: [],
+                  access: {
+                    view: 'stanford',
+                    download: 'stanford'
+                  }
+                }
+              ]
+            }
+          }
+        ]
       }
     )
   end

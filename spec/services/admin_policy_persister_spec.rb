@@ -12,7 +12,7 @@ RSpec.describe AdminPolicyPersister do
 
   context 'with a persisted model (update)' do
     let(:apo) do
-      build(:admin_policy, id: 'druid:zt570qh4444', admin_policy_id: 'druid:xx666zz7777')
+      build(:admin_policy_with_metadata, id: 'druid:zt570qh4444', admin_policy_id: 'druid:xx666zz7777')
     end
 
     let(:use_statement) { 'My use and reproduction statement' }
@@ -46,50 +46,53 @@ RSpec.describe AdminPolicyPersister do
     describe '#sync' do
       subject(:result) { instance.sync }
 
-      it 'sets clean APO metadata for accessTemplate' do
-        expect(result.to_h).to eq(
-          Cocina::Models::AdminPolicy.new(
-            administrative: {
-              accessTemplate: {
-                view: 'world',
-                controlledDigitalLending: false,
-                download: 'world',
-                location: nil,
-                copyright: 'My copyright statement',
-                license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
-                useAndReproductionStatement: 'My use and reproduction statement'
+      let(:expected) do
+        admin_policy = Cocina::Models::AdminPolicy.new(
+          administrative: {
+            accessTemplate: {
+              view: 'world',
+              controlledDigitalLending: false,
+              download: 'world',
+              location: nil,
+              copyright: 'My copyright statement',
+              license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
+              useAndReproductionStatement: 'My use and reproduction statement'
+            },
+            collectionsForRegistration: ['druid:zj785yp4820'],
+            hasAdminPolicy: 'druid:xx666zz7777',
+            hasAgreement: 'druid:dd327rv8888',
+            registrationWorkflow: ['registrationWF'],
+            roles: [
+              {
+                members: [
+                  { identifier: 'sdr:developer', type: 'workgroup' },
+                  { identifier: 'sdr:service-manager', type: 'workgroup' },
+                  { identifier: 'sdr:metadata-staff', type: 'workgroup' }
+                ],
+                name: 'dor-apo-manager'
               },
-              collectionsForRegistration: ['druid:zj785yp4820'],
-              hasAdminPolicy: 'druid:xx666zz7777',
-              hasAgreement: 'druid:dd327rv8888',
-              registrationWorkflow: ['registrationWF'],
-              roles: [
-                {
-                  members: [
-                    { identifier: 'sdr:developer', type: 'workgroup' },
-                    { identifier: 'sdr:service-manager', type: 'workgroup' },
-                    { identifier: 'sdr:metadata-staff', type: 'workgroup' }
-                  ],
-                  name: 'dor-apo-manager'
-                },
-                {
-                  members: [
-                    { identifier: 'sdr:justins', type: 'workgroup' }
-                  ],
-                  name: 'dor-apo-viewer'
-                }
-              ]
-            },
-            description: {
-              title: [{ value: 'My title' }],
-              purl: 'https://purl.stanford.edu/zt570qh4444'
-            },
-            externalIdentifier: 'druid:zt570qh4444',
-            label: 'My title',
-            type: Cocina::Models::ObjectType.admin_policy,
-            version: 1
-          ).to_h
+              {
+                members: [
+                  { identifier: 'sdr:justins', type: 'workgroup' }
+                ],
+                name: 'dor-apo-viewer'
+              }
+            ]
+          },
+          description: {
+            title: [{ value: 'My title' }],
+            purl: 'https://purl.stanford.edu/zt570qh4444'
+          },
+          externalIdentifier: 'druid:zt570qh4444',
+          label: 'My title',
+          type: Cocina::Models::ObjectType.admin_policy,
+          version: 1
         )
+        Cocina::Models.with_metadata(admin_policy, 'abc123')
+      end
+
+      it 'sets clean APO metadata for accessTemplate' do
+        expect(result.to_h).to eq(expected.to_h)
       end
     end
 
@@ -98,7 +101,7 @@ RSpec.describe AdminPolicyPersister do
 
       let(:object_client) { instance_double(Dor::Services::Client::Object, update: cocina_model) }
       let(:cocina_model) do
-        instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:999')
+        instance_double(Cocina::Models::DROWithMetadata, externalIdentifier: 'druid:999')
       end
       let(:change_set) do
         instance_double(ApoForm,

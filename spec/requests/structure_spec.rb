@@ -14,7 +14,7 @@ RSpec.describe 'Structure', type: :request do
   end
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_item) }
-  let(:cocina_item) { build(:dro) }
+  let(:cocina_item) { build(:dro_with_metadata) }
 
   it 'renders a turbo-frame' do
     get '/items/skret-t0k3n/structure'

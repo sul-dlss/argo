@@ -16,7 +16,7 @@ RSpec.describe 'Bulk jobs view', js: true do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: nil) }
-  let(:cocina_model) { build(:admin_policy, id: apo_id) }
+  let(:cocina_model) { build(:admin_policy_with_metadata, id: apo_id) }
   let(:apo_id) { 'druid:hv992yv2222' }
 
   context 'on the page with the list of bulk jobs' do

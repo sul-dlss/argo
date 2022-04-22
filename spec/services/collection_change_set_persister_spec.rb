@@ -6,7 +6,7 @@ RSpec.describe CollectionChangeSetPersister do
   describe '.update' do
     let(:change_set) { instance_double(CollectionChangeSet) }
     let(:instance) { instance_double(described_class, update: nil) }
-    let(:model) { instance_double(Cocina::Models::Collection) }
+    let(:model) { instance_double(Cocina::Models::CollectionWithMetadata) }
 
     before do
       allow(described_class).to receive(:new).and_return(instance)
@@ -26,7 +26,7 @@ RSpec.describe CollectionChangeSetPersister do
     let(:change_set) { CollectionChangeSet.new(model) }
     let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
-      Cocina::Models::Collection.new(
+      model = Cocina::Models::Collection.new(
         externalIdentifier: 'druid:bc123df4568',
         label: 'test',
         type: Cocina::Models::ObjectType.collection,
@@ -43,6 +43,7 @@ RSpec.describe CollectionChangeSetPersister do
         },
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
+      Cocina::Models.with_metadata(model, 'abc123')
     end
     let(:use_statement_before) { 'My First Use Statement' }
 

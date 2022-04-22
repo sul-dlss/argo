@@ -7,7 +7,7 @@ RSpec.describe 'Download the descriptive CSV', type: :request do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   let(:cocina_model) do
-    build(:dro, id: druid, source_id: 'sul:91919', title: 'My ETD')
+    build(:dro_with_metadata, id: druid, source_id: 'sul:91919', title: 'My ETD')
   end
 
   before do

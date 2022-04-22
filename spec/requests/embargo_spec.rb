@@ -11,15 +11,15 @@ RSpec.describe 'Set embargo for an object' do
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
   let(:druid) { 'druid:bc123df4567' }
   let(:cocina) do
-    build(:dro, id: druid).new(access: {
-                                 'view' => 'stanford',
-                                 'download' => 'stanford',
-                                 'embargo' => {
-                                   'releaseDate' => '2040-05-05',
-                                   'view' => 'world',
-                                   'download' => 'world'
-                                 }
-                               })
+    build(:dro_with_metadata, id: druid).new(access: {
+                                               'view' => 'stanford',
+                                               'download' => 'stanford',
+                                               'embargo' => {
+                                                 'releaseDate' => '2040-05-05',
+                                                 'view' => 'world',
+                                                 'download' => 'world'
+                                               }
+                                             })
   end
 
   describe '#update' do

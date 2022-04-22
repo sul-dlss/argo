@@ -14,7 +14,7 @@ RSpec.describe 'Viewing an Admin policy' do
     ]
   end
   let(:cocina_model) do
-    build(:admin_policy)
+    build(:admin_policy_with_metadata)
   end
 
   let(:solr_doc) { { id: apo_druid } }

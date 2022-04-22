@@ -11,7 +11,7 @@ RSpec.describe 'WorkflowsController', type: :request do
     Capybara::Node::Simple.new(response.body)
   end
 
-  let(:cocina) { build(:dro, id: druid, version: 2) }
+  let(:cocina) { build(:dro_with_metadata, id: druid, version: 2) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
 
   before do

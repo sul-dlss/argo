@@ -17,13 +17,13 @@ RSpec.describe SetSourceIdsCsvJob do
   end
   let(:log_buffer) { StringIO.new }
   let(:item1) do
-    build(:dro, id: druids[0], source_id: 'sul:36105014757519')
+    build(:dro_with_metadata, id: druids[0], source_id: 'sul:36105014757519')
   end
   let(:item2) do
-    build(:dro, id: druids[1], source_id: 'sul:36105014757510')
+    build(:dro_with_metadata, id: druids[1], source_id: 'sul:36105014757510')
   end
   let(:item3) do
-    build(:collection, id: druids[2], source_id: 'sul:1234')
+    build(:collection_with_metadata, id: druids[2], source_id: 'sul:1234')
   end
 
   let(:csv_file) do

@@ -46,10 +46,10 @@ RSpec.describe SetGoverningApoJob do
 
     context 'when the user lacks the ability to manage an item and items are not found' do
       let(:cocina1) do
-        build(:dro, id: druids[0])
+        build(:dro_with_metadata, id: druids[0])
       end
       let(:cocina3) do
-        build(:dro, id: druids[2])
+        build(:dro_with_metadata, id: druids[2])
       end
 
       let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
@@ -68,7 +68,7 @@ RSpec.describe SetGoverningApoJob do
       it 'increments the failure and success counts and logs status of each update' do
         subject.perform(bulk_action.id, params)
         expect(state_service).to have_received(:allows_modification?)
-        expect(object_client1).to have_received(:update).with(params: Cocina::Models::DRO)
+        expect(object_client1).to have_received(:update).with(params: Cocina::Models::DROWithMetadata)
 
         expect(bulk_action.druid_count_success).to eq 1
         expect(bulk_action.druid_count_fail).to eq 2

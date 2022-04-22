@@ -8,7 +8,7 @@ RSpec.describe 'Update a datastream' do
     allow(Repository).to receive(:find).and_return(cocina_model)
   end
 
-  let(:cocina_model) { build(:dro) }
+  let(:cocina_model) { build(:dro_with_metadata) }
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }

@@ -26,7 +26,7 @@ RSpec.describe 'Add a workflow to an item' do
                     metadata: metadata_client,
                     version: version_client)
   end
-  let(:cocina_model) { build(:dro, id: item_id) }
+  let(:cocina_model) { build(:dro_with_metadata, id: item_id) }
   let(:item_id) { 'druid:bg444xg6666' }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
