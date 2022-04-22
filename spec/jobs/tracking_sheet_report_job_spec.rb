@@ -26,7 +26,6 @@ RSpec.describe TrackingSheetReportJob, type: :job do
 
   describe '#perform_now' do
     context 'with authorization' do
-      let(:ability) { instance_double(Ability, can?: true) }
       let(:response) { { 'response' => { 'docs' => docs } } }
       let(:solr_doc) { { obj_label_tesim: 'Some label' } }
       let(:docs) { [solr_doc] }
