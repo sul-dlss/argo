@@ -46,9 +46,9 @@ class SetLicenseAndRightsStatementsJob < GenericJob
 
   def change_set_class(cocina_object)
     case cocina_object
-    when Cocina::Models::DRO
+    when Cocina::Models::DROWithMetadata
       ItemChangeSet
-    when Cocina::Models::Collection
+    when Cocina::Models::CollectionWithMetadata
       CollectionChangeSet
     end
   end

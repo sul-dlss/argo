@@ -21,7 +21,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
       }.with_indifferent_access
     end
     let(:cocina_object) do
-      Cocina::Models::DRO.new(
+      cocina_object = Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
         label: 'test',
         type: Cocina::Models::ObjectType.object,
@@ -35,6 +35,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
         structural: {},
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
+      Cocina::Models.with_metadata(cocina_object, 'abc123')
     end
     let(:copyright_statement) { 'the new hotness' }
     let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
@@ -92,7 +93,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
 
       context 'with a collection' do
         let(:cocina_object) do
-          Cocina::Models::Collection.new(
+          cocina_object = Cocina::Models::Collection.new(
             externalIdentifier: 'druid:bc123df4568',
             label: 'test',
             type: Cocina::Models::ObjectType.collection,
@@ -105,6 +106,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
             access: {},
             administrative: { hasAdminPolicy: 'druid:bc123df4569' }
           )
+          Cocina::Models.with_metadata(cocina_object, 'abc123')
         end
 
         it 'updates via collection change set persister' do
