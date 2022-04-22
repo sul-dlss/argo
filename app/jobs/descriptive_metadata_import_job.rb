@@ -25,7 +25,7 @@ class DescriptiveMetadataImportJob < GenericJob
                        .bind { |description, new_cocina_object| CocinaValidator.validate_and_save(new_cocina_object, description:) }
                        .either(
                          ->(_updated) { success.call('Successfully updated') },
-                         ->(messages) { failure.call(messages) }
+                         ->(messages) { failure.call(messages.to_sentence) }
                        )
     end
   end

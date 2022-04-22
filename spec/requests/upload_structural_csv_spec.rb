@@ -6,13 +6,11 @@ RSpec.describe 'Upload the structural CSV' do
   include Dry::Monads[:result]
 
   let(:user) { create(:user) }
-  let(:druid) { 'druid:bc123df4567' }
+  let(:druid) { cocina_model.externalIdentifier }
   let(:state_service) { instance_double(StateService) }
 
   before do
     allow(Repository).to receive(:find).and_return(cocina_model)
-    allow(Repository).to receive(:store)
-
     allow(StateService).to receive(:new).and_return(state_service, allows_modification?: modifiable)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
@@ -38,6 +36,10 @@ RSpec.describe 'Upload the structural CSV' do
         let(:result) { Success(cocina_model.structural) }
 
         context 'when successfully saved' do
+          before do
+            allow(Repository).to receive(:store)
+          end
+
           it 'updates the structure' do
             put "/items/#{druid}/structure", params: { csv: file }
             expect(Repository).to have_received(:store)
@@ -47,13 +49,26 @@ RSpec.describe 'Upload the structural CSV' do
 
         context 'when save failed' do
           before do
-            allow(Repository).to receive(:store).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ''))
+            stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/#{druid}")
+              .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
           end
 
-          it 'updates the structure' do
+          let(:json_response) do
+            <<~JSON
+              {"errors":
+                [{
+                  "status":"422",
+                  "title":"problem",
+                  "detail":"broken"
+                }]
+              }
+            JSON
+          end
+
+          it 'shows a detailed message about what went wrong' do
             put "/items/#{druid}/structure", params: { csv: file }
             expect(response).to have_http_status(:see_other)
-            expect(flash[:error]).to match 'unexpected response from dor-services-app'
+            expect(flash[:error]).to match 'broken'
           end
         end
       end
@@ -83,6 +98,10 @@ RSpec.describe 'Upload the structural CSV' do
                                         })
         end
 
+        before do
+          allow(Repository).to receive(:store)
+        end
+
         it 'shows an error' do
           put "/items/#{druid}/structure", params: { csv: file }
           expect(Repository).not_to have_received(:store)
@@ -93,6 +112,10 @@ RSpec.describe 'Upload the structural CSV' do
 
     context 'when object is locked' do
       let(:modifiable) { false }
+
+      before do
+        allow(Repository).to receive(:store)
+      end
 
       it 'updates the structure' do
         put "/items/#{druid}/structure", params: { csv: file }
