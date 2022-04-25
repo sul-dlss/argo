@@ -58,7 +58,7 @@ module TemplatesTracker
 end
 
 if ENV['TT']
-  TemplatesTracker.start(ENV['TT'])
+  TemplatesTracker.start(ENV.fetch('TT'))
 
   RSpec.configure do |config|
     config.after(:suite) do
