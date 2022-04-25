@@ -23,9 +23,9 @@ RSpec.describe RegisterDruidsJob, type: :job do
 
   let(:csv_string) do
     <<~CSV
-      APO,Collection,Rights,Initial Workflow,Content Type,Source ID,Label,Tags,Tags
-      druid:bc123df4567,druid:bk024qs1808,world,accessionWF,book,foo:123,My new object,csv : test,Project : two
-      druid:dj123qx4567,druid:bk024qs1808,world,accessionWF,book,foo:123,A label
+      administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags
+      druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two
+      druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,world,world
     CSV
   end
 
@@ -40,8 +40,8 @@ RSpec.describe RegisterDruidsJob, type: :job do
     context 'when parsing fails' do
       let(:csv_string) do
         <<~CSV
-          APO,Rights,Initial Workflow,Content Type,Source ID,Label
-          druid:123,world,accessionWF,book,foo:123,My new object
+          administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download
+          druid:123,accessionWF,book,foo:123,My new object,world,world
         CSV
       end
 
@@ -57,8 +57,8 @@ RSpec.describe RegisterDruidsJob, type: :job do
       let(:response) { Failure(RuntimeError.new('connection problem')) }
       let(:csv_string) do
         <<~CSV
-          APO,Rights,Initial Workflow,Content Type,Source ID,Label,Tags,Tags
-          druid:bc123df4567,world,accessionWF,book,foo:123,My new object,csv : test,Project : two
+          administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags
+          druid:bc123df4567,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two
         CSV
       end
 
