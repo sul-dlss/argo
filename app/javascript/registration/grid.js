@@ -167,81 +167,6 @@ export function gridContext() {
       return(this);
     },
 
-    initializeDialogs: function() {
-      // Update Workflow and Form lists when APO changes
-      $('#apo_id').change(function(e) {
-        $.ajax({
-          type: 'GET',
-          url: '/registration/workflow_list',
-          dataType: 'json',
-          data: { apo_id: $('#apo_id').val() },
-          success: function(response,status,xhr) {
-            if (response) {
-              var optionsHtml = response.map(function(v) { return '<option value="'+v+'">'+v+'</option>' }).join('');
-              $('#workflow_id').html(optionsHtml);
-            }
-          }
-        })
-
-        $.ajax({
-          type: 'GET',
-          url: '/registration/collection_list',
-          dataType: 'json',
-          data: { apo_id: $('#apo_id').val() },
-          success: function(response,status,xhr) {
-            if (response) {
-              var optionsHtml='';
-              for (var entry in response)
-              {
-                if(response.hasOwnProperty(entry))
-                {
-                  if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
-                  {
-                    optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
-                  }
-                  else
-                  {
-                    optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
-                  }
-                }
-              }
-              $('#collection').html(optionsHtml);
-            }
-          }
-        })
-
-        $.ajax({
-          type: 'GET',
-          url: '/registration/rights_list',
-          dataType: 'json',
-          data: { apo_id: $('#apo_id').val() },
-          success: function(response,status,xhr) {
-            if (response) {
-              var optionsHtml='';
-              for (var entry in response)
-              {
-                if(response.hasOwnProperty(entry))
-                {
-                  if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
-                  {
-                    optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
-                  }
-                  else
-                  {
-                    optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
-                  }
-                }
-              }
-              $('#rights').html(optionsHtml);
-            }
-          }
-        })
-
-      });
-
-      return(this);
-    },
-
     // Prevent the tab key from moving to the next input when pasting into the
     // "Text" section of the registration.
     allowTabsInTextarea: function() {
@@ -262,7 +187,7 @@ export function gridContext() {
       return(this);
     },
     initialize: function() {
-      this.initializeContext().initializeDialogs().allowTabsInTextarea().
+      this.initializeContext().allowTabsInTextarea().
         initializeGrid().initializeCallbacks();
       $('#properties input,#properties select').change();
     }
