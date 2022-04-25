@@ -5,9 +5,10 @@
     <div class="row mb-3">
       <label for="apo_id" class="col-sm-3 col-form-label">Admin Policy</label>
       <div class="col-sm-9">
-        <%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId', class: 'form-select' %>
+        <%= select_tag :apo_id, options_for_select(@apo_list), 'data-rcparam': 'apoId', class: 'form-select' %>
       </div>
     </div>
+
     <div class="row mb-3">
       <label for="collection" class="col-sm-3 col-form-label">Collection</label>
       <div class="col-sm-9">
@@ -26,6 +27,7 @@
         <%= select_tag :workflow_id, '', 'data-rcparam': 'workflowId', class: 'form-select' %>
       </div>
     </div>
+
     <div class="row mb-3">
       <label for="content_type" class="col-sm-3 col-form-label">Content Type</label>
       <div class="col-sm-9">

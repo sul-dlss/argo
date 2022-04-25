@@ -2,7 +2,7 @@
 
 class RegistrationsController < ApplicationController
   def show
-    @perm_keys = current_user.groups
+    @apo_list = AdminPolicyOptions.for(current_user)
   end
 
   def tracksheet
