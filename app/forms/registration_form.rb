@@ -38,8 +38,7 @@ class RegistrationForm
       }.compact
     }
 
-    access = CocinaDroAccess.from_form_value(params[:rights])
-    model_params.merge!(access: access.value!) unless access.none?
+    model_params.merge!(access: access_params)
 
     structural = {}
     structural[:isMemberOf] = [params[:collection]] if params[:collection].present?
@@ -47,8 +46,15 @@ class RegistrationForm
 
     model_params[:structural] = structural
     model_params[:administrative][:partOfProject] = params[:project] if params[:project].present?
-
     Cocina::Models::RequestDRO.new(model_params)
+  end
+
+  # TODO: This same code is in the ItemChangeSet
+  def access_params
+    access_params = params.require(:access).permit(:view, :download, :location, :controlledDigitalLending).to_h
+    access_params[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(access_params[:controlledDigitalLending])
+    access_params['download'] = 'none' if %w[dark citation-only].include?(access_params['view'])
+    access_params
   end
 
   attr_reader :params

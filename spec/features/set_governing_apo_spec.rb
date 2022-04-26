@@ -12,9 +12,8 @@ RSpec.describe 'Set governing APO' do
   let(:identity_md) { instance_double(Nokogiri::XML::Document, xpath: []) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
-  let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item) do
-    FactoryBot.create_for_repository(:persisted_item, label: 'Foo', source_id: 'sauce:99', admin_policy_id: uber_apo_id, title: 'Test')
+    FactoryBot.create_for_repository(:persisted_item, label: 'Foo', title: 'Test')
   end
   let(:item_id) { item.externalIdentifier }
   let(:blacklight_config) { CatalogController.blacklight_config }

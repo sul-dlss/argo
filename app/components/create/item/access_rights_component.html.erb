@@ -1,0 +1,33 @@
+<div class="mb-3 row">
+  <%= f.label :view_access, class: 'col-sm-3 col-form-label' %>
+  <div class="col-sm-9">
+    <%= f.select :view_access,
+                 view_labels,
+                 {}, class: 'form-select', data: { action: 'access-rights#updateView', access_rights_target: 'view' } %>
+  </div>
+</div>
+
+<div class="mb-3 row" data-access-rights-target="downloadRow">
+  <%= f.label :download_access, class: 'col-sm-3 col-form-label' %>
+  <div class="col-sm-9">
+    <%= f.select :download_access,
+                 download_labels,
+                 {}, class: 'form-select', data: { action: 'access-rights#updateDownload', access_rights_target: 'download' } %>
+  </div>
+</div>
+
+<div class="mb-3 row" data-access-rights-target="locationRow">
+  <%= f.label :access_location, class: 'col-sm-3 col-form-label' %>
+  <div class="col-sm-9">
+    <%= f.select :access_location, location_labels,
+                 { include_blank: true }, class: 'form-select', data: { access_rights_target: 'location' } %>
+  </div>
+</div>
+
+<div class="mb-3 row" data-access-rights-target="cdlRow">
+  <%= f.label :controlled_digital_lending, class: 'col-sm-3 col-form-label' %>
+  <div class="col-sm-9">
+    <%= f.select :controlled_digital_lending, cdl_labels,
+                 {}, class: 'form-select', data: { access_rights_target: 'cdl' } %>
+  </div>
+</div>

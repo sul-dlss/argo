@@ -5,12 +5,13 @@
       <%= select_tag :collection, options_for_select(@collections), prompt: 'None', 'data-rcparam': 'collection', class: 'form-select' %>
     </div>
   </div>
-  <div class="row mb-3">
-    <label for="rights" class="col-sm-3 col-form-label">Rights</label>
-    <div class="col-sm-9">
-      <%= select_tag :rights, options_for_select(@rights, 'default'), class: 'form-select' %>
-    </div>
+
+  <div data-controller="access-rights">
+    <%= fields_for(@access_template) do |f| %>
+      <%= render Create::Item::AccessRightsComponent.new(form_builder: f) %>
+    <% end %>
   </div>
+
   <div class="row mb-3">
     <label for="workflow_id" class="col-sm-3 col-form-label">Initial Workflow</label>
     <div class="col-sm-9">

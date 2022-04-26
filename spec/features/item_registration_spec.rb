@@ -83,7 +83,11 @@ RSpec.describe 'Item registration page', js: true do
         'collection' => '',
         'label' => 'object title',
         'project' => 'special division : project #4',
-        'rights' => 'default',
+        'access' => {
+          'view' => 'world',
+          'download' => 'world',
+          'controlledDigitalLending' => 'false'
+        },
         'source_id' => 'source:id1',
         'content_type' => 'https://cocina.sul.stanford.edu/models/book',
         'viewing_direction' => 'left-to-right',
@@ -95,13 +99,16 @@ RSpec.describe 'Item registration page', js: true do
 
   # this successfully registers an object
   context 'successful registration' do
+    let(:source_id) { "sul:#{SecureRandom.uuid}" }
+
     it 'register an item correctly' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
-      select 'Stanford', from: 'Rights'
+      select 'Stanford', from: 'View access'
+      select 'Stanford', from: 'Download access'
 
       fill_in 'Project Name', with: 'X-Files'
       fill_in 'tags_0', with: 'i : believe'
@@ -118,7 +125,7 @@ RSpec.describe 'Item registration page', js: true do
       # fill out the source ID field
       find("td[aria-describedby='data_source_id']").click # the editable field isn't present till the table cell is clicked
       find("td[aria-describedby='data_source_id'] input[name='source_id']") # wait for the editable field to show up in the table cell
-      fill_in 'source_id', with: 'source:id55'
+      fill_in 'source_id', with: source_id
 
       # fill out the label field
       find("td[aria-describedby='data_label']").click # the editable field isn't present till the table cell is clicked
@@ -156,7 +163,7 @@ RSpec.describe 'Item registration page', js: true do
         expect(page).to have_css 'th', text: 'Project'
         expect(page).to have_css 'td a', text: 'X-Files'
         expect(page).to have_css 'th', text: 'Source IDs'
-        expect(page).to have_css 'td', text: 'source:id55'
+        expect(page).to have_css 'td', text: source_id
         expect(page).to have_css 'th', text: 'Barcode'
         expect(page).to have_css 'td', text: barcode
         expect(page).to have_css 'th', text: 'Tags'

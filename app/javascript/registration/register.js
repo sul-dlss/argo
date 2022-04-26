@@ -37,8 +37,22 @@ export default function DorRegistration(initOpts) {
       return element.value
     },
 
-    rights: function() {
-      return document.getElementById('rights').value
+    access: function() {
+      const cdl = document.querySelector('[data-access-rights-target="cdl"]')
+      const download = document.querySelector('[data-access-rights-target="download"]')
+      const location = document.querySelector('[data-access-rights-target="location"]')
+      const data = { view: document.querySelector('[data-access-rights-target="view"]').value }
+
+      // Checking if elements are disabled is something that happens automatically on a form submission
+      if (!download.disabled)
+        data.download = download.value
+
+      if (!location.disabled)
+        data.location = location.value
+
+      data.controlledDigitalLending = cdl.value
+
+      return data
     },
 
     // Grab list of tags from the form
@@ -60,7 +74,7 @@ export default function DorRegistration(initOpts) {
         'viewing_direction': this.viewingDirection(),
         'label' : data.label || ':auto',
         'tags' : this.tags(),
-        'rights' : this.rights(),
+        'access' : this.access(),
         'collection' : this.collection()
       }
 

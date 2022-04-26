@@ -1,26 +1,26 @@
 <div class="mb-3">
   <%= f.label :view_access, class: 'form-label' %>
   <%= f.select :view_access,
-               [['World', 'world'], ['Stanford', 'stanford'], ['Location based', 'location-based'], ['Citation only', 'citation-only'], ['Dark', 'dark']],
+               view_labels,
                {}, class: 'form-select', data: { action: 'access-rights#updateView', access_rights_target: 'view' } %>
 </div>
 <div class="mb-3" data-access-rights-target="downloadRow">
   <%= f.label :download_access, class: 'form-label' %>
   <%= f.select :download_access,
-               [['World', 'world'], ['Stanford', 'stanford'], ['Location based', 'location-based'], ['None', 'none']],
+               download_labels,
                {}, class: 'form-select', data: { action: 'access-rights#updateDownload', access_rights_target: 'download' } %>
 
 </div>
 <div class="mb-3" data-access-rights-target="locationRow">
   <%= f.label :access_location, class: 'form-label' %>
-  <%= f.select :access_location, [nil, 'spec', 'music', 'ars', 'art', 'hoover', 'm&m'],
-               {}, class: 'form-select', data: { access_rights_target: 'location' } %>
+  <%= f.select :access_location, location_labels,
+               { include_blank: true }, class: 'form-select', data: { access_rights_target: 'location' } %>
 </div>
 
 <% if include_cdl? %>
   <div class="mb-3" data-access-rights-target="cdlRow">
     <%= f.label :controlled_digital_lending, class: 'form-label' %>
-    <%= f.select :controlled_digital_lending, [['No', false], ['Yes', true]],
+    <%= f.select :controlled_digital_lending, cdl_labels,
                  {}, class: 'form-select', data: { access_rights_target: 'cdl' } %>
   </div>
 <% end %>
