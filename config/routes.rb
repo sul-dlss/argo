@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       get 'delete_collection'
       get 'count_collections'
       get 'count_items'
+      get 'registration_options'
     end
   end
 
@@ -208,9 +209,6 @@ Rails.application.routes.draw do
   resource :registration, only: :show do
     collection do
       get 'tracksheet'
-      get 'collection_list'
-      get 'workflow_list'
-      get 'rights_list'
       get 'suggest_project', action: 'autocomplete'
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApoController < ApplicationController
+class ApoController < ApplicationController # rubocop:disable Metrics/ClassLength
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', only: %i[edit update]
@@ -17,6 +17,38 @@ class ApoController < ApplicationController
     @form = ApoForm.new(nil, search_service:)
 
     render layout: 'one_column'
+  end
+
+  # Draw the form controls for collection, rights and initial workflow
+  def registration_options
+    admin_policy = Repository.find(params[:id])
+
+    # workflow_list
+    @workflows = ([Settings.apo.default_workflow_option] + Array(admin_policy.administrative.registrationWorkflow)).uniq
+
+    @collections = Array(admin_policy.administrative.collectionsForRegistration).map do |col_id|
+      name = CollectionNameService.find(col_id)
+      unless name
+        Honeybadger.notify("The APO #{admin_policy.externalIdentifier} asserts that #{col_id} is a collection for registration, but we don't find that collection in solr")
+        next
+      end
+
+      ["#{name.truncate(60, separator: /\s/)} (#{col_id.delete_prefix('druid:')})", col_id]
+    end.sort_by(&:first) # before returning the list, sort by collection name
+
+    default_opt = RightsLabeler.label(admin_policy.administrative.accessTemplate)
+
+    # iterate through the default version of the rights list.  if we found a default option
+    # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
+    # we didn't find a default option, we'll just return the default list of rights options with no
+    # specified selection.
+    @rights = Constants::REGISTRATION_RIGHTS_OPTIONS.each_with_object({}) do |val, rights|
+      if default_opt == val[1]
+        rights["#{val[0]} (APO default)"] = 'default'
+      else
+        rights[val[0]] = val[1]
+      end
+    end
   end
 
   def create
