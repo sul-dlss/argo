@@ -57,4 +57,22 @@ RSpec.describe Contents::FileComponent, type: :component do
       expect(rendered.to_html).not_to include '11839 px'
     end
   end
+
+  context 'with location-based view' do
+    let(:access) { instance_double(Cocina::Models::FileAccess, view: 'location-based', location: 'hoover', download: 'none') }
+
+    it 'renders the view location' do
+      expect(rendered.to_html).to include 'hoover'
+      expect(rendered.to_html).to include 'None'
+    end
+  end
+
+  context 'with location-based download' do
+    let(:access) { instance_double(Cocina::Models::FileAccess, view: 'stanford', location: 'hoover', download: 'location-based') }
+
+    it 'renders the donwload location' do
+      expect(rendered.to_html).to include 'Stanford'
+      expect(rendered.to_html).to include 'hoover'
+    end
+  end
 end

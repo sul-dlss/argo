@@ -23,11 +23,19 @@ module Contents
     delegate :publish, :shelve, :sdrPreserve, to: :administrative
 
     def view_access
-      access.view.capitalize
+      if access.view == 'location-based'
+        access.location
+      else
+        access.view.capitalize
+      end
     end
 
     def download_access
-      access.download.capitalize
+      if access.download == 'location-based'
+        access.location
+      else
+        access.download.capitalize
+      end
     end
 
     def role
