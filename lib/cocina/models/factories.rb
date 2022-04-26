@@ -119,7 +119,7 @@ module Cocina
 
       # rubocop:disable Metrics/ParameterLists
       def self.build_admin_policy_properties(type:, id:, version:, label:, title:,
-                                             admin_policy_id:, agreement_id:,
+                                             admin_policy_id:, agreement_id:, without_description: false,
                                              use_statement: nil, copyright: nil, license: nil,
                                              registration_workflow: nil, collections_for_registration: nil)
         {
@@ -145,6 +145,7 @@ module Cocina
           props[:administrative][:accessTemplate][:license] = license if license
           props[:administrative][:registrationWorkflow] = registration_workflow if registration_workflow
           props[:administrative][:collectionsForRegistration] = collections_for_registration if collections_for_registration
+          props.delete(:description) if without_description
         end
       end
       # rubocop:enable Metrics/ParameterLists

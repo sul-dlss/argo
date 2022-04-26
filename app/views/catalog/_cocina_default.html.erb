@@ -16,7 +16,13 @@
         </a>
 
       <script type="application/json" data-json-renderer-target="cocina">
-        <%= CocinaHashPresenter.new(cocina_object: @cocina).render.to_json.html_safe %>
+       <%=
+       CocinaHashPresenter
+         .new(cocina_object: @cocina, without_metadata: true)
+         .render
+         .to_json
+         .html_safe
+       %>
       </script>
 
       <div class="detail" data-json-renderer-target="section"></div>
