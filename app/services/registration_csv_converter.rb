@@ -31,8 +31,9 @@ class RegistrationCsvConverter
   #   9: rights_view (required)
   #  10: rights_download (required)
   #  11: rights_location (required if "view" or "download" uses "location-based")
-  #  12: project_name (optional)
-  #  13: tags (optional, may repeat)
+  #  12: rights_controlledDigitalLending (optional: "true" is valid only when "view" is "stanford" and "download" is "none")
+  #  13: project_name (optional)
+  #  14: tags (optional, may repeat)
 
   def convert
     CSV.parse(csv_string, headers: true).map { |row| convert_row(row) }
@@ -103,14 +104,7 @@ class RegistrationCsvConverter
       access[:view] = row.fetch('rights_view')
       access[:download] = row.fetch('rights_download')
       access[:location] = row.fetch('rights_location') if [access[:view], access[:download]].include?('location-based')
-      access[:controlledDigitalLending] = controlled_digital_lending?(access)
+      access[:controlledDigitalLending] = row['rights_controlledDigitalLending'].presence || 'false'
     end
-  end
-
-  def controlled_digital_lending?(access)
-    return false unless access['view'] == 'stanford'
-    return false unless access['download'] == 'none'
-
-    true
   end
 end
