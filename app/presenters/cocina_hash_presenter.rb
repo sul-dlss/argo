@@ -27,7 +27,7 @@ class CocinaHashPresenter
   attr_reader :cocina_object_hash
 
   def hash_from(cocina_object, without_metadata)
-    # NOTE: NilModel does not respond to tyep and cannot be fed to `#without_metadata`
+    # NOTE: NilModel does not respond to type and cannot be fed to `#without_metadata`
     return Cocina::Models.without_metadata(cocina_object).to_h if without_metadata && cocina_object.respond_to?(:type)
 
     cocina_object.to_h
