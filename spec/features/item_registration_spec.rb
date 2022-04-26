@@ -79,9 +79,9 @@ RSpec.describe 'Item registration page', js: true do
       'project' => 'special division : project #4',
       'rights' => 'default',
       'source_id' => 'source:id1',
-      'content_type' => 'book',
+      'content_type' => 'https://cocina.sul.stanford.edu/models/book',
       'viewing_direction' => 'left-to-right',
-      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
+      'tag' => ['tag : test', "Registered By : #{user.sunetid}"],
       'workflow_id' => 'goobiWF'
     )
   end

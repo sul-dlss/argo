@@ -213,7 +213,11 @@ RSpec.describe 'Create a new item', type: :request do
                                 location: 'music'
                               },
                               identification: { sourceId: 'sul:1234' },
-                              structural: {},
+                              structural: {
+                                hasMemberOrders: [
+                                  viewingDirection: 'left-to-right'
+                                ]
+                              },
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
                               }).to_json

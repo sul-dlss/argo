@@ -41,10 +41,5 @@ class RegistrationForm
     Cocina::Models::RequestDRO.new(model_params)
   end
 
-  # All the tags from the form except the project and content type, which are handled specially
-  def administrative_tags
-    params[:tag].filter { |t| !t.start_with?('Process : Content Type') }
-  end
-
   attr_reader :params
 end
