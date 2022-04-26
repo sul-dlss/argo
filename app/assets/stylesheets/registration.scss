@@ -40,14 +40,14 @@
 	float: left;
 	margin-left: 0;
 	margin-right: 0;
-	background: #fff 50% 50% repeat-x;
+	background: #fff;
 	color: black;
 }
 
 .ui-state-active,
 .ui-widget-content .ui-state-active {
-	border: 1px solid #8c1515;
-	background: #8c1515 50% 50% repeat-x;
+	border: 1px solid $primary;
+	background: $primary;
 	font-weight: 400;
 	color: #fff;
 }
