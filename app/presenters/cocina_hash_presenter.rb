@@ -9,8 +9,8 @@
 #    it's super easy to coerce a hash into other data structures, so it gives us
 #    flexibility.
 class CocinaHashPresenter
-  def initialize(cocina_object:)
-    @cocina_object_hash = cocina_object.to_h
+  def initialize(cocina_object:, without_metadata: false)
+    @cocina_object_hash = hash_from(cocina_object, without_metadata)
   end
 
   def render
@@ -25,4 +25,11 @@ class CocinaHashPresenter
   private
 
   attr_reader :cocina_object_hash
+
+  def hash_from(cocina_object, without_metadata)
+    # NOTE: NilModel does not respond to tyep and cannot be fed to `#without_metadata`
+    return Cocina::Models.without_metadata(cocina_object).to_h if without_metadata && cocina_object.respond_to?(:type)
+
+    cocina_object.to_h
+  end
 end
