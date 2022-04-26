@@ -5,7 +5,7 @@
 
   <div class='mb-3'>
     <%= f.label :new_apo_id, 'New governing APO' %>
-    <%= f.select(:new_apo_id, apo_list(current_user.groups), {}, class: 'form-select') %>
+    <%= f.select(:new_apo_id, @apo_list, {}, class: 'form-select') %>
   </div>
 
   <%= render 'bulk_actions/druids', f: f %>

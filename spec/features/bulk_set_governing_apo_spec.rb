@@ -7,7 +7,7 @@ RSpec.describe 'Bulk Update of Governing APO', js: true do
 
   before do
     sign_in current_user
-    allow_any_instance_of(RegistrationHelper).to receive(:apo_list).and_return(['APO 1', 'APO 2', 'APO 3'])
+    allow(AdminPolicyOptions).to receive(:for).and_return(['APO 1', 'APO 2', 'APO 3'])
   end
 
   it 'Creates a new job' do

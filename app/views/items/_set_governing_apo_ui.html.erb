@@ -2,7 +2,7 @@
   <div class='mb-3'>
     <%= label_tag :new_apo_id, 'New governing APO' %>
     <%= select_tag :new_apo_id,
-                   options_for_select(apo_list(current_user.groups), @cocina.administrative.hasAdminPolicy),
+                   options_for_select(@apo_list, @cocina.administrative.hasAdminPolicy),
                    class: 'form-select' %>
   </div>
   <button class='btn btn-primary'>

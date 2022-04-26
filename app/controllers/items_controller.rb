@@ -232,6 +232,8 @@ class ItemsController < ApplicationController
   end
 
   def set_governing_apo_ui
+    @apo_list = AdminPolicyOptions.for(current_user)
+
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
