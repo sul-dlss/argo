@@ -104,7 +104,7 @@ class RegistrationCsvConverter
       access[:view] = row.fetch('rights_view')
       access[:download] = row.fetch('rights_download')
       access[:location] = row.fetch('rights_location') if [access[:view], access[:download]].include?('location-based')
-      access[:controlledDigitalLending] = row['rights_controlledDigitalLending'].presence || 'false'
+      access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(row['rights_controlledDigitalLending']) if row['rights_controlledDigitalLending'].present?
     end
   end
 end
