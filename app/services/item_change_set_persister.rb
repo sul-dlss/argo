@@ -39,7 +39,6 @@ class ItemChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :admin_policy_id, :barcode, :catkeys, :source_id, :collection_ids,
-           :embargo_release_date, :embargo_access,
            *ACCESS_FIELDS.keys,
            :changed?, to: :change_set
 
@@ -66,22 +65,17 @@ class ItemChangeSetPersister
   end
 
   def access_changed?
-    embargo_changed? || ACCESS_FIELDS.keys.any? { |field| changed?(field) }
+    ACCESS_FIELDS.keys.any? { |field| changed?(field) }
   end
 
   def identification_changed?
     changed?(:source_id) || changed?(:catkeys) || changed?(:barcode)
   end
 
-  def embargo_changed?
-    %i[embargo_release_date embargo_access].any? { |field| changed?(field) }
-  end
-
   def updated_access(updated)
     return updated unless access_changed?
 
-    props = updated_access_properties.merge(updated_embargo(updated.access))
-    updated.new(access: updated.access.new(props))
+    updated.new(access: updated.access.new(updated_access_properties))
   end
 
   def updated_access_properties
@@ -91,27 +85,6 @@ class ItemChangeSetPersister
         access_properties[cocina_field] = val.is_a?(String) ? val.presence : val # allow boolean false
       end
     end
-  end
-
-  def updated_embargo(existing_access)
-    @updated_embargo ||= begin
-      embargo_class = existing_access.embargo || Cocina::Models::Embargo
-      embargo_props.present? ? { embargo: embargo_class.new(embargo_props) } : {}
-    end
-  end
-
-  def embargo_props
-    @embargo_props ||= begin
-      new_embargo_props = {}
-      new_embargo_props[:releaseDate] = embargo_release_date if changed?(:embargo_release_date)
-
-      new_embargo_props.merge!(embargo_rights) if changed?(:embargo_access)
-      new_embargo_props
-    end
-  end
-
-  def embargo_rights
-    CocinaDroAccess.from_form_value(embargo_access).value_or(nil) if embargo_access.present?
   end
 
   def update_identification(updated)

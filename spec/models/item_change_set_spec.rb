@@ -7,33 +7,22 @@ RSpec.describe ItemChangeSet do
   let(:druid) { 'druid:bc123df4567' }
   let(:cocina_item) { build(:dro, id: druid) }
 
-  context 'when bad embargo_access' do
-    subject { instance.validate(embargo_access: 'stanford-nobody') }
-
-    it { is_expected.to be false }
-  end
-
   describe 'loading from cocina' do
     let(:cocina_item) do
       build(:dro).new(access: {
-                        'view' => 'stanford',
-                        'download' => 'stanford',
-                        'embargo' => {
-                          'releaseDate' => '2040-05-05',
-                          'view' => 'stanford',
-                          'download' => 'stanford'
-                        }
+                        'view' => 'world',
+                        'download' => 'stanford'
                       })
     end
 
-    describe '#embargo_release_date' do
-      subject { instance.embargo_release_date }
+    describe '#view_access' do
+      subject { instance.view_access }
 
-      it { is_expected.to eq '2040-05-05' }
+      it { is_expected.to eq 'world' }
     end
 
-    describe '#embargo_access' do
-      subject { instance.embargo_access }
+    describe '#download_access' do
+      subject { instance.download_access }
 
       it { is_expected.to eq 'stanford' }
     end
