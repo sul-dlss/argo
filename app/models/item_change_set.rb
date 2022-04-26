@@ -6,8 +6,6 @@ class ItemChangeSet < ApplicationChangeSet
   property :catkeys, virtual: true
   property :collection_ids, virtual: true
   property :copyright, virtual: true
-  property :embargo_release_date, virtual: true
-  property :embargo_access, virtual: true
   property :license, virtual: true
   property :source_id, virtual: true
   property :use_statement, virtual: true
@@ -16,10 +14,6 @@ class ItemChangeSet < ApplicationChangeSet
   include HasViewAccessWithCdl
 
   validates :source_id, presence: true, if: -> { changed?(:source_id) }
-  validates :embargo_access, inclusion: {
-    in: Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:second),
-    allow_blank: true
-  }
 
   def self.model_name
     ::ActiveModel::Name.new(nil, nil, 'Item')
@@ -41,20 +35,6 @@ class ItemChangeSet < ApplicationChangeSet
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license
     setup_view_access_with_cdl_properties(model.access)
-
-    setup_embargo_properties! if model.access.embargo
-  end
-
-  def setup_embargo_properties!
-    embargo = model.access.embargo
-    self.embargo_release_date = embargo.releaseDate.to_date.to_fs(:default)
-    self.embargo_access = if embargo.view == 'location-based'
-                            "loc:#{embargo.location}"
-                          elsif embargo.download == 'none' && embargo.view.in?(%w[stanford world])
-                            "#{embargo.view}-nd"
-                          else
-                            embargo.view
-                          end
   end
 
   # @param structural [Cocina::Models::DRO] the DRO metadata to modify
