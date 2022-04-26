@@ -11,7 +11,7 @@ RSpec.describe 'Open and close a version' do
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    dsc.accession.start(workflow: 'accessionWF')
+    dsc.accession.start(workflow: 'accessionWF', significance: 'major', description: 'test version')
   end
 
   it 'opens an object', js: true do
