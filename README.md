@@ -35,7 +35,7 @@ Install foreman for local development (foreman is not supposed to be in the Gemf
 gem install foreman
 ```
 
-## Local Development TLDR
+## Local Development TL;DR
 
 Brings up app at localhost:3000 with some test data:
 
@@ -43,8 +43,9 @@ Brings up app at localhost:3000 with some test data:
 gem install foreman
 docker compose up -d
 docker compose stop web
-bin/dev
+REMOTE_DEBUGGER=byebug bin/dev # omit REMOTE_DEBUGGER if you don't need a debugger
 bin/rake argo:seed_data # run in separate terminal window
+bundle exec byebug -R localhost:8989 # run in separate terminal window
 ```
 
 ## Run the tests locally
@@ -137,11 +138,19 @@ bin/rake argo:seed_data
 
 For creating additional test data, see the section below "Creating fixture data".
 
-If you want to use an interactive debugging session (e.g. by adding byebug to your code), stop any existing web servers (e.g. if you had been running the web docker container or the `bin/dev` script), and instead start the app using `bin/rails s` - this should give you the Argo app on port 3000 mocking an admin login.
+To enable interactive debugging, invoke `bin/dev` as follows:
 
 ```
-bin/server
+REMOTE_DEBUGGER=byebug bin/dev
 ```
+
+And then start up the debugger in another window (only byebug is supported at this time):
+
+```
+bundle exec byebug -R localhost:8989
+```
+
+Note that, by default, the debugger will run on `localhost` on port `8989`. To change these values, add the `DEBUGGER_HOST` and `DEBUGGER_PORT` environment variables when invoking `bin/dev` above and make sure to poing `byebug -R` at those same values when starting up the debugger.
 
 ## Local Development Troubleshooting
 
