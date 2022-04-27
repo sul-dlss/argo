@@ -154,7 +154,7 @@
     @extend .header;
   }
 
-  .caption-header>caption {
+  .caption-header > caption {
     caption-side: top;
     @extend .header;
     background-color: $silver-sand;
