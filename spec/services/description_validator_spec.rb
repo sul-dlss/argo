@@ -28,8 +28,8 @@ RSpec.describe DescriptionValidator do
         end
       end
 
-      context 'with missing title1.structureValue1.value column' do
-        let(:csv) { 'druid,title1.structureValue1.type' }
+      context 'with missing title1.structuredValue1.value column' do
+        let(:csv) { 'druid,title1.structuredValue1.type' }
 
         it 'finds errors' do
           expect(instance.valid?).to be false
@@ -37,8 +37,8 @@ RSpec.describe DescriptionValidator do
         end
       end
 
-      context 'with missing title1.structureValue1.type column' do
-        let(:csv) { 'druid,title1.structureValue1.value' }
+      context 'with missing title1.structuredValue1.type column' do
+        let(:csv) { 'druid,title1.structuredValue1.value' }
 
         it 'finds errors' do
           expect(instance.valid?).to be false
@@ -46,8 +46,8 @@ RSpec.describe DescriptionValidator do
         end
       end
 
-      context 'with a title1.structureValue1.value and a title1.structureValue1.type column' do
-        let(:csv) { 'druid,title1.structureValue1.type,title1.structureValue1.value' }
+      context 'with a title1.structuredValue1.value and a title1.structuredValue1.type column' do
+        let(:csv) { 'druid,title1.structuredValue1.type,title1.structuredValue1.value' }
 
         it 'validates' do
           expect(instance.valid?).to be true

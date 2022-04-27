@@ -41,7 +41,7 @@ class DescriptionValidator
 
   def validate_title_headers
     if @headers.include?('title1.value') ||
-       (@headers.exclude?('title1.value') && @headers.include?('title1.structureValue1.type') && @headers.include?('title1.structureValue1.value'))
+       (@headers.exclude?('title1.value') && @headers.include?('title1.structuredValue1.type') && @headers.include?('title1.structuredValue1.value'))
       return
     end
 
