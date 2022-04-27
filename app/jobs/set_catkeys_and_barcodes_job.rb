@@ -23,7 +23,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
       update_druids.each_with_index do |current_druid, i|
         cocina_object = Repository.find(current_druid)
         args = {}
-        args[:catkeys] = catkeys[i] if catkeys
+        args[:catkeys] = (catkeys[i] || []) if catkeys
         args[:barcode] = barcodes[i] if barcodes
         change_set = ItemChangeSet.new(cocina_object)
         change_set.validate(args)
