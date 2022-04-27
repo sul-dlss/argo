@@ -64,6 +64,8 @@ class SetCatkeysAndBarcodesJob < GenericJob
       log.puts("#{Time.current} Catkey/barcode added/updated/removed successfully")
     rescue StandardError => e
       log.puts("#{Time.current} Catkey/barcode failed #{e.class} #{e.message}")
+      Honeybadger.context(args:, druid: cocina_object.externalIdentifier)
+      Honeybadger.notify(e)
       bulk_action.increment(:druid_count_fail).save
       nil
     end
