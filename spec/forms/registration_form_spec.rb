@@ -14,7 +14,7 @@ RSpec.describe RegistrationForm do
         source_id: 'foo:bar',
         admin_policy: 'druid:hv992yv2222',
         label: 'test parameters for registration',
-        tag: ['Process : Content Type : File'],
+        tag: ['some : tag'],
         content_type: 'https://cocina.sul.stanford.edu/models/object',
         rights: 'default'
       }
