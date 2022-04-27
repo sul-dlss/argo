@@ -32,3 +32,10 @@
   color: $body-color;
   opacity: 1.0;
 }
+
+// Style disabled outline-primary buttons as greyed out using the `disabled` pseudo-class
+.btn-outline-primary:disabled {
+  border-color: $btn-link-disabled-color;
+  color: $btn-link-disabled-color;
+  opacity: $btn-disabled-opacity;
+}
