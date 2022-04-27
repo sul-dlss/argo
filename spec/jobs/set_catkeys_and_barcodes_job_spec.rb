@@ -74,6 +74,35 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       end
     end
 
+    context 'when catkey selected but none provided' do
+      before do
+        allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
+        allow(BulkJobLog).to receive(:open).and_yield(buffer)
+      end
+
+      let(:params) do
+        {
+          druids:,
+          catkeys: "\n\n44444", # two blank rows, one row with a catkey
+          barcodes: '',
+          use_catkeys_option: '1',
+          use_barcodes_option: '0'
+        }.with_indifferent_access
+      end
+
+      it 'attempts to update the catkey for each druid with an empty array and not nil' do
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: [] }, buffer) # changed to empty
+        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, { catkeys: [] }, buffer) # not changed
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: ['44444'] }, buffer) # changed to a value
+        subject.perform(bulk_action_no_process_callback.id, params)
+        expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
+        expect(change_set1).to have_received(:validate).with(catkeys: []) # set to empty
+        expect(change_set2).to have_received(:validate).with(catkeys: []) # not changed
+        expect(change_set3).to have_received(:validate).with(catkeys: ['44444']) # changed to a value
+      end
+    end
+
     context 'when catkey and barcode not selected' do
       let(:params) do
         {
