@@ -181,18 +181,18 @@ RSpec.describe ApoForm do
 
       let(:default_access) { { view: 'world' } }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to be false }
 
       describe 'stanford variation' do
         let(:default_access) { { view: 'stanford', download: 'none' } }
 
-        it { is_expected.to be_nil }
+        it { is_expected.to be false }
       end
 
       describe 'location based' do
         let(:default_access) { { view: 'stanford', download: 'location-based', location: 'ars' } }
 
-        it { is_expected.to be_nil }
+        it { is_expected.to be false }
       end
 
       describe 'controlled digital lending' do
