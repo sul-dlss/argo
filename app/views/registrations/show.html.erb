@@ -14,14 +14,14 @@
     <div class="row mb-3">
       <label for="content_type" class="col-sm-3 col-form-label">Content Type</label>
       <div class="col-sm-9">
-        <%= select_tag :content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), 'data-rcparam': 'contentType',
+        <%= select_tag :content_type, options_for_select(ContentTypeForm::CONTENT_TYPES),
                     class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' }  %>
       </div>
     </div>
     <div data-content-type-target="directionRow" class="row mb-3">
       <label for="viewing_direction" class="col-sm-3 col-form-label">Viewing Direction</label>
       <div class="col-sm-9">
-        <%= select_tag :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), 'data-rcparam': 'viewingDirection',
+        <%= select_tag :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS),
                     include_blank: 'none', class: 'form-select', data: { content_type_target: 'direction' } %>
       </div>
     </div>

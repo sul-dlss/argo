@@ -27,11 +27,14 @@ export default function DorRegistration(initOpts) {
     },
 
     contentType : function() {
-      return document.querySelector('[data-rcparam="contentType"]').value
+      return document.querySelector('[data-content-type-target="contentType"]').value
     },
 
     viewingDirection : function() {
-      return document.querySelector('[data-rcparam="viewingDirection"]').value
+      var element = document.querySelector('[data-content-type-target="direction"]')
+      if (element.disabled)
+        return null
+      return element.value
     },
 
     rights: function() {
