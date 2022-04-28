@@ -16,9 +16,10 @@ class StructureUpdater
     @model = model
     @csv = CSV.new(csv, headers: true)
     @errors = []
+    @druid = model.externalIdentifier.delete_prefix('druid:')
   end
 
-  attr_reader :model, :csv, :errors
+  attr_reader :model, :csv, :errors, :druid
 
   # @return [Bool] true if there are no problems
   def validate
@@ -100,27 +101,24 @@ class StructureUpdater
     end
 
     contains = files_by_fileset.keys.map do |sequence|
-      existing_fileset = file_set(sequence, files_by_fileset[sequence].first.label)
+      fileset = fileset_for(sequence, files_by_fileset[sequence].first.label)
       attributes = fileset_attributes[sequence]
                    .merge(structural: { contains: files_by_fileset[sequence] })
-      existing_fileset.new(**attributes)
+      fileset.new(**attributes)
     end
     Success(model.structural.new(contains:))
   end
 
+  FILESET_NAMESPACE = 'https://cocina.sul.stanford.edu/fileset/'
+
   # @param [int] sequence is the index of the fileset in the import
   # @param [string] label the label to inject for a new fileset
-  def file_set(sequence, label)
-    model.structural.contains[sequence.to_i - 1].presence || new_file_set(label) # Cocina::Models::FileSet.new(files)
-  end
-
-  def new_file_set(label)
-    druid = model.externalIdentifier.delete_prefix('druid:')
-    fileset_id = "https://cocina.sul.stanford.edu/fileset/#{druid}-#{SecureRandom.uuid}"
-    Cocina::Models::FileSet.new(externalIdentifier: fileset_id,
-                                type: Cocina::Models::FileSetType.file,
-                                label:,
-                                version: 1)
+  def fileset_for(sequence, label)
+    model.structural.contains[sequence.to_i - 1].presence ||
+      Cocina::Models::FileSet.new(externalIdentifier: "#{FILESET_NAMESPACE}#{druid}-#{SecureRandom.uuid}",
+                                  type: Cocina::Models::FileSetType.file,
+                                  label:,
+                                  version: 1)
   end
 
   # Change the short resource type into a url
