@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # Validate the descriptive metadata spreadsheet
+# rubocop:disable Metrics/ClassLength
 class DescriptionValidator
   def initialize(csv, bulk_job: false)
     @csv = csv
@@ -41,10 +42,7 @@ class DescriptionValidator
   end
 
   def validate_title_headers
-    if @headers.include?('title1.value') ||
-       (@headers.exclude?('title1.value') && @headers.include?('title1.structuredValue1.type') && @headers.include?('title1.structuredValue1.value'))
-      return
-    end
+    return if title_value_header? || title_structured_value_header? || title_parallel_value_header?
 
     errors << 'Title column not found.'
   end
@@ -69,6 +67,18 @@ class DescriptionValidator
   end
 
   private
+
+  def title_value_header?
+    @headers.include?('title1.value')
+  end
+
+  def title_structured_value_header?
+    @headers.include?('title1.structuredValue1.type') && @headers.include?('title1.structuredValue1.value')
+  end
+
+  def title_parallel_value_header?
+    @headers.include?('title1.parallelValue1.value') || @headers.include?('title1.parallelValue1.structuredValue1.value')
+  end
 
   def duplicate_headers
     @headers.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
@@ -121,3 +131,4 @@ class DescriptionValidator
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
