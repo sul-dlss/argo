@@ -15,11 +15,6 @@ module Show
               target: '_blank', rel: 'noopener', class: 'external-link-button'
     end
 
-    def dor_link
-      link_to 'Fedora UI', File.join(fedora_url_without_credentials, "objects/#{document.id}"),
-              target: '_blank', rel: 'noopener', class: 'external-link-button'
-    end
-
     def searchworks_link
       return tag.span('SearchWorks', class: 'external-link-button disabled btn') unless released_to_searchworks?
 
@@ -58,13 +53,5 @@ module Show
     private
 
     attr_reader :document
-
-    def fedora_url_without_credentials
-      fedora_uri = URI.parse(Settings.fedora_url)
-      fedora_uri.user = fedora_uri.password = nil
-      fedora_uri.to_s
-    rescue URI::InvalidURIError
-      nil
-    end
   end
 end

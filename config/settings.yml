@@ -65,7 +65,6 @@ preservation_catalog:
 
 # URLs
 dor_indexing_url: 'https://dor-indexing-app:3000/dor'
-fedora_url: 'http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora'
 modsulator_url: 'https://modsulator-app-stage.stanford.edu/v1/modsulator'
 normalizer_url: 'https://modsulator-app-stage.stanford.edu/v1/normalizer'
 purl_url: 'https://sul-purl-stage.stanford.edu'
