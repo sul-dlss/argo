@@ -55,8 +55,8 @@ RSpec.describe 'Create an apo', js: true do
     click_button 'Register APO'
     expect(page).to have_text 'created'
 
-    # Shows a link to the agreement
-    expect(page).to have_link 'Test Agreement', href: solr_document_path(agreement.externalIdentifier)
+    # Shows a link to the agreement (page.find waits for the element to appear via turbo)
+    expect(page.find('.show-document')).to have_link 'Test Agreement', href: solr_document_path(agreement.externalIdentifier)
 
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
