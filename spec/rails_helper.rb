@@ -7,9 +7,9 @@ require File.expand_path('../config/environment', __dir__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'support/factory_bot'
 require 'cocina/rspec'
 require 'capybara/rspec'
-require 'cocina/models/factories'
 require 'equivalent-xml/rspec_matchers'
 require 'view_component/test_helpers'
 require 'webmock/rspec'
@@ -79,8 +79,6 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.include FactoryBot::Syntax::Methods
-  config.include Cocina::Models::Factories::Methods
   config.include Capybara::DSL
   config.include TestViewHelpers, type: :view
   config.include SigninHelper, type: :view
