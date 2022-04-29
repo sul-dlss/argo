@@ -61,6 +61,18 @@ RSpec.describe DescriptionValidator do
           expect(instance.valid?).to be true
         end
       end
+
+      context 'with headers that do not map to cocina model' do
+        let(:csv) { 'druid,title1.value,title2.value,title3.value,bogus,event.contributor,event1.contributor,event1.note1.source.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          # "bogus" is not a valid cocina attribute, and "event" must be an array (so needs to include a number)
+          expect(instance.errors).to eq ['Column header invalid: bogus',
+                                         'Column header invalid: event.contributor',
+                                         'Column header invalid: event1.contributor']
+        end
+      end
     end
 
     context 'for bulk jobs' do
