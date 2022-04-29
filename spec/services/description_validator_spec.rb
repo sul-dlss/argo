@@ -62,6 +62,22 @@ RSpec.describe DescriptionValidator do
         end
       end
 
+      context 'with title1.parallelValue1.value column' do
+        let(:csv) { 'druid,title1.parallelValue1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with title1.parallelValue1.structuredValue1.value column' do
+        let(:csv) { 'druid,title1.parallelValue1.structuredValue1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
+
       context 'with headers that do not map to cocina model' do
         let(:csv) { 'druid,title1.value,title2.value,title3.value,bogus,event.contributor,event1.contributor,event1.note1.source.value' }
 

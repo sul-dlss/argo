@@ -58,7 +58,7 @@ RSpec.describe 'Create an apo', js: true do
     # Shows a link to the agreement
     expect(page).to have_link 'Test Agreement',
                               href: solr_document_path(agreement.externalIdentifier),
-                              wait: 15 # This link is rendered in a turbo-frame, so wait longer than the default
+                              wait: 30 # This link is rendered in a turbo-frame, so wait longer than the default
 
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
