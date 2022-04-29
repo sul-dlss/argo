@@ -5,14 +5,12 @@ class ApplyModsMetadata
   # @param [String] apo_druid
   # @param [String] mods A string containing MODS XML.
   # @param [Cocina::Models::DRO] cocina the item to be updated
-  # @param [String] existing_mods A string containing the current descriptive metadata for the object.
   # @param [String] original_filename the filename these updates came from
   # @param [Ability] ability the abilities of the acting user
   # @param [#puts] log
-  def initialize(apo_druid:, mods:, existing_mods:, cocina:, original_filename:, ability:, log:)
+  def initialize(apo_druid:, mods:, cocina:, original_filename:, ability:, log:)
     @apo_druid = apo_druid
     @mods = mods
-    @existing_mods = existing_mods
     @cocina = cocina
     @original_filename = original_filename
     @ability = ability
@@ -35,13 +33,13 @@ class ApplyModsMetadata
 
     return false unless ability.can? :update, cocina
 
-    # We only update objects if the descMetadata XML is different
-    if equivalent_xml?(existing_mods, mods)
+    # We only update objects if the cocina is different
+    if cocina.description == cocina_description
       log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{cocina.externalIdentifier}")
       return false
     end
 
-    errors = ModsValidator.validate(Nokogiri::XML(mods))
+    errors = ModsValidator.validate(mods_ng)
     if errors.present?
       log.puts "argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{errors.join(';')}"
       return false
@@ -61,13 +59,15 @@ class ApplyModsMetadata
     rescue Dor::Services::Client::UnexpectedResponse => e
       log.puts("argo.bulk_metadata.bulk_log_unexpected_response #{cocina.externalIdentifier} #{e.message}")
     end
+  rescue Cocina::Models::ValidationError => e
+    log.puts("argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{e.message}")
   rescue StandardError => e
     log_error!(e)
   end
 
   private
 
-  attr_reader :apo_druid, :mods, :existing_mods, :cocina, :original_filename, :ability, :log
+  attr_reader :apo_druid, :mods, :cocina, :original_filename, :ability, :log
 
   # Log the error
   def log_error!(exception)
@@ -89,28 +89,15 @@ class ApplyModsMetadata
 
   def update_metadata
     object_client = Dor::Services::Client.object(cocina.externalIdentifier)
-    object_client.metadata.update_mods(mods)
+    object_client.update(params: cocina.new(description: cocina_description))
   end
 
   # Open a new version for the given object.
   def commit_new_version
-    VersionService.open(identifier: cocina.externalIdentifier,
-                        significance: 'minor',
-                        description: "Descriptive metadata upload from #{original_filename}",
-                        opening_user_name: ability.current_user.sunetid)
-  end
-
-  # Check if two MODS XML nodes are equivalent.
-  #
-  # @param [Nokogiri::XML::Element] node1 A MODS XML node.
-  # @param [Nokogiri::XML::Element] node2 A MODS XML node.
-  # @return [Boolean] true if the given nodes are equivalent, false otherwise.
-  def equivalent_xml?(node1, node2)
-    EquivalentXml.equivalent?(node1,
-                              node2,
-                              element_order: false,
-                              normalize_whitespace: true,
-                              ignore_attr_values: ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
+    @cocina = VersionService.open(identifier: cocina.externalIdentifier,
+                                  significance: 'minor',
+                                  description: "Descriptive metadata upload from #{original_filename}",
+                                  opening_user_name: ability.current_user.sunetid)
   end
 
   # Returns true if the given object is accessioned, false otherwise.
@@ -139,5 +126,14 @@ class ApplyModsMetadata
   def status
     # We must provide a string version here: https://github.com/sul-dlss/dor-workflow-client/issues/169
     @status ||= WorkflowClientFactory.build.status(druid: cocina.externalIdentifier, version: cocina.version.to_s).info[:status_code]
+  end
+
+  def cocina_description
+    @cocina_description ||= Cocina::Models::Description.new(Cocina::Models::Mapping::FromMods::Description.props(mods: mods_ng, druid: cocina.externalIdentifier,
+                                                                                                                 label: cocina.label))
+  end
+
+  def mods_ng
+    @mods_ng ||= Nokogiri::XML(mods)
   end
 end

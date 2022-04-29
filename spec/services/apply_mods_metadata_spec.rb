@@ -13,22 +13,30 @@ RSpec.describe ApplyModsMetadata do
     XML
   end
 
-  let(:apo_druid) { 'druid:999apo' }
-  let(:existing_mods) { nil }
+  let(:apo_druid) { 'druid:xx666zz7777' }
   let(:druid) { 'druid:bc123hv8998' }
   let(:log) { instance_double(File, puts: true) }
   let(:ability) { Ability.new(user) }
   let(:user) { build(:user) }
   let(:cocina) do
-    instance_double(Cocina::Models::DRO, administrative:, externalIdentifier: druid, version: 1)
+    build(:dro_with_metadata, id: druid, admin_policy_id: apo_druid)
   end
-  let(:administrative) { instance_double(Cocina::Models::Administrative, hasAdminPolicy: apo_druid) }
+
+  let(:updated_cocina) do
+    cocina.new(
+      description: {
+        title: [
+          { value: 'Oral history with Jakob Spielmann' }
+        ],
+        purl: 'https://sul-purl-stage.stanford.edu/bc123hv8998'
+      }
+    )
+  end
 
   let(:action) do
     described_class.new(apo_druid:,
                         mods:,
                         cocina:,
-                        existing_mods:,
                         original_filename: 'testfile.xlsx',
                         ability:,
                         log:)
@@ -45,14 +53,12 @@ RSpec.describe ApplyModsMetadata do
 
     let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: 9 }) }
     let(:object_client) do
-      instance_double(Dor::Services::Client::Object, metadata: metadata_client)
-    end
-    let(:metadata_client) do
-      instance_double(Dor::Services::Client::Metadata, update_mods: nil)
+      instance_double(Dor::Services::Client::Object)
     end
 
     before do
       allow(workflow_client).to receive(:status).and_return(status_service)
+      allow(object_client).to receive(:update)
     end
 
     context 'with permission' do
@@ -68,14 +74,14 @@ RSpec.describe ApplyModsMetadata do
 
         it 'saves the metadata' do
           apply
-          expect(metadata_client).to have_received(:update_mods)
+          expect(object_client).to have_received(:update).with(params: updated_cocina)
           expect(action).not_to have_received(:log_error!)
         end
       end
 
       context 'when save fails' do
         before do
-          stub_request(:put, "#{Settings.dor_services.url}/v1/objects/#{druid}/metadata/mods")
+          stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/#{druid}")
             .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
         end
 
@@ -96,6 +102,34 @@ RSpec.describe ApplyModsMetadata do
           expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_unexpected_response druid:bc123hv8998 problem (broken)')
         end
       end
+
+      context 'when ValidationError' do
+        before do
+          allow(action).to receive(:cocina_description).and_raise(Cocina::Models::ValidationError, 'Bad type')
+        end
+
+        it 'logs the error' do
+          apply
+          expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_validation_error druid:bc123hv8998 Bad type')
+        end
+      end
+
+      context 'when unchanged' do
+        let(:action) do
+          described_class.new(apo_druid:,
+                              mods:,
+                              cocina: updated_cocina,
+                              original_filename: 'testfile.xlsx',
+                              ability:,
+                              log:)
+        end
+
+        it 'logs and skips' do
+          apply
+          expect(object_client).not_to have_received(:update)
+          expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_skipped_mods druid:bc123hv8998')
+        end
+      end
     end
 
     context 'without permission' do
@@ -106,7 +140,7 @@ RSpec.describe ApplyModsMetadata do
 
       it 'saves the metadata' do
         apply
-        expect(metadata_client).not_to have_received(:update_mods)
+        expect(object_client).not_to have_received(:update)
       end
     end
   end
@@ -160,7 +194,7 @@ RSpec.describe ApplyModsMetadata do
 
   describe '#commit_new_version' do
     before do
-      allow(VersionService).to receive(:open)
+      allow(VersionService).to receive(:open).and_return(cocina)
     end
 
     it 'opens a new minor version with filename and username' do

@@ -91,14 +91,11 @@ class ModsulatorJob < ActiveJob::Base
       end
 
       begin
-        object_client = Dor::Services::Client.object(item_druid)
-        current_metadata = object_client.metadata.mods
         cocina = Repository.find(item_druid)
 
         ApplyModsMetadata.new(apo_druid: druid,
                               mods: xmldoc_node.first_element_child.to_s,
                               cocina:,
-                              existing_mods: current_metadata,
                               original_filename:,
                               ability:,
                               log:).apply
