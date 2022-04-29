@@ -16,10 +16,9 @@ class StructureUpdater
     @model = model
     @csv = CSV.new(csv, headers: true)
     @errors = []
-    @druid = model.externalIdentifier.delete_prefix('druid:')
   end
 
-  attr_reader :model, :csv, :errors, :druid
+  attr_reader :model, :csv, :errors
 
   # @return [Bool] true if there are no problems
   def validate
@@ -115,7 +114,7 @@ class StructureUpdater
   # @param [string] label the label to inject for a new fileset
   def fileset_for(sequence, label)
     model.structural.contains[sequence.to_i - 1].presence ||
-      Cocina::Models::FileSet.new(externalIdentifier: "#{FILESET_NAMESPACE}#{druid}-#{SecureRandom.uuid}",
+      Cocina::Models::FileSet.new(externalIdentifier: "#{FILESET_NAMESPACE}#{SecureRandom.uuid}",
                                   type: Cocina::Models::FileSetType.file,
                                   label:,
                                   version: 1)
