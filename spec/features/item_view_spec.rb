@@ -10,7 +10,16 @@ RSpec.describe 'Item view', js: true do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:item_id) { 'druid:hj185xx2222' }
-  let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }
+  let(:props) { {} }
+  let(:event) do
+    Dor::Services::Client::Events::Event.new(
+      event_type: 'shelve_request_received',
+      data: {
+        host: 'dor-services-stage.stanford.edu',
+        **props
+      }
+    )
+  end
   let(:datastream) { Dor::Services::Client::Metadata::Datastream.new(dsid: 'descMetadata', pid: item_id) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: [datastream]) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
@@ -268,6 +277,13 @@ RSpec.describe 'Item view', js: true do
             expect(page).to have_css 'table.table thead tr th', text: 'Release'
             expect(page).to have_css 'tr td', text: /Searchworks/
             expect(page).to have_css 'tr td', text: /pjreed/
+
+            # The following three clicks make sure events are expandable and collapsible
+            click_button 'Events'
+            within '#events' do
+              click_button 'View more'
+              click_button 'View less'
+            end
 
             click_button 'Datastreams' # Open the datastream accordion
             click_link 'descMetadata' # Open the datastream modal

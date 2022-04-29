@@ -17,6 +17,7 @@ import ApoFormController from './apo_form_controller'
 import OpenCloseController from './open_close_controller'
 import StructuralController from './structural_controller'
 import AccessRightsController from './access_rights_controller'
+import ExpandableSnippets from './expandable_snippets'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -37,3 +38,4 @@ application.register("apo-form", ApoFormController)
 application.register("open-close", OpenCloseController)
 application.register("structural", StructuralController)
 application.register("access-rights", AccessRightsController)
+application.register("expandable-snippets", ExpandableSnippets)
