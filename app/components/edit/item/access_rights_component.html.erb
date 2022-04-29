@@ -18,8 +18,9 @@
 </div>
 
 <% if include_cdl? %>
-  <div class="mb-3 form-check" data-access-rights-target="cdlRow">
-    <%= f.check_box :controlled_digital_lending, class: 'form-check-input', data: { access_rights_target: 'cdl' } %>
-    <%= f.label :controlled_digital_lending, class: 'form-check-label' %>
+  <div class="mb-3" data-access-rights-target="cdlRow">
+    <%= f.label :controlled_digital_lending, class: 'form-label' %>
+    <%= f.select :controlled_digital_lending, [['No', false], ['Yes', true]],
+                 {}, class: 'form-select', data: { access_rights_target: 'cdl' } %>
   </div>
 <% end %>
