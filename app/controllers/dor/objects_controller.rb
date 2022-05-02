@@ -6,7 +6,7 @@ class Dor::ObjectsController < ApplicationController
   def create
     form = RegistrationForm.new(params)
     request_model = form.cocina_model # might raise Cocina::Models::ValidationError
-    result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
+    result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: params[:tag])
     result.either(
       ->(model) { render json: { druid: model.externalIdentifier }, status: :created, location: solr_document_url(model.externalIdentifier) },
       ->(error) { render_failure(error) }

@@ -23,7 +23,8 @@ RSpec.describe 'Item registration page', js: true do
     visit registration_path
     select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
     select 'goobiWF', from: 'Initial Workflow'
-    select 'Book (ltr)', from: 'Content Type'
+    select 'book', from: 'Content Type'
+    select 'left-to-right', from: 'Viewing Direction'
 
     fill_in 'Project Name', with: 'special division : project #4'
     fill_in 'tags_0', with: 'tag : test'
@@ -78,7 +79,9 @@ RSpec.describe 'Item registration page', js: true do
       'project' => 'special division : project #4',
       'rights' => 'default',
       'source_id' => 'source:id1',
-      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
+      'content_type' => 'https://cocina.sul.stanford.edu/models/book',
+      'viewing_direction' => 'left-to-right',
+      'tag' => ['tag : test', "Registered By : #{user.sunetid}"],
       'workflow_id' => 'goobiWF'
     )
   end
