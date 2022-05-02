@@ -24,6 +24,7 @@ module Contents
     end
 
     delegate :label, to: :resource
+    delegate :allows_modification?, to: :@state_service
 
     def files
       resource.structural.contains

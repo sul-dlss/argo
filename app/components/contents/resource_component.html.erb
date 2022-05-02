@@ -1,7 +1,12 @@
 <li class="resource">
   <dl class="dl-horizontal">
     <dt>Resource (<%= resource_counter %>)</dt>
-    <dd><%= type %></dd>
+    <dd>
+      <%= type %>
+      <% if allows_modification? %>
+        <span class="bi-pencil"></span>
+      <% end %>
+    </dd>
     <% if label %>
       <dt>Label</dt>
       <dd><%= label %></dd>
