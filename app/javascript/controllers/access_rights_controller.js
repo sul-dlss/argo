@@ -127,7 +127,9 @@ export default class extends Controller {
 
   disableCdl() {
     this.cdlRowTarget.hidden = true
-    this.cdlTarget.disabled = true
+    // Set this to false, so that it gets updated when we merge the params
+    // from the form with those in the cocina-model
+    this.cdlTarget.value = false
   }
 
   enableCdl() {
