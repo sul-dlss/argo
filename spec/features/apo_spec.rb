@@ -6,7 +6,16 @@ RSpec.describe 'Create an apo', js: true do
   let(:user) { create(:user) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
+  let(:workflow_client) do
+    instance_double(Dor::Workflow::Client,
+                    workflow_templates: ['accessionWF'],
+                    create_workflow_by_name: true,
+                    lifecycle: [],
+                    active_lifecycle: [],
+                    milestones: [],
+                    workflow_routes:,
+                    workflow_status: nil)
+  end
   # An Agreement object must exist to populate the dropdown on the form
   let(:agreement) { FactoryBot.create_for_repository(:agreement) }
   let!(:preexisting_collection) do
@@ -18,14 +27,6 @@ RSpec.describe 'Create an apo', js: true do
 
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-
-    allow(workflow_client).to receive_messages(workflow_templates: ['accessionWF'],
-                                               create_workflow_by_name: true,
-                                               lifecycle: [],
-                                               active_lifecycle: [],
-                                               milestones: [],
-                                               workflow_routes:,
-                                               workflow_status: nil)
 
     sign_in user, groups: ['sdr:administrator-role']
   end
