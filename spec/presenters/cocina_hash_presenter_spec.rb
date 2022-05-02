@@ -10,24 +10,14 @@ RSpec.describe CocinaHashPresenter do
   describe '#render' do
     subject(:rendered) { presenter.render }
 
-    context 'when cocina object lacks descriptive metadata' do
-      let(:cocina_object) do
-        build(:admin_policy_with_metadata, without_description: true)
-      end
-
-      it 'returns the object untouched as a hash' do
-        expect(rendered).to eq(cocina_object.to_h)
-      end
-    end
-
     context 'without metadata' do
       let(:cocina_object) do
-        build(:admin_policy_with_metadata, without_description: true)
+        build(:admin_policy_with_metadata)
       end
       let(:without_metadata) { true }
 
       it 'returns the object without a lock' do
-        expect(rendered).to eq(cocina_object.to_h.except(:lock))
+        expect(rendered).not_to have_key(:lock)
       end
     end
 
