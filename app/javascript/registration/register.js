@@ -31,9 +31,9 @@ export default function DorRegistration(initOpts) {
     },
 
     viewingDirection : function() {
-      var element = document.querySelector('[data-content-type-target="direction"]')
+      const element = document.querySelector('[data-content-type-target="direction"]')
       if (element.disabled)
-        return null
+        return
       return element.value
     },
 
