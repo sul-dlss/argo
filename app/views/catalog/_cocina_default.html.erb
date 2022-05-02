@@ -5,27 +5,9 @@
     </button>
   </h2>
   <div id="document-cocina-section" class="accordion-collapse collapse" aria-labelledby="document-cocina-heading">
-    <div class="accordion-body" data-controller="json-renderer">
-        <a class="btn btn-secondary " data-action="json-renderer#expand">
-          <span class="bi-arrows-expand"/>
-          <span>Expand</span>
-        </a>
-        <a class="btn btn-secondary " data-action="json-renderer#collapse">
-          <span class="bi-arrows-collapse"/>
-          <span>Collapse</span>
-        </a>
-
-      <script type="application/json" data-json-renderer-target="cocina">
-       <%=
-       CocinaHashPresenter
-         .new(cocina_object: @cocina, without_metadata: true)
-         .render
-         .to_json
-         .html_safe
-       %>
-      </script>
-
-      <div class="detail" data-json-renderer-target="section"></div>
+    <div class="accordion-body">
+      <turbo-frame id="cocina_object" src="<%= item_cocina_object_path(view_token) %>" loading="lazy">
+      </turbo-frame>
     </div>
   </div>
 </div>

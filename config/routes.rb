@@ -147,6 +147,7 @@ Rails.application.routes.draw do
     resource :descriptive, only: %i[show edit update]
     resource :technical, only: %i[show]
     resource :events, only: %i[show]
+    resource :cocina_object, only: %i[show]
     resource :serials, only: %i[edit update]
 
     resources :workflows, only: %i[new create show update] do
