@@ -49,8 +49,8 @@ class DescriptivesController < ApplicationController
     description = DescriptionExport.export(source_id: @cocina.identification.sourceId,
                                            description: @cocina.description)
     headers = DescriptionHeaders.create(headers: description.keys)
-    CSV.generate(write_headers: true, headers:) do |body|
-      body << description.values_at(*headers)
+    CSV.generate(write_headers: true, headers: ['druid'] + headers) do |body|
+      body << ([@cocina.externalIdentifier] + description.values_at(*headers))
     end
   end
 end
