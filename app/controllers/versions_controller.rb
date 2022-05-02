@@ -45,7 +45,7 @@ class VersionsController < ApplicationController
   end
 
   # as long as this isn't a bulk operation, and we get non-nil significance and description
-  # values, update those fields on the version metadata datastream
+  # values, update those fields in the version service
   def close
     VersionService.close(
       identifier: @cocina_object.externalIdentifier,

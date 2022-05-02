@@ -70,8 +70,7 @@ class WorkflowsController < ApplicationController
                                                         wf_name,
                                                         version: cocina_object.version)
 
-    # We need to sync up the workflows datastream with workflow service (using #find)
-    # and then force a committed Solr update before redirection.
+    # Force a Solr update before redirection.
     Argo::Indexer.reindex_druid_remotely(cocina_object.externalIdentifier)
 
     msg = "Added #{wf_name}"
