@@ -91,6 +91,34 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       end
     end
 
+    context 'when missing druid column' do
+      let(:csv_file) do
+        [
+          'source_id,title1:value,purl',
+          [item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
+        ].join("\n")
+      end
+
+      let(:ability) { instance_double(Ability, can?: true) }
+      let(:log_buffer) { StringIO.new }
+
+      before do
+        allow(Ability).to receive(:new).and_return(ability)
+        allow(Honeybadger).to receive(:notify)
+        allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+        subject.perform(bulk_action.id, { csv_file: })
+      end
+
+      it 'logs the error without alerting honeybadger' do
+        expect(bulk_action.druid_count_total).to eq 1
+        expect(bulk_action.druid_count_fail).to eq 1
+        expect(bulk_action.druid_count_success).to eq 0
+        expect(Repository).not_to have_received(:store)
+        expect(Honeybadger).not_to have_received(:notify)
+        expect(log_buffer.string).to include 'Column "druid" not found'
+      end
+    end
+
     context 'when unchanged' do
       before do
         allow(Ability).to receive(:new).and_return(ability)
