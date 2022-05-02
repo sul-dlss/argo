@@ -55,9 +55,7 @@ RSpec.describe 'Create an apo', js: true do
     click_button 'Register APO'
     expect(page).to have_text 'created'
 
-    # Shows a link to the agreement. The agreement name is loaded by turbo-links, so pause to let it complete
-    # (capybara wait is flaky, see https://discuss.hotwired.dev/t/capybara-wait-for-ajax-replacement-for-turbo-stream-responses/2269/9)
-    sleep 3
+    # Shows a link to the agreement. The agreement name is loaded by turbo-links.
     expect(page).to have_link 'Test Agreement', href: solr_document_path(agreement.externalIdentifier)
 
     click_on 'Edit APO'
