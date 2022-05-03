@@ -18,6 +18,7 @@ import OpenCloseController from './open_close_controller'
 import StructuralController from './structural_controller'
 import AccessRightsController from './access_rights_controller'
 import ExpandableSnippets from './expandable_snippets'
+import TagValidation from './tag_validation_controller'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -28,6 +29,7 @@ application.register("facet-filter", FacetFilter)
 application.register('json-renderer', JSONRenderer)
 application.register("workflow-grid", WorkflowGrid)
 application.register("collection-editor", CollectionEditor)
+application.register("tag-validation", TagValidation)
 application.register("tokens", Tokens)
 application.register("b-h-collapsible", BlacklightHierarchyController)
 application.register("nested-form", NestedFormController)
