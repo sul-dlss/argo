@@ -23,6 +23,7 @@ module Argo
 
     config.after_initialize do |app|
       Argo.verifier = app.message_verifier('Argo')
+      Cocina::Models::Mapping::Purl.base_url = Settings.purl_url
     end
   end
 
