@@ -13,6 +13,8 @@ class CsvUploadNormalizer
 
   # Reads uploaded file (could be csv or Excel) and normalizes to CSV.
   # This includes handling BOM and druids without prefixes.
+  # @return [String] csv
+  # @raise [StandardError] if unsupported file type
   def read
     raise 'Unsupported upload file type' unless %w[.csv .ods .xls .xlsx].include? File.extname(path)
 

@@ -33,7 +33,7 @@ class DescriptiveMetadataImportJob < GenericJob
   private
 
   def validate_changed(cocina_object, description)
-    return Failure('Description unchanged') if cocina_object.description == description
+    return Failure(['Description unchanged']) if cocina_object.description == description
 
     Success(description)
   end

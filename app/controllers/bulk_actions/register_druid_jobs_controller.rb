@@ -5,8 +5,19 @@ module BulkActions
     include CreatesBulkActions
     self.action_type = 'RegisterDruidsJob'
 
+    REQUIRED_HEADERS = [
+      'Content Type',
+      'APO',
+      'Source ID',
+      'Initial Workflow'
+    ].freeze
+
     def job_params
       { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
+    end
+
+    def validate_job_params(job_params)
+      validate_csv_headers(job_params.fetch(:csv_file), REQUIRED_HEADERS)
     end
   end
 end

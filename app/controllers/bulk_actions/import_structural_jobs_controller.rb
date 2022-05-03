@@ -6,7 +6,11 @@ module BulkActions
     self.action_type = 'ImportStructuralJob'
 
     def job_params
-      { groups: current_user.groups, csv_file: File.read(params[:csv_file].path) }
+      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
+    end
+
+    def validate_job_params(job_params)
+      validate_csv_headers(job_params.fetch(:csv_file), ['druid'])
     end
   end
 end

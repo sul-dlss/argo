@@ -1,4 +1,6 @@
 <%= form_with url: governing_apo_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+  
   <span class='help-block'>
     Moves the object to a new governing APO.
   </span>

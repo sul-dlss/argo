@@ -1,4 +1,6 @@
 <%= form_with url: license_and_rights_statement_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+  
   <span class='help-block'>
     Edit license, copyright statement, and/or use &amp; reproduction statements
   </span>

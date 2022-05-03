@@ -1,4 +1,6 @@
 <%= form_with url: apply_apo_defaults_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+
   <span class='help-block'>
     Overwrite object metadata with the defaults from the APO.
   </span>

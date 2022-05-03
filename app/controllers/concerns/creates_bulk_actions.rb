@@ -2,6 +2,7 @@
 
 module CreatesBulkActions
   extend ActiveSupport::Concern
+  include Dry::Monads[:result]
 
   included do
     class_attribute :action_type
@@ -10,10 +11,17 @@ module CreatesBulkActions
   def new; end
 
   def create
+    bulk_action_job_params = job_params
+    result = validate_job_params(bulk_action_job_params)
+    if result.failure?
+      @errors = result.failure
+      return render :new, status: :unprocessable_entity
+    end
+
     bulk_action = BulkAction.new(user: current_user, action_type:, description: params[:description])
 
     if bulk_action.save
-      bulk_action.enqueue_job(job_params)
+      bulk_action.enqueue_job(bulk_action_job_params)
 
       # strip the CSRF token, and the parameters that happened to be in the bulk job creation form
       # this can be removed when this is resolved: https://github.com/projectblacklight/blacklight/issues/2683
@@ -41,5 +49,15 @@ module CreatesBulkActions
     return [] if params[:druids].blank?
 
     params[:druids].split.map { |druid| Druid.new(druid).with_namespace }
+  end
+
+  # Override to perform validation
+  def validate_job_params(_job_params)
+    Success()
+  end
+
+  def validate_csv_headers(csv, headers)
+    validator = CsvUploadValidator.new(csv:, headers:)
+    validator.valid? ? Success() : Failure(validator.errors)
   end
 end
