@@ -33,41 +33,24 @@ RSpec.describe 'Item registration page', js: true do
       select 'left-to-right', from: 'Viewing Direction'
 
       fill_in 'Project Name', with: 'special division : project #4'
-      fill_in 'tags_0', with: 'tag : test'
+      fill_in 'Tags', with: 'tag : test'
 
-      # click the button to add a row for a new item
-      click_button 'Add another row'
-      find_all("tr.ui-widget-content[role='row']") # try to wait for the item entry row to show up, since it's added dynamically after clicking the add btn
-
-      # fill out the barcode field
-      find("td[aria-describedby='data_barcode_id']").click # the editable field isn't present till the table cell is clicked
-      find("td[aria-describedby='data_barcode_id'] input[name='barcode_id']") # wait for the editable field to show up in the table cell
-      fill_in 'barcode_id', with: barcode
-
-      # fill out the source ID field
-      find("td[aria-describedby='data_source_id']").click # the editable field isn't present till the table cell is clicked
-      find("td[aria-describedby='data_source_id'] input[name='source_id']") # wait for the editable field to show up in the table cell
-      fill_in 'source_id', with: 'source:id1'
-
-      # fill out the label field
-      find("td[aria-describedby='data_label']").click # the editable field isn't present till the table cell is clicked
-      find("td[aria-describedby='data_label'] input[name='label']") # wait for the editable field to show up in the table cell
-      fill_in 'label', with: 'object title'
-
-      # Change focus off of the label
-      find("td[aria-describedby='data_label'] input[name='label']").native.send_keys :tab
+      fill_in 'Barcode', with: barcode
+      fill_in 'Source ID', with: 'source:id1'
+      fill_in 'Label', with: 'object title'
 
       registration_params = {}
-      expect_any_instance_of(Dor::ObjectsController).to receive(:create) do |arg|
+      expect_any_instance_of(RegistrationForm).to receive(:validate) do |form, attributes|
         # If parameter expectations are put in here, and an expectation fails, the controller
         # will respond with a 500 (because the failure produces an exception, and this block
         # is running in place of the mocked method).  But it won't result in a nice explanatory
         # test failure message (presumably because it's not executing and bubbling up within
         # the context of the test definition). So write to a var defined in the test and inspect
         # the var out there.
-        registration_params.merge!(arg.params.to_unsafe_h)
+        registration_params = attributes
+        form.errors.add(:save, 'Conflict')
 
-        arg.render json: { error: 'errror' }.to_json, status: 500 # test error presentation
+        false
       end
 
       click_button 'Register'
@@ -76,23 +59,45 @@ RSpec.describe 'Item registration page', js: true do
       # it also forces capybara to wait for the Dor::ObjectsController#create call to finish, meaning the
       # block we fed to expect_any_instance_of (to mock #create) can set registration_params, allowing us
       # to check the params below.
-      expect(page).to have_css('span.icon-exclamation-sign', visible: true, wait: 50)
+      expect(page).to have_css('.alert', text: 'Conflict')
       expect(registration_params).to include(
         'admin_policy' => ur_apo_id,
-        'barcode_id' => barcode,
         'collection' => '',
-        'label' => 'object title',
-        'project' => 'special division : project #4',
-        'access' => {
-          'view' => 'world',
-          'download' => 'world',
-          'controlledDigitalLending' => 'false'
-        },
-        'source_id' => 'source:id1',
+        'workflow_id' => 'goobiWF',
+        'view_access' => 'world',
+        'download_access' => 'world',
+        'controlled_digital_lending' => 'false',
         'content_type' => 'https://cocina.sul.stanford.edu/models/book',
         'viewing_direction' => 'left-to-right',
-        'tags' => ['', 'tag : test', '', '', '', '', '', '', '', '', '', ''],
-        'workflow_id' => 'goobiWF'
+        'project' => 'special division : project #4',
+        'tags_attributes' => {
+          '0' => {
+            'name' => 'tag : test'
+          },
+          '1' => {
+            'name' => ''
+          },
+          '2' => {
+            'name' => ''
+          },
+          '3' => {
+            'name' => ''
+          },
+          '4' => {
+            'name' => ''
+          },
+          '5' => {
+            'name' => ''
+          }
+        },
+        'items_attributes' => {
+          '0' => {
+            'source_id' => 'source:id1',
+            'catkey' => '',
+            'label' => 'object title',
+            'barcode' => barcode
+          }
+        }
       )
     end
   end
@@ -111,40 +116,22 @@ RSpec.describe 'Item registration page', js: true do
       select 'Stanford', from: 'Download access'
 
       fill_in 'Project Name', with: 'X-Files'
-      fill_in 'tags_0', with: 'i : believe'
+      fill_in 'Tags', with: 'i : believe'
 
-      # click the button to add a row for a new item
-      click_button 'Add another row'
-      find_all("tr.ui-widget-content[role='row']") # try to wait for the item entry row to show up, since it's added dynamically after clicking the add btn
-
-      # fill out the barcode field
-      find("td[aria-describedby='data_barcode_id']").click # the editable field isn't present till the table cell is clicked
-      find("td[aria-describedby='data_barcode_id'] input[name='barcode_id']") # wait for the editable field to show up in the table cell
-      fill_in 'barcode_id', with: barcode
-
-      # fill out the source ID field
-      find("td[aria-describedby='data_source_id']").click # the editable field isn't present till the table cell is clicked
-      find("td[aria-describedby='data_source_id'] input[name='source_id']") # wait for the editable field to show up in the table cell
-      fill_in 'source_id', with: source_id
-
-      # fill out the label field
-      find("td[aria-describedby='data_label']").click # the editable field isn't present till the table cell is clicked
-      find("td[aria-describedby='data_label'] input[name='label']") # wait for the editable field to show up in the table cell
-      fill_in 'label', with: 'object title'
-
-      # Change focus off of the label
-      find("td[aria-describedby='data_label'] input[name='label']").native.send_keys :tab
+      fill_in 'Barcode', with: barcode
+      fill_in 'Source ID', with: source_id
+      fill_in 'Label', with: 'object title'
 
       click_button 'Register'
 
-      expect(page).to have_css('span.icon-ok-sign', visible: true, wait: 50) # registration succeeded checkmark
+      expect(page).to have_content 'Items successfully registered.'
 
-      find('td[aria-describedby=data_status][title=success]')
-      object_druid = find('td[aria-describedby=data_druid]').text
+      druid_link = find('td > a')
 
       # Since we don't have rabbitMQ in the test suite, we have to fake it by indexing manually.
-      Argo::Indexer.reindex_druid_remotely(object_druid)
-      visit solr_document_path(object_druid)
+      Argo::Indexer.reindex_druid_remotely(druid_link.text)
+
+      druid_link.click
 
       # now verify that registration succeeded by checking some metadata
       within_table('Overview') do

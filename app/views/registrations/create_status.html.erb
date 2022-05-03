@@ -1,0 +1,21 @@
+<h1>DOR item(s) submitted</h1>
+
+<p>Items successfully registered.</p>
+<div class="row">
+  <div class="col-sm-4">
+    <table class="table">
+      <% @registration_form.created.each do |dro| %>
+        <tr>
+          <td><%= dro.identification.sourceId %></td>
+          <td><%= link_to dro.externalIdentifier, solr_document_path(dro.externalIdentifier) %></td>
+          <td><%= dro.label %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<% druids = @registration_form.created.map(&:externalIdentifier).map { |druid| "druid[]=#{druid}"}.join('&') %>
+<%= link_to "/registration/tracksheet?name=#{@registration_form.project}&sequence=1&#{druids}", class: "btn btn-outline-primary my-5" do %>
+  Tracking sheets
+<% end %>

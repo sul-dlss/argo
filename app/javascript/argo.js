@@ -1,7 +1,6 @@
 import TagsAutocomplete from './modules/tags_autocomplete'
 import ProjectAutocomplete from './modules/project_autocomplete'
 
-import {gridContext} from './registration/grid'
 import {initializeReport} from './modules/report'
 
 require('@github/time-elements')
@@ -11,7 +10,6 @@ export default class Argo {
         this.tagsAutocomplete()
         this.projectAutocomplete()
         this.report()
-        this.registration()
         this.blacklight()
     }
 
@@ -24,11 +22,6 @@ export default class Argo {
     report() {
       if (document.querySelector('[data-controller="report"]'))
         initializeReport()
-    }
-
-    registration() {
-      if (document.querySelector('[data-controller="grid"]'))
-        gridContext().initialize()
     }
 
     tagsAutocomplete() {
