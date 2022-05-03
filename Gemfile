@@ -117,6 +117,7 @@ group :test do
   gem 'simplecov'
   gem 'webdrivers' # installs the chrome for selenium tests
   gem 'webmock', require: false
+  gem 'write_xlsx' # this is required to write an xlsx file prior to opening it with roo in tests
 end
 
 group :deployment do
