@@ -37,13 +37,11 @@ RSpec.describe 'Item source id change' do
                       find: cocina_model,
                       events: events_client,
                       version: version_client,
-                      metadata: metadata_client,
                       update: true)
     end
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes:) }
-    let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
