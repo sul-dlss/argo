@@ -100,7 +100,7 @@ class StructureUpdater
     end
 
     contains = files_by_fileset.keys.map do |sequence|
-      fileset = fileset_for(sequence, files_by_fileset[sequence].first.label)
+      fileset = fileset_for(sequence.to_i, files_by_fileset[sequence].first.label)
       attributes = fileset_attributes[sequence]
                    .merge(structural: { contains: files_by_fileset[sequence] })
       fileset.new(**attributes)
@@ -111,9 +111,9 @@ class StructureUpdater
   FILESET_NAMESPACE = 'https://cocina.sul.stanford.edu/fileset/'
 
   # @param [Integer] sequence is the index of the fileset in the import
-  # @param [string] label the label to inject for a new fileset
+  # @param [String] label the label to inject for a new fileset
   def fileset_for(sequence, label)
-    model.structural.contains[sequence.to_i - 1].presence ||
+    model.structural.contains[sequence - 1].presence ||
       Cocina::Models::FileSet.new(externalIdentifier: "#{FILESET_NAMESPACE}#{SecureRandom.uuid}",
                                   type: Cocina::Models::FileSetType.file,
                                   label:,
