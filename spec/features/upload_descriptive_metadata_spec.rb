@@ -17,7 +17,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', js: true do
     "title1.value,purl\nmy title,https://purl.stanford.edu/#{Druid.new(item.externalIdentifier).without_namespace}\n"
   end
   let(:file) do
-    Tempfile.new('upload.csv').tap do |file|
+    Tempfile.new(%w[upload .csv]).tap do |file|
       file.write csv
       file.close
     end
