@@ -15,16 +15,6 @@ export function gridContext() {
     }
   };
 
-  // Validates free-text tags fields and sets the .invalid class on elements
-  // that aren't well formed tags
-  let freeTagValidator = function(sender) {
-    let value = sender.value.trim().split(/\s*:\s*/)
-    sender.value = value.join(' : ')
-    let invalid = (value.length == 1 && value[0] != '') ||
-      (value.length > 1 && value.includes(''))
-    sender.classList.toggle('invalid', invalid)
-  }
-
   var $t = {
     statusIcons: {},
 
@@ -157,16 +147,6 @@ export function gridContext() {
       return(this);
     },
 
-    initializeCallbacks: function() {
-      document.querySelectorAll('input.free.tag-field').forEach(elem => {
-        elem.addEventListener('blur', (event) => {
-          freeTagValidator(event.target)
-        })
-      })
-
-      return(this);
-    },
-
     // Prevent the tab key from moving to the next input when pasting into the
     // "Text" section of the registration.
     allowTabsInTextarea: function() {
@@ -188,7 +168,7 @@ export function gridContext() {
     },
     initialize: function() {
       this.initializeContext().allowTabsInTextarea().
-        initializeGrid().initializeCallbacks();
+        initializeGrid()
       $('#properties input,#properties select').change();
     }
   };

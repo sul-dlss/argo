@@ -50,7 +50,7 @@ export default function DorRegistration(initOpts) {
         if (elem.disabled || value == null || value.trim() == '')
           return null
 
-        const prefix = elem.dataset.tagname
+        const prefix = elem.dataset.tagname // For "Registered By"
         return prefix ? `${prefix} : ${value}` : value
       }).filter(n => n)
 
