@@ -119,6 +119,8 @@ class GenericJob < ApplicationJob
   def with_csv_items(csv, name:, druid_column: 'druid')
     update_druid_count(count: csv.size)
     with_bulk_action_log do |log|
+      return unless check_druid_column(csv:, druid_column:, log:, bulk_action:)
+
       csv.each.with_index(2) do |csv_row, row_num|
         druid = csv_row.fetch(druid_column)
 
@@ -133,8 +135,6 @@ class GenericJob < ApplicationJob
 
         cocina_object = Repository.find(druid)
         yield(cocina_object, csv_row, success, failure, row_num)
-      rescue KeyError
-        raise "Column \"#{druid_column}\" not found"
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
         Honeybadger.notify(e, context: { druid: })
@@ -153,6 +153,14 @@ class GenericJob < ApplicationJob
 
   def update_druid_count(count: druids.length)
     bulk_action.update(druid_count_total: count)
+  end
+
+  def check_druid_column(csv:, druid_column:, log:, bulk_action:)
+    return true if csv.headers.include?(druid_column)
+
+    log.puts("Column \"#{druid_column}\" not found")
+    bulk_action.update_attribute(:druid_count_fail, csv.size)
+    false
   end
 
   # Opens a new minor version of the provided cocina object.
