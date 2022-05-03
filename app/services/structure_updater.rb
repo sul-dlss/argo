@@ -110,7 +110,7 @@ class StructureUpdater
 
   FILESET_NAMESPACE = 'https://cocina.sul.stanford.edu/fileset/'
 
-  # @param [int] sequence is the index of the fileset in the import
+  # @param [Integer] sequence is the index of the fileset in the import
   # @param [string] label the label to inject for a new fileset
   def fileset_for(sequence, label)
     model.structural.contains[sequence.to_i - 1].presence ||
