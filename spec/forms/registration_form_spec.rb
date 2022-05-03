@@ -5,6 +5,26 @@ require 'rails_helper'
 RSpec.describe RegistrationForm do
   let(:instance) { described_class.new(ActionController::Parameters.new(params)) }
 
+  describe '#tags' do
+    subject { instance.tags }
+
+    before do
+      instance.current_user = instance_double(User, login: 'bob')
+    end
+
+    context 'with no tag params passed in' do
+      let(:params) { {} }
+
+      it { is_expected.to eq ['Registered By : bob'] }
+    end
+
+    context 'with tag params passed in' do
+      let(:params) { { tags: ['one : dog', ' ', 'two : cats', ''] } }
+
+      it { is_expected.to eq ['one : dog', 'two : cats', 'Registered By : bob'] }
+    end
+  end
+
   describe '#cocina_model' do
     subject(:cocina_model) { instance.cocina_model }
 

@@ -4,9 +4,9 @@ class Dor::ObjectsController < ApplicationController
   before_action :munge_parameters
 
   def create
-    form = RegistrationForm.new(params)
+    form = RegistrationForm.new(params).tap { |f| f.current_user = current_user }
     request_model = form.cocina_model # might raise Cocina::Models::ValidationError
-    result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: params[:tag])
+    result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.tags)
     result.either(
       ->(model) { render json: { druid: model.externalIdentifier }, status: :created, location: solr_document_url(model.externalIdentifier) },
       ->(error) { render_failure(error) }
