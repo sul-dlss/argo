@@ -41,18 +41,13 @@ export default function DorRegistration(initOpts) {
       return document.getElementById('rights').value
     },
 
+    // Grab list of tags from the form and rejects blanks
+    tags: function() {
+        return Array.from(document.querySelectorAll('[data-controller="tag-validation"]')).map((elem) => elem.value)
+    },
+
     register : function(rowid, progressFunction) {
       progressFunction = progressFunction || function() {}
-
-      // Grab list of tags from the form and rejects blanks
-      var tags = Array.from(document.querySelectorAll('#properties .tag-field')).map((elem) => {
-        var value = elem.value
-        if (elem.disabled || value == null || value.trim() == '')
-          return null
-
-        const prefix = elem.dataset.tagname // For "Registered By"
-        return prefix ? `${prefix} : ${value}` : value
-      }).filter(n => n)
 
       var data = $t.getData(rowid);
       data.id = rowid
@@ -64,7 +59,7 @@ export default function DorRegistration(initOpts) {
         'content_type': this.contentType(),
         'viewing_direction': this.viewingDirection(),
         'label' : data.label || ':auto',
-        'tag' : tags,
+        'tag' : this.tags(),
         'rights' : this.rights(),
         'collection' : this.collection()
       }

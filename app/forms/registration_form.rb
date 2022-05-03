@@ -2,8 +2,18 @@
 
 # This models the values set from the registration form
 class RegistrationForm
+  attr_accessor :current_user
+
   def initialize(params)
     @params = params
+  end
+
+  def tags
+    Array(params[:tags]).compact_blank + [registered_by_tag]
+  end
+
+  def registered_by_tag
+    "Registered By : #{current_user.login}"
   end
 
   # @raise [Cocina::Models::ValidationError]
