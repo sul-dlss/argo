@@ -12,13 +12,11 @@ RSpec.describe 'Item manage release' do
 
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: item,
                     events: events_client,
-                    metadata: metadata_client,
                     version: version_client)
   end
   let(:item) do

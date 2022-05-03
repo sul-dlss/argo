@@ -20,8 +20,6 @@ RSpec.describe 'Item view', js: true do
       }
     )
   end
-  let(:datastream) { Dor::Services::Client::Metadata::Datastream.new(dsid: 'descMetadata', pid: item_id) }
-  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: [datastream]) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
@@ -70,8 +68,7 @@ RSpec.describe 'Item view', js: true do
         let(:object_client) do
           instance_double(Dor::Services::Client::Object,
                           version: version_client,
-                          events: events_client,
-                          metadata: metadata_client)
+                          events: events_client)
         end
 
         before do
@@ -89,8 +86,7 @@ RSpec.describe 'Item view', js: true do
           instance_double(Dor::Services::Client::Object,
                           find: cocina_model,
                           version: version_client,
-                          events: events_client,
-                          metadata: metadata_client)
+                          events: events_client)
         end
         let(:cocina_model) do
           model = Cocina::Models::DRO.new(props)
@@ -236,12 +232,6 @@ RSpec.describe 'Item view', js: true do
               identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
               tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo']
             }
-          end
-
-          before do
-            allow(metadata_client).to receive(:datastream)
-              .with('descMetadata')
-              .and_return('<titleInfo><title>Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</title></titleInfo>')
           end
 
           it 'shows the file info' do

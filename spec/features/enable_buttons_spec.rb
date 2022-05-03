@@ -18,14 +18,12 @@ RSpec.describe 'Enable buttons' do
   let(:item_id) { 'druid:hj185xx2222' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
   let(:cocina_model) { build(:dro_with_metadata, id: item_id) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
                     events: events_client,
-                    metadata: metadata_client,
                     version: version_client)
   end
 
