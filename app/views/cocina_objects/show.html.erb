@@ -1,0 +1,24 @@
+<turbo-frame id="cocina_object">
+  <div data-controller="json-renderer">
+    <a class="btn btn-secondary " data-action="json-renderer#expand">
+      <span class="bi-arrows-expand"/>
+      <span>Expand</span>
+    </a>
+    <a class="btn btn-secondary " data-action="json-renderer#collapse">
+      <span class="bi-arrows-collapse"/>
+      <span>Collapse</span>
+    </a>
+
+    <script type="application/json" data-json-renderer-target="cocina">
+    <%=
+      CocinaHashPresenter
+        .new(cocina_object: @cocina_object, without_metadata: true)
+        .render
+        .to_json
+        .html_safe
+    %>
+    </script>
+
+    <div class="detail" data-json-renderer-target="section"></div>
+  </div>
+</turbo-frame>
