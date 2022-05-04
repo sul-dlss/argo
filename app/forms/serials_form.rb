@@ -18,20 +18,40 @@ class SerialsForm < ApplicationChangeSet
     title_to_change = titles.find { |title| title.status == PRIMARY }
     title_to_change ||= titles.first
 
-    setup_from_structured_value(title_to_change.structuredValue) if title_to_change.structuredValue.present?
+    structured_value = structured_value_for_setup(title_to_change)
+    setup_from_structured_value(structured_value) if structured_value
     self.sort_field = model.description.note.find { |note| note.type == NOTE_TYPE }&.value
   end
 
+  def structured_value_for_setup(title)
+    return title.structuredValue if title.structuredValue.present?
+    return title.parallelValue.first.structuredValue if title.parallelValue.first&.structuredValue
+
+    nil
+  end
+
   def setup_from_structured_value(structured_value)
-    part_name_index = structured_value.index { |element| element.type == PART_NAME }
-    part_number_index = structured_value.index { |element| element.type == PART_NUMBER }
-    part_number_value = structured_value.find { |element| element.type == PART_NUMBER }&.value
-    if part_number_value && part_number_index < part_name_index
-      self.part_number = part_number_value
-    else
-      self.part_number2 = part_number_value
-    end
+    setup_part_name(structured_value)
+    setup_part_number(structured_value)
+  end
+
+  def setup_part_name(structured_value)
     self.part_name = structured_value.find { |element| element.type == PART_NAME }&.value
+  end
+
+  def setup_part_number(structured_value)
+    part_number_value = structured_value.find { |element| element.type == PART_NUMBER }&.value
+
+    return if part_number_value.nil?
+
+    part_number_index = structured_value.index { |element| element.type == PART_NUMBER }
+    part_name_index = structured_value.index { |element| element.type == PART_NAME }
+
+    if part_name_index && part_number_index > part_name_index
+      self.part_number2 = part_number_value
+    else
+      self.part_number = part_number_value
+    end
   end
 
   def save_model
@@ -45,7 +65,11 @@ class SerialsForm < ApplicationChangeSet
     model.description.title.map(&:to_h).tap do |titles|
       title_to_change = titles.find { |title| title[:status] == PRIMARY }
       title_to_change ||= titles.first
-      title_to_change[:structuredValue] = update_or_create_structured_value(title_to_change)
+      if title_to_change[:parallelValue].present?
+        title_to_change[:parallelValue].first[:structuredValue] = update_or_create_structured_value(title_to_change[:parallelValue].first)
+      else
+        title_to_change[:structuredValue] = update_or_create_structured_value(title_to_change)
+      end
     end
   end
 
