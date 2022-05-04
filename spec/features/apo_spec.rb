@@ -57,7 +57,6 @@ RSpec.describe 'Create an apo', js: true do
     expect(page).to have_text 'created'
 
     # Shows a link to the agreement. The agreement name is loaded by turbo-links and is flaky, wait for it and scroll into view
-    sleep 3
     page.execute_script 'window.scrollTo(0,250);'
     expect(page).to have_link 'Test Agreement', href: solr_document_path(agreement.externalIdentifier)
 
