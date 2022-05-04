@@ -56,8 +56,9 @@ RSpec.describe 'Create an apo', js: true do
     click_button 'Register APO'
     expect(page).to have_text 'created'
 
-    # Shows a link to the agreement. The agreement name is loaded by turbo-links and is flaky, test href target instead
-    expect(page).to have_link href: solr_document_path(agreement.externalIdentifier)
+    # Shows a link to the agreement. The agreement name is loaded by turbo-links and is flaky, wait for it and scroll into view
+    page.execute_script 'window.scrollTo(0,250);'
+    expect(page).to have_link 'Test Agreement', href: solr_document_path(agreement.externalIdentifier)
 
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
