@@ -7,9 +7,10 @@ module Contents
       @resource_counter = resource_counter + counter_offset
       @object_id = object_id
       @viewable = viewable
+      @state_service = StateService.new(Repository.find(object_id))
     end
 
-    attr_reader :resource, :resource_counter, :object_id
+    attr_reader :resource, :resource_counter, :object_id, :state_service
 
     def viewable?
       @viewable
@@ -24,7 +25,7 @@ module Contents
     end
 
     delegate :label, to: :resource
-    delegate :allows_modification?, to: :@state_service
+    delegate :allows_modification?, to: :state_service
 
     def files
       resource.structural.contains

@@ -2,6 +2,6 @@
   <%= helpers.paginate paginatable_array, theme: :blacklight %>
 </div>
 <ul class="resource-list">
-  <%= render Contents::ResourceComponent.with_collection(paginatable_array, counter_offset: paginatable_array.offset_value, object_id: object_id, viewable: viewable?, state_service: state_service) %>
+  <%= render Contents::ResourceComponent.with_collection(paginatable_array, counter_offset: paginatable_array.offset_value, object_id: object_id, viewable: viewable?) %>
   <%= render Contents::ExternalFileComponent.with_collection(structural.hasMemberOrders.first&.members) %>
 </ul>
