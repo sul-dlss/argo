@@ -36,7 +36,7 @@ class BulkActionsFormComponent < ApplicationComponent
       ]],
       ['Modify objects (via CSV)', [
         ['Create virtual object(s)', new_virtual_object_job_path],
-        ['Edit catkeys and Barcodes from CSV', new_catkey_and_barcode_csv_job_path],
+        ['Edit catkeys and barcodes from CSV', new_catkey_and_barcode_csv_job_path],
         ['Change source id', new_source_id_csv_job_path],
         ['Export tags to CSV', new_export_tag_job_path(search_of_druids)],
         ['Import tags from CSV', new_import_tag_job_path],
