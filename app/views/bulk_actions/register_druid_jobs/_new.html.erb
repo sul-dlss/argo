@@ -1,4 +1,6 @@
 <%= form_with url: register_druid_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+  
   <span class='help-block'>
     Register druids
   </span>

@@ -8,5 +8,9 @@ module BulkActions
     def job_params
       { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
     end
+
+    def validate_job_params(job_params)
+      validate_csv_headers(job_params.fetch(:csv_file), %w[druid source_id])
+    end
   end
 end

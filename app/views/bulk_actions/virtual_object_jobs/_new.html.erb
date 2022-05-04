@@ -1,4 +1,6 @@
 <%= form_with url: virtual_object_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+  
   <span class='help-block'>
     Create one or more virtual objects.
   </span>

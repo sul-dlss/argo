@@ -1,11 +1,9 @@
 <%= form_with url: validate_cocina_descriptive_job_path , class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+
   <span class='help-block'>
     Upload descriptive metadata for objects.
   </span>
-
-  <% if @errors.present? %>
-    <div class="alert alert-danger"><%= @errors.to_sentence %></div>
-  <% end %>
 
   <div class='mb-3' id="import-csv">
     <%= f.label :csv_file, 'Upload a CSV or Excel file' %>

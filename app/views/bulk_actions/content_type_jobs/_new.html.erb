@@ -1,4 +1,6 @@
 <%= form_with url: content_type_job_path, class: 'new_bulk_action', data: { controller: 'content-type', turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+  
   <span class='help-block'>
     Set content type
   </span>

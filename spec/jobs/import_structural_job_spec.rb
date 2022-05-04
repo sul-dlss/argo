@@ -21,7 +21,7 @@ RSpec.describe ImportStructuralJob, type: :job do
 
   describe '#perform' do
     let(:file_path) { File.join(file_fixture_path, 'bulk_upload_structural.csv') }
-    let(:csv_file) { File.read(file_path) }
+    let(:csv_file) { CsvUploadNormalizer.read(file_path) }
 
     let(:druid1) { 'druid:zp968gy7494' }
     let(:druid2) { 'druid:bc234fg7890' }

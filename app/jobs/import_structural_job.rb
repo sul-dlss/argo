@@ -6,7 +6,7 @@ class ImportStructuralJob < GenericJob
 
     csv = CSV.parse(params[:csv_file], headers: true)
     # Group the rows by druid
-    grouped = csv.group_by { |row| "druid:#{row['druid']}" }
+    grouped = csv.group_by { |row| row['druid'] }
     with_items(grouped.keys, name: 'Import structural') do |cocina_item, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_item)
 

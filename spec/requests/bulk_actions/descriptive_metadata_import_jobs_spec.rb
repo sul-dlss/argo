@@ -37,5 +37,15 @@ RSpec.describe 'Bulk descriptive metadata import', type: :request do
               })
       expect(response).to have_http_status(:see_other)
     end
+
+    context 'when invalid csv' do
+      it 'does not create the job' do
+        params = { 'csv_file' => fixture_file_upload('invalid_bulk_upload_descriptive.csv', 'text/csv') }
+
+        expect { post '/bulk_actions/descriptive_metadata_import_job', params: }.not_to have_enqueued_job(DescriptiveMetadataImportJob)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to match('Column header invalid: xsource_id')
+      end
+    end
   end
 end
