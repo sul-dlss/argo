@@ -81,7 +81,7 @@ RSpec.describe 'Item registration page', js: true do
       'source_id' => 'source:id1',
       'content_type' => 'https://cocina.sul.stanford.edu/models/book',
       'viewing_direction' => 'left-to-right',
-      'tag' => ['', 'tag : test', '', '', '', '', '', '', '', '', '', ''],
+      'tags' => ['', 'tag : test', '', '', '', '', '', '', '', '', '', ''],
       'workflow_id' => 'goobiWF'
     )
   end

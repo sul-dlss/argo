@@ -41,7 +41,7 @@ export default function DorRegistration(initOpts) {
       return document.getElementById('rights').value
     },
 
-    // Grab list of tags from the form and rejects blanks
+    // Grab list of tags from the form
     tags: function() {
         return Array.from(document.querySelectorAll('[data-controller="tag-validation"]')).map((elem) => elem.value)
     },
@@ -59,7 +59,7 @@ export default function DorRegistration(initOpts) {
         'content_type': this.contentType(),
         'viewing_direction': this.viewingDirection(),
         'label' : data.label || ':auto',
-        'tag' : this.tags(),
+        'tags' : this.tags(),
         'rights' : this.rights(),
         'collection' : this.collection()
       }
