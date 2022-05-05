@@ -34,7 +34,8 @@ class BulkAction < ApplicationRecord
                      ManageEmbargoesJob
                      SetCollectionJob
                      SetRightsJob
-                     ValidateCocinaDescriptiveJob]
+                     ValidateCocinaDescriptiveJob
+                     TrackingSheetReportJob]
             }
 
   after_create :create_output_directory, :create_log_file

@@ -50,7 +50,8 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Download descriptive metadata spreadsheet', new_descriptive_metadata_export_job_path(search_of_druids)],
         ['Upload descriptive metadata spreadsheet', new_descriptive_metadata_import_job_path(search_of_druids)],
         ['Download descriptive metadata (as MODS)', new_download_mods_job_path(search_of_druids)],
-        ['Validate Cocina descriptive metadata spreadsheet', new_validate_cocina_descriptive_job_path]
+        ['Validate Cocina descriptive metadata spreadsheet', new_validate_cocina_descriptive_job_path],
+        ['Download tracking sheet', new_tracking_sheet_report_job_path(search_of_druids)]
       ]]
     ]
   end
