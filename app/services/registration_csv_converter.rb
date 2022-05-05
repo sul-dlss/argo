@@ -43,7 +43,7 @@ class RegistrationCsvConverter
     catalog_links = row['catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['catkey'], refresh: true }] : []
 
     model_params = {
-      type: dro_type(row.fetch('content_type')),
+      type: dro_type(row.fetch('content_type').downcase),
       version: 1,
       label: row['catkey'] ? row['label'] : row.fetch('label'),
       administrative: {
@@ -73,19 +73,19 @@ class RegistrationCsvConverter
 
   def dro_type(content_type)
     case content_type
-    when 'Image'
+    when 'image'
       Cocina::Models::ObjectType.image
-    when '3D'
+    when '3d'
       Cocina::Models::ObjectType.three_dimensional
-    when 'Map'
+    when 'map'
       Cocina::Models::ObjectType.map
-    when 'Media'
+    when 'media'
       Cocina::Models::ObjectType.media
-    when 'Document'
+    when 'document'
       Cocina::Models::ObjectType.document
-    when /^Manuscript/
+    when /^manuscript/
       Cocina::Models::ObjectType.manuscript
-    when 'Book (ltr)', 'Book (rtl)'
+    when 'book', 'book (ltr)', 'book (rtl)'
       Cocina::Models::ObjectType.book
     else
       Cocina::Models::ObjectType.object

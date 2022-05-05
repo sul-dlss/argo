@@ -5,11 +5,11 @@ module BulkActions
     include CreatesBulkActions
     self.action_type = 'RegisterDruidsJob'
 
-    REQUIRED_HEADERS = [
-      'Content Type',
-      'APO',
-      'Source ID',
-      'Initial Workflow'
+    REQUIRED_HEADERS = %w[
+      content_type
+      administrative_policy_object
+      source_id
+      initial_workflow
     ].freeze
 
     def job_params
