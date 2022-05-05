@@ -16,6 +16,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', js: true do
   before do
     sign_in user, groups: ['sdr:administrator-role']
     visit solr_document_path(item.externalIdentifier)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   after do
@@ -41,6 +42,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', js: true do
       click_button 'Upload'
 
       expect(page).to have_content 'Descriptive metadata has been updated.'
+      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end
   end
 
@@ -72,6 +74,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', js: true do
       click_button 'Upload'
 
       expect(page).to have_content 'Descriptive metadata has been updated.'
+      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end
   end
 end
