@@ -17,11 +17,10 @@ class DescriptionImport
     # The source_id and druid are only there for the user to reference and should be ignored for data processing
     # druid is only on the bulk sheet
     headers = @csv_row.headers.excluding('source_id', 'druid')
+    headers.sort_by! { |address| sortable_address(address) }
 
     headers.each do |address|
-      split_address = address.scan(/[[:alpha:]]+|[[:digit:]]+/)
-                             .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
-      visit(params, split_address, @csv_row[address]) if @csv_row[address]
+      visit(params, split_address(address), @csv_row[address]) if @csv_row[address]
     end
 
     Success(Cocina::Models::Description.new(compact_params(params)))
@@ -30,6 +29,19 @@ class DescriptionImport
   end
 
   private
+
+  def split_address(address)
+    address.scan(/[[:alpha:]]+|[[:digit:]]+/)
+           .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
+  end
+
+  def sortable_address(address)
+    split_address(address).map do |part|
+      next part unless part.is_a?(Integer)
+
+      part.to_s.rjust(3, '0')
+    end.join('.')
+  end
 
   def nest_hashes(value, *keys)
     return value if keys.empty?
