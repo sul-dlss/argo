@@ -7,6 +7,18 @@
 
   }
 
+  .search-links {
+    border-bottom: $pagination-border-width solid $pagination-border-color;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+
+    .pagination-search-widgets {
+      border-bottom-width: 0px;
+      margin-bottom: 0em;
+      padding-bottom: 0em;
+    }  
+  }
+
   .object-type {
     width: 15rem;
     height: 2.4rem;
