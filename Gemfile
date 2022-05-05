@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+ruby '3.1.2'
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -124,7 +126,7 @@ group :deployment do
   gem 'capistrano-maintenance', '~> 1.2', require: false
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'dlss-capistrano', require: false
+  gem 'dlss-capistrano', require: false, github: 'sul-dlss/dlss-capistrano', branch: 'ruby-version-reporting'
 end
 
 group :production do

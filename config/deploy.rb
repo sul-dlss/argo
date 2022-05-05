@@ -42,5 +42,8 @@ set :sidekiq_systemd_use_hooks, true
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
 
+# Prevent deployment if application ruby not installed
+set :validate_ruby_on_deploy, true
+
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'
