@@ -19,48 +19,53 @@ class RegistrationCsvConverter
 
   # @return [Result] an array of dry-monad results
   # Columns:
-  #   0: APO (required)
-  #   1: Collection
-  #   2: Rights (required)
-  #   3: Initial Workflow (required)
-  #   4: Content Type (required)
-  #   5: Project Name
-  #   6: Tags (not required, may repeat)
-  #   7: Catkey
-  #   8: Source ID (required)
-  #   9: Label (required if no Catkey)
+  #   0: administrative_policy_object (required)
+  #   1: collection (optional)
+  #   2: initial_workflow (required)
+  #   3: content_type (required)
+  #   4: reading_order (required if "content_type" is "book" or "image")
+  #   5: source_id (required)
+  #   6: catkey (optional)
+  #   7: barcode (optional)
+  #   8: label (required unless a catkey has been entered)
+  #   9: rights_view (required)
+  #  10: rights_download (required)
+  #  11: rights_location (required if "view" or "download" uses "location-based")
+  #  12: rights_controlledDigitalLending (optional: "true" is valid only when "view" is "stanford" and "download" is "none")
+  #  13: project_name (optional)
+  #  14: tags (optional, may repeat)
+
   def convert
     CSV.parse(csv_string, headers: true).map { |row| convert_row(row) }
   end
 
   def convert_row(row)
-    catalog_links = row['Catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['Catkey'], refresh: true }] : []
+    catalog_links = row['catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['catkey'], refresh: true }] : []
 
     model_params = {
-      type: dro_type(row.fetch('Content Type')),
+      type: dro_type(row.fetch('content_type').downcase),
       version: 1,
-      label: row['Catkey'] ? row['Label'] : row.fetch('Label'),
+      label: row['catkey'] ? row['label'] : row.fetch('label'),
       administrative: {
-        hasAdminPolicy: row.fetch('APO')
+        hasAdminPolicy: row.fetch('administrative_policy_object')
       },
       identification: {
-        sourceId: row.fetch('Source ID'),
+        sourceId: row.fetch('source_id'),
+        barcode: row['barcode'],
         catalogLinks: catalog_links
       }
     }
 
-    structural = {}
-    structural[:isMemberOf] = [row['Collection']] if row['Collection']
-    model_params[:structural] = structural
-    model_params[:access] = CocinaDroAccess.from_form_value(row['Rights']).value_or(nil)
-    model_params[:administrative][:partOfProject] = row['Project Name'] if row['Project Name'].present?
+    model_params[:structural] = structural(row)
+    model_params[:access] = access(row)
+    model_params[:administrative][:partOfProject] = row['project_name'] if row['project_name'].present?
 
     tags = []
-    tag_count = row.headers.count('Tags')
-    tag_count.times { |n| tags << row.field('Tags', n + row.index('Tags')) }
+    tag_count = row.headers.count('tags')
+    tag_count.times { |n| tags << row.field('tags', n + row.index('tags')) }
     model = Cocina::Models::RequestDRO.new(model_params)
     Success(model:,
-            workflow: row.fetch('Initial Workflow'),
+            workflow: row.fetch('initial_workflow'),
             tags: tags.compact)
   rescue Cocina::Models::ValidationError => e
     Failure(e)
@@ -68,22 +73,38 @@ class RegistrationCsvConverter
 
   def dro_type(content_type)
     case content_type
-    when 'Image'
+    when 'image'
       Cocina::Models::ObjectType.image
-    when '3D'
+    when '3d'
       Cocina::Models::ObjectType.three_dimensional
-    when 'Map'
+    when 'map'
       Cocina::Models::ObjectType.map
-    when 'Media'
+    when 'media'
       Cocina::Models::ObjectType.media
-    when 'Document'
+    when 'document'
       Cocina::Models::ObjectType.document
-    when /^Manuscript/
+    when /^manuscript/
       Cocina::Models::ObjectType.manuscript
-    when 'Book (ltr)', 'Book (rtl)'
+    when 'book', 'book (ltr)', 'book (rtl)'
       Cocina::Models::ObjectType.book
     else
       Cocina::Models::ObjectType.object
+    end
+  end
+
+  def structural(row)
+    {}.tap do |structural|
+      structural[:isMemberOf] = [row['collection']] if row['collection']
+      structural[:hasMemberOrders] = [{ viewingDirection: row['reading_order'] }] if row['reading_order'].present?
+    end
+  end
+
+  def access(row)
+    {}.tap do |access|
+      access[:view] = row.fetch('rights_view')
+      access[:download] = row.fetch('rights_download')
+      access[:location] = row.fetch('rights_location') if [access[:view], access[:download]].include?('location-based')
+      access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(row['rights_controlledDigitalLending']) if row['rights_controlledDigitalLending'].present?
     end
   end
 end
