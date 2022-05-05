@@ -179,6 +179,21 @@ RSpec.describe DescriptionImport do
     end
   end
 
+  context 'with a valid csv with columns out of order' do
+    let(:csv) do
+      # Reverse the columns
+      table = CSV.read(file_fixture('descriptive-upload.csv'), headers: true)
+      new_headers = table.headers.reverse
+      CSV::Table.new([], headers: new_headers).tap do |new_table|
+        new_table << new_headers.map { |header| table.first[header] }
+      end
+    end
+
+    it 'deserializes the item' do
+      expect(updated.value!).to eq expected
+    end
+  end
+
   context 'with an invalid csv' do
     let(:csv) do
       CSV.read(file_fixture('bulk_upload_structural.csv'), headers: true)
