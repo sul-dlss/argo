@@ -269,6 +269,53 @@ RSpec.describe StructureUpdater do
     end
   end
 
+  context 'with valid csv that adds filesets' do
+    let(:csv) do
+      <<~CSV
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
+        Picture 2,object,2,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        Picture 3,page,3,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
+        Picture 4,page,4,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
+      CSV
+    end
+
+    it 'adds the filesets' do
+      new_filesets = result.value!.contains
+      expect(new_filesets.map(&:label)).to eq [
+        'Picture 1',
+        'Picture 2',
+        'Picture 3',
+        'Picture 4'
+      ]
+    end
+
+    it 'produces valid cocina' do
+      cocina.new(structural: result.value!)
+    end
+  end
+
+  context 'with valid csv that combines filesets' do
+    let(:csv) do
+      <<~CSV
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        Picture 1,page,1,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
+        Picture 1,page,1,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
+      CSV
+    end
+
+    it 'combines the filesets' do
+      new_filesets = result.value!.contains
+      expect(new_filesets.map(&:label)).to eq ['Picture 1']
+    end
+
+    it 'produces valid cocina' do
+      cocina.new(structural: result.value!)
+    end
+  end
+
   context 'with invalid csv' do
     let(:csv) do
       <<~CSV
