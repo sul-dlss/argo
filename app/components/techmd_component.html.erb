@@ -6,7 +6,9 @@
   </h2>
   <div id="document-techmd-section" class="accordion-collapse collapse" aria-labelledby="document-techmd-heading">
     <div class="accordion-body">
-      <turbo-frame id="techmd" src="<%= item_technical_path(view_token) %>" loading="lazy"></turbo-frame>
+      <turbo-frame id="techmd" src="<%= item_technical_path(view_token) %>" loading="lazy">
+        <%= render Spinner.new %>
+      </turbo-frame>
     </div>
   </div>
 </div>

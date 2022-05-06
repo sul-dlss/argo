@@ -6,7 +6,9 @@
   </h2>
   <div id="document-events-section" class="accordion-collapse collapse" aria-labelledby="document-events-heading">
     <div class="accordion-body">
-      <turbo-frame id="events" src="<%= item_events_path(view_token) %>" loading="lazy"></turbo-frame>
+      <turbo-frame id="events" src="<%= item_events_path(view_token) %>" loading="lazy">
+        <%= render Spinner.new %>
+      </turbo-frame>
     </div>
   </div>
 </div>
