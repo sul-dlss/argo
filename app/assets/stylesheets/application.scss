@@ -4,12 +4,6 @@
 @import 'bootstrap-overrides';
 // Override before importing Blacklight
 @import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
-
-// Here we override blacklight to wrap the $logo-image in a url()
-.navbar-logo {  // The main logo image for the Blacklight instance
-  background: transparent url("logo.png") no-repeat top left;
-}
-
 @import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';
 
 @import "argo";
