@@ -83,7 +83,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.25.1)
+    blacklight (7.24.0)
       deprecation
       globalid
       i18n (>= 1.7.0)
@@ -595,7 +595,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.20)
+  blacklight (~> 7.24.0)
   blacklight-hierarchy (~> 6.0)
   bootsnap (>= 1.4.2)
   byebug
