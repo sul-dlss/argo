@@ -83,8 +83,6 @@ executors:
       - image: solr:7
         command: bin/solr -cloud -noprompt -f
         name: solr
-      - image: suldlss/fcrepo:no-messaging-latest
-        name: fcrepo
       - image: suldlss/dor-indexing-app:latest
         name: dor-indexing-app
         environment:
@@ -93,7 +91,6 @@ executors:
           SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
           # To generate the token: docker-compose run dor-services-app rake generate_token
           SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-          SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
           SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
           SETTINGS__WORKFLOW_URL: http://workflow:3000
       - image: suldlss/dor-services-app:latest
@@ -108,7 +105,6 @@ executors:
           SOLR_URL: http://solr:8983/solr/argo
           SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
           SETTINGS__SOLR__URL: http://solr:8983/solr/argo
-          SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
           SETTINGS__SURI__URL: http://suri:3000
           SETTINGS__WORKFLOW_URL: http://workflow:3000
           SETTINGS__ENABLED_FEATURES__UPDATE_DESCRIPTIVE: 'true'
@@ -186,7 +182,6 @@ jobs:
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
-      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__REDIS_URL: redis://redis:6379/
       SETTINGS__SDR_API__URL: http://sdr-api:3000
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
@@ -214,9 +209,6 @@ jobs:
       - run:
           name: Build assets
           command: bin/rails assets:precompile
-      - run:
-          name: Wait for fedora
-          command: 'dockerize -wait tcp://fcrepo:8080/fedora/describe -timeout 1m'
       - configure_solr:
           solr_config_path: solr_conf/conf
       - run:
