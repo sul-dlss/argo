@@ -46,7 +46,7 @@ RSpec.describe CocinaHashPresenter do
                                },
                                description: {
                                  title: [
-                                   { value: cocina_object.label }
+                                   { value: 'factory collection title' }
                                  ],
                                  purl: cocina_object.description.purl
                                })
