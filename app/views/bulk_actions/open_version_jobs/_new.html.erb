@@ -13,7 +13,7 @@
 
   <div class='mb-3'>
     <%= f.label :version_description, 'Describe this version' %>
-    <%= f.text_area :version_description, class: 'form-control' %>
+    <%= f.text_area :version_description, class: 'form-control', required: true %>
   </div>
 
   <%= render 'bulk_actions/druids', f: f %>
