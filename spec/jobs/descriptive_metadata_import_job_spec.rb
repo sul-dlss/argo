@@ -70,8 +70,8 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
     context 'when validation fails' do
       let(:csv_file) do
         [
-          'druid,source_id,title1.structuredValue1.type,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
+          'druid,source_id,title1.structuredValue1.value,purl',
+          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/x#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
         ].join("\n")
       end
       let(:ability) { instance_double(Ability, can?: true) }
@@ -130,7 +130,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       let(:csv_file) do
         [
           'druid,source_id,title1:value,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'test object', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
+          [item1.externalIdentifier, item1.identification.sourceId, 'factory DRO title', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
         ].join("\n")
       end
 
