@@ -16,6 +16,9 @@ class CatalogController < ApplicationController
     #  https://github.com/projectblacklight/blacklight/issues/1324 and more recent issues in Aug 2021 with large solr queries being sent over GET
     config.http_method = :post
 
+    # Configure the SearchState to know that "druids_only", is part of the state we care about.
+    config.search_state_fields << :druids_only
+
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 10

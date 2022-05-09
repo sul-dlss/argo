@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ValueHelper do
   let(:document) { SolrDocument.new(document_attributes) }
   let(:args) { { document:, value: } }
-  let(:blacklight_config) { Blacklight::Configuration.new }
+  let(:blacklight_config) { CatalogController.blacklight_config }
   let(:search_state) { Blacklight::SearchState.new({}, blacklight_config) }
   let(:search_action_path) { '/search_action_path' }
   let(:collection) do
