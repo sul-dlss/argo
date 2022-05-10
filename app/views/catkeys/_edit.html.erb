@@ -1,10 +1,43 @@
-<%= form_with model: @change_set, url: item_catkey_path(@change_set), method: :patch do |f| %>
-  <div class="mb-3">
-    <%= f.label :catkey %>
-    <%= f.text_field :catkey, class: 'form-control' %>
-    <p class='form-text'>
-      Separate multiple catkeys with commas.
-    </p>
-  </div>
-  <button class="btn btn-primary">Update</button>
+<%= render EditModalComponent.new do |component| %>
+  <% component.header { 'Manage catkey' } %>
+  <% component.body do %>
+    <div class="mb-3 row plain-container">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10 col-xl-8">
+        <strong>Catkey</strong>
+      </div>
+      <div class="col-sm-1"></div>
+    </div>
+    <%= form_with model: @form,
+                      url: item_catkey_path(@form),
+                      method: :patch,
+                      data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
+
+        <% if @form.errors.full_messages.present? %>
+          <div id="error_explanation">
+            <ul>
+            <% @form.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <template data-nested-form-target='template'>
+          <%= form.fields_for :catkeys, CatkeysController::CatkeyRow.new, child_index: 'TEMPLATE_RECORD' do |catkey_form| %>
+            <%= render 'row', form: catkey_form %>
+          <% end %>
+        </template>
+
+        <%= form.fields_for :catkeys do |catkey_form| %>
+          <%= render 'row', form: catkey_form %>
+        <% end %>
+
+        <div data-nested-form-target="add_item" class="mb-5">
+          <%= button_tag '+ Add another catkey', type: 'button', class: "col-sm-2 btn btn-outline-primary",  data: { action: "nested-form#addAssociation" } %>
+        </div>
+
+        <button class='btn btn-primary'>Update</button>
+    <% end %>
+  <% end %>
 <% end %>

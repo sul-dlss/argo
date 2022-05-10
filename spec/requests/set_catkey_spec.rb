@@ -5,6 +5,9 @@ require 'rails_helper'
 RSpec.describe 'Set catkey' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:dc243mg0841' }
+  let(:catkey_params) do
+    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '', 'id' => '12345' } } }, 'item_id' => 'druid:xc078vy7260' }
+  end
 
   context 'without manage content access' do
     let(:cocina) { instance_double(Cocina::Models::DROWithMetadata) }
@@ -16,8 +19,8 @@ RSpec.describe 'Set catkey' do
     end
 
     it 'returns a 403' do
-      patch "/items/#{druid}/catkey", params: { catkey: { catkey: '12345' } }
-
+      patch item_catkey_path(druid),
+            params: catkey_params
       expect(response.code).to eq('403')
     end
   end
@@ -35,7 +38,7 @@ RSpec.describe 'Set catkey' do
         let(:cocina_model) { build(:dro, id: druid) }
 
         it 'draws the form' do
-          get "/items/#{druid}/catkey/edit"
+          get edit_item_catkey_path druid
 
           expect(response).to be_successful
         end
@@ -45,7 +48,7 @@ RSpec.describe 'Set catkey' do
         let(:cocina_model) { build(:collection, id: druid) }
 
         it 'draws the form' do
-          get "/items/#{druid}/catkey/edit"
+          get edit_item_catkey_path druid
 
           expect(response).to be_successful
         end
@@ -55,7 +58,7 @@ RSpec.describe 'Set catkey' do
         let(:cocina_model) { build(:collection, id: druid, catkeys: ['10448742']) }
 
         it 'draws the form' do
-          get "/items/#{druid}/catkey/edit"
+          get edit_item_catkey_path druid
 
           expect(response).to be_successful
           expect(response.body).to include '10448742'
@@ -82,8 +85,8 @@ RSpec.describe 'Set catkey' do
       context 'with an item' do
         let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
-        it 'updates the catkey, trimming whitespace' do
-          patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
+        it 'updates the catkey' do
+          patch "/items/#{druid}/catkey", params: catkey_params
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
@@ -94,8 +97,8 @@ RSpec.describe 'Set catkey' do
       context 'with a collection that has no existing catkeys' do
         let(:cocina_model) { build(:collection_with_metadata, id: druid, source_id: 'sul:1234') }
 
-        it 'updates the catkey, trimming whitespace' do
-          patch "/items/#{druid}/catkey", params: { catkey: { catkey: '   12345 ' } }
+        it 'updates the catkey' do
+          patch "/items/#{druid}/catkey", params: catkey_params
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)

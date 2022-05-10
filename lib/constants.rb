@@ -119,4 +119,7 @@ module Constants
     %w[Searchworks Searchworks],
     %w[Earthworks Earthworks]
   ].freeze
+
+  SYMPHONY = 'symphony'
+  PREVIOUS_CATKEY = 'previous symphony'
 end

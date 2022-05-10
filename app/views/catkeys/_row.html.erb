@@ -1,0 +1,17 @@
+<div class="mb-3 row plain-container">
+  <div class="col-sm-2">
+    <%= form.select :refresh, [['Do not refresh', false], ['Refresh', true]], {}, class: 'form-select' %>
+  </div>
+  <div class="col-sm-10 col-xl-8">
+    <%= form.text_field :value, class: "form-control" %>
+  </div>
+  <div class="col-sm-1">
+    <%= button_tag type: 'button', class: 'btn', aria: { label: 'Remove' },
+     data: { action: "click->nested-form#removeAssociation",
+             plain: true } do %>
+      <span class="bi bi-trash"></span>
+    <% end %>
+    <%= form.hidden_field :_destroy %>
+    <%= form.hidden_field :id %>
+  </div>
+</div>
