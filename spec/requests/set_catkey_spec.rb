@@ -6,7 +6,11 @@ RSpec.describe 'Set catkey' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:dc243mg0841' }
   let(:catkey_params) do
-    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '', 'id' => '12345' } } }, 'item_id' => 'druid:xc078vy7260' }
+    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '', 'id' => '12345' } } }, 'item_id' => druid }
+  end
+  let(:turbo_stream_headers) do
+    { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}",
+      'Turbo-Frame' => 'edit_copyright' }
   end
 
   context 'without manage content access' do
@@ -80,6 +84,21 @@ RSpec.describe 'Set catkey' do
 
       before do
         allow(Argo::Indexer).to receive(:reindex_druid_remotely)
+      end
+
+      context 'with an invalid catkey on an item' do
+        let(:cocina_model) { build(:dro_with_metadata, id: druid) }
+
+        it 'does not update the catkey' do
+          catkey_params[:catkey]['catkeys_attributes']['0']['value'] = 'bogus'
+
+          patch "/items/#{druid}/catkey", params: catkey_params, headers: turbo_stream_headers
+
+          expect(object_client).not_to have_received(:update)
+            .with(params: updated_model)
+          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
+          expect(response.status).to eq 422
+        end
       end
 
       context 'with an item' do
