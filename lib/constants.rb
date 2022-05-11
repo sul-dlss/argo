@@ -3,26 +3,15 @@
 ##
 # A module for including constants throughout the Argo application
 module Constants
-  REGISTRATION_RIGHTS_OPTIONS = [
-    %w[World world],
-    ['World (no-download)', 'world-nd'],
-    %w[Stanford stanford],
-    ['Stanford (no-download)', 'stanford-nd'],
-    ['Controlled Digital Lending (no-download)', 'cdl-stanford-nd'],
-    ['Location: Special Collections', 'loc:spec'],
-    ['Location: Music Library', 'loc:music'],
-    ['Location: Archive of Recorded Sound', 'loc:ars'],
-    ['Location: Art Library', 'loc:art'],
-    ['Location: Hoover Library', 'loc:hoover'],
-    ['Location: Media & Microtext', 'loc:m&m'],
-    ['Dark (Preserve Only)', 'dark'],
-    ['Citation Only', 'citation-only']
-  ].freeze
-
   COLLECTION_RIGHTS_OPTIONS = [
     %w[World world],
     ['Dark (Preserve Only)', 'dark']
   ].freeze
+
+  VIEW_ACCESS_OPTIONS = %w[world stanford location-based citation-only dark].freeze
+  DOWNLOAD_ACCESS_OPTIONS = %w[world stanford location-based none].freeze
+  ACCESS_LOCATION_OPTIONS = %w[spec music ars art hoover m&m].freeze
+  CDL_OPTIONS = [true, false].freeze
 
   LICENSE_OPTIONS = [
     # CC4 licenses

@@ -36,7 +36,11 @@ RSpec.describe RegistrationForm do
         label: 'test parameters for registration',
         tag: ['some : tag'],
         content_type: 'https://cocina.sul.stanford.edu/models/object',
-        rights: 'default'
+        access: {
+          view: 'world',
+          download: 'world',
+          controlledDigitalLending: false
+        }
       }
     end
 

@@ -4,7 +4,7 @@
 class CocinaAccess
   extend Dry::Monads[:maybe]
 
-  # @param [String] the rights representation from the form (must be one of the keys in Constants::COLLECTION_RIGHTS_OPTIONS, or 'default')
+  # @param [String] the rights representation from the form
   # @return [Maybe<Hash<Symbol,String>>] a hash representing a subset of the Access subschema of the Cocina model
   def self.from_form_value(rights)
     # Default only appears on the registration form, not the update form.

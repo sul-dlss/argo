@@ -49,75 +49,12 @@ RSpec.describe 'Registration', type: :request do
         administrative: {
           hasAdminPolicy: 'druid:hv992ry2431',
           hasAgreement: 'druid:hp308wm0436',
-          registrationWorkflow: [Settings.apo.default_workflow_option],
-          accessTemplate: default_access
+          registrationWorkflow: [Settings.apo.default_workflow_option]
         }
       )
     end
 
-    context 'when Stanford is the read group and discover is world' do
-      let(:default_access) do
-        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'stanford')
-      end
-
-      it 'shows Stanford as the default' do
-        get "/apo/#{druid}/registration_options"
-        expect(response.body.include?('Stanford (APO default)')).to be(true)
-      end
-    end
-
-    context 'when the read group is not Stanford' do
-      let(:default_access) do
-        Cocina::Models::AdminPolicyAccessTemplate.new
-      end
-
-      it 'does not show Stanford as the default' do
-        get "/apo/#{druid}/registration_options"
-        expect(response.body.include?('Stanford (APO default)')).to be(false)
-      end
-    end
-
-    context 'when discover and read are both world' do
-      let(:default_access) do
-        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'world')
-      end
-
-      it 'shows World as the default' do
-        get "/apo/#{druid}/registration_options"
-
-        expect(response.body.include?('World (APO default)')).to be(true)
-      end
-    end
-
-    context 'when discover and read are both none' do
-      let(:default_access) do
-        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'dark')
-      end
-
-      it 'shows Dark as the default' do
-        get "/apo/#{druid}/registration_options"
-
-        expect(response.body.include?('Dark (Preserve Only) (APO default)')).to be(true)
-      end
-    end
-
-    context 'when discover is world and read is none' do
-      let(:default_access) do
-        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'citation-only')
-      end
-
-      it 'shows Citation Only as the default' do
-        get "/apo/#{druid}/registration_options"
-
-        expect(response.body.include?('Citation Only (APO default)')).to be(true)
-      end
-    end
-
     context 'when there is no default_access' do
-      let(:default_access) do
-        nil
-      end
-
       it 'shows no default' do
         get "/apo/#{druid}/registration_options"
 
@@ -136,7 +73,6 @@ RSpec.describe 'Registration', type: :request do
           hasAdminPolicy: 'druid:hv992ry2431',
           hasAgreement: 'druid:hp308wm0436',
           registrationWorkflow: [Settings.apo.default_workflow_option],
-          accessTemplate: {},
           collectionsForRegistration: collections
         }
       )
@@ -189,8 +125,7 @@ RSpec.describe 'Registration', type: :request do
         administrative: {
           hasAdminPolicy: 'druid:hv992ry2431',
           hasAgreement: 'druid:hp308wm0436',
-          registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'],
-          accessTemplate: { view: 'world', download: 'world' }
+          registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF']
         }
       )
     end
