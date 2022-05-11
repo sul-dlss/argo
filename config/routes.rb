@@ -210,6 +210,7 @@ Rails.application.routes.draw do
     collection do
       get 'tracksheet'
       get 'source_id'
+      get 'spreadsheet'
       get 'suggest_project', action: 'autocomplete'
     end
   end

@@ -27,7 +27,7 @@ RSpec.describe CsvUploadValidator do
     end
 
     it 'returns errors' do
-      expect(validator.errors).to eq ['Missing headers: xDruid']
+      expect(validator.errors).to eq ['missing headers: xDruid.']
     end
   end
 end

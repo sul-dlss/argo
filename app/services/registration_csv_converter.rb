@@ -6,15 +6,17 @@ class RegistrationCsvConverter
 
   # @param [String] csv_string CSV string
   # @return [Array<Result>] a list of registration requests suitable for passing off to dor-services-client
-  def self.convert(csv_string:)
-    new(csv_string:).convert
+  def self.convert(csv_string:, params: {})
+    new(csv_string:, params:).convert
   end
 
-  attr_reader :csv_string
+  attr_reader :csv_string, :params
 
   # @param [String] csv_string CSV string
-  def initialize(csv_string:)
+  # @param [Hash] params that can be used instead of CSV columns. Keys are same as column headers.
+  def initialize(csv_string:, params:)
     @csv_string = csv_string
+    @params = params
   end
 
   # @return [Result] an array of dry-monad results
@@ -40,39 +42,52 @@ class RegistrationCsvConverter
   end
 
   def convert_row(row)
-    catalog_links = row['catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['catkey'], refresh: true }] : []
-
-    model_params = {
-      type: dro_type(row.fetch('content_type').downcase),
-      version: 1,
-      label: row['catkey'] ? row['label'] : row.fetch('label'),
-      administrative: {
-        hasAdminPolicy: row.fetch('administrative_policy_object')
-      },
-      identification: {
-        sourceId: row.fetch('source_id'),
-        barcode: row['barcode'],
-        catalogLinks: catalog_links
-      }
-    }
-
-    model_params[:structural] = structural(row)
-    model_params[:access] = access(row)
-    model_params[:administrative][:partOfProject] = row['project_name'] if row['project_name'].present?
-
-    tags = []
-    tag_count = row.headers.count('tags')
-    tag_count.times { |n| tags << row.field('tags', n + row.index('tags')) }
-    model = Cocina::Models::RequestDRO.new(model_params)
+    model = Cocina::Models::RequestDRO.new(model_params(row))
     Success(model:,
-            workflow: row.fetch('initial_workflow'),
-            tags: tags.compact)
+            workflow: params[:initial_workflow] || row.fetch('initial_workflow'),
+            tags: tags(row))
   rescue Cocina::Models::ValidationError => e
     Failure(e)
   end
 
+  def model_params(row)
+    model_params = {
+      type: dro_type(params[:content_type] || row.fetch('content_type')),
+      version: 1,
+      label: row['catkey'] ? row['label'] : row.fetch('label'),
+      administrative: {
+        hasAdminPolicy: params[:administrative_policy_object] || row.fetch('administrative_policy_object')
+      },
+      identification: {
+        sourceId: row.fetch('source_id'),
+        barcode: row['barcode'],
+        catalogLinks: catalog_links(row)
+      }.compact
+    }
+
+    model_params[:structural] = structural(row)
+    model_params[:access] = access(row)
+    project_name = params[:project_name] || row['project_name']
+    model_params[:administrative][:partOfProject] = project_name if project_name.present?
+
+    model_params
+  end
+
+  def catalog_links(row)
+    row['catkey'] ? [{ catalog: 'symphony', catalogRecordId: row['catkey'], refresh: true }] : []
+  end
+
+  def tags(row)
+    tags = params[:tags] || []
+    if tags.empty?
+      tag_count = row.headers.count('tags')
+      tag_count.times { |n| tags << row.field('tags', n + row.index('tags')) }
+    end
+    tags.compact
+  end
+
   def dro_type(content_type)
-    case content_type
+    case content_type.downcase
     when 'image'
       Cocina::Models::ObjectType.image
     when '3d'
@@ -94,17 +109,20 @@ class RegistrationCsvConverter
 
   def structural(row)
     {}.tap do |structural|
-      structural[:isMemberOf] = [row['collection']] if row['collection']
-      structural[:hasMemberOrders] = [{ viewingDirection: row['reading_order'] }] if row['reading_order'].present?
+      collection = params[:collection] || row['collection']
+      structural[:isMemberOf] = [collection] if collection
+      reading_order = params[:reading_order] || row['reading_order']
+      structural[:hasMemberOrders] = [{ viewingDirection: reading_order }] if reading_order.present?
     end
   end
 
   def access(row)
     {}.tap do |access|
-      access[:view] = row.fetch('rights_view')
-      access[:download] = row.fetch('rights_download')
-      access[:location] = row.fetch('rights_location') if [access[:view], access[:download]].include?('location-based')
-      access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(row['rights_controlledDigitalLending']) if row['rights_controlledDigitalLending'].present?
-    end
+      access[:view] = params[:rights_view] || row['rights_view']
+      access[:download] = params[:rights_download] || row['rights_download']
+      access[:location] = (params[:rights_location] || row.fetch('rights_location')) if [access[:view], access[:download]].include?('location-based')
+      cdl = params[:rights_controlledDigitalLending] || row['rights_controlledDigitalLending']
+      access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(cdl) if cdl.present?
+    end.compact
   end
 end

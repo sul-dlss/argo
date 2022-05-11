@@ -5,7 +5,7 @@
                 controller: 'registration',
                 action: 'invalid->registration#showValidations',
                 turbo: false # We need to return data, and turbo requires a redirect on form success
-              }, class: 'container' do |f| %>
+              }, class: 'container' do |f| %>                
   <div class="row mt-3" data-controller="content-type">
     <div class="col-md-5">
       <div class="row mb-3">
@@ -62,33 +62,55 @@
     <div class="alert alert-danger"><%= @registration_form.errors.full_messages.to_sentence %></div>
   <% end %>
 
+  <div data-controller="registration-tabs">
+    <ul class="nav nav-pills" role="tablist">
+      <% is_form = f.object.class.name == 'RegistrationForm' %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link<%= is_form ? ' active' : ''%>" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="<%= is_form%>" data-action="registration-tabs#toggleForm">Fill in form</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link<%= is_form ? '' : ' active'%>" id="csv-tab" data-bs-toggle="tab" data-bs-target="#csv" type="button" role="tab" aria-controls="csv" aria-selected="<%= !is_form%>" data-action="registration-tabs#toggleCsv">Upload CSV</button>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane<%= is_form ? ' active' : ''%>" id="form" role="tabpanel" aria-labelledby="form-tab">
+        <div class="my-3 col-lg-7" data-controller="registration-items" data-registration-items-selector-value=".plain-container">
+            <template data-registration-items-target='template'>
+              <div class="plain-container" style="position: relative">
+                <hr class="my-4"/>
+                <div style="position: absolute; right: -40px">
+                  <%= button_tag type: 'button', class: 'btn btn-link', aria: { label: 'Remove' },
+                  data: { action: "click->registration-items#removeAssociation",
+                          plain: true } do %>
+                    <span class='bi bi-trash'></span>
+                  <% end %>
+                </div>
 
-  <div class="my-3 col-lg-7" data-controller="registration-items" data-registration-items-selector-value=".plain-container">
-      <template data-registration-items-target='template'>
-        <div class="plain-container" style="position: relative">
-          <hr class="my-4"/>
-          <div style="position: absolute; right: -40px">
-            <%= button_tag type: 'button', class: 'btn btn-link', aria: { label: 'Remove' },
-             data: { action: "click->registration-items#removeAssociation",
-                     plain: true } do %>
-              <span class='bi bi-trash'></span>
+                <%= f.fields_for :items, child_index: 'TEMPLATE_RECORD' do |item_form| %>
+                  <% render 'item_row', item_form: %>
+                <% end %>
+              <div>
+            </template>
+
+            <%= f.fields_for :items do |item_form| %>
+              <% render 'item_row', item_form: %>
+            <% end %>
+
+          <div data-registration-items-target="add_item">
+            <%= button_tag type: 'button', class: "btn btn-sm btn-outline-primary", data: { action: "registration-items#addAssociation" } do %>
+              <span class="bi bi-plus"></span>Add another row
             <% end %>
           </div>
-
-          <%= f.fields_for :items, child_index: 'TEMPLATE_RECORD' do |item_form| %>
-            <% render 'item_row', item_form: %>
+        </div>    
+      </div>
+      <div class="tab-pane <%= is_form ? '' : ' active'%>" id="csv" role="tabpanel" aria-labelledby="csv-tab">
+        <div class="my-3">
+          <%= link_to spreadsheet_registration_path(format: :csv), download: true, class: 'btn btn-link my-2' do %>
+            <span class="bi-download"></span> Download CSV template
           <% end %>
-        <div>
-      </template>
-
-      <%= f.fields_for :items do |item_form| %>
-        <% render 'item_row', item_form: %>
-      <% end %>
-
-    <div data-registration-items-target="add_item">
-      <%= button_tag type: 'button', class: "btn btn-sm btn-outline-primary", data: { action: "registration-items#addAssociation" } do %>
-        <span class="bi bi-plus"></span>Add another row
-      <% end %>
+          <%= f.file_field :csv_file, class: 'form-control', accept: '.csv', data: { registration_tabs_target: 'requiredCsvField'}, 'aria-label': "Upload a CSV file" %>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -20,6 +20,7 @@ import AccessRightsController from './access_rights_controller'
 import ExpandableSnippets from './expandable_snippets'
 import TagValidation from './tag_validation_controller'
 import RegistrationItems from './registration_items_controller'
+import RegistrationTabs from './registration_tabs_controller'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -43,3 +44,4 @@ application.register("structural", StructuralController)
 application.register("access-rights", AccessRightsController)
 application.register("expandable-snippets", ExpandableSnippets)
 application.register("registration-items", RegistrationItems)
+application.register("registration-tabs", RegistrationTabs)
