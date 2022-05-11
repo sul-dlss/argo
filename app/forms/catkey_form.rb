@@ -16,8 +16,8 @@ class CatkeyForm < Reform::Form
   validate :catkeys_acceptable
 
   def catkeys_acceptable
-    # at most one catkey can be set to refresh == true
-    errors.add(:refresh, 'is only allowed for a single catkey.') if catkeys.count { |catkey| catkey.refresh == 'true' } > 1
+    # at most one catkey (not being deleted) can be set to refresh == true
+    errors.add(:refresh, 'is only allowed for a single catkey.') if catkeys.count { |catkey| catkey.refresh == 'true' && catkey._destroy != '1' } > 1
     # must match the expected pattern
     errors.add(:catkey, 'must be in an allowed format') if catkeys.count { |catkey| catkey.value.match(/^\d+(:\d+)*$/).nil? }.positive?
   end
