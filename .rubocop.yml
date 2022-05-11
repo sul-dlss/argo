@@ -434,3 +434,6 @@ Style/ObjectThen: # new in 1.28
   Enabled: true
 RSpec/VerifiedDoubleReference: # new in 2.10.0
   Enabled: true
+
+Style/EnvHome: # new in 1.29
+  Enabled: true
