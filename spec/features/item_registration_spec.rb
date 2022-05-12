@@ -141,11 +141,10 @@ RSpec.describe 'Item registration page', js: true do
 
       find('td[aria-describedby=data_status][title=success]')
       object_druid = find('td[aria-describedby=data_druid]').text
-      visit solr_document_path(object_druid)
 
-      # ensure we are up-to-date
-      click_link 'Reindex'
-      expect(page).to have_text('Successfully updated index for')
+      # Since we don't have rabbitMQ in the test suite, we have to fake it by indexing manually.
+      Argo::Indexer.reindex_druid_remotely(object_druid)
+      visit solr_document_path(object_druid)
 
       # now verify that registration succeeded by checking some metadata
       within_table('Overview') do
@@ -170,7 +169,6 @@ RSpec.describe 'Item registration page', js: true do
         expect(page).to have_css 'td a', text: 'Project : X-Files'
         expect(page).to have_css 'td a', text: 'i : believe'
         expect(page).to have_css 'td a', text: "Registered By : #{user.sunetid}"
-        expect(page).to have_css 'td a', text: 'Process : Content Type : Book (ltr)'
       end
     end
   end
