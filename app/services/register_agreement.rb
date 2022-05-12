@@ -39,7 +39,10 @@ class RegisterAgreement
                                                     logger: Rails.logger,
                                                     connection:)
 
-    poll_for_job_complete(job_id:)
+    poll_for_job_complete(job_id:).tap do |druid|
+      # Index imediately, so that we have a page to send the user to. DSA indexes asynchronously.
+      Argo::Indexer.reindex_druid_remotely(druid)
+    end
   end
 
   private
