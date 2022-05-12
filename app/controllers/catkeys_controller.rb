@@ -5,6 +5,7 @@ class CatkeysController < ApplicationController
 
   def edit
     @form = catkey_form
+    @form.prepopulate!
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -33,12 +34,8 @@ class CatkeysController < ApplicationController
     # fetch catkeys from object
     object_catkeys = @cocina.identification.catalogLinks.filter_map { |catalog_link| catalog_link if catalog_link.catalog == Constants::SYMPHONY }
 
-    # if there are no object catkeys, provide an initial blank row, else form is initialized with catkeys in the object
-    catkeys = if object_catkeys.size.zero?
-                [CatkeyForm::Row.new(value: '', refresh: true)]
-              else
-                object_catkeys.map { |catkey| CatkeyForm::Row.new(value: catkey.catalogRecordId, refresh: catkey.refresh) }
-              end
+    # form is initialized with catkeys in the object
+    catkeys = object_catkeys.map { |catkey| CatkeyForm::Row.new(value: catkey.catalogRecordId, refresh: catkey.refresh) }
     CatkeyForm.new(
       CatkeyForm::ModelProxy.new(
         id: params[:item_id],

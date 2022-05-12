@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class CatkeyForm < Reform::Form
-  collection :catkeys, populator: lambda { |collection:, index:, **|
+  collection :catkeys, prepopulator: ->(*) { catkeys << CatkeyForm::Row.new(value: '', refresh: true) if catkeys.size.zero? },
+                       populator: lambda { |collection:, index:, **|
                                     if item = collection[index] # rubocop:disable Lint/AssignmentInCondition
                                       item
                                     else
