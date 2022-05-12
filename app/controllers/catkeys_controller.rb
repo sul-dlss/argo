@@ -3,42 +3,6 @@
 class CatkeysController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
-  ### classes that define a virtual catkey model object and data structure, used in form editing...persistence is in the cocina model
-  class ModelProxy
-    def initialize(id:, catkeys:)
-      @id = id # the object ID
-      @catkeys = catkeys # the array of catkey objects (defined in custom class below)
-    end
-
-    attr_reader :id, :catkeys
-
-    def to_param
-      @id
-    end
-
-    def persisted?
-      true
-    end
-  end
-
-  class CatkeyRow
-    attr_accessor :value, :refresh, :id
-
-    def initialize(attrs = {})
-      @id = attrs[:value]
-      @value = attrs[:value]
-      @refresh = attrs[:refresh]
-    end
-
-    def persisted?
-      id.present?
-    end
-
-    # from https://github.com/rails/rails/blob/f95c0b7e96eb36bc3efc0c5beffbb9e84ea664e4/activerecord/lib/active_record/nested_attributes.rb#L382-L384
-    def _destroy; end
-  end
-  ###
-
   def edit
     @form = catkey_form
     respond_to do |format|
@@ -71,12 +35,12 @@ class CatkeysController < ApplicationController
 
     # if there are no object catkeys, provide an initial blank row, else form is initialized with catkeys in the object
     catkeys = if object_catkeys.size.zero?
-                [CatkeyRow.new(value: '', refresh: true)]
+                [CatkeyForm::Row.new(value: '', refresh: true)]
               else
-                object_catkeys.map { |catkey| CatkeyRow.new(value: catkey.catalogRecordId, refresh: catkey.refresh) }
+                object_catkeys.map { |catkey| CatkeyForm::Row.new(value: catkey.catalogRecordId, refresh: catkey.refresh) }
               end
     CatkeyForm.new(
-      ModelProxy.new(
+      CatkeyForm::ModelProxy.new(
         id: params[:item_id],
         catkeys:
       )

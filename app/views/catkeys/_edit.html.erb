@@ -24,7 +24,7 @@
         <% end %>
 
         <template data-nested-form-target='template'>
-          <%= form.fields_for :catkeys, CatkeysController::CatkeyRow.new, child_index: 'TEMPLATE_RECORD' do |catkey_form| %>
+          <%= form.fields_for :catkeys, CatkeyForm::Row.new, child_index: 'TEMPLATE_RECORD' do |catkey_form| %>
             <%= render 'row', form: catkey_form %>
           <% end %>
         </template>

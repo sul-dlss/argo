@@ -5,7 +5,7 @@ class CatkeyForm < Reform::Form
                                     if item = collection[index] # rubocop:disable Lint/AssignmentInCondition
                                       item
                                     else
-                                      collection.insert(index, CatkeysController::CatkeyRow.new)
+                                      collection.insert(index, CatkeyForm::Row.new)
                                     end
                                   } do
     property :value
@@ -14,6 +14,42 @@ class CatkeyForm < Reform::Form
   end
 
   validate :catkeys_acceptable
+
+  ### classes that define a virtual catkey model object and data structure, used in form editing...persistence is in the cocina model
+  class ModelProxy
+    def initialize(id:, catkeys:)
+      @id = id # the object ID
+      @catkeys = catkeys # the array of catkey objects (defined in custom class below)
+    end
+
+    attr_reader :id, :catkeys
+
+    def to_param
+      @id
+    end
+
+    def persisted?
+      true
+    end
+  end
+
+  class Row
+    attr_accessor :value, :refresh, :id
+
+    def initialize(attrs = {})
+      @id = attrs[:value]
+      @value = attrs[:value]
+      @refresh = attrs[:refresh]
+    end
+
+    def persisted?
+      id.present?
+    end
+
+    # from https://github.com/rails/rails/blob/f95c0b7e96eb36bc3efc0c5beffbb9e84ea664e4/activerecord/lib/active_record/nested_attributes.rb#L382-L384
+    def _destroy; end
+  end
+  ###
 
   def catkeys_acceptable
     # at most one catkey (not being deleted) can be set to refresh == true
