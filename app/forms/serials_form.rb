@@ -55,9 +55,12 @@ class SerialsForm < ApplicationChangeSet
   end
 
   def save_model
-    updated_description = model.description.new(title: updated_title, note: updated_note)
-    updated_model = model.new(description: updated_description)
+    updated_model = model.new(description: updated_description, identification: updated_identification)
     Repository.store(updated_model)
+  end
+
+  def updated_description
+    model.description.new(title: updated_title, note: updated_note)
   end
 
   def updated_title
@@ -106,6 +109,16 @@ class SerialsForm < ApplicationChangeSet
       structured_value << { value: part_number, type: PART_NUMBER } if part_number.present?
       structured_value << { value: part_name, type: PART_NAME } if part_name.present?
       structured_value << { value: part_number2, type: PART_NUMBER } if part_number2.present?
+    end
+  end
+
+  def updated_identification
+    model.identification.new(catalogLinks: updated_catalog_links)
+  end
+
+  def updated_catalog_links
+    model.identification.catalogLinks.map do |catalog_link|
+      catalog_link.to_h.merge(refresh: false)
     end
   end
 end

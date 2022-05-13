@@ -321,5 +321,39 @@ RSpec.describe SerialsForm do
         expect(object_client).to have_received(:update).with(params: expected)
       end
     end
+
+    context 'when catalog links present' do
+      let(:cocina_item) { build(:dro_with_metadata, id: druid, catkeys: ['6671606']) }
+
+      let(:expected) do
+        build(:dro_with_metadata, id: druid).new(
+          description: {
+            title: [
+              {
+                structuredValue: [
+                  { value: 'factory DRO title', type: 'main title' }
+                ]
+              }
+            ],
+            purl: 'https://purl.stanford.edu/bc123df4567'
+          },
+          identification: {
+            catalogLinks: [
+              { catalog: 'symphony', refresh: false, catalogRecordId: '6671606' }
+            ],
+            sourceId: 'sul:1234'
+          }
+        )
+      end
+
+      before do
+        instance.validate({ part_number: '', part_name: '', part_number2: '', sort_field: '' })
+        instance.save
+      end
+
+      it 'sets refresh to false' do
+        expect(object_client).to have_received(:update).with(params: expected)
+      end
+    end
   end
 end
