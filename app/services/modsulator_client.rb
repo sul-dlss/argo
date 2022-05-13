@@ -2,8 +2,8 @@
 
 # A client for calling the remote modsulator service
 class ModsulatorClient
-  # Wait 30 minutes for remote requests to complete
-  TIMEOUT = 1800
+  # Wait 45 minutes for remote requests to complete
+  TIMEOUT = 2700
 
   # Converts a spreadsheet to MODS by calling the remote modsulator service
   # @param [String] uploaded_filename The full path to the spreadsheet file.
