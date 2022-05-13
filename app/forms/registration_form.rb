@@ -21,7 +21,7 @@ class RegistrationForm
     catalog_links = []
     if params[:other_id] != 'label:'
       catalog, record_id = params[:other_id].split(':')
-      catalog_links = [{ catalog:, catalogRecordId: record_id, refresh: false }]
+      catalog_links = [{ catalog:, catalogRecordId: record_id, refresh: true }]
     end
 
     model_params = {
