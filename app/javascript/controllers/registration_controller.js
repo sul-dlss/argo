@@ -24,18 +24,11 @@ export default class extends Controller {
     }
 
     register() {
-        var cells = $('#data').jqGrid('getGridParam','savedRow');
-        if (cells.length > 0) {
-          this.rc.displayRequirements('You are still editing a cell. Please use tab or enter to finish editing before trying to register items.')
-          return;
-        }
-        else{
-          if (this.allValid()) {
-            this.toggleEditing(false);
-            this.rc.registerAll();
-          } else {
-            this.rc.displayRequirements('The form contains errors. Please correct them before submitting.')
-          }
+        if (this.allValid()) {
+          this.toggleEditing(false);
+          this.rc.registerAll();
+        } else {
+          this.rc.displayRequirements('The form contains errors. Please correct them before submitting.')
         }
     }
 
