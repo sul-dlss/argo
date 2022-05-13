@@ -22,10 +22,9 @@ class DescriptiveMetadataImportJob < GenericJob
       DescriptionImport.import(csv_row:)
                        .bind { |description| validate_changed(cocina_object, description) }
                        .bind { |description| open_version(cocina_object, description) }
-                       .bind do |description, new_cocina_object|
-                         CocinaValidator.validate_and_save(new_cocina_object, description:)
-                         close_version(new_cocina_object)
-                       end.either(
+                       .bind { |description, new_cocina_object| validate_and_save(new_cocina_object, description) }
+                       .bind { |new_cocina_object| close_version(new_cocina_object) }
+                       .either(
                          ->(_updated) { success.call('Successfully updated') },
                          ->(messages) { failure.call(messages.to_sentence) }
                        )
@@ -46,6 +45,13 @@ class DescriptiveMetadataImportJob < GenericJob
     Success([description, cocina_object])
   rescue RuntimeError => e
     Failure([e.message])
+  end
+
+  def validate_and_save(cocina_object, description)
+    result = CocinaValidator.validate_and_save(cocina_object, description:)
+    return Success(cocina_object) if result.success?
+
+    Failure(["validate_and_save failed for #{cocina_object.externalIdentifier}"])
   end
 
   def close_version(cocina_object)
