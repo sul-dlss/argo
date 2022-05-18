@@ -10,7 +10,7 @@ class CatkeyForm < Reform::Form
                                     end
                                   } do
     property :value
-    property :refresh
+    property :refresh # ActiveModel::Type::Boolean.new.cast('1')
     property :_destroy, virtual: true
   end
 
@@ -59,9 +59,7 @@ class CatkeyForm < Reform::Form
     errors.add(:catkey, 'must be in an allowed format') if catkeys.count { |catkey| catkey.value.match(/^\d+(:\d+)*$/).nil? }.positive?
   end
 
-  def save
-    cocina_object = Repository.find(@model.id)
-
+  def save(cocina_object)
     return false if catkeys.size.zero? # nothing submitted on the form
 
     # fetch the existing previous catkey values from the cocina object

@@ -16,7 +16,7 @@ class CatkeysController < ApplicationController
 
     @form = catkey_form
     respond_to do |format|
-      if @form.validate(params[:catkey]) && @form.save
+      if @form.validate(params[:catkey]) && @form.save(@cocina)
         Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
         msg = "Catkeys for #{@cocina.externalIdentifier} have been updated!"
         format.html { redirect_to solr_document_path(@cocina.externalIdentifier, format: :html), notice: msg }
