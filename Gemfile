@@ -74,7 +74,7 @@ gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all fe
 gem 'openapi_parser', '< 1.0'
 
 # Stanford related gems
-gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'release-7.x'
+gem 'blacklight', '~> 7.25'
 gem 'blacklight-hierarchy', '~> 6.0'
 gem 'dor-services-client', '~> 12.0'
 gem 'dor-workflow-client', '~> 4.0'
