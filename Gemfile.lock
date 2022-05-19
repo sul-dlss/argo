@@ -1,7 +1,7 @@
 GIT
-  remote: https://github.com/projectblacklight/blacklight
-  revision: 9644976c01ad7ab4d785ca88b78607a60613cdfa
-  branch: backport-unpermitted-params
+  remote: https://github.com/projectblacklight/blacklight.git
+  revision: 5af44ee348d34807cba91135af7b23fbd34696b5
+  branch: release-7.x
   specs:
     blacklight (7.25.1)
       deprecation
@@ -602,7 +602,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.25)!
+  blacklight!
   blacklight-hierarchy (~> 6.0)
   bootsnap (>= 1.4.2)
   byebug

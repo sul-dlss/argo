@@ -74,8 +74,7 @@ gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all fe
 gem 'openapi_parser', '< 1.0'
 
 # Stanford related gems
-# temporary pin of blacklight to fix https://github.com/sul-dlss/argo/issues/3697 .... remove when blacklight PR merged, 5/18/2022
-gem 'blacklight', '~> 7.25', git: 'https://github.com/projectblacklight/blacklight', branch: 'backport-unpermitted-params'
+gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'release-7.x'
 gem 'blacklight-hierarchy', '~> 6.0'
 gem 'dor-services-client', '~> 12.0'
 gem 'dor-workflow-client', '~> 4.0'
