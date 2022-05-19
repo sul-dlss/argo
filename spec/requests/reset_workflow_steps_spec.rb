@@ -32,7 +32,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
       post '/report/reset', params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
       expect(response).to redirect_to(report_workflow_grid_path)
       expect(workflow_client).to have_received(:update_status)
-        .with(druid: 'druid:xb482ww9999', workflow:, process: step, status: 'waiting')
+        .with(druid: 'druid:xb482ww9999', workflow:, process: step, status: 'waiting', current_status: 'error')
     end
 
     it 'requires parameters' do
@@ -55,7 +55,7 @@ RSpec.describe 'Reset failed workflow steps', type: :request do
 
       expect(response).to redirect_to(report_workflow_grid_path)
       expect(workflow_client).to have_received(:update_status)
-        .with(druid: 'druid:xb482ww9999', workflow:, process: step, status: 'waiting')
+        .with(druid: 'druid:xb482ww9999', workflow:, process: step, status: 'waiting', current_status: 'error')
     end
   end
 
