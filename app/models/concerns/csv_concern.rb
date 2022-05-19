@@ -17,7 +17,7 @@ module CsvConcern
           csv << @fields.map { |f| record[f[:field]].to_s }
         end
         @params[:page] += 1
-        (@response,) = search_results(params)
+        (@response,) = search_results
       end
     end
   end

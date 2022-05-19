@@ -188,14 +188,14 @@ class Report
               end
     @params = params
     @params[:page] ||= 1
-    (@response,) = search_results(@params)
+    (@response,) = search_results
     @num_found = @response['response']['numFound'].to_i
   end
 
   def druids(opts = {})
     params[:page] = 1
     params[:per_page] = 100
-    (@response,) = search_results(params)
+    (@response,) = search_results
     druids = []
     until @response.documents.empty?
       report_data.each do |rec|
@@ -212,7 +212,7 @@ class Report
         end
       end
       params[:page] += 1
-      (@response,) = search_results(params)
+      (@response,) = search_results
     end
 
     druids
@@ -226,20 +226,15 @@ class Report
 
   delegate :search_results, to: :search_service
 
-  def search_results(params)
-    search_service(params).search_results
+  # This line can be removed in Blacklight 8
+  delegate :search_service_class, to: :CatalogController
+
+  def search_state
+    Blacklight::SearchState.new(params, blacklight_config)
   end
 
-  # TODO: Refactor to use Blacklight::Searchable instead.  Requires a SearchState rather than params
-  def search_service(params)
-    search_service_class.new(config: blacklight_config,
-                             user_params: params,
-                             current_user:)
-  end
-
-  # We can remove this when https://github.com/projectblacklight/blacklight/pull/2320 is merged into Blacklight
-  def search_service_class
-    Blacklight::SearchService
+  def search_service_context
+    { current_user: }
   end
 
   # @param [Array<SolrDocument>] docs
