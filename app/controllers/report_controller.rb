@@ -57,8 +57,13 @@ class ReportController < CatalogController
         druid:,
         workflow:,
         process: step,
+        current_status: 'error',
         status: 'waiting'
       )
+    rescue Dor::WorkflowException => e
+      # NOTE: this may be triggered if the step being set to waiting is no longer in error
+      # which should not normally happen, because the list of druids fetched by `Report` should all be in error
+      Honeybadger.notify(e, context: { druid: })
     end
     message = "#{ids.size} objects were reset back to waiting for #{workflow}:#{step}.  It may take a few seconds to update."
     redirect_back(fallback_location: report_workflow_grid_path, notice: message)
