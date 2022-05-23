@@ -3,15 +3,9 @@
 class CatkeysController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
-  rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
-    md = /\((.*)\)/.match exception.message
-    detail = JSON.parse(md[1])['errors'].first['detail']
-    redirect_to solr_document_path(params[:item_id]),
-                flash: { error: "Unable to retrieve the cocina model: #{detail.truncate(200)}" }
-  end
-
   def edit
-    @change_set = CatkeyForm.new(@cocina)
+    @form = CatkeyForm.new(@cocina)
+    @form.prepopulate!
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -20,18 +14,13 @@ class CatkeysController < ApplicationController
   def update
     return unless enforce_versioning
 
-    form = CatkeyForm.new(@cocina)
-    form.validate(catkey: update_params[:catkey].strip)
-    form.save
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
-
-    msg = "Catkey for #{@cocina.externalIdentifier} has been updated!"
-    redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
-  end
-
-  private
-
-  def update_params
-    params[CatkeyForm.model_name.param_key]
+    @form = CatkeyForm.new(@cocina)
+    if @form.validate(params[:catkey]) && @form.save
+      Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+      msg = "Catkeys for #{@cocina.externalIdentifier} have been updated!"
+      redirect_to solr_document_path(@cocina.externalIdentifier, format: :html), notice: msg
+    else
+      render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_entity
+    end
   end
 end

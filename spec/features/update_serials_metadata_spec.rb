@@ -20,7 +20,11 @@ RSpec.describe 'Update serials metadata', js: true do
 
   it 'edits serials' do
     click_link 'Manage catkey'
-    fill_in 'Catkey', with: '55555'
+
+    within '.modal-body' do
+      find('input').set '55555'
+      find('select').set true
+    end
     click_button 'Update'
 
     click_button 'Manage description'

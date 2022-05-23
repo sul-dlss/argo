@@ -15,7 +15,9 @@ RSpec.describe 'Item catkey change' do
 
     it 'cannot change the catkey' do
       visit edit_item_catkey_path druid
-      fill_in 'Catkey', with: '12345'
+      within '.modal-body' do
+        find('input').set '12345'
+      end
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Object cannot be modified in ' \
                                              'its current state.'
@@ -56,10 +58,13 @@ RSpec.describe 'Item catkey change' do
 
     it 'changes the catkey' do
       visit edit_item_catkey_path druid
-      fill_in 'Catkey', with: '12345, 99912'
+      within '.modal-body' do
+        find('input').set '12345'
+        find('select').set true
+      end
       click_button 'Update'
-      expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \
-                                                          "#{druid} has been updated!"
+      expect(page).to have_css '.alert.alert-info', text: 'Catkeys for ' \
+                                                          "#{druid} have been updated!"
       expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end
   end
