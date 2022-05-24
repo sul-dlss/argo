@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe PurgeJob, type: :job do
   let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'jcoyne85') }
+  let(:user) { create(:user) }
   let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted) }
   let(:submitted) { false }
-  let(:bulk_action) { create(:bulk_action) }
+  let(:bulk_action) { create(:bulk_action, user:) }
 
   let(:cocina1) do
     build(:dro_with_metadata, id: druids[0])
@@ -52,8 +52,8 @@ RSpec.describe PurgeJob, type: :job do
       let(:submitted) { false }
 
       it 'purges objects' do
-        expect(PurgeService).to have_received(:purge).with(druid: druids[0])
-        expect(PurgeService).to have_received(:purge).with(druid: druids[1])
+        expect(PurgeService).to have_received(:purge).with(druid: druids[0], user_name: user.login)
+        expect(PurgeService).to have_received(:purge).with(druid: druids[1], user_name: user.login)
       end
     end
   end

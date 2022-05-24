@@ -2,8 +2,10 @@
 
 # Removes an object from dor-services-app, the workflow service and solr.
 class PurgeService
-  def self.purge(druid:)
-    Dor::Services::Client.object(druid).destroy
+  # @param [String] druid
+  # @param [String] user_name
+  def self.purge(druid:, user_name:)
+    Dor::Services::Client.object(druid).destroy(user_name:)
     WorkflowClientFactory.build.delete_all_workflows(pid: druid)
     blacklight_config = CatalogController.blacklight_config
     solr_conn = blacklight_config.repository_class.new(blacklight_config).connection
