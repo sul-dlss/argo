@@ -6,11 +6,11 @@ RSpec.describe 'Set catkey' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:dc243mg0841' }
   let(:catkey_params) do
-    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '', 'id' => '12345' } } }, 'item_id' => druid }
+    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '' } } }, 'item_id' => druid }
   end
   let(:delete_catkey_params) do
-    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '99999', '_destroy' => '1', 'id' => '99999' },
-                                          '1' => { 'refresh' => 'true', 'value' => '45678', '_destroy' => '', 'id' => '45678' } } }, 'item_id' => druid }
+    { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '99999', '_destroy' => '1' },
+                                          '1' => { 'refresh' => 'true', 'value' => '45678', '_destroy' => '' } } }, 'item_id' => druid }
   end
   let(:turbo_stream_headers) do
     { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}",
@@ -92,7 +92,22 @@ RSpec.describe 'Set catkey' do
 
       context 'with invalid catkey value on an item' do
         let(:invalid_catkey_params) do
-          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => 'bogus', '_destroy' => '', 'id' => 'bogus' } } }, 'item_id' => druid }
+          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => 'bogus', '_destroy' => '' } } }, 'item_id' => druid }
+        end
+
+        it 'does not update the catkey' do
+          patch item_catkey_path(druid), params: invalid_catkey_params, headers: turbo_stream_headers
+
+          expect(object_client).not_to have_received(:update)
+          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
+          expect(response.status).to eq 422
+        end
+      end
+
+      context 'with duplicate catkey values on an item' do
+        let(:invalid_catkey_params) do
+          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'false', 'value' => '99999', '_destroy' => '' },
+                                                '1' => { 'refresh' => 'true', 'value' => '99999', '_destroy' => '' } } }, 'item_id' => druid }
         end
 
         it 'does not update the catkey' do
@@ -121,8 +136,8 @@ RSpec.describe 'Set catkey' do
 
       context 'with an item that has no existing catkeys' do
         let(:mutiple_catkey_params) do
-          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '', 'id' => '12345' },
-                                                '1' => { 'refresh' => 'false', 'value' => '45678', '_destroy' => '', 'id' => '45678' } } }, 'item_id' => druid }
+          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'true', 'value' => '12345', '_destroy' => '' },
+                                                '1' => { 'refresh' => 'false', 'value' => '45678', '_destroy' => '' } } }, 'item_id' => druid }
         end
         let(:updated_model_multiple_catkeys) do
           cocina_model.new(
@@ -187,8 +202,8 @@ RSpec.describe 'Set catkey' do
       context 'with an item that has two existing catkeys' do
         let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: %w[99999 45678]) }
         let(:update_catkey_params) do
-          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'false', 'value' => '99999', '_destroy' => '', 'id' => '99999' },
-                                                '1' => { 'refresh' => 'true', 'value' => '45678', '_destroy' => '', 'id' => '45678' } } }, 'item_id' => druid }
+          { catkey: { 'catkeys_attributes' => { '0' => { 'refresh' => 'false', 'value' => '99999', '_destroy' => '' },
+                                                '1' => { 'refresh' => 'true', 'value' => '45678', '_destroy' => '' } } }, 'item_id' => druid }
         end
         let(:updated_model_updated_catkeys) do
           cocina_model.new(
