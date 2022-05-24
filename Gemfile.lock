@@ -183,7 +183,7 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (12.1.0)
+    dor-services-client (12.2.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.80.0)
       deprecation
@@ -611,7 +611,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client (~> 12.0)
+  dor-services-client (~> 12.2)
   dor-workflow-client (~> 4.0)
   druid-tools
   dry-monads

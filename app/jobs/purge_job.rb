@@ -11,7 +11,7 @@ class PurgeJob < GenericJob
 
       next failure.call('Cannot purge item because it has already been submitted') if WorkflowService.submitted?(druid: cocina_object.externalIdentifier)
 
-      PurgeService.purge(druid: cocina_object.externalIdentifier)
+      PurgeService.purge(druid: cocina_object.externalIdentifier, user_name: @current_user.login)
 
       success.call('Purge sucessful')
     end

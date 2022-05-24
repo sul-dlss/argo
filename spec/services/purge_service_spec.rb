@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PurgeService do
   describe '.purge' do
-    subject(:purge) { described_class.purge(druid: 'druid:ab123cd4567') }
+    subject(:purge) { described_class.purge(druid: 'druid:ab123cd4567', user_name: 'dijkstra') }
 
     let(:object_client) { instance_double(Dor::Services::Client::Object, destroy: true) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, delete_all_workflows: true) }

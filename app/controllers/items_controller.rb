@@ -97,7 +97,7 @@ class ItemsController < ApplicationController
       return
     end
 
-    PurgeService.purge(druid: params[:id])
+    PurgeService.purge(druid: params[:id], user_name: current_user.login)
 
     redirect_to '/', status: :see_other, notice: "#{params[:id]} has been purged!"
   end
