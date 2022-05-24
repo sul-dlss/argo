@@ -27,7 +27,9 @@ class CatkeyForm < Reform::Form
     property :_destroy
   end
 
-  validate :catkeys_acceptable
+  validate :single_catkey_refresh
+  validate :unique_catkey_value
+  validate :valid_catkey_value
 
   # needed because our model in this form is a cocina object and not an active record model, and Reform calls `persisted?`
   def persisted?
@@ -40,11 +42,20 @@ class CatkeyForm < Reform::Form
     self.catkeys = object_catkeys.map { |catkey| CatkeyForm::Row.new(value: catkey.catalogRecordId, refresh: catkey.refresh) }
   end
 
-  def catkeys_acceptable
-    # at most one catkey can be set to refresh == true
-    errors.add(:refresh, 'is only allowed for a single catkey.') if catkeys.count { |catkey| catkey.refresh && catkey._destroy != '1' } > 1
+  def unique_catkey_value
+    # each catkey must be unique
+    catkey_values = catkeys.map(&:value)
+    errors.add(:catkey, 'must be unique') if catkey_values.size != catkey_values.uniq.size
+  end
+
+  def valid_catkey_value
     # must match the expected pattern
     errors.add(:catkey, 'must be in an allowed format') if catkeys.count { |catkey| catkey.value.match(/^\d+(:\d+)*$/).nil? }.positive?
+  end
+
+  def single_catkey_refresh
+    # at most one catkey can be set to refresh == true
+    errors.add(:refresh, 'is only allowed for a single catkey.') if catkeys.count { |catkey| catkey.refresh && catkey._destroy != '1' } > 1
   end
 
   # this is overriding Reforms save method, since we are persisting catkeys in cocina only
