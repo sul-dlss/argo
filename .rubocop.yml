@@ -437,3 +437,6 @@ RSpec/VerifiedDoubleReference: # new in 2.10.0
 
 Style/EnvHome: # new in 1.29
   Enabled: true
+
+RSpec/ChangeByZero: # new in 2.11.0
+  Enabled: true
