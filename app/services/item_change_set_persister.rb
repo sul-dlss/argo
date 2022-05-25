@@ -18,8 +18,9 @@ class ItemChangeSetPersister
   def update
     updated_model = update_identification(model)
                     .then { |updated| updated_administrative(updated) }
+                    .then { |updated| updated_structural_collections(updated) }
                     .then { |updated| updated_access(updated) }
-                    .then { |updated| update_structural(updated) }
+
     Repository.store(updated_model)
   end
 
@@ -39,7 +40,7 @@ class ItemChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :admin_policy_id, :barcode, :catkeys, :source_id, :collection_ids,
-           *ACCESS_FIELDS.keys,
+           *ACCESS_FIELDS.keys, :rights_changed?,
            :changed?, to: :change_set
 
   def object_client
@@ -53,7 +54,7 @@ class ItemChangeSetPersister
     updated.new(administrative: updated_administrative)
   end
 
-  def update_structural(updated)
+  def updated_structural_collections(updated)
     return updated unless changed?(:collection_ids)
 
     updated_structural = if collection_ids
@@ -64,6 +65,45 @@ class ItemChangeSetPersister
     updated.new(structural: updated_structural)
   end
 
+  ### Access and structural have to be updated simultaneously or it may trigger
+  ### the validation about the file being published when access is dark.
+  # @param [Cocina::Models::Dro] updated the DRO metadata to modify
+  def updated_access(updated)
+    updated.new(
+      structural: structural_with_updated_file_access(updated),
+      access: updated_object_access(updated)
+    )
+  end
+
+  # If the rights on the object were changed, then we copy the new rights to the file level
+  # @param [Cocina::Models::Dro] updated the DRO metadata to modify
+  # @return [Cocina::Models::DROStructural] the new structural modified to have appropriate file access.
+  def structural_with_updated_file_access(updated)
+    return updated.structural unless rights_changed?
+
+    # Convert to hash so we can mutate it
+    structure_hash = updated.structural.to_h
+    Array(structure_hash[:contains]).each do |fileset|
+      fileset[:structural][:contains].each do |file|
+        case view_access
+        when 'dark'
+          # Ensure files attached to dark objects are neither published nor shelved
+          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
+          file[:administrative].merge!(publish: false)
+          file[:administrative].merge!(shelve: false)
+        when 'citation-only'
+          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
+        else
+          file[:access].merge!(view: view_access,
+                               download: download_access,
+                               controlledDigitalLending: controlled_digital_lending,
+                               location: access_location)
+        end
+      end
+    end
+    Cocina::Models::DROStructural.new(structure_hash)
+  end
+
   def access_changed?
     ACCESS_FIELDS.keys.any? { |field| changed?(field) }
   end
@@ -72,10 +112,8 @@ class ItemChangeSetPersister
     changed?(:source_id) || changed?(:catkeys) || changed?(:barcode)
   end
 
-  def updated_access(updated)
-    return updated unless access_changed?
-
-    updated.new(access: updated.access.new(updated_access_properties))
+  def updated_object_access(updated)
+    access_changed? ? updated.access.new(updated_access_properties) : updated.access
   end
 
   def updated_access_properties
