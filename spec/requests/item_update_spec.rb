@@ -141,11 +141,7 @@ RSpec.describe 'Set the properties for an item' do
                     type: Cocina::Models::ObjectType.file,
                     version: 1,
                     access: existing_file_access,
-                    administrative: {
-                      publish: true,
-                      sdrPreserve: true,
-                      shelve: true
-                    },
+                    administrative: existing_file_administrative,
                     filename: 'fred',
                     hasMessageDigests: [],
                     label: 'hi'
@@ -157,7 +153,13 @@ RSpec.describe 'Set the properties for an item' do
           isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
         }
       end
-
+      let(:existing_file_administrative) do
+        {
+          publish: true,
+          sdrPreserve: true,
+          shelve: true
+        }
+      end
       let(:existing_file_access) do
         {
           view: 'world',
@@ -378,6 +380,87 @@ RSpec.describe 'Set the properties for an item' do
           patch "/items/#{druid}", params: {
             item: {
               view_access: 'dark',
+              controlled_digital_lending: '0'
+            }
+          }
+
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+          expect(response.code).to eq('303')
+        end
+      end
+
+      context 'when changing from dark access' do
+        let(:existing_access) do
+          {
+            view: 'dark',
+            download: 'none'
+          }
+        end
+
+        let(:existing_file_administrative) do
+          {
+            publish: false,
+            sdrPreserve: true,
+            shelve: false
+          }
+        end
+
+        # This allows us to test that the access on the file was changed as well.
+        let(:existing_file_access) do
+          existing_access
+        end
+
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              access: {
+                view: 'location-based',
+                download: 'location-based',
+                location: 'spec',
+                controlledDigitalLending: false
+              },
+              structural: {
+                contains: [
+                  {
+                    externalIdentifier: 'fileset_1',
+                    type: Cocina::Models::FileSetType.file,
+                    version: 1,
+                    label: 'Fileset 1',
+                    structural: {
+                      contains: [
+                        {
+                          externalIdentifier: 'file_1',
+                          type: Cocina::Models::ObjectType.file,
+                          version: 1,
+                          access: {
+                            view: 'location-based',
+                            download: 'location-based',
+                            location: 'spec',
+                            controlledDigitalLending: false
+                          },
+                          administrative: existing_file_administrative, # Nothing was changed
+                          filename: 'fred',
+                          hasMessageDigests: [],
+                          label: 'hi'
+                        }
+                      ]
+                    }
+                  }
+                ],
+                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+              }
+            }
+          )
+        end
+
+        it 'sets the new access rights' do
+          patch "/items/#{druid}", params: {
+            item: {
+              view_access: 'location-based',
+              download_access: 'location-based',
+              access_location: 'spec',
               controlled_digital_lending: '0'
             }
           }

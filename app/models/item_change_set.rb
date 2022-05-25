@@ -37,32 +37,6 @@ class ItemChangeSet < ApplicationChangeSet
     setup_view_access_with_cdl_properties(model.access)
   end
 
-  # @param structural [Cocina::Models::DRO] the DRO metadata to modify
-  # @return [Cocina::Models::DRO] a copy of the the Cocina model, with the new structural overlaid
-  def update_files(updated)
-    # Convert to hash so we can mutate it
-    structure_hash = updated.structural.to_h
-    Array(structure_hash[:contains]).each do |fileset|
-      fileset[:structural][:contains].each do |file|
-        case view_access
-        when 'dark'
-          # Ensure files attached to dark objects are neither published nor shelved
-          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
-          file[:administrative].merge!(publish: false)
-          file[:administrative].merge!(shelve: false)
-        when 'citation-only'
-          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
-        else
-          file[:access].merge!(view: view_access,
-                               download: download_access,
-                               controlledDigitalLending: controlled_digital_lending,
-                               location: access_location)
-        end
-      end
-    end
-    updated.new(structural: structure_hash)
-  end
-
   def sync
     super
     self.download_access = 'none' if clear_download? # This must be before clearing location
@@ -81,7 +55,8 @@ class ItemChangeSet < ApplicationChangeSet
   # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
   def save_model
     updated = model
-    updated = update_files(updated) if rights_changed? # This would ideally live in #sync, but reform doesn't support immutable models.
+    # Can't update the files if the previous access was dark, as it triggers validation that may make the object invalid
+    # updated = update_files(updated) if rights_changed? # This would ideally live in #sync, but reform doesn't support immutable models.
     ItemChangeSetPersister.update(updated, self)
   end
 
