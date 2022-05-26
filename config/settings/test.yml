@@ -2,5 +2,5 @@ bulk_metadata:
   directory: 'spec/fixtures/bulk_upload/workspace/'
 
 # URLs
-solrizer_url: 'http://localhost:8984/solr/argo'
+solrizer_url: 'http://localhost:8983/solr/argo'
 dor_indexing_url: http://localhost:3004/dor

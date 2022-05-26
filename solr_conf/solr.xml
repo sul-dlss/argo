@@ -39,7 +39,7 @@
        New style future stuff:
   <solrcloud>
     <str name="host">${host:}</str>
-    <int name="hostPort">${jetty.port:8984}</int>
+    <int name="hostPort">${jetty.port:8983}</int>
     <str name="hostContext">${hostContext:solr}</str>
     <int name="zkClientTimeout">${zkClientTimeout:30000}</int>
     <bool name="genericCoreNodeNames">${genericCoreNodeNames:false}</bool>

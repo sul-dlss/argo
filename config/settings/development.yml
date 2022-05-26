@@ -3,4 +3,4 @@ profiler:
 
 # URLs
 dor_indexing_url: 'http://localhost:3004/dor'
-solrizer_url: 'http://localhost:8984/solr/argo'
+solrizer_url: 'http://localhost:8983/solr/argo'

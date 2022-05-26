@@ -123,7 +123,7 @@ services:
       - ./solr_conf/conf/:/myconfig
     command: solr-create -c argo -d /myconfig
     ports:
-      - 8984:8983
+      - 8983:8983
 
   suri:
     image: suldlss/suri-rails:latest
