@@ -141,10 +141,6 @@ services:
 
   db:
     image: postgres:11 # aligns the pg version with what is supported by dor-services-app
-     # No ports shared externally, so that this doesn't conflict with the postgres
-     # server that TravisCI starts up.
-     # ports:
-     #   - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=sekret
     volumes:
