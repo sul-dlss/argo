@@ -79,13 +79,13 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
-        expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
+        expect(page).not_to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
 
         # these buttons are disabled since object is locked
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
 
-        expect(rendered.css('a').size).to eq 10
+        expect(rendered.css('a').size).to eq 9
         expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, purge, publish/unpublish are disabled
       end
     end
