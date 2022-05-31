@@ -36,7 +36,7 @@ class ApoController < ApplicationController # rubocop:disable Metrics/ClassLengt
       end
 
       ["#{name.truncate(60, separator: /\s/)} (#{col_id.delete_prefix('druid:')})", col_id]
-    end.sort_by(&:first) # before returning the list, sort by collection name
+    end.compact.sort_by(&:first) # before returning the list, sort by collection name
   end
 
   def create
