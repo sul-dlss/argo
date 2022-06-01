@@ -1,3 +1,7 @@
 en:
   blacklight:
     application_name: 'Argo'
+    search:
+      fields:
+        released_to_earthworks: Released to Earthworks
+        released_to_searchworks: Released to Searchworks
