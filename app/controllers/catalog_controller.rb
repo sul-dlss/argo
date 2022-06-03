@@ -45,6 +45,7 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_SOURCE_ID,     label: 'Source'
     config.add_index_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
+
     config.add_index_field 'status_ssi',                      label: 'Status'
     config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
     config.add_index_field 'rights_descriptions_ssim', label: 'Access Rights'
@@ -72,6 +73,54 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version',             component: true, limit: 10, home: false
     config.add_facet_field 'processing_status_text_ssi',        label: 'Processing Status',   component: true, limit: 10, home: false
     config.add_facet_field SolrDocument::FIELD_RELEASED_TO,     label: 'Released To',         component: true, limit: 10
+    config.add_facet_field 'released_to_earthworks',
+                           component: true,
+                           query: {
+                             week: {
+                               label: 'Last week',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_EARTHWORKS}:[NOW-7DAY/DAY TO NOW]"
+                             },
+                             month: {
+                               label: 'Last month',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_EARTHWORKS}:[NOW-1MONTH/DAY TO NOW]"
+                             },
+                             year: {
+                               label: 'Last year',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_EARTHWORKS}:[NOW-1YEAR/DAY TO NOW]"
+                             },
+                             ever: {
+                               label: 'Currently released',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_EARTHWORKS}:[* TO *]"
+                             },
+                             never: {
+                               label: 'Not released',
+                               fq: "-#{SolrDocument::FIELD_RELEASED_TO_EARTHWORKS}:[* TO *]"
+                             }
+                           }
+    config.add_facet_field 'released_to_searchworks',
+                           component: true,
+                           query: {
+                             week: {
+                               label: 'Last week',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[NOW-7DAY/DAY TO NOW]"
+                             },
+                             month: {
+                               label: 'Last month',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[NOW-1MONTH/DAY TO NOW]"
+                             },
+                             year: {
+                               label: 'Last year',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[NOW-1YEAR/DAY TO NOW]"
+                             },
+                             ever: {
+                               label: 'Currently released',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[* TO *]"
+                             },
+                             never: {
+                               label: 'Not released',
+                               fq: "-#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[* TO *]"
+                             }
+                           }
     config.add_facet_field 'wf_wps_ssim',    label: 'Workflows (WPS)',
                                              component: Blacklight::Hierarchy::FacetFieldListComponent,
                                              limit: 9999

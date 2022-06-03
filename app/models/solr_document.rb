@@ -20,7 +20,10 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   FIELD_LAST_MODIFIED_DATE        = :modified_latest_dttsi
   FIELD_LAST_OPENED_DATE          = :opened_latest_dttsi
   FIELD_PRESERVATION_SIZE         = :preserved_size_dbtsi
+  FIELD_RELEASED_TO_EARTHWORKS    = :released_to_earthworks_dttsi
+  FIELD_RELEASED_TO_SEARCHWORKS   = :released_to_searchworks_dttsi
   FIELD_RELEASED_TO               = :released_to_ssim
+
   FIELD_TITLE                     = 'sw_display_title_tesim'
   FIELD_AUTHOR                    = 'sw_author_tesim'
   FIELD_LABEL                     = 'obj_label_tesim'
