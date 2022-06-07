@@ -90,10 +90,6 @@ class ProfilePresenter
     facet_query_field['-rights_primary_ssi:"dark" AND published_dttsim:*']
   end
 
-  def released_to
-    aggregations[SolrDocument::FIELD_RELEASED_TO.to_s].items
-  end
-
   def catkey
     stats_field['catkey_id_ssim']
   end

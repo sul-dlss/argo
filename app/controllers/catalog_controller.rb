@@ -72,7 +72,6 @@ class CatalogController < ApplicationController
     config.add_facet_field 'hydrus_apo_title_ssim',             label: 'Hydrus Admin Policy', component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version',             component: true, limit: 10, home: false
     config.add_facet_field 'processing_status_text_ssi',        label: 'Processing Status',   component: true, limit: 10, home: false
-    config.add_facet_field SolrDocument::FIELD_RELEASED_TO,     label: 'Released To',         component: true, limit: 10
     config.add_facet_field 'released_to_earthworks',
                            component: true,
                            query: {

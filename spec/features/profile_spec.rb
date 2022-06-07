@@ -18,7 +18,6 @@ RSpec.describe 'Profile' do
     solr_conn.add(id: 'druid:xb482bw3988',
                   objectType_ssim: 'item',
                   content_type_ssim: 'image',
-                  SolrDocument::FIELD_RELEASED_TO => 'SEARCHWORKS',
                   collection_title_ssim: 'Annual report of the State Corporation Commission',
                   apo_title_ssim: 'Stanford University Libraries - Special Collections',
                   rights_descriptions_ssim: 'dark',
@@ -46,7 +45,6 @@ RSpec.describe 'Profile' do
     within '#discovery' do
       expect(page).to have_css 'h4', text: 'Discovery'
       expect(page).to have_css 'td:nth-child(1)', text: 'Published to PURL'
-      expect(page).to have_css 'td:nth-child(1)', text: 'SEARCHWORKS'
       expect(page).to have_css 'h5', text: 'Catkeys'
       expect(page).to have_css 'td:nth-child(1)', text: 'has value'
     end
