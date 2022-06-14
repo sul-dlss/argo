@@ -11,21 +11,21 @@ class DescriptiveMetadataExportJob < GenericJob
 
       # NOTE: This could potentially consume a lot of memory, because we don't know which columns a record has ahead of time,
       #  so we have to load all the records into memory first.
-      headers = Set.new
       descriptions = druids.each_with_object({}) do |druid, out|
         log_buffer.puts("#{Time.current} #{self.class}: Exporting description for #{druid} (bulk_action.id=#{bulk_action_id})")
         item = Repository.find(druid)
         description = DescriptionExport.export(source_id: item.identification.sourceId, description: item.description)
         out[druid] = description
-        headers.merge(description.keys)
         bulk_action.increment(:druid_count_success).save
       end
 
+      grouped_descriptions = DescriptionsGrouper.group(descriptions:)
+      ordered_headers = DescriptionHeaders.create(headers: grouped_descriptions.values.flat_map(&:keys).uniq)
+
       log_buffer.puts("#{Time.current} #{self.class}: Writing to file")
-      ordered_headers = DescriptionHeaders.create(headers:)
 
       CSV.open(csv_download_path, 'w', write_headers: true, headers: %w[druid] + ordered_headers) do |csv|
-        descriptions.each do |druid, description|
+        grouped_descriptions.each do |druid, description|
           csv << ([druid] + description.values_at(*ordered_headers))
         end
       end
