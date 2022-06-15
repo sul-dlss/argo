@@ -1,14 +1,21 @@
 # frozen_string_literal: true
 
 module ApoHelper
-  # Retrieve a list of workflow templates from  the workflow service and return
-  # an array suitable for select_tag options
+  # @return [Array<Array<String, String>] array suitable for select_tag options
   def workflow_options
-    Rails.cache.fetch 'workflow-templates-select-options' do
-      list = WorkflowClientFactory.build.workflow_templates
-      list.map do |name|
-        [name, name]
-      end
+    # per https://github.com/sul-dlss/argo/issues/3741, this should be hardcoded
+    %w[
+      accessionWF
+      gisAssemblyWF
+      gisDeliveryWF
+      gisDiscoveryWF
+      goobiWF
+      registrationWF
+      wasCrawlDisseminationWF
+      wasCrawlPreassemblyWF
+      wasSeedPreassemblyWF
+    ].map do |workflow|
+      [workflow, workflow]
     end
   end
 
