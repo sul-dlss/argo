@@ -30,4 +30,4 @@ RUN yarn install
 
 COPY . .
 
-CMD ["bin/dev"]
+CMD ["docker/entrypoint.sh"]
