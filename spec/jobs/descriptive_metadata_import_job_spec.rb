@@ -20,7 +20,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
     ].join("\n")
   end
 
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true, object_state: :unlock) }
 
   before do
     allow(BulkJobLog).to receive(:open).and_yield(logger)
@@ -58,6 +58,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         expect(Repository).to have_received(:store).with(expected1)
         expect(Repository).to have_received(:store).with(expected2)
         expect(state_service).to have_received(:allows_modification?).twice
+        expect(state_service).to have_received(:object_state).twice
         expect(version_client).to have_received(:close).twice
       end
     end
@@ -168,21 +169,37 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
 
       let(:ability) { instance_double(Ability, can?: true) }
 
-      let(:state_service) { instance_double(StateService, allows_modification?: false) }
-
       let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
 
-      let(:expected1) do
-        item1.new(version: 2, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
+      context 'when already accessioned and locked' do
+        let(:state_service) { instance_double(StateService, allows_modification?: false, object_state: :lock) }
+        let(:expected1) do
+          item1.new(version: 2, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
+        end
+
+        it 'opens the item, updates the descriptive metadata and then closes the item' do
+          expect(bulk_action.druid_count_total).to eq 1
+          expect(Repository).to have_received(:store).with(expected1)
+          expect(state_service).to have_received(:allows_modification?)
+          expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, significance: 'minor', opening_user_name: bulk_action.user.to_s,
+                                                              description: 'Descriptive metadata upload')
+          expect(version_client).to have_received(:close).once
+        end
       end
 
-      it 'opens the item, updates the descriptive metadata and then closes the item' do
-        expect(bulk_action.druid_count_total).to eq 1
-        expect(Repository).to have_received(:store).with(expected1)
-        expect(state_service).to have_received(:allows_modification?)
-        expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, significance: 'minor', opening_user_name: bulk_action.user.to_s,
-                                                            description: 'Descriptive metadata upload')
-        expect(version_client).to have_received(:close).once
+      context 'when registered' do
+        let(:state_service) { instance_double(StateService, allows_modification?: true, object_state: :unlock_inactive) }
+        let(:expected1) do
+          item1.new(version: 1, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
+        end
+
+        it 'updates the descriptive metadata but does not open or close the item' do
+          expect(bulk_action.druid_count_total).to eq 1
+          expect(Repository).to have_received(:store).with(expected1)
+          expect(state_service).to have_received(:allows_modification?)
+          expect(VersionService).not_to have_received(:open)
+          expect(version_client).not_to have_received(:close)
+        end
       end
     end
   end
