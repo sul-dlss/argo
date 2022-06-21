@@ -27,7 +27,7 @@ RSpec.describe 'BulkActions::ImportStructuralJobs', type: :request do
 
         expect { post '/bulk_actions/import_structural_job', params: }.not_to have_enqueued_job(ImportStructuralJob)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to match('Missing headers: druid')
+        expect(response.body).to match('missing headers: druid')
       end
     end
   end

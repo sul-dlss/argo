@@ -12,7 +12,7 @@ class RegisterDruidsJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    results = RegistrationCsvConverter.convert(csv_string: params[:csv_file])
+    results = RegistrationCsvConverter.convert(csv_string: params[:csv_file], params:)
     report_filename = generate_report_filename(bulk_action.output_directory)
 
     with_bulk_action_log do |log|

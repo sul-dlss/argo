@@ -5,7 +5,8 @@
                              pattern: '^.+:.+$',
                              data: {
                                action: "change->registration#validateSourceId invalid->registration#displayValidation",
-                               registration_target: 'sourceId'
+                               registration_target: 'sourceId',
+                               registration_tabs_target: 'requiredFormField'
                              }
      %>
   </div>
@@ -21,7 +22,8 @@
   <div class="col-sm-10">
     <%= item_form.text_field :label, class: 'form-control', required: true,
                              data: {
-                               action: "invalid->registration#displayValidation"
+                               action: "invalid->registration#displayValidation",
+                               registration_tabs_target: 'requiredFormField'
                              } %>
   </div>
 </div>

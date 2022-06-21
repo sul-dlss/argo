@@ -29,11 +29,13 @@ RSpec.describe RegisterDruidsJob, type: :job do
     CSV
   end
 
+  let(:params) { { csv_file: csv_string } }
+
   before do
     allow(BulkAction).to receive(:find).and_return(bulk_action)
     allow(RegistrationService).to receive(:register).and_return(response)
     allow(BulkJobLog).to receive(:open).and_yield(fake_log)
-    job.perform(bulk_action.id, csv_file: csv_string)
+    job.perform(bulk_action.id, **params)
   end
 
   describe '#perform' do
@@ -77,6 +79,38 @@ RSpec.describe RegisterDruidsJob, type: :job do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
                                                                      tags: [],
                                                                      workflow: 'accessionWF')
+        expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
+        expect(bulk_action.druid_count_success).to eq 2
+      end
+    end
+
+    context 'when registration is successful with params' do
+      # Params are provided from registration page (not bulk action page)
+      let(:csv_string) do
+        <<~CSV
+          source_id,label
+          foo:123,My new object
+          foo:123,A label
+        CSV
+      end
+
+      let(:params) do
+        {
+          csv_file: csv_string,
+          administrative_policy_object: 'druid:bc123df4567',
+          collection: 'druid:bk024qs1808',
+          initial_workflow: 'accessionWF',
+          content_type: 'book',
+          rights_view: 'world',
+          rights_download: 'world',
+          tags: ['csv : test', 'Project : two']
+        }
+      end
+
+      it 'registers the object' do
+        expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
+                                                                     tags: ['csv : test', 'Project : two'],
+                                                                     workflow: 'accessionWF').twice
         expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
       end

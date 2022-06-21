@@ -8,14 +8,10 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @registration_form = RegistrationForm.new(nil)
-    create_params = params.require(:registration).to_unsafe_h.merge(current_user:)
-    if @registration_form.validate(create_params) && @registration_form.save
-      render 'create_status'
+    if params[:registration][:csv_file]
+      csv_create
     else
-      @apo_list = AdminPolicyOptions.for(current_user)
-      @registration_form.prepopulate!
-      render :show, status: :bad_request
+      form_create
     end
   end
 
@@ -55,6 +51,17 @@ class RegistrationsController < ApplicationController
     render json: resp.to_json, layout: false
   end
 
+  def spreadsheet
+    respond_to do |format|
+      format.csv do
+        csv_template = CSV.generate do |csv|
+          csv << %w[source_id catkey barcode label]
+        end
+        send_data csv_template, filename: 'registration.csv'
+      end
+    end
+  end
+
   private
 
   def apo_id
@@ -65,5 +72,37 @@ class RegistrationsController < ApplicationController
     return render plain: error.message, status: :conflict if error.errors.first&.fetch('status') == '422'
 
     render plain: error.message, status: :bad_request
+  end
+
+  def form_create
+    @registration_form = RegistrationForm.new(nil)
+    create_params = params.require(:registration).to_unsafe_h.merge(current_user:)
+    if @registration_form.validate(create_params) && @registration_form.save
+      render 'create_status'
+    else
+      @apo_list = AdminPolicyOptions.for(current_user)
+      @registration_form.prepopulate!
+      render :show, status: :bad_request
+    end
+  end
+
+  def csv_create
+    @registration_form = CsvRegistrationForm.new(nil)
+    if @registration_form.validate(create_params) && @registration_form.save
+      # # strip the CSRF token, and the parameters that happened to be in the bulk job creation form
+      # # this can be removed when this is resolved: https://github.com/projectblacklight/blacklight/issues/2683
+      # search_state_subset = search_state.to_h.except(:authenticity_token, :druids, :druids_only, :description)
+      # path_params = Blacklight::Parameters.sanitize(search_state_subset)
+      # redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
+      redirect_to bulk_actions_path, status: :see_other, notice: 'Register druids job was successfully created.'
+    else
+      @apo_list = AdminPolicyOptions.for(current_user)
+      @registration_form.prepopulate!
+      render :show, status: :bad_request
+    end
+  end
+
+  def create_params
+    params.require(:registration).to_unsafe_h.merge(current_user:)
   end
 end
