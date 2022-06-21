@@ -1,11 +1,12 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-    static targets = [ "sourceId" ]
+    static targets = [ "sourceId", "catKey" ]
 
     // If the field is marked as invalid, then show the invalid (bootstrap) style.
     displayValidation(event) {
       const field = event.target
+      console.log(event.target)
       field.classList.toggle("invalid", !field.validity.valid)
     }
 

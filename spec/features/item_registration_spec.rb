@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Item registration page', js: true do
   let(:barcode) { '6772719-1001' }
+  let(:source_id) { "sul:#{SecureRandom.uuid}" }
   let(:user) { create(:user) }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
@@ -104,8 +105,6 @@ RSpec.describe 'Item registration page', js: true do
 
   # this successfully registers an object
   context 'successful registration' do
-    let(:source_id) { "sul:#{SecureRandom.uuid}" }
-
     it 'register an item correctly' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
@@ -157,6 +156,30 @@ RSpec.describe 'Item registration page', js: true do
         expect(page).to have_css 'td a', text: 'i : believe'
         expect(page).to have_css 'td a', text: "Registered By : #{user.sunetid}"
       end
+    end
+  end
+
+  context 'invalid catkey' do
+    it 'does not register' do
+      visit registration_path
+      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select 'registrationWF', from: 'Initial Workflow'
+      select 'book', from: 'Content Type'
+      select 'left-to-right', from: 'Viewing Direction'
+      select 'Stanford', from: 'View access'
+      select 'Stanford', from: 'Download access'
+
+      fill_in 'Project Name', with: 'X-Files'
+      fill_in 'Tags', with: 'i : believe'
+
+      fill_in 'Catkey', with: 'not_a_catkey'
+      fill_in 'Source ID', with: source_id
+      fill_in 'Label', with: 'object title'
+
+      click_button 'Register'
+
+      expect(page).to have_css('.invalid')
+      expect(page).not_to have_content 'Items successfully registered.'
     end
   end
 end
