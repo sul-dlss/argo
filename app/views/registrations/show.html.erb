@@ -1,140 +1,98 @@
 <%= tag.h1 'Register DOR Items', class: 'h2 my-4 fw-bolder' %>
 
-<div id='properties' class="container row mt-3" style="display: none" data-controller="content-type">
-  <div class="col-md-5">
-    <div class="row mb-3">
-      <label for="apo_id" class="col-sm-3 col-form-label">Admin Policy</label>
-      <div class="col-sm-9">
-        <%= select_tag :apo_id, options_for_select(@apo_list), 'data-rcparam': 'apoId', class: 'form-select', onChange: "document.querySelector('#registration-options').src = `/apo/${this.selectedOptions[0].value}/registration_options`" %>
+<%= form_with model: @registration_form, url: registration_path,
+              data: {
+                controller: 'registration',
+                action: 'invalid->registration#showValidations',
+                turbo: false # We need to return data, and turbo requires a redirect on form success
+              }, class: 'container' do |f| %>
+  <div class="row mt-3" data-controller="content-type">
+    <div class="col-md-5">
+      <div class="row mb-3">
+        <%= f.label :admin_policy, 'Admin Policy', class: "col-sm-3 col-form-label" %>
+        <div class="col-sm-9">
+          <%= f.select :admin_policy, options_for_select(@apo_list), {}, class: 'form-select', onChange: "document.querySelector('#registration-options').src = `/apo/${this.selectedOptions[0].value}/registration_options`" %>
+        </div>
+      </div>
+
+      <turbo-frame id="registration-options" src="/apo/<%= @apo_list.first.last %>/registration_options"></turbo-frame>
+
+      <div class="row mb-3">
+        <%= f.label :content_type, 'Content Type', class: "col-sm-3 col-form-label" %>
+        <div class="col-sm-9">
+          <%= f.select :content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), {},
+                      class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' }  %>
+        </div>
+      </div>
+      <div data-content-type-target="directionRow" class="row mb-3">
+        <%= f.label :viewing_direction, 'Viewing Direction', class: "col-sm-3 col-form-label" %>
+        <div class="col-sm-9">
+          <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), {},
+                      include_blank: 'none', class: 'form-select', data: { content_type_target: 'direction' } %>
+        </div>
       </div>
     </div>
-
-    <turbo-frame id="registration-options" src="/apo/<%= @apo_list.first.last %>/registration_options"></turbo-frame>
-
-    <div class="row mb-3">
-      <label for="content_type" class="col-sm-3 col-form-label">Content Type</label>
-      <div class="col-sm-9">
-        <%= select_tag :content_type, options_for_select(ContentTypeForm::CONTENT_TYPES),
-                    class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' }  %>
+    <div class="col-md-5 offset-md-2">
+      <div class="row mb-3">
+        <%= f.label :project, 'Project Name', class: "col-sm-3 col-form-label" %>
+        <div class="col-sm-9">
+          <%= f.text_field :project, data: { project_autocomplete: true }, class: 'form-control' %>
+        </div>
       </div>
-    </div>
-    <div data-content-type-target="directionRow" class="row mb-3">
-      <label for="viewing_direction" class="col-sm-3 col-form-label">Viewing Direction</label>
-      <div class="col-sm-9">
-        <%= select_tag :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS),
-                    include_blank: 'none', class: 'form-select', data: { content_type_target: 'direction' } %>
+      <div class="row mb-3">
+        <label for="registration_tags_attributes_0_name" class="col-sm-3 col-form-label">Tags</label>
+        <div class="col-sm-9">
+          <span id="tags" style="width: auto">
+            <%= f.fields_for :tags do |tags_form| %>
+              <%= tags_form.text_field :name, class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
+            <% end %>
+          </span>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-5 offset-md-2">
-    <div class="row mb-3">
-      <label for="project" class="col-sm-3 col-form-label">Project Name</label>
-      <div class="col-sm-9">
-        <%= text_field_tag :project, nil, data: { rcparam: 'projectName', project_autocomplete: true }, class: 'form-control' %>
-      </div>
-    </div>
-    <div class="row mb-3">
-      <label for="tags_0" class="col-sm-3 col-form-label">Tags</label>
-      <div class="col-sm-9">
-        <span id="tags" style="width: auto">
-          <%= text_field_tag :'tags[]', nil, id: 'tags_0', class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
-          <%= text_field_tag :'tags[]', nil, id: 'tags_1', class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
-          <%= text_field_tag :'tags[]', nil, id: 'tags_2', class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
-          <%= text_field_tag :'tags[]', nil, id: 'tags_3', class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
-          <%= text_field_tag :'tags[]', nil, id: 'tags_4', class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
-          <%= text_field_tag :'tags[]', nil, id: 'tags_5', class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class='row' data-controller="registration">
-  <div id='dynamic' data-controller="grid">
-    <table id='data'></table>
-    <div id='pdata'></div>
-    <%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, hidden: true %>
-  </div>
-
-  <div class="mt-3">
-    <button class="btn btn-sm btn-outline-primary" data-action="click->registration#addRow">
-      <span class="bi bi-plus"></span>Add another row
-    </button>
-  </div>
-
-  <div class="mt-3">
-    <button class="btn btn-primary" data-action="click->registration#register">
-      Register
-    </button>
-  </div>
-</div>
-
-<template id="table-header">
-  <div class="my-3">
-    <span class="button-group ui-controlgroup ui-controlgroup-horizontal ui-helper-clearfix" id="view-toggle" role="toolbar">
-      <input type="radio" id="grid-view" name="view" checked="checked" class="ui-checkboxradio ui-helper-hidden-accessible" data-action="click->registration#enableGridView">
-      <label for="grid-view" class="ui-button ui-widget ui-checkboxradio-radio-label ui-checkboxradio-checked ui-state-active ui-controlgroup-item ui-checkboxradio-label ui-corner-left" data-registration-target="gridShowLabel">Grid</label>
-      <input type="radio" id="text-view" name="view" class="ui-checkboxradio ui-helper-hidden-accessible" data-action="click->registration#enableTextView">
-      <label for="text-view" class="ui-button ui-widget ui-checkboxradio-radio-label ui-controlgroup-item ui-checkboxradio-label ui-corner-right" data-registration-target="textShowLabel">Text</label>
-    </span>
-
+  <div class="my-3 clearfix">
     <div class="float-end">
-      <button class="btn btn-link" data-action="click->registration#resetDialog">Reset</button>
-
-      <button data-registration-target="trackingSheetButton" disabled class="btn btn-outline-primary" data-action="click->registration#trackingSheet">
-        Tracking sheets
-      </button>
+      <button class="btn btn-link" type="reset" onclick="return confirm('You sure?')">Reset</button>
     </div>
   </div>
-</template>
 
-<div class="modal" tabindex="-1" id="gridErrorModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Error</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Error</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
-      </div>
+  <% if @registration_form.errors.full_messages.present? %>
+    <div class="alert alert-danger"><%= @registration_form.errors.full_messages.to_sentence %></div>
+  <% end %>
+
+
+  <div class="my-3 col-lg-7" data-controller="registration-items" data-registration-items-selector-value=".plain-container">
+      <template data-registration-items-target='template'>
+        <div class="plain-container" style="position: relative">
+          <hr class="my-4"/>
+          <div style="position: absolute; right: -40px">
+            <%= button_tag type: 'button', class: 'btn btn-link', aria: { label: 'Remove' },
+             data: { action: "click->registration-items#removeAssociation",
+                     plain: true } do %>
+              <span class='bi bi-trash'></span>
+            <% end %>
+          </div>
+
+          <%= f.fields_for :items, child_index: 'TEMPLATE_RECORD' do |item_form| %>
+            <% render 'item_row', item_form: %>
+          <% end %>
+        <div>
+      </template>
+
+      <%= f.fields_for :items do |item_form| %>
+        <% render 'item_row', item_form: %>
+      <% end %>
+
+    <div data-registration-items-target="add_item">
+      <%= button_tag type: 'button', class: "btn btn-sm btn-outline-primary", data: { action: "registration-items#addAssociation" } do %>
+        <span class="bi bi-plus"></span>Add another row
+      <% end %>
     </div>
   </div>
-</div>
 
-<div class="modal" tabindex="-1" id="resetModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirm</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to clear the grid?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-action="reset" data-bs-dismiss="modal">Ok</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
+  <div class="mt-3">
+    <%= f.submit 'Register', class: 'btn btn-primary' %>
   </div>
-</div>
-
-<div class="modal" tabindex="-1" id="progressModal" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Progress</h5>
-      </div>
-      <div class="modal-body">
-        <progress id="register-progress" max="100" value="0"></progress>
-      </div>
-    </div>
-  </div>
-</div>
+<% end %>

@@ -206,9 +206,10 @@ Rails.application.routes.draw do
 
   resources :agreements, only: %i[show new create]
 
-  resource :registration, only: :show do
+  resource :registration, only: %i[show create] do
     collection do
       get 'tracksheet'
+      get 'source_id'
       get 'suggest_project', action: 'autocomplete'
     end
   end
@@ -231,7 +232,6 @@ Rails.application.routes.draw do
 
   namespace :dor do
     match 'reindex/:druid', action: :reindex, as: 'reindex', via: %i[get post]
-    resources :objects, only: :create # we only implement create for object registration
   end
 
   resources :workflow_service, only: [] do

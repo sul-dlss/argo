@@ -83,7 +83,7 @@ RSpec.describe 'Registration', type: :request do
 
       it 'shows "None"' do
         get "/apo/#{druid}/registration_options"
-        options = rendered.find_css('#collection option')
+        options = rendered.find_css('#registration_collection option')
         expect(options.to_html).to include('None')
         expect(options.length).to eq(1)
       end
@@ -110,7 +110,7 @@ RSpec.describe 'Registration', type: :request do
 
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
         get "/apo/#{druid}/registration_options"
-        options = rendered.find_css('#collection option')
+        options = rendered.find_css('#registration_collection option')
         expect(options.map { |node| [node.attr('value'), node.text] }).to eq [
           ['', 'None'],
           ['druid:pb873ty1662', 'Annual report of the State Corporation Commission showing... (pb873ty1662)']
@@ -132,7 +132,7 @@ RSpec.describe 'Registration', type: :request do
 
     it 'handles an APO with multiple workflows, putting the default workflow first always' do
       get "/apo/#{druid}/registration_options"
-      options = rendered.find_css('#workflow_id option')
+      options = rendered.find_css('#registration_workflow_id option')
 
       expect(options.map(&:text)).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end

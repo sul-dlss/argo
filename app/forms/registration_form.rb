@@ -1,15 +1,67 @@
 # frozen_string_literal: true
 
 # This models the values set from the registration form
-class RegistrationForm
-  attr_accessor :current_user
-
-  def initialize(params)
-    @params = params
+class RegistrationForm < Reform::Form
+  class VirtualModel < Hash
+    def persisted?
+      false
+    end
   end
 
-  def tags
-    Array(params[:tags]).compact_blank + [registered_by_tag]
+  include HasViewAccessWithCdl
+
+  property :current_user, virtual: true
+  property :admin_policy, virtual: true
+  property :collection, virtual: true
+
+  property :workflow_id, virtual: true
+  property :content_type, virtual: true
+  property :viewing_direction, virtual: true
+  property :project, virtual: true
+
+  collection :tags, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
+                    prepopulator: ->(*) { (6 - tags.count).times { tags << VirtualModel.new } } do
+    property :name, virtual: true
+    validates :name, allow_blank: true, format: { with: /.+( : .+)+/, message: "must include the pattern:
+
+[term] : [term]
+
+It's legal to have more than one colon in a hierarchy, but at least one colon is required." }
+  end
+
+  collection :items, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
+                     prepopulator: ->(*) { (1 - items.count).times { items << VirtualModel.new } } do
+    property :source_id, virtual: true
+    property :catkey, virtual: true
+    property :label, virtual: true
+    property :barcode, virtual: true
+    validates :source_id, format: { with: /\A.+:.+\z/, message: 'ID is invalid' }
+  end
+
+  def persisted?
+    false
+  end
+
+  attr_reader :created
+
+  def save_model
+    statuses = save_items
+    if statuses.all?(&:success?)
+      @created = statuses.map(&:value!)
+      return true
+    end
+
+    statuses.filter(&:failure?).map(&:failure).each { |error| errors.add(:save, error.message) }
+    false
+  end
+
+  def save_items
+    tags_with_user = tags.map(&:name) + [registered_by_tag]
+
+    items.map do |item|
+      request_model = cocina_model(item) # might raise Cocina::Models::ValidationError
+      RegistrationService.register(model: request_model, workflow: workflow_id, tags: tags_with_user)
+    end
   end
 
   def registered_by_tag
@@ -17,45 +69,57 @@ class RegistrationForm
   end
 
   # @raise [Cocina::Models::ValidationError]
-  def cocina_model
-    catalog_links = []
-    if params[:other_id] != 'label:'
-      catalog, record_id = params[:other_id].split(':')
-      catalog_links = [{ catalog:, catalogRecordId: record_id, refresh: true }]
-    end
-
+  def cocina_model(item)
     model_params = {
-      type: params[:content_type],
-      label: params.require(:label),
+      type: content_type,
+      label: item.label,
       version: 1,
-      administrative: {
-        hasAdminPolicy: params.require(:admin_policy)
-      },
-      identification: {
-        sourceId: params.require(:source_id),
-        catalogLinks: catalog_links,
-        barcode: params[:barcode_id]
-      }.compact
+      administrative:,
+      identification: identification(item),
+      structural:,
+      access:
     }
 
-    model_params.merge!(access: access_params)
-
-    structural = {}
-    structural[:isMemberOf] = [params[:collection]] if params[:collection].present?
-    structural[:hasMemberOrders] = [{ viewingDirection: params[:viewing_direction] }] if params[:viewing_direction].present?
-
-    model_params[:structural] = structural
-    model_params[:administrative][:partOfProject] = params[:project] if params[:project].present?
     Cocina::Models::RequestDRO.new(model_params)
   end
 
   # TODO: This same code is in the ItemChangeSet
-  def access_params
-    access_params = params.require(:access).permit(:view, :download, :location, :controlledDigitalLending).to_h
-    access_params[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(access_params[:controlledDigitalLending])
-    access_params['download'] = 'none' if %w[dark citation-only].include?(access_params['view'])
-    access_params
+  def access
+    {
+      view: view_access,
+      download: download_access,
+      location: access_location,
+      controlledDigitalLending: ::ActiveModel::Type::Boolean.new.cast(controlled_digital_lending)
+    }.tap do |access_params|
+      access_params[:download] = 'none' if %w[dark citation-only].include?(access_params[:view])
+    end.compact_blank
   end
 
-  attr_reader :params
+  def administrative
+    {
+      hasAdminPolicy: admin_policy,
+      partOfProject: project
+    }.compact_blank
+  end
+
+  def identification(item)
+    {
+      sourceId: item.source_id,
+      catalogLinks: catalog_links(item),
+      barcode: item.barcode
+    }.compact_blank
+  end
+
+  def structural
+    structural = {}
+    structural[:isMemberOf] = [collection] if collection.present?
+    structural[:hasMemberOrders] = [{ viewingDirection: viewing_direction }] if viewing_direction.present?
+    structural
+  end
+
+  def catalog_links(item)
+    return [] if item.catkey.blank?
+
+    [{ catalog: 'symphony', catalogRecordId: item.catkey, refresh: true }]
+  end
 end
