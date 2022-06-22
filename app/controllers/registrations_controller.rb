@@ -51,6 +51,23 @@ class RegistrationsController < ApplicationController
     render json: resp.to_json, layout: false
   end
 
+  # Allow the front end to check if a catkey exists
+  def catkey
+    begin
+      Dor::Services::Client.marcxml.marcxml(catkey: params[:catkey])
+      resp = true
+    rescue Dor::Services::Client::NotFoundResponse
+      resp = false
+    rescue Dor::Services::Client::UnexpectedResponse => e
+      # In production, this will prevent registration attempt when Symphony is not available.
+      # In other environments, where Symphony is never available, it will allow registration.
+      return render plain: e.message, status: :bad_gateway if Rails.env.production?
+
+      resp = true
+    end
+    render json: resp.to_json, layout: false
+  end
+
   def spreadsheet
     respond_to do |format|
       format.csv do
