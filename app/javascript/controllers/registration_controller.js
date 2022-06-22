@@ -56,7 +56,7 @@ export default class extends Controller {
       if (!field.validity.patternMismatch) { // Only check if the format is valid
         this.clearValidation(field)
 
-        // Check to see if this is unique in SDR        
+        // Check to see if this is unique in SDR
         fetch(`/registration/catkey?catkey=${currentCatkey}`)
           .then(response => {
             if (response.ok) {
@@ -75,5 +75,13 @@ export default class extends Controller {
           })
       }
     }
-    
+
+    validateBarcode(event) {
+      const field = event.target
+      if (field.validity.patternMismatch) {
+        field.classList.toggle("invalid", !field.validity.valid)
+      } else {
+        this.clearValidation(field)
+      }
+    }
 }
