@@ -41,7 +41,7 @@ class RegistrationsController < ApplicationController
 
   # Allow the front end to check if a source Id already exists
   def source_id
-    raise 'Malformed input' unless /\A[\w:]+\z/.match?(params[:source_id])
+    raise 'Malformed input' unless /\A.+:.+\z/.match?(params[:source_id])
 
     query = "_query_:\"{!raw f=#{SolrDocument::FIELD_SOURCE_ID}}#{params[:source_id]}\""
     solr_conn = blacklight_config.repository_class.new(blacklight_config).connection
