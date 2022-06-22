@@ -218,6 +218,28 @@ RSpec.describe ItemChangeSetPersister do
       end
     end
 
+    context 'when change set has changed refresh' do
+      let(:new_catkeys) { ['367269'] }
+
+      before do
+        change_set.validate(catkeys: [catkey_before], refresh: false)
+        instance.update
+      end
+
+      it 'invokes object client with item/DRO that has new catkey' do
+        expect(Repository).to have_received(:store).with(
+          cocina_object_with(
+            identification: {
+              barcode: barcode_before,
+              catalogLinks: [
+                { catalog: 'symphony', catalogRecordId: catkey_before, refresh: false }
+              ]
+            }
+          )
+        )
+      end
+    end
+
     context 'when change set has changed catkey' do
       let(:new_catkeys) { ['367269'] }
 

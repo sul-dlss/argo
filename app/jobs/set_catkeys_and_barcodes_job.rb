@@ -16,7 +16,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
     super
 
     # Catkeys, barcodes are nil if not selected for use.
-    update_druids, catkeys, barcodes = params_from(params)
+    update_druids, catkeys, barcodes, refresh = params_from(params)
 
     with_bulk_action_log do |log|
       update_druid_count(count: update_druids.count)
@@ -24,6 +24,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
         cocina_object = Repository.find(current_druid)
         args = {}
         args[:catkeys] = Array(catkeys[i]) if catkeys
+        args[:refresh] = refresh[i] if refresh
         args[:barcode] = barcodes[i] if barcodes
         change_set = ItemChangeSet.new(cocina_object)
         change_set.validate(args)
@@ -36,8 +37,9 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   def params_from(params)
     catkeys = catkeys_from_params(params)
+    refresh = catkeys ? Array.new(catkeys.size, true) : nil
     barcodes = barcodes_from_params(params)
-    [druids, catkeys, barcodes]
+    [druids, catkeys, barcodes, refresh]
   end
 
   private
