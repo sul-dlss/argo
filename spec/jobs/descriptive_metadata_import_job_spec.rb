@@ -187,7 +187,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         end
       end
 
-      context 'when registered' do
+      context 'when registered v1 but no accessioningWF in progress' do
         let(:state_service) { instance_double(StateService, allows_modification?: true, object_state: :unlock_inactive) }
         let(:expected1) do
           item1.new(version: 1, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
