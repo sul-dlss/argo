@@ -28,11 +28,9 @@ RSpec.describe DescriptiveMetadataExportJob, type: :job do
     let(:druid2) { 'druid:bd123fg5678' }
     let(:groups) { [] }
     let(:user) { instance_double(User, to_s: 'jcoyne85') }
-
     let(:item1) do
       build(:dro_with_metadata, id: 'druid:bc123df4567', source_id: 'sul:4444')
     end
-
     let(:item2) do
       build(:dro_with_metadata, id: 'druid:bd123fg5678', title: 'Test DRO #2')
     end

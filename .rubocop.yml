@@ -36,6 +36,8 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'lib/**/*.rake'
     - 'app/jobs/create_virtual_objects_job.rb'
+    - 'app/services/forms_grouper.rb'
+    - 'app/services/notes_grouper.rb'
 
 Metrics/ModuleLength:
   Exclude:
@@ -52,6 +54,7 @@ Naming/PredicateName:
 RSpec/ExampleLength:
   Exclude:
     - 'spec/features/**/*_spec.rb'
+    - 'spec/services/descriptions_grouper_spec.rb'
   Max: 43
 
 RSpec/MultipleExpectations:
