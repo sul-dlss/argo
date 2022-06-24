@@ -33,7 +33,8 @@ RSpec.describe 'Bulk descriptive metadata import', type: :request do
       expect { post '/bulk_actions/descriptive_metadata_import_job', params: }.to have_enqueued_job(DescriptiveMetadataImportJob)
         .with(Integer, {
                 groups: ["sunetid:#{user.login}", 'workgroup:sdr:administrator-role'],
-                csv_file: String
+                csv_file: String,
+                csv_filename: 'bulk_upload_descriptive.csv'
               })
       expect(response).to have_http_status(:see_other)
     end

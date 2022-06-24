@@ -103,6 +103,7 @@ class GenericJob < ApplicationJob
   # @param [CSV] csv the spreadsheet to operate on
   # @param [String] druid_column ('druid') the header of the column that holds the druid
   # @param [String] name the name of the operation for logging
+  # @param [String] filename the name of the csv file
   # @yieldparam [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] the cocina item
   # @yieldparam [CSV::Row] one line from the spreadsheet
   # @yieldparam [Proc] call this proc with a message if the operation was successful
@@ -116,9 +117,10 @@ class GenericJob < ApplicationJob
   #       failure.call("Something went wrong")
   #     end
   #   end
-  def with_csv_items(csv, name:, druid_column: 'druid')
+  def with_csv_items(csv, name:, druid_column: 'druid', filename: nil)
     update_druid_count(count: csv.size)
     with_bulk_action_log do |log|
+      log.puts("CSV filename: #{filename}") if filename
       return unless check_druid_column(csv:, druid_column:, log:, bulk_action:)
 
       csv.each.with_index(2) do |csv_row, row_num|

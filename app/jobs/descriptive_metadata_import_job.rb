@@ -16,7 +16,7 @@ class DescriptiveMetadataImportJob < GenericJob
   def perform(bulk_action_id, params)
     super
     csv = CSV.parse(params[:csv_file], headers: true)
-    with_csv_items(csv, name: 'Import descriptive metadata') do |cocina_object, csv_row, success, failure|
+    with_csv_items(csv, name: 'Import descriptive metadata', filename: params[:csv_filename]) do |cocina_object, csv_row, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       DescriptionImport.import(csv_row:)

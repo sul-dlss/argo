@@ -6,7 +6,7 @@ module BulkActions
     self.action_type = 'DescriptiveMetadataImportJob'
 
     def job_params
-      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
+      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path), csv_filename: params[:csv_file].original_filename }
     end
 
     def validate_job_params(job_params)
