@@ -182,4 +182,28 @@ RSpec.describe 'Item registration page', js: true do
       expect(page).not_to have_content 'Items successfully registered.'
     end
   end
+
+  context 'invalid barcode' do
+    it 'does not register' do
+      visit registration_path
+      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select 'registrationWF', from: 'Initial Workflow'
+      select 'book', from: 'Content Type'
+      select 'left-to-right', from: 'Viewing Direction'
+      select 'Stanford', from: 'View access'
+      select 'Stanford', from: 'Download access'
+
+      fill_in 'Project Name', with: 'Y-Files'
+      fill_in 'Tags', with: 'vinsky : believes'
+
+      fill_in 'Barcode', with: 'not_a_barcode'
+      fill_in 'Source ID', with: source_id
+      fill_in 'Label', with: 'object title'
+
+      click_button 'Register'
+
+      expect(page).to have_css('.invalid')
+      expect(page).not_to have_content 'Items successfully registered.'
+    end
+  end
 end

@@ -8,6 +8,9 @@ class RegistrationForm < Reform::Form
     end
   end
 
+  # standard, business, lane, catkey (matches allowed patterns in cocina-models)
+  VALID_BARCODE_REGEX = /\A(36105[0-9]{9}|2050[0-9]{7}|245[0-9]{8}|[0-9]+-[0-9]+)\z/
+
   include HasViewAccessWithCdl
 
   property :current_user, virtual: true
@@ -37,6 +40,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     property :barcode, virtual: true
     validates :source_id, format: { with: /\A.+:.+\z/, message: 'ID is invalid' }
     validates :catkey, allow_blank: true, format: { with: /\A\d+(:\d+)*\z/, message: 'is invalid' }
+    validates :barcode, allow_blank: true, format: { with: VALID_BARCODE_REGEX, message: 'is invalid' }
   end
 
   def persisted?
