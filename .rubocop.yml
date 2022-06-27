@@ -257,8 +257,6 @@ Rails/WhereExists:
 Rails/WhereNot: # (new in 2.8)
   Enabled: true
 
-Gemspec/DateAssignment: # (new in 1.10)
-  Enabled: true
 Layout/SpaceBeforeBrackets: # (new in 1.7)
   Enabled: true
 Lint/AmbiguousAssignment: # (new in 1.7)
