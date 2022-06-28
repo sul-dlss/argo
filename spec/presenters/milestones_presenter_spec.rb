@@ -20,13 +20,13 @@ RSpec.describe MilestonesPresenter do
 
   let(:milestones) do
     { '1' => {
-      'registered' => { time: '2020-03-02 13:12:43 +0000' },
-      'submitted' => { time: '2020-05-01 19:26:37 +0000' },
-      'described' => { time: '2020-05-01 19:26:37 +0000' },
-      'published' => { time: '2020-05-01 19:26:37 +0000' },
-      'deposited' => { time: '2020-05-01 19:26:37 +0000' },
-      'accessioned' => { time: '2020-05-01 19:26:37 +0000' }
-    }, '2' => milestone2 }
+        'registered' => { time: '2020-03-02 13:12:43 +0000' },
+        'submitted' => { time: '2020-05-01 19:26:37 +0000' },
+        'described' => { time: '2020-05-01 19:26:37 +0000' },
+        'published' => { time: '2020-05-01 19:26:37 +0000' },
+        'deposited' => { time: '2020-05-01 19:26:37 +0000' },
+        'accessioned' => { time: '2020-05-01 19:26:37 +0000' }
+      }, '2' => milestone2 }
   end
 
   let(:versions) do
