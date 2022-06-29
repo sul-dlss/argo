@@ -446,3 +446,20 @@ Gemspec/DeprecatedAttributeAssignment: # new in 1.30
   Enabled: true
 Style/MapCompactWithConditionalBlock: # new in 1.30
   Enabled: true
+
+Layout/LineContinuationLeadingSpace: # new in 1.31
+  Enabled: true
+Layout/LineContinuationSpacing: # new in 1.31
+  Enabled: true
+Lint/ConstantOverwrittenInRescue: # new in 1.31
+  Enabled: true
+Lint/NonAtomicFileOperation: # new in 1.31
+  Enabled: true
+Rails/DotSeparatedKeys: # new in 2.15
+  Enabled: true
+Rails/RootPublicPath: # new in 2.15
+  Enabled: true
+Rails/StripHeredoc: # new in 2.15
+  Enabled: true
+Rails/ToFormattedS: # new in 2.15
+  Enabled: true

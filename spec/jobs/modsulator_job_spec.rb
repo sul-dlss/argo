@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe ModsulatorJob, type: :job do
   before do
-    Dir.mkdir(output_directory) unless Dir.exist?(output_directory)
+    FileUtils.mkdir_p(output_directory)
   end
 
   after do
-    FileUtils.rm_rf(output_directory) if Dir.exist?(output_directory)
+    FileUtils.rm_rf(output_directory)
   end
 
   let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'job_tests') }

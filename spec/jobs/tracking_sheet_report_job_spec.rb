@@ -21,7 +21,7 @@ RSpec.describe TrackingSheetReportJob, type: :job do
   end
 
   after do
-    FileUtils.rm_rf(output_directory) if Dir.exist?(output_directory)
+    FileUtils.rm_rf(output_directory)
   end
 
   describe '#perform_now' do

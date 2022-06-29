@@ -29,7 +29,7 @@ class UploadsController < ApplicationController
   private
 
   def make_tmp_filename(temp_spreadsheet_filename)
-    FileUtils.mkdir_p(Settings.bulk_metadata.temporary_directory) unless File.exist?(Settings.bulk_metadata.temporary_directory)
+    FileUtils.mkdir_p(Settings.bulk_metadata.temporary_directory)
     File.join(Settings.bulk_metadata.temporary_directory, temp_spreadsheet_filename)
   end
 end
