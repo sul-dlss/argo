@@ -67,9 +67,11 @@ class NotesGrouper
                             # If there is no matching note number, increment the
                             # current highest note number and use it for note
                             # elements for this type
-                            ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first.succ.tap do |new_note|
-                              ordered_mapping[new_note] = [label_for_note_number, type_for_note_number]
-                            end
+                            max_note = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
+                            field, number = max_note.scan(/(\D+)(\d+)/).first
+                            new_note = "#{field}#{number.to_i.succ}"
+                            ordered_mapping[new_note] = [label_for_note_number, type_for_note_number]
+                            new_note
                           when 1
                             # If there is only one matching note number in the mapping, use it and move on.
                             ordered_mapping.key([label_for_note_number, type_for_note_number])
