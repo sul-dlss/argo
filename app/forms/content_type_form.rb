@@ -15,6 +15,7 @@ class ContentTypeForm < ApplicationChangeSet
     '3d' => Cocina::Models::ObjectType.three_dimensional,
     'document' => Cocina::Models::ObjectType.document,
     'geo' => Cocina::Models::ObjectType.geo,
+    'webarchive-binary' => Cocina::Models::ObjectType.webarchive_binary,
     'webarchive-seed' => Cocina::Models::ObjectType.webarchive_seed
   }.freeze
 
