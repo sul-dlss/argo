@@ -20,8 +20,8 @@ RSpec.describe AdminPolicyOptions do
       it 'runs the appropriate query for the given permission keys, filtering out groups ending with /administrator' do
         result
         expect(SearchService).to have_received(:query).with(
-          'apo_register_permissions_ssim:"sunetid:user" OR '\
-          'apo_register_permissions_ssim:"workgroup:dlss:mock-group1" OR '\
+          'apo_register_permissions_ssim:"sunetid:user" OR ' \
+          'apo_register_permissions_ssim:"workgroup:dlss:mock-group1" OR ' \
           'apo_register_permissions_ssim:"workgroup:dlss:mock-group2"',
           defType: 'lucene',
           rows: 99_999,

@@ -266,7 +266,7 @@ RSpec.describe 'Create a new item', type: :request do
 
     let(:request_json) do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.book}\"," \
-        '"label":"test parameters for registration","version":1,'\
+        '"label":"test parameters for registration","version":1,' \
         '"access":{"view":"location-based","download":"location-based","location":' \
         '"music","controlledDigitalLending":false},' \
         '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},' \
