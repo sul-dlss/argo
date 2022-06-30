@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class StructureSerializer
-  HEADERS = %w[resource_label resource_type sequence filename file_label publish
+  HEADERS = %w[druid resource_label resource_type sequence filename file_label publish
                shelve preserve rights_view rights_download rights_location mimetype role].freeze
 
-  def self.as_csv(structural)
-    new(structural).as_csv
+  def self.as_csv(druid, structural)
+    new(druid, structural).as_csv
   end
 
-  def initialize(structural)
+  def initialize(druid, structural)
+    @druid = Druid.new(druid).without_namespace
     @structural = structural
   end
 
@@ -24,7 +25,7 @@ class StructureSerializer
   def rows
     Array(structural.contains).each.with_index(1) do |resource, n|
       resource.structural.contains.each do |file|
-        yield [resource.label, type(resource), n, file.filename, file.label,
+        yield [@druid, resource.label, type(resource), n, file.filename, file.label,
                to_yes_no(file.administrative.publish), to_yes_no(file.administrative.shelve),
                to_yes_no(file.administrative.sdrPreserve), file.access.view,
                file.access.download, file.access.location, file.hasMimeType, file.use]
