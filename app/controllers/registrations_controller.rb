@@ -43,10 +43,12 @@ class RegistrationsController < ApplicationController
   def source_id
     raise 'Malformed input' unless /\A.+:.+\z/.match?(params[:source_id])
 
-    query = "_query_:\"{!raw f=#{SolrDocument::FIELD_SOURCE_ID}}#{params[:source_id]}\""
-    solr_conn = blacklight_config.repository_class.new(blacklight_config).connection
-    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
-    resp = result.dig('response', 'numFound').to_i.positive?
+    begin
+      Dor::Services::Client.objects.find(source_id: params[:source_id])
+      resp = true
+    rescue Dor::Services::Client::NotFoundResponse
+      resp = false
+    end
 
     render json: resp.to_json, layout: false
   end

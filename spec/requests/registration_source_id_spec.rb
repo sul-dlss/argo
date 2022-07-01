@@ -4,14 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Registration source_id check', type: :request do
   let(:user) { create(:user) }
-  let(:blacklight_config) { CatalogController.blacklight_config }
-  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:source_id) { 'sul:abc-123' }
+  let(:source_id) { FactoryBot.create_for_repository(:persisted_item).identification.sourceId }
 
   before do
     sign_in user
-    solr_conn.add(:id => 'druid:hv992yv2222', SolrDocument::FIELD_SOURCE_ID => source_id)
-    solr_conn.commit
   end
 
   context 'when source_id found' do
