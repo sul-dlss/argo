@@ -54,8 +54,6 @@ services:
     image: rabbitmq:3
     ports:
       - 5672:5672
-    environment:
-      SOLR_URL: http://solr:8983/solr/argo
 
   dor-indexing-app:
     <<: *dor-indexing-backend
@@ -87,7 +85,6 @@ services:
       SETTINGS__RABBITMQ__ENABLED: 'true'
       SETTINGS__RABBITMQ__HOSTNAME: rabbitmq
       SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
-      SETTINGS__ENABLED_FEATURES__UPDATE_DESCRIPTIVE: 'true'
       REDIS_URL: redis://redis:6379/
     depends_on:
       - db
