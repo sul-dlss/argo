@@ -39,7 +39,7 @@ class DescmetadataDownloadJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       return
     end
-    unless ability.can?(:view_metadata, cocina_object)
+    unless ability.can?(:read, cocina_object)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end

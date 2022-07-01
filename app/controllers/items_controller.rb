@@ -2,7 +2,9 @@
 
 # rubocop:disable Metrics/ClassLength
 class ItemsController < ApplicationController
-  before_action :load_cocina
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', only: :show
+
+  before_action :load_cocina, except: :show
   before_action :authorize_manage!, only: %i[
     add_collection remove_collection
     purge_object
@@ -76,8 +78,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    authorize! :view_metadata, @cocina
-
     respond_to do |format|
       format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
     end

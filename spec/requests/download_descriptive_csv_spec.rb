@@ -12,7 +12,7 @@ RSpec.describe 'Download the descriptive CSV', type: :request do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    sign_in build(:user), groups: ['sdr:administrator-role']
+    sign_in build(:user), groups: ['sdr:manager-role']
   end
 
   it 'returns descriptive csv' do

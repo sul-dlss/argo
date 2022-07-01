@@ -27,12 +27,12 @@ class Ability
     cannot :impersonate, User unless current_user.webauth_admin?
 
     if current_user.manager?
-      can %i[update manage_governing_apo view_content view_metadata],
+      can %i[update manage_governing_apo view_content read],
           [NilModel] + DRO_MODELS + COLLECTION_MODELS
       can :create, ADMIN_POLICY_MODELS
     end
 
-    can %i[view_metadata view_content], DRO_MODELS + COLLECTION_MODELS + ADMIN_POLICY_MODELS if current_user.viewer?
+    can %i[read view_content], DRO_MODELS + COLLECTION_MODELS + ADMIN_POLICY_MODELS if current_user.viewer?
 
     can :update, ADMIN_POLICY_MODELS do |cocina_object|
       can_manage_items? current_user.roles(cocina_object.externalIdentifier)
@@ -51,11 +51,11 @@ class Ability
       can_view? current_user.roles(cocina_item.administrative.hasAdminPolicy)
     end
 
-    can :view_metadata, COLLECTION_MODELS + DRO_MODELS do |cocina_object|
+    can :read, COLLECTION_MODELS + DRO_MODELS do |cocina_object|
       can_view? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :view_metadata, ADMIN_POLICY_MODELS do |cocina_admin_policy|
+    can :read, ADMIN_POLICY_MODELS do |cocina_admin_policy|
       can_view?(current_user.roles(cocina_admin_policy.externalIdentifier)) ||
         can_view?(current_user.roles(cocina_admin_policy.administrative.hasAdminPolicy))
     end

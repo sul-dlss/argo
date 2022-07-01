@@ -76,8 +76,8 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
     before do
       allow(Ability).to receive(:new).and_return(ability)
-      allow(ability).to receive(:can?).with(:view_metadata, cocina_model1).and_return(true)
-      allow(ability).to receive(:can?).with(:view_metadata, cocina_model2).and_return(true)
+      allow(ability).to receive(:can?).with(:read, cocina_model1).and_return(true)
+      allow(ability).to receive(:can?).with(:read, cocina_model2).and_return(true)
     end
 
     after do
@@ -127,11 +127,11 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
     context 'user lacks permission to view metadata on one of the objects' do
       before do
-        allow(ability).to receive(:can?).with(:view_metadata, cocina_model1).and_return(true)
-        allow(ability).to receive(:can?).with(:view_metadata, cocina_model2).and_return(false)
+        allow(ability).to receive(:can?).with(:read, cocina_model1).and_return(true)
+        allow(ability).to receive(:can?).with(:read, cocina_model2).and_return(false)
       end
 
-      it 'creates a valid zip file with only the objects for which the user has view_metadata authorization' do
+      it 'creates a valid zip file with only the objects for which the user has read authorization' do
         expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
         download_job.perform(bulk_action.id, dl_job_params)

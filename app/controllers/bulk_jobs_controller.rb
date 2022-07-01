@@ -8,7 +8,7 @@ class BulkJobsController < ApplicationController
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
-    authorize! :view_metadata, @cocina
+    authorize! :read, @cocina
 
     @document = find(params[:apo_id])
     @bulk_jobs = load_bulk_jobs(params[:apo_id])

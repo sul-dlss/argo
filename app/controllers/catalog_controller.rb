@@ -238,7 +238,7 @@ class CatalogController < ApplicationController
     @cocina = Repository.find(params[:id])
     flash[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
 
-    authorize! :view_metadata, @cocina
+    authorize! :read, @cocina
 
     @workflows = WorkflowService.workflows_for(druid: params[:id])
 
@@ -247,7 +247,7 @@ class CatalogController < ApplicationController
     @milestones_presenter = MilestonesPresenter.new(milestones:,
                                                     versions: object_client.version.inventory)
 
-    # If you have this token, it indicates you have view_metadata access to the object
+    # If you have this token, it indicates you have read access to the object
     @verified_token_with_expiration = Argo.verifier.generate(
       { key: params[:id] },
       expires_in: 1.hour,
