@@ -79,10 +79,6 @@ class Ability
     intersect user_roles, MANAGE_ITEM_ROLES
   end
 
-  def can_edit_desc_metadata?(user_roles)
-    intersect user_roles, EDIT_DESC_METADATA_ROLES
-  end
-
   def can_view?(user_roles)
     intersect user_roles, VIEW_ROLES
   end
