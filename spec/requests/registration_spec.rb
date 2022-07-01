@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Registration', type: :request do
   let(:druid) { 'druid:bc123df4567' }
+  let(:bare_druid) { 'bc123df4567' }
   let(:user) { create(:user) }
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
@@ -23,12 +24,11 @@ RSpec.describe 'Registration', type: :request do
     let(:cocina_admin_policy) do
       instance_double(Cocina::Models::AdminPolicyWithMetadata, externalIdentifier: druid)
     end
-    let(:bare_druid) { 'xb482ww9999' }
     let(:track_sheet) { instance_double(TrackSheet, generate_tracking_pdf: doc) }
     let(:doc) { instance_double(Prawn::Document, render: '') }
 
     it 'generates a tracking sheet with the right default name' do
-      get "/registration/tracksheet?druid=#{bare_druid}", headers: headers
+      get "/registration/tracksheet?druid=#{druid}", headers: headers
 
       expect(response.headers['Content-Type']).to eq('pdf; charset=utf-8')
       expect(response.headers['content-disposition']).to eq('attachment; filename=tracksheet-1.pdf')
@@ -37,7 +37,7 @@ RSpec.describe 'Registration', type: :request do
     it 'generates a tracking sheet with the specified name (and sequence number)' do
       test_name = 'test_name'
       test_seq_no = 7
-      get "/registration/tracksheet?druid=#{bare_druid}&name=#{test_name}&sequence=#{test_seq_no}", headers: headers
+      get "/registration/tracksheet?druid=#{druid}&name=#{test_name}&sequence=#{test_seq_no}", headers: headers
 
       expect(response.headers['content-disposition']).to eq("attachment; filename=#{test_name}-#{test_seq_no}.pdf")
     end

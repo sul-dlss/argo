@@ -16,7 +16,7 @@ class RegistrationsController < ApplicationController
   end
 
   def tracksheet
-    druids   = Array(params[:druid])
+    druids   = Array(params[:druid]).map { |druid| Druid.new(druid).without_namespace }
     name     = params[:name] || 'tracksheet'
     sequence = params[:sequence] || 1
     response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
