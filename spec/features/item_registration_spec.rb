@@ -125,12 +125,7 @@ RSpec.describe 'Item registration page', js: true do
 
       expect(page).to have_content 'Items successfully registered.'
 
-      druid_link = find('td > a')
-
-      # Since we don't have rabbitMQ in the test suite, we have to fake it by indexing manually.
-      Argo::Indexer.reindex_druid_remotely(druid_link.text)
-
-      druid_link.click
+      find('td > a').click # Click on the druid link in the table
 
       # now verify that registration succeeded by checking some metadata
       within_table('Overview') do
