@@ -7,7 +7,7 @@
       <% @registration_form.created.each do |dro| %>
         <tr>
           <td><%= dro.identification.sourceId %></td>
-          <td><%= link_to dro.externalIdentifier, solr_document_path(dro.externalIdentifier) %></td>
+          <td><%= link_to Druid.new(dro).without_namespace, solr_document_path(dro.externalIdentifier) %></td>
           <td><%= dro.label %></td>
         </tr>
       <% end %>

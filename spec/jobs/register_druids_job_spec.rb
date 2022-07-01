@@ -72,6 +72,8 @@ RSpec.describe RegisterDruidsJob, type: :job do
     end
 
     context 'when registration is successful' do
+      let(:csv_filepath) { "#{Settings.bulk_metadata.directory}RemoteIndexingJob_1/registration_report.csv" }
+
       it 'registers the object' do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
                                                                      tags: ['csv : test', 'Project : two'],
@@ -81,6 +83,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
                                                                      workflow: 'accessionWF')
         expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
+        expect(File.read(csv_filepath)).to eq("Druid,Source Id,Label\n123,foo:bar1,My object\n123,foo:bar1,My object\n")
       end
     end
 
