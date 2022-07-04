@@ -83,7 +83,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.26.1)
+    blacklight (7.27.0)
       deprecation
       globalid
       hashdiff
@@ -180,7 +180,7 @@ GEM
     disposable (0.6.3)
       declarative (>= 0.0.9, < 1.0.0)
       representable (>= 3.1.1, < 4)
-    dlss-capistrano (4.2.1)
+    dlss-capistrano (4.3.0)
       capistrano (~> 3.0)
       capistrano-bundle_audit (>= 0.3.0)
       capistrano-one_time_key
@@ -316,7 +316,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.1)
+    minitest (5.16.2)
     moab-versioning (5.0.0)
       druid-tools (>= 1.0.0)
       json
@@ -331,7 +331,7 @@ GEM
       i18n
       stanford-mods (>= 3.0.0.alpha1, < 4)
       view_component
-    msgpack (1.5.2)
+    msgpack (1.5.3)
     multi_json (1.15.0)
     multipart-post (2.2.3)
     mysql2 (0.5.4)
@@ -409,10 +409,10 @@ GEM
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
-    rack (2.2.3.1)
+    rack (2.2.4)
     rack-mini-profiler (3.0.0)
       rack (>= 1.2.0)
-    rack-test (2.0.1)
+    rack-test (2.0.2)
       rack (>= 1.3)
     rails (7.0.3)
       actioncable (= 7.0.3)
@@ -445,7 +445,7 @@ GEM
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.7.0)
+    redis (4.7.1)
     reform (2.6.2)
       disposable (>= 0.5.0, < 1.0.0)
       representable (>= 3.1.1, < 4)
@@ -496,7 +496,8 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     rss (0.2.9)
       rexml
-    rubocop (1.31.0)
+    rubocop (1.31.1)
+      json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -511,8 +512,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    rubocop-rspec (2.11.1)
-      rubocop (~> 1.19)
+    rubocop-rspec (2.12.1)
+      rubocop (~> 1.31)
     ruby-ole (1.2.12.2)
     ruby-prof (1.4.3)
     ruby-progressbar (1.11.0)
@@ -680,4 +681,4 @@ DEPENDENCIES
   zip_tricks (= 5.3.1)
 
 BUNDLED WITH
-   2.3.9
+   2.3.17
