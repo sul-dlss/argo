@@ -16,7 +16,7 @@ export default class {
         displayKey: (suggestion) => suggestion,
       }
     ]).on('autocomplete:selected', function(event, suggestion, dataset, context) {
-      console.log(event, suggestion, dataset, context);
+      // console.log(event, suggestion, dataset, context);
     });
   }
 }
