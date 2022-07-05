@@ -24,9 +24,15 @@ class ApoController < ApplicationController
     administrative = Repository.find(params[:id]).administrative
 
     # workflow_list
-    @workflows = ([Settings.apo.default_workflow_option] + Array(administrative.registrationWorkflow)).uniq
+    @workflows = ([params[:workflow_id]] + [Settings.apo.default_workflow_option] + Array(administrative.registrationWorkflow)).compact.uniq
 
-    @access_template = AccessTemplate.new(administrative.accessTemplate)
+    access_template = administrative.accessTemplate.new({
+      view: params[:view_access],
+      download: params[:download_access],
+      location: params[:access_location],
+      controlledDigitalLending: params[:controlled_digital_lending] == 'true'
+    }.compact)
+    @access_template = AccessTemplate.new(access_template:, apo_defaults_template: administrative.accessTemplate)
 
     @collections = Array(administrative.collectionsForRegistration).map do |col_id|
       name = CollectionNameService.find(col_id)
