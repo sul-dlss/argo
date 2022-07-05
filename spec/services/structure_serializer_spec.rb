@@ -4,19 +4,22 @@ require 'rails_helper'
 
 RSpec.describe StructureSerializer do
   subject(:csv) do
-    described_class.as_csv(cocina.structural)
+    described_class.as_csv(cocina.externalIdentifier, cocina.structural)
   end
 
   let(:cocina) do
     Cocina::Models.build(JSON.parse(json))
   end
 
+  let(:druid) { 'druid:qr773tm1060' }
+  let(:bare_druid) { 'qr773tm1060' }
+
   context 'with no resources' do
     let(:json) do
       <<~JSON
         {
           "type": "#{Cocina::Models::ObjectType.image}",
-          "externalIdentifier": "druid:qr773tm1060",
+          "externalIdentifier": "#{druid}",
           "label": "dood",
           "version": 1,
           "access": {
@@ -51,7 +54,7 @@ RSpec.describe StructureSerializer do
 
     it 'serializes to CSV' do
       expect(csv).to eq <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
       CSV
     end
   end
@@ -61,7 +64,7 @@ RSpec.describe StructureSerializer do
       <<~JSON
         {
           "type": "#{Cocina::Models::ObjectType.image}",
-          "externalIdentifier": "druid:qr773tm1060",
+          "externalIdentifier": "#{druid}",
           "label": "dood",
           "version": 1,
           "access": {
@@ -248,11 +251,11 @@ RSpec.describe StructureSerializer do
 
     it 'serializes to CSV' do
       expect(csv).to eq <<~CSV
-        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
-        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,,image/tiff,
-        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
-        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,,image/tiff,
-        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,location-based,music,image/jp2,
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,,image/tiff,
+        #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,,image/tiff,
+        #{bare_druid},Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,location-based,music,image/jp2,
       CSV
     end
   end

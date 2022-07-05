@@ -9,13 +9,9 @@ class ExportStructuralJob < GenericJob
     super
 
     CSV.open(csv_download_path, 'w', headers: true) do |csv|
-      csv << ['druid', *StructureSerializer::HEADERS]
+      csv << StructureSerializer::HEADERS
       with_items(params[:druids], name: 'Export structural metadata') do |cocina_object, success, failure|
-        rows_for_file = item_to_rows(cocina_object, success, failure)
-        druid = Druid.new(cocina_object).without_namespace
-        rows_for_file.each do |row|
-          csv << [druid, *row]
-        end
+        item_to_rows(cocina_object, success, failure).each { |row| csv << row }
       end
     end
   end
@@ -30,7 +26,7 @@ class ExportStructuralJob < GenericJob
       return []
     end
 
-    StructureSerializer.new(item.structural).rows do |row|
+    StructureSerializer.new(item.externalIdentifier, item.structural).rows do |row|
       result << row
     end
     success.call('Exported structural metadata')

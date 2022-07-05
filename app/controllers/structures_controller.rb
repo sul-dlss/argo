@@ -12,7 +12,7 @@ class StructuresController < ApplicationController
         cocina = Repository.find(params[:item_id])
         authorize! :update, cocina
         filename = "structure-#{Druid.new(cocina).without_namespace}.csv"
-        send_data StructureSerializer.as_csv(cocina.structural), filename:
+        send_data StructureSerializer.as_csv(cocina.externalIdentifier, cocina.structural), filename:
       end
       format.html do
         # Lazy loading of the structural part of the show page
