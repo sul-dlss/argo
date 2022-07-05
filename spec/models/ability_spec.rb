@@ -73,14 +73,14 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, apo_id) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
-    it { is_expected.to be_able_to(:view_metadata, dro) }
-    it { is_expected.to be_able_to(:view_metadata, dro_with_metadata) }
+    it { is_expected.to be_able_to(:read, dro) }
+    it { is_expected.to be_able_to(:read, dro_with_metadata) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
-    it { is_expected.to be_able_to(:view_metadata, admin_policy) }
-    it { is_expected.to be_able_to(:view_metadata, admin_policy_with_metadata) }
-    it { is_expected.to be_able_to(:view_metadata, collection) }
-    it { is_expected.to be_able_to(:view_metadata, collection_with_metadata) }
+    it { is_expected.to be_able_to(:read, admin_policy) }
+    it { is_expected.to be_able_to(:read, admin_policy_with_metadata) }
+    it { is_expected.to be_able_to(:read, collection) }
+    it { is_expected.to be_able_to(:read, collection_with_metadata) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
@@ -103,12 +103,12 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
 
-    it { is_expected.to be_able_to(:view_metadata, dro) }
-    it { is_expected.to be_able_to(:view_metadata, dro_with_metadata) }
-    it { is_expected.to be_able_to(:view_metadata, collection) }
-    it { is_expected.to be_able_to(:view_metadata, collection_with_metadata) }
-    it { is_expected.to be_able_to(:view_metadata, admin_policy) }
-    it { is_expected.to be_able_to(:view_metadata, admin_policy_with_metadata) }
+    it { is_expected.to be_able_to(:read, dro) }
+    it { is_expected.to be_able_to(:read, dro_with_metadata) }
+    it { is_expected.to be_able_to(:read, collection) }
+    it { is_expected.to be_able_to(:read, collection_with_metadata) }
+    it { is_expected.to be_able_to(:read, admin_policy) }
+    it { is_expected.to be_able_to(:read, admin_policy_with_metadata) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
   end
@@ -123,12 +123,12 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
 
-    it { is_expected.not_to be_able_to(:view_metadata, dro) }
-    it { is_expected.not_to be_able_to(:view_metadata, dro_with_metadata) }
-    it { is_expected.not_to be_able_to(:view_metadata, collection) }
-    it { is_expected.not_to be_able_to(:view_metadata, collection_with_metadata) }
-    it { is_expected.to be_able_to(:view_metadata, admin_policy) }
-    it { is_expected.to be_able_to(:view_metadata, admin_policy_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, dro) }
+    it { is_expected.not_to be_able_to(:read, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, collection) }
+    it { is_expected.not_to be_able_to(:read, collection_with_metadata) }
+    it { is_expected.to be_able_to(:read, admin_policy) }
+    it { is_expected.to be_able_to(:read, admin_policy_with_metadata) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, dro_with_metadata) }
   end
