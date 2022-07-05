@@ -41,7 +41,7 @@ class RegisterDruidsJob < GenericJob
 
   def log_success(model, bulk_action:, log:, report:)
     log.puts("#{Time.current} #{self.class}: Successfully registered #{model.externalIdentifier}")
-    report << [model.externalIdentifier, model.identification.sourceId, model.label]
+    report << [Druid.new(model).without_namespace, model.identification.sourceId, model.label]
     bulk_action.increment(:druid_count_success).save
   end
 
