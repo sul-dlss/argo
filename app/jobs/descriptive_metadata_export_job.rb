@@ -12,11 +12,15 @@ class DescriptiveMetadataExportJob < GenericJob
       # NOTE: This could potentially consume a lot of memory, because we don't know which columns a record has ahead of time,
       #  so we have to load all the records into memory first.
       descriptions = druids.each_with_object({}) do |druid, out|
-        log_buffer.puts("#{Time.current} #{self.class}: Exporting description for #{druid} (bulk_action.id=#{bulk_action_id})")
         item = Repository.find(druid)
-        description = DescriptionExport.export(source_id: item.identification.sourceId, description: item.description)
-        out[druid] = description
-        bulk_action.increment(:druid_count_success).save
+        if item.is_a?(NilModel)
+          log_buffer.puts("#{Time.current} #{self.class}: Skipping description for #{druid} since not found (bulk_action.id=#{bulk_action_id})")
+          bulk_action.increment(:druid_count_fail).save
+        else
+          description = DescriptionExport.export(source_id: item.identification.sourceId, description: item.description)
+          out[druid] = description
+          bulk_action.increment(:druid_count_success).save
+        end
       end
 
       grouped_descriptions = DescriptionsGrouper.group(descriptions:)
