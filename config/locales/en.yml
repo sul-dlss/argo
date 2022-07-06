@@ -6,6 +6,12 @@ en:
     attributes:
       tag:
         name: Tag
+    errors:
+      models:
+        item:
+          attributes:
+            barcode:
+              invalid: "\"%{value}\" is not a valid barcode"
   helpers:
     label:
       agreement:
@@ -16,8 +22,6 @@ en:
         release_date: 'Enter the date when this embargo ends'
       serials:
         part_number2: Part number 2
-
-
   date:
       formats:
           default: "%Y-%m-%d %I:%M%p"

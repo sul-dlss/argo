@@ -14,6 +14,10 @@ class ItemChangeSet < ApplicationChangeSet
   include HasViewAccessWithCdl
 
   validates :source_id, presence: true, if: -> { changed?(:source_id) }
+  validates :barcode, format: {
+    with: /\A(2050[0-9]{7}|245[0-9]{8}|36105[0-9]{9}|[0-9]+-[0-9]+)\z/,
+    allow_blank: true
+  }
 
   def self.model_name
     ::ActiveModel::Name.new(nil, nil, 'Item')
