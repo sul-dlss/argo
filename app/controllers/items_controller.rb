@@ -204,9 +204,7 @@ class ItemsController < ApplicationController
       reindex
       redirect_to solr_document_path(params[:id]), status: :see_other
     else
-      message = change_set.errors.full_messages.to_sentence
-      logger.error "Errors: #{message}"
-      render 'error', locals: { message: }
+      render 'error', locals: { message: change_set.errors.map(&:message).to_sentence }
     end
   end
 

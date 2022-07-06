@@ -541,7 +541,7 @@ RSpec.describe 'Set the properties for an item' do
         patch "/items/#{druid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include '<turbo-frame id="barcode">Error building Cocina: &quot;invalid&quot; isn&#39;t one of in #/components/schemas/Barcode</turbo-frame>'
+        expect(response.body).to include '<turbo-frame id="barcode">&quot;invalid&quot; is not a valid barcode</turbo-frame>'
       end
     end
 
