@@ -193,11 +193,11 @@ GEM
       faraday (~> 2.0)
       faraday-retry
       zeitwerk (~> 2.1)
-    dor-workflow-client (4.0.0)
+    dor-workflow-client (4.1.0)
       activesupport (>= 3.2.1, < 8)
       deprecation (>= 0.99.0)
       faraday (~> 2.0)
-      faraday-retry
+      faraday-retry (~> 1.0)
       nokogiri (~> 1.6)
       zeitwerk (~> 2.1)
     druid-tools (2.2.1)
@@ -265,8 +265,7 @@ GEM
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
     faraday-net_http (2.0.3)
-    faraday-retry (2.0.0)
-      faraday (~> 2.0)
+    faraday-retry (1.0.3)
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
