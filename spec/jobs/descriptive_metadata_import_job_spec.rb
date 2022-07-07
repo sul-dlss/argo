@@ -7,10 +7,11 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
   let(:item1) { build(:dro_with_metadata, id: druids[0]) }
   let(:item2) { build(:dro_with_metadata, id: druids[1]) }
-  let(:logger) { instance_double(File, puts: nil) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, version: version_client) }
+  let(:filename) { 'test.csv' }
+  let(:log_buffer) { StringIO.new }
 
   let(:csv_file) do
     [
@@ -23,7 +24,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:state_service) { instance_double(StateService, allows_modification?: true, object_state: :unlock) }
 
   before do
-    allow(BulkJobLog).to receive(:open).and_yield(logger)
+    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
     allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
@@ -40,7 +41,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
     context 'when authorized' do
       before do
         allow(Ability).to receive(:new).and_return(ability)
-        subject.perform(bulk_action.id, { csv_file: })
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
       let(:ability) { instance_double(Ability, can?: true) }
@@ -65,7 +66,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
 
     context 'when not authorized' do
       before do
-        subject.perform(bulk_action.id, { csv_file: })
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
       it 'does not update or close items' do
@@ -87,7 +88,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       before do
         allow(Ability).to receive(:new).and_return(ability)
         allow(Honeybadger).to receive(:notify)
-        subject.perform(bulk_action.id, { csv_file: })
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
       it 'updates the error count without alerting honeybadger, updating or closing' do
@@ -109,13 +110,11 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
       end
 
       let(:ability) { instance_double(Ability, can?: true) }
-      let(:log_buffer) { StringIO.new }
 
       before do
         allow(Ability).to receive(:new).and_return(ability)
         allow(Honeybadger).to receive(:notify)
-        allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
-        subject.perform(bulk_action.id, { csv_file: })
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
       it 'logs the error without alerting honeybadger' do
@@ -131,7 +130,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
     context 'when unchanged' do
       before do
         allow(Ability).to receive(:new).and_return(ability)
-        subject.perform(bulk_action.id, { csv_file: })
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
       let(:ability) { instance_double(Ability, can?: true) }
@@ -157,7 +156,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         allow(Ability).to receive(:new).and_return(ability)
         allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
         allow(VersionService).to receive(:open).and_return(item1.new(version: 2))
-        subject.perform(bulk_action.id, { csv_file: })
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
       let(:csv_file) do
@@ -184,6 +183,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
           expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, significance: 'minor', opening_user_name: bulk_action.user.to_s,
                                                               description: 'Descriptive metadata upload')
           expect(version_client).to have_received(:close).once
+          expect(log_buffer.string).to include "CSV filename: #{filename}"
         end
       end
 
