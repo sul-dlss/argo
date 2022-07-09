@@ -9,6 +9,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
 
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
   let(:catkeys) { ['12345', '', '44444'] }
+  let(:refresh) { ['true', '', 'false'] }
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
 
@@ -29,10 +30,10 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
 
   let(:csv_file) do
     [
-      'Druid,Barcode,Catkey,Catkey',
-      [druids[0], barcodes[0], catkeys[0], '55555'].join(','),
-      [druids[1], barcodes[1], catkeys[1], ''].join(','),
-      [druids[2], barcodes[2], catkeys[2], ''].join(',')
+      'Druid,Barcode,Catkey,Catkey,Refresh',
+      [druids[0], barcodes[0], catkeys[0], '55555', refresh[0]].join(','),
+      [druids[1], barcodes[1], catkeys[1], '', refresh[1]].join(','),
+      [druids[2], barcodes[2], catkeys[2], '', refresh[2]].join(',')
     ].join("\n")
   end
 

@@ -15,18 +15,25 @@ class SetCatkeysAndBarcodesCsvJob < SetCatkeysAndBarcodesJob
     update_druids = []
     catkeys = nil
     barcodes = nil
+    refresh = nil
     CSV.parse(params[:csv_file], headers: true).each do |row|
       update_druids << row['Druid']
       if row.header?('Catkey')
         catkeys ||= []
+        refresh ||= []
         catkeys << catkey_cols(row)
+        refresh << refresh?(row)
       end
       if row.header?('Barcode')
         barcodes ||= []
         barcodes << row['Barcode'].presence
       end
     end
-    [update_druids, catkeys, barcodes]
+    [update_druids, catkeys, barcodes, refresh]
+  end
+
+  def refresh?(row)
+    (row['Refresh']&.downcase != 'false')
   end
 
   def catkey_cols(row)

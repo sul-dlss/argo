@@ -63,14 +63,14 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
       it 'attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode' do
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: catkeys[0].split(','), barcode: barcodes[0] }, buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: catkeys[0].split(','), barcode: barcodes[0], refresh: true }, buffer)
         expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, { catkeys: [], barcode: nil }, buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: [catkeys[2]], barcode: barcodes[2] }, buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: [catkeys[2]], barcode: barcodes[2], refresh: true }, buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
-        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkeys: %w[12345 66233])
-        expect(change_set2).to have_received(:validate).with(barcode: nil, catkeys: [])
-        expect(change_set3).to have_received(:validate).with(barcode: barcodes[2], catkeys: [catkeys[2]])
+        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkeys: %w[12345 66233], refresh: true)
+        expect(change_set2).to have_received(:validate).with(barcode: nil, catkeys: [], refresh: true)
+        expect(change_set3).to have_received(:validate).with(barcode: barcodes[2], catkeys: [catkeys[2]], refresh: true)
       end
     end
 
@@ -92,14 +92,14 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
       it 'attempts to update the catkey for each druid with an empty array and not nil' do
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: [] }, buffer) # changed to empty
-        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, { catkeys: [] }, buffer) # not changed
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: ['44444'] }, buffer) # changed to a value
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: [], refresh: true }, buffer) # changed to empty
+        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, { catkeys: [], refresh: true }, buffer) # not changed
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: ['44444'], refresh: true }, buffer) # changed to a value
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
-        expect(change_set1).to have_received(:validate).with(catkeys: []) # set to empty
-        expect(change_set2).to have_received(:validate).with(catkeys: []) # not changed
-        expect(change_set3).to have_received(:validate).with(catkeys: ['44444']) # changed to a value
+        expect(change_set1).to have_received(:validate).with(catkeys: [], refresh: true) # set to empty
+        expect(change_set2).to have_received(:validate).with(catkeys: [], refresh: true) # not changed
+        expect(change_set3).to have_received(:validate).with(catkeys: ['44444'], refresh: true) # changed to a value
       end
     end
 
@@ -198,7 +198,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
       it 'updates catkey and barcode and versions objects' do
         expect(subject).to receive(:open_new_version).with(previous_version, "Catkey updated to 12345, 66233. Barcode updated to #{barcode}.").and_return(previous_version)
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode: }, buffer)
+        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode:, refresh: true }, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
       end
@@ -209,7 +209,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
 
       it 'updates catkey and barcode and does not version objects if not needed' do
         expect(subject).not_to receive(:open_new_version).with(previous_version, "Catkey updated to #{catkeys[0]}. Barcode updated to #{barcode}.")
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode: }, buffer)
+        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode:, refresh: true }, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
       end
