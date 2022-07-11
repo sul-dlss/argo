@@ -463,3 +463,7 @@ Rails/StripHeredoc: # new in 2.15
   Enabled: true
 Rails/ToFormattedS: # new in 2.15
   Enabled: true
+RSpec/Capybara/SpecificMatcher: # new in 2.12
+  Enabled: false
+RSpec/Rails/HaveHttpStatus: # new in 2.12
+  Enabled: true
