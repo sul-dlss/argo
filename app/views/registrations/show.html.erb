@@ -3,7 +3,6 @@
 <%= form_with model: @registration_form, url: registration_path,
               data: {
                 controller: 'registration',
-                action: 'invalid->registration#showValidations',
                 turbo: false # We need to return data, and turbo requires a redirect on form success
               }, class: 'container' do |f| %>                
   <div class="row mt-3" data-controller="content-type">
@@ -75,26 +74,30 @@
     <div class="tab-content">
       <div class="tab-pane<%= is_form ? ' active' : ''%>" id="form" role="tabpanel" aria-labelledby="form-tab">
         <div class="my-3 col-lg-7" data-controller="registration-items" data-registration-items-selector-value=".plain-container">
-            <template data-registration-items-target='template'>
-              <div class="plain-container" style="position: relative">
-                <hr class="my-4"/>
-                <div style="position: absolute; right: -40px">
-                  <%= button_tag type: 'button', class: 'btn btn-link', aria: { label: 'Remove' },
-                  data: { action: "click->registration-items#removeAssociation",
-                          plain: true } do %>
-                    <span class='bi bi-trash'></span>
-                  <% end %>
-                </div>
-
-                <%= f.fields_for :items, child_index: 'TEMPLATE_RECORD' do |item_form| %>
-                  <% render 'item_row', item_form: %>
+          <label for="pasteHere" class="form-label">Enter a tab-delimited list of Barcode, Catkey, Source ID, and Label in the large data entry box below or enter them individually in the text fields below. Max 15.</label>
+          <textarea data-action="paste->registration-items#populateFromPastedData" id="pasteHere" class="form-control mb-5"></textarea>
+          <template data-registration-items-target='template'>
+            <div class="plain-container" style="position: relative" data-controller="registration-item-row">
+              <hr class="my-4"/>
+              <div style="position: absolute; right: -40px">
+                <%= button_tag type: 'button', class: 'btn btn-link',
+                               aria: { label: 'Remove' },
+                               data: { action: "click->registration-items#removeAssociation" } do %>
+                  <span class='bi bi-trash'></span>
                 <% end %>
-              <div>
-            </template>
+              </div>
 
+              <%= f.fields_for :items, child_index: 'TEMPLATE_RECORD' do |item_form| %>
+                <% render 'item_row', item_form: %>
+              <% end %>
+            <div>
+          </template>
+
+          <div class="plain-container" style="position: relative" data-controller="registration-item-row">
             <%= f.fields_for :items do |item_form| %>
               <% render 'item_row', item_form: %>
             <% end %>
+          </div>
 
           <div data-registration-items-target="add_item">
             <%= button_tag type: 'button', class: "btn btn-sm btn-outline-primary", data: { action: "registration-items#addAssociation" } do %>
