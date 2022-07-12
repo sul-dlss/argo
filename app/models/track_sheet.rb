@@ -31,6 +31,7 @@ class TrackSheet
   # @param [String] druid unqualified DRUID identifier
   # @param [Prawn::Document] pdf document being built (document is modified)
   # @return [Prawn::Document] the same document
+  # rubocop:disable Metrics/AbcSize
   def generate_tracking_sheet(druid, pdf)
     bc_width  = 2.25.in
     bc_height = 0.75.in
@@ -45,7 +46,7 @@ class TrackSheet
       return pdf
     end
 
-    barcode = Barby::Code128B.new(druid)
+    barcode = Barby::Code128B.new(druid.delete_prefix('druid:'))
     barcode.annotate_pdf(
       pdf,
       width: bc_width,
@@ -55,7 +56,7 @@ class TrackSheet
     )
 
     pdf.y -= (bc_height + 0.25.in)
-    pdf.text druid, size: 15, style: :bold, align: :center
+    pdf.text druid.delete_prefix('druid:'), size: 15, style: :bold, align: :center
     pdf.y -= 0.5.in
 
     pdf.font('Courier', size: 10)
@@ -88,6 +89,7 @@ class TrackSheet
     end
     pdf
   end
+  # rubocop:enable Metrics/AbcSize
 
   # @param [Hash] doc Solr document or to_solr Hash
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
