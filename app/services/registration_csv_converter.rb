@@ -4,6 +4,15 @@
 class RegistrationCsvConverter
   include Dry::Monads[:result]
 
+  CONTENT_TYPES = [Cocina::Models::ObjectType.image,
+                   Cocina::Models::ObjectType.three_dimensional,
+                   Cocina::Models::ObjectType.map,
+                   Cocina::Models::ObjectType.media,
+                   Cocina::Models::ObjectType.document,
+                   Cocina::Models::ObjectType.manuscript,
+                   Cocina::Models::ObjectType.book,
+                   Cocina::Models::ObjectType.object].freeze
+
   # @param [String] csv_string CSV string
   # @return [Array<Result>] a list of registration requests suitable for passing off to dor-services-client
   def self.convert(csv_string:, params: {})
@@ -69,7 +78,6 @@ class RegistrationCsvConverter
     model_params[:access] = access(row)
     project_name = params[:project_name] || row['project_name']
     model_params[:administrative][:partOfProject] = project_name if project_name.present?
-
     model_params
   end
 
@@ -87,6 +95,9 @@ class RegistrationCsvConverter
   end
 
   def dro_type(content_type)
+    # for CSV registration, we already have the URI
+    return content_type if CONTENT_TYPES.include?(content_type)
+
     case content_type.downcase
     when 'image'
       Cocina::Models::ObjectType.image
