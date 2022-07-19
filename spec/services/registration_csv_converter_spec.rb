@@ -55,7 +55,7 @@ RSpec.describe RegistrationCsvConverter do
         administrative_policy_object: 'druid:bc123df4567',
         collection: 'druid:bk024qs1808',
         initial_workflow: 'accessionWF',
-        content_type: 'book',
+        content_type: Cocina::Models::ObjectType.book,
         rights_view: 'world',
         rights_download: 'world',
         tags: ['csv : test', 'Project : two']
@@ -84,7 +84,7 @@ RSpec.describe RegistrationCsvConverter do
         administrative_policy_object: 'druid:bc123df4567',
         collection: 'druid:bk024qs1808',
         initial_workflow: 'accessionWF',
-        content_type: 'book',
+        content_type: Cocina::Models::ObjectType.book,
         tags: ['csv : test', 'Project : two']
       }
     end

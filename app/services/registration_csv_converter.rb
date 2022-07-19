@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # Convert CSV to JSON for registration
+# rubocop:disable Metrics/ClassLength
 class RegistrationCsvConverter
   include Dry::Monads[:result]
 
@@ -115,6 +116,12 @@ class RegistrationCsvConverter
       Cocina::Models::ObjectType.manuscript
     when 'book', 'book (ltr)', 'book (rtl)'
       Cocina::Models::ObjectType.book
+    when 'geo'
+      Cocina::Models::ObjectType.geo
+    when 'webarchive-seed'
+      Cocina::Models::ObjectType.webarchive_seed
+    when 'webarchive-binary'
+      Cocina::Models::ObjectType.webarchive_binary
     else
       Cocina::Models::ObjectType.object
     end
@@ -139,3 +146,4 @@ class RegistrationCsvConverter
     end.compact
   end
 end
+# rubocop:enable Metrics/ClassLength
