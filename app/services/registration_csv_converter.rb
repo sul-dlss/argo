@@ -4,14 +4,16 @@
 class RegistrationCsvConverter
   include Dry::Monads[:result]
 
-  CONTENT_TYPES = [Cocina::Models::ObjectType.image,
-                   Cocina::Models::ObjectType.three_dimensional,
+  CONTENT_TYPES = [Cocina::Models::ObjectType.book,
+                   Cocina::Models::ObjectType.document,
+                   Cocina::Models::ObjectType.file,
+                   Cocina::Models::ObjectType.geo,
+                   Cocina::Models::ObjectType.image,
                    Cocina::Models::ObjectType.map,
                    Cocina::Models::ObjectType.media,
-                   Cocina::Models::ObjectType.document,
-                   Cocina::Models::ObjectType.manuscript,
-                   Cocina::Models::ObjectType.book,
-                   Cocina::Models::ObjectType.object].freeze
+                   Cocina::Models::ObjectType.three_dimensional,
+                   Cocina::Models::ObjectType.webarchive_binary,
+                   Cocina::Models::ObjectType.webarchive_seed].freeze
 
   # @param [String] csv_string CSV string
   # @return [Array<Result>] a list of registration requests suitable for passing off to dor-services-client
