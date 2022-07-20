@@ -86,5 +86,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   def csv_file_validation
     validator = CsvUploadValidator.new(csv: job_csv, headers: ['source_id'])
     errors.add(:csv_file, validator.errors.join(' ')) unless validator.valid?
+  rescue CSV::MalformedCSVError => e
+    errors.add :csv_file, "is invalid: #{e.message}"
   end
 end

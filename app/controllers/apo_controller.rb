@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApoController < ApplicationController # rubocop:disable Metrics/ClassLength
+class ApoController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', only: %i[edit update]
