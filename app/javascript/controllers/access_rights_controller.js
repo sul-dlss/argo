@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 
 // This handles editing the access rights for a DRO
 export default class extends Controller {
-  static targets = [ "view", "download", "location", "cdl", "downloadRow", "locationRow", "cdlRow"]
+  static targets = ["view", "download", "location", "cdl", "downloadRow", "locationRow", "cdlRow"]
 
   connect() {
     this.render()
@@ -64,8 +64,7 @@ export default class extends Controller {
     this.disableCdl()
 
     // This has to come after enableDownload
-    if (this.currentDownload() == 'world')
-      this.activateWorldDownload(false)
+    this.activateWorldDownload(false)
   }
 
   maybeEnableLocation() {
