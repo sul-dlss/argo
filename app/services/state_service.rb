@@ -25,8 +25,6 @@ class StateService
     lifecycle('published') ? true : false
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   def object_state
     # This item is currently unlocked and can be edited and moved to a locked state
     return STATES[:unlock] if !active_assembly_wf? && opened? && !submitted?
@@ -40,8 +38,6 @@ class StateService
     # This item is registered, so it can be edited, but cannot currently be moved to a locked state
     STATES[:unlock_inactive]
   end
-  # rubocop:enable Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   private
 

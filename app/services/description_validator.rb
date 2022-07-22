@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # Validate the descriptive metadata spreadsheet
-# rubocop:disable Metrics/ClassLength
 class DescriptionValidator
   def initialize(csv, bulk_job: false)
     @csv = csv
@@ -131,4 +130,3 @@ class DescriptionValidator
     end
   end
 end
-# rubocop:enable Metrics/ClassLength

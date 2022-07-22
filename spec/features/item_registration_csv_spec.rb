@@ -82,4 +82,28 @@ RSpec.describe 'Item registration page', js: true do
       expect(page).to have_content 'Csv file missing headers: source_id.'
     end
   end
+
+  context 'invalid CSV' do
+    it 'reports error' do
+      visit registration_path
+      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select 'registrationWF', from: 'Initial Workflow'
+      select 'book', from: 'Content Type'
+      select 'left-to-right', from: 'Viewing Direction'
+      select 'Stanford', from: 'View access'
+      select 'Stanford', from: 'Download access'
+
+      fill_in 'Project Name', with: 'X-Files'
+      fill_in 'Tags', with: 'i : believe'
+
+      click_button 'Upload CSV'
+
+      attach_file 'Upload a CSV file', file_fixture('character-test.csv')
+
+      click_button 'Register'
+
+      expect(page).to have_content 'Register DOR Items'
+      expect(page).to have_content 'Csv file is invalid'
+    end
+  end
 end

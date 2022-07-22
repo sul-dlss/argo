@@ -15,10 +15,12 @@ class CsvUploadNormalizer
   # This includes handling BOM and druids without prefixes.
   # @return [String] csv
   # @raise [StandardError] if unsupported file type
+  # @raise [CSV::MalformedCSVError] if malformed CSV, e.g., invalid byte sequence
   def read
     raise 'Unsupported upload file type' unless %w[.csv .ods .xls .xlsx].include? File.extname(path)
 
     spreadsheet = Roo::Spreadsheet.open(path, { csv_options: { encoding: 'bom|utf-8' } }) # open the spreadsheet
+    Rails.logger.info(spreadsheet.to_csv)
     table = CSV.parse(spreadsheet.to_csv, headers: true) # convert spreadsheet to CSV and then parse by the CSV library
 
     table.each do |row|

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # Convert CSV to JSON for registration
-# rubocop:disable Metrics/ClassLength
 class RegistrationCsvConverter
   include Dry::Monads[:result]
 
@@ -146,4 +145,3 @@ class RegistrationCsvConverter
     end.compact
   end
 end
-# rubocop:enable Metrics/ClassLength
