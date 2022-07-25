@@ -1,4 +1,4 @@
-import { Application } from 'stimulus'
+import { Application } from '@hotwired/stimulus'
 import CollectionEditor from './collection_editor'
 import BulkActions from './bulk_actions'
 import BulkUpload from './bulk_upload'

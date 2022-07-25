@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
     // If the field is marked as invalid, then show the invalid (bootstrap) style.
