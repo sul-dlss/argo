@@ -1,4 +1,4 @@
-import { Controller } from 'stimulus'
+import { Controller } from '@hotwired/stimulus'
 
 // This handles editing the access rights for a DRO
 export default class extends Controller {

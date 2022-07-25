@@ -1,4 +1,4 @@
-import { Controller } from 'stimulus'
+import { Controller } from '@hotwired/stimulus'
 import Sharing from '../modules/sharing'
 
 // This handles the "Register APO" as well as "Edit APO" forms

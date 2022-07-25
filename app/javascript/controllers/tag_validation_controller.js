@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 // Validates free-text tags fields and sets the .invalid class on elements
 // that aren't well formed tags
