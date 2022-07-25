@@ -75,10 +75,10 @@ blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.20.2:
     jquery "^3.5.1"
     typeahead.js "^0.11.1"
 
-blacklight-hierarchy@^6.0.0:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-6.0.1.tgz#9882de54b294990efda43b31e98776098784cb75"
-  integrity sha512-2pwHfN5rDDveOurm6Zo4zyZ/RGrFXSWE0K13DJJmWoIQeBqirXl7n5NpnIdfhrGKYd8wSk4coqX1WnIly2yKZg==
+blacklight-hierarchy@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-6.0.2.tgz#fa9f6e178ba21266253f810dd4b818421a22f84c"
+  integrity sha512-KRWQJ8Z8khkVxoKMExIp/TqlwlIC/yGHNTCCQAGtb76iWDQWU+rwnimqyvqCnBetvVtc9NMyztDOEY948vxbew==
   dependencies:
     blacklight-frontend ">=7.1.0-alpha"
     jquery ">=3.0"
