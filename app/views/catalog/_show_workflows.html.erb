@@ -1,4 +1,4 @@
-<table class="detail">
+<table class="detail" id="workflow-details">
   <thead>
   <tr><th>name</th><th>status</th></tr>
   </thead>
@@ -7,7 +7,7 @@
     <% workflows.each do |wf| %>
       <tr>
         <td><%= link_to wf.name, item_workflow_path(document_id, wf.name), title: wf.name, data: { blacklight_modal: 'trigger' } %></td>
-        <td>
+        <td id="workflow-details-status-<%=wf.name%>">
           <%= wf.complete? ? 'completed' : 'active' %>
           <% if wf.error_count.positive? %>
             <span class="errortext">(<%= pluralize(wf.error_count, 'error') %>)</span>
