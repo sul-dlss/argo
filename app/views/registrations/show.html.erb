@@ -10,23 +10,24 @@
       <div class="row mb-3">
         <%= f.label :admin_policy, 'Admin Policy', class: "col-sm-3 col-form-label" %>
         <div class="col-sm-9">
-          <%= f.select :admin_policy, options_for_select(@apo_list), {}, class: 'form-select', onChange: "document.querySelector('#registration-options').src = `/apo/${this.selectedOptions[0].value}/registration_options`" %>
+          <%= f.select :admin_policy, @apo_list, {}, class: 'form-select', onChange: "document.querySelector('#registration-options').src = `/apo/${this.selectedOptions[0].value}/registration_options`" %>
         </div>
       </div>
 
-      <turbo-frame id="registration-options" src="/apo/<%= @apo_list.first.last %>/registration_options"></turbo-frame>
+      <%# Passing parameters so that collection, access, etc. are set correctly from back link. %>
+      <turbo-frame id="registration-options" src="<%= registration_options_apo_path(@registration_form.admin_policy, collection: @registration_form.collection, view_access: @registration_form.view_access, download_access: @registration_form.download_access, access_location: @registration_form.access_location, controlled_digital_lending: @registration_form.controlled_digital_lending, workflow_id: @registration_form.workflow_id) %>"></turbo-frame>
 
       <div class="row mb-3">
         <%= f.label :content_type, 'Content Type', class: "col-sm-3 col-form-label" %>
         <div class="col-sm-9">
-          <%= f.select :content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), {},
+          <%= f.select :content_type, ContentTypeForm::CONTENT_TYPES, {},
                       class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' }  %>
         </div>
       </div>
       <div data-content-type-target="directionRow" class="row mb-3">
         <%= f.label :viewing_direction, 'Viewing Direction', class: "col-sm-3 col-form-label" %>
         <div class="col-sm-9">
-          <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), {},
+          <%= f.select :viewing_direction, ContentTypeForm::DIRECTIONS, {},
                       include_blank: 'none', class: 'form-select', data: { content_type_target: 'direction' } %>
         </div>
       </div>

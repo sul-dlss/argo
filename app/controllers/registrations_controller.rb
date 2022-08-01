@@ -4,7 +4,10 @@ class RegistrationsController < ApplicationController
   def show
     @apo_list = AdminPolicyOptions.for(current_user)
     @registration_form = RegistrationForm.new(nil)
-    @registration_form.prepopulate!
+    prepopulate
+
+    # Handle "Back to form" functionality
+    @registration_form.deserialize(create_params) if params.key?(:registration)
   end
 
   def create
@@ -99,8 +102,7 @@ class RegistrationsController < ApplicationController
     if @registration_form.validate(create_params) && @registration_form.save
       render 'create_status'
     else
-      @apo_list = AdminPolicyOptions.for(current_user)
-      @registration_form.prepopulate!
+      prepopulate
       render :show, status: :bad_request
     end
   end
@@ -115,13 +117,18 @@ class RegistrationsController < ApplicationController
       # redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
       redirect_to bulk_actions_path, status: :see_other, notice: 'Register druids job was successfully created.'
     else
-      @apo_list = AdminPolicyOptions.for(current_user)
-      @registration_form.prepopulate!
+      prepopulate
       render :show, status: :bad_request
     end
   end
 
   def create_params
     params.require(:registration).to_unsafe_h.merge(current_user:)
+  end
+
+  def prepopulate
+    @apo_list = AdminPolicyOptions.for(current_user)
+    @registration_form.prepopulate!
+    @registration_form.admin_policy = @apo_list.first.last
   end
 end

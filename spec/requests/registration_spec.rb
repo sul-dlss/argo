@@ -10,6 +10,10 @@ RSpec.describe 'Registration', type: :request do
     Capybara::Node::Simple.new(response.body)
   end
 
+  let(:cocina_admin_policy) do
+    instance_double(Cocina::Models::AdminPolicyWithMetadata, externalIdentifier: druid)
+  end
+
   before do
     sign_in user
     allow(user).to receive(:admin?).and_return(true)
@@ -40,6 +44,25 @@ RSpec.describe 'Registration', type: :request do
       get "/registration/tracksheet?druid=#{druid}&name=#{test_name}&sequence=#{test_seq_no}", headers: headers
 
       expect(response.headers['content-disposition']).to eq("attachment; filename=#{test_name}-#{test_seq_no}.pdf")
+    end
+  end
+
+  context 'when defaults are provided ("Back to form" button pressed)' do
+    before do
+      allow(AdminPolicyOptions).to receive(:for).and_return([[double]])
+    end
+
+    it 'sets the defaults on the form' do
+      get '/registration?registration[content_type]=https%3A%2F%2Fcocina.sul.stanford.edu%2Fmodels%2Fmap&registration[project]=Nemo+maps' \
+          '&registration[admin_policy]=druid%3Ahv992ry2431&registration[collection]=&registration[view_access]=stanford' \
+          '&registration[download_access]=none&registration[controlled_digital_lending]=true&registration[workflow_id]=registrationWF'
+      content_type_select = rendered.find_css('#registration_content_type option[selected]').first
+      expect(content_type_select['value']).to eq 'https://cocina.sul.stanford.edu/models/map'
+      project_input = rendered.find_css('#registration_project').first
+      expect(project_input['value']).to eq 'Nemo maps'
+      expect(rendered.find_css('#registration-options').first[:src]).to eq '/apo/druid:hv992ry2431/registration_options?collection=' \
+                                                                           '&controlled_digital_lending=true&download_access=none' \
+                                                                           '&view_access=stanford&workflow_id=registrationWF'
     end
   end
 
@@ -115,6 +138,26 @@ RSpec.describe 'Registration', type: :request do
           ['', 'None'],
           ['druid:pb873ty1662', 'Annual report of the State Corporation Commission showing... (pb873ty1662)']
         ]
+      end
+    end
+
+    context 'when access parameters are provided' do
+      let(:collections) { [] }
+
+      it 'uses the provided access parameters' do
+        get "/apo/#{druid}/registration_options?view_access=stanford&download_access=location-based&access_location=spec" \
+            '&controlled_digital_lending=false&workflow_id=wasSeedPreassemblyWF'
+        selected_view_acccess = rendered.find_css('#registration_view_access option[@selected]').first
+        expect(selected_view_acccess.text).to eq 'Stanford'
+        expect(selected_view_acccess[:value]).to eq 'stanford'
+        selected_download_acccess = rendered.find_css('#registration_download_access option[@selected]').first
+        expect(selected_download_acccess.text).to eq 'Location based'
+        expect(selected_download_acccess[:value]).to eq 'location-based'
+        selected_access_location = rendered.find_css('#registration_access_location option[@selected]').first
+        expect(selected_access_location.text).to eq 'spec'
+        expect(selected_access_location[:value]).to eq 'spec'
+        selected_worklow = rendered.find_css('#registration_workflow_id option[@selected]').first
+        expect(selected_worklow.text).to eq 'wasSeedPreassemblyWF'
       end
     end
   end
