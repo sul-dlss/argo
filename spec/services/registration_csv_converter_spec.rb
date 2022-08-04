@@ -95,4 +95,55 @@ RSpec.describe RegistrationCsvConverter do
       expect(results.first.value![:model]).to eq(expected_cocina.new(access: {}))
     end
   end
+
+  context 'when params have rights_view citation-only but no rights_download' do
+    let(:csv_string) do
+      <<~CSV
+        source_id,label
+        foo:123,My new object
+      CSV
+    end
+
+    let(:params) do
+      {
+        administrative_policy_object: 'druid:bc123df4567',
+        collection: 'druid:bk024qs1808',
+        initial_workflow: 'accessionWF',
+        content_type: Cocina::Models::ObjectType.book,
+        rights_view: 'citation-only',
+        tags: ['csv : test', 'Project : two']
+      }
+    end
+
+    it 'returns result with access citation-only model' do
+      expect(results.size).to be 1
+      expect(results.first.success?).to be true
+      expect(results.first.value![:model]).to eq(expected_cocina.new(access: { 'view' => 'citation-only', 'download' => 'none' }))
+    end
+  end
+
+  context 'when CSV has rights_view citation-only but no rights_download' do
+    let(:csv_string) do
+      <<~CSV
+        source_id,label,rights_view
+        foo:123,My new object,citation-only
+      CSV
+    end
+
+    let(:params) do
+      {
+        administrative_policy_object: 'druid:bc123df4567',
+        collection: 'druid:bk024qs1808',
+        initial_workflow: 'accessionWF',
+        content_type: Cocina::Models::ObjectType.book,
+        tags: ['csv : test', 'Project : two']
+      }
+    end
+
+    it 'returns result with access citation-only model' do
+      expect(results.size).to be 1
+      expect(results.first.success?).to be true
+      expect(results.first.value![:model]).to eq(expected_cocina.new(access: { 'view' => 'citation-only', 'download' => 'none' }))
+    end
+  end
 end

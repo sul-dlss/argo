@@ -138,7 +138,7 @@ class RegistrationCsvConverter
   def access(row)
     {}.tap do |access|
       access[:view] = params[:rights_view] || row['rights_view']
-      access[:download] = params[:rights_download] || row['rights_download']
+      access[:download] = params[:rights_download] || row['rights_download'] || ('none' if %w[citation-only dark].include? access[:view])
       access[:location] = (params[:rights_location] || row.fetch('rights_location')) if [access[:view], access[:download]].include?('location-based')
       cdl = params[:rights_controlledDigitalLending] || row['rights_controlledDigitalLending']
       access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(cdl) if cdl.present?
