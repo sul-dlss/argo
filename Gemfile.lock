@@ -105,7 +105,7 @@ GEM
       thor (~> 1.0)
     byebug (11.1.3)
     cancancan (3.4.0)
-    capistrano (3.17.0)
+    capistrano (3.17.1)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -200,8 +200,7 @@ GEM
       faraday-retry (~> 1.0)
       nokogiri (~> 1.6)
       zeitwerk (~> 2.1)
-    druid-tools (2.2.1)
-      deprecation
+    druid-tools (3.0.0)
     dry-configurable (0.15.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.6)
@@ -252,7 +251,7 @@ GEM
       rainbow
       rubocop
       smart_properties
-    erubi (1.10.0)
+    erubi (1.11.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -315,7 +314,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.16.2)
-    moab-versioning (5.1.0)
+    moab-versioning (5.2.0)
       druid-tools (>= 1.0.0)
       json
       nokogiri
@@ -494,7 +493,7 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     rss (0.2.9)
       rexml
-    rubocop (1.32.0)
+    rubocop (1.33.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
@@ -504,7 +503,7 @@ GEM
       rubocop-ast (>= 1.19.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.19.1)
+    rubocop-ast (1.20.1)
       parser (>= 3.1.1.0)
     rubocop-rails (2.15.2)
       activesupport (>= 4.2.0)
@@ -527,10 +526,10 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (6.5.1)
+    sidekiq (6.5.3)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.2.0)
+      redis (>= 4.5.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -545,7 +544,7 @@ GEM
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    stanford-mods (3.2.0)
+    stanford-mods (3.3.1)
       activesupport
       mods (~> 3.0, >= 3.0.3)
     strscan (3.0.4)
@@ -565,8 +564,9 @@ GEM
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     unicode-display_width (2.2.0)
-    view_component (2.62.0)
+    view_component (2.64.0)
       activesupport (>= 5.0.0, < 8.0)
+      concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -579,7 +579,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (~> 4.0)
-    webmock (3.14.0)
+    webmock (3.17.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
