@@ -90,12 +90,15 @@ class DescriptionValidator
   def invalid_headers
     # The source_id is only for user reference, and we already validate the druid column is present in bulk jobs
     @headers.excluding('source_id', 'druid').map do |header|
-      split_address = header.scan(/[[:alpha:]]+|[[:digit:]]+/)
-                            .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
+      if header
+        split_address = header.scan(/[[:alpha:]]+|[[:digit:]]+/)
+                              .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
+        next if resolve_address(Cocina::Models::Description, split_address)
 
-      next if resolve_address(Cocina::Models::Description, split_address)
-
-      header
+        header
+      else
+        '(empty string)'
+      end
     end.compact
   end
 

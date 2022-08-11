@@ -89,6 +89,16 @@ RSpec.describe DescriptionValidator do
                                          'Column header invalid: event1.contributor']
         end
       end
+
+      context 'with missing header for column' do
+        let(:csv) { 'druid,title1.value,,title2.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          # missing header value is not a valid cocina attribute
+          expect(instance.errors).to eq ['Column header invalid: (empty string)']
+        end
+      end
     end
 
     context 'for bulk jobs' do
