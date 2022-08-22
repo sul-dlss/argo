@@ -64,7 +64,7 @@ RSpec.describe SearchBuilder do
   describe '#add_facet_paging_to_solr' do
     subject { search_builder.with(user_params).facet(facet) }
 
-    let(:facet) { 'nonhydrus_collection_title_ssim' }
+    let(:facet) { 'collection_title_ssim' }
 
     it 'uses the :more_limit configuration to independently change the "more" size' do
       solr_params = {}
