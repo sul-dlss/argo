@@ -346,7 +346,6 @@ Style/StringConcatenation:
     - 'app/controllers/uploads_controller.rb'
     - 'app/helpers/value_helper.rb'
     - 'app/jobs/modsulator_job.rb'
-    - 'app/models/concerns/permitted_queries.rb'
     - 'app/models/report.rb'
     - 'app/models/user.rb'
     - 'app/search_builders/argo/access_controls_enforcement.rb'
