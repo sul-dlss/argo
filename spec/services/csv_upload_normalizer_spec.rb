@@ -55,5 +55,13 @@ RSpec.describe CsvUploadNormalizer do
         expect(csv).to eq(expected_csv)
       end
     end
+
+    context 'CSV with invalid bytes' do
+      let(:filepath) { file_fixture('invalid_bulk_upload_nonutf8.csv').to_s }
+
+      it 'raises an exception' do
+        expect { csv }.to raise_error(CSV::MalformedCSVError)
+      end
+    end
   end
 end

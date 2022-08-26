@@ -48,5 +48,15 @@ RSpec.describe 'Bulk descriptive metadata import', type: :request do
         expect(response.body).to match('Column header invalid: xsource_id')
       end
     end
+
+    context 'when invalid bytes in csv' do
+      it 'does not create the job and displays an error' do
+        params = { 'csv_file' => fixture_file_upload('invalid_bulk_upload_nonutf8.csv', 'text/csv') }
+
+        expect { post '/bulk_actions/descriptive_metadata_import_job', params: }.not_to have_enqueued_job(DescriptiveMetadataImportJob)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to match('Error starting bulk action: Invalid byte sequence')
+      end
+    end
   end
 end
