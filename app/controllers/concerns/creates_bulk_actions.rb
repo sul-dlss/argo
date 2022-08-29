@@ -11,7 +11,14 @@ module CreatesBulkActions
   def new; end
 
   def create
-    bulk_action_job_params = job_params
+    begin
+      bulk_action_job_params = job_params
+    rescue StandardError => e
+      # if job_params calls CsvUploadNormalizer, CSV::MalformedCSVError may be raised
+      @errors = ["Error starting bulk action: #{e.message}"]
+      return render :new, status: :unprocessable_entity
+    end
+
     result = validate_job_params(bulk_action_job_params)
     if result.failure?
       @errors = result.failure

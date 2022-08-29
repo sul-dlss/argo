@@ -28,7 +28,7 @@ Lint/DeprecatedOpenSSLConstant:
 
 Metrics/BlockLength:
   Max: 25
-  IgnoredMethods:
+  AllowedMethods:
     - 'configure_blacklight'
   Exclude:
     - 'config/routes.rb'
