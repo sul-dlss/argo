@@ -42,6 +42,7 @@ RSpec.describe PermittedQueries do
       let(:service) { described_class.new([], [], true) }
 
       before do
+        solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:collection")
         solr_conn.add(id: 'druid:bg444xg6666', objectType_ssim: 'collection', sw_display_title_tesim: 'Inactive collection', tag_ssim: PermittedQueries::INACTIVE_TAG)
         solr_conn.add(id: 'druid:bg555xg7777', objectType_ssim: 'collection', sw_display_title_tesim: 'My collection')
         solr_conn.commit
