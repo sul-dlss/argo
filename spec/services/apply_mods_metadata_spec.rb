@@ -210,7 +210,7 @@ RSpec.describe ApplyModsMetadata do
   end
 
   describe 'status_ok?' do
-    (0..9).each do |i|
+    10.times do |i|
       it "correctly queries the status of DOR objects (:status_code #{i})" do
         allow(action).to receive(:status).and_return(i)
         if [1, 6, 7, 8, 9].include?(i)
@@ -223,7 +223,7 @@ RSpec.describe ApplyModsMetadata do
   end
 
   describe 'in_accessioning?' do
-    (0..9).each do |i|
+    10.times do |i|
       it "returns true for DOR objects that are currently in accessioning, false otherwise (:status_code #{i})" do
         allow(action).to receive(:status).and_return(i)
         if [2, 3, 4, 5].include?(i)
@@ -236,7 +236,7 @@ RSpec.describe ApplyModsMetadata do
   end
 
   describe 'accessioned?' do
-    (0..9).each do |i|
+    10.times do |i|
       it "returns true for DOR objects that are accessioned, false otherwise (:status_code #{i})" do
         allow(action).to receive(:status).and_return(i)
         if [6, 7, 8].include?(i)

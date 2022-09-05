@@ -439,7 +439,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
-    rb-fsevent (0.11.1)
+    rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.8.0)
@@ -493,7 +493,7 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     rss (0.2.9)
       rexml
-    rubocop (1.35.1)
+    rubocop (1.36.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
@@ -564,7 +564,7 @@ GEM
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     unicode-display_width (2.2.0)
-    view_component (2.69.0)
+    view_component (2.71.0)
       activesupport (>= 5.0.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -587,14 +587,11 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    write_xlsx (1.09.3)
+    write_xlsx (1.09.4)
       rubyzip (>= 1.0.0)
-      zip-zip
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.6.0)
-    zip-zip (0.3)
-      rubyzip (>= 1.0.0)
     zip_tricks (5.3.1)
 
 PLATFORMS
