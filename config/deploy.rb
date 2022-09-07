@@ -44,3 +44,9 @@ set :honeybadger_env, fetch(:stage)
 
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'
+
+# configure capistrano-rails to work with propshaft instead of sprockets
+# (we don't have public/assets/.sprockets-manifest* or public/assets/manifest*.*)
+set :assets_manifests, lambda {
+  [release_path.join('public', fetch(:assets_prefix), '.manifest.json')]
+}
