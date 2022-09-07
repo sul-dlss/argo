@@ -89,8 +89,8 @@ gem 'devise'
 gem 'devise-remote-user', '~> 1.0'
 
 # useful for debugging, even in prod
+gem 'pry' # make it possible to use pry as the rails console shell instead of IRB
 gem 'pry-byebug' # Adds step-by-step debugging and stack navigation capabilities to pry using byebug
-gem 'pry-rails' # use pry as the rails console shell instead of IRB
 
 group :test, :development do
   gem 'erb_lint', '~> 0.0.31', require: false
