@@ -42,9 +42,6 @@ OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.ne
 solr_url = Blacklight.connection_config.fetch(:url)
 OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new("#{solr_url}/admin/ping")
 
-OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.stacks.host}")
-OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.stacks.local_workspace_root)
-
 # Bulk Metadata  services
 OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.directory)
 OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.temporary_directory)

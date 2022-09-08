@@ -48,11 +48,6 @@ profiler:
 #   key_file: 'key_name.key'
 #   key_pass: 'password'
 
-# Stacks
-stacks:
-  local_workspace_root: '/foo/workspace'
-  host: 'stacks-test.stanford.edu'
-
 dor_services:
   url: 'http://localhost:3003'
   # To generate the token: docker-compose run dor-services-app rake generate_token

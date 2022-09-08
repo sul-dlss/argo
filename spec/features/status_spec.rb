@@ -14,9 +14,6 @@ RSpec.describe 'application and dependency monitoring' do
       stub_request(:get, Settings.spreadsheet_url)
         .to_return(status: 200, body: '', headers: {})
 
-      stub_request(:get, "https://#{Settings.stacks.host}")
-        .to_return(status: 200, body: '', headers: {})
-
       stub_request(:get, "#{Settings.modsulator_url.split('v1').first}v1/about")
         .to_return(status: 200, body: '', headers: {})
 
