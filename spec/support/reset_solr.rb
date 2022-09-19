@@ -11,8 +11,7 @@ module ResetSolr
     solr_conn.add(id: 'druid:hv992ry2431',
                   objectType_ssim: ['adminPolicy'],
                   apo_register_permissions_ssim: ['workgroup:dlss:developers'],
-                  sw_display_title_tesim: ['[Internal System Objects]'],
-                  has_model_ssim: ['info:fedora/afmodel:Dor_AdminPolicyObject'])
+                  sw_display_title_tesim: ['[Internal System Objects]'])
     solr_conn.commit
   end
 end
