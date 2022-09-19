@@ -130,10 +130,6 @@ class CatalogController < ApplicationController
                                              component: Blacklight::Hierarchy::FacetFieldListComponent,
                                              limit: 9999,
                                              home: false
-    config.add_facet_field 'has_model_ssim', label: 'Object Model',
-                                             component: true,
-                                             limit: 10,
-                                             home: false
 
     config.add_facet_field 'metadata_source_ssi', label: 'Metadata Source', home: false,
                                                   component: true
