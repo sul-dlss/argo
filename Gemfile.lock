@@ -136,7 +136,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (4.1.0)
-    cocina-models (0.85.0)
+    cocina-models (0.86.0)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -186,9 +186,9 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (12.8.0)
+    dor-services-client (12.9.0)
       activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.85.0)
+      cocina-models (~> 0.86.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -514,9 +514,9 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sdr-client (0.95.0)
+    sdr-client (0.96.0)
       activesupport
-      cocina-models (~> 0.85.0)
+      cocina-models (~> 0.86.0)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (4.4.0)
