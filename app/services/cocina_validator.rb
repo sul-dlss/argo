@@ -13,9 +13,13 @@ class CocinaValidator
 
   def self.validate_and_save(model, **args)
     validate(model, **args).bind do |updated|
-      Try[Dor::Services::Client::UnexpectedResponse] { Repository.store(updated) }
+      Try[Dor::Services::Client::UnexpectedResponse] { 
+        byebug
+        Repository.store(updated) }
         .to_result
-        .or { |e| Failure(e.errors.map { |err| err['detail'] }) }
+        .or { |e|
+        byebug
+         Failure(e.errors.map { |err| err['detail'] }) }
     end
   end
 end

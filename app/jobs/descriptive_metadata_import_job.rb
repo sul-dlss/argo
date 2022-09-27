@@ -13,48 +13,22 @@ class DescriptiveMetadataImportJob < GenericJob
   def perform(bulk_action_id, params)
     super
     csv = CSV.parse(params[:csv_file], headers: true)
-    with_csv_items(csv, name: 'Import descriptive metadata', filename: params[:csv_filename]) do |cocina_object, csv_row, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+    druid_column = 'druid'
+    update_druid_count(count: csv.size)
+    with_bulk_action_log do |log|
+      log.puts("CSV filename: #{params[:csv_filename]}")
+      return unless check_druid_column(csv:, druid_column:, log:, bulk_action:)
 
-      DescriptionImport.import(csv_row:)
-                       .bind { |description| validate_changed(cocina_object, description) }
-                       .bind { |description| open_version(cocina_object, description) }
-                       .bind { |description, new_cocina_object| validate_and_save(new_cocina_object, description) }
-                       .bind { |new_cocina_object| close_version(new_cocina_object) }
-                       .either(
-                         ->(_updated) { success.call('Successfully updated') },
-                         ->(messages) { failure.call(messages.to_sentence) }
-                       )
+      csv.each.with_index(2) do |csv_row, row_num|
+        druid = csv_row.fetch(druid_column)
+        DescriptionImportRowJob.perform_later(
+          csv_row: csv_row.to_h,
+          headers: csv_row.headers.excluding('source_id', 'druid'),
+          row_num:,
+          bulk_action:,
+          groups:
+        )
+      end
     end
-  end
-
-  private
-
-  def validate_changed(cocina_object, description)
-    return Failure(['Description unchanged']) if cocina_object.description == description
-
-    Success(description)
-  end
-
-  def open_version(cocina_object, description)
-    cocina_object = open_new_version_if_needed(cocina_object, 'Descriptive metadata upload')
-
-    Success([description, cocina_object])
-  rescue RuntimeError => e
-    Failure([e.message])
-  end
-
-  def validate_and_save(cocina_object, description)
-    result = CocinaValidator.validate_and_save(cocina_object, description:)
-    return Success(cocina_object) if result.success?
-
-    Failure(["validate_and_save failed for #{cocina_object.externalIdentifier}"])
-  end
-
-  def close_version(cocina_object)
-    VersionService.close(identifier: cocina_object.externalIdentifier) unless StateService.new(cocina_object).object_state == :unlock_inactive
-    Success()
-  rescue RuntimeError => e
-    Failure([e.message])
   end
 end

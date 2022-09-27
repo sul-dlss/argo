@@ -3,23 +3,21 @@
 class DescriptionImport
   include Dry::Monads[:result]
 
-  def self.import(csv_row:)
-    new(csv_row:).import
+  # The source_id and druid are only there for the user to reference and should be ignored for data processing
+  # druid is only on the bulk sheet
+  def self.import(csv_row:, headers: csv_row.headers.excluding('source_id', 'druid'))
+    new(csv_row:, headers:).import
   end
 
-  def initialize(csv_row:)
+  def initialize(csv_row:, headers:)
     @csv_row = csv_row
+    @headers = headers.sort_by { |address| sortable_address(address) }
   end
 
   def import
     params = {}
 
-    # The source_id and druid are only there for the user to reference and should be ignored for data processing
-    # druid is only on the bulk sheet
-    headers = @csv_row.headers.excluding('source_id', 'druid')
-    headers.sort_by! { |address| sortable_address(address) }
-
-    headers.each do |address|
+    @headers.each do |address|
       visit(params, split_address(address), @csv_row[address]) if @csv_row[address]
     end
 

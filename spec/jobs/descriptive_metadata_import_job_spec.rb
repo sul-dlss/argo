@@ -24,6 +24,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:state_service) { instance_double(StateService, allows_modification?: true, object_state: :unlock) }
 
   before do
+    Rails.application.config.active_job.queue_adapter = :inline
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
