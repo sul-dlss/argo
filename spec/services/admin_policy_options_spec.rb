@@ -26,7 +26,7 @@ RSpec.describe AdminPolicyOptions do
           defType: 'lucene',
           rows: 99_999,
           fl: 'id,tag_ssim,sw_display_title_tesim',
-          fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
+          fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
         )
       end
 
