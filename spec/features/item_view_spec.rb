@@ -279,7 +279,7 @@ RSpec.describe 'Item view', js: true do
               click_link 'M1090_S15_B02_F01_0126.jp2'
             end
 
-            within '.modal-content' do
+            within '#blacklight-modal' do
               expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2'
             end
           end
