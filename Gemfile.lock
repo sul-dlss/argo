@@ -83,7 +83,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.29.0)
+    blacklight (7.30.0)
       deprecation
       globalid
       hashdiff
