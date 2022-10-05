@@ -374,7 +374,7 @@ GEM
       ttfunk (~> 1.4.0)
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
-    preservation-client (4.0.0)
+    preservation-client (5.0.0)
       activesupport (>= 4.2, < 8)
       faraday (~> 2.0)
       moab-versioning (~> 5.0)
@@ -631,7 +631,7 @@ DEPENDENCIES
   openapi_parser (< 1.0)
   prawn (~> 1)
   prawn-table
-  preservation-client (~> 4.0)
+  preservation-client (~> 5.0)
   propshaft
   pry
   pry-byebug
