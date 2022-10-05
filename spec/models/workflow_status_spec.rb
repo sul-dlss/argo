@@ -87,7 +87,7 @@ RSpec.describe WorkflowStatus do
 
       it 'has one for each xml process' do
         expect(subject.size).to eq 13
-        expect(subject).to all(be_kind_of Dor::Workflow::Response::Process)
+        expect(subject).to all(be_a Dor::Workflow::Response::Process)
       end
     end
 

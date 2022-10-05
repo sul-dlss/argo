@@ -467,3 +467,30 @@ RSpec/Capybara/SpecificMatcher: # new in 2.12
   Enabled: false
 RSpec/Rails/HaveHttpStatus: # new in 2.12
   Enabled: true
+
+Lint/RequireRangeParentheses: # new in 1.32
+  Enabled: true
+Style/EmptyHeredoc: # new in 1.32
+  Enabled: true
+Style/MagicCommentFormat: # new in 1.35
+  Enabled: true
+RSpec/ClassCheck: # new in 2.13
+  Enabled: true
+RSpec/NoExpectationExample: # new in 2.13
+  Enabled: true
+RSpec/Capybara/SpecificFinders: # new in 2.13
+  Enabled: true
+Rails/ActionControllerFlashBeforeRender: # new in 2.16
+  Enabled: true
+Rails/ActiveSupportOnLoad: # new in 2.16
+  Enabled: true
+Rails/FreezeTime: # new in 2.16
+  Enabled: true
+Rails/RootPathnameMethods: # new in 2.16
+  Enabled: true
+Rails/ToSWithArgument: # new in 2.16
+  Enabled: true
+Rails/TopLevelHashWithIndifferentAccess: # new in 2.16
+  Enabled: true
+Rails/WhereMissing: # new in 2.16
+  Enabled: true
