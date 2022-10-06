@@ -27,7 +27,7 @@ module Argo
     end
   end
 
-  ARGO_VERSION = File.read(File.join(Rails.root, 'VERSION'))
+  ARGO_VERSION = Rails.root.join('VERSION').read
   class << self
     def version
       ARGO_VERSION

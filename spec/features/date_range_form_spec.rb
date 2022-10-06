@@ -49,7 +49,7 @@ RSpec.describe 'Date range form', js: true do
         find('input[type="submit"]').click
       end
       using_wait_time 45 do
-        find('#appliedParams')
+        find_by_id('appliedParams')
         within '.constraints-container' do
           expect(page).to have_css '.filter-name', text: 'Last Modified'
           expect(page).to have_css(
@@ -68,7 +68,7 @@ RSpec.describe 'Date range form', js: true do
         find('input[type="submit"]').click
       end
       using_wait_time 45 do
-        find('#appliedParams')
+        find_by_id('appliedParams')
         within '.constraints-container' do
           expect(page).to have_css '.filter-name', text: 'Last Modified'
           expect(page).to have_css(
@@ -84,7 +84,7 @@ RSpec.describe 'Date range form', js: true do
         find('input[type="submit"]').click
       end
       using_wait_time 45 do
-        find('#appliedParams')
+        find_by_id('appliedParams')
         within '.constraints-container' do
           expect(page).to have_css '.filter-name', text: 'Last Modified'
           expect(page).to have_css(
@@ -109,7 +109,7 @@ RSpec.describe 'Date range form', js: true do
         find('input[type="submit"]').click
       end
 
-      find('#appliedParams')
+      find_by_id('appliedParams')
       expect(page).to have_content '1 - 5 of 5'
       within '.constraints-container' do
         expect(page).to have_css '.filter-value', text: 'Reports'

@@ -239,7 +239,7 @@ RSpec.describe StructureUpdater do
     end
 
     it 'produces valid cocina' do
-      cocina.new(structural: result.value!)
+      expect { cocina.new(structural: result.value!) }.not_to raise_error
     end
   end
 
@@ -268,7 +268,7 @@ RSpec.describe StructureUpdater do
     end
 
     it 'produces valid cocina' do
-      cocina.new(structural: result.value!)
+      expect { cocina.new(structural: result.value!) }.not_to raise_error
     end
   end
 
@@ -294,7 +294,7 @@ RSpec.describe StructureUpdater do
     end
 
     it 'produces valid cocina' do
-      cocina.new(structural: result.value!)
+      expect { cocina.new(structural: result.value!) }.not_to raise_error
     end
   end
 
@@ -315,7 +315,7 @@ RSpec.describe StructureUpdater do
     end
 
     it 'produces valid cocina' do
-      cocina.new(structural: result.value!)
+      expect { cocina.new(structural: result.value!) }.not_to raise_error
     end
   end
 
