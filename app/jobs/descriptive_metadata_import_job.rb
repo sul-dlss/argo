@@ -17,6 +17,7 @@ class DescriptiveMetadataImportJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       DescriptionImport.import(csv_row:)
+                       .bind { |description| validate_input(cocina_object, description) }
                        .bind { |description| validate_changed(cocina_object, description) }
                        .bind { |description| open_version(cocina_object, description) }
                        .bind { |description, new_cocina_object| validate_and_save(new_cocina_object, description) }
@@ -29,6 +30,14 @@ class DescriptiveMetadataImportJob < GenericJob
   end
 
   private
+
+  # this validates input data from spreadsheet before any updates are applied to provide error messages to the user
+  def validate_input(cocina_object, description)
+    result = CocinaValidator.validate(cocina_object, description:)
+    return Success(description) if result.success?
+
+    Failure(["validation failed for #{cocina_object.externalIdentifier}: #{result.failure}"])
+  end
 
   def validate_changed(cocina_object, description)
     return Failure(['Description unchanged']) if cocina_object.description == description
