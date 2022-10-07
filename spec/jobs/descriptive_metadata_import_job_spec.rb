@@ -7,7 +7,7 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
   let(:item1) { build(:dro_with_metadata, id: druids[0]) }
   let(:item2) { build(:dro_with_metadata, id: druids[1]) }
-  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true, close: true) }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, version: version_client) }
   let(:filename) { 'test.csv' }
@@ -91,10 +91,11 @@ RSpec.describe DescriptiveMetadataImportJob, type: :job do
         subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
-      it 'updates the error count without alerting honeybadger, updating or closing' do
+      it 'updates the error count without opening, alerting honeybadger, updating or closing' do
         expect(bulk_action.druid_count_total).to eq 1
         expect(bulk_action.druid_count_fail).to eq 1
         expect(bulk_action.druid_count_success).to eq 0
+        expect(version_client).not_to have_received(:open)
         expect(Repository).not_to have_received(:store)
         expect(Honeybadger).not_to have_received(:notify)
         expect(version_client).not_to have_received(:close)
