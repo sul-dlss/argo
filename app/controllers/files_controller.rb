@@ -36,6 +36,8 @@ class FilesController < ApplicationController
   def preserved
     authorize! :view_content, @cocina_model
 
+    Rails.logger.info("FILENAME: #{filename}")
+
     # Set headers on the response before writing to the response stream
     send_file_headers!(
       type: 'application/octet-stream',

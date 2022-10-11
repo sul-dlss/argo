@@ -132,12 +132,10 @@ Rails.application.routes.draw do
   end
 
   resources :items, only: %i[show update] do
-    resources 'files', only: %i[index], constraints: { id: /.*/ } do
-      member do
-        get 'preserved'
-      end
-
+    resources 'files', only: %i[index] do
       collection do
+        # Preserved is a collection so that filename is passed as a query param to avoid having to set the Apache AllowEncodedSlashes.
+        get 'preserved'
         get 'download'
       end
     end
