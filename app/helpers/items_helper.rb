@@ -2,7 +2,12 @@
 
 module ItemsHelper
   def stacks_url_full_size(druid, file_name)
-    "#{Settings.stacks_file_url}/#{druid}/#{ERB::Util.url_encode(file_name)}"
+    "#{Settings.stacks_file_url}/#{druid}/#{url_encode(file_name)}"
+  end
+
+  def url_encode(string)
+    # Allow literal slash characters
+    ERB::Util.url_encode(string).gsub('%2F', '/')
   end
 
   # Overriding blacklight so we can pass @cocina to the presenter
