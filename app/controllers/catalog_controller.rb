@@ -231,7 +231,7 @@ class CatalogController < ApplicationController
     _deprecated_response, @document = search_service.fetch(params[:id])
 
     @cocina = Repository.find(params[:id])
-    flash.now[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
+    flash[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
 
     authorize! :read, @cocina
 
