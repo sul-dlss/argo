@@ -40,7 +40,7 @@ class PermittedQueries
       fl: 'id',
       fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:Hydrus']
     )['response']['docs']
-    resp.pluck('id')
+    resp.map { |doc| doc['id'] }
   end
 
   ##
