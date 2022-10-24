@@ -15,7 +15,7 @@ class CocinaValidator
     validate(model, **args).bind do |updated|
       Try[Dor::Services::Client::UnexpectedResponse] { Repository.store(updated) }
         .to_result
-        .or { |e| Failure(e.errors.map { |err| err['detail'] }) }
+        .or { |e| Failure(e.errors.pluck('detail')) }
     end
   end
 end

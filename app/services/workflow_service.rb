@@ -34,7 +34,7 @@ class WorkflowService
   # Get the workflow definition from the server so we know which processes should be present
   # TODO: This could be cached for better performance
   def self.definition_process_names(workflow_name)
-    workflow_client.workflow_template(workflow_name).fetch('processes').map { |p| p['name'] }
+    workflow_client.workflow_template(workflow_name).fetch('processes').pluck('name')
   end
   private_class_method :definition_process_names
 

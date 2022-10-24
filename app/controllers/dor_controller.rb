@@ -5,9 +5,9 @@ class DorController < ApplicationController
   def reindex
     begin
       Argo::Indexer.reindex_druid_remotely params[:druid]
-      flash[:notice] = "Successfully updated index for #{params[:druid]}"
+      flash.now[:notice] = "Successfully updated index for #{params[:druid]}"
     rescue Argo::Exceptions::ReindexError => e
-      flash[:error] = "Failed to update index for #{params[:druid]}"
+      flash.now[:error] = "Failed to update index for #{params[:druid]}"
       Rails.logger.error "#{flash[:error]}: #{e.inspect}"
     end
 
