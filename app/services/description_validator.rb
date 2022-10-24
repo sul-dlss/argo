@@ -84,7 +84,7 @@ class DescriptionValidator
   end
 
   def duplicate_druids
-    @csv.pluck('druid').group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
+    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
   end
 
   def invalid_headers

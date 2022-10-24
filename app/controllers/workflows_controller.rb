@@ -109,6 +109,6 @@ class WorkflowsController < ApplicationController
   def workflow_processes(workflow_name)
     client = WorkflowClientFactory.build
     workflow_definition = client.workflow_template(workflow_name)
-    workflow_definition['processes'].pluck('name')
+    workflow_definition['processes'].map { |process| process['name'] }
   end
 end
