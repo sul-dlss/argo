@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DescriptionImport do
   subject(:updated) { described_class.import(csv_row: csv.first) }
@@ -27,7 +27,7 @@ RSpec.describe DescriptionImport do
       	}],
       	"contributor": [{
       		"name": [{
-      			"structuredValue": [{#{'						'}
+      			"structuredValue": [{#{"\t\t\t\t\t\t"}
       				"value": "Harvey, Robert Gibson",
       				"type": "name"
       			}, {
@@ -38,13 +38,13 @@ RSpec.describe DescriptionImport do
       		"type": "person",
       		"status": "primary"
       	}],
-      	"event": [{#{'				'}
-      		"location": [{#{'					'}
+      	"event": [{#{"\t\t\t\t"}
+      		"location": [{#{"\t\t\t\t\t"}
       			"code": "xx",
       			"source": {
       				"code": "marccountry"
       			}
-      		}],#{'				'}
+      		}],#{"\t\t\t\t"}
       		"note": [{
       			"value": "monographic",
       			"type": "issuance",
@@ -120,7 +120,7 @@ RSpec.describe DescriptionImport do
       				}]
       			}],
       			"type": "organization"
-      		}]#{'				'}
+      		}]#{"\t\t\t\t"}
       	}],
       	"adminMetadata": {
       		"contributor": [{
@@ -168,58 +168,58 @@ RSpec.describe DescriptionImport do
 
   let(:expected) { Cocina::Models::Description.new(JSON.parse(expected_json)) }
 
-  context 'with a valid csv' do
+  context "with a valid csv" do
     let(:csv) do
       # From https://argo-stage.stanford.edu/view/druid:bb041bm1345
-      CSV.read(file_fixture('descriptive-upload.csv'), headers: true)
+      CSV.read(file_fixture("descriptive-upload.csv"), headers: true)
     end
 
-    it 'deserializes the item' do
+    it "deserializes the item" do
       expect(updated.value!).to eq expected
     end
   end
 
-  context 'with a valid csv with columns out of order' do
+  context "with a valid csv with columns out of order" do
     let(:csv) do
       # Reverse the columns
-      table = CSV.read(file_fixture('descriptive-upload.csv'), headers: true)
+      table = CSV.read(file_fixture("descriptive-upload.csv"), headers: true)
       new_headers = table.headers.reverse
       CSV::Table.new([], headers: new_headers).tap do |new_table|
         new_table << new_headers.map { |header| table.first[header] }
       end
     end
 
-    it 'deserializes the item' do
+    it "deserializes the item" do
       expect(updated.value!).to eq expected
     end
   end
 
-  context 'with an invalid csv' do
+  context "with an invalid csv" do
     let(:csv) do
-      CSV.read(file_fixture('bulk_upload_structural.csv'), headers: true)
+      CSV.read(file_fixture("bulk_upload_structural.csv"), headers: true)
     end
 
-    it 'returns an error' do
+    it "returns an error" do
       expect(updated).to be_failure
     end
   end
 
-  context 'with a csv that has nil values' do
+  context "with a csv that has nil values" do
     # This case occurs when you do a bulk export of a dense and a sparse object on the same sheet
     let(:csv) do
       CSV.parse("access:accessContact1:source:code,title1:value,purl\n,my title,https://purl\n", headers: true)
     end
 
     let(:expected) do
-      Cocina::Models::Description.new(title: [{ value: 'my title' }], purl: 'https://purl')
+      Cocina::Models::Description.new(title: [{value: "my title"}], purl: "https://purl")
     end
 
-    it 'ignores the empty field' do
+    it "ignores the empty field" do
       expect(updated.value!).to eq expected
     end
   end
 
-  context 'with a csv that has varied nested values' do
+  context "with a csv that has varied nested values" do
     # This case occurs when you do a bulk import of different object structures
     let(:csv_data) do
       <<~CSV
@@ -233,26 +233,26 @@ RSpec.describe DescriptionImport do
 
     let(:expected) do
       Cocina::Models::Description.new(
-        title: [{ value: 'Title 2' }],
-        purl: 'https://purl/jr825qh8124',
+        title: [{value: "Title 2"}],
+        purl: "https://purl/jr825qh8124",
         contributor: [
-          { name: [
-            { parallelValue: [
-              { structuredValue: [
-                { value: 'Parallel 1 part 1', type: 'name' },
-                { value: '1800-1900', type: 'life dates' }
-              ] },
-              { structuredValue: [
-                { value: 'Parallel 2 part 1', type: 'name' },
-                { value: 'marchioness', type: 'term of address' }
-              ] }
-            ] }
-          ] }
+          {name: [
+            {parallelValue: [
+              {structuredValue: [
+                {value: "Parallel 1 part 1", type: "name"},
+                {value: "1800-1900", type: "life dates"}
+              ]},
+              {structuredValue: [
+                {value: "Parallel 2 part 1", type: "name"},
+                {value: "marchioness", type: "term of address"}
+              ]}
+            ]}
+          ]}
         ]
       )
     end
 
-    it 'ignores the empty field' do
+    it "ignores the empty field" do
       expect(updated.value!).to eq expected
     end
   end

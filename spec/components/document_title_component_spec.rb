@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DocumentTitleComponent, type: :component do
   subject(:component) { described_class.new(presenter:, document:) }
@@ -9,7 +9,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
   let(:document) do
     instance_double(
       SolrDocument,
-      id: 'druid:ab123cd3445',
+      id: "druid:ab123cd3445",
       admin_policy?: admin_policy,
       virtual_object?: virtual_object,
       object_type:
@@ -20,76 +20,76 @@ RSpec.describe DocumentTitleComponent, type: :component do
 
   before do
     allow(component).to receive(:helpers).and_return(ability_mock)
-    allow(component).to receive(:title).and_return('Dummy Title')
+    allow(component).to receive(:title).and_return("Dummy Title")
   end
 
-  context 'with an APO' do
+  context "with an APO" do
     let(:admin_policy) { true }
     let(:virtual_object) { false }
-    let(:object_type) { 'adminPolicy' }
+    let(:object_type) { "adminPolicy" }
 
-    it 'renders the expected object type label' do
-      expect(rendered.css('div.object-type').first.text.strip).to eq('apo')
+    it "renders the expected object type label" do
+      expect(rendered.css("div.object-type").first.text.strip).to eq("apo")
     end
 
-    it 'renders the expected object type class' do
-      expect(rendered.css('div.object-type').first.classes).to include('object-type-apo')
+    it "renders the expected object type class" do
+      expect(rendered.css("div.object-type").first.classes).to include("object-type-apo")
     end
   end
 
-  context 'with an agreement' do
+  context "with an agreement" do
     let(:admin_policy) { false }
     let(:virtual_object) { false }
-    let(:object_type) { 'agreement' }
+    let(:object_type) { "agreement" }
 
-    it 'renders the expected object type label' do
-      expect(rendered.css('div.object-type').first.text.strip).to eq('agreement')
+    it "renders the expected object type label" do
+      expect(rendered.css("div.object-type").first.text.strip).to eq("agreement")
     end
 
-    it 'renders the expected object type class' do
-      expect(rendered.css('div.object-type').first.classes).to include('object-type-agreement')
+    it "renders the expected object type class" do
+      expect(rendered.css("div.object-type").first.classes).to include("object-type-agreement")
     end
   end
 
-  context 'with a collection' do
+  context "with a collection" do
     let(:admin_policy) { false }
     let(:virtual_object) { false }
-    let(:object_type) { 'collection' }
+    let(:object_type) { "collection" }
 
-    it 'renders the expected object type label' do
-      expect(rendered.css('div.object-type').first.text.strip).to eq('collection')
+    it "renders the expected object type label" do
+      expect(rendered.css("div.object-type").first.text.strip).to eq("collection")
     end
 
-    it 'renders the expected object type class' do
-      expect(rendered.css('div.object-type').first.classes).to include('object-type-collection')
+    it "renders the expected object type class" do
+      expect(rendered.css("div.object-type").first.classes).to include("object-type-collection")
     end
   end
 
-  context 'with an item' do
+  context "with an item" do
     let(:admin_policy) { false }
     let(:virtual_object) { false }
-    let(:object_type) { 'item' }
+    let(:object_type) { "item" }
 
-    it 'renders the expected object type label' do
-      expect(rendered.css('div.object-type').first.text.strip).to eq('item')
+    it "renders the expected object type label" do
+      expect(rendered.css("div.object-type").first.text.strip).to eq("item")
     end
 
-    it 'renders the expected object type class' do
-      expect(rendered.css('div.object-type').first.classes).to include('object-type-item')
+    it "renders the expected object type class" do
+      expect(rendered.css("div.object-type").first.classes).to include("object-type-item")
     end
   end
 
-  context 'with a virtual object' do
+  context "with a virtual object" do
     let(:admin_policy) { false }
     let(:virtual_object) { true }
-    let(:object_type) { 'item' }
+    let(:object_type) { "item" }
 
-    it 'renders the expected object type label' do
-      expect(rendered.css('div.object-type').first.text.strip).to eq('virtual object')
+    it "renders the expected object type label" do
+      expect(rendered.css("div.object-type").first.text.strip).to eq("virtual object")
     end
 
-    it 'renders the expected object type class' do
-      expect(rendered.css('div.object-type').first.classes).to include('object-type-virtual-object')
+    it "renders the expected object type class" do
+      expect(rendered.css("div.object-type").first.classes).to include("object-type-virtual-object")
     end
   end
 end

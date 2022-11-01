@@ -22,7 +22,7 @@ class ApoForm < ApplicationChangeSet
   DEFAULT_MANAGER_WORKGROUPS = %w[developer service-manager metadata-staff].freeze
 
   def self.model_name
-    ::ActiveModel::Name.new(nil, nil, 'Apo')
+    ::ActiveModel::Name.new(nil, nil, "Apo")
   end
 
   # needed for generating the update route
@@ -48,18 +48,18 @@ class ApoForm < ApplicationChangeSet
       self.permissions = manage_permissions + view_permissions
       setup_view_access_with_cdl_properties(model.administrative.accessTemplate)
     else
-      self.collection_radio = 'none'
-      self.default_workflows = ['registrationWF']
+      self.collection_radio = "none"
+      self.default_workflows = ["registrationWF"]
       self.permissions = default_permissions
     end
   end
 
   def save_model
     @model = if persisted?
-               AdminPolicyPersister.update(model, self)
-             else
-               AdminPolicyPersister.create(self)
-             end
+      AdminPolicyPersister.update(model, self)
+    else
+      AdminPolicyPersister.create(self)
+    end
   end
 
   def id
@@ -70,9 +70,9 @@ class ApoForm < ApplicationChangeSet
   def default_collection_objects
     @default_collection_objects ||=
       @search_service
-      .fetch(default_collections, rows: default_collections.size)
-      .last
-      .sort_by do |solr_doc|
+        .fetch(default_collections, rows: default_collections.size)
+        .last
+        .sort_by do |solr_doc|
         solr_doc.label.downcase
       end
   end
@@ -82,7 +82,7 @@ class ApoForm < ApplicationChangeSet
   end
 
   def license_options
-    [['-- none --', '']] + options_for_use_license_type(use_license)
+    [["-- none --", ""]] + options_for_use_license_type(use_license)
   end
 
   private
@@ -109,30 +109,30 @@ class ApoForm < ApplicationChangeSet
   end
 
   def manage_permissions
-    manage_role = model.administrative.roles&.find { |role| role.name == 'dor-apo-manager' }
+    manage_role = model.administrative.roles&.find { |role| role.name == "dor-apo-manager" }
     managers = manage_role ? manage_role.members.map { |member| "#{member.type}:#{member.identifier}" } : []
-    build_permissions(managers, 'manage')
+    build_permissions(managers, "manage")
   end
 
   def view_permissions
-    view_role = model.administrative.roles&.find { |role| role.name == 'dor-apo-viewer' }
+    view_role = model.administrative.roles&.find { |role| role.name == "dor-apo-viewer" }
     viewers = view_role ? view_role.members.map { |member| "#{member.type}:#{member.identifier}" } : []
-    build_permissions(viewers, 'view')
+    build_permissions(viewers, "view")
   end
 
   def build_permissions(role_list, access)
     role_list.map do |name|
-      if name.starts_with? 'workgroup:'
-        { name: name.sub(/^workgroup:[^:]*:/, ''), type: 'group', access: }
+      if name.starts_with? "workgroup:"
+        {name: name.sub(/^workgroup:[^:]*:/, ""), type: "group", access:}
       else
-        { name: name.sub(/^sunetid:/, ''), type: 'person', access: }
+        {name: name.sub(/^sunetid:/, ""), type: "person", access:}
       end
     end
   end
 
   def default_permissions
     DEFAULT_MANAGER_WORKGROUPS.map do |name|
-      { name:, type: 'group', access: 'manage' }
+      {name:, type: "group", access: "manage"}
     end
   end
 end

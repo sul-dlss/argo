@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 # This is an integration test (with DSA), because we need to show that the
 # data we submit from here doesn't cause a round trip to MODS error.
-RSpec.describe 'Update serials metadata', js: true do
+RSpec.describe "Update serials metadata", js: true do
   let(:user) { create(:user) }
   # We need to set a catkey on this item, but we can't do it when it's created,
   # because we don't have symphony running in our test environment. If you register
@@ -14,27 +14,27 @@ RSpec.describe 'Update serials metadata', js: true do
   end
 
   before do
-    sign_in user, groups: ['sdr:administrator-role']
+    sign_in user, groups: ["sdr:administrator-role"]
     visit solr_document_path(item.externalIdentifier)
   end
 
-  it 'edits serials' do
-    click_link 'Manage catkey'
+  it "edits serials" do
+    click_link "Manage catkey"
 
-    within '.modal-body' do
-      find('input').set '55555'
-      find('select').set true
+    within ".modal-body" do
+      find("input").set "55555"
+      find("select").set true
     end
-    click_button 'Update'
+    click_button "Update"
 
-    click_button 'Manage description'
-    click_link 'Manage serials'
+    click_button "Manage description"
+    click_link "Manage serials"
 
-    fill_in 'Part number', with: 'part 17'
-    fill_in 'Part name', with: 'supplement'
-    fill_in 'Sort field', with: '17'
-    click_button 'Update'
+    fill_in "Part number", with: "part 17"
+    fill_in "Part name", with: "supplement"
+    fill_in "Sort field", with: "17"
+    click_button "Update"
 
-    expect(page).to have_content 'test object. part 17, supplement'
+    expect(page).to have_content "test object. part 17, supplement"
   end
 end

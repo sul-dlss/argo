@@ -12,10 +12,10 @@ class SetCollectionJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    @new_collection_ids = Array(params['new_collection_id'].presence)
+    @new_collection_ids = Array(params["new_collection_id"].presence)
 
-    with_items(params[:druids], name: 'Set collection') do |cocina_object, success, _failure|
-      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+    with_items(params[:druids], name: "Set collection") do |cocina_object, success, _failure|
+      next failure.call("Not authorized") unless ability.can?(:update, cocina_object)
 
       cocina_object = open_new_version_if_needed(cocina_object, version_message(new_collection_ids))
 
@@ -23,13 +23,13 @@ class SetCollectionJob < GenericJob
       change_set.validate(collection_ids: new_collection_ids)
       change_set.save
 
-      success.call('Update successful')
+      success.call("Update successful")
     end
   end
 
   private
 
   def version_message(collection_ids)
-    collection_ids ? "Added to collections #{collection_ids.join(',')}." : 'Removed collection membership.'
+    collection_ids ? "Added to collections #{collection_ids.join(",")}." : "Removed collection membership."
   end
 end

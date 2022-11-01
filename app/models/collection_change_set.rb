@@ -11,7 +11,7 @@ class CollectionChangeSet < ApplicationChangeSet
   property :view_access, virtual: true
 
   def self.model_name
-    ::ActiveModel::Name.new(nil, nil, 'Collection')
+    ::ActiveModel::Name.new(nil, nil, "Collection")
   end
 
   def id

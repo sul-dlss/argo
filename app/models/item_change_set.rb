@@ -21,7 +21,7 @@ class ItemChangeSet < ApplicationChangeSet
   }
 
   def self.model_name
-    ::ActiveModel::Name.new(nil, nil, 'Item')
+    ::ActiveModel::Name.new(nil, nil, "Item")
   end
 
   def id
@@ -45,7 +45,7 @@ class ItemChangeSet < ApplicationChangeSet
 
   def sync
     super
-    self.download_access = 'none' if clear_download? # This must be before clearing location
+    self.download_access = "none" if clear_download? # This must be before clearing location
     self.access_location = nil if clear_location?
   end
 
@@ -54,7 +54,7 @@ class ItemChangeSet < ApplicationChangeSet
   end
 
   def clear_location?
-    (changed?(:view_access) || changed?(:download_access)) && view_access != 'location-based' && download_access != 'location-based'
+    (changed?(:view_access) || changed?(:download_access)) && view_access != "location-based" && download_access != "location-based"
   end
 
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request

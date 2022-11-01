@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Set the properties for an item' do
+RSpec.describe "Set the properties for an item" do
   let(:user) { create(:user) }
-  let(:druid) { 'druid:bc123df4567' }
+  let(:druid) { "druid:bc123df4567" }
   let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
 
   before do
@@ -12,20 +12,20 @@ RSpec.describe 'Set the properties for an item' do
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
-  context 'when they have manage access' do
+  context "when they have manage access" do
     before do
-      sign_in user, groups: ['sdr:administrator-role']
+      sign_in user, groups: ["sdr:administrator-role"]
     end
 
     let(:cocina_model) { build(:dro_with_metadata) }
 
-    context 'when barcode is passed' do
+    context "when barcode is passed" do
       let(:updated_model) do
         cocina_model.new(
           {
             identification: {
-              barcode: '36105010362304',
-              sourceId: 'sul:1234'
+              barcode: "36105010362304",
+              sourceId: "sul:1234"
             }
           }
         )
@@ -35,22 +35,22 @@ RSpec.describe 'Set the properties for an item' do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      it 'sets the new barcode' do
-        patch "/items/#{druid}", params: { item: { barcode: '36105010362304' } }
+      it "sets the new barcode" do
+        patch "/items/#{druid}", params: {item: {barcode: "36105010362304"}}
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq('303')
+        expect(response.code).to eq("303")
       end
     end
 
-    context 'when copyright is passed' do
+    context "when copyright is passed" do
       let(:updated_model) do
         cocina_model.new(
           {
-            'access' => {
-              'copyright' => 'in public domain'
+            "access" => {
+              "copyright" => "in public domain"
             }
           }
         )
@@ -60,22 +60,22 @@ RSpec.describe 'Set the properties for an item' do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      it 'sets the new copyright' do
-        patch "/items/#{druid}", params: { item: { copyright: 'in public domain' } }
+      it "sets the new copyright" do
+        patch "/items/#{druid}", params: {item: {copyright: "in public domain"}}
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq('303')
+        expect(response.code).to eq("303")
       end
     end
 
-    context 'when use_statement is passed' do
+    context "when use_statement is passed" do
       let(:updated_model) do
         cocina_model.new(
           {
-            'access' => {
-              'useAndReproductionStatement' => 'call before using'
+            "access" => {
+              "useAndReproductionStatement" => "call before using"
             }
           }
         )
@@ -85,22 +85,22 @@ RSpec.describe 'Set the properties for an item' do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      it 'sets the new use and reproduction statement' do
-        patch "/items/#{druid}", params: { item: { use_statement: 'call before using' } }
+      it "sets the new use and reproduction statement" do
+        patch "/items/#{druid}", params: {item: {use_statement: "call before using"}}
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq('303')
+        expect(response.code).to eq("303")
       end
     end
 
-    context 'when license is passed' do
+    context "when license is passed" do
       let(:updated_model) do
         cocina_model.new(
           {
-            'access' => {
-              'license' => 'https://creativecommons.org/licenses/by/4.0/legalcode'
+            "access" => {
+              "license" => "https://creativecommons.org/licenses/by/4.0/legalcode"
             }
           }
         )
@@ -110,47 +110,47 @@ RSpec.describe 'Set the properties for an item' do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      it 'sets the new license statement' do
-        patch "/items/#{druid}", params: { item: { license: 'https://creativecommons.org/licenses/by/4.0/legalcode' } }
+      it "sets the new license statement" do
+        patch "/items/#{druid}", params: {item: {license: "https://creativecommons.org/licenses/by/4.0/legalcode"}}
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq('303')
+        expect(response.code).to eq("303")
       end
     end
 
-    describe 'access rights' do
+    describe "access rights" do
       let(:cocina_model) do
         build(:dro_with_metadata).new(access: existing_access, structural: existing_structural)
       end
 
-      let(:existing_access) { { view: 'world', download: 'none' } }
+      let(:existing_access) { {view: "world", download: "none"} }
       let(:existing_structural) do
         {
           contains: [
             {
-              externalIdentifier: 'fileset_1',
+              externalIdentifier: "fileset_1",
               type: Cocina::Models::FileSetType.file,
               version: 1,
-              label: 'Fileset 1',
+              label: "Fileset 1",
               structural: {
                 contains: [
                   {
-                    externalIdentifier: 'file_1',
+                    externalIdentifier: "file_1",
                     type: Cocina::Models::ObjectType.file,
                     version: 1,
                     access: existing_file_access,
                     administrative: existing_file_administrative,
-                    filename: 'fred',
+                    filename: "fred",
                     hasMessageDigests: [],
-                    label: 'hi'
+                    label: "hi"
                   }
                 ]
               }
             }
           ],
-          isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+          isMemberOf: ["druid:sx469gx8472"] # to ensure this is not modified
         }
       end
       let(:existing_file_administrative) do
@@ -162,8 +162,8 @@ RSpec.describe 'Set the properties for an item' do
       end
       let(:existing_file_access) do
         {
-          view: 'world',
-          download: 'world'
+          view: "world",
+          download: "world"
         }
       end
 
@@ -171,33 +171,33 @@ RSpec.describe 'Set the properties for an item' do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      context 'when they are location access' do
+      context "when they are location access" do
         let(:updated_model) do
           cocina_model.new(
             {
               access: {
-                view: 'world',
-                download: 'location-based',
-                location: 'm&m',
+                view: "world",
+                download: "location-based",
+                location: "m&m",
                 controlledDigitalLending: false
               },
               structural: {
                 contains: [
                   {
-                    externalIdentifier: 'fileset_1',
+                    externalIdentifier: "fileset_1",
                     type: Cocina::Models::FileSetType.file,
                     version: 1,
-                    label: 'Fileset 1',
+                    label: "Fileset 1",
                     structural: {
                       contains: [
                         {
-                          externalIdentifier: 'file_1',
+                          externalIdentifier: "file_1",
                           type: Cocina::Models::ObjectType.file,
                           version: 1,
                           access: {
-                            view: 'world',
-                            download: 'location-based',
-                            location: 'm&m',
+                            view: "world",
+                            download: "location-based",
+                            location: "m&m",
                             controlledDigitalLending: false
                           },
                           administrative: {
@@ -205,43 +205,43 @@ RSpec.describe 'Set the properties for an item' do
                             sdrPreserve: true,
                             shelve: true
                           },
-                          filename: 'fred',
+                          filename: "fred",
                           hasMessageDigests: [],
-                          label: 'hi'
+                          label: "hi"
                         }
                       ]
                     }
                   }
                 ],
-                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+                isMemberOf: ["druid:sx469gx8472"] # to ensure this is not modified
               }
             }
           )
         end
 
-        it 'sets the new access rights (without overwriting collection)' do
+        it "sets the new access rights (without overwriting collection)" do
           patch "/items/#{druid}", params: {
             item: {
-              view_access: 'world',
-              download_access: 'location-based',
-              access_location: 'm&m',
-              controlled_digital_lending: '0'
+              view_access: "world",
+              download_access: "location-based",
+              access_location: "m&m",
+              controlled_digital_lending: "0"
             }
           }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq('303')
+          expect(response.code).to eq("303")
         end
       end
 
-      context 'when changing from location access' do
+      context "when changing from location access" do
         let(:existing_access) do
           {
-            view: 'world',
-            download: 'location-based',
-            location: 'm&m',
+            view: "world",
+            download: "location-based",
+            location: "m&m",
             controlledDigitalLending: false
           }
         end
@@ -255,27 +255,27 @@ RSpec.describe 'Set the properties for an item' do
           cocina_model.new(
             {
               access: {
-                view: 'stanford',
-                download: 'stanford',
+                view: "stanford",
+                download: "stanford",
                 location: nil,
                 controlledDigitalLending: false
               },
               structural: {
                 contains: [
                   {
-                    externalIdentifier: 'fileset_1',
+                    externalIdentifier: "fileset_1",
                     type: Cocina::Models::FileSetType.file,
                     version: 1,
-                    label: 'Fileset 1',
+                    label: "Fileset 1",
                     structural: {
                       contains: [
                         {
-                          externalIdentifier: 'file_1',
+                          externalIdentifier: "file_1",
                           type: Cocina::Models::ObjectType.file,
                           version: 1,
                           access: {
-                            view: 'stanford',
-                            download: 'stanford',
+                            view: "stanford",
+                            download: "stanford",
                             location: nil,
                             controlledDigitalLending: false
                           },
@@ -284,42 +284,42 @@ RSpec.describe 'Set the properties for an item' do
                             sdrPreserve: true,
                             shelve: true
                           },
-                          filename: 'fred',
+                          filename: "fred",
                           hasMessageDigests: [],
-                          label: 'hi'
+                          label: "hi"
                         }
                       ]
                     }
                   }
                 ],
-                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+                isMemberOf: ["druid:sx469gx8472"] # to ensure this is not modified
               }
             }
           )
         end
 
-        it 'sets the new access rights' do
+        it "sets the new access rights" do
           patch "/items/#{druid}", params: {
             item: {
-              view_access: 'stanford',
-              download_access: 'stanford',
-              controlled_digital_lending: '0'
+              view_access: "stanford",
+              download_access: "stanford",
+              controlled_digital_lending: "0"
             }
           }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq('303')
+          expect(response.code).to eq("303")
         end
       end
 
-      context 'when changing to dark access' do
+      context "when changing to dark access" do
         let(:existing_access) do
           {
-            view: 'world',
-            download: 'location-based',
-            location: 'm&m',
+            view: "world",
+            download: "location-based",
+            location: "m&m",
             controlledDigitalLending: false
           }
         end
@@ -333,27 +333,27 @@ RSpec.describe 'Set the properties for an item' do
           cocina_model.new(
             {
               access: {
-                view: 'dark',
-                download: 'none',
+                view: "dark",
+                download: "none",
                 location: nil,
                 controlledDigitalLending: false
               },
               structural: {
                 contains: [
                   {
-                    externalIdentifier: 'fileset_1',
+                    externalIdentifier: "fileset_1",
                     type: Cocina::Models::FileSetType.file,
                     version: 1,
-                    label: 'Fileset 1',
+                    label: "Fileset 1",
                     structural: {
                       contains: [
                         {
-                          externalIdentifier: 'file_1',
+                          externalIdentifier: "file_1",
                           type: Cocina::Models::ObjectType.file,
                           version: 1,
                           access: {
-                            view: 'dark',
-                            download: 'none',
+                            view: "dark",
+                            download: "none",
                             location: nil,
                             controlledDigitalLending: false
                           },
@@ -362,40 +362,40 @@ RSpec.describe 'Set the properties for an item' do
                             sdrPreserve: true,
                             shelve: false
                           },
-                          filename: 'fred',
+                          filename: "fred",
                           hasMessageDigests: [],
-                          label: 'hi'
+                          label: "hi"
                         }
                       ]
                     }
                   }
                 ],
-                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+                isMemberOf: ["druid:sx469gx8472"] # to ensure this is not modified
               }
             }
           )
         end
 
-        it 'sets the new access rights' do
+        it "sets the new access rights" do
           patch "/items/#{druid}", params: {
             item: {
-              view_access: 'dark',
-              controlled_digital_lending: '0'
+              view_access: "dark",
+              controlled_digital_lending: "0"
             }
           }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq('303')
+          expect(response.code).to eq("303")
         end
       end
 
-      context 'when changing from dark access' do
+      context "when changing from dark access" do
         let(:existing_access) do
           {
-            view: 'dark',
-            download: 'none'
+            view: "dark",
+            download: "none"
           }
         end
 
@@ -416,87 +416,87 @@ RSpec.describe 'Set the properties for an item' do
           cocina_model.new(
             {
               access: {
-                view: 'location-based',
-                download: 'location-based',
-                location: 'spec',
+                view: "location-based",
+                download: "location-based",
+                location: "spec",
                 controlledDigitalLending: false
               },
               structural: {
                 contains: [
                   {
-                    externalIdentifier: 'fileset_1',
+                    externalIdentifier: "fileset_1",
                     type: Cocina::Models::FileSetType.file,
                     version: 1,
-                    label: 'Fileset 1',
+                    label: "Fileset 1",
                     structural: {
                       contains: [
                         {
-                          externalIdentifier: 'file_1',
+                          externalIdentifier: "file_1",
                           type: Cocina::Models::ObjectType.file,
                           version: 1,
                           access: {
-                            view: 'location-based',
-                            download: 'location-based',
-                            location: 'spec',
+                            view: "location-based",
+                            download: "location-based",
+                            location: "spec",
                             controlledDigitalLending: false
                           },
                           administrative: existing_file_administrative, # Nothing was changed
-                          filename: 'fred',
+                          filename: "fred",
                           hasMessageDigests: [],
-                          label: 'hi'
+                          label: "hi"
                         }
                       ]
                     }
                   }
                 ],
-                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+                isMemberOf: ["druid:sx469gx8472"] # to ensure this is not modified
               }
             }
           )
         end
 
-        it 'sets the new access rights' do
+        it "sets the new access rights" do
           patch "/items/#{druid}", params: {
             item: {
-              view_access: 'location-based',
-              download_access: 'location-based',
-              access_location: 'spec',
-              controlled_digital_lending: '0'
+              view_access: "location-based",
+              download_access: "location-based",
+              access_location: "spec",
+              controlled_digital_lending: "0"
             }
           }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq('303')
+          expect(response.code).to eq("303")
         end
       end
 
-      context 'when they are CDL access' do
+      context "when they are CDL access" do
         let(:updated_model) do
           cocina_model.new(
             {
               access: {
-                view: 'stanford',
-                download: 'none',
+                view: "stanford",
+                download: "none",
                 controlledDigitalLending: true
               },
               structural: {
                 contains: [
                   {
-                    externalIdentifier: 'fileset_1',
+                    externalIdentifier: "fileset_1",
                     type: Cocina::Models::FileSetType.file,
                     version: 1,
-                    label: 'Fileset 1',
+                    label: "Fileset 1",
                     structural: {
                       contains: [
                         {
-                          externalIdentifier: 'file_1',
+                          externalIdentifier: "file_1",
                           type: Cocina::Models::ObjectType.file,
                           version: 1,
                           access: {
-                            view: 'stanford',
-                            download: 'none',
+                            view: "stanford",
+                            download: "none",
                             location: nil,
                             controlledDigitalLending: true
                           },
@@ -505,47 +505,47 @@ RSpec.describe 'Set the properties for an item' do
                             sdrPreserve: true,
                             shelve: true
                           },
-                          filename: 'fred',
+                          filename: "fred",
                           hasMessageDigests: [],
-                          label: 'hi'
+                          label: "hi"
                         }
                       ]
                     }
                   }
                 ],
-                isMemberOf: ['druid:sx469gx8472'] # to ensure this is not modified
+                isMemberOf: ["druid:sx469gx8472"] # to ensure this is not modified
               }
             }
           )
         end
 
-        it 'sets the new access rights' do
+        it "sets the new access rights" do
           patch "/items/#{druid}", params: {
             item: {
-              view_access: 'stanford',
-              download_access: 'none',
-              controlled_digital_lending: '1'
+              view_access: "stanford",
+              download_access: "none",
+              controlled_digital_lending: "1"
             }
           }
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq('303')
+          expect(response.code).to eq("303")
         end
       end
     end
 
-    context 'when there is an error building the Cocina' do
-      it 'draws the error' do
-        patch "/items/#{druid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
+    context "when there is an error building the Cocina" do
+      it "draws the error" do
+        patch "/items/#{druid}", params: {item: {barcode: "invalid"}}, headers: {"Turbo-Frame" => "barcode"}
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include '<turbo-frame id="barcode">&quot;invalid&quot; is not a valid barcode</turbo-frame>'
       end
     end
 
-    context 'when there is an error saving the Cocina' do
+    context "when there is an error saving the Cocina" do
       let(:json_response) do
         <<~JSON
           {"errors":
@@ -560,11 +560,11 @@ RSpec.describe 'Set the properties for an item' do
 
       before do
         stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/druid:bc234fg5678")
-          .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
+          .to_return(status: 422, body: json_response, headers: {"content-type" => "application/vnd.api+json"})
       end
 
-      it 'draws the error' do
-        patch "/items/#{druid}", params: { item: { barcode: '36105010362304' } }, headers: { 'Turbo-Frame' => 'barcode' }
+      it "draws the error" do
+        patch "/items/#{druid}", params: {item: {barcode: "36105010362304"}}, headers: {"Turbo-Frame" => "barcode"}
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include '<turbo-frame id="barcode">Unable to retrieve the cocina model: broken</turbo-frame>'

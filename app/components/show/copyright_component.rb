@@ -8,7 +8,7 @@ module Show
     end
 
     def copyright
-      @change_set.copyright || 'Not entered'
+      @change_set.copyright || "Not entered"
     end
 
     delegate :allows_modification?, to: :@state_service

@@ -22,7 +22,7 @@ class ChecksumReportJob < GenericJob
         csv_report = Preservation::Client.objects.checksums(druids:)
         File.write(report_filename, csv_report)
         bulk_action.update(druid_count_success: druids.length) # this whole job is run in one call, so it either all succeeds or fails
-      rescue StandardError => e
+      rescue => e
         bulk_action.update(druid_count_fail: druids.length)
         message = exception_message_for(e)
         log.puts(message) # this one goes to the user via the bulk action log

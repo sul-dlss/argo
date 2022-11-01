@@ -8,7 +8,7 @@ class WorkflowServiceController < ApplicationController
   ##
   # Draw the lock/unlock button depending on which state the object is in
   def lock
-    render StateService.new(@cocina).object_state, locals: { id: params[:id] }
+    render StateService.new(@cocina).object_state, locals: {id: params[:id]}
   end
 
   ##

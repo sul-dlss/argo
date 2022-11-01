@@ -52,32 +52,32 @@ class FormsGrouper
         type_for_form_number = description.slice(*description.keys.grep(/^old_form#{form_number[1]}\.type/)).values.first
 
         # Look up the form number of the type value
-        new_form_number = if description.slice(*description.keys.grep(/form.+type/)).select { |_key, value| value == type_for_form_number }.count == 1
-                            # If there is only one matching form number in the mapping, use it and move on.
-                            ordered_mapping.key(type_for_form_number)
-                          else
-                            # If there are multiple forms of this type, e.g., an
-                            # item with multiple forms of type "genre", use the
-                            # first form number not already used
-                            unused_form = ordered_mapping.find do |mapped_form_number, type_value|
-                              type_value == type_for_form_number &&
-                                !description.key?(key.sub(/^old_form\d+/, mapped_form_number)) &&
-                                !mapping.key(mapped_form_number)
-                            end
+        new_form_number = if description.slice(*description.keys.grep(/form.+type/)).count { |_key, value| value == type_for_form_number } == 1
+          # If there is only one matching form number in the mapping, use it and move on.
+          ordered_mapping.key(type_for_form_number)
+        else
+          # If there are multiple forms of this type, e.g., an
+          # item with multiple forms of type "genre", use the
+          # first form number not already used
+          unused_form = ordered_mapping.find do |mapped_form_number, type_value|
+            type_value == type_for_form_number &&
+              !description.key?(key.sub(/^old_form\d+/, mapped_form_number)) &&
+              !mapping.key(mapped_form_number)
+          end
 
-                            if unused_form
-                              unused_form.first
-                            else
-                              # If there is no matching form number, increment the
-                              # current highest form number and use it for form
-                              # elements for this type
-                              max_form = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
-                              field, number = max_form.scan(/(\D+)(\d+)/).first
-                              new_form = "#{field}#{number.to_i.succ}"
-                              ordered_mapping[new_form] = type_for_form_number
-                              new_form
-                            end
-                          end
+          if unused_form
+            unused_form.first
+          else
+            # If there is no matching form number, increment the
+            # current highest form number and use it for form
+            # elements for this type
+            max_form = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
+            field, number = max_form.scan(/(\D+)(\d+)/).first
+            new_form = "#{field}#{number.to_i.succ}"
+            ordered_mapping[new_form] = type_for_form_number
+            new_form
+          end
+        end
 
         # Fall back to original number if look-up returned nil
         new_form_number ||= "form#{form_number[1]}"
@@ -103,11 +103,11 @@ class FormsGrouper
     #         ["resource type", "form", "extent", "digital origin"]
     #       ]
     unique_types_in_order = type_values
-                            .flatten
-                            .index_with { |type| type_values.flatten.count(type) }
-                            .sort_by { |_value, count| -count }
-                            .to_h
-                            .keys
+      .flatten
+      .index_with { |type| type_values.flatten.count(type) }
+      .sort_by { |_value, count| -count }
+      .to_h
+      .keys
 
     # ["resource type", "form", "extent", "digital origin", "genre"]
     repeat_types_counts = {}

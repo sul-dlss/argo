@@ -10,7 +10,7 @@ module Show
       attr_reader :document
 
       def placeholder_text
-        truncate(CitationPresenter.new(document, italicize: false).render, length: 246, omission: '…')
+        truncate(CitationPresenter.new(document, italicize: false).render, length: 246, omission: "…")
       end
     end
   end

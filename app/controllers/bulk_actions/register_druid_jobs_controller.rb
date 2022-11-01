@@ -3,7 +3,7 @@
 module BulkActions
   class RegisterDruidJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = 'RegisterDruidsJob'
+    self.action_type = "RegisterDruidsJob"
 
     REQUIRED_HEADERS = %w[
       content_type
@@ -13,7 +13,7 @@ module BulkActions
     ].freeze
 
     def job_params
-      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
+      {groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path)}
     end
 
     def validate_job_params(job_params)

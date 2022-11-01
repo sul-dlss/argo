@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe OpenVersionJob, type: :job do
-  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
+  let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222"] }
   let(:groups) { [] }
   let(:workflow_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
   let(:bulk_action) { create(:bulk_action) }
@@ -23,8 +23,8 @@ RSpec.describe OpenVersionJob, type: :job do
       druids:,
       groups:,
       user:,
-      version_description: 'Changed dates',
-      significance: 'major'
+      version_description: "Changed dates",
+      significance: "major"
     }.with_indifferent_access
   end
 
@@ -36,23 +36,23 @@ RSpec.describe OpenVersionJob, type: :job do
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
   end
 
-  context 'with manage ability' do
+  context "with manage ability" do
     let(:ability) { instance_double(Ability, can?: true) }
 
-    it 'opens new versions' do
+    it "opens new versions" do
       described_class.perform_now(bulk_action.id, params)
 
       expect(VersionService).to have_received(:open).with(identifier: anything,
-                                                          description: 'Changed dates',
-                                                          opening_user_name: user.to_s,
-                                                          significance: 'major').twice
+        description: "Changed dates",
+        opening_user_name: user.to_s,
+        significance: "major").twice
     end
   end
 
-  context 'without manage ability' do
+  context "without manage ability" do
     let(:ability) { instance_double(Ability, can?: false) }
 
-    it 'does not open new versions' do
+    it "does not open new versions" do
       described_class.perform_now(bulk_action.id, params)
 
       expect(VersionService).not_to have_received(:open)

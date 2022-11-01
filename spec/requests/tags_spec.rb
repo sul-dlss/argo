@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Tags', type: :request do
+RSpec.describe "Tags", type: :request do
   let(:user) { create(:user) }
 
   before do
-    sign_in user, groups: ['sdr:administrator-role']
+    sign_in user, groups: ["sdr:administrator-role"]
   end
 
-  describe '#search' do
+  describe "#search" do
     let(:client) { instance_double(Dor::Services::Client::AdministrativeTagSearch, search: '["foo : bar : baz"]') }
 
     before do
       allow(Dor::Services::Client).to receive(:administrative_tags).and_return(client)
     end
 
-    it 'returns results' do
-      get '/tags/search?q=foo'
+    it "returns results" do
+      get "/tags/search?q=foo"
       expect(response.body).to eq '["foo : bar : baz"]'
     end
 
-    context 'when there is a failure' do
+    context "when there is a failure" do
       before do
         allow(client).to receive(:search).and_raise(Dor::Services::Client::ConnectionFailed)
       end
 
-      it 'returns results' do
-        get '/tags/search?q=foo'
-        expect(response.body).to eq '[]'
+      it "returns results" do
+        get "/tags/search?q=foo"
+        expect(response.body).to eq "[]"
       end
     end
   end
 
-  describe '#update' do
-    let(:druid) { 'druid:bc123df4567' }
+  describe "#update" do
+    let(:druid) { "druid:bc123df4567" }
     let(:object_client) do
       instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
     end
@@ -45,33 +45,33 @@ RSpec.describe 'Tags', type: :request do
       allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
-    context 'when they have manage access' do
-      let(:current_tag) { 'Some : Thing' }
+    context "when they have manage access" do
+      let(:current_tag) { "Some : Thing" }
       let(:tags_client) do
         instance_double(Dor::Services::Client::AdministrativeTags,
-                        list: [current_tag],
-                        update: true,
-                        destroy: true,
-                        create: true)
+          list: [current_tag],
+          update: true,
+          destroy: true,
+          create: true)
       end
 
-      it 'updates tags' do
+      it "updates tags" do
         patch "/items/#{druid}/tags", params: {
           tags: {
             tags_attributes: {
-              '0' => { name: 'Some : Thing : Else', id: 'Some : Thing' }
+              "0" => {name: "Some : Thing : Else", id: "Some : Thing"}
             }
           }
         }
-        expect(tags_client).to have_received(:update).with(current: current_tag, new: 'Some : Thing : Else')
+        expect(tags_client).to have_received(:update).with(current: current_tag, new: "Some : Thing : Else")
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
       end
 
-      it 'deletes tag' do
+      it "deletes tag" do
         patch "/items/#{druid}/tags", params: {
           tags: {
             tags_attributes: {
-              '0' => { name: 'Some : Thing : Else', id: 'Some : Thing', _destroy: '1' }
+              "0" => {name: "Some : Thing : Else", id: "Some : Thing", _destroy: "1"}
             }
           }
         }
@@ -79,16 +79,16 @@ RSpec.describe 'Tags', type: :request do
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
       end
 
-      it 'adds a tag' do
+      it "adds a tag" do
         patch "/items/#{druid}/tags", params: {
           tags: {
             tags_attributes: {
-              '0' => { name: 'New : Thing', id: '', _destroy: '' }
+              "0" => {name: "New : Thing", id: "", _destroy: ""}
             }
           }
         }
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(tags_client).to have_received(:create).with(tags: ['New : Thing'])
+        expect(tags_client).to have_received(:create).with(tags: ["New : Thing"])
       end
     end
   end

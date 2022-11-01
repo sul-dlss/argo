@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Set content type for an item', type: :request do
+RSpec.describe "Set content type for an item", type: :request do
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  let(:druid) { 'druid:bc123df4567' }
+  let(:druid) { "druid:bc123df4567" }
   let(:user) { create :user }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:content_type) { Cocina::Models::ObjectType.image }
@@ -17,34 +17,34 @@ RSpec.describe 'Set content type for an item', type: :request do
   let(:contains) do
     [
       Cocina::Models::FileSet.new(
-        externalIdentifier: 'bc123df4567_2',
+        externalIdentifier: "bc123df4567_2",
         type: Cocina::Models::FileSetType.document,
-        label: 'document files',
+        label: "document files",
         version: 1,
         structural: Cocina::Models::FileSetStructural.new(
           contains: [
             Cocina::Models::File.new(
-              externalIdentifier: 'bc123df4567.pdf',
+              externalIdentifier: "bc123df4567.pdf",
               type: Cocina::Models::ObjectType.file,
-              label: 'the PDF',
-              filename: 'bc123df4567.pdf',
+              label: "the PDF",
+              filename: "bc123df4567.pdf",
               version: 1
             )
           ]
         )
       ),
       Cocina::Models::FileSet.new(
-        externalIdentifier: 'bc123df4567_2',
+        externalIdentifier: "bc123df4567_2",
         type: Cocina::Models::FileSetType.image,
-        label: 'image files',
+        label: "image files",
         version: 1,
         structural: Cocina::Models::FileSetStructural.new(
           contains: [
             Cocina::Models::File.new(
-              externalIdentifier: 'bc123df4567.png',
+              externalIdentifier: "bc123df4567.png",
               type: Cocina::Models::ObjectType.file,
-              label: 'the PNG',
-              filename: 'bc123df4567.png',
+              label: "the PNG",
+              filename: "bc123df4567.png",
               version: 1
             )
           ]
@@ -58,65 +58,65 @@ RSpec.describe 'Set content type for an item', type: :request do
     )
   end
 
-  describe 'show the form' do
+  describe "show the form" do
     before do
-      sign_in user, groups: ['sdr:manager-role']
+      sign_in user, groups: ["sdr:manager-role"]
     end
 
     let(:content_type) { Cocina::Models::ObjectType.image }
 
-    it 'is successful' do
+    it "is successful" do
       get "/items/#{druid}/content_type/edit"
       expect(response).to be_successful
-      expect(response.body).to include('Set content type')
+      expect(response.body).to include("Set content type")
     end
   end
 
-  describe 'save the updated value' do
+  describe "save the updated value" do
     before do
       allow(StateService).to receive(:new).and_return(state_service)
     end
 
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
-    context 'with access' do
+    context "with access" do
       before do
-        sign_in user, groups: ['sdr:administrator-role']
+        sign_in user, groups: ["sdr:administrator-role"]
       end
 
-      it 'is successful at changing the content type to media' do
+      it "is successful at changing the content type to media" do
         patch "/items/#{druid}/content_type",
-              params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
+          params: {content_type: {new_content_type: Cocina::Models::ObjectType.media}}
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
           .once
       end
 
-      it 'is successful at changing the content type to book (ltr)' do
+      it "is successful at changing the content type to book (ltr)" do
         patch "/items/#{druid}/content_type",
-              params: { content_type: { new_content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right' } }
+          params: {content_type: {new_content_type: Cocina::Models::ObjectType.book, viewing_direction: "left-to-right"}}
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
-          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
+          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: "left-to-right"))
           .once
       end
 
-      it 'is successful at changing the content type to book (rtl)' do
+      it "is successful at changing the content type to book (rtl)" do
         patch "/items/#{druid}/content_type",
-              params: { content_type: { new_content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left' } }
+          params: {content_type: {new_content_type: Cocina::Models::ObjectType.book, viewing_direction: "right-to-left"}}
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
-          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
+          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: "right-to-left"))
           .once
       end
 
-      it 'is successful at changing the resource type' do
+      it "is successful at changing the resource type" do
         patch "/items/#{druid}/content_type",
-              params: { content_type: { old_resource_type: Cocina::Models::FileSetType.document, new_resource_type: Cocina::Models::FileSetType.file,
-                                        new_content_type: Cocina::Models::ObjectType.image } }
+          params: {content_type: {old_resource_type: Cocina::Models::FileSetType.document, new_resource_type: Cocina::Models::FileSetType.file,
+                                  new_content_type: Cocina::Models::ObjectType.image}}
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(object_client).to have_received(:update)
@@ -129,11 +129,11 @@ RSpec.describe 'Set content type for an item', type: :request do
       end
 
       context "when the values don't change from the original" do
-        it 'is successful' do
+        it "is successful" do
           patch "/items/#{druid}/content_type",
-                params: { content_type: { new_content_type: Cocina::Models::ObjectType.image,
-                                          old_resource_type: Cocina::Models::FileSetType.file,
-                                          new_resource_type: Cocina::Models::FileSetType.document } }
+            params: {content_type: {new_content_type: Cocina::Models::ObjectType.image,
+                                    old_resource_type: Cocina::Models::FileSetType.file,
+                                    new_resource_type: Cocina::Models::FileSetType.document}}
 
           expect(response).to redirect_to solr_document_path(druid)
           expect(object_client).to have_received(:update)
@@ -146,12 +146,12 @@ RSpec.describe 'Set content type for an item', type: :request do
         end
       end
 
-      context 'when the new resource type is none' do
+      context "when the new resource type is none" do
         it "doesn't change the value" do
           patch "/items/#{druid}/content_type",
-                params: { content_type: { new_content_type: Cocina::Models::ObjectType.image,
-                                          old_resource_type: Cocina::Models::FileSetType.document,
-                                          new_resource_type: '' } }
+            params: {content_type: {new_content_type: Cocina::Models::ObjectType.image,
+                                    old_resource_type: Cocina::Models::FileSetType.document,
+                                    new_resource_type: ""}}
 
           expect(response).to redirect_to solr_document_path(druid)
           expect(object_client).to have_received(:update)
@@ -164,12 +164,12 @@ RSpec.describe 'Set content type for an item', type: :request do
         end
       end
 
-      context 'without structural metadata' do
+      context "without structural metadata" do
         let(:structural) { Cocina::Models::DROStructural.new({}) }
 
-        it 'changes the content type only' do
+        it "changes the content type only" do
           patch "/items/#{druid}/content_type",
-                params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
+            params: {content_type: {new_content_type: Cocina::Models::ObjectType.media}}
 
           expect(response).to redirect_to solr_document_path(druid)
           expect(object_client).to have_received(:update)
@@ -177,39 +177,39 @@ RSpec.describe 'Set content type for an item', type: :request do
         end
       end
 
-      context 'when modification not allowed' do
+      context "when modification not allowed" do
         let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
-        it 'is forbidden' do
+        it "is forbidden" do
           patch "/items/#{druid}/content_type",
-                params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
+            params: {content_type: {new_content_type: Cocina::Models::ObjectType.media}}
 
           expect(response).to redirect_to("/view/#{druid}")
-          expect(flash[:error]).to eq 'Object cannot be modified in its current state.'
+          expect(flash[:error]).to eq "Object cannot be modified in its current state."
         end
       end
 
-      context 'with an invalid content_type' do
-        it 'is forbidden' do
+      context "with an invalid content_type" do
+        it "is forbidden" do
           patch "/items/#{druid}/content_type",
-                params: { content_type: { new_content_type: 'https://cocina.sul.stanford.edu/models/frog' } }
+            params: {content_type: {new_content_type: "https://cocina.sul.stanford.edu/models/frog"}}
 
           expect(response).to be_forbidden
-          expect(response.body).to eq 'New content type is not included in the list'
+          expect(response.body).to eq "New content type is not included in the list"
         end
       end
     end
 
-    context 'without access' do
+    context "without access" do
       before do
         sign_in user, groups: []
       end
 
-      it 'is forbidden' do
-        patch "/items/#{druid}/content_type", params: { content_type: { new_content_type: Cocina::Models::ObjectType.media } }
+      it "is forbidden" do
+        patch "/items/#{druid}/content_type", params: {content_type: {new_content_type: Cocina::Models::ObjectType.media}}
 
         expect(response).to be_forbidden
-        expect(response.body).to eq('forbidden')
+        expect(response.body).to eq("forbidden")
       end
     end
   end

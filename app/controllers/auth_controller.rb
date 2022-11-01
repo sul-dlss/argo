@@ -10,7 +10,7 @@ class AuthController < ApplicationController
   end
 
   def remember_impersonated_groups
-    groups = params[:groups].split(',')
+    groups = params[:groups].split(",")
     session[:groups] = groups
     redirect_to root_path
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'reform/form/coercion'
+require "reform/form/coercion"
 
 class CatkeyForm < Reform::Form
   ### classes that define a virtual catkey model object and data structure, used in form editing...persistence is in the cocina model
@@ -21,9 +21,9 @@ class CatkeyForm < Reform::Form
   feature Reform::Form::Coercion
 
   collection :catkeys, populate_if_empty: Row, save: false, virtual: true,
-                       prepopulator: ->(*) { catkeys << CatkeyForm::Row.new(value: '', refresh: true) if catkeys.size.zero? } do
+    prepopulator: ->(*) { catkeys << CatkeyForm::Row.new(value: "", refresh: true) if catkeys.size.zero? } do
     property :value
-    property :refresh, type: Dry::Types['params.nil'] | Dry::Types['params.bool']
+    property :refresh, type: Dry::Types["params.nil"] | Dry::Types["params.bool"]
     property :_destroy
   end
 
@@ -45,17 +45,17 @@ class CatkeyForm < Reform::Form
   def unique_catkey_value
     # each catkey must be unique
     catkey_values = catkeys.map(&:value)
-    errors.add(:catkey, 'must be unique') if catkey_values.size != catkey_values.uniq.size
+    errors.add(:catkey, "must be unique") if catkey_values.size != catkey_values.uniq.size
   end
 
   def valid_catkey_value
     # must match the expected pattern
-    errors.add(:catkey, 'must be in an allowed format') if catkeys.count { |catkey| catkey.value.match(/^\d+(:\d+)*$/).nil? }.positive?
+    errors.add(:catkey, "must be in an allowed format") if catkeys.count { |catkey| catkey.value.match(/^\d+(:\d+)*$/).nil? }.positive?
   end
 
   def single_catkey_refresh
     # at most one catkey can be set to refresh == true
-    errors.add(:refresh, 'is only allowed for a single catkey.') if catkeys.count { |catkey| catkey.refresh && catkey._destroy != '1' } > 1
+    errors.add(:refresh, "is only allowed for a single catkey.") if catkeys.count { |catkey| catkey.refresh && catkey._destroy != "1" } > 1
   end
 
   # this is overriding Reforms save method, since we are persisting catkeys in cocina only
@@ -64,15 +64,15 @@ class CatkeyForm < Reform::Form
     existing_previous_catkeys = Catkey.new(model).previous_links
 
     # these are all of the existing catkey values the user wants to remove (i.e. for which they clicked the trash icon)
-    removed_catkeys = catkeys.filter_map { |catkey| catkey.value if catkey._destroy == '1' }
+    removed_catkeys = catkeys.filter_map { |catkey| catkey.value if catkey._destroy == "1" }
 
     # build an array of all previous catkeys (which includes the existing previous catkeys plus any newly removed ones)
     updated_previous_catkeys = (existing_previous_catkeys + removed_catkeys).map do |catkey_value|
-      { catalog: Constants::PREVIOUS_CATKEY, catalogRecordId: catkey_value, refresh: false }
+      {catalog: Constants::PREVIOUS_CATKEY, catalogRecordId: catkey_value, refresh: false}
     end.uniq
 
     updated_catkeys = catkeys.filter_map do |catkey|
-      { catalog: Constants::SYMPHONY, catalogRecordId: catkey.value, refresh: catkey.refresh } unless catkey._destroy == '1'
+      {catalog: Constants::SYMPHONY, catalogRecordId: catkey.value, refresh: catkey.refresh} unless catkey._destroy == "1"
     end
 
     # now store everything in the cocina object

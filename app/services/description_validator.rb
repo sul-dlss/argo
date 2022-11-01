@@ -25,10 +25,10 @@ class DescriptionValidator
 
   def validate_cell_values
     @csv.each.with_index(2) do |row, i|
-      @headers.excluding('druid').each do |header|
-        location = row['druid'] || "row #{i}"
+      @headers.excluding("druid").each do |header|
+        location = row["druid"] || "row #{i}"
         cell_value = row[header]&.strip
-        errors << "Value error: #{location} has 0 value in #{header}." if cell_value == '0'
+        errors << "Value error: #{location} has 0 value in #{header}." if cell_value == "0"
         errors << "Value error: #{location} has spreadsheet formula error in #{header}." if %w[#NA #REF! #VALUE? #NAME?].include? cell_value
       end
     end
@@ -43,7 +43,7 @@ class DescriptionValidator
   def validate_title_headers
     return if title_value_header? || title_structured_value_header? || title_parallel_value_header?
 
-    errors << 'Title column not found.'
+    errors << "Title column not found."
   end
 
   def validate_header_paths
@@ -53,7 +53,7 @@ class DescriptionValidator
   end
 
   def validate_druid_headers
-    errors << 'Druid column not found.' if @headers.exclude?('druid')
+    errors << "Druid column not found." if @headers.exclude?("druid")
   end
 
   def validate_druid_rows
@@ -61,22 +61,22 @@ class DescriptionValidator
       errors << "Duplicate druids: The druid \"#{druid}\" should occur only once."
     end
     @csv.each.with_index(2) do |row, i|
-      errors << "Missing druid: No druid present in row #{i}." if row['druid'].blank?
+      errors << "Missing druid: No druid present in row #{i}." if row["druid"].blank?
     end
   end
 
   private
 
   def title_value_header?
-    @headers.include?('title1.value')
+    @headers.include?("title1.value")
   end
 
   def title_structured_value_header?
-    @headers.include?('title1.structuredValue1.type') && @headers.include?('title1.structuredValue1.value')
+    @headers.include?("title1.structuredValue1.type") && @headers.include?("title1.structuredValue1.value")
   end
 
   def title_parallel_value_header?
-    @headers.include?('title1.parallelValue1.value') || @headers.include?('title1.parallelValue1.structuredValue1.value')
+    @headers.include?("title1.parallelValue1.value") || @headers.include?("title1.parallelValue1.structuredValue1.value")
   end
 
   def duplicate_headers
@@ -84,20 +84,20 @@ class DescriptionValidator
   end
 
   def duplicate_druids
-    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
+    @csv.map { |row| row["druid"] }.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
   end
 
   def invalid_headers
     # The source_id is only for user reference, and we already validate the druid column is present in bulk jobs
-    @headers.excluding('source_id', 'druid').map do |header|
+    @headers.excluding("source_id", "druid").map do |header|
       if header
         split_address = header.scan(/[[:alpha:]]+|[[:digit:]]+/)
-                              .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
+          .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
         next if resolve_address(Cocina::Models::Description, split_address)
 
         header
       else
-        '(empty string)'
+        "(empty string)"
       end
     end.compact
   end

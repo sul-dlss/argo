@@ -29,15 +29,15 @@ class RegisterAgreement
 
     connection = SdrClient::Connection.new(url: Settings.sdr_api.url, token: SdrClient::Credentials.read)
     upload_responses = SdrClient::Deposit::UploadFiles.upload(file_metadata:,
-                                                              logger: Rails.logger,
-                                                              connection:)
+      logger: Rails.logger,
+      connection:)
 
     new_request_dro = SdrClient::Deposit::UpdateDroWithFileIdentifiers.update(request_dro: model,
-                                                                              upload_responses:)
+      upload_responses:)
     job_id = SdrClient::Deposit::CreateResource.run(accession: true,
-                                                    metadata: new_request_dro,
-                                                    logger: Rails.logger,
-                                                    connection:)
+      metadata: new_request_dro,
+      logger: Rails.logger,
+      connection:)
 
     poll_for_job_complete(job_id:).tap do |druid|
       # Index imediately, so that we have a page to send the user to. DSA indexes asynchronously.
@@ -53,12 +53,12 @@ class RegisterAgreement
     result = nil
     1.upto(5) do |_n|
       result = SdrClient::BackgroundJobResults.show(url: Settings.sdr_api.url, job_id:)
-      break unless %w[pending processing].include? result['status']
+      break unless %w[pending processing].include? result["status"]
 
       sleep 5
     end
-    if result['status'] == 'complete'
-      result.dig('output', 'druid')
+    if result["status"] == "complete"
+      result.dig("output", "druid")
     else
       warn "Job #{job_id} did not complete\n#{result.inspect}"
     end

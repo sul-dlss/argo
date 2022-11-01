@@ -3,20 +3,20 @@
 class ApoController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
-  load_and_authorize_resource :cocina, parent: false, class: 'Repository', only: %i[edit update]
-  load_resource :cocina, parent: false, class: 'Repository', only: :delete_collection
+  load_and_authorize_resource :cocina, parent: false, class: "Repository", only: %i[edit update]
+  load_resource :cocina, parent: false, class: "Repository", only: :delete_collection
 
   def edit
     @form = ApoForm.new(@cocina, search_service:)
 
-    render layout: 'one_column'
+    render layout: "one_column"
   end
 
   def new
     authorize! :create, Cocina::Models::AdminPolicy
     @form = ApoForm.new(nil, search_service:)
 
-    render layout: 'one_column'
+    render layout: "one_column"
   end
 
   # Draw the form controls for collection, rights and initial workflow
@@ -30,7 +30,7 @@ class ApoController < ApplicationController
       view: params[:view_access],
       download: params[:download_access],
       location: params[:access_location],
-      controlledDigitalLending: params[:controlled_digital_lending] == 'true'
+      controlledDigitalLending: params[:controlled_digital_lending] == "true"
     }.compact)
     @access_template = AccessTemplate.new(access_template:, apo_defaults_template: administrative.accessTemplate)
 
@@ -41,7 +41,7 @@ class ApoController < ApplicationController
         next
       end
 
-      ["#{name.truncate(60, separator: /\s/)} (#{col_id.delete_prefix('druid:')})", col_id]
+      ["#{name.truncate(60, separator: /\s/)} (#{col_id.delete_prefix("druid:")})", col_id]
     end.compact.sort_by(&:first) # before returning the list, sort by collection name
   end
 
@@ -50,8 +50,8 @@ class ApoController < ApplicationController
     @form = ApoForm.new(nil, search_service:)
     unless @form.validate(params.require(:apo).to_unsafe_h.merge(registered_by: current_user.login))
       respond_to do |format|
-        format.json { render status: :bad_request, json: { errors: @form.errors } }
-        format.html { render 'new', status: :unprocessable_entity }
+        format.json { render status: :bad_request, json: {errors: @form.errors} }
+        format.html { render "new", status: :unprocessable_entity }
       end
       return
     end
@@ -77,8 +77,8 @@ class ApoController < ApplicationController
     @form = ApoForm.new(@cocina, search_service:)
     unless @form.validate(params.require(:apo).to_unsafe_h)
       respond_to do |format|
-        format.json { render status: :unprocessable_entity, json: { errors: @form.errors } }
-        format.html { render 'edit', status: :unprocessable_entity }
+        format.json { render status: :unprocessable_entity, json: {errors: @form.errors} }
+        format.html { render "edit", status: :unprocessable_entity }
       end
       return
     end
@@ -94,15 +94,15 @@ class ApoController < ApplicationController
     updated = @cocina.new(administrative: updated_administrative)
     Repository.store(updated)
 
-    redirect_to solr_document_path(params[:id]), notice: 'APO updated.'
+    redirect_to solr_document_path(params[:id]), notice: "APO updated."
   end
 
   def spreadsheet_template
     binary_string = Faraday.get(Settings.spreadsheet_url)
     send_data(
       binary_string.body,
-      filename: 'spreadsheet_template.xlsx',
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      filename: "spreadsheet_template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
   end
 
@@ -110,22 +110,22 @@ class ApoController < ApplicationController
   def count_collections
     query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}info:fedora/#{params[:id]}\" AND " \
             "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
-    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+    result = solr_conn.get("select", params: {q: query, qt: "standard", rows: 0})
 
-    path_for_search = link_to_members_with_type('collection')
+    path_for_search = link_to_members_with_type("collection")
 
-    render partial: 'count_collections', locals: { count: result.dig('response', 'numFound'), path_for_search: }
+    render partial: "count_collections", locals: {count: result.dig("response", "numFound"), path_for_search:}
   end
 
   # Displays the turbo-frame that has a link to items governed by this APO
   def count_items
     query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}info:fedora/#{params[:id]}\" AND " \
             "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}item\""
-    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+    result = solr_conn.get("select", params: {q: query, qt: "standard", rows: 0})
 
-    path_for_search = link_to_members_with_type('item')
+    path_for_search = link_to_members_with_type("item")
 
-    render partial: 'count_items', locals: { count: result.dig('response', 'numFound'), path_for_search: }
+    render partial: "count_items", locals: {count: result.dig("response", "numFound"), path_for_search:}
   end
 
   def search_action_path(*args)
@@ -136,16 +136,16 @@ class ApoController < ApplicationController
 
   def search_service
     @search_service ||= Blacklight::SearchService.new(config: CatalogController.blacklight_config,
-                                                      current_user:)
+      current_user:)
   end
 
   def link_to_members_with_type(type)
     facet_config = facet_configuration_for_field(ApoConcern::FIELD_APO_ID)
-    search_state = Blacklight::SearchState.new({ f: { SolrDocument::FIELD_OBJECT_TYPE => [type] } }, blacklight_config)
+    search_state = Blacklight::SearchState.new({f: {SolrDocument::FIELD_OBJECT_TYPE => [type]}}, blacklight_config)
     Blacklight::FacetItemPresenter.new("info:fedora/#{params[:id]}",
-                                       facet_config,
-                                       self,
-                                       ApoConcern::FIELD_APO_ID, search_state).href
+      facet_config,
+      self,
+      ApoConcern::FIELD_APO_ID, search_state).href
   end
 
   def solr_conn

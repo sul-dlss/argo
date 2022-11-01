@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Purge object', type: :request do
-  let(:druid) { 'druid:bc123df4567' }
+RSpec.describe "Purge object", type: :request do
+  let(:druid) { "druid:bc123df4567" }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
@@ -16,31 +16,31 @@ RSpec.describe 'Purge object', type: :request do
       sign_in create(:user), groups: []
     end
 
-    it 'returns 403' do
+    it "returns 403" do
       delete "/items/#{druid}/purge"
-      expect(response.code).to eq('403')
+      expect(response.code).to eq("403")
     end
   end
 
-  context 'when they have manage access' do
+  context "when they have manage access" do
     let(:client) do
       instance_double(Dor::Workflow::Client,
-                      delete_all_workflows: nil,
-                      lifecycle: false)
+        delete_all_workflows: nil,
+        lifecycle: false)
     end
 
     before do
       allow(Dor::Workflow::Client).to receive(:new).and_return(client)
-      sign_in create(:user), groups: ['sdr:administrator-role']
+      sign_in create(:user), groups: ["sdr:administrator-role"]
     end
 
-    context 'when the object has not been submitted' do
+    context "when the object has not been submitted" do
       before do
         allow(WorkflowService).to receive(:submitted?).with(druid:).and_return(false)
         allow(PurgeService).to receive(:purge)
       end
 
-      it 'deletes the object' do
+      it "deletes the object" do
         delete "/items/#{druid}/purge"
 
         expect(response).to redirect_to root_path
@@ -49,16 +49,16 @@ RSpec.describe 'Purge object', type: :request do
       end
     end
 
-    context 'when the object has been submitted' do
+    context "when the object has been submitted" do
       before do
         allow(WorkflowService).to receive(:submitted?).with(druid:).and_return(true)
       end
 
-      it 'blocks purge' do
+      it "blocks purge" do
         delete "/items/#{druid}/purge"
 
-        expect(response.code).to eq('400')
-        expect(response.body).to eq('Cannot purge an object after it is submitted.')
+        expect(response.code).to eq("400")
+        expect(response.body).to eq("Cannot purge an object after it is submitted.")
       end
     end
   end

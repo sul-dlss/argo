@@ -17,10 +17,10 @@ module Argo
       druids = user.permitted_apos
       # Do this as a negative query, exclude items they cannot access
       # rather than including items they can access.
-      solr_druids = druids.map { |p| '"info:fedora/' + p + '"' }.join(' OR ')
+      solr_druids = druids.map { |p| '"info:fedora/' + p + '"' }.join(" OR ")
       # Check for an empty set of DRUIDs.  If empty, they aren't supposed to see
       # anything, but use a dummy value to make sure the solr query is valid.
-      solr_druids = 'dummy_value' if solr_druids.blank?
+      solr_druids = "dummy_value" if solr_druids.blank?
       # Initialize and/or append to :fq
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << "#{SolrDocument::FIELD_APO_ID}:(#{solr_druids})"

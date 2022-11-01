@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe RegisterDruidsJob, type: :job do
   include Dry::Monads[:result]
@@ -9,16 +9,16 @@ RSpec.describe RegisterDruidsJob, type: :job do
 
   let(:bulk_action) { create(:bulk_action) }
   let(:response) { Success(model) }
-  let(:fake_log) { double('logger', puts: nil) }
+  let(:fake_log) { double("logger", puts: nil) }
   let(:identification) do
-    instance_double(Cocina::Models::Identification, sourceId: 'foo:bar1')
+    instance_double(Cocina::Models::Identification, sourceId: "foo:bar1")
   end
 
   let(:model) do
     instance_double(Cocina::Models::DROWithMetadata,
-                    externalIdentifier: 'druid:123',
-                    label: 'My object',
-                    identification:)
+      externalIdentifier: "druid:123",
+      label: "My object",
+      identification:)
   end
 
   let(:csv_string) do
@@ -29,7 +29,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
     CSV
   end
 
-  let(:params) { { csv_file: csv_string } }
+  let(:params) { {csv_file: csv_string} }
 
   before do
     allow(BulkAction).to receive(:find).and_return(bulk_action)
@@ -38,8 +38,8 @@ RSpec.describe RegisterDruidsJob, type: :job do
     job.perform(bulk_action.id, **params)
   end
 
-  describe '#perform' do
-    context 'when parsing fails' do
+  describe "#perform" do
+    context "when parsing fails" do
       let(:csv_string) do
         <<~CSV
           administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download
@@ -47,7 +47,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
         CSV
       end
 
-      it 'does not register the object' do
+      it "does not register the object" do
         expect(RegistrationService).not_to have_received(:register)
         expect(fake_log).to have_received(:puts).with(/does not match value: "druid:123", example: druid:bc123df4567/)
         expect(bulk_action.druid_count_success).to eq 0
@@ -55,8 +55,8 @@ RSpec.describe RegisterDruidsJob, type: :job do
       end
     end
 
-    context 'when registration fails' do
-      let(:response) { Failure(RuntimeError.new('connection problem')) }
+    context "when registration fails" do
+      let(:response) { Failure(RuntimeError.new("connection problem")) }
       let(:csv_string) do
         <<~CSV
           administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags
@@ -64,30 +64,30 @@ RSpec.describe RegisterDruidsJob, type: :job do
         CSV
       end
 
-      it 'logs the error' do
+      it "logs the error" do
         expect(fake_log).to have_received(:puts).with(/connection problem/)
         expect(bulk_action.druid_count_success).to eq 0
         expect(bulk_action.druid_count_fail).to eq 1
       end
     end
 
-    context 'when registration is successful' do
+    context "when registration is successful" do
       let(:csv_filepath) { "#{Settings.bulk_metadata.directory}RemoteIndexingJob_1/registration_report.csv" }
 
-      it 'registers the object' do
+      it "registers the object" do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
-                                                                     tags: ['csv : test', 'Project : two'],
-                                                                     workflow: 'accessionWF')
+          tags: ["csv : test", "Project : two"],
+          workflow: "accessionWF")
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
-                                                                     tags: [],
-                                                                     workflow: 'accessionWF')
+          tags: [],
+          workflow: "accessionWF")
         expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
         expect(File.read(csv_filepath)).to eq("Druid,Source Id,Label\n123,foo:bar1,My object\n123,foo:bar1,My object\n")
       end
     end
 
-    context 'when registration is successful with params' do
+    context "when registration is successful with params" do
       # Params are provided from registration page (not bulk action page)
       let(:csv_string) do
         <<~CSV
@@ -100,26 +100,26 @@ RSpec.describe RegisterDruidsJob, type: :job do
       let(:params) do
         {
           csv_file: csv_string,
-          administrative_policy_object: 'druid:bc123df4567',
-          collection: 'druid:bk024qs1808',
-          initial_workflow: 'accessionWF',
-          content_type: 'book',
-          rights_view: 'world',
-          rights_download: 'world',
-          tags: ['csv : test', 'Project : two']
+          administrative_policy_object: "druid:bc123df4567",
+          collection: "druid:bk024qs1808",
+          initial_workflow: "accessionWF",
+          content_type: "book",
+          rights_view: "world",
+          rights_download: "world",
+          tags: ["csv : test", "Project : two"]
         }
       end
 
-      it 'registers the object' do
+      it "registers the object" do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
-                                                                     tags: ['csv : test', 'Project : two'],
-                                                                     workflow: 'accessionWF').twice
+          tags: ["csv : test", "Project : two"],
+          workflow: "accessionWF").twice
         expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
       end
     end
 
-    context 'with valid view:stanford, download:none, and rights_controlledDigitalLending:true' do
+    context "with valid view:stanford, download:none, and rights_controlledDigitalLending:true" do
       let(:csv_string) do
         <<~CSV
           administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
@@ -128,19 +128,19 @@ RSpec.describe RegisterDruidsJob, type: :job do
         CSV
       end
 
-      it 'registers the objects' do
+      it "registers the objects" do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
-                                                                     tags: ['csv : test', 'Project : two'],
-                                                                     workflow: 'accessionWF')
+          tags: ["csv : test", "Project : two"],
+          workflow: "accessionWF")
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
-                                                                     tags: [],
-                                                                     workflow: 'accessionWF')
+          tags: [],
+          workflow: "accessionWF")
         expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
       end
     end
 
-    context 'with invalid view:world, download:none, and rights_controlledDigitalLending:true' do
+    context "with invalid view:world, download:none, and rights_controlledDigitalLending:true" do
       let(:csv_string) do
         <<~CSV
           administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
@@ -149,7 +149,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
         CSV
       end
 
-      it 'does not register the objects' do
+      it "does not register the objects" do
         expect(fake_log).to have_received(:puts).with(%r{isn't one of in \#/components/schemas/Access}).twice
         expect(bulk_action.druid_count_success).to eq 0
         expect(bulk_action.druid_count_fail).to eq 2

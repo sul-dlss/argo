@@ -8,7 +8,7 @@ class ItemMethodSender
   attr_reader :cocina_model
 
   def title=(title)
-    @cocina_model = @cocina_model.new(description: { title: [{ value: title }] })
+    @cocina_model = @cocina_model.new(description: {title: [{value: title}]})
   end
 
   def source_id=(source_id)

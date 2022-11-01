@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Item view', js: true do
+RSpec.describe "Item view", js: true do
   before do
-    sign_in create(:user), groups: ['sdr:administrator-role']
+    sign_in create(:user), groups: ["sdr:administrator-role"]
   end
 
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:item_id) { 'druid:hj185xx2222' }
+  let(:item_id) { "druid:hj185xx2222" }
   let(:props) { {} }
   let(:event) do
     Dor::Services::Client::Events::Event.new(
-      event_type: 'shelve_request_received',
+      event_type: "shelve_request_received",
       data: {
-        host: 'dor-services-stage.stanford.edu',
+        host: "dor-services-stage.stanford.edu",
         **props
       }
     )
@@ -27,142 +27,142 @@ RSpec.describe 'Item view', js: true do
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows:) }
   let(:workflow_client) do
     instance_double(Dor::Workflow::Client,
-                    active_lifecycle: [],
-                    lifecycle: [],
-                    milestones: {},
-                    workflow_routes:,
-                    workflow_status: nil)
+      active_lifecycle: [],
+      lifecycle: [],
+      milestones: {},
+      workflow_routes:,
+      workflow_status: nil)
   end
 
-  context 'when navigating to an object' do
+  context "when navigating to an object" do
     before do
       solr_conn.add(solr_doc)
       solr_conn.commit
     end
 
-    context 'when displaying the catalog view' do
+    context "when displaying the catalog view" do
       let(:solr_doc) do
         {
-          id: 'druid:hj185xx2222',
-          objectType_ssim: 'item',
+          id: "druid:hj185xx2222",
+          objectType_ssim: "item",
           sw_display_title_tesim: title
         }
       end
       let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
 
-      it 'shows the catalog index view' do
-        visit search_catalog_path f: { objectType_ssim: ['item'] }
-        expect(page).to have_css '.index_title a', text: title
+      it "shows the catalog index view" do
+        visit search_catalog_path f: {objectType_ssim: ["item"]}
+        expect(page).to have_css ".index_title a", text: title
       end
     end
 
-    context 'when viewing the object' do
+    context "when viewing the object" do
       before do
         allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-        allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
+        allow(Preservation::Client.objects).to receive(:current_version).and_return("1")
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      context 'when there is an error retrieving the cocina_model' do
-        let(:solr_doc) { { id: item_id, SolrDocument::FIELD_OBJECT_TYPE => 'item' } }
+      context "when there is an error retrieving the cocina_model" do
+        let(:solr_doc) { {:id => item_id, SolrDocument::FIELD_OBJECT_TYPE => "item"} }
         let(:object_client) do
           instance_double(Dor::Services::Client::Object,
-                          version: version_client,
-                          events: events_client)
+            version: version_client,
+            events: events_client)
         end
 
         before do
-          allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ''))
+          allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ""))
         end
 
-        it 'shows the page' do
+        it "shows the page" do
           visit solr_document_path item_id
-          expect(page).to have_content 'Warning: this object cannot currently be represented in the Cocina model.'
+          expect(page).to have_content "Warning: this object cannot currently be represented in the Cocina model."
         end
       end
 
-      context 'when the cocina_model exists' do
+      context "when the cocina_model exists" do
         let(:object_client) do
           instance_double(Dor::Services::Client::Object,
-                          find: cocina_model,
-                          version: version_client,
-                          events: events_client)
+            find: cocina_model,
+            version: version_client,
+            events: events_client)
         end
         let(:cocina_model) do
           model = Cocina::Models::DRO.new(props)
-          Cocina::Models.with_metadata(model, 'abc123')
+          Cocina::Models.with_metadata(model, "abc123")
         end
 
         let(:props) do
           {
             type: Cocina::Models::ObjectType.image.to_s,
-            externalIdentifier: 'druid:hj185xx2222',
-            label: 'image integration test miry low_explosive',
+            externalIdentifier: "druid:hj185xx2222",
+            label: "image integration test miry low_explosive",
             version: 3,
             access: {
-              view: 'world',
-              download: 'world'
+              view: "world",
+              download: "world"
             },
             administrative: {
-              hasAdminPolicy: 'druid:qc410yz8746',
+              hasAdminPolicy: "druid:qc410yz8746",
               releaseTags: [
                 {
                   release: true,
-                  what: 'self',
-                  to: 'Searchworks',
-                  who: 'pjreed',
-                  date: '2017-10-20T15:42:15Z'
+                  what: "self",
+                  to: "Searchworks",
+                  who: "pjreed",
+                  date: "2017-10-20T15:42:15Z"
                 }
               ]
             },
             description: {
               title: [
                 {
-                  value: 'image integration test miry low_explosive'
+                  value: "image integration test miry low_explosive"
                 }
               ],
-              purl: 'https://purl.stanford.edu/hj185xx2222',
+              purl: "https://purl.stanford.edu/hj185xx2222",
               access: {
                 digitalRepository: [
                   {
-                    value: 'Stanford Digital Repository'
+                    value: "Stanford Digital Repository"
                   }
                 ]
               }
             },
             identification: {
-              sourceId: 'image-integration-test:birken-edward_weston'
+              sourceId: "image-integration-test:birken-edward_weston"
             },
             structural: {
               contains: [
                 {
                   type: Cocina::Models::FileSetType.file.to_s,
-                  externalIdentifier: 'hj185xx2222_1',
-                  label: 'Image 1',
+                  externalIdentifier: "hj185xx2222_1",
+                  label: "Image 1",
                   version: 3,
                   structural: {
                     contains: [
                       {
                         type: Cocina::Models::ObjectType.file.to_s,
-                        externalIdentifier: 'druid:hj185xx2222/image.jpg',
-                        label: 'image.jpg',
-                        filename: 'image.jpg',
+                        externalIdentifier: "druid:hj185xx2222/image.jpg",
+                        label: "image.jpg",
+                        filename: "image.jpg",
                         size: 29_634,
                         version: 3,
-                        hasMimeType: 'image/jpeg',
+                        hasMimeType: "image/jpeg",
                         hasMessageDigests: [
                           {
-                            type: 'sha1',
-                            digest: '85a32f398e228e8228ad84422941110597e0d87a'
+                            type: "sha1",
+                            digest: "85a32f398e228e8228ad84422941110597e0d87a"
                           },
                           {
-                            type: 'md5',
-                            digest: '3e9498107f73ff827e718d5c743f8813'
+                            type: "md5",
+                            digest: "3e9498107f73ff827e718d5c743f8813"
                           }
                         ],
                         access: {
-                          view: 'dark',
-                          download: 'none'
+                          view: "dark",
+                          download: "none"
                         },
                         administrative: {
                           sdrPreserve: true,
@@ -176,25 +176,25 @@ RSpec.describe 'Item view', js: true do
                       },
                       {
                         type: Cocina::Models::ObjectType.file.to_s,
-                        externalIdentifier: 'druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2',
-                        label: 'M1090_S15_B02_F01_0126.jp2',
-                        filename: 'M1090_S15_B02_F01_0126.jp2',
+                        externalIdentifier: "druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2",
+                        label: "M1090_S15_B02_F01_0126.jp2",
+                        filename: "M1090_S15_B02_F01_0126.jp2",
                         size: 65_738,
                         version: 3,
-                        hasMimeType: 'image/jp2',
+                        hasMimeType: "image/jp2",
                         hasMessageDigests: [
                           {
-                            type: 'sha1',
-                            digest: '547818142cca6bf8c888ab14644a386459fe5f92'
+                            type: "sha1",
+                            digest: "547818142cca6bf8c888ab14644a386459fe5f92"
                           },
                           {
-                            type: 'md5',
-                            digest: '45f7262c456d2ee14570881416a7432e'
+                            type: "md5",
+                            digest: "45f7262c456d2ee14570881416a7432e"
                           }
                         ],
                         access: {
-                          view: 'world',
-                          download: 'world'
+                          view: "world",
+                          download: "world"
                         },
                         administrative: {
                           sdrPreserve: false,
@@ -211,107 +211,107 @@ RSpec.describe 'Item view', js: true do
                 }
               ],
               isMemberOf: [
-                'druid:bc778pm9866'
+                "druid:bc778pm9866"
               ]
             }
           }
         end
 
-        context 'when the file is on stacks' do
+        context "when the file is on stacks" do
           let(:solr_doc) do
             {
-              id: item_id,
-              SolrDocument::FIELD_OBJECT_TYPE => 'item',
-              content_type_ssim: 'image',
-              status_ssi: 'v1 Unknown Status',
-              rights_descriptions_ssim: %w[world dark],
-              SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
-              SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
-              project_tag_ssim: 'Fuller Slides',
-              source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
-              identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
-              tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo']
+              :id => item_id,
+              SolrDocument::FIELD_OBJECT_TYPE => "item",
+              :content_type_ssim => "image",
+              :status_ssi => "v1 Unknown Status",
+              :rights_descriptions_ssim => %w[world dark],
+              SolrDocument::FIELD_APO_ID => "info:fedora/druid:ww057qx5555",
+              SolrDocument::FIELD_APO_TITLE => "Stanford University Libraries - Special Collections",
+              :project_tag_ssim => "Fuller Slides",
+              :source_id_ssim => "fuller:M1090_S15_B02_F01_0126",
+              :identifier_tesim => ["fuller:M1090_S15_B02_F01_0126", "uuid:ad2d8894-7eba-11e1-b714-0016034322e7"],
+              :tag_ssim => ["Project : Fuller Slides", "Registered By : renzo"]
             }
           end
 
-          it 'shows the file info' do
+          it "shows the file info" do
             visit solr_document_path item_id
 
-            within_table('Overview') do
-              expect(page).to have_css 'th', text: 'DRUID'
-              expect(page).to have_css 'td', text: item_id
-              expect(page).to have_css 'th', text: 'Admin policy'
-              expect(page).to have_css 'td a', text: 'Stanford University Libraries - Special Collections'
-              expect(page).to have_css 'th', text: 'Status'
-              expect(page).to have_css 'th', text: 'Access rights'
-              expect(page).to have_css 'td', text: 'View: World, Download: World'
-              expect(page).to have_css 'td', text: 'v1 Unknown Status'
+            within_table("Overview") do
+              expect(page).to have_css "th", text: "DRUID"
+              expect(page).to have_css "td", text: item_id
+              expect(page).to have_css "th", text: "Admin policy"
+              expect(page).to have_css "td a", text: "Stanford University Libraries - Special Collections"
+              expect(page).to have_css "th", text: "Status"
+              expect(page).to have_css "th", text: "Access rights"
+              expect(page).to have_css "td", text: "View: World, Download: World"
+              expect(page).to have_css "td", text: "v1 Unknown Status"
             end
 
-            within_table('Details') do
-              expect(page).to have_css 'th', text: 'Object type'
-              expect(page).to have_css 'td', text: 'item'
-              expect(page).to have_css 'th', text: 'Content type'
-              expect(page).to have_css 'td', text: 'image'
-              expect(page).to have_css 'th', text: 'Project'
-              expect(page).to have_css 'td a', text: 'Fuller Slides'
-              expect(page).to have_css 'th', text: 'Source IDs'
-              expect(page).to have_css 'td', text: 'fuller:M1090_S15_B02_F01_0126'
-              expect(page).to have_css 'th', text: 'Tags'
-              expect(page).to have_css 'td a', text: 'Project : Fuller Slides'
-              expect(page).to have_css 'td a', text: 'Registered By : renzo'
+            within_table("Details") do
+              expect(page).to have_css "th", text: "Object type"
+              expect(page).to have_css "td", text: "item"
+              expect(page).to have_css "th", text: "Content type"
+              expect(page).to have_css "td", text: "image"
+              expect(page).to have_css "th", text: "Project"
+              expect(page).to have_css "td a", text: "Fuller Slides"
+              expect(page).to have_css "th", text: "Source IDs"
+              expect(page).to have_css "td", text: "fuller:M1090_S15_B02_F01_0126"
+              expect(page).to have_css "th", text: "Tags"
+              expect(page).to have_css "td a", text: "Project : Fuller Slides"
+              expect(page).to have_css "td a", text: "Registered By : renzo"
             end
 
             # Release History
-            expect(page).to have_css 'dt', text: 'Releases'
-            expect(page).to have_css 'table.table thead tr th', text: 'Release'
-            expect(page).to have_css 'tr td', text: /Searchworks/
-            expect(page).to have_css 'tr td', text: /pjreed/
+            expect(page).to have_css "dt", text: "Releases"
+            expect(page).to have_css "table.table thead tr th", text: "Release"
+            expect(page).to have_css "tr td", text: /Searchworks/
+            expect(page).to have_css "tr td", text: /pjreed/
 
             # The following three clicks make sure events are expandable and collapsible
-            click_button 'Events'
-            within '#events' do
-              click_button 'View more'
-              click_button 'View less'
+            click_button "Events"
+            within "#events" do
+              click_button "View more"
+              click_button "View less"
             end
 
-            within '.resource-list' do
-              click_link 'M1090_S15_B02_F01_0126.jp2'
+            within ".resource-list" do
+              click_link "M1090_S15_B02_F01_0126.jp2"
             end
 
-            within '#blacklight-modal' do
-              expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2'
+            within "#blacklight-modal" do
+              expect(page).to have_link "https://stacks-test.stanford.edu/file/druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2"
             end
           end
         end
 
-        context 'when the title has an ampersand in it' do
-          let(:solr_doc) { { id: item_id, SolrDocument::FIELD_TITLE => 'Road & Track', SolrDocument::FIELD_OBJECT_TYPE => 'item' } }
+        context "when the title has an ampersand in it" do
+          let(:solr_doc) { {:id => item_id, SolrDocument::FIELD_TITLE => "Road & Track", SolrDocument::FIELD_OBJECT_TYPE => "item"} }
 
           let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
 
-          it 'properly escapes the title' do
+          it "properly escapes the title" do
             visit solr_document_path item_id
-            expect(page).to have_title 'Road & Track'
+            expect(page).to have_title "Road & Track"
           end
         end
       end
     end
   end
 
-  context 'for an adminPolicy' do
+  context "for an adminPolicy" do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, administrative:, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
-    let(:id) { 'druid:qv778ht9999' }
+    let(:id) { "druid:qv778ht9999" }
 
     before do
       solr_conn.add(id:)
       solr_conn.commit
     end
 
-    it 'does not show release history' do
+    it "does not show release history" do
       visit solr_document_path id
-      expect(page).not_to have_css 'dt', text: 'Releases'
+      expect(page).not_to have_css "dt", text: "Releases"
     end
   end
 end

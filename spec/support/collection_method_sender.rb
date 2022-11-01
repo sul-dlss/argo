@@ -8,7 +8,7 @@ class CollectionMethodSender
   attr_reader :cocina_model
 
   def title=(title)
-    @cocina_model = @cocina_model.new(description: { title: [{ value: title }] })
+    @cocina_model = @cocina_model.new(description: {title: [{value: title}]})
   end
 
   def label=(label)

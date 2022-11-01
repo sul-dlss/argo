@@ -23,10 +23,10 @@ class ActionButton < ApplicationComponent
         # :confirm trumps :blacklight_modal, because :blacklight_modal would negate :confirm by firing the ajax request regardless of the user's decision
         data[:turbo_confirm] = confirm
       elsif open_modal
-        data[:action] = 'click->button#open'
+        data[:action] = "click->button#open"
       end
       data[:button_check_url_value] = check_url if check_url
-      data[:controller] = 'button' if data[:action] || data[:button_check_url_value]
+      data[:controller] = "button" if data[:action] || data[:button_check_url_value]
       data[:turbo_method] = method if method
     end
   end

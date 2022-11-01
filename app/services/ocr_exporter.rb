@@ -19,7 +19,7 @@ class OCRExporter
   end
 
   def export
-    File.open(filename, 'r').each do |line|
+    File.open(filename, "r").each do |line|
       druid = finder.find_druid(line.chomp)
       unless druid
         warn("no druid found for #{line.chomp}")
@@ -52,7 +52,7 @@ class OCRExporter
     def download_files
       FileUtils.mkdir File.join(@directory, @id)
       @filenames.each do |filename|
-        File.open(File.join(@directory, @id, filename), 'wb') do |f|
+        File.open(File.join(@directory, @id, filename), "wb") do |f|
           f.puts Preservation::Client.objects.content(druid: @id, filepath: filename, version: @version)
         end
       end
@@ -64,12 +64,12 @@ class OCRExporter
     def find_druid(barcode)
       resp = repository.search(
         rows: 1,
-        fl: 'id',
+        fl: "id",
         fq: "tag_ssim:\"barcode : #{barcode}\""
-      )['response']['docs']
+      )["response"]["docs"]
       return unless resp.any?
 
-      resp.first['id']
+      resp.first["id"]
     end
 
     delegate :repository, to: :blacklight_config

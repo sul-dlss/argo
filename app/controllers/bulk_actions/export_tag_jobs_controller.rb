@@ -3,6 +3,6 @@
 module BulkActions
   class ExportTagJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = 'ExportTagsJob'
+    self.action_type = "ExportTagsJob"
   end
 end

@@ -3,7 +3,7 @@
 module BulkActions
   class LicenseAndRightsStatementJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = 'SetLicenseAndRightsStatementsJob'
+    self.action_type = "SetLicenseAndRightsStatementsJob"
 
     def new
       @license_options = license_options
@@ -12,17 +12,17 @@ module BulkActions
 
     def job_params
       super.merge(use_statement_option: params[:use_statement_option],
-                  use_statement: params[:use_statement],
-                  copyright_statement_option: params[:copyright_statement_option],
-                  copyright_statement: params[:copyright_statement],
-                  license_option: params[:license_option],
-                  license: params[:license])
+        use_statement: params[:use_statement],
+        copyright_statement_option: params[:copyright_statement_option],
+        copyright_statement: params[:copyright_statement],
+        license_option: params[:license_option],
+        license: params[:license])
     end
 
     private
 
     def license_options
-      [['-- No license --', '']] +
+      [["-- No license --", ""]] +
         options_for_use_license_type
     end
 

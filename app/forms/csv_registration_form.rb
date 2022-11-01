@@ -19,13 +19,13 @@ class CsvRegistrationForm < Reform::Form
   property :project, virtual: true
 
   collection :tags, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
-                    prepopulator: ->(*) { (6 - tags.count).times { tags << VirtualModel.new } } do
+    prepopulator: ->(*) { (6 - tags.count).times { tags << VirtualModel.new } } do
     property :name, virtual: true
-    validates :name, allow_blank: true, format: { with: /.+( : .+)+/, message: "must include the pattern:
+    validates :name, allow_blank: true, format: {with: /.+( : .+)+/, message: "must include the pattern:
 
 [term] : [term]
 
-It's legal to have more than one colon in a hierarchy, but at least one colon is required." }
+It's legal to have more than one colon in a hierarchy, but at least one colon is required."}
   end
 
   property :csv_file, virtual: true
@@ -39,7 +39,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   attr_reader :created
 
   def save_model
-    bulk_action = BulkAction.new(user: current_user, action_type: 'RegisterDruidsJob')
+    bulk_action = BulkAction.new(user: current_user, action_type: "RegisterDruidsJob")
 
     if bulk_action.save
       bulk_action.enqueue_job(job_params)
@@ -71,7 +71,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
       rights_location: access_location,
       rights_controlledDigitalLending: ::ActiveModel::Type::Boolean.new.cast(controlled_digital_lending)
     }.tap do |access_params|
-      access_params[:download] = 'none' if %w[dark citation-only].include?(access_params[:view])
+      access_params[:download] = "none" if %w[dark citation-only].include?(access_params[:view])
     end.compact_blank
   end
 
@@ -84,8 +84,8 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   end
 
   def csv_file_validation
-    validator = CsvUploadValidator.new(csv: job_csv, headers: ['source_id'])
-    errors.add(:csv_file, validator.errors.join(' ')) unless validator.valid?
+    validator = CsvUploadValidator.new(csv: job_csv, headers: ["source_id"])
+    errors.add(:csv_file, validator.errors.join(" ")) unless validator.valid?
   rescue CSV::MalformedCSVError => e
     errors.add :csv_file, "is invalid: #{e.message}"
   end

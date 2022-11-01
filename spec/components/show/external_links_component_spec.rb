@@ -1,38 +1,38 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Show::ExternalLinksComponent, type: :component do
   before do
     render_inline(described_class.new(document:))
   end
 
-  context 'for a non-publishable item (adminPolicy)' do
+  context "for a non-publishable item (adminPolicy)" do
     let(:document) do
-      instance_double(SolrDocument, id: 'druid:ab123cd3445',
-                                    to_param: 'druid:ab123cd3445',
-                                    druid: 'ab123cd3445',
-                                    publishable?: false)
+      instance_double(SolrDocument, id: "druid:ab123cd3445",
+        to_param: "druid:ab123cd3445",
+        druid: "ab123cd3445",
+        publishable?: false)
     end
 
-    it 'links to Solr and Cocina' do
-      expect(page).not_to have_link 'SearchWorks'
-      expect(page).not_to have_link 'MODS'
-      expect(page).not_to have_link 'PURL'
-      expect(page).not_to have_link 'Dublin Core'
+    it "links to Solr and Cocina" do
+      expect(page).not_to have_link "SearchWorks"
+      expect(page).not_to have_link "MODS"
+      expect(page).not_to have_link "PURL"
+      expect(page).not_to have_link "Dublin Core"
 
-      expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
-      expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
+      expect(page).to have_link "Solr document", href: "/view/druid:ab123cd3445.json"
+      expect(page).to have_link "Cocina model", href: "/items/druid:ab123cd3445.json"
     end
   end
 
-  context 'for a publishable item (DRO)' do
+  context "for a publishable item (DRO)" do
     let(:document) do
-      instance_double(SolrDocument, id: 'druid:ab123cd3445',
-                                    to_param: 'druid:ab123cd3445',
-                                    druid: 'ab123cd3445',
-                                    publishable?: true,
-                                    catkey:, released_to:)
+      instance_double(SolrDocument, id: "druid:ab123cd3445",
+        to_param: "druid:ab123cd3445",
+        druid: "ab123cd3445",
+        publishable?: true,
+        catkey:, released_to:)
     end
     let(:catkey) { nil }
 
@@ -40,37 +40,37 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
       []
     end
 
-    context 'when not released' do
-      it 'links to purl and the Solr document' do
-        expect(page).not_to have_link 'SearchWorks'
-        expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
-        expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
-        expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
-        expect(page).to have_link 'PURL'
-        expect(page).to have_link 'Dublin Core'
+    context "when not released" do
+      it "links to purl and the Solr document" do
+        expect(page).not_to have_link "SearchWorks"
+        expect(page).to have_link "PURL", href: "https://sul-purl-stage.stanford.edu/ab123cd3445"
+        expect(page).to have_link "Solr document", href: "/view/druid:ab123cd3445.json"
+        expect(page).to have_link "Cocina model", href: "/items/druid:ab123cd3445.json"
+        expect(page).to have_link "PURL"
+        expect(page).to have_link "Dublin Core"
       end
     end
 
-    context 'when released to SearchWorks' do
+    context "when released to SearchWorks" do
       let(:released_to) do
-        ['Searchworks']
+        ["Searchworks"]
       end
 
-      context 'with a catkey' do
-        let(:catkey) { '123456' }
+      context "with a catkey" do
+        let(:catkey) { "123456" }
 
-        it 'links to searchworks with the catkey and links to purl' do
-          expect(page).to have_link 'SearchWorks', href: 'http://searchworks.stanford.edu/view/123456'
-          expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
-          expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
+        it "links to searchworks with the catkey and links to purl" do
+          expect(page).to have_link "SearchWorks", href: "http://searchworks.stanford.edu/view/123456"
+          expect(page).to have_link "PURL", href: "https://sul-purl-stage.stanford.edu/ab123cd3445"
+          expect(page).to have_link "Cocina model", href: "/items/druid:ab123cd3445.json"
         end
       end
 
-      context 'without a catkey' do
+      context "without a catkey" do
         let(:catkey) { nil }
 
-        it 'links to searchworks using a druid' do
-          expect(page).to have_link 'SearchWorks', href: 'http://searchworks.stanford.edu/view/ab123cd3445'
+        it "links to searchworks using a druid" do
+          expect(page).to have_link "SearchWorks", href: "http://searchworks.stanford.edu/view/ab123cd3445"
         end
       end
     end

@@ -25,12 +25,12 @@ class SearchBuilder < Blacklight::SearchBuilder
 
     if facet_config.more_limit
       limit = if scope.respond_to?(:facet_list_limit)
-                scope.facet_list_limit.to_s.to_i
-              elsif solr_params['facet.limit']
-                solr_params['facet.limit'].to_i
-              else
-                facet_config[:more_limit]
-              end
+        scope.facet_list_limit.to_s.to_i
+      elsif solr_params["facet.limit"]
+        solr_params["facet.limit"].to_i
+      else
+        facet_config[:more_limit]
+      end
 
       page = blacklight_params.fetch(request[:page], 1).to_i
       offset = (page - 1) * limit

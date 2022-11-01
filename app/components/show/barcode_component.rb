@@ -8,7 +8,7 @@ module Show
     end
 
     def barcode
-      @change_set.barcode || 'Not recorded'
+      @change_set.barcode || "Not recorded"
     end
 
     delegate :allows_modification?, to: :@state_service

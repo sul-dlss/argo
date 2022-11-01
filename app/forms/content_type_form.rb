@@ -7,16 +7,16 @@ class ContentTypeForm < ApplicationChangeSet
   property :viewing_direction, virtual: true
 
   CONTENT_TYPES = {
-    'book' => Cocina::Models::ObjectType.book,
-    'file' => Cocina::Models::ObjectType.object,
-    'image' => Cocina::Models::ObjectType.image,
-    'map' => Cocina::Models::ObjectType.map,
-    'media' => Cocina::Models::ObjectType.media,
-    '3d' => Cocina::Models::ObjectType.three_dimensional,
-    'document' => Cocina::Models::ObjectType.document,
-    'geo' => Cocina::Models::ObjectType.geo,
-    'webarchive-binary' => Cocina::Models::ObjectType.webarchive_binary,
-    'webarchive-seed' => Cocina::Models::ObjectType.webarchive_seed
+    "book" => Cocina::Models::ObjectType.book,
+    "file" => Cocina::Models::ObjectType.object,
+    "image" => Cocina::Models::ObjectType.image,
+    "map" => Cocina::Models::ObjectType.map,
+    "media" => Cocina::Models::ObjectType.media,
+    "3d" => Cocina::Models::ObjectType.three_dimensional,
+    "document" => Cocina::Models::ObjectType.document,
+    "geo" => Cocina::Models::ObjectType.geo,
+    "webarchive-binary" => Cocina::Models::ObjectType.webarchive_binary,
+    "webarchive-seed" => Cocina::Models::ObjectType.webarchive_seed
   }.freeze
 
   DIRECTIONS = %w[left-to-right right-to-left].freeze
@@ -50,10 +50,10 @@ class ContentTypeForm < ApplicationChangeSet
     {}.tap do |attributes|
       attributes[:type] = new_content_type
       attributes[:structural] = if resource_types_should_change?
-                                  structural_with_resource_type_changes
-                                else
-                                  model.structural.new(hasMemberOrders: member_orders)
-                                end
+        structural_with_resource_type_changes
+      else
+        model.structural.new(hasMemberOrders: member_orders)
+      end
     end
   end
 
@@ -61,7 +61,7 @@ class ContentTypeForm < ApplicationChangeSet
   def member_orders
     return [] unless may_have_direction? && viewing_direction.present?
 
-    [{ viewingDirection: viewing_direction }]
+    [{viewingDirection: viewing_direction}]
   end
 
   def may_have_direction?
@@ -82,7 +82,7 @@ class ContentTypeForm < ApplicationChangeSet
   def resource_types_should_change?
     new_resource_type.present? &&
       model.structural.contains
-           .map(&:type)
-           .any? { |resource_type| resource_type == old_resource_type }
+        .map(&:type)
+        .any? { |resource_type| resource_type == old_resource_type }
   end
 end

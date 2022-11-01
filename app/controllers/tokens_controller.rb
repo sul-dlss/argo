@@ -2,7 +2,8 @@
 
 class TokensController < ApplicationController
   # GET /settings/tokens
-  def index; end
+  def index
+  end
 
   # POST /settings/tokens
   def create
@@ -24,7 +25,7 @@ class TokensController < ApplicationController
   # This allows a login using credentials from the config gem.
   class LoginFromSettings
     def self.run
-      { email: Settings.sdr_api.email, password: Settings.sdr_api.password }
+      {email: Settings.sdr_api.email, password: Settings.sdr_api.password}
     end
   end
 end

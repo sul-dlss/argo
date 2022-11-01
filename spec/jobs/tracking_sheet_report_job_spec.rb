@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe TrackingSheetReportJob, type: :job do
-  let(:druids) { ['druid:cc111dd2222'] }
+  let(:druids) { ["druid:cc111dd2222"] }
   let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'amcollie') }
+  let(:user) { instance_double(User, to_s: "amcollie") }
   let(:output_directory) { bulk_action.output_directory }
   let(:bulk_action) do
     create(
       :bulk_action,
-      action_type: 'TrackingSheetReportJob',
-      log_name: 'tmp/tracking_sheet_report_job_log.txt'
+      action_type: "TrackingSheetReportJob",
+      log_name: "tmp/tracking_sheet_report_job_log.txt"
     )
   end
   let(:log_buffer) { StringIO.new }
@@ -24,10 +24,10 @@ RSpec.describe TrackingSheetReportJob, type: :job do
     FileUtils.rm_rf(output_directory)
   end
 
-  describe '#perform_now' do
-    context 'with authorization' do
-      let(:response) { { 'response' => { 'docs' => docs } } }
-      let(:solr_doc) { { obj_label_tesim: 'Some label' } }
+  describe "#perform_now" do
+    context "with authorization" do
+      let(:response) { {"response" => {"docs" => docs}} }
+      let(:solr_doc) { {obj_label_tesim: "Some label"} }
       let(:docs) { [solr_doc] }
 
       before do
@@ -36,8 +36,8 @@ RSpec.describe TrackingSheetReportJob, type: :job do
           .and_return(response)
       end
 
-      context 'happy path' do
-        it 'writes a pdf tracking sheet' do
+      context "happy path" do
+        it "writes a pdf tracking sheet" do
           subject.perform(bulk_action.id, druids:, groups:, user:)
           expect(File).to exist(File.join(output_directory, Settings.tracking_sheet_report_job.pdf_filename))
           expect(bulk_action.druid_count_total).to eq(druids.length)
@@ -46,7 +46,7 @@ RSpec.describe TrackingSheetReportJob, type: :job do
         end
       end
 
-      context 'when there is an error writing the PDF' do
+      context "when there is an error writing the PDF" do
         let(:pdf) { Prawn::Document.new(page_size: [5.5.in, 8.5.in]) }
 
         before do
@@ -57,7 +57,7 @@ RSpec.describe TrackingSheetReportJob, type: :job do
           allow(Rails.logger).to receive(:error)
         end
 
-        it 'updates the failed druid count' do
+        it "updates the failed druid count" do
           subject.perform(bulk_action.id, druids:, groups:, user:)
           expect(Rails.logger).to have_received(:error)
           expect(Honeybadger).to have_received(:context)

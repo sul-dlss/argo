@@ -4,7 +4,7 @@ class WorkflowsController < ApplicationController
   # Called from "Add Workflow" button. This is content for a modal invoked via XHR
   # so we don't want a layout.
   def new
-    render 'new', layout: false
+    render "new", layout: false
   end
 
   ##
@@ -17,7 +17,7 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       format.html do
         @presenter = build_show_presenter(workflow)
-        render 'show', layout: !request.xhr?
+        render "show", layout: !request.xhr?
       end
       format.xml { render xml: }
     end
@@ -34,17 +34,17 @@ class WorkflowsController < ApplicationController
     params.require %i[process status]
     cocina = Repository.find(params[:item_id])
 
-    return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], cocina)
+    return render status: :forbidden, plain: "Unauthorized" unless can_update_workflow?(params[:status], cocina)
 
     # this will raise an exception if the item doesn't have that workflow step
     WorkflowClientFactory.build.workflow_status(druid: params[:item_id],
-                                                workflow: params[:id],
-                                                process: params[:process])
+      workflow: params[:id],
+      process: params[:process])
     # update the status for the step and redirect to the workflow view page
     WorkflowClientFactory.build.update_status(druid: params[:item_id],
-                                              workflow: params[:id],
-                                              process: params[:process],
-                                              status: params[:status])
+      workflow: params[:id],
+      process: params[:process],
+      status: params[:status])
     msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:item_id]}"
     redirect_to solr_document_path(params[:item_id]), notice: msg
   end
@@ -67,8 +67,8 @@ class WorkflowsController < ApplicationController
     end
 
     WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
-                                                        wf_name,
-                                                        version: cocina_object.version)
+      wf_name,
+      version: cocina_object.version)
 
     # Force a Solr update before redirection.
     Argo::Indexer.reindex_druid_remotely(cocina_object.externalIdentifier)
@@ -100,15 +100,15 @@ class WorkflowsController < ApplicationController
     return WorkflowXmlPresenter.new(xml: workflow.xml) if params[:raw]
 
     status = WorkflowStatus.new(workflow:,
-                                workflow_steps: workflow_processes(params[:id]))
+      workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context,
-                          workflow_status: status,
-                          cocina_object: Repository.find(params[:item_id]))
+      workflow_status: status,
+      cocina_object: Repository.find(params[:item_id]))
   end
 
   def workflow_processes(workflow_name)
     client = WorkflowClientFactory.build
     workflow_definition = client.workflow_template(workflow_name)
-    workflow_definition['processes'].map { |process| process['name'] }
+    workflow_definition["processes"].map { |process| process["name"] }
   end
 end

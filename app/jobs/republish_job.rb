@@ -27,7 +27,7 @@ class RepublishJob < GenericJob
       log_buffer.puts("#{Time.current} #{self.class}: Did not republish #{current_druid} because it is never been published (bulk_action.id=#{bulk_action.id})")
       bulk_action.increment(:druid_count_fail).save
     end
-  rescue StandardError => e
+  rescue => e
     log_buffer.puts("#{Time.current} #{self.class}: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e}")
     bulk_action.increment(:druid_count_fail).save
   end

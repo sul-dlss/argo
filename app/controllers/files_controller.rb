@@ -9,9 +9,9 @@ class FilesController < ApplicationController
   ##
   # Brings up a modal dialog that lists all locations of the file
   def index
-    raise ArgumentError, 'Missing file parameter' if filename.blank?
+    raise ArgumentError, "Missing file parameter" if filename.blank?
 
-    @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: 'accessioned')
+    @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: "accessioned")
     files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.filename == params[:id] }
 
@@ -38,11 +38,11 @@ class FilesController < ApplicationController
 
     # Set headers on the response before writing to the response stream
     send_file_headers!(
-      type: 'application/octet-stream',
-      disposition: 'attachment',
+      type: "application/octet-stream",
+      disposition: "attachment",
       filename: CGI.escape(filename)
     )
-    response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
+    response.headers["Last-Modified"] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
 
     Preservation::Client.objects.content(
       druid: @cocina_model.externalIdentifier,
@@ -52,8 +52,8 @@ class FilesController < ApplicationController
     )
   rescue Preservation::Client::NotFoundError => e
     # Undo the header setting above for the streaming response. Not relevant here.
-    response.headers.delete('Last-Modified')
-    response.headers.delete('Content-Disposition')
+    response.headers.delete("Last-Modified")
+    response.headers.delete("Content-Disposition")
 
     render status: :not_found, plain: "Preserved file not found: #{e}"
   rescue Preservation::Client::Error => e
@@ -68,15 +68,15 @@ class FilesController < ApplicationController
   def download
     authorize! :view_content, @cocina_model
 
-    response.headers['Content-Disposition'] = "attachment; filename=#{Druid.new(@cocina_model).without_namespace}.zip"
+    response.headers["Content-Disposition"] = "attachment; filename=#{Druid.new(@cocina_model).without_namespace}.zip"
     zip_tricks_stream do |zip|
       preserved_files(@cocina_model).each do |filename|
         zip.write_deflated_file(filename) do |sink|
           Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
-                                               filepath: filename,
-                                               version: @cocina_model.version,
-                                               on_data: proc { |data, _count| sink.write data })
-        rescue StandardError => e
+            filepath: filename,
+            version: @cocina_model.version,
+            on_data: proc { |data, _count| sink.write data })
+        rescue => e
           sink.close
           message = "Could not zip #{filename} (#{@cocina_model.externalIdentifier}) for download: #{e}"
           logger.error(message)

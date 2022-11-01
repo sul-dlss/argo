@@ -7,12 +7,12 @@ class CitationPresenter
   end
 
   def render
-    result = ''
+    result = ""
     result += "#{author} " if author.present?
     if title.present?
       result += @italicize ? "<em>#{title}</em>" : title
     end
-    origin_info = [publisher, place, mods_created_date].compact.join(', ')
+    origin_info = [publisher, place, mods_created_date].compact.join(", ")
     result += ": #{origin_info}" if origin_info.present?
     result.html_safe
   end

@@ -3,7 +3,7 @@
 module BulkActions
   class GoverningApoJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = 'SetGoverningApoJob'
+    self.action_type = "SetGoverningApoJob"
 
     def new
       @apo_list = AdminPolicyOptions.for(current_user)

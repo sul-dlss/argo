@@ -22,7 +22,7 @@ class StateService
   # Ported over logic from app/helpers/dor_object_helper.rb#LN119
   # @return [Boolean]
   def published?
-    lifecycle('published') ? true : false
+    lifecycle("published") ? true : false
   end
 
   def object_state
@@ -52,22 +52,22 @@ class StateService
   end
 
   def opened?
-    @opened ||= active_lifecycle('opened')
+    @opened ||= active_lifecycle("opened")
   end
 
   def submitted?
-    @submitted ||= active_lifecycle('submitted')
+    @submitted ||= active_lifecycle("submitted")
   end
 
   ##
   # Ported over logic from app/helpers/dor_object_helper.rb#LN133
   # @return [Boolean]
   def accessioned?
-    @accessioned ||= lifecycle('accessioned') ? true : false
+    @accessioned ||= lifecycle("accessioned") ? true : false
   end
 
   def active_assembly_wf?
-    @active_assembly_wf ||= workflow_client.workflow_status(druid:, workflow: 'assemblyWF', process: 'accessioning-initiate') == 'waiting'
+    @active_assembly_wf ||= workflow_client.workflow_status(druid:, workflow: "assemblyWF", process: "accessioning-initiate") == "waiting"
   end
 
   def workflow_client

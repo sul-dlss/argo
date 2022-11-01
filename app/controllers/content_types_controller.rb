@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContentTypesController < ApplicationController
-  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
+  load_and_authorize_resource :cocina, parent: false, class: "Repository", id_param: "item_id"
 
   def edit
     @form = ContentTypeForm.new(@cocina_object)
@@ -18,7 +18,7 @@ class ContentTypesController < ApplicationController
     form = ContentTypeForm.new(@cocina)
     if form.validate(params[:content_type])
       form.save
-      redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
+      redirect_to solr_document_path(params[:item_id]), notice: "Content type updated!"
     else
       render_error(form.errors.full_messages.to_sentence)
     end

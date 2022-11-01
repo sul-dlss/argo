@@ -12,16 +12,16 @@ class WorkflowProcessRow < ApplicationComponent
   end
 
   delegate :druid, :workflow_name, :repository, :name, :status, :datetime,
-           :attempts, :lifecycle, :note, :error_message, to: :process
+    :attempts, :lifecycle, :note, :error_message, to: :process
 
   def elapsed
     return unless process.elapsed
 
-    Kernel.format('%.3f', process.elapsed.to_f)
+    Kernel.format("%.3f", process.elapsed.to_f)
   end
 
   def error?
-    status == 'error'
+    status == "error"
   end
 
   def show_reset_button?

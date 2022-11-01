@@ -38,7 +38,7 @@ class ImportTagsJob < GenericJob
     # not send messages to Solr)
     Argo::Indexer.reindex_druid_remotely(druid)
     bulk_action.increment(:druid_count_success).save
-  rescue StandardError => e
+  rescue => e
     log_buffer.puts("#{Time.current} #{self.class}: Unexpected error importing tags for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")
     bulk_action.increment(:druid_count_fail).save
   end

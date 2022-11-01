@@ -48,7 +48,7 @@ class User < ApplicationRecord
     return @role_cache[admin_policy_id] if @role_cache[admin_policy_id]
 
     # Try to retrieve a Solr doc
-    obj_doc = SearchService.query('id:"' + admin_policy_id + '"')['response']['docs'].first || {}
+    obj_doc = SearchService.query('id:"' + admin_policy_id + '"')["response"]["docs"].first || {}
     return [] if obj_doc.empty?
 
     apo_roles = Set.new
@@ -75,10 +75,10 @@ class User < ApplicationRecord
     # remove any existing impersonation (see #groups below)
     @role_cache = {}
     @groups_to_impersonate = if grps.blank?
-                               nil
-                             else
-                               grps.instance_of?(String) ? [grps] : grps
-                             end
+      nil
+    else
+      grps.instance_of?(String) ? [grps] : grps
+    end
   end
 
   # @return [Array<String>] list of groups the user is a member of including those

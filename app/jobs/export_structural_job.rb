@@ -8,9 +8,9 @@ class ExportStructuralJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    CSV.open(csv_download_path, 'w', headers: true) do |csv|
+    CSV.open(csv_download_path, "w", headers: true) do |csv|
       csv << StructureSerializer::HEADERS
-      with_items(params[:druids], name: 'Export structural metadata') do |cocina_object, success, failure|
+      with_items(params[:druids], name: "Export structural metadata") do |cocina_object, success, failure|
         item_to_rows(cocina_object, success, failure).each { |row| csv << row }
       end
     end
@@ -22,16 +22,16 @@ class ExportStructuralJob < GenericJob
   def item_to_rows(item, success, failure)
     result = []
     if !item.dro? || Array(item.structural&.contains).empty?
-      failure.call('No structural metadata to export')
+      failure.call("No structural metadata to export")
       return []
     end
 
     StructureSerializer.new(item.externalIdentifier, item.structural).rows do |row|
       result << row
     end
-    success.call('Exported structural metadata')
+    success.call("Exported structural metadata")
     result
-  rescue StandardError => e
+  rescue => e
     failure.call("Unexpected error exporting structural metadata: #{e.message}")
     Honeybadger.notify(e)
     result

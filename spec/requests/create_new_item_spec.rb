@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Create a new item', type: :request do
-  let(:druid) { 'druid:abc' }
+RSpec.describe "Create a new item", type: :request do
+  let(:druid) { "druid:abc" }
   let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags:) }
   let(:administrative_tags) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:dor_registration) { instance_double(Cocina::Models::DRO, externalIdentifier: druid) }
   let(:headers) do
     {
-      'Last-Modified' => 'Wed, 03 Mar 2021 18:58:00 GMT',
-      'X-Created-At' => 'Wed, 01 Jan 2021 12:58:00 GMT',
-      'X-Served-By' => 'Awesome webserver',
-      'ETag' => 'W/"d41d8cd98f00b204e9800998ecf8427e"'
+      "Last-Modified" => "Wed, 03 Mar 2021 18:58:00 GMT",
+      "X-Created-At" => "Wed, 01 Jan 2021 12:58:00 GMT",
+      "X-Served-By" => "Awesome webserver",
+      "ETag" => 'W/"d41d8cd98f00b204e9800998ecf8427e"'
     }
   end
 
@@ -23,21 +23,21 @@ RSpec.describe 'Create a new item', type: :request do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_service)
   end
 
-  context 'when source_id is not provided' do
+  context "when source_id is not provided" do
     let(:submitted) do
       {
         registration: {
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'world',
-          download_access: 'world',
-          content_type: 'https://cocina.sul.stanford.edu/models/book',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "world",
+          download_access: "world",
+          content_type: "https://cocina.sul.stanford.edu/models/book",
           items: [
             {
-              source_id: '',
-              label: 'test parameters for registration'
+              source_id: "",
+              label: "test parameters for registration"
             }
           ]
         }
@@ -45,64 +45,64 @@ RSpec.describe 'Create a new item', type: :request do
     end
 
     before do
-      allow(AdminPolicyOptions).to receive(:for).and_return(['APO 1', 'APO 2', 'APO 3'])
+      allow(AdminPolicyOptions).to receive(:for).and_return(["APO 1", "APO 2", "APO 3"])
     end
 
-    it 'displays an error' do
-      post '/registration', params: submitted
-      expect(response.body).to include 'Source ID is invalid'
+    it "displays an error" do
+      post "/registration", params: submitted
+      expect(response.body).to include "Source ID is invalid"
 
       expect(workflow_service).not_to have_received(:create_workflow_by_name)
     end
   end
 
-  context 'when barcode_id is provided' do
+  context "when barcode_id is provided" do
     let(:source_id) { "sul:#{SecureRandom.uuid}" }
 
     let(:submitted) do
       {
         registration: {
-          admin_policy: 'druid:hv992ry2431',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'world',
-          download_access: 'world',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/book',
+          admin_policy: "druid:hv992ry2431",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "world",
+          download_access: "world",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/book",
           items: [
             {
               source_id:,
-              barcode_id: '36105010362304',
-              label: 'test parameters for registration'
+              barcode_id: "36105010362304",
+              label: "test parameters for registration"
             }
           ]
         }
       }
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
     end
   end
 
-  context 'when register is successful with default rights' do
+  context "when register is successful with default rights" do
     let(:submitted) do
       {
         registration: {
 
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'world',
-          download_access: 'world',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/document',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "world",
+          download_access: "world",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/document",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              source_id: "foo:bar",
+              label: "test parameters for registration"
             }
           ]
         }
@@ -110,20 +110,20 @@ RSpec.describe 'Create a new item', type: :request do
     end
 
     let(:json) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.document,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {},
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              }).to_json
+      Cocina::Models::DRO.new(externalIdentifier: "druid:bc234fg5678",
+        type: Cocina::Models::ObjectType.document,
+        label: "Test DRO",
+        version: 1,
+        description: {
+          title: [{value: "Test DRO"}],
+          purl: "https://purl.stanford.edu/bc234fg5678"
+        },
+        access: {},
+        identification: {sourceId: "sul:1234"},
+        structural: {},
+        administrative: {
+          hasAdminPolicy: "druid:hv992ry2431"
+        }).to_json
     end
 
     let(:request_json) do
@@ -142,30 +142,30 @@ RSpec.describe 'Create a new item', type: :request do
         .to_return(status: 200, body: json, headers:)
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
       expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+        .with("druid:bc234fg5678", "registrationWF", version: "1")
     end
   end
 
-  context 'when register is successful with explicit rights' do
+  context "when register is successful with explicit rights" do
     let(:submitted) do
       {
         registration: {
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'stanford',
-          download_access: 'stanford',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/image',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "stanford",
+          download_access: "stanford",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/image",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              source_id: "foo:bar",
+              label: "test parameters for registration"
             }
           ]
         }
@@ -173,23 +173,23 @@ RSpec.describe 'Create a new item', type: :request do
     end
 
     let(:json) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.image,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {
-                                view: 'stanford',
-                                download: 'stanford'
-                              },
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              }).to_json
+      Cocina::Models::DRO.new(externalIdentifier: "druid:bc234fg5678",
+        type: Cocina::Models::ObjectType.image,
+        label: "Test DRO",
+        version: 1,
+        description: {
+          title: [{value: "Test DRO"}],
+          purl: "https://purl.stanford.edu/bc234fg5678"
+        },
+        access: {
+          view: "stanford",
+          download: "stanford"
+        },
+        identification: {sourceId: "sul:1234"},
+        structural: {},
+        administrative: {
+          hasAdminPolicy: "druid:hv992ry2431"
+        }).to_json
     end
     let(:request_json) do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
@@ -206,33 +206,33 @@ RSpec.describe 'Create a new item', type: :request do
         .to_return(status: 200, body: json, headers:)
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
       expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+        .with("druid:bc234fg5678", "registrationWF", version: "1")
     end
   end
 
-  context 'when register is successful with location access' do
+  context "when register is successful with location access" do
     let(:submitted) do
       {
         registration: {
 
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'location-based',
-          download_access: 'location-based',
-          access_location: 'music',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/book',
-          viewing_direction: 'left-to-right',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "location-based",
+          download_access: "location-based",
+          access_location: "music",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/book",
+          viewing_direction: "left-to-right",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              source_id: "foo:bar",
+              label: "test parameters for registration"
             }
           ]
         }
@@ -240,28 +240,28 @@ RSpec.describe 'Create a new item', type: :request do
     end
 
     let(:json) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.book,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'xTest DRO' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {
-                                view: 'location-based',
-                                download: 'location-based',
-                                location: 'music'
-                              },
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {
-                                hasMemberOrders: [
-                                  viewingDirection: 'left-to-right'
-                                ]
-                              },
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              }).to_json
+      Cocina::Models::DRO.new(externalIdentifier: "druid:bc234fg5678",
+        type: Cocina::Models::ObjectType.book,
+        label: "Test DRO",
+        version: 1,
+        description: {
+          title: [{value: "xTest DRO"}],
+          purl: "https://purl.stanford.edu/bc234fg5678"
+        },
+        access: {
+          view: "location-based",
+          download: "location-based",
+          location: "music"
+        },
+        identification: {sourceId: "sul:1234"},
+        structural: {
+          hasMemberOrders: [
+            viewingDirection: "left-to-right"
+          ]
+        },
+        administrative: {
+          hasAdminPolicy: "druid:hv992ry2431"
+        }).to_json
     end
 
     let(:request_json) do
@@ -281,31 +281,31 @@ RSpec.describe 'Create a new item', type: :request do
         .to_return(status: 200, body: json, headers:)
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
       expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+        .with("druid:bc234fg5678", "registrationWF", version: "1")
     end
   end
 
-  context 'when register is successful with no-download and viewing direction set RTL' do
+  context "when register is successful with no-download and viewing direction set RTL" do
     let(:submitted) do
       {
         registration: {
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'world',
-          download_access: 'none',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/image',
-          viewing_direction: 'right-to-left',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "world",
+          download_access: "none",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/image",
+          viewing_direction: "right-to-left",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              source_id: "foo:bar",
+              label: "test parameters for registration"
             }
           ]
         }
@@ -313,27 +313,27 @@ RSpec.describe 'Create a new item', type: :request do
     end
 
     let(:json) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.image,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {
-                                view: 'world',
-                                download: 'none'
-                              },
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {
-                                hasMemberOrders: [
-                                  viewingDirection: 'right-to-left'
-                                ]
-                              },
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              }).to_json
+      Cocina::Models::DRO.new(externalIdentifier: "druid:bc234fg5678",
+        type: Cocina::Models::ObjectType.image,
+        label: "Test DRO",
+        version: 1,
+        description: {
+          title: [{value: "Test DRO"}],
+          purl: "https://purl.stanford.edu/bc234fg5678"
+        },
+        access: {
+          view: "world",
+          download: "none"
+        },
+        identification: {sourceId: "sul:1234"},
+        structural: {
+          hasMemberOrders: [
+            viewingDirection: "right-to-left"
+          ]
+        },
+        administrative: {
+          hasAdminPolicy: "druid:hv992ry2431"
+        }).to_json
     end
 
     let(:request_json) do
@@ -351,53 +351,53 @@ RSpec.describe 'Create a new item', type: :request do
         .to_return(status: 200, body: json, headers:)
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
       expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+        .with("druid:bc234fg5678", "registrationWF", version: "1")
     end
   end
 
-  context 'when register is successful with dark' do
+  context "when register is successful with dark" do
     let(:submitted) do
       {
         registration: {
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              source_id: "foo:bar",
+              label: "test parameters for registration"
             }
           ],
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'dark',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/image'
+          tag: ["Registered By : jcoyne85"],
+          view_access: "dark",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/image"
         }
       }
     end
 
     let(:json) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.image,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {
-                                view: 'dark',
-                                download: 'none'
-                              },
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              }).to_json
+      Cocina::Models::DRO.new(externalIdentifier: "druid:bc234fg5678",
+        type: Cocina::Models::ObjectType.image,
+        label: "Test DRO",
+        version: 1,
+        description: {
+          title: [{value: "Test DRO"}],
+          purl: "https://purl.stanford.edu/bc234fg5678"
+        },
+        access: {
+          view: "dark",
+          download: "none"
+        },
+        identification: {sourceId: "sul:1234"},
+        structural: {},
+        administrative: {
+          hasAdminPolicy: "druid:hv992ry2431"
+        }).to_json
     end
 
     let(:request_json) do
@@ -415,15 +415,15 @@ RSpec.describe 'Create a new item', type: :request do
         .to_return(status: 200, body: json, headers:)
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
       expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+        .with("druid:bc234fg5678", "registrationWF", version: "1")
     end
   end
 
-  context 'when register is a conflict' do
+  context "when register is a conflict" do
     let(:json_response) do
       <<~JSON
         {"errors":
@@ -438,49 +438,49 @@ RSpec.describe 'Create a new item', type: :request do
 
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-        .to_return(status: 409, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
-      allow(AdminPolicyOptions).to receive(:for).and_return(['APO 1', 'APO 2', 'APO 3'])
+        .to_return(status: 409, body: json_response, headers: {"content-type" => "application/vnd.api+json"})
+      allow(AdminPolicyOptions).to receive(:for).and_return(["APO 1", "APO 2", "APO 3"])
     end
 
-    it 'shows an error' do
-      post '/registration', params: {
+    it "shows an error" do
+      post "/registration", params: {
         registration: {
-          admin_policy: 'druid:hv992ry2431',
-          view_access: 'world',
-          download_access: 'world',
-          controlled_digital_lending: 'false',
-          content_type: 'https://cocina.sul.stanford.edu/models/book',
+          admin_policy: "druid:hv992ry2431",
+          view_access: "world",
+          download_access: "world",
+          controlled_digital_lending: "false",
+          content_type: "https://cocina.sul.stanford.edu/models/book",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'This things'
+              source_id: "foo:bar",
+              label: "This things"
             }
           ],
-          tag: ['Registered By : jcoyne85']
+          tag: ["Registered By : jcoyne85"]
         }
       }
       expect(response.status).to eq 400
-      expect(response.body).to include 'Conflict (An object (druid:abc123) with the source ID &#39;googlebooks:999999&#39; has already been registered.)'
+      expect(response.body).to include "Conflict (An object (druid:abc123) with the source ID &#39;googlebooks:999999&#39; has already been registered.)"
     end
   end
 
-  context 'when register is successful with controlled digital lending' do
+  context "when register is successful with controlled digital lending" do
     let(:submitted) do
       {
         registration: {
 
-          admin_policy: 'druid:hv992ry2431',
-          collection: 'druid:hv992ry7777',
-          workflow_id: 'registrationWF',
-          tag: ['Registered By : jcoyne85'],
-          view_access: 'stanford',
-          download_access: 'none',
-          controlled_digital_lending: 'true',
-          content_type: 'https://cocina.sul.stanford.edu/models/book',
+          admin_policy: "druid:hv992ry2431",
+          collection: "druid:hv992ry7777",
+          workflow_id: "registrationWF",
+          tag: ["Registered By : jcoyne85"],
+          view_access: "stanford",
+          download_access: "none",
+          controlled_digital_lending: "true",
+          content_type: "https://cocina.sul.stanford.edu/models/book",
           items: [
             {
-              source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              source_id: "foo:bar",
+              label: "test parameters for registration"
             }
           ]
         }
@@ -488,24 +488,24 @@ RSpec.describe 'Create a new item', type: :request do
     end
 
     let(:json) do
-      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::ObjectType.book,
-                              label: 'Test DRO',
-                              version: 1,
-                              description: {
-                                title: [{ value: 'Test DRO' }],
-                                purl: 'https://purl.stanford.edu/bc234fg5678'
-                              },
-                              access: {
-                                view: 'stanford',
-                                download: 'none',
-                                controlledDigitalLending: true
-                              },
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {},
-                              administrative: {
-                                hasAdminPolicy: 'druid:hv992ry2431'
-                              }).to_json
+      Cocina::Models::DRO.new(externalIdentifier: "druid:bc234fg5678",
+        type: Cocina::Models::ObjectType.book,
+        label: "Test DRO",
+        version: 1,
+        description: {
+          title: [{value: "Test DRO"}],
+          purl: "https://purl.stanford.edu/bc234fg5678"
+        },
+        access: {
+          view: "stanford",
+          download: "none",
+          controlledDigitalLending: true
+        },
+        identification: {sourceId: "sul:1234"},
+        structural: {},
+        administrative: {
+          hasAdminPolicy: "druid:hv992ry2431"
+        }).to_json
     end
     let(:request_json) do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.book}\"," \
@@ -522,11 +522,11 @@ RSpec.describe 'Create a new item', type: :request do
         .to_return(status: 200, body: json, headers:)
     end
 
-    it 'registers the object' do
-      post '/registration', params: submitted
+    it "registers the object" do
+      post "/registration", params: submitted
       expect(response).to have_http_status(:ok)
       expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+        .with("druid:bc234fg5678", "registrationWF", version: "1")
     end
   end
 end

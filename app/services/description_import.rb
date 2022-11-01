@@ -16,7 +16,7 @@ class DescriptionImport
 
     # The source_id and druid are only there for the user to reference and should be ignored for data processing
     # druid is only on the bulk sheet
-    headers = @csv_row.headers.excluding('source_id', 'druid')
+    headers = @csv_row.headers.excluding("source_id", "druid")
     headers.sort_by! { |address| sortable_address(address) }
 
     headers.each do |address|
@@ -32,15 +32,15 @@ class DescriptionImport
 
   def split_address(address)
     address.scan(/[[:alpha:]]+|[[:digit:]]+/)
-           .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
+      .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
   end
 
   def sortable_address(address)
     split_address(address).map do |part|
       next part unless part.is_a?(Integer)
 
-      part.to_s.rjust(3, '0')
-    end.join('.')
+      part.to_s.rjust(3, "0")
+    end.join(".")
   end
 
   def nest_hashes(value, *keys)
@@ -48,7 +48,7 @@ class DescriptionImport
 
     key = keys.shift
     val = keys.empty? ? value : nest_hashes(value, *keys)
-    key.is_a?(Integer) ? [].tap { |arr| arr[key] = val } : { key => val }
+    key.is_a?(Integer) ? [].tap { |arr| arr[key] = val } : {key => val}
   end
 
   # @params [Array,Hash] what a tree or list like data structure. It's one of the nodes in the Cocina descriptive

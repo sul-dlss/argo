@@ -5,7 +5,7 @@ class Repository
   # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy,NilModel] cocina model instance corresponding to the given druid
   # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the given object ID
   def self.find(id)
-    raise ArgumentError, 'Missing identifier' unless id
+    raise ArgumentError, "Missing identifier" unless id
 
     maybe_load_cocina(id)
   end

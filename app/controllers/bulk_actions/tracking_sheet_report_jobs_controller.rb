@@ -3,6 +3,6 @@
 module BulkActions
   class TrackingSheetReportJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = 'TrackingSheetReportJob'
+    self.action_type = "TrackingSheetReportJob"
   end
 end

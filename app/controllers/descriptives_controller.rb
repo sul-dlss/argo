@@ -2,10 +2,11 @@
 
 # Download the CSV descriptive metadata
 class DescriptivesController < ApplicationController
-  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
+  load_and_authorize_resource :cocina, parent: false, class: "Repository", id_param: "item_id"
 
   # Display the form for uploading the descriptive metadata spreadsheet
-  def edit; end
+  def edit
+  end
 
   # Handle upload of the spreadsheet
   def update
@@ -13,11 +14,11 @@ class DescriptivesController < ApplicationController
     validator = DescriptionValidator.new(csv)
     if validator.valid?
       DescriptionImport.import(csv_row: csv.first)
-                       .bind { |description| CocinaValidator.validate_and_save(@cocina, description:) }
-                       .either(
-                         ->(_updated) { display_success },
-                         ->(messages) { display_error(messages) }
-                       )
+        .bind { |description| CocinaValidator.validate_and_save(@cocina, description:) }
+        .either(
+          ->(_updated) { display_success },
+          ->(messages) { display_error(messages) }
+        )
     else
       @errors = validator.errors
       render :edit, status: :unprocessable_entity
@@ -40,7 +41,7 @@ class DescriptivesController < ApplicationController
     # The title as shown to the user comes from Solr (`sw_display_title_tesim`), so we re-index to ensure any change is immediately shown
     # see https://github.com/sul-dlss/argo/issues/3656
     Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
-    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: 'Descriptive metadata has been updated.'
+    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: "Descriptive metadata has been updated."
   end
 
   def display_error(messages)
@@ -50,9 +51,9 @@ class DescriptivesController < ApplicationController
 
   def create_csv
     description = DescriptionExport.export(source_id: @cocina.identification.sourceId,
-                                           description: @cocina.description)
+      description: @cocina.description)
     headers = DescriptionHeaders.create(headers: description.keys)
-    CSV.generate(write_headers: true, headers: ['druid'] + headers) do |body|
+    CSV.generate(write_headers: true, headers: ["druid"] + headers) do |body|
       body << ([@cocina.externalIdentifier] + description.values_at(*headers))
     end
   end

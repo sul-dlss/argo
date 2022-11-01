@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'reform/form/coercion'
+require "reform/form/coercion"
 
 module HasViewAccessWithCdl
   extend ActiveSupport::Concern
@@ -8,7 +8,7 @@ module HasViewAccessWithCdl
   included do
     include HasViewAccess
     feature Reform::Form::Coercion # Casts properties to a specific type
-    property :controlled_digital_lending, virtual: true, type: Dry::Types['params.nil'] | Dry::Types['params.bool']
+    property :controlled_digital_lending, virtual: true, type: Dry::Types["params.nil"] | Dry::Types["params.bool"]
   end
 
   def setup_view_access_with_cdl_properties(access_model)

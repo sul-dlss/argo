@@ -2,7 +2,7 @@
 
 # dispatches to the dor-services-app to (re/un)publish
 class StructuresController < ApplicationController
-  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id', only: :update
+  load_and_authorize_resource :cocina, parent: false, class: "Repository", id_param: "item_id", only: :update
   before_action :enforce_versioning, only: :update
 
   def show
@@ -23,11 +23,11 @@ class StructuresController < ApplicationController
 
   def update
     StructureUpdater.from_csv(@cocina, params[:csv].read)
-                    .bind { |structural| CocinaValidator.validate_and_save(@cocina, structural:) }
-                    .either(
-                      ->(_updated) { display_success('Structural metadata updated') },
-                      ->(messages) { display_error(messages) }
-                    )
+      .bind { |structural| CocinaValidator.validate_and_save(@cocina, structural:) }
+      .either(
+        ->(_updated) { display_success("Structural metadata updated") },
+        ->(messages) { display_error(messages) }
+      )
   end
 
   private
@@ -37,7 +37,7 @@ class StructuresController < ApplicationController
   end
 
   def display_error(messages)
-    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, flash: { error: messages.join(', ') }
+    redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, flash: {error: messages.join(", ")}
   end
 
   # decode the token that grants view access

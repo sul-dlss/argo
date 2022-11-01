@@ -17,10 +17,10 @@ class ShowEmbargoComponent < ApplicationComponent
     return unless allows_modification?
 
     link_to edit_item_embargo_path(id),
-            class: 'text-white',
-            aria: { label: 'Manage embargo' },
-            data: { controller: 'button', action: 'click->button#open' } do
-      tag.span class: 'bi-pencil'
+      class: "text-white",
+      aria: {label: "Manage embargo"},
+      data: {controller: "button", action: "click->button#open"} do
+      tag.span class: "bi-pencil"
     end
   end
 end

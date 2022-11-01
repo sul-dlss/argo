@@ -11,10 +11,10 @@ class SetContentTypeJob < GenericJob
     @new_resource_type = params[:new_resource_type]
     @viewing_direction = params[:viewing_direction]
 
-    raise 'Must provide values for types.' if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?
-    raise 'Must provide a new content type when changing resource type.' if @new_content_type.blank? && @new_resource_type.present?
+    raise "Must provide values for types." if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?
+    raise "Must provide a new content type when changing resource type." if @new_content_type.blank? && @new_resource_type.present?
 
-    with_items(params[:druids], name: 'Set content types') do |cocina_object, success, failure|
+    with_items(params[:druids], name: "Set content types") do |cocina_object, success, failure|
       set_content_type(cocina_object, success, failure)
     end
   end
@@ -29,25 +29,25 @@ class SetContentTypeJob < GenericJob
       return failure.call("Object is a #{cocina_object.type} and cannot be updated")
     end
 
-    return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+    return failure.call("Not authorized") unless ability.can?(:update, cocina_object)
 
     state_service = StateService.new(cocina_object)
-    return failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?
+    return failure.call("Object cannot be modified in its current state.") unless state_service.allows_modification?
 
     # use dor services client to pass a hash for structural metadata and update the cocina object
     new_model = cocina_object.new(cocina_update_attributes(cocina_object))
     Repository.store(new_model)
-    success.call('Successfully updated content type')
+    success.call("Successfully updated content type")
   end
 
   def cocina_update_attributes(cocina_object)
     {}.tap do |attributes|
       attributes[:type] = @new_content_type
       attributes[:structural] = if resource_types_should_change?(cocina_object)
-                                  structural_with_resource_type_changes(cocina_object)
-                                else
-                                  cocina_object.structural.new(hasMemberOrders: member_orders)
-                                end
+        structural_with_resource_type_changes(cocina_object)
+      else
+        cocina_object.structural.new(hasMemberOrders: member_orders)
+      end
     end
   end
 
@@ -55,7 +55,7 @@ class SetContentTypeJob < GenericJob
   def member_orders
     return [] unless may_have_direction? && @viewing_direction.present?
 
-    [{ viewingDirection: @viewing_direction }]
+    [{viewingDirection: @viewing_direction}]
   end
 
   def may_have_direction?
