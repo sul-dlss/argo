@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RepublishJob, type: :job do
+RSpec.describe RepublishJob do
   let(:druids) { ["druid:123", "druid:456"] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: "jcoyne85") }

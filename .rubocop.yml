@@ -1,12 +1,15 @@
-require: standard
+inherit_mode:
+  merge:
+    - Exclude
 
-AllCops:
-  TargetRubyVersion: 3.1
-  SuggestExtensions: false
-  Exclude:
-    - bin/**
-    - db/schema.rb
-    - vendor/bundle/**/*
+require:
+  - rubocop-performance
+  - rubocop-rspec
+  - standard
 
 inherit_gem:
   standard: config/base.yml
+
+inherit_from:
+  - .rubocop/custom.yml
+  - .rubocop_todo.yml

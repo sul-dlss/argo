@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Reset failed workflow steps", type: :request do
+RSpec.describe "Reset failed workflow steps" do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 

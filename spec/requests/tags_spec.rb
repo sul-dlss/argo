@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Tags", type: :request do
+RSpec.describe "Tags" do
   let(:user) { create(:user) }
 
   before do

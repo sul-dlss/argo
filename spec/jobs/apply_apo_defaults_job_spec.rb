@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ApplyApoDefaultsJob, type: :job do
+RSpec.describe ApplyApoDefaultsJob do
   let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222"] }
   let(:groups) { [] }
   let(:bulk_action) { create(:bulk_action) }

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe RegisterDruidsJob, type: :job do
+RSpec.describe RegisterDruidsJob do
   include Dry::Monads[:result]
 
   subject(:job) { described_class.new }

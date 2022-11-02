@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExportStructuralJob, type: :job do
+RSpec.describe ExportStructuralJob do
   subject(:job) { described_class.new }
 
   let(:bulk_action) { create(:bulk_action, action_type: "ExportStructuralJob") }

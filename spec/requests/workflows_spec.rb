@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "WorkflowsController", type: :request do
+RSpec.describe "WorkflowsController" do
   let(:druid) { "druid:bc123df4567" }
   let(:user) { create(:user) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
@@ -185,7 +185,7 @@ RSpec.describe "WorkflowsController", type: :request do
         it "is forbidden" do
           put "/items/#{druid}/workflows/accessionWF", params: {process: "publish", status: "waiting"}
 
-          expect(response.status).to eq 403
+          expect(response).to have_http_status :forbidden
           expect(workflow_client).not_to have_received(:update_status)
         end
       end

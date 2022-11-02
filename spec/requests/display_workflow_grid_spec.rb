@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "The workflow grid", type: :request do
+RSpec.describe "The workflow grid" do
   let(:user) { create(:user) }
 
   context "as an admin" do

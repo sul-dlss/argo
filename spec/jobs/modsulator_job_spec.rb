@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ModsulatorJob, type: :job do
+RSpec.describe ModsulatorJob do
   before do
     FileUtils.mkdir_p(output_directory)
   end

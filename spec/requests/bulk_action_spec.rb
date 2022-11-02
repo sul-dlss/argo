@@ -23,7 +23,7 @@ RSpec.describe "BulkActionsController" do
 
     it "lists the BulkActions from current_user" do
       get "/bulk_actions"
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
       expect(response.body).to include "Belongs to me"
       expect(response.body).not_to include "not mine"
     end
@@ -39,7 +39,7 @@ RSpec.describe "BulkActionsController" do
   describe "GET new" do
     it "has a 200 status code" do
       get "/bulk_actions/new"
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe "BulkActionsController" do
       expect do
         delete "/bulk_actions/#{b_action.id}"
       end.not_to change(BulkAction, :count)
-      expect(response.status).to eq 404
+      expect(response).to have_http_status :not_found
     end
   end
 
@@ -77,7 +77,7 @@ RSpec.describe "BulkActionsController" do
     it "sends through a BulkActions file" do
       get "/bulk_actions/#{bulk_action.id}/file?filename=test.log"
 
-      expect(response.status).to eq 200
+      expect(response).to have_http_status :ok
     end
 
     context "for other users files" do
@@ -86,7 +86,7 @@ RSpec.describe "BulkActionsController" do
       it "does not send file for other users files" do
         get "/bulk_actions/#{bulk_action.id}/file?filename=not_my_log.log"
 
-        expect(response.status).to eq 404
+        expect(response).to have_http_status :not_found
       end
     end
   end

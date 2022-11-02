@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe DescriptiveMetadataImportJob, type: :job do
+RSpec.describe DescriptiveMetadataImportJob do
   let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
   let(:item1) { build(:dro_with_metadata, id: druids[0]) }

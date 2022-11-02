@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Report, type: :model do
+RSpec.describe Report do
   let(:user) { instance_double(User, admin?: true) }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }

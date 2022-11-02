@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Technicals", type: :request do
+RSpec.describe "Technicals" do
   include Dry::Monads[:result]
 
   before do

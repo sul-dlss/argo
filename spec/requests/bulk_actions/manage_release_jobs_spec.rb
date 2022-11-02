@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::ManageReleaseJobs", type: :request do
+RSpec.describe "BulkActions::ManageReleaseJobs" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Bulk descriptive metadata import", type: :request do
+RSpec.describe "Bulk descriptive metadata import" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end

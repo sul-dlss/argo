@@ -100,7 +100,7 @@ RSpec.describe "Set catkey" do
 
           expect(object_client).not_to have_received(:update)
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
-          expect(response.status).to eq 422
+          expect(response).to have_http_status :unprocessable_entity
         end
       end
 
@@ -115,7 +115,7 @@ RSpec.describe "Set catkey" do
 
           expect(object_client).not_to have_received(:update)
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
-          expect(response.status).to eq 422
+          expect(response).to have_http_status :unprocessable_entity
         end
       end
 
@@ -130,7 +130,7 @@ RSpec.describe "Set catkey" do
 
           expect(object_client).not_to have_received(:update)
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
-          expect(response.status).to eq 422
+          expect(response).to have_http_status :unprocessable_entity
         end
       end
 

@@ -3,7 +3,7 @@
 require "rails_helper"
 require "fileutils"
 
-RSpec.describe DescmetadataDownloadJob, type: :job do
+RSpec.describe DescmetadataDownloadJob do
   let(:download_job) { described_class.new(bulk_action.id) }
   let(:bulk_action) do
     create(:bulk_action,

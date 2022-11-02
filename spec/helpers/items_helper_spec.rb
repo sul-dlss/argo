@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ItemsHelper, type: :helper do
+RSpec.describe ItemsHelper do
   describe "#stacks_url_full_size" do
     subject { helper.stacks_url_full_size("druid:999", "foo/bar.txt") }
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Registration", type: :request do
+RSpec.describe "Registration" do
   let(:druid) { "druid:bc123df4567" }
   let(:bare_druid) { "bc123df4567" }
   let(:user) { create(:user) }

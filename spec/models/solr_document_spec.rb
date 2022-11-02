@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SolrDocument, type: :model do
+RSpec.describe SolrDocument do
   let(:document) { described_class.new(document_attributes) }
   let(:single_date) { ["2012-04-05T01:00:04.148Z"] }
 

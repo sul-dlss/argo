@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "WorkflowServiceController", type: :request do
+RSpec.describe "WorkflowServiceController" do
   before do
     sign_in(create(:user))
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)

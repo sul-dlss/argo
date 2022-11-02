@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Registration catkey check", type: :request do
+RSpec.describe "Registration catkey check" do
   let(:user) { create(:user) }
   let(:marcxml_client) { instance_double(Dor::Services::Client::Marcxml) }
 
@@ -59,7 +59,7 @@ RSpec.describe "Registration catkey check", type: :request do
     it "returns 500" do
       get "/registration/catkey?catkey=123"
 
-      expect(response.status).to eq(502)
+      expect(response).to have_http_status(:bad_gateway)
     end
   end
 end

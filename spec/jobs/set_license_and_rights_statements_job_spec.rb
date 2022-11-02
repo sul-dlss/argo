@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
+RSpec.describe SetLicenseAndRightsStatementsJob do
   let(:bulk_action) { create(:bulk_action) }
   let(:groups) { ["workgroup:sdr:administrator-role"] }
 

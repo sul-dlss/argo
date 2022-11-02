@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 begin
-  require "standard/rake"
-rescue
-  LoadError
+  require "rubocop/rake_task"
+  RuboCop::RakeTask.new
+rescue LoadError
+  desc "Run rubocop"
+  task :rubocop do
+    abort "Please install the rubocop gem to run rubocop."
+  end
 end
 
 begin
@@ -18,4 +22,4 @@ end
 task(:default).clear
 
 desc "run linter and tests (for CI)"
-task default: ["standard", "spec"]
+task default: ["rubocop", "spec"]

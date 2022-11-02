@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Download the descriptive CSV", type: :request do
+RSpec.describe "Download the descriptive CSV" do
   let(:druid) { "druid:bc123df4567" }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 

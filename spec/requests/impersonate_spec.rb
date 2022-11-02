@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Remember impersontated groups", type: :request do
+RSpec.describe "Remember impersontated groups" do
   let(:user) { create(:user) }
 
   context "as an admin" do
@@ -31,7 +31,7 @@ RSpec.describe "Remember impersontated groups", type: :request do
       expect(session[:groups]).to be_blank
 
       get "/auth/forget_impersonated_groups"
-      expect(response.status).not_to eq 403
+      expect(response).not_to have_http_status :forbidden
       expect(session[:groups]).to be_blank
     end
   end

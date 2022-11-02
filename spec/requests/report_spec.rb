@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Reports from a search", type: :request do
+RSpec.describe "Reports from a search" do
   before do
     ResetSolr.reset_solr
     solr_conn.add(id: "druid:xb482ww9999",

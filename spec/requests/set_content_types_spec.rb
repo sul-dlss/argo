@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-RSpec.describe "Set content type for an item", type: :request do
+RSpec.describe "Set content type for an item" do
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   let(:druid) { "druid:bc123df4567" }
-  let(:user) { create :user }
+  let(:user) { create(:user) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:content_type) { Cocina::Models::ObjectType.image }
   let(:cocina_model) do

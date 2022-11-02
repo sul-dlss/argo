@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::GoverningApoJobs", type: :request do
+RSpec.describe "BulkActions::GoverningApoJobs" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end

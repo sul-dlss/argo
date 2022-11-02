@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Reindexing", type: :request do
+RSpec.describe "Reindexing" do
   let(:druid) { "druid:aa111bb2222" }
 
   before do

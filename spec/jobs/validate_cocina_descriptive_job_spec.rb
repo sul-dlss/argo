@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ValidateCocinaDescriptiveJob, type: :job do
+RSpec.describe ValidateCocinaDescriptiveJob do
   let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
   let(:item1) { build(:dro, id: druids[0]) }

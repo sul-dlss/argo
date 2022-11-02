@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CloseVersionJob, type: :job do
+RSpec.describe CloseVersionJob do
   let(:druids) { ["druid:bc123df4567", "druid:bc123df4598"] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: "jcoyne85") }

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::RightsJobs", type: :request do
+RSpec.describe "BulkActions::RightsJobs" do
   describe "create" do
     let(:user) { build(:user) }
 

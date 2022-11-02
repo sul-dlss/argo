@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Create a new item", type: :request do
+RSpec.describe "Create a new item" do
   let(:druid) { "druid:abc" }
   let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags:) }
@@ -459,7 +459,7 @@ RSpec.describe "Create a new item", type: :request do
           tag: ["Registered By : jcoyne85"]
         }
       }
-      expect(response.status).to eq 400
+      expect(response).to have_http_status :bad_request
       expect(response.body).to include "Conflict (An object (druid:abc123) with the source ID &#39;googlebooks:999999&#39; has already been registered.)"
     end
   end

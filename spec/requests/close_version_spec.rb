@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Close a version", type: :request do
+RSpec.describe "Close a version" do
   let(:druid) { "druid:bc123df4567" }
   let(:user) { create(:user) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }

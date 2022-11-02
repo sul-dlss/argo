@@ -1,0 +1,67 @@
+# This configuration is from the team's developer playbook
+
+AllCops:
+  TargetRubyVersion: 3.1
+  DisplayCopNames: true
+  SuggestExtensions: false
+  Exclude:
+    - bin/**
+    - db/schema.rb
+    - vendor/bundle/**/*
+
+# These exclusions are from the team's developer playbook
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/views/**/*_spec.rb' # In view tests, the view is named, not the class
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Max: 5 # default 1
+  Exclude:
+    - 'spec/features/**/*_spec.rb'
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 4 # default: 3
+
+# New rubocop-rspec cops go below
+
+RSpec/BeEq: # new in 2.9.0
+  Enabled: true
+RSpec/BeNil: # new in 2.9.0
+  Enabled: true
+RSpec/ChangeByZero: # new in 2.11
+  Enabled: true
+RSpec/ClassCheck: # new in 2.13
+  Enabled: true
+RSpec/ExcessiveDocstringSpacing: # new in 2.5
+  Enabled: true
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: true
+RSpec/NoExpectationExample: # new in 2.13
+  Enabled: true
+RSpec/SortMetadata: # new in 2.14
+  Enabled: true
+RSpec/SubjectDeclaration: # new in 2.5
+  Enabled: true
+RSpec/VerifiedDoubleReference: # new in 2.10.0
+  Enabled: true
+RSpec/Capybara/NegationMatcher: # new in 2.14
+  Enabled: true
+RSpec/Capybara/SpecificActions: # new in 2.14
+  Enabled: true
+RSpec/Capybara/SpecificFinders: # new in 2.13
+  Enabled: true
+RSpec/Capybara/SpecificMatcher: # new in 2.12
+  Enabled: true
+RSpec/FactoryBot/ConsistentParenthesesStyle: # new in 2.14
+  Enabled: true
+RSpec/FactoryBot/SyntaxMethods: # new in 2.7
+  Enabled: true
+RSpec/Rails/AvoidSetupHook: # new in 2.4
+  Enabled: true
+RSpec/Rails/HaveHttpStatus: # new in 2.12
+  Enabled: true
+RSpec/Rails/InferredSpecType: # new in 2.14
+  Enabled: true

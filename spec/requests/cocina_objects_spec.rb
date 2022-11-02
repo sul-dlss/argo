@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Cocina objects", type: :request do
+RSpec.describe "Cocina objects" do
   before do
     allow(Argo.verifier).to receive(:verified).and_return({key: "druid:kv840xx0000"})
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)

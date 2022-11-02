@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Registration source_id check", type: :request do
+RSpec.describe "Registration source_id check" do
   let(:user) { create(:user) }
   let(:source_id) { FactoryBot.create_for_repository(:persisted_item).identification.sourceId }
 

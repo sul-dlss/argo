@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Serials", type: :request do
+RSpec.describe "Serials" do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:druid) { "druid:dc243mg0841" }
 

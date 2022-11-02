@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe TrackingSheetReportJob, type: :job do
+RSpec.describe TrackingSheetReportJob do
   let(:druids) { ["druid:cc111dd2222"] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: "amcollie") }

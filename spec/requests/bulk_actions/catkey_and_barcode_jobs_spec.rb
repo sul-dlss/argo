@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::CatkeyAndBarcodeJobs", type: :request do
+RSpec.describe "BulkActions::CatkeyAndBarcodeJobs" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end

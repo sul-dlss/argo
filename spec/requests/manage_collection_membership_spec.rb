@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Collection membership", type: :request do
+RSpec.describe "Collection membership" do
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)

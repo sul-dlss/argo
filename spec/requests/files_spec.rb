@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Files", type: :request do
+RSpec.describe "Files" do
   let(:druid) { "druid:bc123df4567" }
   let(:user) { create(:user) }
   let(:cocina_model) do

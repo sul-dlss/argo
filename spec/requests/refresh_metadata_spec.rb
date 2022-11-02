@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Refresh metadata", type: :request do
+RSpec.describe "Refresh metadata" do
   let(:druid) { "druid:bc123df4567" }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }

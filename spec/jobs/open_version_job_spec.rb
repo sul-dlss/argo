@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe OpenVersionJob, type: :job do
+RSpec.describe OpenVersionJob do
   let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222"] }
   let(:groups) { [] }
   let(:workflow_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }

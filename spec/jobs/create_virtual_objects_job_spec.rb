@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CreateVirtualObjectsJob, type: :job do
+RSpec.describe CreateVirtualObjectsJob do
   subject(:job) { described_class.new }
 
   let(:bulk_action) { create(:bulk_action) }

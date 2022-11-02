@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::ExportStructuralJobs", type: :request do
+RSpec.describe "BulkActions::ExportStructuralJobs" do
   describe "GET /index" do
     pending "add some examples (or delete) #{__FILE__}"
   end

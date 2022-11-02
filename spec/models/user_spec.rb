@@ -5,7 +5,7 @@ require "rails_helper"
 # General documentation about roles and permissions is on SUL Consul at
 # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   describe "#admin?" do
     subject { user.admin? }
 

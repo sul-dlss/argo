@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::ImportStructuralJobs", type: :request do
+RSpec.describe "BulkActions::ImportStructuralJobs" do
   describe "create" do
     let(:user) { build(:user) }
 

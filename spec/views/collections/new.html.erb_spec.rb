@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "collections/new", type: :view do
+RSpec.describe "collections/new" do
   it "renders the HTML template form" do
     assign(:cocina, instance_double(Cocina::Models::AdminPolicy, externalIdentifier: "druid:zt570qh4444", label: "My label"))
     render

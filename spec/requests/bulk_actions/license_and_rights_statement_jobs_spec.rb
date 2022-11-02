@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::LicenseAndRightsStatementJobs", type: :request do
+RSpec.describe "BulkActions::LicenseAndRightsStatementJobs" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end

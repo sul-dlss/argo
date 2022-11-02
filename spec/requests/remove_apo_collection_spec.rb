@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Removing a collection from the registration list", type: :request do
+RSpec.describe "Removing a collection from the registration list" do
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     sign_in user, groups: ["sdr:administrator-role"]

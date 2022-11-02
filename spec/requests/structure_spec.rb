@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Structure", type: :request do
+RSpec.describe "Structure" do
   before do
     allow(Argo.verifier).to receive(:verified).and_return({key: "druid:kv840xx0000"})
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)

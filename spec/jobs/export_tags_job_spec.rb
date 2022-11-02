@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExportTagsJob, type: :job do
+RSpec.describe ExportTagsJob do
   subject(:job) { described_class.new }
 
   let(:bulk_action) { create(:bulk_action, action_type: "ExportTagsJob") }
