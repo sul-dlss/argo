@@ -3,19 +3,19 @@
 
 
 "@github/time-elements@^3.0.7":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@github/time-elements/-/time-elements-3.1.4.tgz#0ba8504de06280f81a25e4d718491b22fc6b483e"
-  integrity sha512-DTe/w0uKVeciKzGtYadNdfS8D86pXdGF+OrKg+vi8PKlotJ45zAc26zNpmmfCcMblBBg2+uoi3OxmUm7am/0sg==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@github/time-elements/-/time-elements-3.2.0.tgz#763e44a354082e1f4e6301bf635f37b3c71dba22"
+  integrity sha512-YWhC5AqHhme1RYFcQCA5hrTfz0MsVk1z55YXKU7dCk2S8PVwSCEeRBiygtT38975wpzqK55uAfF9NnSgfaX97A==
 
 "@hotwired/stimulus-webpack-helpers@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus-webpack-helpers/-/stimulus-webpack-helpers-1.0.1.tgz#4cd74487adeca576c9865ac2b9fe5cb20cef16dd"
   integrity sha512-wa/zupVG0eWxRYJjC1IiPBdt3Lruv0RqGN+/DTMmUWUyMAEB27KXmVY6a8YpUVTM7QwVuaLNGW4EqDgrS2upXQ==
 
-"@hotwired/stimulus@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.1.0.tgz#20215251e5afe6e0a3787285181ba1bfc9097df0"
-  integrity sha512-iDMHUhiEJ1xFeicyHcZQQgBzhtk5mPR0QZO3L6wtqzMsJEk2TKECuCQTGKjm+KJTHVY0dKq1dOOAWvODjpd2Mg==
+"@hotwired/stimulus@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.1.1.tgz#652f08a8e1d5edcb407340e58818fcff463b5848"
+  integrity sha512-e0JpzIaYLsRRXevRDVs0yevabiCvieIWWCwh7VqVXjXM5AOHdjb7AjaKIj34zYFmY1N6HIRRfk915WVMYlHnDA==
 
 "@hotwired/turbo-rails@^7.0.1":
   version "7.2.4"
@@ -380,9 +380,9 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
 sass@^1.41.1:
-  version "1.55.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.55.0.tgz#0c4d3c293cfe8f8a2e8d3b666e1cf1bff8065d1c"
-  integrity sha512-Pk+PMy7OGLs9WaxZGJMn7S96dvlyVBwwtToX895WmCpAOr5YiJYEUJfiJidMuKb613z2xNWcXCHEuOvjZbqC6A==
+  version "1.56.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.0.tgz#134032075a3223c8d49cb5c35e091e5ba1de8e0a"
+  integrity sha512-WFJ9XrpkcnqZcYuLRJh5qiV6ibQOR4AezleeEjTjMsCocYW59dEG19U3fwTTXxzi2Ed3yjPBp727hbbj53pHFw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -403,11 +403,11 @@ side-channel@^1.0.4:
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
 stimulus@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/stimulus/-/stimulus-3.1.0.tgz#225298f1936f96b0eafa883b8b304266427912c3"
-  integrity sha512-ln+BtLkhemwJozr5N3I5q0kGlSv6fmcPi3JtDjBo7gnnz2tAYhK2WBhyY/EN/4+CWIwqp3qPm3Pc+i9CjIXrtg==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/stimulus/-/stimulus-3.1.1.tgz#ef37aafce32c24d91b8fe496855436d096c6cb44"
+  integrity sha512-eFOPFB6tJXJ6wFpUVjpi0/tYSiY4LPwdZa/1S6bzhhEt5cSIfmtndrHpaUo76uElpWnfmEEOB4ezMXtGnG9HBQ==
   dependencies:
-    "@hotwired/stimulus" "^3.1.0"
+    "@hotwired/stimulus" "^3.1.1"
     "@hotwired/stimulus-webpack-helpers" "^1.0.0"
 
 storage2@^0.1.0:
