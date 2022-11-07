@@ -22,7 +22,7 @@ gem 'cssbundling-rails', '~> 1.1'
 gem 'jsbundling-rails', '~> 1.0'
 gem 'propshaft'
 
-gem 'view_component', '~> 2.52'
+gem 'view_component', '~>  2.74.1' # TODO: Unpin when bug in 2.75.0 is fixed and released
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
