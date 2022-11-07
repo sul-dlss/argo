@@ -510,7 +510,7 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sdr-client (0.96.0)
+    sdr-client (0.97.0)
       activesupport
       cocina-models (~> 0.86.0)
       dry-monads
@@ -655,7 +655,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.1)
   ruby-prof
   rubyzip
-  sdr-client (~> 0.96.0)
+  sdr-client (~> 0.97)
   selenium-webdriver
   sidekiq (~> 6.0)
   simplecov
