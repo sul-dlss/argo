@@ -79,7 +79,7 @@ class StructureUpdater
           download: row["rights_download"],
           location: row["rights_location"],
           # stanford/none required controlledDigitalLending set to false. All others should omit.
-          controlledDigitalLending: row["rights_view"] == "stanford" && row["rights_download"] == "none" ? false : nil
+          controlledDigitalLending: (row["rights_view"] == "stanford" && row["rights_download"] == "none") ? false : nil
         }.compact
       )
     }

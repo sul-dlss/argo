@@ -76,7 +76,7 @@ Rails.application.routes.draw do
   match "report", to: "report#index", via: %i[get post], as: "report"
   match "report/data", to: "report#data", via: %i[get post], as: "report_data"
   match "report/download", to: "report#download", via: %i[get post], as: "report_download"
-  match "report/reset", to: "report#reset", via: [:post], as: "report_reset"
+  post "report/reset", to: "report#reset", as: "report_reset"
   get "report/workflow_grid", to: "report#workflow_grid", as: "report_workflow_grid"
 
   ##

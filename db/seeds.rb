@@ -8,7 +8,7 @@ require_relative "../spec/support/item_method_sender"
 require_relative "../spec/support/apo_method_sender"
 require_relative "../spec/support/reset_solr"
 
-puts "This will clear the Solr repo. Are you sure? [y/n]:"
+$stdout.puts "This will clear the Solr repo. Are you sure? [y/n]:"
 if gets.chomp == "y"
   ResetSolr.reset_solr
   FactoryBot.create_for_repository(:agreement)

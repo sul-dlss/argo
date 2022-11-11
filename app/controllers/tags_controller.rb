@@ -9,24 +9,14 @@ class TagsController < ApplicationController
     render json: []
   end
 
-  def update
-    cocina = Repository.find(params[:item_id])
-    authorize! :update, cocina
-
-    current_tags = tags_client.list
-
-    @form = TagsForm.new(ModelProxy.new(id: params[:item_id], tags: current_tags.map { |name| Tag.new(name:) }))
-    respond_to do |format|
-      if @form.validate(params[:tags]) && @form.save
-        reindex
-        msg = "Tags for #{params[:item_id]} have been updated!"
-        format.html { redirect_to solr_document_path(params[:item_id], format: :html), notice: msg }
-      else
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("modal-frame", partial: "edit"), status: :unprocessable_entity
-        end
-      end
-    end
+  def edit
+    tags = tags_client.list
+    @form = TagsForm.new(
+      ModelProxy.new(
+        id: params[:item_id],
+        tags: tags.map { |name| Tag.new(name:, id: name) }
+      )
+    )
   end
 
   class ModelProxy
@@ -63,14 +53,24 @@ class TagsController < ApplicationController
     end
   end
 
-  def edit
-    tags = tags_client.list
-    @form = TagsForm.new(
-      ModelProxy.new(
-        id: params[:item_id],
-        tags: tags.map { |name| Tag.new(name:, id: name) }
-      )
-    )
+  def update
+    cocina = Repository.find(params[:item_id])
+    authorize! :update, cocina
+
+    current_tags = tags_client.list
+
+    @form = TagsForm.new(ModelProxy.new(id: params[:item_id], tags: current_tags.map { |name| Tag.new(name:) }))
+    respond_to do |format|
+      if @form.validate(params[:tags]) && @form.save
+        reindex
+        msg = "Tags for #{params[:item_id]} have been updated!"
+        format.html { redirect_to solr_document_path(params[:item_id], format: :html), notice: msg }
+      else
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("modal-frame", partial: "edit"), status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   private

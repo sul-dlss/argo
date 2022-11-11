@@ -22,7 +22,7 @@ module Show
       delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :@change_set
 
       def humanize_value(val)
-        val == "location-based" ? "Location" : val.capitalize
+        (val == "location-based") ? "Location" : val.capitalize
       end
     end
   end

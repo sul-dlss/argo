@@ -2,7 +2,7 @@
 
 # This class defines a ActiveJob task that is started when the user uploads a bulk metadata file for
 # an APO.
-class ModsulatorJob < ActiveJob::Base
+class ModsulatorJob < ApplicationJob
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = "%Y-%m-%d %H:%M%P"
 
@@ -63,7 +63,7 @@ class ModsulatorJob < ActiveJob::Base
   end
 
   def operation(filetype)
-    filetype == "xml_only" ? "normalize" : "convert"
+    (filetype == "xml_only") ? "normalize" : "convert"
   end
 
   # Upload metadata into DOR.

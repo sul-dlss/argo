@@ -9,7 +9,7 @@ module ArgoHelper
   def container_classes
     return super if controller_name == "apo"
 
-    action_name == "show" && controller_name == "catalog" ? "container" : "container-fluid"
+    (action_name == "show" && controller_name == "catalog") ? "container" : "container-fluid"
   end
 
   def render_thumbnail_helper(doc, thumb_class = "", thumb_alt = "", thumb_style = "max-width:240px;max-height:240px;")

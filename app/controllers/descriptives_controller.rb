@@ -5,10 +5,20 @@ class DescriptivesController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: "Repository", id_param: "item_id"
 
   # Display the form for uploading the descriptive metadata spreadsheet
-  def edit
+  def show
+    respond_to do |format|
+      format.csv do
+        filename = "descriptive-#{Druid.new(@cocina).without_namespace}.csv"
+        send_data create_csv, filename:
+      end
+    end
   end
 
   # Handle upload of the spreadsheet
+  def edit
+  end
+
+  # Handle download of the spreadsheet
   def update
     csv = CSV.parse(CsvUploadNormalizer.read(params[:data].tempfile), headers: true)
     validator = DescriptionValidator.new(csv)
@@ -22,16 +32,6 @@ class DescriptivesController < ApplicationController
     else
       @errors = validator.errors
       render :edit, status: :unprocessable_entity
-    end
-  end
-
-  # Handle download of the spreadsheet
-  def show
-    respond_to do |format|
-      format.csv do
-        filename = "descriptive-#{Druid.new(@cocina).without_namespace}.csv"
-        send_data create_csv, filename:
-      end
     end
   end
 

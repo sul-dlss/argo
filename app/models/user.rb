@@ -66,7 +66,7 @@ class User < ApplicationRecord
   # @param role [String] Role to be validated for the DOR object
   def solr_role_allowed?(solr_doc, solr_role)
     # solr_doc[solr_role] returns an array of groups permitted to adopt the role
-    !(solr_doc[solr_role] & groups).blank?
+    (solr_doc[solr_role] & groups).present?
   end
 
   # Allow a repository admin to see the repository with different permissions
@@ -84,7 +84,7 @@ class User < ApplicationRecord
   # @return [Array<String>] list of groups the user is a member of including those
   #   they are impersonating
   def groups
-    return @groups_to_impersonate unless @groups_to_impersonate.blank?
+    return @groups_to_impersonate if @groups_to_impersonate.present?
 
     Array(webauth_groups)
   end

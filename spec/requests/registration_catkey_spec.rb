@@ -50,7 +50,7 @@ RSpec.describe "Registration catkey check" do
 
   context "when other error and production" do
     before do
-      allow(Rails).to receive(:env) { "production".inquiry }
+      allow(Rails.env).to receive(:production?).and_return(true)
 
       allow(marcxml_client).to receive(:marcxml).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: "",
         errors: [{title: "Oops!"}]))

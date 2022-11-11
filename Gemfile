@@ -22,7 +22,7 @@ gem "cssbundling-rails", "~> 1.1"
 gem "jsbundling-rails", "~> 1.0"
 gem "propshaft"
 
-gem 'view_component', '~>  2.74.1' # TODO: Unpin when bug in 2.75.0 is fixed and released
+gem "view_component", "~>  2.74.1" # TODO: Unpin when bug in 2.75.0 is fixed and released
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -83,7 +83,7 @@ gem "mods_display", "~> 1.0"
 gem "okcomputer" # monitors application and its dependencies
 gem "preservation-client", "~> 5.0"
 gem "rsolr"
-gem 'sdr-client', '~> 0.96.0' # TODO: Unpin and fix the tests with >= 0.97
+gem "sdr-client", "~> 0.96.0" # TODO: Unpin and fix the tests with >= 0.97
 
 gem "devise"
 gem "devise-remote-user", "~> 1.0"
@@ -98,6 +98,7 @@ group :test, :development do
   gem "http_logger", require: false # Change this to `true` to see all http requests logged
   gem "pry-remote" # allows you to attach remote session to pry
   gem "rspec-rails", "~> 5.0"
+  gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "sqlite3", "~> 1.4.2"
   gem "standard"

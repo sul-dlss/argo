@@ -4,6 +4,7 @@ inherit_mode:
 
 require:
   - rubocop-performance
+  - rubocop-rails
   - rubocop-rspec
   - standard
 
@@ -13,3 +14,5 @@ inherit_gem:
 inherit_from:
   - .rubocop/custom.yml
   - .rubocop_todo.yml
+
+# Where are all the new cops? Check in .rubocop/custom.yml

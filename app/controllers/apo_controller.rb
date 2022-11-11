@@ -6,15 +6,15 @@ class ApoController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: "Repository", only: %i[edit update]
   load_resource :cocina, parent: false, class: "Repository", only: :delete_collection
 
-  def edit
-    @form = ApoForm.new(@cocina, search_service:)
+  def new
+    authorize! :create, Cocina::Models::AdminPolicy
+    @form = ApoForm.new(nil, search_service:)
 
     render layout: "one_column"
   end
 
-  def new
-    authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(nil, search_service:)
+  def edit
+    @form = ApoForm.new(@cocina, search_service:)
 
     render layout: "one_column"
   end

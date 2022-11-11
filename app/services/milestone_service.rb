@@ -15,7 +15,7 @@ class MilestoneService
         "deposited" => {},
         "accessioned" => {}
       ]
-      hash[milestone[:version]].delete(milestone[:version] == "1" ? "opened" : "registered") # only version 1 has 'registered'
+      hash[milestone[:version]].delete((milestone[:version] == "1") ? "opened" : "registered") # only version 1 has 'registered'
       hash[milestone[:version]][milestone[:milestone]] = {
         time: milestone[:at]
       }
