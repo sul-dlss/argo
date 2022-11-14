@@ -3,9 +3,9 @@
 
 
 "@github/time-elements@^3.0.7":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@github/time-elements/-/time-elements-3.2.0.tgz#763e44a354082e1f4e6301bf635f37b3c71dba22"
-  integrity sha512-YWhC5AqHhme1RYFcQCA5hrTfz0MsVk1z55YXKU7dCk2S8PVwSCEeRBiygtT38975wpzqK55uAfF9NnSgfaX97A==
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/@github/time-elements/-/time-elements-3.2.4.tgz#f509fb9b4c48feaabe98365636809c365bf4b0a4"
+  integrity sha512-Kwy5gkbum7LRU9rWAZ4QFU2ZnYhH3mBAdzY/Cm52ENOzQLOgowaxTcq6aWfIDjLSym+7qJPW1W/os3KRdIFLvg==
 
 "@hotwired/stimulus-webpack-helpers@^1.0.0":
   version "1.0.1"
@@ -380,9 +380,9 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
 sass@^1.41.1:
-  version "1.56.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.0.tgz#134032075a3223c8d49cb5c35e091e5ba1de8e0a"
-  integrity sha512-WFJ9XrpkcnqZcYuLRJh5qiV6ibQOR4AezleeEjTjMsCocYW59dEG19U3fwTTXxzi2Ed3yjPBp727hbbj53pHFw==
+  version "1.56.1"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.1.tgz#94d3910cd468fd075fa87f5bb17437a0b617d8a7"
+  integrity sha512-VpEyKpyBPCxE7qGDtOcdJ6fFbcpOM+Emu7uZLxVrkX8KVU/Dp5UF7WLvzqRuUhB6mqqQt1xffLoG+AndxTZrCQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
