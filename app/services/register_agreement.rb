@@ -32,6 +32,9 @@ class RegisterAgreement
                                                               logger: Rails.logger,
                                                               connection:)
 
+    # The upload response have the actual blob filepath, but need the cocina filename to update the DRO.
+    update_upload_responses_with_cocina_filename(upload_responses, file_metadata)
+
     new_request_dro = SdrClient::Deposit::UpdateDroWithFileIdentifiers.update(request_dro: model,
                                                                               upload_responses:)
     job_id = SdrClient::Deposit::CreateResource.run(accession: true,
@@ -48,6 +51,12 @@ class RegisterAgreement
   private
 
   attr_reader :uploaded_files, :model
+
+  def update_upload_responses_with_cocina_filename(upload_responses, file_metadata)
+    upload_responses.each do |upload_response|
+      upload_response.filename = file_metadata[upload_response.filename].filename
+    end
+  end
 
   def poll_for_job_complete(job_id:)
     result = nil

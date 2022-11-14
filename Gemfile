@@ -83,7 +83,7 @@ gem 'mods_display', '~> 1.0'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '~> 5.0'
 gem 'rsolr'
-gem 'sdr-client', '~> 0.96.0' # TODO: Unpin and fix the tests with >= 0.97
+gem 'sdr-client', '~> 0.97'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'
