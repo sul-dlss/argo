@@ -101,7 +101,7 @@ group :test, :development do
   gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "sqlite3", "~> 1.4.2"
-  gem "standard"
+  gem 'standard'
 end
 
 group :development do
