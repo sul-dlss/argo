@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This script is called by our weekly dependency update job in Jenkins after updating Ruby and other deps
+
+standardrb --fix > argo_standard.txt
+
+retVal=$?
+
+git commit -am "Update to latest standard style guide"
+
+if [ $retVal -ne 0 ]; then
+    echo "ERROR UPDATING RUBY TO STANDARD STYLE (argo)"
+    cat argo_standard.txt
+fi
