@@ -22,13 +22,17 @@ class RegisterAgreement
   end
 
   def register
-    file_metadata = uploaded_files.compact.each_with_object({}) do |file, o|
-      o[file.tempfile.path] = metadata_for(file)
+    file_metadata = uploaded_files.compact.each_with_object({}) do |file, hash|
+      hash[file.original_filename] = metadata_for(file)
+    end
+    filepath_map = uploaded_files.compact.each_with_object({}) do |file, hash|
+      hash[file.original_filename] = file.tempfile.path
     end
     SdrClient::Login.run(url: Settings.sdr_api.url, login_service: TokensController::LoginFromSettings)
 
     connection = SdrClient::Connection.new(url: Settings.sdr_api.url, token: SdrClient::Credentials.read)
     upload_responses = SdrClient::Deposit::UploadFiles.upload(file_metadata:,
+      filepath_map:,
       logger: Rails.logger,
       connection:)
 
