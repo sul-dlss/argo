@@ -67,11 +67,11 @@ class AgreementForm < Reform::Form
   end
 
   def md5(path)
-    SdrClient::Deposit::FileMetadataBuilderOperations::MD5.for(file_path: path)
+    SdrClient::Deposit::FileMetadataBuilderOperations::MD5.for(filepath: path)
   end
 
   def sha1(path)
-    SdrClient::Deposit::FileMetadataBuilderOperations::SHA1.for(file_path: path)
+    SdrClient::Deposit::FileMetadataBuilderOperations::SHA1.for(filepath: path)
   end
 
   def file_path(file)
