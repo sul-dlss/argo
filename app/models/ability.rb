@@ -28,7 +28,7 @@ class Ability
 
     if current_user.manager?
       can %i[update manage_governing_apo view_content read],
-          [NilModel] + DRO_MODELS + COLLECTION_MODELS
+        [NilModel] + DRO_MODELS + COLLECTION_MODELS
       can :create, ADMIN_POLICY_MODELS
     end
 
@@ -65,7 +65,7 @@ class Ability
   # The status is currently "waiting" and they can manage that item
   def can_update_workflow?(status, cocina_object)
     can?(:update, :workflow) ||
-      (status == 'waiting' && can?(:update, cocina_object))
+      (status == "waiting" && can?(:update, cocina_object))
   end
 
   private

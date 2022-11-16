@@ -16,11 +16,11 @@ module Contents
     end
 
     def image?
-      type == 'image'
+      type == "image"
     end
 
     def type
-      resource.type.delete_prefix('https://cocina.sul.stanford.edu/models/resources/')
+      resource.type.delete_prefix("https://cocina.sul.stanford.edu/models/resources/")
     end
 
     delegate :label, to: :resource

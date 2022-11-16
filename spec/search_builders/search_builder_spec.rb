@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe SearchBuilder do
   subject { search_builder.with(user_params) }
@@ -11,8 +11,8 @@ RSpec.describe SearchBuilder do
 
   let(:search_builder) { described_class.new(context) }
 
-  describe '#initialize' do
-    it 'has add_access_controls_to_solr_params in chain once' do
+  describe "#initialize" do
+    it "has add_access_controls_to_solr_params in chain once" do
       expect(subject.processor_chain)
         .to include :add_access_controls_to_solr_params
       expect(subject.processor_chain
@@ -24,7 +24,7 @@ RSpec.describe SearchBuilder do
         .count { |x| x == :add_access_controls_to_solr_params }).to eq 1
     end
 
-    it 'has druids_only in chain once' do
+    it "has druids_only in chain once" do
       expect(subject.processor_chain)
         .to include :druids_only
       expect(subject.processor_chain
@@ -36,7 +36,7 @@ RSpec.describe SearchBuilder do
         .count { |x| x == :druids_only }).to eq 1
     end
 
-    it 'has add_date_field_queries in chain once' do
+    it "has add_date_field_queries in chain once" do
       expect(subject.processor_chain)
         .to include :add_date_field_queries
       expect(subject.processor_chain
@@ -48,7 +48,7 @@ RSpec.describe SearchBuilder do
         .count { |x| x == :add_date_field_queries }).to eq 1
     end
 
-    it 'contains add_profile_queries once' do
+    it "contains add_profile_queries once" do
       expect(subject.processor_chain)
         .to include :add_profile_queries
       expect(subject.processor_chain
@@ -61,10 +61,10 @@ RSpec.describe SearchBuilder do
     end
   end
 
-  describe '#add_facet_paging_to_solr' do
+  describe "#add_facet_paging_to_solr" do
     subject { search_builder.with(user_params).facet(facet) }
 
-    let(:facet) { 'collection_title_ssim' }
+    let(:facet) { "collection_title_ssim" }
 
     it 'uses the :more_limit configuration to independently change the "more" size' do
       solr_params = {}
@@ -72,7 +72,7 @@ RSpec.describe SearchBuilder do
       subject.add_facet_paging_to_solr(solr_params)
 
       expect(solr_params).to include "f.#{facet}.facet.limit": 10_000,
-                                     "f.#{facet}.facet.offset": 0
+        "f.#{facet}.facet.offset": 0
     end
   end
 end

@@ -1,31 +1,31 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'BulkActions::GoverningApoJobs', type: :request do
+RSpec.describe "BulkActions::GoverningApoJobs" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
 
-  describe 'GET #new' do
+  describe "GET #new" do
     before do
-      sign_in build(:user), groups: ['sdr:administrator-role']
+      sign_in build(:user), groups: ["sdr:administrator-role"]
       allow(SearchService).to receive(:query).and_return(solr_response)
     end
 
     let(:solr_response) do
       {
-        'response' => {
-          'docs' => [
-            { 'id' => 'druid:123', 'sw_display_title_tesim' => 'APO 1' },
-            { 'id' => 'druid:234', 'sw_display_title_tesim' => 'APO 2' }
+        "response" => {
+          "docs" => [
+            {"id" => "druid:123", "sw_display_title_tesim" => "APO 1"},
+            {"id" => "druid:234", "sw_display_title_tesim" => "APO 2"}
           ]
         }
       }
     end
 
-    it 'draws the form' do
-      get '/bulk_actions/governing_apo_job/new'
+    it "draws the form" do
+      get "/bulk_actions/governing_apo_job/new"
 
       expect(rendered).to have_css 'textarea[name="druids"]'
       expect(rendered).to have_css 'textarea[name="description"]'

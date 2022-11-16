@@ -8,7 +8,7 @@ module Show
     end
 
     def collection
-      return 'None selected' unless @document.collection_ids
+      return "None selected" unless @document.collection_ids
 
       helpers.links_to_collections_with_objs(document: @document, value: Array(@document.collection_ids))
     end

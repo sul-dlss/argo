@@ -499,11 +499,14 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.23.0)
       parser (>= 3.1.1.0)
+    rubocop-performance (1.15.0)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
     rubocop-rails (2.17.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
-    rubocop-rspec (2.15.0)
+    rubocop-rspec (2.14.2)
       rubocop (~> 1.33)
     ruby-ole (1.2.12.2)
     ruby-prof (1.4.3)
@@ -538,6 +541,9 @@ GEM
     sshkit (1.21.3)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    standard (1.17.0)
+      rubocop (= 1.38.0)
+      rubocop-performance (= 1.15.0)
     stanford-mods (3.3.1)
       activesupport
       mods (~> 3.0, >= 3.0.3)
@@ -650,9 +656,8 @@ DEPENDENCIES
   rsolr
   rspec-rails (~> 5.0)
   rspec_junit_formatter
-  rubocop (~> 1.24)
   rubocop-rails
-  rubocop-rspec (~> 2.1)
+  rubocop-rspec
   ruby-prof
   rubyzip
   sdr-client (~> 0.96.0)
@@ -660,6 +665,7 @@ DEPENDENCIES
   sidekiq (~> 6.0)
   simplecov
   sqlite3 (~> 1.4.2)
+  standard
   turbo-rails (~> 1.0)
   view_component (~> 2.74.1)
   web-console

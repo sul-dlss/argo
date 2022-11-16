@@ -6,11 +6,9 @@ class NilModel
     @druid = druid
   end
 
-  # rubocop:disable Naming/MethodName
   def externalIdentifier
     @druid
   end
-  # rubocop:enable Naming/MethodName
 
   def version
     1
@@ -38,10 +36,8 @@ class NilModel
 
   # This stands in for the administrative metadata
   class NilAdministrative
-    # rubocop:disable Naming/MethodName
     def releaseTags
       []
     end
-    # rubocop:enable Naming/MethodName
   end
 end

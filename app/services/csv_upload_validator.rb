@@ -28,7 +28,7 @@ class CsvUploadValidator
     header_line = StringIO.new(csv).readline
     csv_table = CSV.parse(header_line, headers: true)
     missing_headers = headers.select { |header| csv_table.headers.exclude?(header) }
-    return ["missing headers: #{missing_headers.join(', ')}."] if missing_headers.present?
+    return ["missing headers: #{missing_headers.join(", ")}."] if missing_headers.present?
 
     []
   end

@@ -11,8 +11,8 @@ class TestShibbolethHeaders
   end
 
   def call(env)
-    env['REMOTE_USER'] = user
-    env['eduPersonEntitlement'] = Array(groups).join(';')
+    env["REMOTE_USER"] = user
+    env["eduPersonEntitlement"] = Array(groups).join(";")
     @app.call(env)
   end
 end

@@ -51,7 +51,7 @@ module Show
     private
 
     def manage_release
-      render ActionButton.new(url: item_manage_release_path(druid), label: 'Manage release', open_modal: true)
+      render ActionButton.new(url: item_manage_release_path(druid), label: "Manage release", open_modal: true)
     end
 
     def apply_apo_defaults
@@ -59,8 +59,8 @@ module Show
 
       render ActionButton.new(
         url: apply_apo_defaults_item_path(id: druid),
-        method: 'post',
-        label: 'Apply APO defaults',
+        method: "post",
+        label: "Apply APO defaults",
         disabled: button_disabled?
       )
     end
@@ -69,20 +69,20 @@ module Show
       return if !item? || embargoed?
 
       render ActionButton.new url: new_item_embargo_path(druid),
-                              label: 'Create embargo',
-                              open_modal: true,
-                              disabled: button_disabled?
+        label: "Create embargo",
+        open_modal: true,
+        disabled: button_disabled?
     end
 
     def edit_apo
       render ActionButton.new(
-        url: edit_apo_path(druid), label: 'Edit APO'
+        url: edit_apo_path(druid), label: "Edit APO"
       )
     end
 
     def create_collection
       render ActionButton.new(
-        url: new_apo_collection_path(apo_id: druid), label: 'Create Collection',
+        url: new_apo_collection_path(apo_id: druid), label: "Create Collection",
         open_modal: true
       )
     end
@@ -90,36 +90,36 @@ module Show
     def reindex_button
       render ActionButton.new(
         url: dor_reindex_path(druid:),
-        label: 'Reindex'
+        label: "Reindex"
       )
     end
 
     def add_workflow_button
       render ActionButton.new(
-        url: new_item_workflow_path(item_id: druid), label: 'Add workflow', open_modal: true
+        url: new_item_workflow_path(item_id: druid), label: "Add workflow", open_modal: true
       )
     end
 
     def purge_button
       render ActionButton.new(
         url: purge_item_path(id: druid),
-        label: 'Purge',
-        method: 'delete',
-        confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
+        label: "Purge",
+        method: "delete",
+        confirm: "This object will be permanently purged from DOR. This action cannot be undone. Are you sure?",
         disabled: !registered_only?
       )
     end
 
     def upload_mods
-      link_to 'Upload MODS', apo_bulk_jobs_path(doc), class: 'btn btn-primary'
+      link_to "Upload MODS", apo_bulk_jobs_path(doc), class: "btn btn-primary"
     end
 
     def druid
-      @druid ||= doc['id']
+      @druid ||= doc["id"]
     end
 
     def registered_only?
-      ['Registered', 'Unknown Status'].include?(doc['processing_status_text_ssi'])
+      ["Registered", "Unknown Status"].include?(doc["processing_status_text_ssi"])
     end
   end
 end

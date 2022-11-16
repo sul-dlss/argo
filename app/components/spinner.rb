@@ -2,5 +2,6 @@
 
 # A spinner
 class Spinner < ViewComponent::Base
-  def initialize(*); end
+  def initialize(*)
+  end
 end

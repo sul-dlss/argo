@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/queues'
+  require "sidekiq/web"
+  mount Sidekiq::Web => "/queues"
 
-  get '/is_it_working' => 'ok_computer/ok_computer#show', defaults: { check: 'default' }
+  get "/is_it_working" => "ok_computer/ok_computer#show", :defaults => {check: "default"}
 
   resources :bulk_actions, only: %i[index new destroy] do
     member do
       get :file
     end
-    scope module: 'bulk_actions' do
+    scope module: "bulk_actions" do
       collection do
         # In the order they appear in the dropdown
         resource :manage_release_job, only: %i[new create]
@@ -50,46 +50,46 @@ Rails.application.routes.draw do
     end
   end
 
-  mount Blacklight::Engine => '/'
+  mount Blacklight::Engine => "/"
 
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
-  resource :profile, controller: 'profile', only: [:index] do
+  resource :profile, controller: "profile", only: [:index] do
     concerns :searchable
   end
 
-  resource :catalog, only: [:index], controller: 'catalog', path: '/catalog' do
+  resource :catalog, only: [:index], controller: "catalog", path: "/catalog" do
     concerns :searchable
     member do
-      get 'lazy_tag_facet'
+      get "lazy_tag_facet"
     end
   end
 
-  resources :solr_documents, only: [:show], controller: 'catalog', path: '/view' do
+  resources :solr_documents, only: [:show], controller: "catalog", path: "/view" do
     concerns :exportable
   end
 
-  match 'catalog',      via: %i[get post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'search_catalog_redirect'
-  match 'catalog/*all', via: %i[get post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'catalog_redirect'
+  match "catalog", via: %i[get post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, "/view") }, as: "search_catalog_redirect"
+  match "catalog/*all", via: %i[get post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, "/view") }, as: "catalog_redirect"
 
-  match 'report',          to: 'report#index',    via: %i[get post], as: 'report'
-  match 'report/data',     to: 'report#data',     via: %i[get post], as: 'report_data'
-  match 'report/download', to: 'report#download', via: %i[get post], as: 'report_download'
-  match 'report/reset',    to: 'report#reset',    via: [:post], as: 'report_reset'
-  get 'report/workflow_grid', to: 'report#workflow_grid', as: 'report_workflow_grid'
+  match "report", to: "report#index", via: %i[get post], as: "report"
+  match "report/data", to: "report#data", via: %i[get post], as: "report_data"
+  match "report/download", to: "report#download", via: %i[get post], as: "report_download"
+  post "report/reset", to: "report#reset", as: "report_reset"
+  get "report/workflow_grid", to: "report#workflow_grid", as: "report_workflow_grid"
 
   ##
   # This route provides access to CatalogController#facet so facet links can be
   # generated.
-  resource :report, controller: 'report', only: [] do
+  resource :report, controller: "report", only: [] do
     concerns :searchable
   end
 
-  root to: 'catalog#index'
+  root to: "catalog#index"
 
   namespace :report do
-    get 'workflow_grid'
+    get "workflow_grid"
   end
 
   resources :collections, only: :update do
@@ -107,10 +107,10 @@ Rails.application.routes.draw do
       get :spreadsheet_template
     end
     member do
-      get 'delete_collection'
-      get 'count_collections'
-      get 'count_items'
-      get 'registration_options'
+      get "delete_collection"
+      get "count_collections"
+      get "count_items"
+      get "registration_options"
     end
   end
 
@@ -118,8 +118,8 @@ Rails.application.routes.draw do
     resource :bulk_jobs, only: :destroy
     resources :bulk_jobs, only: :index do
       collection do
-        get 'status_help'
-        get ':time/log', action: :show, as: 'show'
+        get "status_help"
+        get ":time/log", action: :show, as: "show"
       end
     end
     resources :uploads, only: %i[new create]
@@ -127,18 +127,18 @@ Rails.application.routes.draw do
 
   resource :tags, only: [] do
     collection do
-      get 'search'
+      get "search"
     end
   end
 
   resources :items, only: %i[show update] do
-    resources 'files', only: %i[index], constraints: { id: /.*/ } do
+    resources "files", only: %i[index], constraints: {id: /.*/} do
       member do
-        get 'preserved'
+        get "preserved"
       end
 
       collection do
-        get 'download'
+        get "download"
       end
     end
 
@@ -153,16 +153,16 @@ Rails.application.routes.draw do
 
     resources :workflows, only: %i[new create show update] do
       collection do
-        get 'history'
+        get "history"
       end
     end
 
     resources :versions, only: [] do
       collection do
-        get 'close_ui'
-        get 'open_ui'
-        post 'open'
-        post 'close'
+        get "close_ui"
+        get "open_ui"
+        post "open"
+        post "close"
       end
     end
 
@@ -171,9 +171,9 @@ Rails.application.routes.draw do
     resource :manage_release, only: :show
     resources :metadata, only: [] do
       collection do
-        get 'full_dc'
-        get 'full_dc_xml'
-        get 'descriptive'
+        get "full_dc"
+        get "full_dc_xml"
+        get "descriptive"
       end
     end
 
@@ -181,26 +181,26 @@ Rails.application.routes.draw do
     resource :embargo, only: %i[new edit update]
 
     member do
-      post 'refresh_metadata'
-      get 'source_id_ui'
-      get 'collection_ui'
-      get 'edit_barcode'
-      get 'show_barcode'
-      get 'edit_copyright'
-      get 'show_copyright'
-      get 'edit_rights'
-      get 'show_rights'
-      get 'edit_use_statement'
-      get 'show_use_statement'
-      get 'edit_license'
-      get 'show_license'
-      get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
-      post 'collection/add',     action: :add_collection,    as: 'add_collection'
-      delete 'purge', action: :purge_object
-      get 'set_governing_apo_ui'
-      post 'set_governing_apo'
+      post "refresh_metadata"
+      get "source_id_ui"
+      get "collection_ui"
+      get "edit_barcode"
+      get "show_barcode"
+      get "edit_copyright"
+      get "show_copyright"
+      get "edit_rights"
+      get "show_rights"
+      get "edit_use_statement"
+      get "show_use_statement"
+      get "edit_license"
+      get "show_license"
+      get "collection/delete", action: :remove_collection, as: "remove_collection"
+      post "collection/add", action: :add_collection, as: "add_collection"
+      delete "purge", action: :purge_object
+      get "set_governing_apo_ui"
+      post "set_governing_apo"
       post :apply_apo_defaults
-      post 'source_id'
+      post "source_id"
     end
   end
 
@@ -208,32 +208,32 @@ Rails.application.routes.draw do
 
   resource :registration, only: %i[show create] do
     collection do
-      get 'tracksheet'
-      get 'source_id'
-      get 'catkey'
-      get 'spreadsheet'
-      get 'suggest_project', action: 'autocomplete'
+      get "tracksheet"
+      get "source_id"
+      get "catkey"
+      get "spreadsheet"
+      get "suggest_project", action: "autocomplete"
     end
   end
 
   namespace :auth do
-    get 'groups'
-    post 'remember_impersonated_groups'
-    get 'forget_impersonated_groups'
+    get "groups"
+    post "remember_impersonated_groups"
+    get "forget_impersonated_groups"
   end
 
-  scope path: '/settings' do
+  scope path: "/settings" do
     resources :tokens, only: %i[index create]
   end
 
   devise_for :users, skip: %i[registrations passwords sessions]
   devise_scope :user do
-    get 'webauth/login' => 'login#login', as: :new_user_session
-    match 'webauth/logout' => 'devise/sessions#destroy', :as => :destroy_user_session, :via => Devise.mappings[:user].sign_out_via
+    get "webauth/login" => "login#login", :as => :new_user_session
+    match "webauth/logout" => "devise/sessions#destroy", :as => :destroy_user_session, :via => Devise.mappings[:user].sign_out_via
   end
 
   namespace :dor do
-    match 'reindex/:druid', action: :reindex, as: 'reindex', via: %i[get post]
+    match "reindex/:druid", action: :reindex, as: "reindex", via: %i[get post]
   end
 
   resources :workflow_service, only: [] do

@@ -20,12 +20,12 @@ module Edit
 
       # This may be overriden in Create::Item::AccessRightsComponent (for registration)
       def view_label(value)
-        value.tr('-', ' ').capitalize
+        value.tr("-", " ").capitalize
       end
 
       # This may be overriden in Create::Item::AccessRightsComponent (for registration)
       def download_label(value)
-        value.tr('-', ' ').capitalize
+        value.tr("-", " ").capitalize
       end
 
       # This may be overriden in Create::Item::AccessRightsComponent (for registration)
@@ -35,7 +35,7 @@ module Edit
 
       # This may be overriden in Create::Item::AccessRightsComponent (for registration)
       def cdl_label(value)
-        value ? 'Yes' : 'No'
+        value ? "Yes" : "No"
       end
 
       def view_labels

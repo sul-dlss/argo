@@ -2,6 +2,6 @@
 
 class BulkJobLog
   def self.open(log_name, &)
-    File.open(log_name, 'a', &)
+    File.open(log_name, "a", &)
   end
 end

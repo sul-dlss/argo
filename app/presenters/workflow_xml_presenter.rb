@@ -7,9 +7,7 @@ class WorkflowXmlPresenter
   end
 
   def pretty_xml
-    # rubocop:disable Rails/OutputSafety
     CodeRay::Duo[:xml, :div].highlight(PrettyXml.print(xml)).html_safe
-    # rubocop:enable Rails/OutputSafety
   end
 
   private

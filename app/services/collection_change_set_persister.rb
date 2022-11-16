@@ -16,8 +16,8 @@ class CollectionChangeSetPersister
 
   def update
     updated_model = update_identification(model)
-                    .then { |updated| updated_access(updated) }
-                    .then { |updated| updated_administrative(updated) }
+      .then { |updated| updated_access(updated) }
+      .then { |updated| updated_administrative(updated) }
 
     Repository.store(updated_model)
   end

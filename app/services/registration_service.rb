@@ -11,7 +11,7 @@ class RegistrationService
     response = Dor::Services::Client.objects.register(params: model)
     druid = response.externalIdentifier
 
-    WorkflowClientFactory.build.create_workflow_by_name(druid, workflow, version: '1')
+    WorkflowClientFactory.build.create_workflow_by_name(druid, workflow, version: "1")
 
     Dor::Services::Client.object(druid).administrative_tags.create(tags:) unless tags.empty?
     Success(response)

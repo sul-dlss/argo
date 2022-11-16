@@ -14,7 +14,7 @@ class VirtualObjectsCreator
 
   # @param [Array] virtual_objects an array of virtual object hashes
   def initialize(virtual_objects:)
-    raise ArgumentError, 'virtual_objects must be a non-empty array' if !virtual_objects.is_a?(Array) || virtual_objects.empty?
+    raise ArgumentError, "virtual_objects must be a non-empty array" if !virtual_objects.is_a?(Array) || virtual_objects.empty?
 
     @virtual_objects = virtual_objects
   end
@@ -41,7 +41,7 @@ class VirtualObjectsCreator
     loop do
       results = Dor::Services::Client.background_job_results.show(job_id: job_id_from(url:))
 
-      if results[:status] != 'complete'
+      if results[:status] != "complete"
         sleep(SECONDS_BETWEEN_REQUESTS)
         redo
       end
@@ -51,6 +51,6 @@ class VirtualObjectsCreator
   end
 
   def job_id_from(url:)
-    url.split('/').last
+    url.split("/").last
   end
 end

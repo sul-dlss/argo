@@ -55,35 +55,35 @@ class NotesGrouper
 
         # Look up the note number of the [displayLabel, type] tuple value
         new_note_number = case description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
-                                          .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
-                                          .select do |_key, value|
+          .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
+          .count do |_key, value|
                                  hash = value.to_h
                                  num = hash.keys.first[/\d+/]
                                  [hash["old_note#{num}.displayLabel"], hash["old_note#{num}.type"]] == [label_for_note_number, type_for_note_number] ||
                                    [hash["note#{num}.displayLabel"], hash["note#{num}.type"]] == [label_for_note_number, type_for_note_number]
                                end
-                                          .count
-                          when 0
-                            # If there is no matching note number, increment the
-                            # current highest note number and use it for note
-                            # elements for this type
-                            max_note = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
-                            field, number = max_note.scan(/(\D+)(\d+)/).first
-                            new_note = "#{field}#{number.to_i.succ}"
-                            ordered_mapping[new_note] = [label_for_note_number, type_for_note_number]
-                            new_note
-                          when 1
-                            # If there is only one matching note number in the mapping, use it and move on.
-                            ordered_mapping.key([label_for_note_number, type_for_note_number])
-                          else
-                            # If there are multiple notes of this type, e.g., an
-                            # item with multiple notes of type "abstract" with a
-                            # nil display label, use the first note number not
-                            # already used
-                            ordered_mapping.find do |mapped_note_number, (label_value, type_value)|
-                              [label_value, type_value] == [label_for_note_number, type_for_note_number] && !description.key?(key.sub(/^old_note\d+/, mapped_note_number))
-                            end&.first
-                          end
+
+        when 0
+          # If there is no matching note number, increment the
+          # current highest note number and use it for note
+          # elements for this type
+          max_note = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
+          field, number = max_note.scan(/(\D+)(\d+)/).first
+          new_note = "#{field}#{number.to_i.succ}"
+          ordered_mapping[new_note] = [label_for_note_number, type_for_note_number]
+          new_note
+        when 1
+          # If there is only one matching note number in the mapping, use it and move on.
+          ordered_mapping.key([label_for_note_number, type_for_note_number])
+        else
+          # If there are multiple notes of this type, e.g., an
+          # item with multiple notes of type "abstract" with a
+          # nil display label, use the first note number not
+          # already used
+          ordered_mapping.find do |mapped_note_number, (label_value, type_value)|
+            [label_value, type_value] == [label_for_note_number, type_for_note_number] && !description.key?(key.sub(/^old_note\d+/, mapped_note_number))
+          end&.first
+        end
 
         # Fall back to original number if look-up returned nil
         new_note_number ||= "note#{note_number[1]}"
@@ -103,8 +103,8 @@ class NotesGrouper
 
   def ordered_mapping_from(descriptions)
     label_and_type_values = descriptions
-                            .values
-                            .map do |description|
+      .values
+      .map do |description|
       notes_count = description.keys.grep(/^note\d+\./).max_by { |field| field[/\d+/].to_i }
       next if notes_count.nil?
 
@@ -128,11 +128,11 @@ class NotesGrouper
 
     # Order based on frequency of a given tuple
     unique_types_in_order = label_and_type_values
-                            .flatten(1)
-                            .index_with { |note_type| label_and_type_values.flatten(1).count(note_type) }
-                            .sort_by { |_value, count| -count }
-                            .to_h
-                            .keys
+      .flatten(1)
+      .index_with { |note_type| label_and_type_values.flatten(1).count(note_type) }
+      .sort_by { |_value, count| -count }
+      .to_h
+      .keys
     # e.g.:
     # [
     #   [nil, nil],

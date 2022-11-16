@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'View MODS descriptive metadata' do
+RSpec.describe "View MODS descriptive metadata" do
   let(:user) { create(:user) }
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, metadata:) }
@@ -21,16 +21,16 @@ RSpec.describe 'View MODS descriptive metadata' do
       </mods>
     XML
   end
-  let(:druid) { 'druid:999' }
+  let(:druid) { "druid:999" }
 
   before do
     sign_in user
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
-  it 'draws the page' do
+  it "draws the page" do
     get "/items/#{druid}/metadata/descriptive"
     expect(response).to be_successful
-    expect(response.body).to include 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.'
+    expect(response.body).to include "PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ."
   end
 end

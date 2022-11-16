@@ -6,7 +6,7 @@ class SearchService
     def query(query, args = {})
       params = args.merge(q: query)
       params[:start] ||= 0
-      solr.get 'select', params:
+      solr.get "select", params:
     end
 
     delegate :blacklight_config, to: CatalogController

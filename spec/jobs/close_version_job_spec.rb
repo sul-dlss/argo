@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe CloseVersionJob, type: :job do
-  let(:druids) { ['druid:bc123df4567', 'druid:bc123df4598'] }
+RSpec.describe CloseVersionJob do
+  let(:druids) { ["druid:bc123df4567", "druid:bc123df4598"] }
   let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'jcoyne85') }
+  let(:user) { instance_double(User, to_s: "jcoyne85") }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
   let(:bulk_action) { create(:bulk_action) }
 
@@ -28,27 +28,27 @@ RSpec.describe CloseVersionJob, type: :job do
     FileUtils.rm(bulk_action.log_name)
   end
 
-  context 'with manage ability' do
+  context "with manage ability" do
     let(:ability) { instance_double(Ability, can?: true) }
 
-    it 'closes versions' do
+    it "closes versions" do
       described_class.perform_now(bulk_action.id,
-                                  druids:,
-                                  groups:,
-                                  user:)
+        druids:,
+        groups:,
+        user:)
 
       expect(version_client).to have_received(:close).twice
     end
   end
 
-  context 'without manage ability' do
+  context "without manage ability" do
     let(:ability) { instance_double(Ability, can?: false) }
 
-    it 'does not close versions' do
+    it "does not close versions" do
       described_class.perform_now(bulk_action.id,
-                                  druids:,
-                                  groups:,
-                                  user:)
+        druids:,
+        groups:,
+        user:)
 
       expect(version_client).not_to have_received(:close)
     end

@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../config/environment', __dir__)
+require "spec_helper"
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../config/environment", __dir__)
 # Prevent database truncation if the environment is production
-abort('The Rails environment is running in production mode!') if Rails.env.production?
-require 'rspec/rails'
+abort("The Rails environment is running in production mode!") if Rails.env.production?
+require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'support/factory_bot'
-require 'cocina/rspec'
-require 'capybara/rspec'
-require 'equivalent-xml/rspec_matchers'
-require 'view_component/test_helpers'
-require 'webmock/rspec'
+require "support/factory_bot"
+require "cocina/rspec"
+require "capybara/rspec"
+require "equivalent-xml/rspec_matchers"
+require "view_component/test_helpers"
+require "webmock/rspec"
 WebMock.disable_net_connect!(allow_localhost: true,
-                             allow: [
-                               'https://chromedriver.storage.googleapis.com',
-                               'solr',
-                               'dor-indexing-app',
-                               'dor-services-app',
-                               'workflow',
-                               'techmd',
-                               'sdr-api'
-                             ])
+  allow: [
+    "https://chromedriver.storage.googleapis.com",
+    "solr",
+    "dor-indexing-app",
+    "dor-services-app",
+    "workflow",
+    "techmd",
+    "sdr-api"
+  ])
 
 Capybara.enable_aria_label = true
 
@@ -39,7 +39,7 @@ Capybara.enable_aria_label = true
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.

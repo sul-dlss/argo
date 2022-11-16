@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EmbargosController < ApplicationController
-  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id', only: %i[edit update]
+  load_and_authorize_resource :cocina, parent: false, class: "Repository", id_param: "item_id", only: %i[edit update]
 
   def new
     cocina = Repository.find(params[:item_id])
@@ -26,7 +26,7 @@ class EmbargosController < ApplicationController
       update_params[:release_date].to_date
     rescue Date::Error
       return redirect_to solr_document_path(@cocina.externalIdentifier),
-                         flash: { error: 'Invalid date' }
+        flash: {error: "Invalid date"}
     end
 
     change_set = EmbargoForm.new(@cocina)
@@ -35,7 +35,7 @@ class EmbargosController < ApplicationController
     Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
 
     respond_to do |format|
-      format.any { redirect_to solr_document_path(@cocina.externalIdentifier), notice: 'Embargo was successfully updated' }
+      format.any { redirect_to solr_document_path(@cocina.externalIdentifier), notice: "Embargo was successfully updated" }
     end
   end
 

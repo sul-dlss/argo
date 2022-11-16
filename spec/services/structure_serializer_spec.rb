@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe StructureSerializer do
   subject(:csv) do
@@ -11,10 +11,10 @@ RSpec.describe StructureSerializer do
     Cocina::Models.build(JSON.parse(json))
   end
 
-  let(:druid) { 'druid:qr773tm1060' }
-  let(:bare_druid) { 'qr773tm1060' }
+  let(:druid) { "druid:qr773tm1060" }
+  let(:bare_druid) { "qr773tm1060" }
 
-  context 'with no resources' do
+  context "with no resources" do
     let(:json) do
       <<~JSON
         {
@@ -52,14 +52,14 @@ RSpec.describe StructureSerializer do
       JSON
     end
 
-    it 'serializes to CSV' do
+    it "serializes to CSV" do
       expect(csv).to eq <<~CSV
         druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
       CSV
     end
   end
 
-  context 'with multiple resources' do
+  context "with multiple resources" do
     let(:json) do
       <<~JSON
         {
@@ -249,7 +249,7 @@ RSpec.describe StructureSerializer do
       JSON
     end
 
-    it 'serializes to CSV' do
+    it "serializes to CSV" do
       expect(csv).to eq <<~CSV
         druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,,image/tiff,

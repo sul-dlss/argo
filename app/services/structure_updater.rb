@@ -24,13 +24,13 @@ class StructureUpdater
   def validate
     @errors = []
     csv.each.with_index(2) do |row, index|
-      errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type" if invalid_resource_type?(row)
+      errors << "On row #{index} found \"#{row["resource_type"]}\", which is not a valid resource type" if invalid_resource_type?(row)
       unless existing_file?(row)
-        errors << "On row #{index} found #{row['filename']}, which appears to be a new file"
+        errors << "On row #{index} found #{row["filename"]}, which appears to be a new file"
         next
       end
-      errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported" if invalid_preservation_change?(row)
-      errors << "On row #{index} found #{row['filename']}, which set view or download rights to location-based but did not specify a location" if invalid_location_rights?(row)
+      errors << "On row #{index} found #{row["filename"]}, which changed preserve from no to yes, which is not supported" if invalid_preservation_change?(row)
+      errors << "On row #{index} found #{row["filename"]}, which set view or download rights to location-based but did not specify a location" if invalid_location_rights?(row)
     end
     csv.rewind
     errors.empty?
@@ -38,22 +38,22 @@ class StructureUpdater
 
   # Ensure all files in the csv are present in the existing object
   def existing_file?(row)
-    existing_files_by_filename.key?(row['filename'])
+    existing_files_by_filename.key?(row["filename"])
   end
 
   # Ensure no existing files change preserve from no to yes
   def invalid_preservation_change?(row)
-    existing_files_by_filename[row['filename']].administrative.sdrPreserve == false && row['preserve'] == 'yes'
+    existing_files_by_filename[row["filename"]].administrative.sdrPreserve == false && row["preserve"] == "yes"
   end
 
   # Ensure no existing files set location-based access without specifying a location
   def invalid_location_rights?(row)
-    [row['rights_view'], row['rights_download']].include?('location-based') && row['rights_location'].blank?
+    [row["rights_view"], row["rights_download"]].include?("location-based") && row["rights_location"].blank?
   end
 
   # Ensure all supplied resource types are valid
   def invalid_resource_type?(row)
-    !Cocina::Models::FileSetType.properties.key?(row['resource_type'].to_sym)
+    !Cocina::Models::FileSetType.properties.key?(row["resource_type"].to_sym)
   end
 
   def existing_files_by_filename
@@ -66,24 +66,24 @@ class StructureUpdater
 
   def update_file(existing_file, row)
     attributes = {
-      hasMimeType: row['mimetype'],
-      label: row['file_label'],
+      hasMimeType: row["mimetype"],
+      label: row["file_label"],
       administrative: existing_file.administrative.new(
-        publish: row['publish'] == 'yes',
-        shelve: row['shelve'] == 'yes',
-        sdrPreserve: row['preserve'] == 'yes'
+        publish: row["publish"] == "yes",
+        shelve: row["shelve"] == "yes",
+        sdrPreserve: row["preserve"] == "yes"
       ),
       access: existing_file.access.class.new(
         {
-          view: row['rights_view'],
-          download: row['rights_download'],
-          location: row['rights_location'],
+          view: row["rights_view"],
+          download: row["rights_download"],
+          location: row["rights_location"],
           # stanford/none required controlledDigitalLending set to false. All others should omit.
-          controlledDigitalLending: row['rights_view'] == 'stanford' && row['rights_download'] == 'none' ? false : nil
+          controlledDigitalLending: (row["rights_view"] == "stanford" && row["rights_download"] == "none") ? false : nil
         }.compact
       )
     }
-    attributes[:use] = row['role'] if row['role'] # nil is not permitted
+    attributes[:use] = row["role"] if row["role"] # nil is not permitted
     existing_file.new(**attributes)
   end
 
@@ -94,30 +94,30 @@ class StructureUpdater
     fileset_attributes = {}
     # Which files go in which filesets
     files_by_fileset = csv.each_with_object({}) do |row, hash|
-      hash[row['sequence']] ||= []
-      fileset_attributes[row['sequence']] = { label: row['resource_label'], type: type(row['resource_type']) }
-      hash[row['sequence']] << update_file(existing_files_by_filename[row['filename']], row)
+      hash[row["sequence"]] ||= []
+      fileset_attributes[row["sequence"]] = {label: row["resource_label"], type: type(row["resource_type"])}
+      hash[row["sequence"]] << update_file(existing_files_by_filename[row["filename"]], row)
     end
 
     contains = files_by_fileset.keys.map do |sequence|
       fileset = fileset_for(sequence.to_i, files_by_fileset[sequence].first.label)
       attributes = fileset_attributes[sequence]
-                   .merge(structural: { contains: files_by_fileset[sequence] })
+        .merge(structural: {contains: files_by_fileset[sequence]})
       fileset.new(**attributes)
     end
     Success(model.structural.new(contains:))
   end
 
-  FILESET_NAMESPACE = 'https://cocina.sul.stanford.edu/fileset/'
+  FILESET_NAMESPACE = "https://cocina.sul.stanford.edu/fileset/"
 
   # @param [Integer] sequence is the index of the fileset in the import
   # @param [String] label the label to inject for a new fileset
   def fileset_for(sequence, label)
     model.structural.contains[sequence - 1].presence ||
       Cocina::Models::FileSet.new(externalIdentifier: "#{FILESET_NAMESPACE}#{SecureRandom.uuid}",
-                                  type: Cocina::Models::FileSetType.file,
-                                  label:,
-                                  version: 1)
+        type: Cocina::Models::FileSetType.file,
+        label:,
+        version: 1)
   end
 
   # Change the short resource type into a url

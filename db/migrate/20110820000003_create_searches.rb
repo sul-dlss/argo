@@ -1,8 +1,7 @@
-# -*- encoding : utf-8 -*-
 class CreateSearches < ActiveRecord::Migration[4.2]
   def self.up
     create_table :searches do |t|
-      t.text  :query_params
+      t.text :query_params
       t.integer :user_id
 
       t.timestamps

@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe ChecksumReportJob, type: :job do
-  let(:druids) { ['druid:123', 'druid:456'] }
+RSpec.describe ChecksumReportJob do
+  let(:druids) { ["druid:123", "druid:456"] }
   let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'jcoyne85') }
+  let(:user) { instance_double(User, to_s: "jcoyne85") }
   let(:output_directory) { bulk_action.output_directory }
   let(:bulk_action) do
     create(
       :bulk_action,
-      action_type: 'ChecksumReportJob',
-      log_name: 'tmp/checksum_report_job_log.txt'
+      action_type: "ChecksumReportJob",
+      log_name: "tmp/checksum_report_job_log.txt"
     )
   end
   let(:csv_response) { "druid:123,checksum1,checksum2\ndruid:456,checksum3,checksum4\n" }
@@ -26,20 +26,20 @@ RSpec.describe ChecksumReportJob, type: :job do
     FileUtils.rm_rf(output_directory)
   end
 
-  describe '#perform_now' do
-    context 'with authorization' do
+  describe "#perform_now" do
+    context "with authorization" do
       let(:ability) { instance_double(Ability, can?: true) }
 
-      context 'happy path' do
+      context "happy path" do
         before do
           allow(Preservation::Client.objects).to receive(:checksums).with(druids:).and_return(csv_response)
         end
 
-        it 'calls the presevation_catalog API, writes a CSV file, and records success counts' do
+        it "calls the presevation_catalog API, writes a CSV file, and records success counts" do
           subject.perform(bulk_action.id,
-                          druids:,
-                          groups:,
-                          user:)
+            druids:,
+            groups:,
+            user:)
           expect(Preservation::Client.objects).to have_received(:checksums).with(druids:)
           expect(File).to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))
           expect(bulk_action.druid_count_total).to eq(druids.length)
@@ -48,21 +48,21 @@ RSpec.describe ChecksumReportJob, type: :job do
         end
       end
 
-      context 'Preservation::Client throws error' do
+      context "Preservation::Client throws error" do
         before do
-          allow(Preservation::Client.objects).to receive(:checksums).with(druids:).and_raise(Preservation::Client::UnexpectedResponseError, 'ruh roh')
+          allow(Preservation::Client.objects).to receive(:checksums).with(druids:).and_raise(Preservation::Client::UnexpectedResponseError, "ruh roh")
           allow(Honeybadger).to receive(:context)
           allow(Honeybadger).to receive(:notify)
           allow(Rails.logger).to receive(:error)
         end
 
-        it 'calls the presevation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
+        it "calls the presevation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts" do
           exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\ \(Preservation::Client::UnexpectedResponseError\): ruh roh/
           expect do
             subject.perform(bulk_action.id,
-                            druids:,
-                            groups:,
-                            user:)
+              druids:,
+              groups:,
+              user:)
           end.not_to raise_error
           expect(Preservation::Client.objects).to have_received(:checksums).with(druids:)
           expect(File).not_to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))
@@ -76,7 +76,7 @@ RSpec.describe ChecksumReportJob, type: :job do
       end
     end
 
-    context 'without authorization' do
+    context "without authorization" do
       let(:ability) { instance_double(Ability, can?: false) }
 
       before do
@@ -86,13 +86,13 @@ RSpec.describe ChecksumReportJob, type: :job do
         allow(Rails.logger).to receive(:error)
       end
 
-      it 'does not call the preservation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
+      it "does not call the preservation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts" do
         exp_msg_regex = /ChecksumReportJob not authorized to view all content/
         expect do
           subject.perform(bulk_action.id,
-                          druids:,
-                          groups:,
-                          user:)
+            druids:,
+            groups:,
+            user:)
         end.not_to raise_error
         expect(Preservation::Client.objects).not_to have_received(:checksums)
         expect(File).not_to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))

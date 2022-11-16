@@ -15,18 +15,18 @@ class OpenVersionJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    significance = params['significance']
-    description = params['version_description']
+    significance = params["significance"]
+    description = params["version_description"]
 
-    with_items(params[:druids], name: 'Open version') do |cocina_object, success, failure|
+    with_items(params[:druids], name: "Open version") do |cocina_object, success, failure|
       next failure.call("State isn't openable") unless openable?(cocina_object)
-      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+      next failure.call("Not authorized") unless ability.can?(:update, cocina_object)
 
       VersionService.open(identifier: cocina_object.externalIdentifier,
-                          significance:,
-                          description:,
-                          opening_user_name: @current_user.to_s)
-      success.call('Version successfully opened')
+        significance:,
+        description:,
+        opening_user_name: @current_user.to_s)
+      success.call("Version successfully opened")
     end
   end
 

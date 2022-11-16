@@ -18,7 +18,7 @@ class CollectionsController < ApplicationController
     authorize! :update, cocina_admin_policy
 
     form = CollectionForm.new
-    return render 'new' unless form.validate(params.merge(apo_druid: params[:apo_id]))
+    return render "new" unless form.validate(params.merge(apo_druid: params[:apo_id]))
 
     form.save
     collection_druid = form.model.externalIdentifier
@@ -62,11 +62,11 @@ class CollectionsController < ApplicationController
   # render the count of collections
   def count
     query = "_query_:\"{!raw f=#{CollectionConcern::FIELD_COLLECTION_ID}}info:fedora/#{params[:id]}\""
-    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+    result = solr_conn.get("select", params: {q: query, qt: "standard", rows: 0})
 
     path_for_facet = link_to_collection
 
-    render partial: 'count', locals: { count: result.dig('response', 'numFound'), path_for_facet: }
+    render partial: "count", locals: {count: result.dig("response", "numFound"), path_for_facet:}
   end
 
   def search_action_path(*args)
@@ -79,9 +79,9 @@ class CollectionsController < ApplicationController
     facet_config = facet_configuration_for_field(CollectionConcern::FIELD_COLLECTION_ID)
     search_state = Blacklight::SearchState.new({}, blacklight_config)
     Blacklight::FacetItemPresenter.new("info:fedora/#{params[:id]}",
-                                       facet_config,
-                                       self,
-                                       CollectionConcern::FIELD_COLLECTION_ID, search_state).href
+      facet_config,
+      self,
+      CollectionConcern::FIELD_COLLECTION_ID, search_state).href
   end
 
   def collection_exists?(title:, catkey:)
@@ -91,8 +91,8 @@ class CollectionsController < ApplicationController
     query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title}\"" if title
     query += " AND identifier_ssim:\"catkey:#{params[:catkey]}\"" if catkey
 
-    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
-    result.dig('response', 'numFound').to_i.positive?
+    result = solr_conn.get("select", params: {q: query, qt: "standard", rows: 0})
+    result.dig("response", "numFound").to_i.positive?
   end
 
   def solr_conn

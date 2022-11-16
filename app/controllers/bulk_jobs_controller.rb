@@ -4,7 +4,7 @@
 class BulkJobsController < ApplicationController
   include Blacklight::Searchable
 
-  load_resource :cocina, class: 'Repository', id_param: 'apo_id', only: :index
+  load_resource :cocina, class: "Repository", id_param: "apo_id", only: :index
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
@@ -25,7 +25,7 @@ class BulkJobsController < ApplicationController
       end
       format.csv do
         if File.exist?(@user_log.csv_file)
-          send_file(@user_log.csv_file, type: 'text/csv')
+          send_file(@user_log.csv_file, type: "text/csv")
         else
           render :nothing, status: :not_found
           # Display error message and log the error
@@ -33,7 +33,7 @@ class BulkJobsController < ApplicationController
       end
       format.xml do
         if File.exist?(@user_log.desc_metadata_xml_file)
-          send_file(@user_log.desc_metadata_xml_file, type: 'application/xml')
+          send_file(@user_log.desc_metadata_xml_file, type: "application/xml")
         else
           render :nothing, status: :not_found
           # Display error message and log the error
@@ -42,7 +42,8 @@ class BulkJobsController < ApplicationController
     end
   end
 
-  def status_help; end
+  def status_help
+  end
 
   # DELETE /apos/:apo_id/bulk_jobs
   def destroy
@@ -53,7 +54,7 @@ class BulkJobsController < ApplicationController
   end
 
   def self.local_prefixes
-    super + ['catalog']
+    super + ["catalog"]
   end
 
   private
@@ -72,13 +73,13 @@ class BulkJobsController < ApplicationController
     directory_list = Dir.glob("#{bulk_load_dir}/*") if File.directory?(bulk_load_dir)
 
     directory_list.each do |directory|
-      time = directory.sub("#{bulk_load_dir}/", '')
+      time = directory.sub("#{bulk_load_dir}/", "")
       log = UserLog.new(druid, time)
       bulk_info.push(log.bulk_job_metadata)
     end
 
     # Sort by start time (newest first)
-    sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'].to_s }
+    sorted_info = bulk_info.sort_by { |b| b["argo.bulk_metadata.bulk_log_job_start"].to_s }
     sorted_info.reverse!
   end
 end

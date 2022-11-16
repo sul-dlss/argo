@@ -14,13 +14,13 @@ class ManageEmbargoesJob < GenericJob
     super
 
     csv = CSV.parse(params[:csv_file], headers: true)
-    with_csv_items(csv, name: 'Embargo') do |cocina_object, csv_row, success, failure|
-      return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+    with_csv_items(csv, name: "Embargo") do |cocina_object, csv_row, success, failure|
+      return failure.call("Not authorized") unless ability.can?(:update, cocina_object)
 
-      cocina_object = open_new_version_if_needed(cocina_object, 'Manage embargo')
+      cocina_object = open_new_version_if_needed(cocina_object, "Manage embargo")
       update_embargo(cocina_object, csv_row)
         .either(
-          ->(_val) { success.call('Embargo updated') },
+          ->(_val) { success.call("Embargo updated") },
           ->(error) { failure.call(error) }
         )
     end
@@ -39,23 +39,23 @@ class ManageEmbargoesJob < GenericJob
   end
 
   def validate_required_field(csv_row)
-    return Failure('Missing required value for "release_date"') unless csv_row['release_date']
+    return Failure('Missing required value for "release_date"') unless csv_row["release_date"]
 
     Success()
   end
 
   def parse_date(csv_row)
-    Success(DateTime.parse(csv_row['release_date']))
+    Success(DateTime.parse(csv_row["release_date"]))
   rescue Date::Error
-    Failure("#{csv_row['release_date']} is not a valid date")
+    Failure("#{csv_row["release_date"]} is not a valid date")
   end
 
   def build_changes(csv_row, embargo_release_date)
     {
       release_date: embargo_release_date,
-      view_access: csv_row['view'],
-      download_access: csv_row['download'],
-      access_location: csv_row['location']
+      view_access: csv_row["view"],
+      download_access: csv_row["download"],
+      access_location: csv_row["location"]
     }
   end
 
@@ -64,7 +64,7 @@ class ManageEmbargoesJob < GenericJob
     if form.validate(changes)
       Success(form)
     else
-      Failure(form.errors.full_messages.join(','))
+      Failure(form.errors.full_messages.join(","))
     end
   end
 end

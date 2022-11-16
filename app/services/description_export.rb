@@ -8,11 +8,11 @@ class DescriptionExport
 
   def initialize(source_id:, description:)
     @description = description
-    @source_id = source_id.presence || '' # identification.sourceId is not a required property.
+    @source_id = source_id.presence || "" # identification.sourceId is not a required property.
   end
 
   def export
-    flatten(squish(description.to_h).merge('source_id' => @source_id))
+    flatten(squish(description.to_h).merge("source_id" => @source_id))
   end
 
   # Transform the COCINA datastructure into a hash structure by converting
@@ -22,11 +22,11 @@ class DescriptionExport
 
     source.each_with_object({}) do |(k, value), sink|
       new_value = if value.is_a? Array
-                    # Transform to hash
-                    value.each_with_object({}).with_index(1) { |(el, acc), index| acc[index] = squish(el) }
-                  else
-                    squish(value)
-                  end
+        # Transform to hash
+        value.each_with_object({}).with_index(1) { |(el, acc), index| acc[index] = squish(el) }
+      else
+        squish(value)
+      end
       sink[k.to_s] = new_value.presence
     end.compact
   end

@@ -64,7 +64,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey/barcode added/updated/removed successfully")
-    rescue StandardError => e
+    rescue => e
       log.puts("#{Time.current} Catkey/barcode failed #{e.class} #{e.message}")
       Honeybadger.context(args:, druid: cocina_object.externalIdentifier)
       Honeybadger.notify(e)
@@ -74,13 +74,13 @@ class SetCatkeysAndBarcodesJob < GenericJob
   end
 
   def catkeys_from_params(params)
-    return unless params['use_catkeys_option'] == '1'
+    return unless params["use_catkeys_option"] == "1"
 
-    lines_for(params, :catkeys).map { |line| line.split(',') }
+    lines_for(params, :catkeys).map { |line| line.split(",") }
   end
 
   def barcodes_from_params(params)
-    return unless params['use_barcodes_option'] == '1'
+    return unless params["use_barcodes_option"] == "1"
 
     lines_for(params, :barcodes).map(&:strip).map(&:presence)
   end
@@ -90,11 +90,10 @@ class SetCatkeysAndBarcodesJob < GenericJob
     params.fetch(key).split("\n")
   end
 
-  # rubocop:disable Style/GuardClause
   def log_update(change_set, log)
     if change_set.changed?(:catkeys)
       if change_set.catkeys.present?
-        log.puts("#{Time.current} Adding catkey of #{change_set.catkeys.join(', ')}")
+        log.puts("#{Time.current} Adding catkey of #{change_set.catkeys.join(", ")}")
       else
         log.puts("#{Time.current} Removing catkey")
       end
@@ -107,24 +106,23 @@ class SetCatkeysAndBarcodesJob < GenericJob
       end
     end
   end
-  # rubocop:enable Style/GuardClause
 
   def version_message(change_set)
     msgs = []
     if change_set.changed?(:catkeys)
       msgs << if change_set.catkeys.present?
-                "Catkey updated to #{change_set.catkeys.join(', ')}."
-              else
-                'Catkey removed.'
-              end
+        "Catkey updated to #{change_set.catkeys.join(", ")}."
+      else
+        "Catkey removed."
+      end
     end
     if change_set.changed?(:barcode)
       msgs << if change_set.barcode
-                "Barcode updated to #{change_set.barcode}."
-              else
-                'Barcode removed.'
-              end
+        "Barcode updated to #{change_set.barcode}."
+      else
+        "Barcode removed."
+      end
     end
-    msgs.join(' ')
+    msgs.join(" ")
   end
 end

@@ -2,7 +2,7 @@
 
 module ApplicationHelper
   def application_name
-    'Argo'
+    "Argo"
   end
 
   def location_to_send_search_form

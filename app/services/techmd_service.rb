@@ -6,8 +6,8 @@ class TechmdService
 
   def self.techmd_for(druid:)
     resp = Faraday.get("#{Settings.tech_md_service.url}/v1/technical-metadata/druid/#{druid}") do |req|
-      req.headers['Accept'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{Settings.tech_md_service.token}"
+      req.headers["Accept"] = "application/json"
+      req.headers["Authorization"] = "Bearer #{Settings.tech_md_service.token}"
     end
     return Success(JSON.parse(resp.body)) if resp.status == 200
     return Success([]) if resp.status == 404

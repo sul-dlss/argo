@@ -31,16 +31,16 @@ class VersionsController < ApplicationController
 
   def open
     VersionService.open(identifier: @cocina_object.externalIdentifier,
-                        significance: params[:significance],
-                        description: params[:description],
-                        opening_user_name: current_user.to_s)
+      significance: params[:significance],
+      description: params[:description],
+      opening_user_name: current_user.to_s)
     msg = "#{@cocina_object.externalIdentifier} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
     Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
-  rescue StandardError => e
-    raise e unless e.to_s == 'Object net yet accessioned'
+  rescue => e
+    raise e unless e.to_s == "Object net yet accessioned"
 
-    render status: :internal_server_error, plain: 'Object net yet accessioned'
+    render status: :internal_server_error, plain: "Object net yet accessioned"
     nil
   end
 

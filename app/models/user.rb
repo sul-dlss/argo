@@ -48,7 +48,7 @@ class User < ApplicationRecord
     return @role_cache[admin_policy_id] if @role_cache[admin_policy_id]
 
     # Try to retrieve a Solr doc
-    obj_doc = SearchService.query('id:"' + admin_policy_id + '"')['response']['docs'].first || {}
+    obj_doc = SearchService.query('id:"' + admin_policy_id + '"')["response"]["docs"].first || {}
     return [] if obj_doc.empty?
 
     apo_roles = Set.new
@@ -66,7 +66,7 @@ class User < ApplicationRecord
   # @param role [String] Role to be validated for the DOR object
   def solr_role_allowed?(solr_doc, solr_role)
     # solr_doc[solr_role] returns an array of groups permitted to adopt the role
-    !(solr_doc[solr_role] & groups).blank?
+    (solr_doc[solr_role] & groups).present?
   end
 
   # Allow a repository admin to see the repository with different permissions
@@ -75,16 +75,16 @@ class User < ApplicationRecord
     # remove any existing impersonation (see #groups below)
     @role_cache = {}
     @groups_to_impersonate = if grps.blank?
-                               nil
-                             else
-                               grps.instance_of?(String) ? [grps] : grps
-                             end
+      nil
+    else
+      grps.instance_of?(String) ? [grps] : grps
+    end
   end
 
   # @return [Array<String>] list of groups the user is a member of including those
   #   they are impersonating
   def groups
-    return @groups_to_impersonate unless @groups_to_impersonate.blank?
+    return @groups_to_impersonate if @groups_to_impersonate.present?
 
     Array(webauth_groups)
   end

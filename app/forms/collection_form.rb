@@ -13,7 +13,7 @@ class CollectionForm
 
   # needed so that we can use ActiveModel::Errors
   def self.model_name
-    Struct.new(:param_key, :route_key, :i18n_key, :human).new('collection_form', 'collection', 'collection', 'Collection')
+    Struct.new(:param_key, :route_key, :i18n_key, :human).new("collection_form", "collection", "collection", "Collection")
   end
 
   # @param [HashWithIndifferentAccess] params the parameters from the form
@@ -22,7 +22,7 @@ class CollectionForm
     @params = params
     unless params[:collection_title].present? || params[:collection_catkey].present?
       @errors.add(:base, :title_or_catkey_blank,
-                  message: 'missing collection_title or collection_catkey')
+        message: "missing collection_title or collection_catkey")
     end
     @errors.empty?
   end
@@ -41,14 +41,14 @@ class CollectionForm
   # @return [Cocina::Models::Collection] registers the Collection
   def register_model
     Dor::Services::Client.objects.register(params: cocina_model).tap do |response|
-      WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
+      WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, "accessionWF", version: "1")
     end
   end
 
   # @return [Hash] the parameters used to register a collection. Must be called after `validate`
   def cocina_model
     reg_params = {
-      label: params[:collection_title].presence || ':auto',
+      label: params[:collection_title].presence || ":auto",
       version: 1,
       type: Cocina::Models::ObjectType.collection,
       administrative: {
@@ -61,11 +61,11 @@ class CollectionForm
 
     raw_rights = params[:collection_catkey].present? ? params[:collection_rights_catkey] : params[:collection_rights]
     access = CocinaAccess.from_form_value(raw_rights)
-    reg_params.merge!(access: access.value!) unless access.none?
+    reg_params[:access] = access.value! unless access.none?
 
     if params[:collection_catkey].present?
       reg_params[:identification] = {
-        catalogLinks: [{ catalog: 'symphony', catalogRecordId: params[:collection_catkey], refresh: true }]
+        catalogLinks: [{catalog: "symphony", catalogRecordId: params[:collection_catkey], refresh: true}]
       }
     end
 
@@ -73,8 +73,8 @@ class CollectionForm
   end
 
   def build_description
-    { title: [{ value: params[:collection_title], status: 'primary' }] }.tap do |description|
-      description[:note] = [{ value: params[:collection_abstract], type: 'summary' }] if params[:collection_abstract].present?
+    {title: [{value: params[:collection_title], status: "primary"}]}.tap do |description|
+      description[:note] = [{value: params[:collection_abstract], type: "summary"}] if params[:collection_abstract].present?
     end
   end
 end

@@ -9,7 +9,7 @@ module Show
 
     def license
       uri = @change_set.license
-      return 'No license' unless uri
+      return "No license" unless uri
 
       value = Constants::LICENSE_OPTIONS.find { |attribute| attribute.fetch(:uri) == uri }
       value.fetch(:label)

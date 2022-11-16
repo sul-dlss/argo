@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe SetCatkeysAndBarcodesJob do
   let(:bulk_action_no_process_callback) do
     bulk_action = build(
       :bulk_action,
-      action_type: 'SetCatkeysAndBarcodesJob'
+      action_type: "SetCatkeysAndBarcodesJob"
     )
     bulk_action.save
     bulk_action
   end
 
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:catkeys) { ['12345,66233', '', '44444'] }
-  let(:barcodes) { ['36105014757517', '', '36105014757518'] }
+  let(:catkeys) { ["12345,66233", "", "44444"] }
+  let(:barcodes) { ["36105014757517", "", "36105014757518"] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    build(:dro_with_metadata, id: druids[0], barcode: '36105014757519', catkeys: ['12346'])
+    build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", catkeys: ["12346"])
   end
   let(:item2) do
-    build(:dro_with_metadata, id: druids[1], barcode: '36105014757510', catkeys: ['12347'])
+    build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", catkeys: ["12347"])
   end
   let(:item3) do
     build(:dro_with_metadata, id: druids[2])
@@ -39,13 +39,13 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
   end
 
-  describe '#perform' do
+  describe "#perform" do
     before do
       allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
       allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
     end
 
-    context 'when catkey and barcode selected' do
+    context "when catkey and barcode selected" do
       before do
         allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
         allow(BulkJobLog).to receive(:open).and_yield(buffer)
@@ -56,16 +56,16 @@ RSpec.describe SetCatkeysAndBarcodesJob do
           druids:,
           catkeys: catkeys.join("\n"),
           barcodes: barcodes.join("\n"),
-          use_catkeys_option: '1',
-          use_barcodes_option: '1'
+          use_catkeys_option: "1",
+          use_barcodes_option: "1"
         }.with_indifferent_access
       end
 
-      it 'attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode' do
+      it "attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode" do
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: catkeys[0].split(','), barcode: barcodes[0], refresh: true }, buffer)
-        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, { catkeys: [], barcode: nil }, buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: [catkeys[2]], barcode: barcodes[2], refresh: true }, buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, {catkeys: catkeys[0].split(","), barcode: barcodes[0], refresh: true}, buffer)
+        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, {catkeys: [], barcode: nil}, buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, {catkeys: [catkeys[2]], barcode: barcodes[2], refresh: true}, buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
         expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkeys: %w[12345 66233], refresh: true)
@@ -74,7 +74,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       end
     end
 
-    context 'when catkey selected but none provided' do
+    context "when catkey selected but none provided" do
       before do
         allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
         allow(BulkJobLog).to receive(:open).and_yield(buffer)
@@ -84,37 +84,37 @@ RSpec.describe SetCatkeysAndBarcodesJob do
         {
           druids:,
           catkeys: "\n\n44444", # two blank rows, one row with a catkey
-          barcodes: '',
-          use_catkeys_option: '1',
-          use_barcodes_option: '0'
+          barcodes: "",
+          use_catkeys_option: "1",
+          use_barcodes_option: "0"
         }.with_indifferent_access
       end
 
-      it 'attempts to update the catkey for each druid with an empty array and not nil' do
+      it "attempts to update the catkey for each druid with an empty array and not nil" do
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, { catkeys: [], refresh: true }, buffer) # changed to empty
-        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, { catkeys: [], refresh: true }, buffer) # not changed
-        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, { catkeys: ['44444'], refresh: true }, buffer) # changed to a value
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, {catkeys: [], refresh: true}, buffer) # changed to empty
+        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, {catkeys: [], refresh: true}, buffer) # not changed
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, {catkeys: ["44444"], refresh: true}, buffer) # changed to a value
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
         expect(change_set1).to have_received(:validate).with(catkeys: [], refresh: true) # set to empty
         expect(change_set2).to have_received(:validate).with(catkeys: [], refresh: true) # not changed
-        expect(change_set3).to have_received(:validate).with(catkeys: ['44444'], refresh: true) # changed to a value
+        expect(change_set3).to have_received(:validate).with(catkeys: ["44444"], refresh: true) # changed to a value
       end
     end
 
-    context 'when catkey and barcode not selected' do
+    context "when catkey and barcode not selected" do
       let(:params) do
         {
           druids:,
           catkeys: catkeys.join("\n"),
           barcodes: barcodes.join("\n"),
-          use_catkeys_option: '0',
-          use_barcodes_option: '0'
+          use_catkeys_option: "0",
+          use_barcodes_option: "0"
         }.with_indifferent_access
       end
 
-      it 'does not attempts to update the catkey/barcode for each druid' do
+      it "does not attempts to update the catkey/barcode for each druid" do
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         expect(subject).not_to receive(:update_catkey_and_barcode)
         subject.perform(bulk_action_no_process_callback.id, params)
@@ -123,18 +123,18 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
   end
 
-  describe '#update_catkey_and_barcode' do
+  describe "#update_catkey_and_barcode" do
     let(:druid) { druids[0] }
-    let(:catkeys_arg) { catkeys[0].split(',') }
+    let(:catkeys_arg) { catkeys[0].split(",") }
     let(:barcode) { barcodes[0] }
     let(:client) { double(Dor::Services::Client) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
     let(:previous_version) do
       build(:dro_with_metadata, id: druids[0], version: 3).new(identification: {
-                                                                 barcode: '36105014757519',
-                                                                 catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346', refresh: true }],
-                                                                 sourceId: 'sul:1234'
-                                                               })
+        barcode: "36105014757519",
+        catalogLinks: [{catalog: "symphony", catalogRecordId: "12346", refresh: true}],
+        sourceId: "sul:1234"
+      })
     end
 
     let(:updated_model) do
@@ -143,11 +143,11 @@ RSpec.describe SetCatkeysAndBarcodesJob do
           identification: {
             barcode:,
             catalogLinks: [
-              { catalog: 'previous symphony', catalogRecordId: '12346', refresh: false },
-              { catalog: 'symphony', catalogRecordId: '12345', refresh: true },
-              { catalog: 'symphony', catalogRecordId: '66233', refresh: false }
+              {catalog: "previous symphony", catalogRecordId: "12346", refresh: false},
+              {catalog: "symphony", catalogRecordId: "12345", refresh: true},
+              {catalog: "symphony", catalogRecordId: "66233", refresh: false}
             ],
-            sourceId: 'sul:1234'
+            sourceId: "sul:1234"
           }
         }
       )
@@ -165,57 +165,57 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       allow(subject.ability).to receive(:can?).and_return(true)
     end
 
-    context 'when not authorized' do
+    context "when not authorized" do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       before do
         allow(subject.ability).to receive(:can?).and_return(false)
       end
 
-      it 'logs and returns' do
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode: }, buffer)
+      it "logs and returns" do
+        subject.send(:update_catkey_and_barcode, change_set, {catkeys: catkeys_arg, barcode:}, buffer)
         expect(object_client).not_to have_received(:update)
-        expect(buffer.string).to include('Not authorized')
+        expect(buffer.string).to include("Not authorized")
       end
     end
 
-    context 'when error' do
+    context "when error" do
       let(:state_service) { instance_double(StateService) }
 
       before do
-        allow(state_service).to receive(:allows_modification?).and_raise('oops')
+        allow(state_service).to receive(:allows_modification?).and_raise("oops")
       end
 
-      it 'logs' do
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode: }, buffer)
+      it "logs" do
+        subject.send(:update_catkey_and_barcode, change_set, {catkeys: catkeys_arg, barcode:}, buffer)
         expect(object_client).not_to have_received(:update)
-        expect(buffer.string).to include('Catkey/barcode failed')
+        expect(buffer.string).to include("Catkey/barcode failed")
       end
     end
 
-    context 'when modification is not allowed' do
+    context "when modification is not allowed" do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
-      it 'updates catkey and barcode and versions objects' do
+      it "updates catkey and barcode and versions objects" do
         expect(subject).to receive(:open_new_version).with(previous_version, "Catkey updated to 12345, 66233. Barcode updated to #{barcode}.").and_return(previous_version)
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode:, refresh: true }, buffer)
+        subject.send(:update_catkey_and_barcode, change_set, {catkeys: catkeys_arg, barcode:, refresh: true}, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
       end
     end
 
-    context 'when modification is allowed' do
+    context "when modification is allowed" do
       let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
-      it 'updates catkey and barcode and does not version objects if not needed' do
+      it "updates catkey and barcode and does not version objects if not needed" do
         expect(subject).not_to receive(:open_new_version).with(previous_version, "Catkey updated to #{catkeys[0]}. Barcode updated to #{barcode}.")
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode:, refresh: true }, buffer)
+        subject.send(:update_catkey_and_barcode, change_set, {catkeys: catkeys_arg, barcode:, refresh: true}, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
       end
     end
 
-    context 'when catkeys are empty and barcode is nil' do
+    context "when catkeys are empty and barcode is nil" do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
       let(:catkeys_arg) { [] }
       let(:barcode) { nil }
@@ -225,16 +225,16 @@ RSpec.describe SetCatkeysAndBarcodesJob do
           {
             identification: {
               barcode: nil,
-              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: '12346', refresh: false }],
-              sourceId: 'sul:1234'
+              catalogLinks: [{catalog: "previous symphony", catalogRecordId: "12346", refresh: false}],
+              sourceId: "sul:1234"
             }
           }
         )
       end
 
-      it 'removes catkey and barcode' do
-        expect(subject).to receive(:open_new_version).with(previous_version, 'Catkey removed. Barcode removed.').and_return(previous_version)
-        subject.send(:update_catkey_and_barcode, change_set, { catkeys: catkeys_arg, barcode: }, buffer)
+      it "removes catkey and barcode" do
+        expect(subject).to receive(:open_new_version).with(previous_version, "Catkey removed. Barcode removed.").and_return(previous_version)
+        subject.send(:update_catkey_and_barcode, change_set, {catkeys: catkeys_arg, barcode:}, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
       end

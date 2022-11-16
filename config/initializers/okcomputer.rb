@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'okcomputer'
+require "okcomputer"
 
 # /status for 'upness', e.g. for load balancer
 # /status/all to show all dependencies
 # /status/<name-of-check> for a specific check (e.g. for nagios warning)
-OkComputer.mount_at = 'status'
+OkComputer.mount_at = "status"
 OkComputer.check_in_parallel = true
 
 # check models to see if at least they have some data
@@ -14,7 +14,7 @@ class TablesHaveDataCheck < OkComputer::Check
     msg = [
       BulkAction,
       User
-    ].map { |klass| table_check(klass) }.join(' ')
+    ].map { |klass| table_check(klass) }.join(" ")
     mark_message msg
   end
 
@@ -27,7 +27,7 @@ class TablesHaveDataCheck < OkComputer::Check
 
     mark_failure
     "#{klass.name} has no data."
-  rescue => e # rubocop:disable Style/RescueStandardError
+  rescue => e
     mark_failure
     "#{e.class.name} received: #{e.message}."
   end
@@ -35,16 +35,16 @@ end
 
 # REQUIRED checks, required to pass for /status/all
 #  individual checks also avail at /status/<name-of-check>
-OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
-OkComputer::Registry.register 'rails_cache', OkComputer::GenericCacheCheck.new
-OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.new
+OkComputer::Registry.register "ruby_version", OkComputer::RubyVersionCheck.new
+OkComputer::Registry.register "rails_cache", OkComputer::GenericCacheCheck.new
+OkComputer::Registry.register "feature-tables-have-data", TablesHaveDataCheck.new
 
 solr_url = Blacklight.connection_config.fetch(:url)
-OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new("#{solr_url}/admin/ping")
+OkComputer::Registry.register "dor_search_service_solr", OkComputer::HttpCheck.new("#{solr_url}/admin/ping")
 
 # Bulk Metadata  services
-OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.directory)
-OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.temporary_directory)
-modsulator_url = "#{Settings.modsulator_url.split('v1').first}v1/about"
-OkComputer::Registry.register 'modsulator_app', OkComputer::HttpCheck.new(modsulator_url)
-OkComputer::Registry.register 'spreadsheet_url', OkComputer::HttpCheck.new(Settings.spreadsheet_url)
+OkComputer::Registry.register "bulk_metadata_dir", OkComputer::DirectoryCheck.new(Settings.bulk_metadata.directory)
+OkComputer::Registry.register "bulk_metadata_tmp_dir", OkComputer::DirectoryCheck.new(Settings.bulk_metadata.temporary_directory)
+modsulator_url = "#{Settings.modsulator_url.split("v1").first}v1/about"
+OkComputer::Registry.register "modsulator_app", OkComputer::HttpCheck.new(modsulator_url)
+OkComputer::Registry.register "spreadsheet_url", OkComputer::HttpCheck.new(Settings.spreadsheet_url)

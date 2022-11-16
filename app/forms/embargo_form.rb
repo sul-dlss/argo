@@ -5,7 +5,7 @@ class EmbargoForm < ApplicationChangeSet
   include HasViewAccess
 
   def self.model_name
-    ::ActiveModel::Name.new(nil, nil, 'Embargo')
+    ::ActiveModel::Name.new(nil, nil, "Embargo")
   end
 
   def id
@@ -44,7 +44,7 @@ class EmbargoForm < ApplicationChangeSet
     }.tap do |params|
       # This is a hack to ensure controlledDigitalLending is set true/false
       # see https://github.com/sul-dlss/cocina-models/issues/405
-      params[:controlledDigitalLending] = false if view_access == 'stanford' && download_access == 'none'
+      params[:controlledDigitalLending] = false if view_access == "stanford" && download_access == "none"
     end
   end
 end

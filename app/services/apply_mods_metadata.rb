@@ -41,7 +41,7 @@ class ApplyModsMetadata
 
     errors = ModsValidator.validate(mods_ng)
     if errors.present?
-      log.puts "argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{errors.join(';')}"
+      log.puts "argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{errors.join(";")}"
       return false
     end
 
@@ -61,7 +61,7 @@ class ApplyModsMetadata
     end
   rescue Cocina::Models::ValidationError => e
     log.puts("argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{e.message}")
-  rescue StandardError => e
+  rescue => e
     log_error!(e)
   end
 
@@ -95,9 +95,9 @@ class ApplyModsMetadata
   # Open a new version for the given object.
   def commit_new_version
     @cocina = VersionService.open(identifier: cocina.externalIdentifier,
-                                  significance: 'minor',
-                                  description: "Descriptive metadata upload from #{original_filename}",
-                                  opening_user_name: ability.current_user.sunetid)
+      significance: "minor",
+      description: "Descriptive metadata upload from #{original_filename}",
+      opening_user_name: ability.current_user.sunetid)
   end
 
   # Returns true if the given object is accessioned, false otherwise.
@@ -130,7 +130,7 @@ class ApplyModsMetadata
 
   def cocina_description
     @cocina_description ||= Cocina::Models::Description.new(Cocina::Models::Mapping::FromMods::Description.props(mods: mods_ng, druid: cocina.externalIdentifier,
-                                                                                                                 label: cocina.label))
+      label: cocina.label))
   end
 
   def mods_ng

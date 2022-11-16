@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe WorkflowService do
-  describe '#workflows_for' do
-    subject(:service) { described_class.workflows_for(druid: 'druid:ab123cd4567') }
+  describe "#workflows_for" do
+    subject(:service) { described_class.workflows_for(druid: "druid:ab123cd4567") }
 
     let(:xml) do
       <<~XML
@@ -42,32 +42,32 @@ RSpec.describe WorkflowService do
     end
 
     let(:accession_json) do
-      { 'processes' => [
-        { 'name' => 'start-accession' },
-        { 'name' => 'descriptive-metadata' },
-        { 'name' => 'rights-metadata' },
-        { 'name' => 'content-metadata' },
-        { 'name' => 'technical-metadata' },
-        { 'name' => 'remediate-object' },
-        { 'name' => 'shelve' },
-        { 'name' => 'publish' },
-        { 'name' => 'provenance-metadata' },
-        { 'name' => 'sdr-ingest-transfer' },
-        { 'name' => 'sdr-ingest-received' },
-        { 'name' => 'reset-workspace' },
-        { 'name' => 'end-accession' }
-      ] }
+      {"processes" => [
+        {"name" => "start-accession"},
+        {"name" => "descriptive-metadata"},
+        {"name" => "rights-metadata"},
+        {"name" => "content-metadata"},
+        {"name" => "technical-metadata"},
+        {"name" => "remediate-object"},
+        {"name" => "shelve"},
+        {"name" => "publish"},
+        {"name" => "provenance-metadata"},
+        {"name" => "sdr-ingest-transfer"},
+        {"name" => "sdr-ingest-received"},
+        {"name" => "reset-workspace"},
+        {"name" => "end-accession"}
+      ]}
     end
 
     let(:assembly_json) do
-      { 'processes' => [
-        { 'name' => 'start-assembly' },
-        { 'name' => 'content-metadata-create' },
-        { 'name' => 'jp2-create' },
-        { 'name' => 'checksum-compute' },
-        { 'name' => 'exif-collect' },
-        { 'name' => 'accessioning-initiate' }
-      ] }
+      {"processes" => [
+        {"name" => "start-assembly"},
+        {"name" => "content-metadata-create"},
+        {"name" => "jp2-create"},
+        {"name" => "checksum-compute"},
+        {"name" => "exif-collect"},
+        {"name" => "accessioning-initiate"}
+      ]}
     end
 
     let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_routes:) }
@@ -78,14 +78,14 @@ RSpec.describe WorkflowService do
     before do
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
 
-      allow(workflow_client).to receive(:workflow_template).with('accessionWF').and_return(accession_json)
-      allow(workflow_client).to receive(:workflow_template).with('assemblyWF').and_return(assembly_json)
+      allow(workflow_client).to receive(:workflow_template).with("accessionWF").and_return(accession_json)
+      allow(workflow_client).to receive(:workflow_template).with("assemblyWF").and_return(assembly_json)
     end
 
     it {
       expect(subject).to eq [
-        WorkflowService::Workflow.new(name: 'accessionWF', complete: true, error_count: 0),
-        WorkflowService::Workflow.new(name: 'assemblyWF', complete: false, error_count: 1)
+        WorkflowService::Workflow.new(name: "accessionWF", complete: true, error_count: 0),
+        WorkflowService::Workflow.new(name: "assemblyWF", complete: false, error_count: 1)
       ]
     }
   end

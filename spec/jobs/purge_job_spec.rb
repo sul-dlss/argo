@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe PurgeJob, type: :job do
-  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
+RSpec.describe PurgeJob do
+  let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222"] }
   let(:groups) { [] }
   let(:user) { create(:user) }
   let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted) }
@@ -28,19 +28,19 @@ RSpec.describe PurgeJob, type: :job do
     allow(PurgeService).to receive(:purge)
 
     described_class.perform_now(bulk_action.id,
-                                druids:,
-                                groups:,
-                                user:)
+      druids:,
+      groups:,
+      user:)
   end
 
   after do
     FileUtils.rm(bulk_action.log_name)
   end
 
-  context 'with manage ability' do
+  context "with manage ability" do
     let(:ability) { instance_double(Ability, can?: true) }
 
-    context 'when submitted' do
+    context "when submitted" do
       let(:submitted) { true }
 
       it "doesn't purge" do
@@ -48,17 +48,17 @@ RSpec.describe PurgeJob, type: :job do
       end
     end
 
-    context 'when not submitted' do
+    context "when not submitted" do
       let(:submitted) { false }
 
-      it 'purges objects' do
+      it "purges objects" do
         expect(PurgeService).to have_received(:purge).with(druid: druids[0], user_name: user.login)
         expect(PurgeService).to have_received(:purge).with(druid: druids[1], user_name: user.login)
       end
     end
   end
 
-  context 'without manage ability' do
+  context "without manage ability" do
     let(:ability) { instance_double(Ability, can?: false) }
 
     it "doesn't purge" do
