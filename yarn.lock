@@ -3,9 +3,9 @@
 
 
 "@github/time-elements@^3.0.7":
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/@github/time-elements/-/time-elements-3.2.4.tgz#f509fb9b4c48feaabe98365636809c365bf4b0a4"
-  integrity sha512-Kwy5gkbum7LRU9rWAZ4QFU2ZnYhH3mBAdzY/Cm52ENOzQLOgowaxTcq6aWfIDjLSym+7qJPW1W/os3KRdIFLvg==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@github/time-elements/-/time-elements-3.3.0.tgz#134d69e359bc150938a5edfe6525e051e0b5ed35"
+  integrity sha512-ru9YsaRfikuljnLWv69Ao7FrQ8dyxf7gDcqQ+3peGOMYMKIQMb4VPpM2ULR9vzxuTDLsqvoEFJVQ7Teu1wdy4A==
 
 "@hotwired/stimulus-webpack-helpers@^1.0.0":
   version "1.0.1"

@@ -83,7 +83,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.31.0)
+    blacklight (7.32.0)
       deprecation
       globalid
       hashdiff
@@ -92,12 +92,12 @@ GEM
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7.1)
-      view_component (~> 2.43)
+      view_component (~> 2.66)
     blacklight-hierarchy (6.0.2)
       blacklight (~> 7.18)
       deprecation
       rails (>= 5.1, < 7.1)
-    bootsnap (1.13.0)
+    bootsnap (1.14.0)
       msgpack (~> 1.2)
     builder (3.2.4)
     bundler-audit (0.9.1)
@@ -200,7 +200,7 @@ GEM
       nokogiri (~> 1.6)
       zeitwerk (~> 2.1)
     druid-tools (3.0.0)
-    dry-configurable (1.0.0)
+    dry-configurable (1.0.1)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
     dry-core (1.0.0)
@@ -259,7 +259,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faraday (2.7.0)
+    faraday (2.7.1)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-multipart (1.0.4)
@@ -345,7 +345,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.0.1)
-    newrelic_rpm (8.12.0)
+    newrelic_rpm (8.13.0)
     nio4r (2.5.8)
     nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
@@ -444,7 +444,7 @@ GEM
     reform-rails (0.2.3)
       activemodel (>= 5.0)
       reform (>= 2.3.1, < 3.0.0)
-    regexp_parser (2.6.0)
+    regexp_parser (2.6.1)
     representable (3.2.0)
       declarative (< 0.1.0)
       trailblazer-option (>= 0.1.1, < 0.2.0)
@@ -487,7 +487,7 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     rss (0.2.9)
       rexml
-    rubocop (1.38.0)
+    rubocop (1.39.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
@@ -502,7 +502,7 @@ GEM
     rubocop-performance (1.15.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.17.2)
+    rubocop-rails (2.17.3)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
@@ -541,8 +541,8 @@ GEM
     sshkit (1.21.3)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    standard (1.17.0)
-      rubocop (= 1.38.0)
+    standard (1.18.0)
+      rubocop (= 1.39.0)
       rubocop-performance (= 1.15.0)
     stanford-mods (3.3.1)
       activesupport
