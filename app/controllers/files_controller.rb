@@ -48,7 +48,7 @@ class FilesController < ApplicationController
       druid: @cocina_model.externalIdentifier,
       filepath: filename,
       version: params[:version],
-      on_data: proc { |data, _count| response.stream.write(data) if data.present? }
+      on_data: proc { |data, _count| response.stream.write data }
     )
   rescue Preservation::Client::NotFoundError => e
     # Undo the header setting above for the streaming response. Not relevant here.
