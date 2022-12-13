@@ -20,7 +20,7 @@ module Show
     end
 
     def fields
-      @fields ||= blacklight_config.show_fields_for(:show)
+      @fields ||= blacklight_config.show_fields_for([:show])
     end
   end
 end
