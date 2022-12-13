@@ -5,7 +5,7 @@
       <%= f.select :view_access, [['World', 'world'], ['Dark', 'dark']], {}, class: 'form-select' %>
     </div>
     <div class="float-end">
-      = link_to 'Cancel', show_rights_item_path(params[:id])
+      <%= link_to 'Cancel', show_rights_item_path(params[:id]) %>
       <%= f.submit 'Save', class: 'btn btn-primary' %>
     </div>
   <% end %>
