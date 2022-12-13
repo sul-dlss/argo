@@ -29,7 +29,7 @@ class CollectionChangeSetPersister
     copyright: :copyright,
     license: :license,
     use_statement: :useAndReproductionStatement,
-    view_access: :access
+    view_access: :view
   }.freeze
 
   attr_reader :model, :change_set
