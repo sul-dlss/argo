@@ -78,7 +78,8 @@ class User < ApplicationRecord
     @groups_to_impersonate = if grps.blank?
       nil
     else
-      grps.instance_of?(String) ? [grps] : grps
+      # NOTE: Do not allow impersonation to grant SDR API access!
+      Array(grps) - SDR_API_AUTHORIZED_GROUPS
     end
   end
 

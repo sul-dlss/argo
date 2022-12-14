@@ -289,15 +289,26 @@ RSpec.describe User do
     end
 
     context "when impersonating" do
+      let(:groups) { %w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2] }
+
       before do
-        user.set_groups_to_impersonate(%w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2])
+        user.set_groups_to_impersonate(groups)
+      end
+
+      context "and the groups include SDR_API_AUTHORIZED_GROUPS" do
+        let(:groups) { %w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2] + User::SDR_API_AUTHORIZED_GROUPS }
+        let(:webauth_groups) { User::ADMIN_GROUPS }
+
+        it "returns the impersonated groups excluding the SDR_API_AUTHORIZED_GROUPS" do
+          expect(subject).not_to include User::SDR_API_AUTHORIZED_GROUPS.first
+        end
       end
 
       context "and the impersonating user is an admin" do
         let(:webauth_groups) { User::ADMIN_GROUPS }
 
         it "returns only the impersonated groups" do
-          expect(subject).not_to include User::ADMIN_GROUPS
+          expect(subject).not_to include User::ADMIN_GROUPS.first
         end
       end
 
@@ -305,7 +316,7 @@ RSpec.describe User do
         let(:webauth_groups) { User::MANAGER_GROUPS }
 
         it "returns only the impersonated groups" do
-          expect(subject).not_to include User::MANAGER_GROUPS
+          expect(subject).not_to include User::MANAGER_GROUPS.first
         end
       end
 
@@ -313,7 +324,7 @@ RSpec.describe User do
         let(:webauth_groups) { User::VIEWER_GROUPS }
 
         it "returns only the impersonated groups" do
-          expect(subject).not_to include User::VIEWER_GROUPS
+          expect(subject).not_to include User::VIEWER_GROUPS.first
         end
       end
     end
