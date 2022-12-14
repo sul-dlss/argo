@@ -9,6 +9,7 @@ class User < ApplicationRecord
   ADMIN_GROUPS = %w[workgroup:sdr:administrator-role].freeze
   MANAGER_GROUPS = %w[workgroup:sdr:manager-role].freeze
   VIEWER_GROUPS = %w[workgroup:sdr:viewer-role].freeze
+  SDR_API_AUTHORIZED_GROUPS = %w[workgroup:sdr:api-authorized-users].freeze
 
   # @return [Array<String>] list of roles the user can adopt. These must match the roles that Ability looks for.
   # NOTE: 'sdr-administrator' and 'sdr-viewer' may be removed in the future. See https://github.com/sul-dlss/dor-services-app/issues/3856
@@ -77,7 +78,8 @@ class User < ApplicationRecord
     @groups_to_impersonate = if grps.blank?
       nil
     else
-      grps.instance_of?(String) ? [grps] : grps
+      # NOTE: Do not allow impersonation to grant SDR API access!
+      Array(grps) - SDR_API_AUTHORIZED_GROUPS
     end
   end
 
@@ -119,6 +121,11 @@ class User < ApplicationRecord
   # @return [Boolean] is the user a repository wide viewer
   def viewer?
     !(groups & VIEWER_GROUPS).empty?
+  end
+
+  # @return [Boolean] is the user authorized to use SDR API
+  def sdr_api_authorized?
+    !(groups & SDR_API_AUTHORIZED_GROUPS).empty?
   end
 
   def login

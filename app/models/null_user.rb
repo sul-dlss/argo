@@ -13,6 +13,10 @@ class NullUser
     false
   end
 
+  def sdr_api_authorized?
+    false
+  end
+
   def permitted_apos
     []
   end

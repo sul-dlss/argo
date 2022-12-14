@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TokensController < ApplicationController
+  before_action { authorize! :create, :token }
+
   # GET /settings/tokens
   def index
   end
