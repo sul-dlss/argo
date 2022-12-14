@@ -46,7 +46,7 @@ class CollectionsController < ApplicationController
     return unless enforce_versioning
 
     change_set = CollectionChangeSet.new(@cocina)
-    attributes = params.require(:collection).permit(:copyright, :use_statement, :license)
+    attributes = params.require(:collection).permit(:view_access, :copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save
     Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
