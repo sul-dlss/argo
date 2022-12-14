@@ -9,7 +9,7 @@ RSpec.describe "auth/groups" do
   end
 
   context "as admin" do
-    let(:user) { mock_user(admin?: true, groups: %w[dlss dpg]) }
+    let(:user) { mock_user(admin?: true, sdr_api_authorized?: false, groups: %w[dlss dpg]) }
 
     it "shows groups and impersonate form" do
       render
@@ -24,7 +24,7 @@ RSpec.describe "auth/groups" do
   end
 
   context "not admin" do
-    let(:user) { mock_user(admin?: false) }
+    let(:user) { mock_user(admin?: false, sdr_api_authorized?: false) }
 
     it "does not show groups or form" do
       render

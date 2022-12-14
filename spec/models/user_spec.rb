@@ -68,6 +68,22 @@ RSpec.describe User do
     end
   end
 
+  describe "#sdr_api_authorized?" do
+    subject { user.sdr_api_authorized? }
+
+    let(:user) { described_class.new }
+
+    before do
+      allow(user).to receive(:webauth_groups).and_return(groups)
+    end
+
+    context "with SDR_API_AUTHORIZED_GROUPS" do
+      let(:groups) { User::SDR_API_AUTHORIZED_GROUPS }
+
+      it { is_expected.to be true }
+    end
+  end
+
   describe "#manager?" do
     subject { user.manager? }
 
