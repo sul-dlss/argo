@@ -1,0 +1,14 @@
+<div class="accordion-item">
+  <h2 class="accordion-header" id="document-filehierarchy-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#document-filehierarchy-section" aria-expanded="false" aria-controls="document-filehierarchy-section">
+      View content in folder hierarchy
+    </button>
+  </h2>
+  <div id="document-filehierarchy-section" class="accordion-collapse collapse" aria-labelledby="document-filehierarchy-heading">
+    <div class="accordion-body">
+      <turbo-frame id="filehierarchy" src="<%= hierarchy_item_structure_path(view_token) %>" loading="lazy">
+        <%= render Spinner.new %>
+      </turbo-frame>
+    </div>
+  </div>
+</div>

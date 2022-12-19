@@ -275,6 +275,8 @@ RSpec.describe "Item view", js: true do
               click_button "View less"
             end
 
+            expect(page).to have_text "View content in folder hierarchy"
+
             within ".resource-list" do
               click_link "M1090_S15_B02_F01_0126.jp2"
             end

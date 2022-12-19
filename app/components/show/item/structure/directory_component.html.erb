@@ -1,0 +1,19 @@
+<% if name.present? %>
+  <a class="text-reset" data-bs-toggle="collapse" href="#collapseDirectory<%= index %>" role="button" aria-expanded="true" aria-controls="#collapseDirectory<%= index %>">
+    <strong><span class="bi-folder-fill me-2"></span><%= name %></strong>
+  </a>
+<% end %>
+<div class="collapse show" id="collapseDirectory<%= index %>">
+  <ul>
+    <% children_files.each do |file| %>
+      <li>
+        <%= render Show::Item::Structure::FileComponent.new(file: file) %>
+      </li>
+    <% end %>
+    <% children_directories.each do |directory| %>
+      <li>
+        <%= render Show::Item::Structure::DirectoryComponent.new(directory: directory) %>
+      </li>
+    <% end %>
+  </ul>
+</div>
