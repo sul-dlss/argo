@@ -30,6 +30,11 @@ class StructuresController < ApplicationController
       )
   end
 
+  def hierarchy
+    @cocina_item = Repository.find(decrypted_token.fetch(:key))
+    @root_directory = FileHierarchyService.to_hierarchy(cocina_object: @cocina_item)
+  end
+
   private
 
   def display_success(message)
