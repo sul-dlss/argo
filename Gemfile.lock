@@ -267,7 +267,7 @@ GEM
     faraday-net_http (3.0.2)
     faraday-retry (1.0.3)
     ffi (1.15.5)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
     honeybadger (4.12.2)
