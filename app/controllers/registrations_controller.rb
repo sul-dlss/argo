@@ -44,7 +44,7 @@ class RegistrationsController < ApplicationController
 
   # Allow the front end to check if a source Id already exists
   def source_id
-    raise "Malformed input" unless /\A.+:.+\z/.match?(params[:source_id])
+    raise "Malformed input" unless Regexp.new(Settings.source_id_regex).match?(params[:source_id])
 
     begin
       Dor::Services::Client.objects.find(source_id: params[:source_id])
