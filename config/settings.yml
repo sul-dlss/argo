@@ -5,6 +5,7 @@
 
 # General
 date_format_str: '%Y-%m-%d %H:%M:%S.%L'
+source_id_regex: \A.+:.+\z
 
 # Bulk Metadata
 bulk_metadata:

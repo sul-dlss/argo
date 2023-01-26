@@ -7,7 +7,7 @@ class AgreementForm < Reform::Form
   property :agreement_file2, virtual: true
 
   validates :title, presence: true
-  validates :source_id, format: {with: /\A\w+:\w+\z/,
+  validates :source_id, format: {with: Regexp.new(Settings.source_id_regex),
                                  message: "must have a single colon in the middle"},
     presence: true
   validates :agreement_file1, presence: true
