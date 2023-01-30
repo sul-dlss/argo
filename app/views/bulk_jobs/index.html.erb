@@ -1,8 +1,5 @@
 <% @page_title = "Bulk Uploads for APO #{@document.id}" %>
 <% content_for(:head) { document_presenter(@document).link_rel_alternates } -%>
-<% content_for(:sidebar) do %>
-  <%= render_document_sidebar_partial @document %>
-<% end %>
 
 <div class="row mt-3">
     <div class="col-md-8"><strong>Spreadsheet bulk upload for APO <%= @document.id %></strong></div>
