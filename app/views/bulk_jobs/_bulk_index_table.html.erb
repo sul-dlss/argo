@@ -43,7 +43,7 @@
   <% end %>
 </table>
 
-<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<dialog class="modal" id="confirm-delete-modal">
   <div class="modal-dialog">
     <div class="modal-content">
       <%= render BlacklightModalComponent.new do |component| %>
@@ -56,4 +56,4 @@
       <% end %>
     </div>
   </div>
-</div>
+</dialog>

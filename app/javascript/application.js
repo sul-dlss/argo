@@ -4,7 +4,7 @@ import 'jquery'
 import bootstrap from  "bootstrap/dist/js/bootstrap"
 global.bootstrap = bootstrap // Required for Blacklight 7 so it can manage the modals
 
-import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
+import Blacklight from 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 import "./controllers"
 
 import Argo from './argo'
