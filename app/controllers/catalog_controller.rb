@@ -219,7 +219,7 @@ class CatalogController < ApplicationController
 
   def lazy_tag_facet
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field("exploded_tag_ssim")
+    facet_config = helpers.facet_configuration_for_field("exploded_tag_ssim")
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: "lazy_tag_facet"
