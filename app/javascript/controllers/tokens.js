@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import Blacklight from 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 
 export default class extends Controller {
   static targets = [ "output", "result", "button" ]
@@ -7,7 +8,7 @@ export default class extends Controller {
     fetch(this.data.get("url"), {
       method: 'POST',
       headers: {
-        "X-CSRF-Token": Blacklight.csrfToken(),
+        "X-CSRF-Token": Blacklight.Core.csrfToken(),
       }
     }).then(response => response.text())
       .then(token => {
