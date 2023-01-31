@@ -26,6 +26,8 @@ class CatalogController < ApplicationController
     # When we test with solr 6 we can have:
     # config.document_solr_path = 'get'
     config.index.document_presenter_class = ArgoIndexPresenter
+    config.index.sidebar_component = Search::SidebarComponent
+
     config.show.document_presenter_class = ArgoShowPresenter
 
     config.index.display_type_field = SolrDocument::FIELD_CONTENT_TYPE
