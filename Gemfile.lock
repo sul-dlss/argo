@@ -93,8 +93,8 @@ GEM
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7.1)
       view_component (~> 2.66)
-    blacklight-hierarchy (6.0.2)
-      blacklight (~> 7.18)
+    blacklight-hierarchy (6.1.0)
+      blacklight (>= 7.18, < 9)
       deprecation
       rails (>= 5.1, < 7.1)
     bootsnap (1.16.0)
@@ -352,12 +352,12 @@ GEM
     net-ssh (7.0.1)
     newrelic_rpm (8.15.0)
     nio4r (2.5.8)
-    nokogiri (1.14.0)
+    nokogiri (1.14.1)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.14.0-x86_64-darwin)
+    nokogiri (1.14.1-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.0-x86_64-linux)
+    nokogiri (1.14.1-x86_64-linux)
       racc (~> 1.4)
     nokogiri-happymapper (0.9.0)
       nokogiri (~> 1.5)
@@ -610,7 +610,7 @@ PLATFORMS
 DEPENDENCIES
   barby
   blacklight (~> 7.25)
-  blacklight-hierarchy (~> 6.0.2)
+  blacklight-hierarchy (~> 6.1)
   bootsnap (>= 1.4.2)
   byebug
   cancancan
