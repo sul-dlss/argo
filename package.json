@@ -4,7 +4,7 @@
     "@hotwired/turbo-rails": "^7.0.1",
     "@popperjs/core": "^2.10.2",
     "autocomplete.js": "^0.37.1",
-    "blacklight-frontend": "^8.0.0-beta.4",
+    "blacklight-frontend": "^8.0.0-beta.5",
     "blacklight-hierarchy": "^6.0.2",
     "bootstrap": "^5.1.0",
     "esbuild": "^0.12.28",
