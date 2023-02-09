@@ -81,7 +81,7 @@ gem "dor-workflow-client", "~> 4.0"
 gem "druid-tools"
 gem "mods_display", "~> 1.0"
 gem "okcomputer" # monitors application and its dependencies
-gem "preservation-client", "~> 5.0"
+gem "preservation-client", "~> 6.0"
 gem "rsolr"
 gem "sdr-client", "~> 1.0"
 
