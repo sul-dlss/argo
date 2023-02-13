@@ -15,7 +15,7 @@ RSpec/AnyInstance:
     - 'spec/requests/show_list_bulk_actions_spec.rb'
 
 # Offense count: 31
-RSpec/Capybara/SpecificMatcher:
+Capybara/SpecificMatcher:
   Exclude:
     - 'spec/features/report_view_spec.rb'
     - 'spec/features/search_results_spec.rb'
@@ -37,7 +37,7 @@ RSpec/Capybara/SpecificMatcher:
     - 'spec/views/workflows/_show.html.erb_spec.rb'
 
 # Offense count: 5
-RSpec/Capybara/VisibilityMatcher:
+Capybara/VisibilityMatcher:
   Exclude:
     - 'spec/components/version_milestones_component_spec.rb'
     - 'spec/features/bulk_jobs_spec.rb'
