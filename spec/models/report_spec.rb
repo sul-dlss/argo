@@ -77,7 +77,7 @@ RSpec.describe Report do
         :source_id_ssim,
         SolrDocument::FIELD_APO_TITLE,
         :status_ssi,
-        :published_dttsim,
+        :published_earliest_dttsi,
         :file_count,
         :shelved_file_count,
         :resource_count,
@@ -102,7 +102,7 @@ RSpec.describe Report do
         :content_type_ssim,
         SolrDocument::FIELD_CATKEY_ID,
         :barcode_id_ssim,
-        :accessioned_dttsim,
+        :accessioned_earliest_dttsi,
         :workflow_status_ssim
       ].each do |k|
         expect(report_fields).to be_any { |f| f[:field] == k }

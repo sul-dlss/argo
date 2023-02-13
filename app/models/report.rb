@@ -105,13 +105,13 @@ class Report
       sort: false, default: true, width: 100, download_default: true
     },
     {
-      field: :accessioned_dttsim, label: "Accession. Datetime",
-      proc: ->(doc) { DatePresenter.render(doc[:accessioned_dttsim]) },
+      field: :accessioned_earliest_dttsi, label: "Accession. Datetime",
+      proc: ->(doc) { DatePresenter.render(doc[:accessioned_earliest_dttsi]) },
       sort: true, default: false, width: 100, download_default: false
     },
     {
-      field: :published_dttsim, label: "Pub. Date",
-      proc: ->(doc) { DatePresenter.render(doc[:published_dttsim]) },
+      field: :published_earliest_dttsi, label: "Pub. Date",
+      proc: ->(doc) { DatePresenter.render(doc[:published_earliest_dttsi]) },
       sort: true, default: true, width: 100, download_default: false
     },
     {
