@@ -78,10 +78,9 @@ class ModsulatorJob < ApplicationJob
     return if xml_string.nil?
 
     root = Nokogiri::XML(xml_string).root
-    namespace = root.namespace()
 
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
-    mods_list = root.xpath("//x:xmlDoc", "x" => namespace.href)
+    mods_list = root.xpath("//x:xmlDoc", "x" => root.namespace.href)
     mods_list.each do |xmldoc_node|
       item_druid = Druid.new(xmldoc_node.attr("objectId")).with_namespace
 
