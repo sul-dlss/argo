@@ -256,7 +256,7 @@ RSpec.describe "Set catkey" do
         end
 
         before do
-          cocina_model.identification.catalogLinks << Cocina::Models::CatalogLink.new(catalog: "previous symphony", refresh: false, catalogRecordId: "55555")
+          cocina_model.identification.catalogLinks << Cocina::Models::CatalogLink[catalog: "previous symphony", refresh: false, catalogRecordId: "55555"]
         end
 
         it "updates the single catkey, preserving previous symphony catkey" do

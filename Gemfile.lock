@@ -135,7 +135,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    cocina-models (0.86.0)
+    cocina-models (0.87.0)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -185,9 +185,9 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (12.10.0)
+    dor-services-client (12.11.0)
       activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.86.0)
+      cocina-models (~> 0.87.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -298,6 +298,8 @@ GEM
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
+    launchy (2.5.2)
+      addressable (~> 2.8)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -352,12 +354,12 @@ GEM
     net-ssh (7.0.1)
     newrelic_rpm (8.16.0)
     nio4r (2.5.8)
-    nokogiri (1.14.1)
+    nokogiri (1.14.2)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.14.1-x86_64-darwin)
+    nokogiri (1.14.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.1-x86_64-linux)
+    nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
     nokogiri-happymapper (0.9.0)
       nokogiri (~> 1.5)
@@ -521,11 +523,13 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sdr-client (1.0.0)
+    sdr-client (2.1.0)
       activesupport
-      cocina-models (~> 0.86.0)
+      cocina-models (~> 0.87.0)
+      config
       dry-monads
       faraday (>= 0.16)
+      launchy
     selenium-webdriver (4.8.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -668,7 +672,7 @@ DEPENDENCIES
   rubocop-rspec
   ruby-prof
   rubyzip
-  sdr-client (~> 1.0)
+  sdr-client (~> 2.0)
   selenium-webdriver
   sidekiq (~> 6.0)
   simplecov
