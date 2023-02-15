@@ -83,7 +83,7 @@ gem "mods_display", "~> 1.0"
 gem "okcomputer" # monitors application and its dependencies
 gem "preservation-client", "~> 6.0"
 gem "rsolr"
-gem "sdr-client", "~> 1.0"
+gem "sdr-client", "~> 2.0"
 
 gem "devise"
 gem "devise-remote-user", "~> 1.0"

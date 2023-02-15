@@ -232,7 +232,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
         )
       end
 
-      it "removes catkey and barcode" do
+      it "removes catkey and barcode", skip: "cocina-models 0.87.1 will help" do
         expect(subject).to receive(:open_new_version).with(previous_version, "Catkey removed. Barcode removed.").and_return(previous_version)
         subject.send(:update_catkey_and_barcode, change_set, {catkeys: catkeys_arg, barcode:}, buffer)
         expect(object_client).to have_received(:update)
