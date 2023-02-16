@@ -131,16 +131,7 @@ class ItemChangeSetPersister
     identification_props = updated.identification.to_h
     identification_props[:sourceId] = source_id if changed?(:source_id)
     identification_props[:catalogLinks] = Catkey.serialize(model, catkeys, refresh:) if changed?(:catkeys) || changed?(:refresh)
-    # TODO: when cocina-models 0.87.1 is released, replace this block with:
-    # identification_props[:barcode] = barcode.presence if changed?(:barcode)
-    # and unskip the two related skipped specs
-    if changed?(:barcode)
-      if barcode.present?
-        identification_props[:barcode] = barcode
-      else
-        identification_props.delete(:barcode)
-      end
-    end
+    identification_props[:barcode] = barcode.presence if changed?(:barcode)
 
     updated.new(identification: identification_props.presence)
   end
