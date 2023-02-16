@@ -206,7 +206,7 @@ RSpec.describe ItemChangeSetPersister do
         instance.update
       end
 
-      it "invokes object client with item/DRO that has no barcode", skip: "cocina-models 0.87.1 will help" do
+      it "invokes object client with item/DRO that has no barcode" do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             identification: {
