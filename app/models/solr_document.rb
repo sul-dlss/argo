@@ -10,6 +10,7 @@ class SolrDocument
   FIELD_EMBARGO_STATUS = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
   FIELD_CATKEY_ID = :catkey_id_ssim
+  FIELD_FOLIO_ID = :folio_instance_hrid_ssim
   FIELD_CREATED_DATE = :created_at_dttsi
   FIELD_REGISTERED_DATE = :registered_dttsim
   FIELD_LAST_ACCESSIONED_DATE = :accessioned_latest_dttsi
@@ -47,6 +48,7 @@ class SolrDocument
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
+  attribute :catkey, Blacklight::Types::String, FIELD_FOLIO_ID
   attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::Date, FIELD_EMBARGO_RELEASE_DATE
