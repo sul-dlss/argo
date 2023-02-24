@@ -38,7 +38,7 @@ module Show
 
     # a catkey indicates there's a symphony record
     def symphony_record?
-      doc.catkey_id.present?
+      doc.catkey.present?
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc

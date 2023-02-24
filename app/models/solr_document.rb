@@ -146,13 +146,6 @@ class SolrDocument
   end
 
   ##
-  # Access a SolrDocument's catkey identifier
-  # @return [String, nil]
-  def catkey_id
-    catkey&.delete_prefix("catkey:")
-  end
-
-  ##
   # Access a SolrDocument's druid parsed from the id format of 'druid:abc123'
   # @return [String]
   def druid
