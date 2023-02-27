@@ -45,8 +45,6 @@ RSpec.describe "Profile" do
     within "#discovery" do
       expect(page).to have_css "h4", text: "Discovery"
       expect(page).to have_css "td:nth-child(1)", text: "Published to PURL"
-      expect(page).to have_css "h5", text: "Catkeys"
-      expect(page).to have_css "td:nth-child(1)", text: "has value"
     end
 
     within "#rights" do

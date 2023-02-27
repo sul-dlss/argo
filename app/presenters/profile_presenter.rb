@@ -90,10 +90,6 @@ class ProfilePresenter
     facet_query_field['-rights_primary_ssi:"dark" AND published_dttsim:*']
   end
 
-  def catkey
-    stats_field["catkey_id_ssim"]
-  end
-
   private
 
   def stats_field
