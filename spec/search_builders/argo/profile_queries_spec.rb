@@ -60,7 +60,6 @@ RSpec.describe Argo::ProfileQueries do
         content_file_count_itsi
         shelved_content_file_count_itsi
         preserved_size_dbtsi
-        catkey_id_ssim
       ]
       expect(solr_parameters["stats"]).to be true
       expect(stats_fields).to include(*required_fields)
