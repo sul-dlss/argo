@@ -4,10 +4,10 @@
 # Job to update/add source IDs to objects
 class SetSourceIdsCsvJob < GenericJob
   ##
-  # A job that allows a user to specify a list of druids and a list of catkeys to be associated with these druids
+  # A job that allows a user to specify a list of druids and a list of source ids to be associated with these druids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [String] :csv_file The file that contains the list of druids and catkeys
+  # @option params [String] :csv_file The file that contains the list of druids and source ids
   def perform(bulk_action_id, params)
     super
 
