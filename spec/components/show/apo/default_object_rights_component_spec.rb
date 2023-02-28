@@ -8,7 +8,7 @@ RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
   let(:cocina) do
     build(:admin_policy, use_statement: "Use and reproduction statement.",
       copyright: "This is the copyright.",
-      license: "A license goes here.")
+      license: "https://www.gnu.org/licenses/agpl.txt")
   end
   let(:doc) do
     SolrDocument.new("id" => "druid:bb663yf7144",
@@ -21,7 +21,7 @@ RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
     # these come from the cocina model:
     expect(rendered.to_html).to include "Use and reproduction statement."
     expect(rendered.to_html).to include "This is the copyright."
-    expect(rendered.to_html).to include "A license goes here."
+    expect(rendered.to_html).to include "https://www.gnu.org/licenses/agpl.txt"
 
     # this comes from the solr document:
     expect(rendered.to_html).to include "location - spec"
