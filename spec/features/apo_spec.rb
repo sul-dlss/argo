@@ -46,7 +46,7 @@ RSpec.describe "Create an apo", js: true do
     select "View", from: "permissionRole"
     click_button "Add"
 
-    select("Dark", from: "Download access")
+    select("None", from: "Download access")
     select("Dark", from: "View access")
     select("Attribution Share Alike 3.0 Unported", from: "Default use license")
     select("accessionWF", from: "Default workflows")
