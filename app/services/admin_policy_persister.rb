@@ -60,6 +60,10 @@ class AdminPolicyPersister
   end
 
   def sync
+    # Do not allow invalid access combinations (we do the same in the ItemChangeSet)
+    form.download_access = "none" if clear_download?
+    form.access_location = nil if clear_location?
+
     updated = model
     updated = updated.new(label: title)
     updated = updated_administrative(updated)
@@ -75,6 +79,14 @@ class AdminPolicyPersister
     :view_access, :download_access, :access_location, :controlled_digital_lending,
     :collection_radio, :collections_for_registration, :collection,
     :registered_by, :changed?, to: :form
+
+  def clear_download?
+    %w[dark citation-only].include?(view_access) && download_access != "none"
+  end
+
+  def clear_location?
+    (changed?(:view_access) || changed?(:download_access)) && view_access != "location-based" && download_access != "location-based"
+  end
 
   def tag_registered_by(druid)
     return unless registered_by
@@ -118,7 +130,7 @@ class AdminPolicyPersister
     controlled_digital_lending: :controlledDigitalLending
   }.freeze
 
-  # TODO: dedupliate with ItemChangeSetPersister
+  # TODO: deduplicate with ItemChangeSetPersister
   def access_template
     {}.tap do |access_properties|
       ACCESS_FIELDS.filter { |field, _cocina_field| changed?(field) }.each do |field, cocina_field|

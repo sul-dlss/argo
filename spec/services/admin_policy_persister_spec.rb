@@ -8,6 +8,7 @@ RSpec.describe AdminPolicyPersister do
 
   before do
     allow(instance).to receive(:tags_client).and_return(fake_tags_client)
+    allow(change_set).to receive(:access_location=).and_return(nil)
   end
 
   context "with a persisted model (update)" do
