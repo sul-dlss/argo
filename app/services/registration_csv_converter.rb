@@ -38,9 +38,9 @@ class RegistrationCsvConverter
   #   3: content_type (required)
   #   4: reading_order (required if "content_type" is "book" or "image")
   #   5: source_id (required)
-  #   6: catkey (optional)
+  #   6: catkey or folio_id (optional)
   #   7: barcode (optional)
-  #   8: label (required unless a catkey has been entered)
+  #   8: label (required unless a catkey or folio_id have been entered)
   #   9: rights_view (required)
   #  10: rights_download (required)
   #  11: rights_location (required if "view" or "download" uses "location-based")
@@ -65,7 +65,7 @@ class RegistrationCsvConverter
     model_params = {
       type: dro_type(params[:content_type] || row.fetch("content_type")),
       version: 1,
-      label: row["catkey"] ? row["label"] : row.fetch("label"),
+      label: row[catalog_record_id_column] ? row["label"] : row.fetch("label"),
       administrative: {
         hasAdminPolicy: params[:administrative_policy_object] || row.fetch("administrative_policy_object")
       },
@@ -84,7 +84,11 @@ class RegistrationCsvConverter
   end
 
   def catalog_links(row)
-    row["catkey"] ? [{catalog: "symphony", catalogRecordId: row["catkey"], refresh: true}] : []
+    row[catalog_record_id_column] ? [{catalog: CatalogRecordId.type, catalogRecordId: row[catalog_record_id_column], refresh: true}] : []
+  end
+
+  def catalog_record_id_column
+    CatalogRecordId.label.downcase.tr(" ", "_")
   end
 
   def tags(row)

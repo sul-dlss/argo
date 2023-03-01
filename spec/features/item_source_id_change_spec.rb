@@ -51,7 +51,7 @@ RSpec.describe "Item source id change" do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       solr_conn.add(:id => druid, :objectType_ssim => "item",
-        SolrDocument::FIELD_CATKEY_ID => "catkey:99999")
+        CatalogRecordId.index_field => "#{CatalogRecordId.indexing_prefix}99999")
       solr_conn.commit
     end
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Item catkey change" do
+RSpec.describe "Item catalog_record_id change" do
   before do
     sign_in create(:user), groups: ["sdr:administrator-role"]
     allow(StateService).to receive(:new).and_return(state_service)
@@ -13,8 +13,8 @@ RSpec.describe "Item catkey change" do
     let(:druid) { item.externalIdentifier }
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
-    it "cannot change the catkey" do
-      visit edit_item_catkey_path druid
+    it "cannot change the catalog_record_id" do
+      visit edit_item_catalog_record_id_path druid
       within ".modal-body" do
         find("input").set "12345"
       end
@@ -52,12 +52,12 @@ RSpec.describe "Item catkey change" do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       solr_conn.add(:id => druid, :objectType_ssim => "item",
-        SolrDocument::FIELD_CATKEY_ID => "catkey:99999")
+        CatalogRecordId.index_field => "#{CatalogRecordId.indexing_prefix}99999")
       solr_conn.commit
     end
 
-    it "changes the catkey" do
-      visit edit_item_catkey_path druid
+    it "changes the catalog_record_id" do
+      visit edit_item_catalog_record_id_path druid
       within ".modal-body" do
         find("input").set "12345"
         find("select").set true

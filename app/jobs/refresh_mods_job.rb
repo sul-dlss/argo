@@ -9,8 +9,8 @@ class RefreshModsJob < GenericJob
     with_items(params[:druids], name: "Refresh MODS") do |cocina_object, success, failure|
       next failure.call("Not authorized") unless ability.can?(:update, cocina_object)
 
-      catkey = cocina_object.identification&.catalogLinks&.find { |link| link.catalog == "symphony" }&.catalogRecordId
-      next failure.call("Did not update metadata because it doesn't have a catkey") if catkey.blank?
+      catalog_record_id = cocina_object.identification&.catalogLinks&.find { |link| link.catalog == CatalogRecordId.type }&.catalogRecordId
+      next failure.call("Did not update metadata because it doesn't have a #{CatalogRecordId.label}") if catalog_record_id.blank?
 
       Dor::Services::Client.object(cocina_object.externalIdentifier).refresh_descriptive_metadata_from_ils
       success.call("Successfully updated metadata")

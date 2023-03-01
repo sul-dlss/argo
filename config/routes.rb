@@ -25,13 +25,13 @@ Rails.application.routes.draw do
         resource :apply_apo_defaults_job, only: %i[new create]
         resource :rights_job, only: %i[new create]
         resource :license_and_rights_statement_job, only: %i[new create]
-        resource :catkey_and_barcode_job, only: %i[new create]
+        resource :catalog_record_id_and_barcode_job, only: %i[new create]
         resource :refresh_mods_job, only: %i[new create]
         resource :content_type_job, only: %i[new create]
         resource :collection_job, only: %i[new create]
 
         resource :virtual_object_job, only: %i[new create]
-        resource :catkey_and_barcode_csv_job, only: %i[new create]
+        resource :catalog_record_id_and_barcode_csv_job, only: %i[new create]
         resource :source_id_csv_job, only: %i[new create]
         resource :export_tag_job, only: %i[new create]
         resource :import_tag_job, only: %i[new create]
@@ -181,7 +181,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :catkey, only: %i[edit update]
+    resource :catalog_record_id, only: %i[edit update]
     resource :embargo, only: %i[new edit update]
 
     member do
@@ -214,7 +214,7 @@ Rails.application.routes.draw do
     collection do
       get "tracksheet"
       get "source_id"
-      get "catkey"
+      get "catalog_record_id"
       get "spreadsheet"
       get "suggest_project", action: "autocomplete"
     end

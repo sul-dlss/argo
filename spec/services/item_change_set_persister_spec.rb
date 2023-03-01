@@ -41,7 +41,7 @@ RSpec.describe ItemChangeSetPersister do
         },
         identification: {
           barcode: barcode_before,
-          catalogLinks: [{catalog: "symphony", catalogRecordId: catkey_before, refresh: true}],
+          catalogLinks: [{catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: true}],
           sourceId: "sul:1234"
         },
         structural: {},
@@ -51,7 +51,7 @@ RSpec.describe ItemChangeSetPersister do
     end
     let(:use_statement_before) { "My First Use Statement" }
     let(:barcode_before) { "36105014757517" }
-    let(:catkey_before) { "367268" }
+    let(:catalog_record_id_before) { "367268" }
     let(:change_set) { ItemChangeSet.new(model) }
 
     before do
@@ -193,7 +193,7 @@ RSpec.describe ItemChangeSetPersister do
           cocina_object_with(
             identification: {
               barcode: new_barcode,
-              catalogLinks: [{catalog: "symphony", catalogRecordId: catkey_before, refresh: true}]
+              catalogLinks: [{catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: true}]
             }
           )
         )
@@ -211,7 +211,7 @@ RSpec.describe ItemChangeSetPersister do
           cocina_object_with(
             identification: {
               barcode: nil,
-              catalogLinks: [{catalog: "symphony", catalogRecordId: catkey_before, refresh: true}]
+              catalogLinks: [{catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: true}]
             }
           )
         )
@@ -219,20 +219,20 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context "when change set has changed refresh" do
-      let(:new_catkeys) { ["367269"] }
+      let(:new_catalog_record_ids) { ["367269"] }
 
       before do
-        change_set.validate(catkeys: [catkey_before], refresh: false)
+        change_set.validate(catalog_record_ids: [catalog_record_id_before], refresh: false)
         instance.update
       end
 
-      it "invokes object client with item/DRO that has new catkey" do
+      it "invokes object client with item/DRO that has new catalog_record_id" do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             identification: {
               barcode: barcode_before,
               catalogLinks: [
-                {catalog: "symphony", catalogRecordId: catkey_before, refresh: false}
+                {catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: false}
               ]
             }
           )
@@ -240,22 +240,22 @@ RSpec.describe ItemChangeSetPersister do
       end
     end
 
-    context "when change set has changed catkey" do
-      let(:new_catkeys) { ["367269"] }
+    context "when change set has changed catalog_record_id" do
+      let(:new_catalog_record_ids) { ["367269"] }
 
       before do
-        change_set.validate(catkeys: new_catkeys)
+        change_set.validate(catalog_record_ids: new_catalog_record_ids)
         instance.update
       end
 
-      it "invokes object client with item/DRO that has new catkey" do
+      it "invokes object client with item/DRO that has new catalog_record_id" do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             identification: {
               barcode: barcode_before,
               catalogLinks: [
-                {catalog: "previous symphony", catalogRecordId: catkey_before, refresh: false},
-                {catalog: "symphony", catalogRecordId: new_catkeys.first, refresh: true}
+                {catalog: "previous symphony", catalogRecordId: catalog_record_id_before, refresh: false},
+                {catalog: "symphony", catalogRecordId: new_catalog_record_ids.first, refresh: true}
               ]
             }
           )
@@ -263,17 +263,17 @@ RSpec.describe ItemChangeSetPersister do
       end
     end
 
-    context "when change set has removed catkey" do
+    context "when change set has removed catalog_record_id" do
       before do
-        change_set.validate(catkeys: [])
+        change_set.validate(catalog_record_ids: [])
         instance.update
       end
 
-      it "invokes object client with item/DRO that has no catkey" do
+      it "invokes object client with item/DRO that has no catalog_record_id" do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             identification: {
-              catalogLinks: [{catalog: "previous symphony", catalogRecordId: catkey_before, refresh: false}],
+              catalogLinks: [{catalog: "previous symphony", catalogRecordId: catalog_record_id_before, refresh: false}],
               barcode: barcode_before
             }
           )

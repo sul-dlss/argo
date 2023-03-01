@@ -55,7 +55,7 @@ class CollectionsController < ApplicationController
   end
 
   def exists
-    resp = collection_exists?(title: params[:title].presence, catkey: params[:catkey].presence)
+    resp = collection_exists?(title: params[:title].presence, catalog_record_id: params[:catalog_record_id].presence)
     render json: resp.to_json, layout: false
   end
 
@@ -84,12 +84,12 @@ class CollectionsController < ApplicationController
       CollectionConcern::FIELD_COLLECTION_ID, search_state).href
   end
 
-  def collection_exists?(title:, catkey:)
-    return false unless title || catkey
+  def collection_exists?(title:, catalog_record_id:)
+    return false unless title || catalog_record_id
 
     query = "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
     query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title}\"" if title
-    query += " AND identifier_ssim:\"catkey:#{params[:catkey]}\"" if catkey
+    query += " AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:#{params[:catalog_record_id]}\"" if catalog_record_id
 
     result = solr_conn.get("select", params: {q: query, qt: "standard", rows: 0})
     result.dig("response", "numFound").to_i.positive?

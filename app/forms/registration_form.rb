@@ -8,7 +8,7 @@ class RegistrationForm < Reform::Form
     end
   end
 
-  # standard, business, lane, catkey (matches allowed patterns in cocina-models)
+  # standard, business, lane (matches allowed patterns in cocina-models)
   VALID_BARCODE_REGEX = /\A(36105[0-9]{9}|2050[0-9]{7}|245[0-9]{8}|[0-9]+-[0-9]+)\z/
 
   include HasViewAccessWithCdl
@@ -35,11 +35,11 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   collection :items, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
     prepopulator: ->(*) { (1 - items.count).times { items << VirtualModel.new } } do
     property :source_id, virtual: true
-    property :catkey, virtual: true
+    property :catalog_record_id, virtual: true
     property :label, virtual: true
     property :barcode, virtual: true
     validates :source_id, format: {with: /\A.+:.+\z/, message: "ID is invalid"}
-    validates :catkey, allow_blank: true, format: {with: /\A\d+(:\d+)*\z/, message: "is invalid"}
+    validates :catalog_record_id, allow_blank: true, format: {with: Regexp.new(CatalogRecordId.pattern_string), message: "is invalid"}
     validates :barcode, allow_blank: true, format: {with: VALID_BARCODE_REGEX, message: "is invalid"}
   end
 
@@ -123,8 +123,8 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   end
 
   def catalog_links(item)
-    return [] if item.catkey.blank?
+    return [] if item.catalog_record_id.blank?
 
-    [{catalog: "symphony", catalogRecordId: item.catkey, refresh: true}]
+    [{catalog: CatalogRecordId.type, catalogRecordId: item.catalog_record_id, refresh: true}]
   end
 end

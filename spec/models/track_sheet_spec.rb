@@ -152,10 +152,10 @@ RSpec.describe TrackSheet do
       end
     end
 
-    context "with a catkey" do
+    context "with a catalog_record_id" do
       let(:solr_doc) do
         base_solr_doc.merge({
-          "catkey_id_ssim" => ["catkey123"]
+          CatalogRecordId.index_field => ["catkey123"]
         })
       end
 
@@ -176,7 +176,7 @@ RSpec.describe TrackSheet do
         })
       end
 
-      it "adds the catkey" do
+      it "adds the catalog_record_id" do
         expect(call).to include(
           [
             "Source ID:",
@@ -193,7 +193,7 @@ RSpec.describe TrackSheet do
         })
       end
 
-      it "adds the catkey" do
+      it "adds the catalog_record_id" do
         expect(call).to include(
           [
             "Barcode:",

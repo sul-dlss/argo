@@ -102,7 +102,7 @@ class TrackSheet
 
     tags = Array(doc["tag_ssim"]).collect { |tag| /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }.compact
     table_data.push(["Tags:", tags.join("\n")]) unless tags.empty?
-    table_data.push(["Catkey:", Array(doc[SolrDocument::FIELD_CATKEY_ID]).join(", ")]) if doc[SolrDocument::FIELD_CATKEY_ID].present?
+    table_data.push(["#{CatalogRecordId.label}:", Array(doc[CatalogRecordId.index_field]).join(", ")]) if doc[CatalogRecordId.index_field].present?
     table_data.push(["Source ID:", Array(doc["source_id_ssim"]).first]) if doc["source_id_ssim"].present?
     table_data.push(["Barcode:", Array(doc["barcode_id_ssim"]).first]) if doc["barcode_id_ssim"].present?
     table_data.push(["Date Printed:", Time.zone.now.strftime("%c")])

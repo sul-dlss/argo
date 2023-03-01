@@ -36,9 +36,9 @@ module Show
       manager?
     end
 
-    # a catkey indicates there's a symphony record
-    def symphony_record?
-      doc.catkey.present?
+    # a catalog record ID indicates there's a catalog record
+    def catalog_record?
+      doc.catalog_record_id.present?
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc

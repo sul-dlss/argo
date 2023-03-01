@@ -16,6 +16,10 @@ module Show
       delegate :object_type, :created_date, :preservation_size, to: :@solr_document
       delegate :state_service, to: :@presenter
 
+      def catalog_record_id_label
+        CatalogRecordId.label
+      end
+
       def released_to
         @solr_document.released_to.presence&.to_sentence || "Not released"
       end

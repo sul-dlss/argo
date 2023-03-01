@@ -145,6 +145,12 @@ class SolrDocument
     end
   end
 
+  def catalog_record_id
+    return folio_instance_hrid if Settings.enabled_features.folio
+
+    catkey
+  end
+
   ##
   # Access a SolrDocument's druid parsed from the id format of 'druid:abc123'
   # @return [String]

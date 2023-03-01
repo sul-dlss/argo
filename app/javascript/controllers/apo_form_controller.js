@@ -4,7 +4,7 @@ import Sharing from '../modules/sharing'
 // This handles the "Register APO" as well as "Edit APO" forms
 // This controller should be on a <form> node
 export default class extends Controller {
-  static targets = [ "selectCollectionFields", "createCollectionFields", "catkeyFields" ]
+  static targets = [ "selectCollectionFields", "createCollectionFields", "catalogRecordIdFields" ]
 
   connect() {
     this.sharing = new Sharing(this.element.querySelector('sharing'))
@@ -18,7 +18,7 @@ export default class extends Controller {
   hideCollection() {
     this.selectCollectionFieldsTarget.hidden = true
     this.createCollectionFieldsTarget.hidden = true
-    this.catkeyFieldsTarget.hidden = true
+    this.catalogRecordIdFieldsTarget.hidden = true
   }
 
   revealCreateCollection() {
@@ -26,9 +26,9 @@ export default class extends Controller {
     this.createCollectionFieldsTarget.hidden = false
   }
 
-  revealCreateCollectionCatkey() {
+  revealCreateCollectionCatalogRecordId() {
     this.hideCollection()
-    this.catkeyFieldsTarget.hidden = false
+    this.catalogRecordIdFieldsTarget.hidden = false
   }
 
   revealSelectCollection() {

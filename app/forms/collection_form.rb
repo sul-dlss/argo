@@ -20,9 +20,9 @@ class CollectionForm
   # @return [Boolean] true if the parameters are valid
   def validate(params)
     @params = params
-    unless params[:collection_title].present? || params[:collection_catkey].present?
-      @errors.add(:base, :title_or_catkey_blank,
-        message: "missing collection_title or collection_catkey")
+    unless params[:collection_title].present? || params[:collection_catalog_record_id].present?
+      @errors.add(:base, :title_or_catalog_record_id_blank,
+        message: "missing collection_title or collection_catalog_record_id")
     end
     @errors.empty?
   end
@@ -59,13 +59,13 @@ class CollectionForm
 
     reg_params[:description] = build_description if params[:collection_title].present? || params[:collection_abstract].present?
 
-    raw_rights = params[:collection_catkey].present? ? params[:collection_rights_catkey] : params[:collection_rights]
+    raw_rights = params[:collection_catalog_record_id].present? ? params[:collection_rights_catalog_record_id] : params[:collection_rights]
     access = CocinaAccess.from_form_value(raw_rights)
     reg_params[:access] = access.value! unless access.none?
 
-    if params[:collection_catkey].present?
+    if params[:collection_catalog_record_id].present?
       reg_params[:identification] = {
-        catalogLinks: [{catalog: "symphony", catalogRecordId: params[:collection_catkey], refresh: true}]
+        catalogLinks: [{catalog: "symphony", catalogRecordId: params[:collection_catalog_record_id], refresh: true}]
       }
     end
 

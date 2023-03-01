@@ -15,6 +15,10 @@ module Show
       def released_to
         @solr_document.released_to.presence&.to_sentence || "Not released"
       end
+
+      def catalog_record_id_label
+        CatalogRecordId.label
+      end
     end
   end
 end

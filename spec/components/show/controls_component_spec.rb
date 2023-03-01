@@ -17,17 +17,17 @@ RSpec.describe Show::ControlsComponent, type: :component do
     rendered
   end
 
-  context "when the object is a DRO the user can manage and no catkey or embargo info" do
+  context "when the object is a DRO the user can manage and no catalog record ID or embargo info" do
     let(:item_id) { "druid:kv840xx0000" }
 
     let(:doc) do
       SolrDocument.new("id" => item_id,
         "processing_status_text_ssi" => "not registered",
         SolrDocument::FIELD_OBJECT_TYPE => "item",
-        SolrDocument::FIELD_CATKEY_ID => catkey,
+        CatalogRecordId.index_field => catalog_record_id,
         SolrDocument::FIELD_APO_ID => [governing_apo_id])
     end
-    let(:catkey) { nil }
+    let(:catalog_record_id) { nil }
 
     context "when the object is unlocked" do
       let(:allows_modification) { true }
@@ -56,8 +56,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
         end
       end
 
-      context "when the item has a catkey" do
-        let(:catkey) { "catkey:1234567" }
+      context "when the item has a catalog record ID" do
+        let(:catalog_record_id) { "#{CatalogRecordId.indexing_prefix}:1234567" }
 
         it "includes the descriptive metadata refresh button and the correct count of actions" do
           expect(page).to have_link "Refresh", href: "/items/druid:kv840xx0000/refresh_metadata"
@@ -126,10 +126,10 @@ RSpec.describe Show::ControlsComponent, type: :component do
       SolrDocument.new("id" => view_collection_id,
         "processing_status_text_ssi" => "not registered",
         SolrDocument::FIELD_OBJECT_TYPE => "collection",
-        SolrDocument::FIELD_CATKEY_ID => catkey,
+        CatalogRecordId.index_field => catalog_record_id,
         SolrDocument::FIELD_APO_ID => [governing_apo_id])
     end
-    let(:catkey) { nil }
+    let(:catalog_record_id) { nil }
 
     it "renders the appropriate buttons" do
       expect(page).to have_link "Reindex", href: "/dor/reindex/druid:kv840xx0000"
@@ -145,8 +145,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(rendered.css("a").size).to eq 9
     end
 
-    context "when the collection has a catkey" do
-      let(:catkey) { "catkey:1234567" }
+    context "when the collection has a catalog record ID" do
+      let(:catalog_record_id) { "#{CatalogRecordId.indexing_prefix}:1234567" }
 
       it 'includes the descriptive metadata refresh button without "Manage Serials" and the correct count of actions' do
         expect(page).to have_link "Refresh", href: "/items/druid:kv840xx0000/refresh_metadata"

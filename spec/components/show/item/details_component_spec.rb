@@ -7,7 +7,7 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set:, cocina:, state_service:) }
   let(:cocina) { instance_double(Cocina::Models::DRO) }
 
-  let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id, catkeys: []) }
+  let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id, catalog_record_ids: []) }
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
@@ -20,7 +20,7 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
 
   let(:content_type_button) { rendered.css("a[aria-label='Set content type']") }
   let(:source_id_button) { rendered.css("a[aria-label='Change source id']") }
-  let(:catkey_button) { rendered.css("a[aria-label='Manage catkey']") }
+  let(:catalog_record_id_button) { rendered.css("a[aria-label='#{CatalogRecordId.manage_label}']") }
   let(:barcode_button) { rendered.css("a[aria-label='Edit barcode']") }
 
   context "when allows_modification is true" do
@@ -29,7 +29,7 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
       expect(rendered.to_html).to include "Not released"
       expect(rendered.to_html).to include "Not recorded"
       expect(rendered.to_html).to include "None assigned"
-      expect(catkey_button).to be_present
+      expect(catalog_record_id_button).to be_present
       expect(content_type_button).to be_present
       expect(barcode_button).to be_present
       expect(rendered.to_html).to include "Preservation size"
@@ -43,7 +43,7 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
 
     it "creates only the tag edit buttons" do
       expect(source_id_button).not_to be_present
-      expect(catkey_button).not_to be_present
+      expect(catalog_record_id_button).not_to be_present
       expect(content_type_button).not_to be_present
       expect(barcode_button).not_to be_present
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present

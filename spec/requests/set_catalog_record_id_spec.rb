@@ -2,15 +2,15 @@
 
 require "rails_helper"
 
-RSpec.describe "Set catkey" do
+RSpec.describe "Set catalog record ID" do
   let(:user) { create(:user) }
   let(:druid) { "druid:dc243mg0841" }
-  let(:catkey_params) do
-    {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""}}}, "item_id" => druid}
+  let(:catalog_record_id_params) do
+    {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""}}}, "item_id" => druid}
   end
-  let(:delete_catkey_params) do
-    {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "true", "value" => "99999", "_destroy" => "1"},
-                                          "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+  let(:delete_catalog_record_id_params) do
+    {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "99999", "_destroy" => "1"},
+                                                                "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
   end
   let(:turbo_stream_headers) do
     {"Accept" => "#{Mime[:turbo_stream]},#{Mime[:html]}",
@@ -28,7 +28,7 @@ RSpec.describe "Set catkey" do
     end
 
     it "returns a 403" do
-      patch item_catkey_path(druid), params: catkey_params
+      patch item_catalog_record_id_path(druid), params: catalog_record_id_params
       expect(response.code).to eq("403")
     end
   end
@@ -46,27 +46,27 @@ RSpec.describe "Set catkey" do
         let(:cocina_model) { build(:dro, id: druid) }
 
         it "draws the form" do
-          get edit_item_catkey_path druid
+          get edit_item_catalog_record_id_path druid
 
           expect(response).to be_successful
         end
       end
 
-      context "with a collection that has no existing catkeys" do
+      context "with a collection that has no existing catalog_record_ids" do
         let(:cocina_model) { build(:collection, id: druid) }
 
         it "draws the form" do
-          get edit_item_catkey_path druid
+          get edit_item_catalog_record_id_path druid
 
           expect(response).to be_successful
         end
       end
 
-      context "with a collection that has existing catkeys" do
+      context "with a collection that has existing catalog_record_ids" do
         let(:cocina_model) { build(:collection, id: druid, catkeys: ["10448742"]) }
 
         it "draws the form" do
-          get edit_item_catkey_path druid
+          get edit_item_catalog_record_id_path druid
 
           expect(response).to be_successful
           expect(response.body).to include "10448742"
@@ -90,13 +90,13 @@ RSpec.describe "Set catkey" do
         allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
-      context "with invalid catkey value on an item" do
-        let(:invalid_catkey_params) do
-          {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "true", "value" => "bogus", "_destroy" => ""}}}, "item_id" => druid}
+      context "with invalid catalog_record_id value on an item" do
+        let(:invalid_catalog_record_id_params) do
+          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "bogus", "_destroy" => ""}}}, "item_id" => druid}
         end
 
-        it "does not update the catkey" do
-          patch item_catkey_path(druid), params: invalid_catkey_params, headers: turbo_stream_headers
+        it "does not update the catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: invalid_catalog_record_id_params, headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
@@ -104,14 +104,14 @@ RSpec.describe "Set catkey" do
         end
       end
 
-      context "with duplicate catkey values on an item" do
-        let(:invalid_catkey_params) do
-          {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "false", "value" => "99999", "_destroy" => ""},
-                                                "1" => {"refresh" => "true", "value" => "99999", "_destroy" => ""}}}, "item_id" => druid}
+      context "with duplicate catalog_record_id values on an item" do
+        let(:invalid_catalog_record_id_params) do
+          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "false", "value" => "99999", "_destroy" => ""},
+                                                                      "1" => {"refresh" => "true", "value" => "99999", "_destroy" => ""}}}, "item_id" => druid}
         end
 
-        it "does not update the catkey" do
-          patch item_catkey_path(druid), params: invalid_catkey_params, headers: turbo_stream_headers
+        it "does not update the catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: invalid_catalog_record_id_params, headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
@@ -119,14 +119,14 @@ RSpec.describe "Set catkey" do
         end
       end
 
-      context "with multiple catkeys set to refresh on an item" do
-        let(:invalid_catkey_params) do
-          {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => "", "id" => "12345"},
-                                                "1" => {"refresh" => "true", "value" => "45678", "_destroy" => "", "id" => "45678"}}}, "item_id" => druid}
+      context "with multiple catalog_record_ids set to refresh on an item" do
+        let(:invalid_catalog_record_id_params) do
+          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => "", "id" => "12345"},
+                                                                      "1" => {"refresh" => "true", "value" => "45678", "_destroy" => "", "id" => "45678"}}}, "item_id" => druid}
         end
 
-        it "does not update the catkey" do
-          patch item_catkey_path(druid), params: invalid_catkey_params, headers: turbo_stream_headers
+        it "does not update the catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: invalid_catalog_record_id_params, headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
           expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
@@ -134,12 +134,12 @@ RSpec.describe "Set catkey" do
         end
       end
 
-      context "with an item that has no existing catkeys" do
-        let(:mutiple_catkey_params) do
-          {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""},
-                                                "1" => {"refresh" => "false", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+      context "with an item that has no existing catalog_record_ids" do
+        let(:mutiple_catalog_record_id_params) do
+          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""},
+                                                                      "1" => {"refresh" => "false", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
         end
-        let(:updated_model_multiple_catkeys) do
+        let(:updated_model_multiple_catalog_record_ids) do
           cocina_model.new(
             {
               identification: {
@@ -151,26 +151,26 @@ RSpec.describe "Set catkey" do
           )
         end
 
-        it "updates a single catkey" do
-          patch item_catkey_path(druid), params: catkey_params
+        it "updates a single catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: catalog_record_id_params
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
 
-        it "updates multiple catkeys" do
-          patch item_catkey_path(druid), params: mutiple_catkey_params
+        it "updates multiple catalog_record_ids" do
+          patch item_catalog_record_id_path(druid), params: mutiple_catalog_record_id_params
 
           expect(object_client).to have_received(:update)
-            .with(params: updated_model_multiple_catkeys)
+            .with(params: updated_model_multiple_catalog_record_ids)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
-      context "with an item that has a single existing catkey" do
+      context "with an item that has a single existing catalog_record_id" do
         let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: ["99999"]) }
-        let(:updated_model_deleted_catkey) do
+        let(:updated_model_deleted_catalog_record_id) do
           cocina_model.new(
             {
               identification: {
@@ -182,30 +182,30 @@ RSpec.describe "Set catkey" do
           )
         end
 
-        it "updates the catkey" do
-          patch item_catkey_path(druid), params: catkey_params
+        it "updates the catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: catalog_record_id_params
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
 
-        it "deletes the catkey, moving it to previous symphony, and then adds a new one" do
-          patch item_catkey_path(druid), params: delete_catkey_params
+        it "deletes the catalog_record_id, moving it to previous symphony, and then adds a new one" do
+          patch item_catalog_record_id_path(druid), params: delete_catalog_record_id_params
 
           expect(object_client).to have_received(:update)
-            .with(params: updated_model_deleted_catkey)
+            .with(params: updated_model_deleted_catalog_record_id)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
-      context "with an item that has two existing catkeys" do
+      context "with an item that has two existing catalog_record_ids" do
         let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: %w[99999 45678]) }
-        let(:update_catkey_params) do
-          {:catkey => {"catkeys_attributes" => {"0" => {"refresh" => "false", "value" => "99999", "_destroy" => ""},
-                                                "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+        let(:update_catalog_record_id_params) do
+          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "false", "value" => "99999", "_destroy" => ""},
+                                                                      "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
         end
-        let(:updated_model_updated_catkeys) do
+        let(:updated_model_updated_catalog_record_ids) do
           cocina_model.new(
             {
               identification: {
@@ -217,21 +217,21 @@ RSpec.describe "Set catkey" do
           )
         end
 
-        it "swaps the refresh setting of the catkeys" do
-          expect(cocina_model.identification.catalogLinks[0].refresh).to be true # the first catkey is refresh true
-          expect(cocina_model.identification.catalogLinks[1].refresh).to be false # the second catkey is refresh false
+        it "swaps the refresh setting of the catalog_record_ids" do
+          expect(cocina_model.identification.catalogLinks[0].refresh).to be true # the first catalog_record_id is refresh true
+          expect(cocina_model.identification.catalogLinks[1].refresh).to be false # the second catalog_record_id is refresh false
 
-          patch item_catkey_path(druid), params: update_catkey_params
+          patch item_catalog_record_id_path(druid), params: update_catalog_record_id_params
 
           expect(object_client).to have_received(:update)
-            .with(params: updated_model_updated_catkeys) # the updated model swaps the refresh
+            .with(params: updated_model_updated_catalog_record_ids) # the updated model swaps the refresh
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
-      context "with an item that has existing catkeys and existing previous catkeys" do
+      context "with an item that has existing catalog_record_ids and existing previous catalog_record_ids" do
         let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: ["99999"]) }
-        let(:updated_model_with_previous_catkey) do
+        let(:updated_model_with_previous_catalog_record_id) do
           cocina_model.new(
             {
               identification: {
@@ -242,7 +242,7 @@ RSpec.describe "Set catkey" do
             }
           )
         end
-        let(:updated_model_with_delete_and_previous_catkey) do
+        let(:updated_model_with_delete_and_previous_catalog_record_id) do
           cocina_model.new(
             {
               identification: {
@@ -259,28 +259,28 @@ RSpec.describe "Set catkey" do
           cocina_model.identification.catalogLinks << Cocina::Models::CatalogLink[catalog: "previous symphony", refresh: false, catalogRecordId: "55555"]
         end
 
-        it "updates the single catkey, preserving previous symphony catkey" do
-          patch item_catkey_path(druid), params: catkey_params
+        it "updates the single catalog_record_id, preserving previous symphony catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: catalog_record_id_params
 
           expect(object_client).to have_received(:update)
-            .with(params: updated_model_with_previous_catkey)
+            .with(params: updated_model_with_previous_catalog_record_id)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
 
-        it "deletes a single catkey, adding it to the existing previous symphony catkey list, and then adds a new one" do
-          patch item_catkey_path(druid), params: delete_catkey_params
+        it "deletes a single catalog_record_id, adding it to the existing previous symphony catalog_record_id list, and then adds a new one" do
+          patch item_catalog_record_id_path(druid), params: delete_catalog_record_id_params
 
           expect(object_client).to have_received(:update)
-            .with(params: updated_model_with_delete_and_previous_catkey)
+            .with(params: updated_model_with_delete_and_previous_catalog_record_id)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
-      context "with a collection that has no existing catkeys" do
+      context "with a collection that has no existing catalog_record_ids" do
         let(:cocina_model) { build(:collection_with_metadata, id: druid, source_id: "sul:1234") }
 
-        it "updates the catkey" do
-          patch item_catkey_path(druid), params: catkey_params
+        it "updates the catalog_record_id" do
+          patch item_catalog_record_id_path(druid), params: catalog_record_id_params
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)

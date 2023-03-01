@@ -29,14 +29,14 @@ class BulkActionsFormComponent < ApplicationComponent
         ["Apply APO defaults", new_apply_apo_defaults_job_path(search_of_druids)],
         ["Set object rights", new_rights_job_path(search_of_druids)],
         ["Edit license and rights statements", new_license_and_rights_statement_job_path(search_of_druids)],
-        ["Edit catkeys and barcodes", new_catkey_and_barcode_job_path(search_of_druids)],
-        ["Refresh MODS from catkey", new_refresh_mods_job_path(search_of_druids)],
+        ["Edit #{CatalogRecordId.label}s and barcodes", new_catalog_record_id_and_barcode_job_path(search_of_druids)],
+        ["Refresh MODS from #{CatalogRecordId.label}", new_refresh_mods_job_path(search_of_druids)],
         ["Set content type", new_content_type_job_path(search_of_druids)],
         ["Set collection", new_collection_job_path(search_of_druids)]
       ]],
       ["Modify objects (via CSV)", [
         ["Create virtual object(s)", new_virtual_object_job_path],
-        ["Edit catkeys and barcodes from CSV", new_catkey_and_barcode_csv_job_path],
+        ["Edit #{CatalogRecordId.label}s and barcodes from CSV", new_catalog_record_id_and_barcode_csv_job_path],
         ["Change source id", new_source_id_csv_job_path],
         ["Export tags to CSV", new_export_tag_job_path(search_of_druids)],
         ["Import tags from CSV", new_import_tag_job_path],

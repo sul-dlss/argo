@@ -104,15 +104,15 @@ class ItemsController < ApplicationController
   def refresh_metadata
     authorize! :update, @cocina
 
-    catkey = @cocina.identification&.catalogLinks&.find { |link| link.catalog == "symphony" }&.catalogRecordId
-    if catkey.blank?
-      render status: :bad_request, plain: "object must have catkey to refresh descMetadata"
+    catalog_record_id = @cocina.identification&.catalogLinks&.find { |link| link.catalog == CatalogRecordId.type }&.catalogRecordId
+    if catalog_record_id.blank?
+      render status: :bad_request, plain: "object must have #{CatalogRecordId.label} to refresh descMetadata"
       return
     end
 
     Dor::Services::Client.object(@cocina.externalIdentifier).refresh_metadata
 
-    redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from catkey: #{catkey}"
+    redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from #{CatalogRecordId.label}: #{catalog_record_id}"
   rescue Dor::Services::Client::UnexpectedResponse => e
     user_begin = "An error occurred while attempting to refresh metadata"
     user_end = "Please try again or contact the #dlss-infrastructure Slack channel for assistance."
