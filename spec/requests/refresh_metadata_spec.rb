@@ -6,7 +6,13 @@ RSpec.describe "Refresh metadata" do
   let(:druid) { "druid:bc123df4567" }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }
-  let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: ["12345"]) }
+  let(:cocina_model) do
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a12345"])
+    else
+      build(:dro_with_metadata, id: druid, catkeys: ["12345"])
+    end
+  end
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
@@ -19,13 +25,13 @@ RSpec.describe "Refresh metadata" do
     end
 
     context "when the object has no catalog_record_id" do
-      let(:cocina_model) { build(:dro, id: druid, catkeys: []) }
+      let(:cocina_model) { build(:dro, id: druid) }
 
       it "returns a 400 with an error message" do
         post "/items/#{druid}/refresh_metadata"
 
         expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq "object must have Catkey to refresh descMetadata"
+        expect(response.body).to eq "object must have #{CatalogRecordId.label} to refresh descMetadata"
       end
     end
 
@@ -35,7 +41,7 @@ RSpec.describe "Refresh metadata" do
         expect(object_service).to have_received(:refresh_metadata)
 
         expect(response).to redirect_to solr_document_path(druid)
-        expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from Catkey: 12345"
+        expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from #{CatalogRecordId.label}: #{"a" if Settings.enabled_features.folio}12345"
       end
     end
 

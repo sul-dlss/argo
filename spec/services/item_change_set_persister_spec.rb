@@ -41,7 +41,7 @@ RSpec.describe ItemChangeSetPersister do
         },
         identification: {
           barcode: barcode_before,
-          catalogLinks: [{catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: true}],
+          catalogLinks: [{catalog: CatalogRecordId.type, catalogRecordId: catalog_record_id_before, refresh: true}],
           sourceId: "sul:1234"
         },
         structural: {},
@@ -51,7 +51,7 @@ RSpec.describe ItemChangeSetPersister do
     end
     let(:use_statement_before) { "My First Use Statement" }
     let(:barcode_before) { "36105014757517" }
-    let(:catalog_record_id_before) { "367268" }
+    let(:catalog_record_id_before) { "#{"a" if Settings.enabled_features.folio}367268" }
     let(:change_set) { ItemChangeSet.new(model) }
 
     before do
@@ -193,7 +193,7 @@ RSpec.describe ItemChangeSetPersister do
           cocina_object_with(
             identification: {
               barcode: new_barcode,
-              catalogLinks: [{catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: true}]
+              catalogLinks: [{catalog: CatalogRecordId.type, catalogRecordId: catalog_record_id_before, refresh: true}]
             }
           )
         )
@@ -211,7 +211,7 @@ RSpec.describe ItemChangeSetPersister do
           cocina_object_with(
             identification: {
               barcode: nil,
-              catalogLinks: [{catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: true}]
+              catalogLinks: [{catalog: CatalogRecordId.type, catalogRecordId: catalog_record_id_before, refresh: true}]
             }
           )
         )
@@ -232,7 +232,7 @@ RSpec.describe ItemChangeSetPersister do
             identification: {
               barcode: barcode_before,
               catalogLinks: [
-                {catalog: "symphony", catalogRecordId: catalog_record_id_before, refresh: false}
+                {catalog: CatalogRecordId.type, catalogRecordId: catalog_record_id_before, refresh: false}
               ]
             }
           )
@@ -241,7 +241,7 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context "when change set has changed catalog_record_id" do
-      let(:new_catalog_record_ids) { ["367269"] }
+      let(:new_catalog_record_ids) { ["#{"a" if Settings.enabled_features.folio}367269"] }
 
       before do
         change_set.validate(catalog_record_ids: new_catalog_record_ids)
@@ -254,8 +254,8 @@ RSpec.describe ItemChangeSetPersister do
             identification: {
               barcode: barcode_before,
               catalogLinks: [
-                {catalog: "previous symphony", catalogRecordId: catalog_record_id_before, refresh: false},
-                {catalog: "symphony", catalogRecordId: new_catalog_record_ids.first, refresh: true}
+                {catalog: CatalogRecordId.previous_type, catalogRecordId: catalog_record_id_before, refresh: false},
+                {catalog: CatalogRecordId.type, catalogRecordId: new_catalog_record_ids.first, refresh: true}
               ]
             }
           )
@@ -273,7 +273,7 @@ RSpec.describe ItemChangeSetPersister do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             identification: {
-              catalogLinks: [{catalog: "previous symphony", catalogRecordId: catalog_record_id_before, refresh: false}],
+              catalogLinks: [{catalog: CatalogRecordId.previous_type, catalogRecordId: catalog_record_id_before, refresh: false}],
               barcode: barcode_before
             }
           )

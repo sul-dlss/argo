@@ -162,7 +162,7 @@ RSpec.describe TrackSheet do
       it "adds the catkey" do
         expect(call).to include(
           [
-            "Catkey:",
+            "#{CatalogRecordId.label}:",
             "catkey123"
           ]
         )

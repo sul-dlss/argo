@@ -22,7 +22,7 @@ RSpec.describe "Update serials metadata", js: true do
     click_link CatalogRecordId.manage_label
 
     within ".modal-body" do
-      find("input").set "55555"
+      find("input").set "#{"a" if Settings.enabled_features.folio}55555"
       find("select").set true
     end
     click_button "Update"

@@ -15,12 +15,20 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
 
   # Replace catalog_record_id on this item
   let(:item1) do
-    build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", catkeys: ["12346"])
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", folio_instance_hrids: ["a12346"])
+    else
+      build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", catkeys: ["12346"])
+    end
   end
 
   # Remove catalog_record_id on this item
   let(:item2) do
-    build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", catkeys: ["12347"])
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", folio_instance_hrids: ["a12347"])
+    else
+      build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", catkeys: ["12347"])
+    end
   end
 
   # Add catalog_record_id on this item
