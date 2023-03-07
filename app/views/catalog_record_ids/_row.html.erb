@@ -1,4 +1,4 @@
-<div class="mb-3 row plain-container">
+<div class="mb-3 row plain-container" <%= 'hidden' if hidden %>>
   <div class="col-sm-2">
     <%= form.select :refresh, [['Do not refresh', false], ['Refresh', true]], {}, class: 'form-select' %>
   </div>

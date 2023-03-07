@@ -3,7 +3,7 @@
 # Represents a set of changes to a collection
 class CollectionChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
-  property :catkeys, virtual: true
+  property :catalog_record_ids, virtual: true
   property :copyright, virtual: true
   property :license, virtual: true
   property :use_statement, virtual: true
@@ -20,7 +20,7 @@ class CollectionChangeSet < ApplicationChangeSet
 
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    self.catkeys = Catkey.symphony_links(model) if model.identification
+    self.catalog_record_ids = CatalogRecordId.links(model) if model.identification
     self.copyright = model.access.copyright
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license

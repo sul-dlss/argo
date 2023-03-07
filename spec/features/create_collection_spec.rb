@@ -16,13 +16,13 @@ RSpec.describe "Add collection" do
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, label: "hey", externalIdentifier: apo_id) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
-  describe "when collection catkey is provided", js: true do
-    it "warns if catkey exists" do
+  describe "when collection catalog_record_id is provided", js: true do
+    it "warns if catalog_record_id exists" do
       visit new_apo_collection_path apo_id
-      choose "Create a Collection from Symphony"
-      expect(page).to have_text("Collection Catkey")
+      choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
+      expect(page).to have_text("Collection #{CatalogRecordId.label}")
       expect(page).not_to have_text("already exists")
-      fill_in "collection_catkey", with: "foo"
+      fill_in "collection_catalog_record_id", with: "foo"
       expect(page).to have_text("already exists")
     end
   end

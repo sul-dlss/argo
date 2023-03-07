@@ -74,7 +74,7 @@ RSpec.describe "Item registration page", js: true do
 
       click_button "Upload CSV"
 
-      attach_file "Upload a CSV file", file_fixture("catkey_and_barcode.csv")
+      attach_file "Upload a CSV file", file_fixture("catalog_record_id_and_barcode.csv")
 
       click_button "Register"
 

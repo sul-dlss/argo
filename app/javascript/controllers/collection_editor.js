@@ -1,16 +1,16 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = [ "titleWarning", "catkeyWarning", "createCollectionFields", "catkeyFields" ]
+  static targets = [ "titleWarning", "catalogRecordIdWarning", "createCollectionFields", "catalogRecordIdFields" ]
 
   revealCreateCollection() {
     this.createCollectionFieldsTarget.hidden = false
-    this.catkeyFieldsTarget.hidden = true
+    this.catalogRecordIdFieldsTarget.hidden = true
   }
 
-  revealCreateCollectionCatkey() {
+  revealCreateCollectionCatalogRecordId() {
     this.createCollectionFieldsTarget.hidden = true
-    this.catkeyFieldsTarget.hidden = false
+    this.catalogRecordIdFieldsTarget.hidden = false
   }
 
   checkTitle(event) {
@@ -21,11 +21,11 @@ export default class extends Controller {
       })
   }
 
-  checkCatkey(event) {
-    fetch(`/collections/exists?catkey=${event.target.value}`).
+  checkCatalogRecordId(event) {
+    fetch(`/collections/exists?catalog_record_id=${event.target.value}`).
       then(resp => resp.json()).
       then(data => {
-        this.catkeyWarningTarget.hidden = !data
+        this.catalogRecordIdWarningTarget.hidden = !data
       })
   }
 }

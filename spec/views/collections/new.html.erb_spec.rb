@@ -9,7 +9,7 @@ RSpec.describe "collections/new" do
     expect(rendered).to have_field "collection_title"
     expect(rendered).to have_field "collection_abstract"
     expect(rendered).to have_field "collection_rights"
-    expect(rendered).to have_field "collection_catkey", visible: false
-    expect(rendered).to have_field "collection_rights_catkey", visible: false
+    expect(rendered).to have_field "collection_catalog_record_id", visible: false
+    expect(rendered).to have_field "collection_rights_catalog_record_id", visible: false
   end
 end

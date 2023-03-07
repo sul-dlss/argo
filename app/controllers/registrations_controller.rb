@@ -56,10 +56,14 @@ class RegistrationsController < ApplicationController
     render json: resp.to_json, layout: false
   end
 
-  # Allow the front end to check if a catkey exists
-  def catkey
+  # Allow the front end to check if a catalog record ID exists
+  def catalog_record_id
     begin
-      Dor::Services::Client.marcxml.marcxml(catkey: params[:catkey])
+      if Settings.enabled_features.folio
+        Dor::Services::Client.marcxml.marcxml(folio_instance_hrid: params[:catalog_record_id])
+      else
+        Dor::Services::Client.marcxml.marcxml(catkey: params[:catalog_record_id])
+      end
       resp = true
     rescue Dor::Services::Client::NotFoundResponse
       resp = false
@@ -77,7 +81,7 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       format.csv do
         csv_template = CSV.generate do |csv|
-          csv << %w[source_id catkey barcode label]
+          csv << ["source_id", CatalogRecordId.label.downcase.tr(" ", "_"), "barcode", "label"]
         end
         send_data csv_template, filename: "registration.csv"
       end

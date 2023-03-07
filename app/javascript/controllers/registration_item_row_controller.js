@@ -1,11 +1,11 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-    static targets = [ "barcode", "catkey", "sourceId" ]
+    static targets = [ "barcode", "catalogRecordId", "sourceId" ]
 
     connect() {
       // These validations need to be run after values are pasted in.
-      this.validateCatkey()
+      this.validateCatalogRecordId()
       this.validateSourceId()
       this.validateBarcode()
     }
@@ -22,7 +22,7 @@ export default class extends Controller {
         } else if (this.isDuplicateSourceId(currentSourceId)) {
           this.setValidation(field, "Duplicate source ID on this form")
           field.classList.add("invalid")
-        } else { 
+        } else {
           this.clearValidation(field) // all other checks passed
 
           // Check to see if this is unique in SDR
@@ -48,11 +48,11 @@ export default class extends Controller {
         }
     }
 
-    // Check that catkey exists.
-    validateCatkey() {
-        const field = this.catkeyTarget
-        const currentCatkey = field.value
-        if (currentCatkey === '')
+    // Check that catalog record ID exists.
+    validateCatalogRecordId() {
+        const field = this.catalogRecordIdTarget
+        const currentCatalogRecordId = field.value
+        if (currentCatalogRecordId === '')
           return
 
         if (field.validity.patternMismatch) {
@@ -60,14 +60,14 @@ export default class extends Controller {
         } else {
           // Only check if the format is valid
           this.clearValidation(field)
-  
+
           // Check to see if this is unique in SDR
-          fetch(`/registration/catkey?catkey=${currentCatkey}`)
+          fetch(`/registration/catalog_record_id?catalog_record_id=${currentCatalogRecordId}`)
             .then(response => {
               if (response.ok) {
                 return response.json();
               }
-              throw new Error('Cannot check catkey. Try again later.');
+              throw new Error('Cannot check catalog record ID. Try again later.');
             })
             .then((data) => {
               if (!data) {
@@ -86,7 +86,7 @@ export default class extends Controller {
         field.setCustomValidity(msg)
         field.reportValidity()
     }
-    
+
     clearValidation(field) {
       this.setValidation(field, '')
     }

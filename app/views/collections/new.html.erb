@@ -16,11 +16,11 @@
 
           <div class="form-check">
             <label class="form-check-label" for="from-symphony">
-              Create a Collection from Symphony
+              Create a Collection from <%= CatalogRecordId.type.capitalize %>
             </label>
             <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-symphony',
                   class: 'form-check-input',
-                  data: { action: 'change->collection-editor#revealCreateCollectionCatkey' } %>
+                  data: { action: 'change->collection-editor#revealCreateCollectionCatalogRecordId' } %>
           </div>
         </div>
 
@@ -46,19 +46,19 @@
           </div>
         </div>
 
-        <div data-collection-editor-target="catkeyFields" hidden>
+        <div data-collection-editor-target="catalogRecordIdFields" hidden>
           <div class="mb-3">
-            <label for="collection_catkey">
-              Collection Catkey
+            <label for="collection_catalog_record_id">
+              Collection <%= CatalogRecordId.label %>
             </label>
-            <%= text_field_tag 'collection_catkey', nil, class: 'form-control', data: { action: 'collection-editor#checkCatkey' } %>
-            <span data-collection-editor-target="catkeyWarning" class="mt-2 alert alert-warning" hidden>Collection with this catkey already exists.</span>
+            <%= text_field_tag 'collection_catalog_record_id', nil, class: 'form-control', data: { action: 'collection-editor#checkCatalogRecordId' } %>
+            <span data-collection-editor-target="catalogRecordIdWarning" class="mt-2 alert alert-warning" hidden>Collection with this <%= CatalogRecordId.label %> already exists.</span>
           </div>
           <div class="mb-3">
-            <label for="collection_rights_catkey">
+            <label for="collection_rights_catalog_record_id">
               Collection Object Visibility
             </label>
-            <%= select_tag :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
+            <%= select_tag :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
           </div>
         </div>
         <div class="mb-3">

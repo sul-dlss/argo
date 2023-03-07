@@ -18,24 +18,24 @@ RSpec.describe "Refresh metadata" do
       sign_in create(:user), groups: ["sdr:administrator-role"]
     end
 
-    context "when the object has no catkey" do
+    context "when the object has no catalog_record_id" do
       let(:cocina_model) { build(:dro, id: druid, catkeys: []) }
 
       it "returns a 400 with an error message" do
         post "/items/#{druid}/refresh_metadata"
 
         expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq "object must have catkey to refresh descMetadata"
+        expect(response.body).to eq "object must have Catkey to refresh descMetadata"
       end
     end
 
-    context "when a catkey is present" do
-      it "redirects with a notice if there is a catkey" do
+    context "when a catalog_record_id is present" do
+      it "redirects with a notice if there is a catalog_record_id" do
         post "/items/#{druid}/refresh_metadata"
         expect(object_service).to have_received(:refresh_metadata)
 
         expect(response).to redirect_to solr_document_path(druid)
-        expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from catkey: 12345"
+        expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from Catkey: 12345"
       end
     end
 

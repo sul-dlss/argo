@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
 
   before_action :authenticate_user!
+  before_action :set_folio_flag_per_param
 
   rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: "forbidden" }
 
@@ -32,6 +33,10 @@ class ApplicationController < ActionController::Base
 
   def default_html_head
     stylesheet_links << ["argo"]
+  end
+
+  def set_folio_flag_per_param
+    Settings.enabled_features.folio = true if params[:folio] == "true"
   end
 
   protected

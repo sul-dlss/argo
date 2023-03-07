@@ -51,9 +51,9 @@
       </tr>
 
       <tr>
-        <th class="col-3" scope="row">Catkey</th>
+        <th class="col-3" scope="row"><%= catalog_record_id_label %></th>
         <td>
-          <%= render Show::CatkeyComponent.new(change_set: @presenter.change_set, state_service: state_service) %>
+          <%= render Show::CatalogRecordIdComponent.new(change_set: @presenter.change_set, state_service: state_service) %>
         </td>
       </tr>
 

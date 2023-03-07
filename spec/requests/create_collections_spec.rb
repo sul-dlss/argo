@@ -43,8 +43,8 @@ RSpec.describe "Create collections" do
 
     it "creates a collection using the form" do
       post "/apo/#{apo_id}/collections", params: {"label" => ":auto",
-                                                  "collection_catkey" => "1234567",
-                                                  "collection_rights_catkey" => "dark"}
+                                                  "collection_catalog_record_id" => "1234567",
+                                                  "collection_rights_catalog_record_id" => "dark"}
       expect(response).to be_redirect # redirects to catalog page
       expect(form).to have_received(:save)
       expect(object_client).to have_received(:update).with(params: cocina_admin_policy_with_registration_collections([collection_id]))
@@ -54,7 +54,7 @@ RSpec.describe "Create collections" do
 
   describe "check that it's not a duplicate" do
     let(:title) { "foo" }
-    let(:catkey) { "123" }
+    let(:catalog_record_id) { "123" }
     let(:repo) { instance_double(Blacklight::Solr::Repository, connection: solr_client) }
     let(:solr_client) { instance_double(RSolr::Client, get: result) }
 
@@ -83,35 +83,35 @@ RSpec.describe "Create collections" do
       end
     end
 
-    context "when the catkey is provided and the collection exists" do
+    context "when the catalog_record_id is provided and the collection exists" do
       let(:result) { {"response" => {"numFound" => 1}} }
 
       it "returns true" do
-        get "/collections/exists?catkey=#{catkey}"
+        get "/collections/exists?catalog_record_id=#{catalog_record_id}"
         expect(response.body).to eq("true")
         expect(solr_client).to have_received(:get).with("select", params: a_hash_including(
-          q: '_query_:"{!raw f=objectType_ssim}collection" AND identifier_ssim:"catkey:123"'
+          q: "_query_:\"{!raw f=objectType_ssim}collection\" AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:123\""
         ))
       end
     end
 
-    context "when the catkey is provided and the collection does not exist" do
+    context "when the catalog_record_id is provided and the collection does not exist" do
       let(:result) { {"response" => {"numFound" => 0}} }
 
       it "returns false" do
-        get "/collections/exists?catkey=#{catkey}"
+        get "/collections/exists?catalog_record_id=#{catalog_record_id}"
         expect(response.body).to eq("false")
       end
     end
 
-    context "when the title and catkey is provided and the collection exists" do
+    context "when the title and catalog_record_id is provided and the collection exists" do
       let(:result) { {"response" => {"numFound" => 1}} }
 
-      it "returns true if collection with title and catkey exists" do
-        get "/collections/exists?catkey=#{catkey}&title=#{title}"
+      it "returns true if collection with title and catalog_record_id exists" do
+        get "/collections/exists?catalog_record_id=#{catalog_record_id}&title=#{title}"
         expect(response.body).to eq("true")
         expect(solr_client).to have_received(:get).with("select", params: a_hash_including(
-          q: '_query_:"{!raw f=objectType_ssim}collection" AND obj_label_tesim:"foo" AND identifier_ssim:"catkey:123"'
+          q: "_query_:\"{!raw f=objectType_ssim}collection\" AND obj_label_tesim:\"foo\" AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:123\""
         ))
       end
     end

@@ -1,6 +1,6 @@
 <%= form_with url: register_druid_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
   <%= render 'bulk_actions/errors' %>
-  
+
   <span class='help-block'>
     Register druids
   </span>
@@ -14,9 +14,9 @@
         <li>content_type (required)</li>
         <li>reading_order (required if "content_type" is "book" or "image")</li>
         <li>source_id (required)</li>
-        <li>catkey (optional)</li>
+        <li><%= CatalogRecordId.label.downcase.gsub(' ', '_') %> (optional)</li>
         <li>barcode (optional)</li>
-        <li>label (required unless a catkey has been entered)</li>
+        <li>label (required unless a <%= CatalogRecordId.label.downcase.gsub(' ', '_') %> has been entered)</li>
         <li>rights_view (required)</li>
         <li>rights_download (required)</li>
         <li>rights_location (required if "view" or "download" uses "location-based")</li>

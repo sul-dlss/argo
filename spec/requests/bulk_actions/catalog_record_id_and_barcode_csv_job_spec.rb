@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "BulkActions::CatkeyAndBarcodeCsvJobs" do
+RSpec.describe "BulkActions::CatalogRecordIdAndBarcodeCsvJobs" do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
@@ -13,7 +13,7 @@ RSpec.describe "BulkActions::CatkeyAndBarcodeCsvJobs" do
     end
 
     it "draws the form" do
-      get "/bulk_actions/catkey_and_barcode_csv_job/new"
+      get "/bulk_actions/catalog_record_id_and_barcode_csv_job/new"
 
       expect(rendered).to have_css 'textarea[name="description"]'
       expect(rendered).to have_css 'input[type="file"][name="csv_file"]'

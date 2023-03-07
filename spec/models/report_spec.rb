@@ -100,7 +100,7 @@ RSpec.describe Report do
         :tag_ssim,
         :objectType_ssim,
         :content_type_ssim,
-        SolrDocument::FIELD_CATKEY_ID,
+        CatalogRecordId.index_field,
         :barcode_id_ssim,
         :accessioned_earliest_dttsi,
         :workflow_status_ssim

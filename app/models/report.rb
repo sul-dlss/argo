@@ -93,7 +93,7 @@ class Report
       sort: true, default: false, width: 100, download_default: false
     },
     {
-      field: SolrDocument::FIELD_CATKEY_ID, label: "Catkey",
+      field: CatalogRecordId.index_field, label: CatalogRecordId.label,
       sort: true, default: false, width: 100, download_default: false
     },
     {

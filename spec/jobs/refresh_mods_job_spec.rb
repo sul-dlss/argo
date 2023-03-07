@@ -8,15 +8,19 @@ RSpec.describe RefreshModsJob do
   let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
 
-  let(:catkeys) do
+  let(:catalog_record_ids) do
     ["123"]
   end
 
+  # NOTE: the `catkeys` arg in the cocina-models factories is currently the only
+  #       possibility for catalog record IDs, and those map to Symphony catalog
+  #       links. The next release (after 0.89.0) should contain a change
+  #       allowing both the `catkeys` arg and the `folio_instance_hrids` arg
   let(:cocina1) do
-    build(:dro_with_metadata, id: druids[0], catkeys:)
+    build(:dro_with_metadata, id: druids[0], catkeys: catalog_record_ids)
   end
   let(:cocina2) do
-    build(:dro_with_metadata, id: druids[1], catkeys:)
+    build(:dro_with_metadata, id: druids[1], catkeys: catalog_record_ids)
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, refresh_descriptive_metadata_from_ils: true) }
@@ -38,20 +42,20 @@ RSpec.describe RefreshModsJob do
   context "with manage ability" do
     let(:ability) { instance_double(Ability, can?: true) }
 
-    context "without catkey" do
-      let(:catkeys) { [] }
+    context "without catalog_record_id" do
+      let(:catalog_record_ids) { [] }
 
       it "logs errors" do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a catkey for druid:bb111cc2222/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a catkey for druid:cc111dd2222/)
+        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a Catkey for druid:bb111cc2222/)
+        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a Catkey for druid:cc111dd2222/)
 
         expect(object_client1).not_to have_received(:refresh_descriptive_metadata_from_ils)
         expect(object_client2).not_to have_received(:refresh_descriptive_metadata_from_ils)
       end
     end
 
-    context "with catkey" do
+    context "with catalog_record_id" do
       it "refreshes" do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
         expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)

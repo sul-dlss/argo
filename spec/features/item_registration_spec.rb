@@ -94,7 +94,7 @@ RSpec.describe "Item registration page", js: true do
         "items_attributes" => {
           "0" => {
             "source_id" => "source:id1",
-            "catkey" => "",
+            "catalog_record_id" => "",
             "label" => "object title",
             "barcode" => barcode
           }
@@ -154,7 +154,7 @@ RSpec.describe "Item registration page", js: true do
     end
   end
 
-  context "invalid catkey" do
+  context "invalid catalog_record_id" do
     it "does not register" do
       visit registration_path
       select "[Internal System Objects]", from: "Admin Policy" # "uber APO"

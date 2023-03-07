@@ -32,10 +32,9 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
         to_param: "druid:ab123cd3445",
         druid: "ab123cd3445",
         publishable?: true,
-        catkey:, released_to:)
+        catalog_record_id:, released_to:)
     end
-    let(:catkey) { nil }
-
+    let(:catalog_record_id) { nil }
     let(:released_to) do
       []
     end
@@ -56,18 +55,18 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
         ["Searchworks"]
       end
 
-      context "with a catkey" do
-        let(:catkey) { "123456" }
+      context "with a catalog record ID" do
+        let(:catalog_record_id) { "123456" }
 
-        it "links to searchworks with the catkey and links to purl" do
+        it "links to searchworks with the catalog record ID and links to purl" do
           expect(page).to have_link "SearchWorks", href: "http://searchworks.stanford.edu/view/123456"
           expect(page).to have_link "PURL", href: "https://sul-purl-stage.stanford.edu/ab123cd3445"
           expect(page).to have_link "Cocina model", href: "/items/druid:ab123cd3445.json"
         end
       end
 
-      context "without a catkey" do
-        let(:catkey) { nil }
+      context "without a catalog record ID" do
+        let(:catalog_record_id) { nil }
 
         it "links to searchworks using a druid" do
           expect(page).to have_link "SearchWorks", href: "http://searchworks.stanford.edu/view/ab123cd3445"

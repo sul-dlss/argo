@@ -33,12 +33,12 @@ export default class extends Controller {
     const rowsOnPage = this.element.querySelectorAll(this.selectorValue)
 
     lines.forEach((line, index) => {
-      let sourceId, catkey, label, barcode;
-      [barcode, catkey, sourceId, label] = line.split(/\t/)
-  
+      let sourceId, catalogRecordId, label, barcode;
+      [barcode, catalogRecordId, sourceId, label] = line.split(/\t/)
+
       const elements = rowsOnPage[index].querySelectorAll('input')
       elements[0].value = barcode
-      elements[1].value = catkey
+      elements[1].value = catalogRecordId
       elements[2].value = sourceId
       elements[3].value = label
       // Trigger client side validations for existing rows
@@ -47,6 +47,6 @@ export default class extends Controller {
       elements.forEach(element => element.dispatchEvent(new Event('change')))
     })
 
-    event.preventDefault()    
+    event.preventDefault()
   }
 }

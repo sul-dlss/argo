@@ -3,7 +3,10 @@
 # Represents a set of changes to an item.
 class ItemChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
-  property :catkeys, virtual: true
+  property :catalog_record_ids, virtual: true
+  # NOTE: Only needed while using Symphony and Folio, as a way to quietly keep
+  #       the non-active catalog's values in Cocina w/o wiping them out.
+  property :other_catalog_record_ids, virtual: true
   property :refresh, virtual: true
   property :collection_ids, virtual: true
   property :copyright, virtual: true
@@ -31,8 +34,9 @@ class ItemChangeSet < ApplicationChangeSet
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
     if model.identification
-      self.catkeys = Catkey.symphony_links(model)
-      self.refresh = Catkey.symphony_link_refresh(model)
+      self.catalog_record_ids = CatalogRecordId.links(model)
+      self.other_catalog_record_ids = CatalogRecordId.other_links(model)
+      self.refresh = CatalogRecordId.link_refresh(model)
       self.barcode = model.identification.barcode
       self.source_id = model.identification.sourceId
     end
