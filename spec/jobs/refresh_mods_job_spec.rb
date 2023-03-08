@@ -9,18 +9,26 @@ RSpec.describe RefreshModsJob do
   let(:user) { bulk_action.user }
 
   let(:catalog_record_ids) do
-    ["123"]
+    if Settings.enabled_features.folio
+      ["a123"]
+    else
+      ["123"]
+    end
   end
 
-  # NOTE: the `catkeys` arg in the cocina-models factories is currently the only
-  #       possibility for catalog record IDs, and those map to Symphony catalog
-  #       links. The next release (after 0.89.0) should contain a change
-  #       allowing both the `catkeys` arg and the `folio_instance_hrids` arg
   let(:cocina1) do
-    build(:dro_with_metadata, id: druids[0], catkeys: catalog_record_ids)
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druids[0], folio_instance_hrids: catalog_record_ids)
+    else
+      build(:dro_with_metadata, id: druids[0], catkeys: catalog_record_ids)
+    end
   end
   let(:cocina2) do
-    build(:dro_with_metadata, id: druids[1], catkeys: catalog_record_ids)
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druids[1], folio_instance_hrids: catalog_record_ids)
+    else
+      build(:dro_with_metadata, id: druids[1], catkeys: catalog_record_ids)
+    end
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, refresh_descriptive_metadata_from_ils: true) }
@@ -47,8 +55,8 @@ RSpec.describe RefreshModsJob do
 
       it "logs errors" do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a Catkey for druid:bb111cc2222/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a Catkey for druid:cc111dd2222/)
+        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a #{CatalogRecordId.label} for druid:bb111cc2222/)
+        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a #{CatalogRecordId.label} for druid:cc111dd2222/)
 
         expect(object_client1).not_to have_received(:refresh_descriptive_metadata_from_ils)
         expect(object_client2).not_to have_received(:refresh_descriptive_metadata_from_ils)

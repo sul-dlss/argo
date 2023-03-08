@@ -59,11 +59,11 @@ RSpec.describe "Item catalog_record_id change" do
     it "changes the catalog_record_id" do
       visit edit_item_catalog_record_id_path druid
       within ".modal-body" do
-        find("input").set "12345"
+        find("input").set "#{"a" if Settings.enabled_features.folio}12345"
         find("select").set true
       end
       click_button "Update"
-      expect(page).to have_css ".alert.alert-info", text: "Catkeys for " \
+      expect(page).to have_css ".alert.alert-info", text: "#{CatalogRecordId.label}s for " \
                                                           "#{druid} have been updated!"
       expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
     end

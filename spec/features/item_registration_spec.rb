@@ -167,7 +167,7 @@ RSpec.describe "Item registration page", js: true do
       fill_in "Project Name", with: "X-Files"
       fill_in "Tags", with: "i : believe"
 
-      fill_in "Catkey", with: "not_a_catkey"
+      fill_in CatalogRecordId.label, with: "not_a_catkey"
       fill_in "Source ID", with: source_id
       fill_in "Label", with: "object title"
 

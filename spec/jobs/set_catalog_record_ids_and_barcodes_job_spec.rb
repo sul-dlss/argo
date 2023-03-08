@@ -13,14 +13,28 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
   end
 
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:catalog_record_ids) { ["12345,66233", "", "44444"] }
+  let(:catalog_record_ids) do
+    if Settings.enabled_features.folio
+      ["a12345,a66233", "", "a44444"]
+    else
+      ["12345,66233", "", "44444"]
+    end
+  end
   let(:barcodes) { ["36105014757517", "", "36105014757518"] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", catkeys: ["12346"])
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", folio_instance_hrids: ["a12346"])
+    else
+      build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", catkeys: ["12346"])
+    end
   end
   let(:item2) do
-    build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", catkeys: ["12347"])
+    if Settings.enabled_features.folio
+      build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", folio_instance_hrids: ["a12347"])
+    else
+      build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", catkeys: ["12347"])
+    end
   end
   let(:item3) do
     build(:dro_with_metadata, id: druids[2])
@@ -68,7 +82,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
         expect(subject).to receive(:update_catalog_record_id_and_barcode).with(change_set3, {catalog_record_ids: [catalog_record_ids[2]], barcode: barcodes[2], refresh: true}, buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
-        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catalog_record_ids: %w[12345 66233], refresh: true)
+        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catalog_record_ids: ["#{"a" if Settings.enabled_features.folio}12345", "#{"a" if Settings.enabled_features.folio}66233"], refresh: true)
         expect(change_set2).to have_received(:validate).with(barcode: nil, catalog_record_ids: [], refresh: true)
         expect(change_set3).to have_received(:validate).with(barcode: barcodes[2], catalog_record_ids: [catalog_record_ids[2]], refresh: true)
       end
@@ -130,27 +144,51 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
     let(:client) { double(Dor::Services::Client) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
     let(:previous_version) do
-      build(:dro_with_metadata, id: druids[0], version: 3).new(identification: {
-        barcode: "36105014757519",
-        catalogLinks: [{catalog: "symphony", catalogRecordId: "12346", refresh: true}],
-        sourceId: "sul:1234"
-      })
+      if Settings.enabled_features.folio
+        build(:dro_with_metadata, id: druids[0], version: 3).new(identification: {
+          barcode: "36105014757519",
+          catalogLinks: [{catalog: "folio", catalogRecordId: "a12346", refresh: true}],
+          sourceId: "sul:1234"
+        })
+      else
+        build(:dro_with_metadata, id: druids[0], version: 3).new(identification: {
+          barcode: "36105014757519",
+          catalogLinks: [{catalog: "symphony", catalogRecordId: "12346", refresh: true}],
+          sourceId: "sul:1234"
+        })
+      end
     end
 
     let(:updated_model) do
-      previous_version.new(
-        {
-          identification: {
-            barcode:,
-            catalogLinks: [
-              {catalog: "previous symphony", catalogRecordId: "12346", refresh: false},
-              {catalog: "symphony", catalogRecordId: "12345", refresh: true},
-              {catalog: "symphony", catalogRecordId: "66233", refresh: false}
-            ],
-            sourceId: "sul:1234"
+      if Settings.enabled_features.folio
+        previous_version.new(
+          {
+            identification: {
+              barcode:,
+              catalogLinks: [
+                {catalog: "previous folio", catalogRecordId: "a12346", refresh: false},
+                {catalog: "folio", catalogRecordId: "a12345", refresh: true},
+                {catalog: "folio", catalogRecordId: "a66233", refresh: false}
+              ],
+              sourceId: "sul:1234"
+            }
           }
-        }
-      )
+        )
+      else
+        previous_version.new(
+          {
+            identification: {
+              barcode:,
+              catalogLinks: [
+                {catalog: "previous symphony", catalogRecordId: "12346", refresh: false},
+                {catalog: "symphony", catalogRecordId: "12345", refresh: true},
+                {catalog: "symphony", catalogRecordId: "66233", refresh: false}
+              ],
+              sourceId: "sul:1234"
+            }
+          }
+        )
+      end
     end
 
     let(:change_set) do
@@ -189,7 +227,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       it "logs" do
         subject.send(:update_catalog_record_id_and_barcode, change_set, {catalog_record_ids: catalog_record_ids_arg, barcode:}, buffer)
         expect(object_client).not_to have_received(:update)
-        expect(buffer.string).to include("Catkey/barcode failed")
+        expect(buffer.string).to include("#{CatalogRecordId.label}/barcode failed")
       end
     end
 
@@ -197,7 +235,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it "updates catalog_record_id and barcode and versions objects" do
-        expect(subject).to receive(:open_new_version).with(previous_version, "Catkey updated to 12345, 66233. Barcode updated to #{barcode}.").and_return(previous_version)
+        expect(subject).to receive(:open_new_version).with(previous_version, "#{CatalogRecordId.label} updated to #{"a" if Settings.enabled_features.folio}12345, #{"a" if Settings.enabled_features.folio}66233. Barcode updated to #{barcode}.").and_return(previous_version)
         subject.send(:update_catalog_record_id_and_barcode, change_set, {catalog_record_ids: catalog_record_ids_arg, barcode:, refresh: true}, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -208,7 +246,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
       it "updates catalog_record_id and barcode and does not version objects if not needed" do
-        expect(subject).not_to receive(:open_new_version).with(previous_version, "Catkey updated to #{catalog_record_ids[0]}. Barcode updated to #{barcode}.")
+        expect(subject).not_to receive(:open_new_version).with(previous_version, "#{CatalogRecordId.label} updated to #{catalog_record_ids[0]}. Barcode updated to #{barcode}.")
         subject.send(:update_catalog_record_id_and_barcode, change_set, {catalog_record_ids: catalog_record_ids_arg, barcode:, refresh: true}, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -221,19 +259,31 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       let(:barcode) { nil }
 
       let(:updated_model) do
-        previous_version.new(
-          {
-            identification: {
-              barcode: nil,
-              catalogLinks: [{catalog: "previous symphony", catalogRecordId: "12346", refresh: false}],
-              sourceId: "sul:1234"
+        if Settings.enabled_features.folio
+          previous_version.new(
+            {
+              identification: {
+                barcode: nil,
+                catalogLinks: [{catalog: "previous folio", catalogRecordId: "a12346", refresh: false}],
+                sourceId: "sul:1234"
+              }
             }
-          }
-        )
+          )
+        else
+          previous_version.new(
+            {
+              identification: {
+                barcode: nil,
+                catalogLinks: [{catalog: "previous symphony", catalogRecordId: "12346", refresh: false}],
+                sourceId: "sul:1234"
+              }
+            }
+          )
+        end
       end
 
       it "removes catalog_record_id and barcode" do
-        expect(subject).to receive(:open_new_version).with(previous_version, "Catkey removed. Barcode removed.").and_return(previous_version)
+        expect(subject).to receive(:open_new_version).with(previous_version, "#{CatalogRecordId.label} removed. Barcode removed.").and_return(previous_version)
         subject.send(:update_catalog_record_id_and_barcode, change_set, {catalog_record_ids: catalog_record_ids_arg, barcode:}, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)

@@ -6,11 +6,20 @@ RSpec.describe "Set catalog record ID" do
   let(:user) { create(:user) }
   let(:druid) { "druid:dc243mg0841" }
   let(:catalog_record_id_params) do
-    {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""}}}, "item_id" => druid}
+    if Settings.enabled_features.folio
+      {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "a12345", "_destroy" => ""}}}, "item_id" => druid}
+    else
+      {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""}}}, "item_id" => druid}
+    end
   end
   let(:delete_catalog_record_id_params) do
-    {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "99999", "_destroy" => "1"},
-                                                                "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+    if Settings.enabled_features.folio
+      {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "a99999", "_destroy" => "1"},
+                                                                  "1" => {"refresh" => "true", "value" => "a45678", "_destroy" => ""}}}, "item_id" => druid}
+    else
+      {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "99999", "_destroy" => "1"},
+                                                                  "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+    end
   end
   let(:turbo_stream_headers) do
     {"Accept" => "#{Mime[:turbo_stream]},#{Mime[:html]}",
@@ -63,27 +72,47 @@ RSpec.describe "Set catalog record ID" do
       end
 
       context "with a collection that has existing catalog_record_ids" do
-        let(:cocina_model) { build(:collection, id: druid, catkeys: ["10448742"]) }
+        let(:catalog_record_id) do
+          Settings.enabled_features.folio ?
+            "a10448742" :
+            "10448742"
+        end
+        let(:cocina_model) do
+          Settings.enabled_features.folio ?
+            build(:collection, id: druid, folio_instance_hrids: [catalog_record_id]) :
+            build(:collection, id: druid, catkeys: [catalog_record_id])
+        end
 
         it "draws the form" do
           get edit_item_catalog_record_id_path druid
 
           expect(response).to be_successful
-          expect(response.body).to include "10448742"
+          expect(response.body).to include catalog_record_id
         end
       end
     end
 
     describe "submitting changes" do
       let(:updated_model) do
-        cocina_model.new(
-          {
-            identification: {
-              catalogLinks: [{catalog: "symphony", catalogRecordId: "12345", refresh: true}],
-              sourceId: "sul:1234"
+        if Settings.enabled_features.folio
+          cocina_model.new(
+            {
+              identification: {
+                catalogLinks: [{catalog: "folio", catalogRecordId: "a12345", refresh: true}],
+                sourceId: "sul:1234"
+              }
             }
-          }
-        )
+          )
+        else
+          cocina_model.new(
+            {
+              identification: {
+                catalogLinks: [{catalog: "symphony", catalogRecordId: "12345", refresh: true}],
+                sourceId: "sul:1234"
+              }
+            }
+          )
+        end
       end
 
       before do
@@ -136,19 +165,36 @@ RSpec.describe "Set catalog record ID" do
 
       context "with an item that has no existing catalog_record_ids" do
         let(:mutiple_catalog_record_id_params) do
-          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""},
-                                                                      "1" => {"refresh" => "false", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+          if Settings.enabled_features.folio
+            {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "a12345", "_destroy" => ""},
+                                                                        "1" => {"refresh" => "false", "value" => "a45678", "_destroy" => ""}}}, "item_id" => druid}
+          else
+            {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "true", "value" => "12345", "_destroy" => ""},
+                                                                        "1" => {"refresh" => "false", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+          end
         end
         let(:updated_model_multiple_catalog_record_ids) do
-          cocina_model.new(
-            {
-              identification: {
-                catalogLinks: [{catalog: "symphony", catalogRecordId: "12345", refresh: true},
-                  {catalog: "symphony", catalogRecordId: "45678", refresh: false}],
-                sourceId: "sul:1234"
+          if Settings.enabled_features.folio
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "folio", catalogRecordId: "a12345", refresh: true},
+                    {catalog: "folio", catalogRecordId: "a45678", refresh: false}],
+                  sourceId: "sul:1234"
+                }
               }
-            }
-          )
+            )
+          else
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "symphony", catalogRecordId: "12345", refresh: true},
+                    {catalog: "symphony", catalogRecordId: "45678", refresh: false}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          end
         end
 
         it "updates a single catalog_record_id" do
@@ -169,17 +215,35 @@ RSpec.describe "Set catalog record ID" do
       end
 
       context "with an item that has a single existing catalog_record_id" do
-        let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: ["99999"]) }
+        let(:cocina_model) do
+          if Settings.enabled_features.folio
+            build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a99999"])
+          else
+            build(:dro_with_metadata, id: druid, catkeys: ["99999"])
+          end
+        end
         let(:updated_model_deleted_catalog_record_id) do
-          cocina_model.new(
-            {
-              identification: {
-                catalogLinks: [{catalog: "previous symphony", catalogRecordId: "99999", refresh: false},
-                  {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
-                sourceId: "sul:1234"
+          if Settings.enabled_features.folio
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
+                    {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
+                  sourceId: "sul:1234"
+                }
               }
-            }
-          )
+            )
+          else
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous symphony", catalogRecordId: "99999", refresh: false},
+                    {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          end
         end
 
         it "updates the catalog_record_id" do
@@ -200,21 +264,44 @@ RSpec.describe "Set catalog record ID" do
       end
 
       context "with an item that has two existing catalog_record_ids" do
-        let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: %w[99999 45678]) }
+        let(:cocina_model) do
+          if Settings.enabled_features.folio
+            build(:dro_with_metadata, id: druid, folio_instance_hrids: %w[a99999 a45678])
+          else
+            build(:dro_with_metadata, id: druid, catkeys: %w[99999 45678])
+          end
+        end
         let(:update_catalog_record_id_params) do
-          {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "false", "value" => "99999", "_destroy" => ""},
-                                                                      "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+          if Settings.enabled_features.folio
+            {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "false", "value" => "a99999", "_destroy" => ""},
+                                                                        "1" => {"refresh" => "true", "value" => "a45678", "_destroy" => ""}}}, "item_id" => druid}
+          else
+            {:catalog_record_id => {"catalog_record_ids_attributes" => {"0" => {"refresh" => "false", "value" => "99999", "_destroy" => ""},
+                                                                        "1" => {"refresh" => "true", "value" => "45678", "_destroy" => ""}}}, "item_id" => druid}
+          end
         end
         let(:updated_model_updated_catalog_record_ids) do
-          cocina_model.new(
-            {
-              identification: {
-                catalogLinks: [{catalog: "symphony", catalogRecordId: "99999", refresh: false},
-                  {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
-                sourceId: "sul:1234"
+          if Settings.enabled_features.folio
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "folio", catalogRecordId: "a99999", refresh: false},
+                    {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
+                  sourceId: "sul:1234"
+                }
               }
-            }
-          )
+            )
+          else
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "symphony", catalogRecordId: "99999", refresh: false},
+                    {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          end
         end
 
         it "swaps the refresh setting of the catalog_record_ids" do
@@ -230,33 +317,68 @@ RSpec.describe "Set catalog record ID" do
       end
 
       context "with an item that has existing catalog_record_ids and existing previous catalog_record_ids" do
-        let(:cocina_model) { build(:dro_with_metadata, id: druid, catkeys: ["99999"]) }
+        let(:cocina_model) do
+          if Settings.enabled_features.folio
+            build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a99999"])
+          else
+            build(:dro_with_metadata, id: druid, catkeys: ["99999"])
+          end
+        end
         let(:updated_model_with_previous_catalog_record_id) do
-          cocina_model.new(
-            {
-              identification: {
-                catalogLinks: [{catalog: "previous symphony", catalogRecordId: "55555", refresh: false},
-                  {catalog: "symphony", catalogRecordId: "12345", refresh: true}],
-                sourceId: "sul:1234"
+          if Settings.enabled_features.folio
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous folio", catalogRecordId: "a55555", refresh: false},
+                    {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
+                  sourceId: "sul:1234"
+                }
               }
-            }
-          )
+            )
+          else
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous symphony", catalogRecordId: "55555", refresh: false},
+                    {catalog: "symphony", catalogRecordId: "12345", refresh: true}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          end
         end
         let(:updated_model_with_delete_and_previous_catalog_record_id) do
-          cocina_model.new(
-            {
-              identification: {
-                catalogLinks: [{catalog: "previous symphony", catalogRecordId: "55555", refresh: false},
-                  {catalog: "previous symphony", catalogRecordId: "99999", refresh: false},
-                  {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
-                sourceId: "sul:1234"
+          if Settings.enabled_features.folio
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous folio", catalogRecordId: "a55555", refresh: false},
+                    {catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
+                    {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
+                  sourceId: "sul:1234"
+                }
               }
-            }
-          )
+            )
+          else
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous symphony", catalogRecordId: "55555", refresh: false},
+                    {catalog: "previous symphony", catalogRecordId: "99999", refresh: false},
+                    {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          end
         end
 
         before do
-          cocina_model.identification.catalogLinks << Cocina::Models::CatalogLink[catalog: "previous symphony", refresh: false, catalogRecordId: "55555"]
+          cocina_model.identification.catalogLinks << if Settings.enabled_features.folio
+            Cocina::Models::CatalogLink[catalog: "previous folio", refresh: false, catalogRecordId: "a55555"]
+          else
+            Cocina::Models::CatalogLink[catalog: "previous symphony", refresh: false, catalogRecordId: "55555"]
+          end
         end
 
         it "updates the single catalog_record_id, preserving previous symphony catalog_record_id" do

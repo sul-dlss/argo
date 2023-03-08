@@ -20,7 +20,11 @@ RSpec.describe "Registration catalog_record_id check" do
       get "/registration/catalog_record_id?catalog_record_id=123"
 
       expect(response.body).to eq("true")
-      expect(marcxml_client).to have_received(:marcxml).with(catkey: "123")
+      if Settings.enabled_features.folio
+        expect(marcxml_client).to have_received(:marcxml).with(folio_instance_hrid: "123")
+      else
+        expect(marcxml_client).to have_received(:marcxml).with(catkey: "123")
+      end
     end
   end
 
