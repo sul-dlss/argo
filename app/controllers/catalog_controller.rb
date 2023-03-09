@@ -130,13 +130,8 @@ class CatalogController < ApplicationController
       limit: 9999,
       home: false
 
-    config.add_facet_field "metadata_source_ssi", label: "Metadata Source", home: false,
+    config.add_facet_field "metadata_source_ssim", label: "Metadata Source", home: false,
       component: true
-
-    if Settings.enabled_features.multivalued_metadata_sources
-      config.add_facet_field "metadata_source_ssim", label: "Metadata Source (Multi)", home: false,
-        component: true
-    end
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
