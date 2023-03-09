@@ -7,3 +7,4 @@ solrizer_url: 'http://localhost:8983/solr/argo'
 
 enabled_features:
   folio: true
+  multivalued_metadata_sources: true
