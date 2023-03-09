@@ -44,6 +44,9 @@ RSpec.describe "Upload the structural CSV" do
             put "/items/#{druid}/structure", params: {csv: file}
             expect(Repository).to have_received(:store)
             expect(response).to have_http_status(:see_other)
+            expect(StructureUpdater).to have_received(:from_csv) do |_cocina, csv|
+              expect(csv.encoding).to eq Encoding::UTF_8
+            end
           end
         end
 

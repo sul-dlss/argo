@@ -161,8 +161,8 @@ RSpec.describe StructureUpdater do
                   {
                     "type": "#{Cocina::Models::ObjectType.file}",
                     "externalIdentifier": "https://cocina.sul.stanford.edu/file/55d78b7f-b043-4880-8542-b85f2c3b0414",
-                    "label": "bb045jk9908_0002.jp2",
-                    "filename": "bb045jk9908_0002.jp2",
+                    "label": "CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx",
+                    "filename": "CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx",
                     "size": 4391262,
                     "version": 1,
                     "hasMimeType": "image/jp2",
@@ -210,7 +210,7 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/one,
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription
         #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,
-        #{bare_druid},Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,location-based,music,image/four,
+        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,location-based,location-based,music,image/four,
       CSV
     end
 
@@ -250,7 +250,7 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
-        #{bare_druid},Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
+        #{bare_druid},Picture 2,page,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,world,world,,image/jp2,
       CSV
     end
 
@@ -279,7 +279,7 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 2,object,2,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 3,page,3,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
-        #{bare_druid},Picture 4,page,4,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
+        #{bare_druid},Picture 4,page,4,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,world,world,,image/jp2,
       CSV
     end
 
@@ -305,7 +305,7 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 1,page,1,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
-        #{bare_druid},Picture 1,page,1,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,,image/jp2,
+        #{bare_druid},Picture 1,page,1,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,world,world,,image/jp2,
       CSV
     end
 
@@ -326,7 +326,7 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Image 1,image,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,,image/tiff,
         #{bare_druid},Image 1,image,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,,image/jp2,
         #{bare_druid},Image 2,image,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,,image/tiff,
-        #{bare_druid},Image 2,paper,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,,image/jp2,
+        #{bare_druid},Image 2,paper,2,bb045jk_0002.jp2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,yes,world,world,,image/jp2,
       CSV
     end
 
@@ -348,13 +348,13 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
-        #{bare_druid},Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,,image/jp2,
+        #{bare_druid},Picture 2,page,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,yes,world,world,,image/jp2,
       CSV
     end
 
     it "returns errors" do
       expect(result.failure).to eq [
-        "On row 5 found bb045jk9908_0002.jp2, which changed preserve from no to yes, which is not supported"
+        "On row 5 found CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx, which changed preserve from no to yes, which is not supported"
       ]
     end
   end
@@ -366,13 +366,13 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
-        #{bare_druid},Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,location-based,world,,image/jp2,
+        #{bare_druid},Picture 2,page,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,location-based,world,,image/jp2,
       CSV
     end
 
     it "returns errors" do
       expect(result.failure).to eq [
-        "On row 5 found bb045jk9908_0002.jp2, which set view or download rights to location-based but did not specify a location"
+        "On row 5 found CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx, which set view or download rights to location-based but did not specify a location"
       ]
     end
   end
