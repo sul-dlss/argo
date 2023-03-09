@@ -7,3 +7,4 @@ dor_indexing_url: http://localhost:3004/dor
 
 enabled_features:
   folio: true
+  multivalued_metadata_sources: true

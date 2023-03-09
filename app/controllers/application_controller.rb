@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   before_action :set_folio_flag_per_param
+  before_action :set_multivalued_metadata_source_flag_per_param
 
   rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: "forbidden" }
 
@@ -37,6 +38,10 @@ class ApplicationController < ActionController::Base
 
   def set_folio_flag_per_param
     Settings.enabled_features.folio = true if params[:folio] == "true"
+  end
+
+  def set_multivalued_metadata_source_flag_per_param
+    Settings.enabled_features.multivalued_metadata_sources = true if params[:multivalued] == "true"
   end
 
   protected

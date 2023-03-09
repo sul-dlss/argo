@@ -105,3 +105,4 @@ redis_url: 'redis://localhost:6379/'
 
 enabled_features:
   folio: false
+  multivalued_metadata_sources: false
