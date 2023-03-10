@@ -17,9 +17,6 @@ RSpec.describe DescriptionsGrouper do
     JSON.parse(
       <<~JSON
       {
-        "title": [{
-          "value": "Fisherman (Peter Needham)"
-        }],
         "contributor": [{
           "name": [{
             "value": "Wong, Martin",
