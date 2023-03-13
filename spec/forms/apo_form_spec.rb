@@ -50,13 +50,13 @@ RSpec.describe ApoForm do
       end
 
       it "has the defaults" do
-        expect(subject).to match_array [
+        expect(subject).to contain_exactly(
           {name: "developers", type: "group", access: "manage"},
           {name: "pmag-staff", type: "group", access: "manage"},
           {name: "smpl-staff", type: "group", access: "manage"},
           {name: "dpg-staff", type: "group", access: "manage"},
           {name: "argo-access-spec", type: "group", access: "manage"}
-        ]
+        )
       end
     end
 
@@ -248,11 +248,11 @@ RSpec.describe ApoForm do
       subject { instance.permissions }
 
       it "has the defaults" do
-        expect(subject).to match_array [
+        expect(subject).to contain_exactly(
           {name: "developer", type: "group", access: "manage"},
           {name: "service-manager", type: "group", access: "manage"},
           {name: "metadata-staff", type: "group", access: "manage"}
-        ]
+        )
       end
     end
 
