@@ -65,7 +65,7 @@ class CollectionForm
 
     if params[:collection_catalog_record_id].present?
       reg_params[:identification] = {
-        catalogLinks: [{catalog: "symphony", catalogRecordId: params[:collection_catalog_record_id], refresh: true}]
+        catalogLinks: [{catalog: CatalogRecordId.type, catalogRecordId: params[:collection_catalog_record_id], refresh: true}]
       }
     end
 
