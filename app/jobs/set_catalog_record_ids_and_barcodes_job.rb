@@ -25,8 +25,8 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
         args = {}
         args[:catalog_record_ids] = Array(catalog_record_ids[i]) if catalog_record_ids
         args[:refresh] = refresh[i] if refresh
-        args[:barcode] = barcodes[i] if barcodes
-        change_set = ItemChangeSet.new(cocina_object)
+        args[:barcode] = barcodes[i] if barcodes && cocina_object.dro?
+        change_set = change_set_for(cocina_object)
         change_set.validate(args)
         update_catalog_record_id_and_barcode(change_set, args, log) if change_set.changed?
       end
@@ -58,7 +58,7 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
 
     begin
       new_cocina_model = open_new_version_if_needed(cocina_object, version_message(change_set))
-      new_change_set = ItemChangeSet.new(new_cocina_model)
+      new_change_set = change_set_for(new_cocina_model)
       new_change_set.validate(args)
       new_change_set.save
 
@@ -71,6 +71,11 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       nil
     end
+  end
+
+  def change_set_for(cocina_object)
+    change_set_class = cocina_object.dro? ? ItemChangeSet : CollectionChangeSet
+    change_set_class.new(cocina_object)
   end
 
   def catalog_record_ids_from_params(params)
