@@ -84,13 +84,13 @@
     <div id="create-collection-catalog_record_id" data-apo-form-target="catalogRecordIdFields" hidden>
       <div class="mb-3">
         <%= collection.label :collection_catalog_record_id, "Collection #{CatalogRecordId.label}", class: "col-sm-4 control-label" %>
-        <div class="col-sm-10">
+        <div class="col-sm-8">
           <%= collection.text_field :collection_catalog_record_id, class: 'form-control' %>
         </div>
       </div>
       <div class="mb-3">
-        <%= collection.label :collection_rights_catalog_record_id, "Collection Rights", class: "col-sm-2 control-label" %>
-        <div class="col-sm-10">
+        <%= collection.label :collection_rights_catalog_record_id, "Collection Rights", class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
           <%= collection.select :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-select' %>
         </div>
       </div>
