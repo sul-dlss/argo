@@ -10,13 +10,6 @@ export default class Argo {
         this.tagsAutocomplete()
         this.projectAutocomplete()
         this.report()
-        this.blacklight()
-    }
-
-    // Because blacklight doesn't yet support turbo, we need to manually initialize
-    // the features we care about.
-    blacklight() {
-      Blacklight.activate()
     }
 
     report() {
