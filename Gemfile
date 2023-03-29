@@ -50,7 +50,7 @@ gem "faraday"
 gem "faraday-multipart"
 gem "honeybadger", "~> 4.1"
 gem "lograge"
-gem "sidekiq", "~> 6.0"
+gem "sidekiq", "~> 7.0"
 
 gem "roo", "~> 2.9.0" # work with newer Excel files and other types (xlsx, ods, csv)
 gem "roo-xls" # needed to work with legacy Excel files (xls)
