@@ -1,0 +1,60 @@
+production:
+  https://www.apache.org/licenses/LICENSE-2.0:
+    description: 'This work is licensed under an Apache License 2.0.'
+  https://opensource.org/licenses/BSD-2-Clause:
+    description: 'This work is licensed under a BSD 2-Clause "Simplified" License.'
+  https://opensource.org/licenses/BSD-3-Clause:
+    description: 'This work is licensed under a BSD 3-Clause "New" or "Revised" License.'
+  https://creativecommons.org/licenses/by/3.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution 3.0 Unported license (CC BY).'
+  https://creativecommons.org/licenses/by/4.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution 4.0 International license (CC BY).'
+  https://creativecommons.org/licenses/by-nc/3.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Non Commercial 3.0 Unported license (CC BY-NC).'
+  https://creativecommons.org/licenses/by-nc/4.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Non Commercial 4.0 International license (CC BY-NC).'
+  https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Non Commercial No Derivatives 3.0 Unported license (CC BY-NC-ND).'
+  https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Non Commercial No Derivatives 4.0 International license (CC BY-NC-ND).'
+  https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Non Commercial Share Alike 3.0 Unported license (CC BY-NC-SA).'
+  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Non Commercial Share Alike 4.0 International license (CC BY-NC-SA).'
+  https://creativecommons.org/licenses/by-nd/4.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution No Derivatives 4.0 International license (CC BY-ND).'
+  https://creativecommons.org/licenses/by-sa/3.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Share Alike 3.0 Unported license (CC BY-SA).'
+  https://creativecommons.org/licenses/by-sa/4.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution Share Alike 4.0 International license (CC BY-SA).'
+  https://creativecommons.org/licenses/by-nd/3.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Attribution No Derivatives 3.0 Unported license (CC BY-ND).'
+  https://creativecommons.org/publicdomain/zero/1.0/legalcode:
+    description: 'This work is licensed under a Creative Commons Zero v1.0 Universal license (CC0).'
+  https://opensource.org/licenses/cddl1:
+    description: 'This work is licensed under a Common Development and Distribution License 1.0.'
+  https://www.eclipse.org/legal/epl-2.0:
+    description: 'This work is licensed under an Eclipse Public License 2.0.'
+  https://www.gnu.org/licenses/agpl.txt:
+    description: 'This work is licensed under a GNU Affero General Public License v3.0 only.'
+  https://www.gnu.org/licenses/gpl-3.0-standalone.html:
+    description: 'This work is licensed under a GNU General Public License v3.0 only.'
+  https://www.gnu.org/licenses/lgpl-3.0-standalone.html:
+    description: 'This work is licensed under a GNU Lesser General Public License v3.0 only.'
+  https://www.isc.org/downloads/software-support-policy/isc-license/:
+    description: 'This work is licensed under an ISC License.'
+  https://opensource.org/licenses/MIT:
+    description: 'This work is licensed under an MIT License.'
+  https://www.mozilla.org/MPL/2.0/:
+    description: 'This work is licensed under a Mozilla Public License 2.0.'
+  https://opendatacommons.org/licenses/by/1-0/:
+    description: 'This work is licensed under an Open Data Commons Attribution License v1.0.'
+  http://opendatacommons.org/licenses/odbl/1.0/:
+    # This is a non-canonical url found in some existing data. It redirects to  # https://opendatacommons.org/licenses/odbl/1-0/
+    description: 'This work is licensed under an Open Data Commons Open Database License v1.0.'
+  https://opendatacommons.org/licenses/odbl/1-0/:
+    description: 'This work is licensed under an Open Data Commons Open Database License v1.0.'
+  https://opendatacommons.org/licenses/pddl/1-0/:
+    description: 'This work is licensed under an Open Data Commons Public Domain Dedication & License 1.0.'
+  https://creativecommons.org/publicdomain/mark/1.0/:
+    description: 'This work has been identified as being free of known restrictions under copyright law, including all related and neighboring rights (Public Domain Mark 1.0).'

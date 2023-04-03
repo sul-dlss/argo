@@ -16,12 +16,10 @@ RSpec.describe DescmetadataDownloadJob do
   let(:dl_job_params) do
     {druids: druid_list}
   end
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_model1, metadata: metadata_client1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2, metadata: metadata_client2) }
-  let(:metadata_client1) { instance_double(Dor::Services::Client::Metadata, mods: "<mods/>") }
-  let(:metadata_client2) { instance_double(Dor::Services::Client::Metadata, mods: "<mods/>") }
-  let(:cocina_model1) { instance_double(Cocina::Models::DROWithMetadata) }
-  let(:cocina_model2) { instance_double(Cocina::Models::DROWithMetadata) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_object1) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_object2) }
+  let(:cocina_object1) { build(:dro, id: druid_list.first) }
+  let(:cocina_object2) { build(:dro, id: druid_list.last) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid_list[0]).and_return(object_client1)
@@ -76,8 +74,8 @@ RSpec.describe DescmetadataDownloadJob do
 
     before do
       allow(Ability).to receive(:new).and_return(ability)
-      allow(ability).to receive(:can?).with(:read, cocina_model1).and_return(true)
-      allow(ability).to receive(:can?).with(:read, cocina_model2).and_return(true)
+      allow(ability).to receive(:can?).with(:read, cocina_object1).and_return(true)
+      allow(ability).to receive(:can?).with(:read, cocina_object2).and_return(true)
     end
 
     after do
@@ -127,8 +125,8 @@ RSpec.describe DescmetadataDownloadJob do
 
     context "user lacks permission to view metadata on one of the objects" do
       before do
-        allow(ability).to receive(:can?).with(:read, cocina_model1).and_return(true)
-        allow(ability).to receive(:can?).with(:read, cocina_model2).and_return(false)
+        allow(ability).to receive(:can?).with(:read, cocina_object1).and_return(true)
+        allow(ability).to receive(:can?).with(:read, cocina_object2).and_return(false)
       end
 
       it "creates a valid zip file with only the objects for which the user has read authorization" do

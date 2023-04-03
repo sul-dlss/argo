@@ -44,7 +44,7 @@ class DescmetadataDownloadJob < GenericJob
       return
     end
 
-    desc_metadata = Dor::Services::Client.object(current_druid).metadata.mods
+    desc_metadata = ModsService.new(cocina_object).to_xml
 
     write_to_zip(desc_metadata, current_druid, zip_file)
     log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
