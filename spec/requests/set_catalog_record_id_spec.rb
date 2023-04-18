@@ -246,11 +246,35 @@ RSpec.describe "Set catalog record ID" do
           end
         end
 
+        let(:updated_model_replaced_catalog_record_id) do
+          if Settings.enabled_features.folio
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
+                    {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          else
+            cocina_model.new(
+              {
+                identification: {
+                  catalogLinks: [{catalog: "previous symphony", catalogRecordId: "99999", refresh: false},
+                    {catalog: "symphony", catalogRecordId: "12345", refresh: true}],
+                  sourceId: "sul:1234"
+                }
+              }
+            )
+          end
+        end
+
         it "updates the catalog_record_id" do
           patch item_catalog_record_id_path(druid), params: catalog_record_id_params
 
           expect(object_client).to have_received(:update)
-            .with(params: updated_model)
+            .with(params: updated_model_replaced_catalog_record_id)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
 
@@ -285,8 +309,8 @@ RSpec.describe "Set catalog record ID" do
             cocina_model.new(
               {
                 identification: {
-                  catalogLinks: [{catalog: "folio", catalogRecordId: "a99999", refresh: false},
-                    {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
+                  catalogLinks: [{catalog: "folio", catalogRecordId: "a45678", refresh: true},
+                    {catalog: "folio", catalogRecordId: "a99999", refresh: false}],
                   sourceId: "sul:1234"
                 }
               }
@@ -295,8 +319,8 @@ RSpec.describe "Set catalog record ID" do
             cocina_model.new(
               {
                 identification: {
-                  catalogLinks: [{catalog: "symphony", catalogRecordId: "99999", refresh: false},
-                    {catalog: "symphony", catalogRecordId: "45678", refresh: true}],
+                  catalogLinks: [{catalog: "symphony", catalogRecordId: "45678", refresh: true},
+                    {catalog: "symphony", catalogRecordId: "99999", refresh: false}],
                   sourceId: "sul:1234"
                 }
               }
@@ -330,6 +354,7 @@ RSpec.describe "Set catalog record ID" do
               {
                 identification: {
                   catalogLinks: [{catalog: "previous folio", catalogRecordId: "a55555", refresh: false},
+                    {catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
                     {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
                   sourceId: "sul:1234"
                 }
@@ -340,6 +365,7 @@ RSpec.describe "Set catalog record ID" do
               {
                 identification: {
                   catalogLinks: [{catalog: "previous symphony", catalogRecordId: "55555", refresh: false},
+                    {catalog: "previous symphony", catalogRecordId: "99999", refresh: false},
                     {catalog: "symphony", catalogRecordId: "12345", refresh: true}],
                   sourceId: "sul:1234"
                 }

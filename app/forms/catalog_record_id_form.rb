@@ -73,28 +73,15 @@ class CatalogRecordIdForm < Reform::Form
 
   # this is overriding Reforms save method, since we are persisting catalog record IDs in cocina only
   def save_model
-    # fetch the existing previous catalog record ID values from the cocina object
-    existing_previous_catalog_record_ids = CatalogRecordId.new(model).previous_links
+    refresh_catalog_record_id_from_form = catalog_record_ids.find { |id| id.refresh && id._destroy != "1" }&.value
+    non_refresh_catalog_record_ids_from_form = catalog_record_ids.filter_map { |id| id.value if id.refresh != true && id._destroy != "1" }
+    catalog_record_ids_from_form = [refresh_catalog_record_id_from_form].compact + non_refresh_catalog_record_ids_from_form
 
-    # these are all of the existing catalog record ID values the user wants to remove (i.e. for which they clicked the trash icon)
-    removed_catalog_record_ids = catalog_record_ids.filter_map { |id| id.value if id._destroy == "1" }
-
-    # build an array of all previous catalog record IDs (which includes the existing previous catalog record IDs plus any newly removed ones)
-    updated_previous_catalog_record_ids = (existing_previous_catalog_record_ids + removed_catalog_record_ids).map do |id_value|
-      {catalog: CatalogRecordId.previous_type, catalogRecordId: id_value, refresh: false}
-    end.uniq
-
-    updated_catalog_record_ids = catalog_record_ids.filter_map do |id|
-      {catalog: CatalogRecordId.type, catalogRecordId: id.value, refresh: id.refresh} unless id._destroy == "1"
-    end
-
-    other_existing_catalog_record_ids = other_catalog_record_ids.map do |id|
-      {catalog: id.catalog, catalogRecordId: id.value, refresh: id.refresh}
-    end
+    new_catalog_links = CatalogRecordId.serialize(model, catalog_record_ids_from_form, refresh: refresh_catalog_record_id_from_form.present?)
 
     # now store everything in the cocina object
     updated_object = model
-    identification_props = updated_object.identification.new(catalogLinks: updated_previous_catalog_record_ids + updated_catalog_record_ids + other_existing_catalog_record_ids)
+    identification_props = updated_object.identification.new(catalogLinks: new_catalog_links)
     updated_object = updated_object.new(identification: identification_props)
     Repository.store(updated_object)
   end
