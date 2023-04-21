@@ -63,15 +63,6 @@ class NotesGrouper
                                    [hash["note#{num}.displayLabel"], hash["note#{num}.type"]] == [label_for_note_number, type_for_note_number]
                                end
 
-        when 0
-          # If there is no matching note number, increment the
-          # current highest note number and use it for note
-          # elements for this type
-          max_note = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
-          field, number = max_note.scan(/(\D+)(\d+)/).first
-          new_note = "#{field}#{number.to_i.succ}"
-          ordered_mapping[new_note] = [label_for_note_number, type_for_note_number]
-          new_note
         when 1
           # If there is only one matching note number in the mapping, use it and move on.
           ordered_mapping.key([label_for_note_number, type_for_note_number])
@@ -79,7 +70,8 @@ class NotesGrouper
           # If there are multiple notes of this type, e.g., an
           # item with multiple notes of type "abstract" with a
           # nil display label, use the first note number not
-          # already used
+          # already used.
+          # Also applies when there are no displayLabels or types for the note
           ordered_mapping.find do |mapped_note_number, (label_value, type_value)|
             [label_value, type_value] == [label_for_note_number, type_for_note_number] && !description.key?(key.sub(/^old_note\d+/, mapped_note_number))
           end&.first

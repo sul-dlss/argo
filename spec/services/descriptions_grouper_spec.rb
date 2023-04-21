@@ -858,4 +858,380 @@ RSpec.describe DescriptionsGrouper do
       expect(run.dig(druid6, "note12.displayLabel")).to eq("Contents")
     end
   end
+
+  context "with notes containing multiple repeat values including those with no displayLabel or type" do
+    let(:descriptions) do
+      {
+        druid1 => DescriptionExport.export(description: description1, source_id: ""),
+        druid2 => DescriptionExport.export(description: description2, source_id: ""),
+        druid3 => DescriptionExport.export(description: description3, source_id: ""),
+        druid4 => DescriptionExport.export(description: description4, source_id: ""),
+        druid5 => DescriptionExport.export(description: description5, source_id: ""),
+        druid6 => DescriptionExport.export(description: description6, source_id: "")
+      }
+    end
+
+    let(:description1) do
+      JSON.parse(
+        <<~JSON
+          {          
+            "note": [{
+              "value": "Federal Financial Institutions Examination Council.",
+              "type": "statement of responsibility"
+            }, {
+              "value": "Title from disc label."
+            }, {
+              "value": "Disc characteristics: CD-ROM.",
+              "type": "system details"
+            }, {
+              "value": "note with display label",
+              "displayLabel": "Display label"
+            }, {
+              "value": "note with display label and type",
+              "type": "condition",
+              "displayLabel": "Another label"
+            }, {
+              "value": "Another note with display label",
+              "displayLabel": "Display label"
+            }]
+          }
+        JSON
+      )
+    end
+    let(:description2) do
+      JSON.parse(
+        <<~JSON
+          {
+            "note": [{
+              "value": "May 2004."
+            }, {
+              "value": "Title from disc label."
+            }, {
+              "value": "Provides extensive structural information about surface structures determined from experiment.",
+              "type": "abstract"
+            }, {
+              "value": "Users guide entitled: NIST surface structure database (SSD) with interactive analysis and visualization / authors, P.R. Watson, M.A. Van Hove, K. Herrmann."
+            }, {
+              "value": "System requirements: Intel Pentium processor",
+              "type": "system details"
+            }, {
+              "value": "note with display label",
+              "displayLabel": "Display label"
+            }, {
+              "value": "note with display label and type",
+              "type": "condition",
+              "displayLabel": "Another label"
+            }]
+          }
+        JSON
+      )
+    end
+    let(:description3) do
+      JSON.parse(
+        <<~JSON
+          {          
+            "note": [{
+              "value": "Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.",
+              "type": "abstract"
+            }, {
+              "value": "A note without type or label."
+            }, {
+              "value": "GeoLytics, Inc.",
+              "type": "statement of responsibility"
+            }, {
+              "value": "Title from disc label."
+            }, {
+              "value": "Accompanying user guide is for an earlier version, Â©2008."
+            }, {
+              "value": "note with type but not display label",
+              "type": "condition"
+            }]
+          }        
+        JSON
+      )
+    end
+    let(:description4) do
+      JSON.parse(
+        <<~JSON
+          {          
+            "note": [{
+              "value": "Title from disc surface."
+            }, {
+              "value": "Accompanying booklet is user guide."
+            }, {
+              "value": "2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections."
+            }]
+          }        
+        JSON
+      )
+    end
+    let(:description5) do
+      JSON.parse(
+        <<~JSON
+          {          
+            "note": [{
+              "value": "40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).",
+              "type": "abstract"
+            }, {
+              "value": "Initial file, 1980-2020-",
+              "type": "date/sequential designation"
+            }, {
+              "value": "Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)"
+            }]
+          }        
+        JSON
+      )
+    end
+    let(:description6) do
+      JSON.parse(
+        <<~JSON
+          {
+            "note": [{
+              "value": "Associated Press Collections includes decades worth of access to an array of internal AP publications and records from select AP bureaus. Contents provided by Associated Press Corporate Archives, AP Images, and AP Archive.",
+              "type": "abstract"
+            }, {
+              "structuredValue": [{
+                "value": "1. News features \u0026 internal communications"
+              }, {
+                "value": "2. U.S. City bureaus collection, 1931-2004"
+              }, {
+                "value": "3. Washington, D.C. Bureau collection, 1938-2009"
+              }, {
+                "value": "4. The Middle East bureaus collection, 1967-2008"
+              }, {
+                "value": "5. European bureaus collection, 1937-2003"
+              }, {
+                "value": "6. The Washington D.C. Bureau collection, part II (1915-1930)."
+              }],
+              "type": "table of contents",
+              "displayLabel": "Contents"
+            }]
+          }        
+        JSON
+      )
+    end
+
+    let(:druid1) { "druid:kg986pw1063" }
+    let(:druid2) { "druid:qg486xd2400" }
+    let(:druid3) { "druid:sm561bg8999" }
+    let(:druid4) { "druid:tr125sy5253" }
+    let(:druid5) { "druid:tw155vv5117" }
+    let(:druid6) { "druid:vc609bv8108" }
+
+    it "groups notes as expected" do
+      expect(run.dig(druid1, "note1.value")).to eq("Title from disc label.")
+      expect(run.dig(druid1, "note2.value")).to be_nil
+      expect(run.dig(druid1, "note3.value")).to be_nil
+      expect(run.dig(druid1, "note4.value")).to be_nil
+      expect(run.dig(druid1, "note5.value")).to eq("note with display label")
+      expect(run.dig(druid1, "note5.displayLabel")).to eq("Display label")
+      expect(run.dig(druid1, "note6.value")).to eq("Another note with display label")
+      expect(run.dig(druid1, "note6.displayLabel")).to eq("Display label")
+      expect(run.dig(druid1, "note7.value")).to eq("Federal Financial Institutions Examination Council.")
+      expect(run.dig(druid1, "note7.type")).to eq("statement of responsibility")
+      expect(run.dig(druid1, "note8.value")).to eq("Disc characteristics: CD-ROM.")
+      expect(run.dig(druid1, "note8.type")).to eq("system details")
+      expect(run.dig(druid1, "note9.value")).to eq("note with display label and type")
+      expect(run.dig(druid1, "note9.type")).to eq("condition")
+      expect(run.dig(druid1, "note9.displayLabel")).to eq("Another label")
+      expect(run.dig(druid1, "note10.value")).to be_nil
+      expect(run.dig(druid1, "note11.value")).to be_nil
+      expect(run.dig(druid1, "note12.value")).to be_nil
+
+      expect(run.dig(druid2, "note1.value")).to eq("May 2004.")
+      expect(run.dig(druid2, "note2.value")).to eq("Title from disc label.")
+      expect(run.dig(druid2, "note3.value")).to eq("Users guide entitled: NIST surface structure database (SSD) with interactive analysis and visualization / authors, P.R. Watson, M.A. Van Hove, K. Herrmann.")
+      expect(run.dig(druid2, "note4.value")).to eq("Provides extensive structural information about surface structures determined from experiment.")
+      expect(run.dig(druid2, "note4.type")).to eq("abstract")
+      expect(run.dig(druid2, "note5.value")).to eq("note with display label")
+      expect(run.dig(druid2, "note5.displayLabel")).to eq("Display label")
+      expect(run.dig(druid2, "note6.value")).to be_nil
+      expect(run.dig(druid2, "note7.value")).to be_nil
+      expect(run.dig(druid2, "note8.value")).to eq("System requirements: Intel Pentium processor")
+      expect(run.dig(druid2, "note8.type")).to eq("system details")
+      expect(run.dig(druid2, "note9.value")).to eq("note with display label and type")
+      expect(run.dig(druid2, "note9.type")).to eq("condition")
+      expect(run.dig(druid2, "note9.displayLabel")).to eq("Another label")
+      expect(run.dig(druid2, "note10.value")).to be_nil
+      expect(run.dig(druid2, "note11.value")).to be_nil
+      expect(run.dig(druid2, "note12.value")).to be_nil
+
+      expect(run.dig(druid3, "note1.value")).to eq("A note without type or label.")
+      expect(run.dig(druid3, "note2.value")).to eq("Title from disc label.")
+      expect(run.dig(druid3, "note3.value")).to eq("Accompanying user guide is for an earlier version, Â©2008.")
+      expect(run.dig(druid3, "note4.value")).to eq("Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.")
+      expect(run.dig(druid3, "note4.type")).to eq("abstract")
+      expect(run.dig(druid3, "note5.value")).to be_nil
+      expect(run.dig(druid3, "note6.value")).to be_nil
+      expect(run.dig(druid3, "note7.value")).to eq("GeoLytics, Inc.")
+      expect(run.dig(druid3, "note7.type")).to eq("statement of responsibility")
+      expect(run.dig(druid3, "note8.value")).to be_nil
+      expect(run.dig(druid3, "note9.value")).to be_nil
+      expect(run.dig(druid3, "note10.value")).to eq("note with type but not display label")
+      expect(run.dig(druid3, "note10.type")).to eq("condition")
+      expect(run.dig(druid3, "note11.value")).to be_nil
+      expect(run.dig(druid3, "note12.value")).to be_nil
+
+      expect(run.dig(druid4, "note1.value")).to eq("Title from disc surface.")
+      expect(run.dig(druid4, "note2.value")).to eq("Accompanying booklet is user guide.")
+      expect(run.dig(druid4, "note3.value")).to eq("2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.")
+      expect(run.dig(druid4, "note4.value")).to be_nil
+      expect(run.dig(druid4, "note5.value")).to be_nil
+      expect(run.dig(druid4, "note6.value")).to be_nil
+      expect(run.dig(druid4, "note7.value")).to be_nil
+      expect(run.dig(druid4, "note8.value")).to be_nil
+      expect(run.dig(druid4, "note9.value")).to be_nil
+      expect(run.dig(druid4, "note10.value")).to be_nil
+      expect(run.dig(druid4, "note11.value")).to be_nil
+      expect(run.dig(druid4, "note12.value")).to be_nil
+
+      expect(run.dig(druid5, "note1.value")).to eq("Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)")
+      expect(run.dig(druid5, "note2.value")).to be_nil
+      expect(run.dig(druid5, "note3.value")).to be_nil
+      expect(run.dig(druid5, "note4.value")).to eq("40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).")
+      expect(run.dig(druid5, "note4.type")).to eq("abstract")
+      expect(run.dig(druid5, "note5.value")).to be_nil
+      expect(run.dig(druid5, "note6.value")).to be_nil
+      expect(run.dig(druid5, "note7.value")).to be_nil
+      expect(run.dig(druid5, "note8.value")).to be_nil
+      expect(run.dig(druid5, "note9.value")).to be_nil
+      expect(run.dig(druid5, "note10.value")).to be_nil
+      expect(run.dig(druid5, "note11.value")).to eq("Initial file, 1980-2020-")
+      expect(run.dig(druid5, "note11.type")).to eq("date/sequential designation")
+      expect(run.dig(druid5, "note12.value")).to be_nil
+
+      expect(run.dig(druid6, "note1.value")).to be_nil
+      expect(run.dig(druid6, "note2.value")).to be_nil
+      expect(run.dig(druid6, "note3.value")).to be_nil
+      expect(run.dig(druid6, "note4.value")).to eq("Associated Press Collections includes decades worth of access to an array of internal AP publications and records from select AP bureaus. Contents provided by Associated Press Corporate Archives, AP Images, and AP Archive.")
+      expect(run.dig(druid6, "note4.type")).to eq("abstract")
+      expect(run.dig(druid6, "note5.value")).to be_nil
+      expect(run.dig(druid6, "note6.value")).to be_nil
+      expect(run.dig(druid6, "note7.value")).to be_nil
+      expect(run.dig(druid6, "note8.value")).to be_nil
+      expect(run.dig(druid6, "note9.value")).to be_nil
+      expect(run.dig(druid6, "note10.value")).to be_nil
+      expect(run.dig(druid6, "note11.value")).to be_nil
+      expect(run.dig(druid6, "note12.type")).to eq("table of contents")
+      expect(run.dig(druid6, "note12.displayLabel")).to eq("Contents")
+    end
+  end
+
+  context "with all notes lacking displayLabel or type" do
+    let(:descriptions) do
+      {
+        druid1 => DescriptionExport.export(description: description1, source_id: ""),
+        druid2 => DescriptionExport.export(description: description2, source_id: "")
+      }
+    end
+
+    let(:description1) do
+      JSON.parse(
+        <<~JSON
+          {          
+            "note": [{
+              "value": "One Title from disc label."
+            }, {
+              "value": "Two Disc characteristics: CD-ROM."
+            }, {
+              "value": "Three note with display label"
+            }]
+          }
+        JSON
+      )
+    end
+    let(:description2) do
+      JSON.parse(
+        <<~JSON
+          {
+            "note": [{
+              "value": "One May 2004."
+            }, {
+              "value": "Two Title from disc label."
+            }, {
+              "value": "Three Provides extensive structural information about surface structures determined from experiment."
+            }]
+          }
+        JSON
+      )
+    end
+
+    it "groups notes with no empty columns at start of row" do
+      expect(run.dig(druid1, "note1.value")).to eq("One Title from disc label.")
+      expect(run.dig(druid1, "note2.value")).to eq("Two Disc characteristics: CD-ROM.")
+      expect(run.dig(druid1, "note3.value")).to eq("Three note with display label")
+
+      expect(run.dig(druid2, "note1.value")).to eq("One May 2004.")
+      expect(run.dig(druid2, "note2.value")).to eq("Two Title from disc label.")
+      expect(run.dig(druid2, "note3.value")).to eq("Three Provides extensive structural information about surface structures determined from experiment.")
+    end
+  end
+
+  context "with an item with several unique notes" do
+    let(:descriptions) do
+      {
+        druid1 => DescriptionExport.export(description: description1, source_id: ""),
+        druid2 => DescriptionExport.export(description: description2, source_id: "")
+      }
+    end
+
+    let(:description1) do
+      JSON.parse(
+        <<~JSON
+          {          
+            "note": [{
+              "value": "One Title from disc label."
+            }, {
+              "value": "Two Disc characteristics: CD-ROM."
+            }, {
+              "value": "Three note with display label"  
+            }]
+          }
+        JSON
+      )
+    end
+    let(:description2) do
+      JSON.parse(
+        <<~JSON
+          {
+            "note": [{
+              "value": "One May 2004."
+            }, {
+              "value": "Two Title from disc label."
+            }, {
+              "value": "Three Provides extensive structural information about surface structures determined from experiment."
+            }, {
+              "value": "An additional note."
+            }, {
+              "value": "Example abstract",
+              "type": "abstract"
+            }, {
+              "value": "An author",
+              "type": "statement of responsibility"
+            }]
+          }
+        JSON
+      )
+    end
+
+    it "groups notes as expected" do
+      expect(run.dig(druid1, "note1.value")).to eq("One Title from disc label.")
+      expect(run.dig(druid1, "note2.value")).to eq("Two Disc characteristics: CD-ROM.")
+      expect(run.dig(druid1, "note3.value")).to eq("Three note with display label")
+      expect(run.dig(druid1, "note4.value")).to be_nil
+      expect(run.dig(druid1, "note5.value")).to be_nil
+      expect(run.dig(druid1, "note5.type")).to be_nil
+      expect(run.dig(druid1, "note6.value")).to be_nil
+      expect(run.dig(druid1, "note6.type")).to be_nil
+
+      expect(run.dig(druid2, "note1.value")).to eq("One May 2004.")
+      expect(run.dig(druid2, "note2.value")).to eq("Two Title from disc label.")
+      expect(run.dig(druid2, "note3.value")).to eq("Three Provides extensive structural information about surface structures determined from experiment.")
+      expect(run.dig(druid2, "note4.value")).to eq("An additional note.")
+      expect(run.dig(druid2, "note5.value")).to eq("Example abstract")
+      expect(run.dig(druid2, "note5.type")).to eq("abstract")
+      expect(run.dig(druid2, "note6.value")).to eq("An author")
+      expect(run.dig(druid2, "note6.type")).to eq("statement of responsibility")
+    end
+  end
 end
