@@ -34,7 +34,7 @@ class ApoController < ApplicationController
     }.compact)
     @access_template = AccessTemplate.new(access_template:, apo_defaults_template: administrative.accessTemplate)
 
-    @collections = Array(administrative.collectionsForRegistration).map do |col_id|
+    @collections = Array(administrative.collectionsForRegistration).filter_map do |col_id|
       name = CollectionNameService.find(col_id)
       unless name
         Honeybadger.notify("The APO #{params[:id]} asserts that #{col_id} is a collection for registration, but we don't find that collection in solr")
@@ -42,7 +42,7 @@ class ApoController < ApplicationController
       end
 
       ["#{name.truncate(60, separator: /\s/)} (#{col_id.delete_prefix("druid:")})", col_id]
-    end.compact.sort_by(&:first) # before returning the list, sort by collection name
+    end.sort_by(&:first) # before returning the list, sort by collection name
   end
 
   def create

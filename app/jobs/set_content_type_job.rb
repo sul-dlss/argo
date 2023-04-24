@@ -74,6 +74,6 @@ class SetContentTypeJob < GenericJob
   end
 
   def resource_types_should_change?(cocina_object)
-    Array(cocina_object.structural&.contains).map(&:type).any? { |resource_type| resource_type == @current_resource_type }
+    Array(cocina_object.structural&.contains).map(&:type).any?(@current_resource_type)
   end
 end
