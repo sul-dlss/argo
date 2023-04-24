@@ -100,7 +100,7 @@ class TrackSheet
     table_data.push(["Object Label:", label])
     table_data.push(["Project Name:", doc["project_tag_ssim"].to_s]) if doc["project_tag_ssim"]
 
-    tags = Array(doc["tag_ssim"]).collect { |tag| /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }.compact
+    tags = Array(doc["tag_ssim"]).filter_map { |tag| /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }
     table_data.push(["Tags:", tags.join("\n")]) unless tags.empty?
     table_data.push(["#{CatalogRecordId.label}:", Array(doc[CatalogRecordId.index_field]).join(", ")]) if doc[CatalogRecordId.index_field].present?
     table_data.push(["Source ID:", Array(doc["source_id_ssim"]).first]) if doc["source_id_ssim"].present?

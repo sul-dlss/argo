@@ -63,7 +63,7 @@ RSpec.describe "Collection membership" do
 
       it "returns 403" do
         post "/items/#{druid}/collection/add?collection=druid:bc555gh3434"
-        expect(response.code).to eq("403")
+        expect(response).to have_http_status(:forbidden)
         expect(object_service).not_to have_received(:update)
       end
     end
@@ -112,7 +112,7 @@ RSpec.describe "Collection membership" do
       it "returns 403" do
         get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"
 
-        expect(response.code).to eq("403")
+        expect(response).to have_http_status(:forbidden)
         expect(object_service).not_to have_received(:update)
       end
     end

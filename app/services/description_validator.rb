@@ -29,7 +29,9 @@ class DescriptionValidator
         location = row["druid"] || "row #{i}"
         cell_value = row[header]&.strip
         errors << "Value error: #{location} has 0 value in #{header}." if cell_value == "0"
+        # rubocop:disable Performance/CollectionLiteralInLoop
         errors << "Value error: #{location} has spreadsheet formula error in #{header}." if %w[#NA #REF! #VALUE? #NAME?].include? cell_value
+        # rubocop:enable Performance/CollectionLiteralInLoop
       end
     end
   end
@@ -89,7 +91,7 @@ class DescriptionValidator
 
   def invalid_headers
     # The source_id is only for user reference, and we already validate the druid column is present in bulk jobs
-    @headers.excluding("source_id", "druid").map do |header|
+    @headers.excluding("source_id", "druid").filter_map do |header|
       if header
         split_address = header.scan(/[[:alpha:]]+|[[:digit:]]+/)
           .map { |item| /\d+/.match?(item) ? item.to_i - 1 : item.to_sym }
@@ -99,7 +101,7 @@ class DescriptionValidator
       else
         "(empty string)"
       end
-    end.compact
+    end
   end
 
   def resolve_address(root, address)

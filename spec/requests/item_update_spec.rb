@@ -41,7 +41,7 @@ RSpec.describe "Set the properties for an item" do
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq("303")
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe "Set the properties for an item" do
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq("303")
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -91,7 +91,7 @@ RSpec.describe "Set the properties for an item" do
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq("303")
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -116,7 +116,7 @@ RSpec.describe "Set the properties for an item" do
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
         expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-        expect(response.code).to eq("303")
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -232,7 +232,7 @@ RSpec.describe "Set the properties for an item" do
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq("303")
+          expect(response).to have_http_status(:see_other)
         end
       end
 
@@ -310,7 +310,7 @@ RSpec.describe "Set the properties for an item" do
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq("303")
+          expect(response).to have_http_status(:see_other)
         end
       end
 
@@ -387,7 +387,7 @@ RSpec.describe "Set the properties for an item" do
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq("303")
+          expect(response).to have_http_status(:see_other)
         end
       end
 
@@ -468,7 +468,7 @@ RSpec.describe "Set the properties for an item" do
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq("303")
+          expect(response).to have_http_status(:see_other)
         end
       end
 
@@ -531,7 +531,7 @@ RSpec.describe "Set the properties for an item" do
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
-          expect(response.code).to eq("303")
+          expect(response).to have_http_status(:see_other)
         end
       end
     end

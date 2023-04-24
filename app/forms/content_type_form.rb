@@ -83,6 +83,6 @@ class ContentTypeForm < ApplicationChangeSet
     new_resource_type.present? &&
       model.structural.contains
         .map(&:type)
-        .any? { |resource_type| resource_type == old_resource_type }
+        .any?(old_resource_type)
   end
 end

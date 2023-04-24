@@ -18,7 +18,7 @@ RSpec.describe "Purge object" do
 
     it "returns 403" do
       delete "/items/#{druid}/purge"
-      expect(response.code).to eq("403")
+      expect(response).to have_http_status(:forbidden)
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe "Purge object" do
       it "blocks purge" do
         delete "/items/#{druid}/purge"
 
-        expect(response.code).to eq("400")
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to eq("Cannot purge an object after it is submitted.")
       end
     end

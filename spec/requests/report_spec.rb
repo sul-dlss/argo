@@ -31,7 +31,7 @@ RSpec.describe "Reports from a search" do
       it "returns json" do
         get "/report/data.json?rows=5"
         expect(response).to have_http_status(:ok)
-        data = JSON.parse(response.body)
+        data = response.parsed_body
         expect(Report).to have_received(:new).with(hash_including(per_page: 5), Hash)
         expect(data["rows"].length).to eq 5
       end
@@ -40,7 +40,7 @@ RSpec.describe "Reports from a search" do
     it "defaults to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in" do
       get "/report/data.json"
       expect(response).to have_http_status(:ok)
-      data = JSON.parse(response.body)
+      data = response.parsed_body
       expect(data["rows"].length).to eq(10)
     end
 
@@ -52,7 +52,7 @@ RSpec.describe "Reports from a search" do
         get "/report/data.json", params: params
 
         expect(response).to have_http_status(:ok)
-        data = JSON.parse(response.body)
+        data = response.parsed_body
         expect(Report).to have_received(:new)
           .with(hash_including("f" => {"modified_latest_dttsi" => ["[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]"]}, :per_page => 5), Hash)
 
