@@ -38,7 +38,7 @@ RSpec.describe "Close a version" do
 
     it "returns a 403" do
       post "/items/#{druid}/versions/close"
-      expect(response.code).to eq("403")
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

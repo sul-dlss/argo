@@ -78,7 +78,7 @@ RSpec.describe "Files" do
         expect(response.headers["Last-Modified"]).to be >= last_modified_lower_bound
         expect(response.headers["Content-Type"]).to eq("application/octet-stream")
         expect(response.headers["Content-Disposition"]).to eq "attachment; filename=\"preserved+file.txt\"; filename*=UTF-8''preserved+file.txt"
-        expect(response.code).to eq("200")
+        expect(response).to have_http_status(:ok)
         expect(Preservation::Client.objects).to have_received(:content)
           .with(druid:, filepath: mock_file_name, version: mock_version, on_data: Proc)
       end
@@ -97,7 +97,7 @@ RSpec.describe "Files" do
           expect(response.headers["Content-Type"]).to eq("application/octet-stream")
           expect(response.headers["Last-Modified"]).to be_nil
           expect(response.headers["Content-Disposition"]).to be_nil
-          expect(response.code).to eq("404")
+          expect(response).to have_http_status(:not_found)
           expect(response.body).to eq("Preserved file not found: #{errmsg}")
         end
       end

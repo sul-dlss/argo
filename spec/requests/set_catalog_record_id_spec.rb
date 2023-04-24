@@ -38,7 +38,7 @@ RSpec.describe "Set catalog record ID" do
 
     it "returns a 403" do
       patch item_catalog_record_id_path(druid), params: catalog_record_id_params
-      expect(response.code).to eq("403")
+      expect(response).to have_http_status(:forbidden)
     end
   end
 
