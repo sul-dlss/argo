@@ -8,7 +8,6 @@ module ApoHelper
       accessionWF
       gisAssemblyWF
       gisDeliveryWF
-      gisDiscoveryWF
       goobiWF
       registrationWF
       wasCrawlDisseminationWF
