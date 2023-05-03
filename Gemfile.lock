@@ -353,7 +353,6 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.1.0)
-    newrelic_rpm (9.2.0)
     nio4r (2.5.9)
     nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
@@ -656,7 +655,6 @@ DEPENDENCIES
   lograge
   mods_display (~> 1.0)
   mysql2 (~> 0.5)
-  newrelic_rpm
   nokogiri (~> 1.14)
   okcomputer
   openapi_parser (< 1.0)
