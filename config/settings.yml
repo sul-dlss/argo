@@ -30,12 +30,6 @@ tracking_sheet_report_job:
 descriptive_metadata_export_job:
   csv_filename: 'descriptive.csv'
 
-# Newrelic
-newrelic:
-  enabled: false
-  license_key: 'super secret api key'
-  app_name: 'Argo - name should be specific to server'
-
 # Profiler
 profiler:
   ##
