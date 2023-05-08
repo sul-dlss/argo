@@ -449,7 +449,7 @@ GEM
       disposable (>= 0.5.0, < 1.0.0)
       representable (>= 3.1.1, < 4)
       uber (< 0.2.0)
-    reform-rails (0.2.4)
+    reform-rails (0.2.3)
       activemodel (>= 5.0)
       reform (>= 2.3.1, < 3.0.0)
     regexp_parser (2.8.0)
@@ -672,7 +672,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 7.0.2)
   rake
-  reform-rails
+  reform-rails (< 0.2.4)
   retries
   roo (~> 2.9.0)
   roo-xls
