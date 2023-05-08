@@ -65,148 +65,6 @@ RSpec/Rails/HaveHttpStatus: # new in 2.12
   Enabled: true
 RSpec/Rails/InferredSpecType: # new in 2.14
   Enabled: true
-
-Rails/ActionControllerFlashBeforeRender: # new in 2.16
-  Enabled: false # Breaks stuff.
-Rails/ActionControllerTestCase: # new in 2.14
-  Enabled: true
-Rails/ActionOrder: # new in 2.17
-  Enabled: true
-Rails/ActiveRecordCallbacksOrder: # new in 2.7
-  Enabled: true
-Rails/ActiveSupportOnLoad: # new in 2.16
-  Enabled: true
-Rails/AddColumnIndex: # new in 2.11
-  Enabled: true
-Rails/AfterCommitOverride: # new in 2.8
-  Enabled: true
-Rails/AttributeDefaultBlockValue: # new in 2.9
-  Enabled: true
-Rails/CompactBlank: # new in 2.13
-  Enabled: true
-Rails/DeprecatedActiveModelErrorsMethods: # new in 2.14
-  Enabled: true
-Rails/DotSeparatedKeys: # new in 2.15
-  Enabled: true
-Rails/DuplicateAssociation: # new in 2.14
-  Enabled: true
-Rails/DuplicateScope: # new in 2.14
-  Enabled: true
-Rails/DurationArithmetic: # new in 2.13
-  Enabled: true
-Rails/EagerEvaluationLogMessage: # new in 2.11
-  Enabled: true
-Rails/ExpandedDateRange: # new in 2.11
-  Enabled: true
-Rails/FindById: # new in 2.7
-  Enabled: true
-Rails/FreezeTime: # new in 2.16
-  Enabled: true
-Rails/I18nLazyLookup: # new in 2.14
-  Enabled: true
-Rails/I18nLocaleAssignment: # new in 2.11
-  Enabled: true
-Rails/I18nLocaleTexts: # new in 2.14
-  Enabled: true
-Rails/IgnoredColumnsAssignment: # new in 2.17
-  Enabled: true
-Rails/Inquiry: # new in 2.7
-  Enabled: true
-Rails/MailerName: # new in 2.7
-  Enabled: true
-Rails/MatchRoute: # new in 2.7
-  Enabled: true
-Rails/MigrationClassName: # new in 2.14
-  Enabled: true
-Rails/NegateInclude: # new in 2.7
-  Enabled: true
-Rails/Pluck: # new in 2.7
-  Enabled: false # We support data structures that support map but not pluck
-Rails/PluckInWhere: # new in 2.7
-  Enabled: true
-Rails/RedundantPresenceValidationOnBelongsTo: # new in 2.13
-  Enabled: true
-Rails/RedundantTravelBack: # new in 2.12
-  Enabled: true
-Rails/RenderInline: # new in 2.7
-  Enabled: true
-Rails/RenderPlainText: # new in 2.7
-  Enabled: true
-Rails/RootJoinChain: # new in 2.13
-  Enabled: true
-Rails/RootPathnameMethods: # new in 2.16
-  Enabled: true
-Rails/RootPublicPath: # new in 2.15
-  Enabled: true
-Rails/ShortI18n: # new in 2.7
-  Enabled: true
-Rails/SquishedSQLHeredocs: # new in 2.8
-  Enabled: true
-Rails/StripHeredoc: # new in 2.15
-  Enabled: true
-Rails/TimeZoneAssignment: # new in 2.10
-  Enabled: true
-Rails/ToFormattedS: # new in 2.15
-  Enabled: true
-Rails/ToSWithArgument: # new in 2.16
-  Enabled: true
-Rails/TopLevelHashWithIndifferentAccess: # new in 2.16
-  Enabled: true
-Rails/TransactionExitStatement: # new in 2.14
-  Enabled: true
-Rails/UnusedIgnoredColumns: # new in 2.11
-  Enabled: true
-Rails/WhereEquals: # new in 2.9
-  Enabled: true
-Rails/WhereExists: # new in 2.7
-  Enabled: true
-Rails/WhereMissing: # new in 2.16
-  Enabled: true
-Rails/WhereNot: # new in 2.8
-  Enabled: true
-Rails/WhereNotWithMultipleConditions: # new in 2.17
-  Enabled: true
-
-Performance/AncestorsInclude: # new in 1.7
-  Enabled: true
-Performance/BigDecimalWithNumericArgument: # new in 1.7
-  Enabled: true
-Performance/BlockGivenWithExplicitBlock: # new in 1.9
-  Enabled: true
-Performance/CollectionLiteralInLoop: # new in 1.8
-  Enabled: true
-Performance/ConcurrentMonotonicTime: # new in 1.12
-  Enabled: true
-Performance/ConstantRegexp: # new in 1.9
-  Enabled: true
-Performance/MapCompact: # new in 1.11
-  Enabled: true
-Performance/MethodObjectAsBlock: # new in 1.9
-  Enabled: true
-Performance/RedundantEqualityComparisonBlock: # new in 1.10
-  Enabled: true
-Performance/RedundantSortBlock: # new in 1.7
-  Enabled: true
-Performance/RedundantSplitRegexpArgument: # new in 1.10
-  Enabled: true
-Performance/RedundantStringChars: # new in 1.7
-  Enabled: true
-Performance/ReverseFirst: # new in 1.7
-  Enabled: true
-Performance/SortReverse: # new in 1.7
-  Enabled: true
-Performance/Squeeze: # new in 1.7
-  Enabled: true
-Performance/StringIdentifierArgument: # new in 1.13
-  Enabled: true
-Performance/StringInclude: # new in 1.7
-  Enabled: true
-Performance/Sum: # new in 1.8
-  Enabled: true
-Rails/ResponseParsedBody: # new in 2.18
-  Enabled: true
-Rails/ThreeStateBooleanColumn: # new in 2.19
-  Enabled: true
 Capybara/MatchStyle: # new in 2.17
   Enabled: true
 RSpec/BeEmpty: # new in 2.20
@@ -231,6 +89,9 @@ RSpec/Rails/MinitestAssertions: # new in 2.17
   Enabled: true
 RSpec/Rails/TravelAround: # new in 2.19
   Enabled: true
-
-Rails/UniqueValidationWithoutIndex:
-  Enabled: false # it's buggy in 2.20.1
+FactoryBot/AssociationStyle: # new in 2.23
+  Enabled: true
+FactoryBot/FactoryAssociationWithStrategy: # new in 2.23
+  Enabled: true
+FactoryBot/RedundantFactoryOption: # new in 2.23
+  Enabled: true

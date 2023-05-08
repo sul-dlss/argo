@@ -22,10 +22,11 @@ class ApplicationController < ActionController::Base
       cur_user.set_groups_to_impersonate session[:groups] if session[:groups]
       # TODO: Perhaps move these to the the LoginController and cache on the user model?
       cur_user.display_name = request.env["displayName"]
-      if request.env["eduPersonEntitlement"]
-        cur_user.webauth_groups = request.env["eduPersonEntitlement"].split(";")
-      elsif Rails.env.development?
-        cur_user.webauth_groups = ENV.fetch("ROLES", "").split(";")
+      cur_user.webauth_groups = if request.env["eduPersonEntitlement"]
+        request.env["eduPersonEntitlement"].split(";")
+      else
+        # NOTE: config.user_groups is only defined in the development environment
+        Rails.application.config.try(:user_groups) || []
       end
     end
   end

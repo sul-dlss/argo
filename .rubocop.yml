@@ -3,16 +3,19 @@ inherit_mode:
     - Exclude
 
 require:
+  - standard
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
-  - standard
 
 inherit_gem:
   standard: config/base.yml
+  standard-performance: config/base.yml
+  standard-custom: config/base.yml
+  standard-rails: config/base.yml
 
 inherit_from:
   - .rubocop/custom.yml
   - .rubocop_todo.yml
 
-# Where are all the new cops? Check in .rubocop/custom.yml
+# Where are all the new RSpec/Capybara/FactoryBot cops? .rubocop/custom.yml
