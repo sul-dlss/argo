@@ -60,10 +60,7 @@ gem "nokogiri", "~> 1.14"
 gem "prawn", "~> 1"
 gem "prawn-table"
 gem "rake"
-# TODO: Deal with this
-# pinned because 0.2.4 broke the build: https://app.circleci.com/pipelines/github/sul-dlss/argo/6018/workflows/fd256885-f9aa-4cf6-bb60-8bd2be232f49/jobs/13023/tests#failed-test-1
-# Specifically because of the `TagsForm` thinking a new tag was a tag to update
-gem "reform-rails", "< 0.2.4"
+gem "reform-rails"
 gem "retries"
 gem "ruby-prof"
 gem "rubyzip"

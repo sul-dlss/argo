@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class TagsForm < Reform::Form
-  collection :tags, populator: lambda { |collection:, index:, **|
-                                 if (item = collection[index])
+  collection :tags, populator: lambda { |collection:, index:, fragment:, **|
+                                 if (item = collection.find { |tag| tag.id == fragment[:id] })
                                    item
                                  else
                                    collection.insert(index, TagsController::Tag.new)
