@@ -51,7 +51,7 @@ RSpec.describe ApplyModsMetadata do
   describe "#apply" do
     subject(:apply) { action.apply }
 
-    let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: {status_code: 9}) }
+    let(:status_service) { instance_double(Dor::Workflow::Client::Status, status_code: 9) }
     let(:object_client) do
       instance_double(Dor::Services::Client::Object)
     end
@@ -150,7 +150,7 @@ RSpec.describe ApplyModsMetadata do
       allow(workflow_client).to receive(:status).and_return(status_service)
     end
 
-    let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: {status_code:}) }
+    let(:status_service) { instance_double(Dor::Workflow::Client::Status, status_code:) }
 
     let(:status_code) { 6 }
     let(:workflow) { instance_double(DorObjectWorkflowStatus) }

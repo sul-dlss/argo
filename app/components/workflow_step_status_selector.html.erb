@@ -3,7 +3,6 @@
              method: 'put',
              data: { turbo_confirm: confirm } do %>
   <%= hidden_field_tag('process', name) %>
-  <%= hidden_field_tag('repo', repository) %>
   <div class="input-group">
     <%= select_tag('status',
                    options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]),

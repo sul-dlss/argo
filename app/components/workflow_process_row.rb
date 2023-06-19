@@ -11,7 +11,7 @@ class WorkflowProcessRow < ApplicationComponent
     @cocina_object = cocina_object
   end
 
-  delegate :druid, :workflow_name, :repository, :name, :status, :datetime,
+  delegate :druid, :workflow_name, :name, :status, :datetime,
     :attempts, :lifecycle, :note, :error_message, to: :process
 
   def elapsed

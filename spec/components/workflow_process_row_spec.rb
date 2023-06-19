@@ -16,7 +16,6 @@ RSpec.describe WorkflowProcessRow, type: :component do
         pid: "druid:132",
         workflow_name: "accessionWF",
         name: "technical-metadata",
-        repository: "dor",
         datetime: "2008-12-17T14:21:32Z",
         elapsed: 1,
         attempts: 2,
