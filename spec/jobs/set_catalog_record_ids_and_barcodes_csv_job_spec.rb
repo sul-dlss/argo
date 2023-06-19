@@ -8,10 +8,16 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
   end
 
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:catalog_record_ids) { ["12345", "", "44444"] }
+  let(:catalog_record_ids) { ["#{catalog_record_id_prefix}12345", "", "#{catalog_record_id_prefix}44444"] }
   let(:refresh) { ["true", "", "false"] }
   let(:barcodes) { ["36105014757517", "", "36105014757518"] }
   let(:buffer) { StringIO.new }
+  let(:catalog_record_id_column) do
+    Settings.enabled_features.folio ? "Folio Instance HRID" : "Catkey"
+  end
+  let(:catalog_record_id_prefix) do
+    Settings.enabled_features.folio ? "in" : ""
+  end
 
   # Replace catalog_record_id on this item
   let(:item1) do
@@ -38,8 +44,8 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
 
   let(:csv_file) do
     [
-      "Druid,Barcode,Catkey,Catkey,Refresh",
-      [druids[0], barcodes[0], catalog_record_ids[0], "55555", refresh[0]].join(","),
+      "Druid,Barcode,#{catalog_record_id_column},#{catalog_record_id_column},Refresh",
+      [druids[0], barcodes[0], catalog_record_ids[0], "#{catalog_record_id_prefix}55555", refresh[0]].join(","),
       [druids[1], barcodes[1], catalog_record_ids[1], "", refresh[1]].join(","),
       [druids[2], barcodes[2], catalog_record_ids[2], "", refresh[2]].join(",")
     ].join("\n")
@@ -65,7 +71,33 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
 
     it "attempts to update the catalog_record_id/barcode for each druid with correct corresponding catalog_record_id/barcode" do
       expect(bulk_action.druid_count_total).to eq druids.length
-      expect(subject).to have_received(:update_catalog_record_id_and_barcode).with(ItemChangeSet, Hash, buffer).exactly(3).times
+      expect(bulk_action.druid_count_fail).to eq 0
+      expect(subject).to have_received(:update_catalog_record_id_and_barcode).with(ItemChangeSet, Hash, buffer).exactly(druids.length).times
+    end
+  end
+
+  context "with invalid barcode and catalog_record_ids" do
+    let(:csv_file) do
+      [
+        "Druid,Barcode,#{catalog_record_id_column},#{catalog_record_id_column},Refresh",
+        [druids[0], "superbad", catalog_record_ids[0], "#{catalog_record_id_prefix}55555", refresh[0]].join(","),
+        [druids[1], barcodes[1], "trash", "", refresh[1]].join(","),
+        [druids[2], barcodes[2], catalog_record_ids[2], "", refresh[2]].join(",")
+      ].join("\n")
+    end
+
+    describe "#perform" do
+      before do
+        allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+        allow(subject).to receive(:update_catalog_record_id_and_barcode)
+        subject.perform(bulk_action.id, {csv_file:})
+      end
+
+      it "only attempts to update the catalog_record_id/barcode for the one druids with valid barcode/catalog_record_id" do
+        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.druid_count_fail).to eq 2
+        expect(subject).to have_received(:update_catalog_record_id_and_barcode).with(ItemChangeSet, Hash, buffer).exactly(druids.length - 2).times
+      end
     end
   end
 end

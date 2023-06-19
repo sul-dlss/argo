@@ -27,8 +27,12 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
         args[:refresh] = refresh[i] if refresh
         args[:barcode] = barcodes[i] if barcodes && cocina_object.dro?
         change_set = change_set_for(cocina_object)
-        change_set.validate(args)
-        update_catalog_record_id_and_barcode(change_set, args, log) if change_set.changed?
+        if change_set.validate(args)
+          update_catalog_record_id_and_barcode(change_set, args, log) if change_set.changed?
+        else
+          log.puts("#{Time.current} Invalid #{CatalogRecordId.label}/barcode for #{cocina_object.externalIdentifier}")
+          bulk_action.increment(:druid_count_fail).save
+        end
       end
     end
   end
