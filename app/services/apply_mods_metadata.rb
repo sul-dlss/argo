@@ -125,7 +125,7 @@ class ApplyModsMetadata
   # @return [Integer] value corresponding to the status info list
   def status
     # We must provide a string version here: https://github.com/sul-dlss/dor-workflow-client/issues/169
-    @status ||= WorkflowClientFactory.build.status(druid: cocina.externalIdentifier, version: cocina.version.to_s).info[:status_code]
+    @status ||= WorkflowClientFactory.build.status(druid: cocina.externalIdentifier, version: cocina.version.to_s).status_code
   end
 
   def cocina_description

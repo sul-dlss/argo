@@ -9,7 +9,7 @@ class WorkflowStatus
     @workflow_steps = workflow_steps
   end
 
-  delegate :empty?, :workflow_name, :repository, to: :workflow
+  delegate :empty?, :workflow_name, to: :workflow
 
   def druid
     workflow.pid

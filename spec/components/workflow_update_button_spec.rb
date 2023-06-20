@@ -10,8 +10,7 @@ RSpec.describe WorkflowUpdateButton, type: :component do
       status:,
       pid: "druid:132",
       workflow_name: "accessionWF",
-      name: "technical-metadata",
-      repository: "dor")
+      name: "technical-metadata")
   end
 
   context "when the state is error" do

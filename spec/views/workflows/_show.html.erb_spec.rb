@@ -15,7 +15,6 @@ RSpec.describe "workflows/_show" do
       elapsed: nil,
       attempts: nil,
       lifecycle: nil,
-      repository: "dor",
       error_message: "broken",
       note: nil)
   end

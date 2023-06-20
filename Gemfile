@@ -76,7 +76,7 @@ gem "openapi_parser", "< 1.0"
 gem "blacklight", "~> 7.25"
 gem "blacklight-hierarchy", "~> 6.1"
 gem "dor-services-client", "~> 12.5"
-gem "dor-workflow-client", "~> 4.0"
+gem "dor-workflow-client", "~> 6.0"
 gem "druid-tools"
 gem "mods_display", "~> 1.0"
 gem "okcomputer" # monitors application and its dependencies
