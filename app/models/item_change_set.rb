@@ -22,6 +22,7 @@ class ItemChangeSet < ApplicationChangeSet
     with: /\A(2050[0-9]{7}|245[0-9]{8}|36105[0-9]{9}|[0-9]+-[0-9]+)\z/,
     allow_blank: true
   }
+  validate :format_of_catalog_record_ids
 
   def self.model_name
     ::ActiveModel::Name.new(nil, nil, "Item")
@@ -45,6 +46,12 @@ class ItemChangeSet < ApplicationChangeSet
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license
     setup_view_access_with_cdl_properties(model.access)
+  end
+
+  def format_of_catalog_record_ids
+    return if catalog_record_ids.blank? || CatalogRecordId.valid?(catalog_record_ids)
+
+    errors.add(:catalog_record_ids, "are not a valid format")
   end
 
   def sync
