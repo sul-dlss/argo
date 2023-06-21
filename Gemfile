@@ -97,10 +97,15 @@ group :test, :development do
   gem "http_logger", require: false # Change this to `true` to see all http requests logged
   gem "pry-remote" # allows you to attach remote session to pry
   gem "rspec-rails", "~> 5.0"
+  # NOTE: the `standard` way does not support using the rubocop CLI with
+  # extensions like standard-rails, so until that changes or we decide to switch
+  # to the standardrb CLI (which would need CI and editor support), we have to
+  # carry both this dependency and standard-rails.
   gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "sqlite3", "~> 1.4.2"
   gem "standard"
+  gem "standard-rails"
 end
 
 group :development do

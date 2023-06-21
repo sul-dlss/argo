@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :bulk_action do
     action_type { "RemoteIndexingJob" }
-    association :user
+    user
     log_name { "tmp/log.txt" }
   end
 end
