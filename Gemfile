@@ -104,7 +104,7 @@ group :test, :development do
   gem "rubocop-rails"
   gem "rubocop-rspec"
   gem "sqlite3", "~> 1.4.2"
-  gem "standard"
+  gem "standard", "< 1.30", require: false # TODO: 1.30.x breaks build as of 2023-07-10, unpin once a later release fixes this, or if suggested workaround is acceptable and fixes the issue, see https://github.com/standardrb/standard/issues/569
   gem "standard-rails"
 end
 
