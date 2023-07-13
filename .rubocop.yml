@@ -4,6 +4,9 @@ inherit_mode:
 
 require:
   - standard
+  - standard-custom
+  - standard-performance
+  - standard-rails
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
