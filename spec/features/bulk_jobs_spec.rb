@@ -15,7 +15,7 @@ RSpec.describe "Bulk jobs view", js: true do
 
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: nil) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object) }
   let(:cocina_model) { build(:admin_policy_with_metadata, id: apo_id) }
   let(:apo_id) { "druid:hv992yv2222" }
 
