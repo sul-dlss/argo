@@ -185,7 +185,7 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (12.14.0)
+    dor-services-client (12.15.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.90.0)
       deprecation
@@ -322,7 +322,7 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
+    mini_portile2 (2.8.4)
     minitest (5.18.1)
     moab-versioning (6.1.0)
       druid-tools (>= 1.0.0)
@@ -338,7 +338,7 @@ GEM
       i18n
       stanford-mods (~> 3.3)
       view_component
-    msgpack (1.7.1)
+    msgpack (1.7.2)
     multi_json (1.15.0)
     multipart-post (2.3.0)
     mysql2 (0.5.5)
