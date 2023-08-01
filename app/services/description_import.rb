@@ -23,7 +23,13 @@ class DescriptionImport
       visit(params, split_address(address), @csv_row[address]) if @csv_row[address]
     end
 
-    Success(Cocina::Models::Description.new(compact_params(params)))
+    compacted_params = compact_params(params)
+
+    remove_contributors_if_role_without_name(compacted_params)
+    remove_form_if_source_without_value(compacted_params)
+    remove_nested_attributes_without_value(compacted_params)
+
+    Success(Cocina::Models::Description.new(compacted_params))
   rescue Cocina::Models::ValidationError => e
     Failure([e.message])
   end
@@ -87,6 +93,34 @@ class DescriptionImport
 
       params[key].compact!
       params[key].map { |param| compact_params(param) }
+    end
+  end
+
+  def remove_contributors_if_role_without_name(compacted_params_hash)
+    return unless compacted_params_hash && compacted_params_hash[:contributor]
+
+    compacted_params_hash[:contributor].delete_if do |contributor|
+      contributor && contributor[:name].nil? && contributor[:role].present?
+    end
+  end
+
+  def remove_form_if_source_without_value(compacted_params_hash)
+    return unless compacted_params_hash && compacted_params_hash[:form]
+
+    compacted_params_hash[:form].delete_if do |form|
+      form && form[:value].nil? && (form[:source].present? || form[:type].present?)
+    end
+  end
+
+  def remove_nested_attributes_without_value(compacted_params_hash)
+    # event can have contributors, geographic can have form, relatedResource can have form and/or contributor
+    [:relatedResource, :event, :geographic].each do |parent_property|
+      next if compacted_params_hash[parent_property].blank?
+
+      compacted_params_hash[parent_property].each do |parent_object|
+        remove_contributors_if_role_without_name(parent_object)
+        remove_form_if_source_without_value(parent_object)
+      end
     end
   end
 end
