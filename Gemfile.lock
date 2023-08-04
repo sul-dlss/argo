@@ -669,6 +669,7 @@ DEPENDENCIES
   nokogiri (~> 1.14)
   okcomputer
   openapi_parser (< 1.0)
+  parallel
   prawn (~> 1)
   prawn-table
   preservation-client (~> 6.0)

@@ -72,6 +72,8 @@ gem "zip_tricks", "5.3.1" # 5.3.1 is required as 5.4+ breaks the download all fe
 # see https://app.circleci.com/pipelines/github/sul-dlss/argo/3007/workflows/17473c95-b882-4d9b-a167-7ac16849573b/jobs/6771
 gem "openapi_parser", "< 1.0"
 
+gem 'parallel'
+
 # Stanford related gems
 gem "blacklight", "~> 7.25"
 gem "blacklight-hierarchy", "~> 6.1"
