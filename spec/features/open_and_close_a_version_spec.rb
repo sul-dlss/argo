@@ -6,8 +6,8 @@ RSpec.describe "Open and close a version" do
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
   end
-
   let(:dsc) { Dor::Services::Client.object(item.externalIdentifier) }
+  let(:accession_step_count) { WorkflowClientFactory.build.workflow_template("accessionWF").fetch("processes").size }
 
   before do
     sign_in create(:user), groups: ["sdr:administrator-role"]
@@ -16,8 +16,8 @@ RSpec.describe "Open and close a version" do
 
   it "opens an object", js: true do
     visit solr_document_path item.externalIdentifier
-    # Should match the number of steps in accessionWF
-    11.times do
+    # The initial accessioning step will already be complete; this completes the rest.
+    (accession_step_count - 1).times do
       # Ensure every step of accessionWF is completed, this will allow us to open a new version.
       click_link "accessionWF"
       click_button "Set to completed", match: :first
