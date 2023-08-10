@@ -39,8 +39,16 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     property :label, virtual: true
     property :barcode, virtual: true
     validates :source_id, format: {with: /\A.+:.+\z/, message: "ID is invalid"}
-    validates :catalog_record_id, allow_blank: true, format: {with: Regexp.new(CatalogRecordId.pattern_string), message: "is invalid"}
     validates :barcode, allow_blank: true, format: {with: VALID_BARCODE_REGEX, message: "is invalid"}
+    validates_each :catalog_record_id do |record, attr, value|
+      next if value.blank?
+
+      if Settings.ils_cutover_in_progress
+        record.errors.add(attr, "must be blank")
+      elsif !value.match?(Regexp.new(CatalogRecordId.pattern_string))
+        record.errors.add(attr, "is invalid")
+      end
+    end
   end
 
   def persisted?
