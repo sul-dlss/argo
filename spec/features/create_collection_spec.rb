@@ -16,6 +16,17 @@ RSpec.describe "Add collection" do
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, label: "hey", externalIdentifier: apo_id) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
+  describe "during folio cutover when collection catalog_record_id is provided", js: true do
+    before do
+      allow(Settings).to receive(:ils_cutover_in_progress).and_return(true)
+    end
+
+    it "doesn't allow the collection to be created" do
+      visit new_apo_collection_path apo_id
+      expect(page).not_to have_text("Create a Collection from Folio")
+    end
+  end
+
   describe "when collection catalog_record_id is provided", js: true do
     it "warns if catalog_record_id exists" do
       visit new_apo_collection_path apo_id
