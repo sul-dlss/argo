@@ -114,7 +114,6 @@ group :test do
   gem "rspec_junit_formatter" # needed for test coverage in CircleCI
   gem "selenium-webdriver" # for js testing
   gem "simplecov"
-  gem "webdrivers" # installs the chrome for selenium tests
   gem "webmock", require: false
   gem "write_xlsx" # this is required to write an xlsx file prior to opening it with roo in tests
 end

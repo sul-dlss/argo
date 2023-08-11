@@ -2,7 +2,7 @@
 
 class TagsForm < Reform::Form
   collection :tags, populator: lambda { |collection:, index:, fragment:, **|
-                                 if (item = collection.find { |tag| tag.id == fragment[:id] })
+                                 if (item = collection.find { |tag| fragment[:id].present? && tag.id == fragment[:id] })
                                    item
                                  else
                                    collection.insert(index, TagsController::Tag.new)
