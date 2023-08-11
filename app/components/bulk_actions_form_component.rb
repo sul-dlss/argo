@@ -30,7 +30,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ["Set object rights", new_rights_job_path(search_of_druids)],
         ["Edit license and rights statements", new_license_and_rights_statement_job_path(search_of_druids)],
         ["Edit #{CatalogRecordId.label}s and barcodes", new_catalog_record_id_and_barcode_job_path(search_of_druids)],
-        ["Refresh MODS from #{CatalogRecordId.label}", new_refresh_mods_job_path(search_of_druids)],
+        Settings.ils_cutover_in_progress ? ["DISABLED: Refresh MODS from #{CatalogRecordId.label}", nil] : ["Refresh MODS from #{CatalogRecordId.label}", new_refresh_mods_job_path(search_of_druids)],
         ["Set content type", new_content_type_job_path(search_of_druids)],
         ["Set collection", new_collection_job_path(search_of_druids)]
       ]],
