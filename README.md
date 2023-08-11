@@ -233,7 +233,7 @@ Argo uses systemd to manage and monitor its Sidekiq-based background job workers
 
 ### Indexing (including bulk reindexing)
 
-For further reading on how indexing from Fedora to Solr works in Argo, see [INDEXING.md](INDEXING.md).  This explains how single object reindexing works, how the bulk reindexing mechanism works, and how to build custom reindexing runs.
+For further reading on how indexing from Fedora to Solr works in Argo, see [INDEXING.md](INDEXING.md).  This explains how single object reindexing works, how the bulk reindexing mechanism works, and how to build custom reindexing runs. 
 
 ### Profiling
 
