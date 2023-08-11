@@ -16,7 +16,7 @@ class BulkActionsFormComponent < ApplicationComponent
   def action_types
     grouped_options_for_select [
       ["Perform actions", [
-        ["Manage release", new_manage_release_job_path(search_of_druids)],
+        Settings.ils_cutover_in_progress ? ["DISABLED: Manage release", nil] : ["Manage release", new_manage_release_job_path(search_of_druids)],
         ["Reindex", new_reindex_job_path(search_of_druids)],
         ["Republish objects", new_republish_job_path(search_of_druids)],
         ["Purge", new_purge_job_path(search_of_druids)],
