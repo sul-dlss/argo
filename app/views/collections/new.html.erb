@@ -14,14 +14,16 @@
                   data: { action: 'change->collection-editor#revealCreateCollection' } %>
           </div>
 
-          <div class="form-check">
-            <label class="form-check-label" for="from-catalog">
-              Create a Collection from <%= CatalogRecordId.type.capitalize %>
-            </label>
-            <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-catalog',
-                  class: 'form-check-input',
-                  data: { action: 'change->collection-editor#revealCreateCollectionCatalogRecordId' } %>
-          </div>
+          <% unless Settings.ils_cutover_in_progress %>
+            <div class="form-check">
+              <label class="form-check-label" for="from-catalog">
+                Create a Collection from <%= CatalogRecordId.type.capitalize %>
+              </label>
+              <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-catalog',
+                    class: 'form-check-input',
+                    data: { action: 'change->collection-editor#revealCreateCollectionCatalogRecordId' } %>
+            </div>
+          <% end %>
         </div>
 
         <div data-collection-editor-target="createCollectionFields">
