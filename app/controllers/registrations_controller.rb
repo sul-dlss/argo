@@ -68,8 +68,8 @@ class RegistrationsController < ApplicationController
     rescue Dor::Services::Client::NotFoundResponse
       resp = false
     rescue Dor::Services::Client::UnexpectedResponse => e
-      # In production, this will prevent registration attempt when Symphony is not available.
-      # In other environments, where Symphony is never available, it will allow registration.
+      # In production, this will prevent registration attempt when ILS (Folio) is not available.
+      # In other environments, where Folio is never available, it will allow registration.
       return render plain: e.message, status: :bad_gateway if Rails.env.production?
 
       resp = true

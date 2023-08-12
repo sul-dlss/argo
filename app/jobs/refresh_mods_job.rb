@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# job to refresh the descriptive metadata from Symphony
+# job to refresh the descriptive metadata from ILS (Folio)
 class RefreshModsJob < GenericJob
   def perform(bulk_action_id, params)
     super
