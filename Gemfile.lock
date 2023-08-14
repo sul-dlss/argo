@@ -355,12 +355,12 @@ GEM
       net-protocol
     net-ssh (7.2.0)
     nio4r (2.5.9)
-    nokogiri (1.15.3)
+    nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.15.3-x86_64-darwin)
+    nokogiri (1.15.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.15.3-x86_64-linux)
+    nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     nokogiri-happymapper (0.9.0)
       nokogiri (~> 1.5)
@@ -497,7 +497,7 @@ GEM
     rspec-support (3.12.1)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rss (0.2.9)
+    rss (0.3.0)
       rexml
     rubocop (1.52.1)
       json (~> 2.3)
@@ -538,7 +538,7 @@ GEM
       dry-monads
       faraday (>= 0.16)
       launchy
-    selenium-webdriver (4.10.0)
+    selenium-webdriver (4.11.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
