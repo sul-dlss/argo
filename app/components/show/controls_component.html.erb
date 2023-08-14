@@ -38,8 +38,8 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdown-descriptive">
         <% if catalog_record? %>
-          <li><%= link_to 'Refresh', refresh_metadata_item_path(id: druid),
-                                     class: "dropdown-item #{'disabled' if button_disabled?}",
+          <li><%= link_to refresh_button_label, refresh_metadata_item_path(id: druid),
+                                     class: "dropdown-item #{'disabled' if button_disabled? || Settings.ils_cutover_in_progress}",
                                      data: { turbo_method: 'post' } %></li>
         <% end %>
         <li><%= link_to 'Download Cocina spreadsheet', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>

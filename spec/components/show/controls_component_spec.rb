@@ -65,6 +65,20 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
           expect(rendered.css("a").size).to eq 12
         end
+
+        context "when ILS cutover flag is enabled" do # rubocop:disable RSpec/NestedGroups
+          around do |spec|
+            original_value = Settings.ils_cutover_in_progress
+            Settings.ils_cutover_in_progress = true
+            spec.run
+            Settings.ils_cutover_in_progress = original_value
+          end
+
+          it "includes the disabled descriptive metadata refresh button" do
+            # Refresh button is disabled during ILS cutover
+            expect(page).to have_css "a.disabled", text: "Refresh (disabled during ILS cutover)"
+          end
+        end
       end
     end
 
