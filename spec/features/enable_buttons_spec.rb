@@ -8,8 +8,7 @@ RSpec.describe "Enable buttons" do
     solr_conn.add(id: item_id, objectType_ssim: "item")
     solr_conn.commit
     allow(StateService).to receive(:new).and_return(state_service)
-    allow(state_service).to receive(:published?).and_return(true)
-    allow(state_service).to receive(:object_state).and_return(:unlock)
+    allow(state_service).to receive_messages(published?: true, object_state: :unlock)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 

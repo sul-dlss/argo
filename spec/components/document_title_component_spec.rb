@@ -19,8 +19,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
   let(:rendered) { render_inline(component) }
 
   before do
-    allow(component).to receive(:helpers).and_return(ability_mock)
-    allow(component).to receive(:title).and_return("Dummy Title")
+    allow(component).to receive_messages(helpers: ability_mock, title: "Dummy Title")
   end
 
   context "with an APO" do
