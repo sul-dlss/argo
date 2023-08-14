@@ -17,6 +17,7 @@ class CsvUploadValidator
   def errors
     @errors ||= [].tap do |errors|
       errors.concat(header_errors)
+      errors.concat(data_errors)
     end
   end
 
@@ -31,5 +32,20 @@ class CsvUploadValidator
     return ["missing headers: #{missing_headers.join(", ")}."] if missing_headers.present?
 
     []
+  end
+
+  def data_errors
+    return [] unless Settings.ils_cutover_in_progress
+
+    CSV.parse(csv, headers: true).each do |row|
+      # Short-circuit the iteration as soon as a problematic row is encountered
+      return ["rows may not contain catalog record IDs during the ILS cutover"] if row[catalog_record_id_column].present?
+    end
+
+    []
+  end
+
+  def catalog_record_id_column
+    CatalogRecordId.label.downcase.tr(" ", "_")
   end
 end
