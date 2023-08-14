@@ -27,8 +27,7 @@ RSpec.describe WorkflowTableProcessComponent, type: :component do
     let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
 
     before do
-      allow(component).to receive(:search_state).and_return search_state
-      allow(component).to receive(:report_reset_path).and_return("/foo")
+      allow(component).to receive_messages(search_state: search_state, report_reset_path: "/foo")
     end
 
     describe "wf_hash structure" do

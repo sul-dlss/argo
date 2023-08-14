@@ -14,9 +14,7 @@ RSpec.describe ValueHelper do
   let(:honeybadger) { double(Honeybadger) }
 
   before do
-    allow(helper).to receive(:blacklight_config).and_return blacklight_config
-    allow(helper).to receive(:search_state).and_return search_state
-    allow(helper).to receive(:search_action_path).and_return search_action_path
+    allow(helper).to receive_messages(blacklight_config: blacklight_config, search_state: search_state, search_action_path: search_action_path)
   end
 
   describe "#link_to_admin_policy" do
