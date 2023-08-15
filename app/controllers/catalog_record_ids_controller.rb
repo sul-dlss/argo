@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for updating catalog record ids from a modal on the item details page.
 class CatalogRecordIdsController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: "Repository", id_param: "item_id"
 
