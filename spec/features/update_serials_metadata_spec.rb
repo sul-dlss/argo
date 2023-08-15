@@ -7,8 +7,8 @@ require "rails_helper"
 RSpec.describe "Update serials metadata", js: true do
   let(:user) { create(:user) }
   # We need to set a catalog_record_id on this item, but we can't do it when it's created,
-  # because we don't have symphony running in our test environment. If you register
-  # an object with a catalog_record_id, then DSA tries to connect to symphony to get the metadata.
+  # because we don't have an ILS (Folio) hooked up in our test environment. If you register
+  # an object with a catalog_record_id, then DSA tries to connect to Folio to get the metadata.
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
   end
