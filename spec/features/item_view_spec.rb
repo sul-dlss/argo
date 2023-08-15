@@ -270,6 +270,8 @@ RSpec.describe "Item view", js: true do
 
             # The following three clicks make sure events are expandable and collapsible
             click_button "Events"
+            # NOTE: Without scrolling to the events section, the clicks below were flappy. (example RSpec seed: 39192)
+            scroll_to find_by_id("document-events-heading")
             within "#events" do
               click_button "View more"
               click_button "View less"

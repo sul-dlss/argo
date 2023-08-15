@@ -109,6 +109,7 @@ end
 
 group :test do
   gem "capybara"
+  gem "capybara-screenshot"
   # We only need the RSpec matchers from cocina-models in Argo, so don't worry about pinning to patch level
   gem "cocina-models", "~> 0.69"
   gem "rspec_junit_formatter" # needed for test coverage in CircleCI

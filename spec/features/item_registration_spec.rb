@@ -125,7 +125,12 @@ RSpec.describe "Item registration page", js: true do
 
       expect(page).to have_content "Items successfully registered."
 
-      find("td > a").click # Click on the druid link in the table
+      druid_link = find("td > a")
+
+      # NOTE: Unless we force a reindex here, this spec is flappy (example RSpec seed: 39128)
+      Argo::Indexer.reindex_druid_remotely(druid_link["href"].split("/").last)
+
+      druid_link.click
 
       # now verify that registration succeeded by checking some metadata
       within_table("Overview") do
