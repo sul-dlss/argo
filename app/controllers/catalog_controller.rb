@@ -221,17 +221,16 @@ class CatalogController < ApplicationController
     params[:id] = Druid.new(params[:id]).with_namespace
     _deprecated_response, @document = search_service.fetch(params[:id])
 
-    @cocina = Repository.find(params[:id])
+    @cocina = Repository.find_lite(params[:id], structural: false)
     flash[:alert] = "Warning: this object cannot currently be represented in the Cocina model." if @cocina.instance_of?(NilModel)
 
     authorize! :read, @cocina
 
     @workflows = WorkflowService.workflows_for(druid: params[:id])
-
     milestones = MilestoneService.milestones_for(druid: params[:id])
     object_client = Dor::Services::Client.object(params[:id])
-    @milestones_presenter = MilestonesPresenter.new(milestones:,
-      versions: object_client.version.inventory)
+    versions = object_client.version.inventory
+    @milestones_presenter = MilestonesPresenter.new(milestones:, versions: versions)
 
     # If you have this token, it indicates you have read access to the object
     @verified_token_with_expiration = Argo.verifier.generate(

@@ -12,8 +12,8 @@ RSpec.describe "WorkflowServiceController" do
   let(:druid) { "druid:bc123df4567" }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService) }
-  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
-  let(:cocina) { build(:dro_with_metadata) }
+  let(:object_service) { instance_double(Dor::Services::Client::Object, find_lite: cocina) }
+  let(:cocina) { build(:dro_lite) }
 
   describe "GET published" do
     context "when published" do

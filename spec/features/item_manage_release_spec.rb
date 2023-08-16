@@ -16,6 +16,7 @@ RSpec.describe "Item manage release" do
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
       find: item,
+      find_lite: item,
       events: events_client,
       version: version_client)
   end

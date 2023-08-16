@@ -17,7 +17,7 @@ RSpec.describe "Item registration page", :js do
   # this mocks a failed registration response from DSA
   context "failed registration" do
     let(:ur_apo_id) { "druid:hv992ry2431" }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find_lite: cocina_model, find: cocina_model) }
     let(:cocina_model) do
       build(:admin_policy_with_metadata, registration_workflow: %w[dpgImageWF goobiWF])
     end

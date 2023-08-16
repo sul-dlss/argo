@@ -20,5 +20,9 @@ module Contents
     def paginatable_array
       @paginatable_array ||= Kaminari.paginate_array(structural.contains).page(params[:page]).per(50)
     end
+
+    def number_of_file_sets
+      structural.contains.size
+    end
   end
 end

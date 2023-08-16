@@ -20,6 +20,7 @@ RSpec.describe "Collection manage release" do
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
+      find_lite: cocina_model, # Note: This should really be a DROLite
       find: cocina_model,
       events: events_client,
       version: version_client)

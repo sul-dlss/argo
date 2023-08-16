@@ -21,6 +21,6 @@ class WorkflowServiceController < ApplicationController
   private
 
   def load_cocina
-    @cocina = Repository.find(params[:id])
+    @cocina = Repository.find_lite(params[:id], structural: false)
   end
 end
