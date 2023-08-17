@@ -23,7 +23,7 @@ RSpec.describe "Item manage release" do
     FactoryBot.create_for_repository(:persisted_item)
   end
 
-  it "has a manage release button" do
+  it "has a manage release button", pending: "FOLIO Cutover" do
     visit solr_document_path(item.externalIdentifier)
     expect(page).to have_css "a", text: "Manage release"
   end
