@@ -57,7 +57,7 @@ module Show
     private
 
     def manage_release
-      render ActionButton.new(url: item_manage_release_path(druid), label: "Manage release", open_modal: true)
+      render ActionButton.new(url: item_manage_release_path(druid), label: "Manage release", open_modal: true) unless Settings.disable_release_prior_to_ils_cutover
     end
 
     def apply_apo_defaults
