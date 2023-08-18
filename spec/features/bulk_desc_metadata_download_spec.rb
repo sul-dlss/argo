@@ -10,7 +10,7 @@ RSpec.describe "Bulk Descriptive Metadata Download", js: true do
   end
 
   # TODO: This test is disabled temporarily during the FOLIO Cutover
-  it "New page has a populate druids button and div with last search", pending: "FOLIO Cutover" do
+  xit "New page has a populate druids button and div with last search" do
     visit search_catalog_path q: "stanford"
     within ".search-widgets" do
       click_link "Bulk Actions"
