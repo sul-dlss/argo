@@ -8,11 +8,11 @@ RSpec.describe CsvUploadValidator do
   let(:headers) { ["Druid", catalog_record_id_header] }
   let(:validator) { described_class.new(csv:, headers:) }
 
-  it "is valid" do
+  it "is valid", pending: "Folio cutover" do
     expect(validator).to be_valid
   end
 
-  it "returns empty errors" do
+  it "returns empty errors", pending: "Folio cutover" do
     expect(validator.errors).to be_empty
   end
 
@@ -54,7 +54,7 @@ RSpec.describe CsvUploadValidator do
       expect(validator).not_to be_valid
     end
 
-    it "returns errors" do
+    it "returns errors", pending: "Folio cutover" do
       expect(validator.errors).to eq(["missing headers: xDruid."])
     end
   end

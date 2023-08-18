@@ -28,7 +28,7 @@ RSpec.describe "Add collection" do
   end
 
   describe "when collection catalog_record_id is provided", js: true do
-    it "warns if catalog_record_id exists" do
+    it "warns if catalog_record_id exists", pending: "Folio cutover" do
       visit new_apo_collection_path apo_id
       choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
       expect(page).to have_text("Collection #{CatalogRecordId.label}")
