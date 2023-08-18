@@ -16,7 +16,7 @@ class BulkActionsFormComponent < ApplicationComponent
   def action_types
     grouped_options_for_select [
       ["Perform actions", [
-        Settings.disable_release_prior_to_ils_cutover ? ["Manage release (disabled during FOLIO cutover)", nil] : ["Manage release", new_manage_release_job_path(search_of_druids)],
+        # DISABLED during Folio cutover ["Manage release", new_manage_release_job_path(search_of_druids)],
         ["Reindex", new_reindex_job_path(search_of_druids)],
         ["Republish objects", new_republish_job_path(search_of_druids)],
         ["Purge", new_purge_job_path(search_of_druids)],
@@ -30,7 +30,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ["Set object rights", new_rights_job_path(search_of_druids)],
         ["Edit license and rights statements", new_license_and_rights_statement_job_path(search_of_druids)],
         ["Edit #{CatalogRecordId.label}s and barcodes", new_catalog_record_id_and_barcode_job_path(search_of_druids)],
-        Settings.ils_cutover_in_progress ? ["DISABLED: Refresh MODS from #{CatalogRecordId.label}", nil] : ["Refresh MODS from #{CatalogRecordId.label}", new_refresh_mods_job_path(search_of_druids)],
+        # DISABLED during Folio cutover ["Refresh MODS from #{CatalogRecordId.label}", new_refresh_mods_job_path(search_of_druids)],
         ["Set content type", new_content_type_job_path(search_of_druids)],
         ["Set collection", new_collection_job_path(search_of_druids)]
       ]],
