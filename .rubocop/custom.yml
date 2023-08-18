@@ -78,7 +78,7 @@ RSpec/IndexedLet: # new in 2.20
 RSpec/MatchArray: # new in 2.19
   Enabled: true
 RSpec/PendingWithoutReason: # new in 2.16
-  Enabled: false
+  Enabled: true
 RSpec/RedundantAround: # new in 2.19
   Enabled: true
 RSpec/SkipBlockInsideExample: # new in 2.19

@@ -44,7 +44,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link "Download Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive.csv"
         expect(page).to have_link "Upload Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive/edit"
 
-        expect(rendered.css("a").size).to eq 9
+        expect(rendered.css("a").size).to eq 9 # TODO: reset to 10 after FOLIO cutover
         expect(rendered.css("a.disabled").size).to eq 3 # purge, publish/unpublish are disabled
       end
 
@@ -63,7 +63,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
           expect(page).to have_link "Refresh", href: "/items/druid:kv840xx0000/refresh_metadata"
           expect(page).to have_link "Manage serials", href: "/items/druid:kv840xx0000/serials/edit"
 
-          expect(rendered.css("a").size).to eq 11
+          expect(rendered.css("a").size).to eq 11 # TODO: reset to 12 after FOLIO cutover
         end
 
         context "when ILS cutover flag is enabled" do # rubocop:disable RSpec/NestedGroups
@@ -99,7 +99,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_css "a.disabled", text: "Create embargo"
         expect(page).to have_css "a.disabled", text: "Apply APO defaults"
 
-        expect(rendered.css("a").size).to eq 8
+        expect(rendered.css("a").size).to eq 8 # TODO: reset to 9 after FOLIO cutover
         expect(rendered.css("a.disabled").size).to eq 5 # create embargo, apply APO defaults, purge, publish/unpublish are disabled
       end
     end
@@ -156,7 +156,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(page).to have_link "Download Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive.csv"
       expect(page).to have_link "Upload Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive/edit"
 
-      expect(rendered.css("a").size).to eq 8
+      expect(rendered.css("a").size).to eq 8 # TODO: reset to 9 after FOLIO cutover
     end
 
     context "when the collection has a catalog record ID" do
@@ -166,7 +166,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link "Refresh", href: "/items/druid:kv840xx0000/refresh_metadata"
         expect(page).not_to have_link "Manage serials", href: "/items/druid:kv840xx0000/serials/edit"
 
-        expect(rendered.css("a").size).to eq 9
+        expect(rendered.css("a").size).to eq 9 # TODO: reset to 10 after FOLIO cutover
       end
     end
   end

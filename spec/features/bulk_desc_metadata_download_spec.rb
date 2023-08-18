@@ -9,8 +9,7 @@ RSpec.describe "Bulk Descriptive Metadata Download", js: true do
     sign_in current_user
   end
 
-  # TODO: This test is disabled temporarily during the FOLIO Cutover
-  xit "New page has a populate druids button and div with last search" do
+  it "New page has a populate druids button and div with last search" do
     visit search_catalog_path q: "stanford"
     within ".search-widgets" do
       click_link "Bulk Actions"
