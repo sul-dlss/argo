@@ -4,12 +4,12 @@
 class VersionService
   class << self
     # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with updated version
-    def open(identifier:, **options)
-      new(identifier:).open(**options)
+    def open(identifier:, **)
+      new(identifier:).open(**)
     end
 
-    def close(identifier:, **options)
-      new(identifier:).close(**options)
+    def close(identifier:, **)
+      new(identifier:).close(**)
     end
 
     def openable?(identifier:)

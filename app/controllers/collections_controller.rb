@@ -69,8 +69,8 @@ class CollectionsController < ApplicationController
     render partial: "count", locals: {count: result.dig("response", "numFound"), path_for_facet:}
   end
 
-  def search_action_path(*args)
-    search_catalog_path(*args)
+  def search_action_path(*)
+    search_catalog_path(*)
   end
 
   private
