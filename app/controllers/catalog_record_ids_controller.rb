@@ -18,7 +18,7 @@ class CatalogRecordIdsController < ApplicationController
     if @form.validate(params[:catalog_record_id]) && @form.save
       Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
       msg = "#{CatalogRecordId.label}s for #{@cocina.externalIdentifier} have been updated!"
-      redirect_to solr_document_path(@cocina.externalIdentifier, folio: params[:folio]), notice: msg
+      redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
     else
       render turbo_stream: turbo_stream.replace("modal-frame", partial: "edit"), status: :unprocessable_entity
     end
