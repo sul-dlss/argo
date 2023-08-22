@@ -16,7 +16,7 @@ class BulkActionsFormComponent < ApplicationComponent
   def action_types
     grouped_options_for_select [
       ["Perform actions", [
-        # DISABLED during Folio cutover ["Manage release", new_manage_release_job_path(search_of_druids)],
+        (["Manage release", new_manage_release_job_path(search_of_druids)] unless Settings.disable_release_prior_to_ils_cutover),
         ["Reindex", new_reindex_job_path(search_of_druids)],
         ["Republish objects", new_republish_job_path(search_of_druids)],
         ["Purge", new_purge_job_path(search_of_druids)],
