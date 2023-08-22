@@ -3,74 +3,47 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 7.0.2"
-# Use Puma as the app server
-gem "puma", "~> 5.6"
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.5"
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", ">= 1.4.2", require: false
-
-gem "cssbundling-rails", "~> 1.1"
-gem "jsbundling-rails", "~> 1.0"
-gem "propshaft"
-
-gem "view_component", "~>  2.74.1" # TODO: Unpin when bug in 2.75.0 is fixed and released
-
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "byebug", platform: :mri
-end
-
-group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem "listen", "~> 3.2"
-  gem "web-console"
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  # gem 'spring'
-  # gem 'spring-watcher-listen', '~> 2.0.0'
-end
-
-# Barby creates barcodes. Used in generating tracksheets
-gem "barby"
-gem "cancancan"
-# Pretty format for XML
-gem "coderay"
+gem "barby" # Barby creates barcodes. Used in generating tracksheets
+gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
+gem "cancancan" # authorization
+gem "coderay" # Pretty format for XML
 gem "config"
+gem "cssbundling-rails", "~> 1.1"
+gem "devise"
+gem "devise-remote-user", "~> 1.0"
 gem "dry-monads"
 gem "equivalent-xml", ">= 0.6.0" # For ignoring_attr_values() with arguments
-gem "faraday"
+gem "faraday" # HTTP client library
 gem "faraday-multipart"
 gem "honeybadger", "~> 4.1"
+gem "jbuilder", "~> 2.5" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem "jsbundling-rails", "~> 1.0"
 gem "lograge"
-gem "sidekiq", "~> 7.0"
-
-gem "roo", "~> 2.9.0" # work with newer Excel files and other types (xlsx, ods, csv)
-gem "roo-xls" # needed to work with legacy Excel files (xls)
-
 gem "nokogiri", "~> 1.14"
-# Prawn is used to create "tracksheets"
-gem "prawn", "~> 1"
-gem "prawn-table"
-gem "rake"
-gem "reform-rails"
-gem "retries"
-gem "ruby-prof"
-gem "rubyzip"
-gem "turbo-rails", "~> 1.0"
-gem "zip_tricks", "5.3.1" # 5.3.1 is required as 5.4+ breaks the download all feature
-
+gem "okcomputer" # monitors application and its dependencies
 # openapi_parser is an indirect dependency that's being pinned for now, because 1.0 introduces
 # stricter date-time format parsing, which breaks the test suite
 # see https://app.circleci.com/pipelines/github/sul-dlss/argo/3007/workflows/17473c95-b882-4d9b-a167-7ac16849573b/jobs/6771
 gem "openapi_parser", "< 1.0"
+gem "prawn", "~> 1" # Prawn is used to create "tracksheets"
+gem "prawn-table"
+gem "propshaft"
+# pry is useful for debugging, even in prod
+gem "pry" # make it possible to use pry as the rails console shell instead of IRB
+gem "pry-byebug" # Adds step-by-step debugging and stack navigation capabilities to pry using byebug
+gem "puma", "~> 5.6" # Use Puma as the app server
+gem "rails", "~> 7.0.2"
+gem "rake"
+gem "reform-rails"
+gem "retries"
+gem "roo", "~> 2.9.0" # work with newer Excel files and other types (xlsx, ods, csv)
+gem "roo-xls" # needed to work with legacy Excel files (xls)
+gem "ruby-prof"
+gem "rubyzip"
+gem "sidekiq", "~> 7.0"
+gem "turbo-rails", "~> 1.0"
+gem "view_component", "~>  2.74.1" # TODO: ?? Unpin when bug in 2.75.0 is fixed and released ??
+gem "zip_tricks", "5.3.1" # 5.3.1 is required as 5.4+ breaks the download all feature
 
 # Stanford related gems
 gem "blacklight", "~> 7.25"
@@ -79,19 +52,12 @@ gem "dor-services-client", "~> 12.5"
 gem "dor-workflow-client", "~> 6.0"
 gem "druid-tools"
 gem "mods_display", "~> 1.0"
-gem "okcomputer" # monitors application and its dependencies
 gem "preservation-client", "~> 6.0"
 gem "rsolr"
 gem "sdr-client", "~> 2.0"
 
-gem "devise"
-gem "devise-remote-user", "~> 1.0"
-
-# useful for debugging, even in prod
-gem "pry" # make it possible to use pry as the rails console shell instead of IRB
-gem "pry-byebug" # Adds step-by-step debugging and stack navigation capabilities to pry using byebug
-
 group :test, :development do
+  gem "byebug", platform: :mri # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "erb_lint", "~> 0.0.31", require: false
   gem "factory_bot_rails"
   gem "http_logger", require: false # Change this to `true` to see all http requests logged
@@ -104,14 +70,15 @@ group :test, :development do
 end
 
 group :development do
+  gem "listen", "~> 3.2" # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem "rack-mini-profiler", require: false # used for performance profiling
+  gem "web-console"
 end
 
 group :test do
   gem "capybara"
   gem "capybara-screenshot"
-  # We only need the RSpec matchers from cocina-models in Argo, so don't worry about pinning to patch level
-  gem "cocina-models", "~> 0.69"
+  gem "cocina-models", "~> 0.69" # only need RSpec matchers here; don't need to pin to patch level
   gem "rspec_junit_formatter" # needed for test coverage in CircleCI
   gem "selenium-webdriver" # for js testing
   gem "simplecov"
