@@ -35,11 +35,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .errortext {
-  color: red;
+ color: red;
+ --bs-table-color: red; // override bootstrap table text color
 }
 
 .notetext {
   color: green;
+  --bs-table-color: green;  // override bootstrap table text color
 }
 
 .clear {
