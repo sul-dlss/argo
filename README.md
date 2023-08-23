@@ -238,3 +238,4 @@ For further reading on how indexing from Fedora to Solr works in Argo, see [INDE
 ### Profiling
 
 For information on how to profile the app in the event of performance issues, see [PROFILING.md](PROFILING.md).  This explains how to collect profiling info, how to analyze it, how to approach the issue generally, and alternatives/complements to Argo's main built-in profiling tool.
+FOOBAR
