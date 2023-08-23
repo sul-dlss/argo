@@ -75,7 +75,7 @@
     <div class="tab-content">
       <div class="tab-pane<%= is_form ? ' active' : ''%>" id="form" role="tabpanel" aria-labelledby="form-tab">
         <div class="my-3 col-lg-7" data-controller="registration-items" data-registration-items-selector-value=".plain-container">
-          <label for="pasteHere" class="form-label">Enter a tab-delimited list of Barcode, <%= CatalogRecordId.label %>, Source ID, and Label in the large data entry box below or enter them individually in the text fields below. Max 15.</label>
+          <label for="pasteHere" class="form-label">Enter a tab-delimited list of Barcode, <%= CatalogRecordId.label %>, Source ID, and Label in the large data entry box below or enter them individually in the text fields below. Suggested maximum of 500 rows.</label>
           <textarea data-action="paste->registration-items#populateFromPastedData" id="pasteHere" class="form-control mb-5"></textarea>
           <template data-registration-items-target='template'>
             <div class="plain-container" style="position: relative" data-controller="registration-item-row">
