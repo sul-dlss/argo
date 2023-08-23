@@ -229,6 +229,13 @@ and in development or testing mode:
 
 Argo uses systemd to manage and monitor its Sidekiq-based background job workers in all deployed environments. See  [Sidekiq via systemd](https://github.com/sul-dlss/dlss-capistrano#sidekiq-via-systemd)
 
+## Reset Process (for QA/Stage)
+
+### Steps
+
+1. Reset the database: `bin/rails -e p db:reset`.
+2. Clear the bulk directory: `rm -fr /workspace/bulk/*`
+
 ## Further reading
 
 ### Indexing (including bulk reindexing)
