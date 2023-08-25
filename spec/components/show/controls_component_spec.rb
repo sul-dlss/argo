@@ -38,13 +38,13 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link "Publish", href: "/items/druid:kv840xx0000/publish"
         expect(page).to have_link "Unpublish", href: "/items/druid:kv840xx0000/publish"
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq "Purge"
-        # TODO: Renable after FOLIO cutover - expect(page).to have_link "Manage release", href: "/items/druid:kv840xx0000/manage_release"
+        expect(page).to have_link "Manage release", href: "/items/druid:kv840xx0000/manage_release" unless Settings.ils_cutover_in_progress
         expect(page).to have_link "Create embargo", href: "/items/druid:kv840xx0000/embargo/new"
         expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq "Apply APO defaults"
         expect(page).to have_link "Download Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive.csv"
         expect(page).to have_link "Upload Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive/edit"
 
-        expect(rendered.css("a").size).to eq 9 # TODO: reset to 10 after FOLIO cutover
+        expect(rendered.css("a").size).to eq Settings.ils_cutover_in_progress ? 9 : 10
         expect(rendered.css("a.disabled").size).to eq 3 # purge, publish/unpublish are disabled
       end
 
@@ -63,7 +63,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
           expect(page).to have_link "Refresh", href: "/items/druid:kv840xx0000/refresh_metadata"
           expect(page).to have_link "Manage serials", href: "/items/druid:kv840xx0000/serials/edit"
 
-          expect(rendered.css("a").size).to eq 11 # TODO: reset to 12 after FOLIO cutover
+          expect(rendered.css("a").size).to eq Settings.ils_cutover_in_progress ? 11 : 12
         end
 
         context "when ILS cutover flag is enabled" do # rubocop:disable RSpec/NestedGroups
@@ -91,7 +91,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link "Publish", href: "/items/druid:kv840xx0000/publish"
         expect(page).to have_link "Unpublish", href: "/items/druid:kv840xx0000/publish"
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq "Purge"
-        # TODO: Renable after FOLIO cutover - expect(page).to have_link "Manage release", href: "/items/druid:kv840xx0000/manage_release"
+        expect(page).to have_link "Manage release", href: "/items/druid:kv840xx0000/manage_release" unless Settings.ils_cutover_in_progress
         expect(page).to have_link "Download Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive.csv"
         expect(page).not_to have_link "Upload Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive/edit"
 
@@ -99,7 +99,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_css "a.disabled", text: "Create embargo"
         expect(page).to have_css "a.disabled", text: "Apply APO defaults"
 
-        expect(rendered.css("a").size).to eq 8 # TODO: reset to 9 after FOLIO cutover
+        expect(rendered.css("a").size).to eq Settings.ils_cutover_in_progress ? 8 : 9
         expect(rendered.css("a.disabled").size).to eq 5 # create embargo, apply APO defaults, purge, publish/unpublish are disabled
       end
     end
@@ -147,7 +147,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     it "renders the appropriate buttons" do
       expect(page).to have_link "Reindex", href: "/dor/reindex/druid:kv840xx0000"
-      # TODO: Renable after FOLIO cutover - expect(page).to have_link "Manage release", href: "/items/druid:kv840xx0000/manage_release"
+      expect(page).to have_link "Manage release", href: "/items/druid:kv840xx0000/manage_release" unless Settings.ils_cutover_in_progress
       expect(page).to have_link "Add workflow", href: "/items/druid:kv840xx0000/workflows/new"
       expect(page).to have_link "Publish"
       expect(page).to have_link "Unpublish"
@@ -156,7 +156,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(page).to have_link "Download Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive.csv"
       expect(page).to have_link "Upload Cocina spreadsheet", href: "/items/druid:kv840xx0000/descriptive/edit"
 
-      expect(rendered.css("a").size).to eq 8 # TODO: reset to 9 after FOLIO cutover
+      expect(rendered.css("a").size).to eq Settings.ils_cutover_in_progress ? 8 : 9
     end
 
     context "when the collection has a catalog record ID" do
@@ -166,7 +166,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link "Refresh", href: "/items/druid:kv840xx0000/refresh_metadata"
         expect(page).not_to have_link "Manage serials", href: "/items/druid:kv840xx0000/serials/edit"
 
-        expect(rendered.css("a").size).to eq 9 # TODO: reset to 10 after FOLIO cutover
+        expect(rendered.css("a").size).to eq Settings.ils_cutover_in_progress ? 9 : 10
       end
     end
   end

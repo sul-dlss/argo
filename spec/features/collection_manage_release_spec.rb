@@ -30,8 +30,8 @@ RSpec.describe "Collection manage release" do
   let(:uber_apo_id) { "druid:hv992ry2431" }
   let(:collection_id) { "druid:gg232vv1111" }
 
-  # TODO: This test is disabled temporarily during the FOLIO Cutover
-  it "Has a manage release button", pending: "FOLIO Cutover" do
+  # TODO: This test is disabled temporarily during the FOLIO Cutover - disable_release_prior_to_ils_cutover
+  it "Has a manage release button", pending: "FOLIO cutover" do
     visit solr_document_path(collection_id)
     expect(page).to have_css "a", text: "Manage release"
   end
