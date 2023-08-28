@@ -34,6 +34,7 @@ class CsvUploadValidator
     []
   end
 
+  # NOTE: this method can be removed when we remove the ils_cutover_in_progress flag
   def data_errors
     return [] unless Settings.ils_cutover_in_progress
 
