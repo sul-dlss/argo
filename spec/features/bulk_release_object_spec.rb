@@ -9,8 +9,7 @@ RSpec.describe "Bulk Object Release", js: true do
     sign_in current_user
   end
 
-  # TODO: This test is disabled temporarily during the FOLIO Cutover - disable_release_prior_to_ils_cutover
-  it "Creates new jobs", pending: "FOLIO Cutover" do
+  it "Creates new jobs" do
     visit new_bulk_action_path
     select "Manage release"
     fill_in "Druids to perform bulk action on", with: "druid:ab123gg7777"

@@ -57,7 +57,6 @@ module Show
     private
 
     def manage_release
-      # NOTE: added if clause to disable this button during ILS cutover
       render ActionButton.new(url: item_manage_release_path(druid), label: "Manage release", open_modal: true) unless Settings.disable_release_prior_to_ils_cutover
     end
 
