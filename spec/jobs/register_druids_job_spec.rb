@@ -11,10 +11,10 @@ RSpec.describe RegisterDruidsJob do
   let(:response) { Success(model) }
   let(:fake_log) { double("logger", puts: nil) }
   let(:catalog_link) do
-    instance_double(Cocina::Models::FolioCatalogLink, catalog: "folio", catalogRecordId: "in12345", refresh: true)
+    Cocina::Models::FolioCatalogLink.new(catalog: "folio", catalogRecordId: "in12345", refresh: true)
   end
   let(:identification) do
-    instance_double(Cocina::Models::Identification, barcode: "12345", catalogLinks: [catalog_link], sourceId: "foo:bar1")
+    Cocina::Models::Identification.new(barcode: "36105010101010", catalogLinks: [catalog_link], sourceId: "foo:bar1")
   end
 
   let(:model) do
@@ -86,7 +86,7 @@ RSpec.describe RegisterDruidsJob do
           workflow: "accessionWF")
         expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
-        expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Label\n123,12345,in12345,foo:bar1,My object\n123,12345,in12345,foo:bar1,My object\n")
+        expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Label\n123,36105010101010,in12345,foo:bar1,My object\n123,36105010101010,in12345,foo:bar1,My object\n")
       end
     end
 
