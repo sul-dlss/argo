@@ -4,6 +4,16 @@
 <div class="row">
   <div class="col-sm-4">
     <table class="table">
+      <thead>
+        <tr>
+          <th>DRUID</th>
+          <th>Barcode</th>
+          <th><%= CatalogRecordId.label %></th>
+          <th>Source ID</th>
+          <th>Label</th>
+        </tr>
+      </thead>
+      <tbody>
       <% @registration_form.created.each do |dro| %>
         <tr>
           <td><%= link_to Druid.new(dro).without_namespace, solr_document_path(dro.externalIdentifier) %></td>
@@ -13,6 +23,7 @@
           <td><%= dro.label %></td>
         </tr>
       <% end %>
+      </tbody>
     </table>
   </div>
 </div>
