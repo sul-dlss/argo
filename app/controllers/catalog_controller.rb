@@ -145,6 +145,15 @@ class CatalogController < ApplicationController
     # This will help us find records that need to be fixed before we can move to cocina.
     config.add_facet_field "data_quality_ssim", label: "Data Quality", home: false, component: true
 
+    config.add_facet_field "identifiers", label: "Identifiers",
+      component: true,
+      query: {
+        has_orcids: {label: "Has contributor ORCIDs", fq: "+contributor_orcids_ssim:*"},
+        has_doi: {label: "Has DOI", fq: "+doi_ssim:*"},
+        has_barcode: {label: "Has barcode", fq: "+barcode_id_ssim:*"},
+        has_folio_hrid: {label: "Has Folio instance HRIDs", fq: "+folio_instance_hrid_ssim:*"}
+      }
+
     config.add_facet_field "empties", label: "Empty Fields", home: false,
       component: true,
       query: {
