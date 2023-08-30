@@ -15,8 +15,8 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
     SolrDocument.new("id" => "druid:kv840xx0000",
       SolrDocument::FIELD_REGISTERED_DATE => ["2012-04-05T01:00:04.148Z"],
       SolrDocument::FIELD_OBJECT_TYPE => object_type,
-      SolrDocument::FIELD_DOI => ["doi-12345"],
-      SolrDocument::FIELD_ORCIDS => ["orcid/123-1234-123-1234"])
+      SolrDocument::FIELD_DOI => ["10.25740/yr775yn6440"],
+      SolrDocument::FIELD_ORCIDS => ["0000-0002-7262-6251"])
   end
   let(:object_type) { "item" }
 
