@@ -52,7 +52,7 @@ class SolrDocument
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
   attribute :folio_instance_hrid, Blacklight::Types::String, FIELD_FOLIO_INSTANCE_HRID
   attribute :doi, Blacklight::Types::String, FIELD_DOI
-  attribute :orcids, Blacklight::Types::String, FIELD_ORCIDS
+  attribute :orcids, Blacklight::Types::Array, FIELD_ORCIDS
   attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::Date, FIELD_EMBARGO_RELEASE_DATE

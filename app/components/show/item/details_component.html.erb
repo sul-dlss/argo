@@ -68,12 +68,12 @@
         <tr>
           <th class="col-3" scope="row">DOI</th>
           <td>
-            <%= doi.join(', ') %>
+            <%= doi %>
           </td>
         </tr>
       <% end %>
 
-      <% if orcids %>
+      <% unless orcids.blank? %>
         <tr>
           <th class="col-3" scope="row">Contributor ORCIDs</th>
           <td>
