@@ -18,17 +18,19 @@ bulk_metadata:
 
 checksum_report_job:
   csv_filename: 'checksum_report.csv'
+descriptive_metadata_export_job:
+  csv_filename: 'descriptive.csv'
 export_tags_job:
   csv_filename: 'tags.csv'
 export_structural_job:
   csv_filename: 'structural_metadata.csv'
+export_cocina_json_job:
+  jsonl_filename: 'cocina.jsonl'
+  gzip_filename: 'cocina.jsonl.gz'
 register_druids_job:
   csv_filename: 'registration_report.csv'
 tracking_sheet_report_job:
   pdf_filename: 'tracking_sheet.pdf'
-
-descriptive_metadata_export_job:
-  csv_filename: 'descriptive.csv'
 
 # Profiler
 profiler:
