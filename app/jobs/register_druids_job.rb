@@ -14,11 +14,10 @@ class RegisterDruidsJob < GenericJob
 
     results = RegistrationCsvConverter.convert(csv_string: params[:csv_file], params:)
     report_filename = generate_report_filename(bulk_action.output_directory)
-
     with_bulk_action_log do |log|
       update_druid_count(count: results.length)
       CSV.open(report_filename, "wb") do |report|
-        report << ["Druid", "Source Id", "Label"]
+        report << ["Druid", "Barcode", CatalogRecordId.label, "Source Id", "Label"]
 
         results.each do |parse_result|
           parse_result.either(->(value) { register(value, bulk_action:, log:, report:) },
@@ -41,7 +40,7 @@ class RegisterDruidsJob < GenericJob
 
   def log_success(model, bulk_action:, log:, report:)
     log.puts("#{Time.current} #{self.class}: Successfully registered #{model.externalIdentifier}")
-    report << [Druid.new(model).without_namespace, model.identification.sourceId, model.label]
+    report << [Druid.new(model).without_namespace, model.identification.barcode, model.identification.catalogLinks.first&.catalogRecordId, model.identification.sourceId, model.label]
     bulk_action.increment(:druid_count_success).save
   end
 
