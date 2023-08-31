@@ -252,6 +252,7 @@ RSpec/SubjectStub:
     - 'spec/jobs/checksum_report_job_spec.rb'
     - 'spec/jobs/descriptive_metadata_export_job_spec.rb'
     - 'spec/jobs/descriptive_metadata_import_job_spec.rb'
+    - 'spec/jobs/export_cocina_json_job_spec.rb'
     - 'spec/jobs/export_structural_job_spec.rb'
     - 'spec/jobs/export_tags_job_spec.rb'
     - 'spec/jobs/generic_job_spec.rb'

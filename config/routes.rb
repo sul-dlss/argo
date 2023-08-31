@@ -46,6 +46,7 @@ Rails.application.routes.draw do
         resource :checksum_report_job, only: %i[new create]
         resource :validate_cocina_descriptive_job, only: %i[new create]
         resource :tracking_sheet_report_job, only: %i[new create]
+        resource :export_cocina_json_job, only: %i[new create]
       end
     end
   end
