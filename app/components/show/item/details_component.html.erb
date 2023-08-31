@@ -64,6 +64,24 @@
         </td>
       </tr>
 
+      <% if doi %>
+        <tr>
+          <th class="col-3" scope="row">DOI</th>
+          <td>
+            <%= doi %>
+          </td>
+        </tr>
+      <% end %>
+
+      <% unless orcids.blank? %>
+        <tr>
+          <th class="col-3" scope="row">Contributor ORCIDs</th>
+          <td>
+            <%= orcids.join(', ') %>
+          </td>
+        </tr>
+      <% end %>
+
       <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>

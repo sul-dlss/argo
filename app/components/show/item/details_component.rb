@@ -13,7 +13,7 @@ module Show
         !@presenter.cocina.is_a? NilModel
       end
 
-      delegate :object_type, :created_date, :preservation_size, to: :@solr_document
+      delegate :object_type, :created_date, :preservation_size, :doi, :orcids, to: :@solr_document
       delegate :state_service, to: :@presenter
 
       def catalog_record_id_label

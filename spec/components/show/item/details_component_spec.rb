@@ -14,7 +14,9 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
   let(:doc) do
     SolrDocument.new("id" => "druid:kv840xx0000",
       SolrDocument::FIELD_REGISTERED_DATE => ["2012-04-05T01:00:04.148Z"],
-      SolrDocument::FIELD_OBJECT_TYPE => object_type)
+      SolrDocument::FIELD_OBJECT_TYPE => object_type,
+      SolrDocument::FIELD_DOI => "10.25740/yr775yn6440",
+      SolrDocument::FIELD_ORCIDS => ["0000-0002-7262-6251", "0000-0002-7262-999X"])
   end
   let(:object_type) { "item" }
 
@@ -35,6 +37,11 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
       expect(rendered.to_html).to include "Preservation size"
       expect(rendered.to_html).to include "Content type"
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
+    end
+
+    it "includes doi and orcid when available" do
+      expect(rendered.to_html).to include "10.25740/yr775yn6440"
+      expect(rendered.to_html).to include "0000-0002-7262-6251, 0000-0002-7262-999X"
     end
   end
 
