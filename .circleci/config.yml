@@ -212,7 +212,6 @@ jobs:
     steps:
       - checkout
       - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       - ruby/install-deps:
           key: gems-v2
       - node/install-packages:
