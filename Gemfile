@@ -52,7 +52,7 @@ gem "dor-services-client", "~> 12.5"
 gem "dor-workflow-client", "~> 6.0"
 gem "druid-tools"
 gem "mods_display", "~> 1.0"
-gem "preservation-client", "~> 6.0"
+gem "preservation-client", "~> 6.2"
 gem "rsolr"
 gem "sdr-client", "~> 2.0"
 
