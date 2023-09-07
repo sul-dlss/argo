@@ -2,7 +2,6 @@
 
 class FilesController < ApplicationController
   include ActionController::Live # required for streaming
-  include ZipTricks::RailsStreaming
 
   before_action :load_resource
 
@@ -68,23 +67,19 @@ class FilesController < ApplicationController
   def download
     authorize! :view_content, @cocina_model
 
-    response.headers["Content-Disposition"] = "attachment; filename=#{Druid.new(@cocina_model).without_namespace}.zip"
-    zip_tricks_stream do |zip|
-      preserved_files(@cocina_model).each do |filename|
-        zip.write_deflated_file(filename) do |sink|
-          Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
-            filepath: filename,
-            version: last_accessioned_version(@cocina_model.externalIdentifier),
-            on_data: proc { |data, _count| sink.write data })
-        rescue => e
-          sink.close
-          message = "Could not zip #{filename} (#{@cocina_model.externalIdentifier}) for download: #{e}"
-          logger.error(message)
-          Honeybadger.notify(message)
-          render status: :internal_server_error, plain: message
-        end
-      end
+    send_file_headers!(
+      type: "application/zip",
+      disposition: "attachment",
+      filename: "#{Druid.new(@cocina_model).without_namespace}.zip"
+    )
+    response.headers["Last-Modified"] = Time.now.httpdate.to_s
+    response.headers["X-Accel-Buffering"] = "no"
+
+    PresStreamer.stream(druid: @cocina_model.externalIdentifier, version: last_accessioned_version(@cocina_model.externalIdentifier), filenames: preserved_files(@cocina_model)) do |chunk|
+      response.stream.write(chunk)
     end
+  ensure
+    response.stream.close
   end
 
   private
@@ -108,5 +103,46 @@ class FilesController < ApplicationController
 
   def load_resource
     @cocina_model = Repository.find(params[:item_id])
+  end
+
+  # Zip-tricks based streaming for files from preservation.
+  # Based on https://piotrmurach.com/articles/streaming-large-zip-files-in-rails/
+  class PresStreamer
+    include Enumerable
+
+    def self.stream(druid:, version:, filenames:, &chunks)
+      streamer = new(druid:, version:, filenames:)
+      streamer.each(&chunks)
+    end
+
+    attr_reader :druid, :version, :filenames
+
+    def initialize(druid:, version:, filenames:)
+      @druid = druid
+      @version = version
+      @filenames = filenames
+    end
+
+    def each(&chunks)
+      writer = ZipTricks::BlockWrite.new(&chunks)
+
+      ZipTricks::Streamer.open(writer) do |zip|
+        filenames.each do |filename|
+          Rails.logger.info("Adding #{filename} to zip")
+          zip.write_deflated_file(filename) do |file_writer|
+            Preservation::Client.objects.content(druid: druid,
+              filepath: filename,
+              version: version,
+              on_data: proc { |data, _count| file_writer.write data })
+          rescue => e
+            file_writer.close
+            message = "Could not zip #{filename} (#{druid}) for download: #{e}"
+            Rails.logger.error(message)
+            Honeybadger.notify(message)
+            next
+          end
+        end
+      end
+    end
   end
 end

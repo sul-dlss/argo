@@ -141,13 +141,16 @@ RSpec.describe "Download item files" do
       allow(Preservation::Client.objects).to receive(:content)
       allow(ZipTricks::Streamer).to receive(:open).and_yield(fake_zip)
       allow(fake_zip).to receive(:write_deflated_file).and_yield(fake_sink)
+      allow(Time).to receive(:now).and_return(Time.parse("2023-09-08 11:39:45 -0000"))
     end
 
     it "sets content-disposition header" do
       get download_item_files_path(druid)
       expect(response.headers.to_h).to include(
-        "Content-Disposition" => "attachment; filename=#{bare_druid}.zip",
-        "Content-Type" => "application/zip"
+        "Content-Disposition" => "attachment; filename=\"#{bare_druid}.zip\"; filename*=UTF-8''#{bare_druid}.zip",
+        "Content-Type" => "application/zip",
+        "X-Accel-Buffering" => "no",
+        "Last-Modified" => "Fri, 08 Sep 2023 11:39:45 GMT"
       )
     end
 
@@ -176,10 +179,9 @@ RSpec.describe "Download item files" do
         allow(Rails.logger).to receive(:error)
       end
 
-      it "closes the zip sink and raises" do
+      it "closes the zip sink and continues" do
         get download_item_files_path(druid)
-        expect(response).to have_http_status(:internal_server_error)
-        expect(response.body).to eq("Could not zip M1090_S15_B01_F07_0106.jp2 (#{druid}) for download: uh oh")
+        expect(response).to have_http_status(:ok)
         expect(Rails.logger).to have_received(:error).twice
         expect(Honeybadger).to have_received(:notify).twice
         expect(fake_sink).to have_received(:close).twice

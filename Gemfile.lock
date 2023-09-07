@@ -705,7 +705,7 @@ DEPENDENCIES
   web-console
   webmock
   write_xlsx
-  zip_tricks (= 5.3.1)
+  zip_tricks
 
 BUNDLED WITH
    2.4.13
