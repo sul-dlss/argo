@@ -1,0 +1,40 @@
+$brand-color: $color-cardinal-red !default;
+$footer-color: $white !default;
+$pre-footer-background: $fog-light !default;
+
+// These body/main styles allow the SUL and SU footers to render at the bottom of the viewport
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+  @extend .mt-4;
+}
+
+#pre-footer {
+  background-color: $pre-footer-background;
+}
+
+.su-global-footer {
+  background-color: $brand-color;
+  color: $footer-color;
+  a {
+    color: $footer-color;
+  }
+
+  .su-global-footer__menu--policy {
+    font-size: 0.9rem;
+  }
+
+  .su-global-footer__menu--global {
+    font-weight: 600;
+  }
+
+  .su-global-footer__copyright {
+    font-size: 0.8rem;
+  }
+
+}
