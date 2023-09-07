@@ -26,11 +26,4 @@ module Argo
       Cocina::Models::Mapping::Purl.base_url = Settings.purl_url
     end
   end
-
-  ARGO_VERSION = Rails.root.join("VERSION").read
-  class << self
-    def version
-      ARGO_VERSION
-    end
-  end
 end
