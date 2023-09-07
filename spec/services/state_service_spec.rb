@@ -15,8 +15,6 @@ RSpec.describe StateService do
   let(:service) { described_class.new(cocina) }
 
   describe "#allows_modification?" do
-    subject(:allows_modification?) { service.allows_modification? }
-
     before do
       allow(service).to receive(:object_state).and_return(:unlock)
     end
@@ -27,7 +25,7 @@ RSpec.describe StateService do
       end
 
       it "returns true" do
-        expect(subject).to be true
+        expect(service).to be_allows_modification
       end
     end
 
@@ -37,7 +35,7 @@ RSpec.describe StateService do
       end
 
       it "returns true" do
-        expect(subject).to be true
+        expect(service).to be_allows_modification
       end
     end
 
@@ -47,7 +45,7 @@ RSpec.describe StateService do
       end
 
       it "returns false" do
-        expect(subject).to be false
+        expect(service).not_to be_allows_modification
       end
     end
 
@@ -57,14 +55,12 @@ RSpec.describe StateService do
       end
 
       it "returns false" do
-        expect(subject).to be false
+        expect(service).not_to be_allows_modification
       end
     end
   end
 
   describe "#object_state" do
-    subject(:object_state) { service.object_state }
-
     context "if the object is not opened and hasn't been submitted" do
       before do
         allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: "submitted", version: 3).and_return(false)
@@ -72,7 +68,7 @@ RSpec.describe StateService do
       end
 
       it "returns unlock_inactive" do
-        expect(subject).to eq :unlock_inactive
+        expect(service.object_state).to eq :unlock_inactive
       end
     end
 
@@ -83,7 +79,7 @@ RSpec.describe StateService do
       end
 
       it "returns unlock" do
-        expect(subject).to be :unlock
+        expect(service.object_state).to eq :unlock
       end
     end
 
@@ -94,7 +90,7 @@ RSpec.describe StateService do
       end
 
       it "returns lock_inactive" do
-        expect(subject).to be :lock_inactive
+        expect(service.object_state).to eq :lock_inactive
       end
     end
 
@@ -106,14 +102,12 @@ RSpec.describe StateService do
       end
 
       it "returns lock" do
-        expect(subject).to be :lock
+        expect(service.object_state).to eq :lock
       end
     end
   end
 
   describe "#published?" do
-    subject(:published?) { service.published? }
-
     before do
       allow(workflow_client).to receive(:workflow_status).with(druid:, process: "accessioning-initiate", workflow: "assemblyWF").and_return("completed")
       allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: "accessioned").and_return(false)
@@ -125,7 +119,7 @@ RSpec.describe StateService do
       end
 
       it "returns true" do
-        expect(subject).to be true
+        expect(service).to be_published
       end
     end
 
@@ -135,21 +129,19 @@ RSpec.describe StateService do
       end
 
       it "returns false" do
-        expect(subject).to be false
+        expect(service).not_to be_published
       end
     end
   end
 
   describe "#accessioned?" do
-    subject(:accessioned?) { service.accessioned? }
-
     context "if the accessioned lifecycle exists" do
       before do
         allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: "accessioned").and_return("2022-04-20 21:55:25 +0000")
       end
 
       it "returns true" do
-        expect(subject).to be true
+        expect(service).to be_accessioned
       end
     end
 
@@ -159,7 +151,7 @@ RSpec.describe StateService do
       end
 
       it "returns false" do
-        expect(subject).to be false
+        expect(service).not_to be_accessioned
       end
     end
   end
