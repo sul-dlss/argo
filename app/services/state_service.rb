@@ -39,6 +39,13 @@ class StateService
     STATES[:unlock_inactive]
   end
 
+  ##
+  # Ported over logic from app/helpers/dor_object_helper.rb#LN133
+  # @return [Boolean]
+  def accessioned?
+    @accessioned ||= lifecycle("accessioned") ? true : false
+  end
+
   private
 
   attr_reader :druid, :version
@@ -57,13 +64,6 @@ class StateService
 
   def submitted?
     @submitted ||= active_lifecycle("submitted")
-  end
-
-  ##
-  # Ported over logic from app/helpers/dor_object_helper.rb#LN133
-  # @return [Boolean]
-  def accessioned?
-    @accessioned ||= lifecycle("accessioned") ? true : false
   end
 
   def active_assembly_wf?

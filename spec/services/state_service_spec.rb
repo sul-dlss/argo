@@ -139,4 +139,28 @@ RSpec.describe StateService do
       end
     end
   end
+
+  describe "#accessioned?" do
+    subject(:accessioned?) { service.accessioned? }
+
+    context "if the accessioned lifecycle exists" do
+      before do
+        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: "accessioned").and_return("2022-04-20 21:55:25 +0000")
+      end
+
+      it "returns true" do
+        expect(subject).to be true
+      end
+    end
+
+    context "if the accessioned lifecycle does not exist" do
+      before do
+        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: "accessioned").and_return(nil)
+      end
+
+      it "returns false" do
+        expect(subject).to be false
+      end
+    end
+  end
 end
