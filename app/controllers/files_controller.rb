@@ -11,13 +11,13 @@ class FilesController < ApplicationController
   def index
     raise ArgumentError, "Missing file parameter" if filename.blank?
 
-    @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: "accessioned")
+    @has_been_accessioned = StateService.new(@cocina_model).accessioned?
     files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.filename == params[:id] }
 
     if @has_been_accessioned
       begin
-        @last_accessioned_version = Preservation::Client.objects.current_version(params[:item_id])
+        @last_accessioned_version = last_accessioned_version(params[:item_id])
       rescue Preservation::Client::NotFoundError
         return render status: :unprocessable_entity, plain: "Preservation has not yet received #{params[:item_id]}"
       rescue Preservation::Client::Error => e
@@ -74,7 +74,7 @@ class FilesController < ApplicationController
         zip.write_deflated_file(filename) do |sink|
           Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
             filepath: filename,
-            version: @cocina_model.version,
+            version: last_accessioned_version(@cocina_model.externalIdentifier),
             on_data: proc { |data, _count| sink.write data })
         rescue => e
           sink.close
@@ -88,6 +88,10 @@ class FilesController < ApplicationController
   end
 
   private
+
+  def last_accessioned_version(druid)
+    Preservation::Client.objects.current_version(druid)
+  end
 
   def preserved_files(cocina_model)
     resources = Array(cocina_model.structural&.contains)

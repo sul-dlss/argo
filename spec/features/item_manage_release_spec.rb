@@ -10,7 +10,7 @@ RSpec.describe "Item manage release" do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:object_client) do

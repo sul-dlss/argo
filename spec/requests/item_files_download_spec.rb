@@ -8,6 +8,8 @@ RSpec.describe "Download item files" do
     model = Cocina::Models.build(cocina_params.stringify_keys)
     Cocina::Models.with_metadata(model, "abc123")
   end
+  let(:state_service) { instance_double(StateService) }
+
   let(:cocina_params) do
     {
       type: Cocina::Models::ObjectType.image,
@@ -119,6 +121,7 @@ RSpec.describe "Download item files" do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Preservation::Client.objects).to receive(:current_version).and_return(4)
     sign_in user
   end
 
