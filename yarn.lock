@@ -123,11 +123,6 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-free-jqgrid@^4.15.5:
-  version "4.15.5"
-  resolved "https://registry.yarnpkg.com/free-jqgrid/-/free-jqgrid-4.15.5.tgz#90058fa104d74d70daac84c2b16f7c19affce755"
-  integrity sha512-mWDF8LhKablncFaN4I2Bo7t1QnbVqR2s8fgKt4yn6ciuuXHs+5qUWcjIIH4SGBjkUiQmXp4rymeFXMDKBbTcmg==
-
 fsevents@~2.3.2:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
@@ -174,7 +169,7 @@ is-number@^7.0.0:
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
-jquery@>=1.7, jquery@>=3.0, jquery@^3.4.1, jquery@^3.5.1:
+jquery@>=1.7, jquery@>=3.0, jquery@^3.5.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
   integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
