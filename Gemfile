@@ -43,7 +43,7 @@ gem "rubyzip"
 gem "sidekiq", "~> 7.0"
 gem "turbo-rails", "~> 1.0"
 gem "view_component", "~>  2.74.1" # TODO: ?? Unpin when bug in 2.75.0 is fixed and released ??
-gem "zip_tricks", "5.3.1" # 5.3.1 is required as 5.4+ breaks the download all feature
+gem "zip_tricks"
 
 # Stanford related gems
 gem "blacklight", "~> 7.25"
