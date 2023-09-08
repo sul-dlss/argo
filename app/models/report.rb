@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
+require "csv"
+
 # Runs a query against solr and returns the results.
 # Does exactly what blacklight does, paginates the solr requests untill all results
 # have been received
-
 class Report
   include Blacklight::Configurable
-  include CsvConcern
   include DateFacetConfigurations
   include Blacklight::Searchable
 
@@ -14,24 +14,27 @@ class Report
     include ValueHelper
   end
 
+  COLUMN_SELECTOR_COLUMN_SIZE = 3
+  ROWS_PER_PAGE = 100
+
   REPORT_FIELDS = [
     {
       field: :druid, label: "Druid",
       proc: ->(doc) { doc.druid },
-      sort: true, default: true, width: 100, download_default: true
+      sort: true, default: true, width: 100
     },
     {
       field: :purl, label: "Purl",
       proc: ->(doc) { File.join(Settings.purl_url, doc.druid) },
       solr_fields: %w[id],
-      sort: false, default: false, width: 100, download_default: true
+      sort: false, default: false, width: 100
     },
     {
       field: :title, label: "Title",
       proc: ->(doc) { doc.title },
       solr_fields: [SolrDocument::FIELD_TITLE,
         SolrDocument::FIELD_LABEL],
-      sort: false, default: false, width: 100, download_default: true
+      sort: false, default: false, width: 100
     },
     {
       field: :citation, label: "Citation",
@@ -42,124 +45,129 @@ class Report
         SolrDocument::FIELD_PLACE,
         SolrDocument::FIELD_PUBLISHER,
         SolrDocument::FIELD_MODS_CREATED_DATE],
-      sort: false, default: true, width: 100, download_default: false
+      sort: false, default: false, width: 100
     },
     {
       field: :source_id_ssim, label: "Source Id",
-      sort: false, default: true, width: 100, download_default: true
+      sort: false, default: true, width: 100
     },
     {
       field: SolrDocument::FIELD_APO_ID, label: "Admin Policy ID",
       proc: ->(doc) { Druid.new(doc[SolrDocument::FIELD_APO_ID].first).without_namespace },
-      sort: false, default: false, width: 100, download_default: false
+      sort: false, default: false, width: 100
     },
     {
       field: SolrDocument::FIELD_APO_TITLE, label: "Admin Policy",
-      sort: false, default: true, width: 100, download_default: false
+      sort: false, default: true, width: 100
     },
     {
       field: SolrDocument::FIELD_COLLECTION_ID, label: "Collection ID",
       proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| Druid.new(id).without_namespace } },
-      sort: false, default: false, width: 100, download_default: false
+      sort: false, default: false, width: 100
     },
     {
       field: SolrDocument::FIELD_COLLECTION_TITLE, label: "Collection",
       proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_TITLE].join(",") },
-      sort: false, default: false, width: 100, download_default: false
+      sort: false, default: false, width: 100
     },
     {
       field: :project_tag_ssim, label: "Project",
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :registered_by_tag_ssim, label: "Registered By",
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :registered_earliest_dttsi, label: "Registered",
       proc: ->(doc) { DatePresenter.render(doc[:registered_earliest_dttsi]) },
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :tag_ssim, label: "Tags",
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :objectType_ssim, label: "Object Type",
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :content_type_ssim, label: "Content Type",
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: CatalogRecordId.index_field, label: CatalogRecordId.label,
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :barcode_id_ssim, label: "Barcode",
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :status_ssi, label: "Status",
-      sort: false, default: true, width: 100, download_default: true
+      sort: false, default: true, width: 100
     },
     {
       field: :accessioned_earliest_dttsi, label: "Accession. Datetime",
       proc: ->(doc) { DatePresenter.render(doc[:accessioned_earliest_dttsi]) },
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :published_earliest_dttsi, label: "Pub. Date",
       proc: ->(doc) { DatePresenter.render(doc[:published_earliest_dttsi]) },
-      sort: true, default: true, width: 100, download_default: false
+      sort: true, default: true, width: 100
     },
     {
       field: :workflow_status_ssim, label: "Errors",
       proc: ->(doc) { doc[:workflow_status_ssim].first.split("|")[2] },
-      sort: true, default: false, width: 100, download_default: false
+      sort: true, default: false, width: 100
     },
     {
       field: :file_count, label: "Files",
       proc: ->(doc) { doc[:content_file_count_itsi] },
       solr_fields: %w[content_file_count_itsi],
-      sort: false, default: true, width: 50, download_default: false
+      sort: false, default: true, width: 50
     },
     {
       field: :shelved_file_count, label: "Shelved Files",
       proc: ->(doc) { doc[:shelved_content_file_count_itsi] },
       solr_fields: %w[shelved_content_file_count_itsi],
-      sort: false, default: true, width: 50, download_default: false
+      sort: false, default: true, width: 50
     },
     {
       field: :resource_count, label: "Resources",
       proc: ->(doc) { doc[:resource_count_itsi] },
       solr_fields: %w[resource_count_itsi],
-      sort: false, default: true, width: 50, download_default: false
+      sort: false, default: true, width: 50
     },
     {
       field: :preserved_size, label: "Preservation Size",
       proc: ->(doc) { doc.preservation_size },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
-      sort: false, default: true, width: 50, download_default: false
+      sort: false, default: true, width: 50
     },
     {
       field: :dissertation_id, label: "Dissertation ID",
       proc: ->(doc) { doc[:identifier_ssim].filter { |id| id.include?("dissertationid") }.map { |id| id.split(":").last } },
       solr_fields: %w[identifier_ssim],
-      sort: false, default: true, width: 50, download_default: false
+      sort: false, default: true, width: 50
     }
   ].freeze
 
-  COLUMN_MODEL = REPORT_FIELDS.collect do |spec|
+  COLUMN_MODEL = REPORT_FIELDS.map do |spec|
     {
-      "name" => spec[:field],
-      "jsonmap" => spec[:field],
-      "label" => spec[:label],
-      "index" => spec[:field],
-      "width" => spec[:width],
-      "sortable" => spec[:sort],
-      "hidden" => (!spec[:default])
+      "field" => spec[:field],
+      "title" => spec[:label],
+      "visible" => spec[:default],
+      "minWidth" => spec[:width],
+      # Disable sorting due to behavior that will confuse users, namely the
+      # likelihood of a user attempting to sort a column before the full report
+      # data set has loaded, namely that we are loading data sets progressively
+      # as users scroll down the reports view to keep performance satisfactory.
+      # Sorting a partial data set only to scroll to the bottom and have more
+      # rows load will look strange, and give users false confident that they
+      # are looking at the complete data set.
+      "headerSort" => false # spec[:sort]
     }
   end
 
@@ -170,7 +178,7 @@ class Report
   configure_blacklight do |config|
     config.search_builder_class = ReportSearchBuilder # leave off faceting for report queries
 
-    config.default_solr_params[:rows] = 100
+    config.default_solr_params[:rows] = ROWS_PER_PAGE
     config.default_solr_params[:fl] = REPORT_FIELDS.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(",")
 
     config.sort_fields.clear
@@ -178,23 +186,26 @@ class Report
   end
 
   # @param [Array<String>] fields
-  def initialize(params = {}, fields = nil, current_user: NullUser.new)
+  def initialize(params = {}, current_user: NullUser.new)
     @current_user = current_user
-    @fields = if fields.nil?
-      REPORT_FIELDS
+    @fields = if params[:fields].present?
+      params
+        .delete(:fields)
+        .split(/\s*,\s*/)
+        .map do |field_name|
+          REPORT_FIELDS.find { |field_entry| field_entry[:field] == field_name.to_sym }
+        end
     else
-      REPORT_FIELDS.select { |f| fields.include?(f[:field].to_s) }
-        .sort { |a, b| fields.index(a[:field].to_s) <=> fields.index(b[:field].to_s) }
+      REPORT_FIELDS
     end
     @params = params
-    @params[:page] ||= 1
     (@response,) = search_results(@params)
     @num_found = @response["response"]["numFound"].to_i
   end
 
   def druids(opts = {})
     params[:page] = 1
-    params[:per_page] = 100
+    params[:per_page] = ROWS_PER_PAGE
     (@response,) = search_results(params)
     druids = []
     until @response.documents.empty?
@@ -222,6 +233,25 @@ class Report
     docs_to_records(@response.documents)
   end
 
+  ##
+  # Converts the `report_data` into CSV data
+  #
+  # @return [Enumerator] data in CSV format
+  def to_csv
+    @params[:page] = 1
+    @params[:per_page] = ROWS_PER_PAGE
+    Enumerator.new do |yielder|
+      yielder << CSV.generate_line(@fields.map { |field| field.fetch(:label) }, force_quotes: true) # header row
+      until @response.documents.empty?
+        report_data.each do |record|
+          yielder << CSV.generate_line(@fields.map { |field| record[field.fetch(:field)].to_s }, force_quotes: true)
+        end
+        @params[:page] += 1
+        (@response,) = search_results(@params)
+      end
+    end
+  end
+
   private
 
   delegate :search_results, to: :search_service
@@ -246,9 +276,8 @@ class Report
   # @param [Array<Hash>] fields
   # @return [Array<Hash(Symbol => String)>]
   def docs_to_records(docs, fields = REPORT_FIELDS)
-    result = []
-    docs.each_with_index do |doc, index|
-      row = fields.to_h do |spec|
+    docs.map do |doc|
+      fields.to_h do |spec|
         val =
           begin
             spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
@@ -258,9 +287,6 @@ class Report
         val = val.join(";") if val.is_a?(Array)
         [spec[:field].to_sym, val.to_s]
       end
-      row[:id] = index + 1
-      result << row
     end
-    result
   end
 end

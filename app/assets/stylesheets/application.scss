@@ -4,6 +4,8 @@
 // Override before importing Blacklight
 @import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
 @import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';
+@import "tabulator-tables/dist/css/tabulator.min";
+@import "tabulator-tables/dist/css/tabulator_bootstrap5.min";
 
 @import "argo";
 @import "bulk-actions";

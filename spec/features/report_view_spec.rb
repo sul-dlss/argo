@@ -20,17 +20,20 @@ RSpec.describe "Report view" do
 
     it "shows table without error" do
       visit report_path f: {objectType_ssim: ["item"]}
-      expect(page).to have_css "table#report_grid"
+      expect(page).to have_css "div#objectsTable"
       expect(page).to have_content("hj185xx2222")
     end
 
     it "shows the column selector when clicked" do
       visit report_path f: {objectType_ssim: ["item"]}
-      find(".ui-pg-button-text", text: "Columns").click
-      expect(page).to have_css "div#column_selector"
-      expect(page).to have_content("Select columns to download:")
-      expect(page).to have_selector('input[name="selected_columns"]', count: 26) # count the total
-      expect(page).to have_selector('input[name="selected_columns"]:checked', count: 5) # count the default
+      click_button("Columns")
+      expect(page).to have_content("Select Columns to Display and Download")
+      # count the # of total fields
+      expect(page).to have_selector("input.form-check-input",
+        count: Report::REPORT_FIELDS.count)
+      # count the # of fields displayed by default
+      expect(page).to have_selector("input.form-check-input:checked",
+        count: Report::REPORT_FIELDS.count { |field| field[:default] })
     end
   end
 end

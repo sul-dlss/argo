@@ -22,6 +22,7 @@ import TagValidation from './tag_validation_controller'
 import RegistrationItems from './registration_items_controller'
 import RegistrationItemRow from './registration_item_row_controller'
 import RegistrationTabs from './registration_tabs_controller'
+import ObjectReporter from './object_reporter'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -47,3 +48,4 @@ application.register("expandable-snippets", ExpandableSnippets)
 application.register("registration-items", RegistrationItems)
 application.register("registration-item-row", RegistrationItemRow)
 application.register("registration-tabs", RegistrationTabs)
+application.register("object-reporter", ObjectReporter)

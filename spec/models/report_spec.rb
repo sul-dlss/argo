@@ -12,11 +12,13 @@ RSpec.describe Report do
     solr_conn.commit
   end
 
-  context "csv" do
+  describe "#to_csv" do
     let(:csv) do
-      described_class.new(
-        current_user: user
-      ).to_csv
+      described_class
+        .new(current_user: user)
+        .to_csv # Returns an enumerator for more performant streaming of CSV results.
+        .to_a   # Iterate through the enumerator.
+        .join   # Coerce to string for parsing convenience.
     end
 
     it "generates data in valid CSV format" do
@@ -121,7 +123,7 @@ RSpec.describe Report do
   describe "#druids" do
     context "with no attributes" do
       subject(:report) do
-        described_class.new({q: "report"}, %w[druid], current_user: user).druids
+        described_class.new({q: "report"}, current_user: user).druids
       end
 
       before do
@@ -151,14 +153,14 @@ RSpec.describe Report do
       )
 
       expect(described_class.new(
-        {q: "report"}, %w[druid source_id_ssim],
+        {q: "report"},
         current_user: user
       ).druids(source_id: true)).to include "qq613vj0238\tsul:36105011952764"
     end
 
     context "with tags: true" do
       subject(:report) do
-        described_class.new({q: "report"}, %w[druid tag_ssim], current_user: user).druids(tags: true)
+        described_class.new({q: "report"}, current_user: user).druids(tags: true)
       end
 
       before do
