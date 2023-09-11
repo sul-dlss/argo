@@ -9,7 +9,7 @@
       <div class="col-sm-1"></div>
     </div>
     <%= form_with model: @form,
-                      url: item_catalog_record_id_path(@cocina.externalIdentifier, folio: params[:folio]),
+                      url: item_catalog_record_id_path(@cocina.externalIdentifier),
                       method: :patch,
                       data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
 
