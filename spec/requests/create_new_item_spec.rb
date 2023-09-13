@@ -189,7 +189,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
@@ -253,7 +253,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
@@ -328,7 +328,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
@@ -398,7 +398,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
@@ -462,7 +462,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
@@ -489,7 +489,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .to_return(status: 409, body: json_response, headers: {"content-type" => "application/vnd.api+json"})
       allow(AdminPolicyOptions).to receive(:for).and_return(["APO 1", "APO 2", "APO 3"])
     end
@@ -569,7 +569,7 @@ RSpec.describe "Create a new item" do
     end
 
     before do
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+      stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
         .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
