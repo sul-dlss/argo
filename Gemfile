@@ -21,10 +21,6 @@ gem "jsbundling-rails", "~> 1.0"
 gem "lograge"
 gem "nokogiri", "~> 1.14"
 gem "okcomputer" # monitors application and its dependencies
-# openapi_parser is an indirect dependency that's being pinned for now, because 1.0 introduces
-# stricter date-time format parsing, which breaks the test suite
-# see https://app.circleci.com/pipelines/github/sul-dlss/argo/3007/workflows/17473c95-b882-4d9b-a167-7ac16849573b/jobs/6771
-gem "openapi_parser", "< 1.0"
 gem "prawn", "~> 1" # Prawn is used to create "tracksheets"
 gem "prawn-table"
 gem "propshaft"
