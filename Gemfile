@@ -36,7 +36,7 @@ gem "roo", "~> 2.9.0" # work with newer Excel files and other types (xlsx, ods, 
 gem "roo-xls" # needed to work with legacy Excel files (xls)
 gem "ruby-prof"
 gem "rubyzip"
-gem "sidekiq", "~> 7.0"
+gem "sidekiq", "~> 7.1"
 gem "turbo-rails", "~> 1.0"
 gem "view_component", "~>  2.74.1" # TODO: ?? Unpin when bug in 2.75.0 is fixed and released ??
 gem "zip_tricks"
