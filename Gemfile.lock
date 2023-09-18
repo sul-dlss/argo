@@ -139,7 +139,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    cocina-models (0.91.0)
+    cocina-models (0.91.1)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -708,4 +708,4 @@ DEPENDENCIES
   zip_tricks
 
 BUNDLED WITH
-   2.4.14
+   2.4.19
