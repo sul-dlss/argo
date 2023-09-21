@@ -75,12 +75,11 @@ GEM
     barby (0.6.8)
     base64 (0.1.1)
     bcrypt (3.1.19)
-    better_html (1.0.16)
-      actionview (>= 4.0)
-      activesupport (>= 4.0)
+    better_html (2.0.2)
+      actionview (>= 6.0)
+      activesupport (>= 6.0)
       ast (~> 2.0)
       erubi (~> 1.4)
-      html_tokenizer (~> 0.0.6)
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
@@ -249,10 +248,9 @@ GEM
       activesupport (>= 3.0, < 8.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    erb_lint (0.0.37)
+    erb_lint (0.4.0)
       activesupport
-      better_html (~> 1.0.7)
-      html_tokenizer
+      better_html (>= 2.0.1)
       parser (>= 2.7.1.4)
       rainbow
       rubocop
@@ -277,7 +275,6 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.0.1)
     honeybadger (4.12.2)
-    html_tokenizer (0.0.7)
     http_logger (0.7.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -658,7 +655,7 @@ DEPENDENCIES
   druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
-  erb_lint (~> 0.0.31)
+  erb_lint (~> 0.4.0)
   factory_bot_rails
   faraday
   faraday-multipart

@@ -85,8 +85,10 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 5. **Run the linters and the tests**
 
     ```
-    bin/rake && yarn run lint
+    bin/rake
     ```
+
+To run just the linters, run `bin/rake lint`. To run the linters individually, run `bundle exec erblint --lint-all`, `bundle exec rubocop`, and `yarn run lint`
 
 ## Docker
 
