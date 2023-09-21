@@ -1,15 +1,15 @@
-@import 'ui.jqgrid';
 @import 'variables';
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-overrides';
 // Override before importing Blacklight
 @import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
 @import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';
+@import "tabulator-tables/dist/css/tabulator.min";
+@import "tabulator-tables/dist/css/tabulator_bootstrap5.min";
 
 @import "argo";
 @import "bulk-actions";
 @import "errors";
-@import "dialog";
 @import "document";
 @import "document-component";
 @import "icons";

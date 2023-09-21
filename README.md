@@ -217,7 +217,6 @@ Argo uses Blacklight and ActiveFedora to expose the repository contents, and `do
 - RSolr
 - Sidekiq
 - Bootstrap
-- JQuery
 
 and in development or testing mode:
 

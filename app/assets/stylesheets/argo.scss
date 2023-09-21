@@ -1,4 +1,3 @@
-
 // Here we override blacklight to wrap the $logo-image in a url()
 .navbar-logo {  // The main logo image for the Blacklight instance
   background: transparent url("logo.png") no-repeat top left;
@@ -57,10 +56,6 @@ legend {
 
 .apo-register-error {
   color: red;
-}
-
-#report_container {
-  margin-top: 1.5em;
 }
 
 .metadata-display {

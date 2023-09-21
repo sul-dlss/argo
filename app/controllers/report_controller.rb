@@ -10,35 +10,32 @@ class ReportController < CatalogController
   end
 
   def data
-    params[:sord] ||= "asc"
-    rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
-    params[:per_page] = rows_per_page * [params.delete(:npage).to_i, 1].max
+    params[:per_page] = params[:per_page] ? params[:per_page].to_i : Report::ROWS_PER_PAGE
+    params[:page] ||= 1
     @report = Report.new(params, current_user:)
 
     respond_to do |format|
       format.json do
         render json: {
           page: params[:page].to_i,
-          records: @report.num_found,
-          total: (@report.num_found / rows_per_page.to_f).ceil,
-          rows: @report.report_data
+          last_page: (@report.num_found / params[:per_page].to_f).ceil,
+          data: @report.report_data
         }
       end
       format.xml { render xml: @report.report_data }
     end
   end
 
-  def content_types
-  end
-
   def download
-    fields = params["fields"].present? ? params.delete("fields").split(/\s*,\s*/) : nil
-    params[:per_page] = 10
-    params[:page] = 1
-    response.headers["Content-Type"] = "application/octet-stream"
-    response.headers["Content-Disposition"] = "attachment; filename=report.csv"
+    # Tells Rack to stream the response instead of filling a buffer
+    response.headers.delete("Content-Length")
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["Content-Type"] = "text/csv"
+    response.headers["Content-Disposition"] = "attachment; filename=\"report.csv\""
     response.headers["Last-Modified"] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = Report.new(params, fields, current_user:).to_csv
+    response.headers["X-Accel-Buffering"] = "no"
+
+    self.response_body = Report.new(params, current_user:).to_csv
   end
 
   # reset workflow states for objects

@@ -1,9 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-if ! foreman version &> /dev/null
-then
-    echo "Installing foreman..."
-    gem install foreman
+if ! gem list foreman -i --silent; then
+  echo "Installing foreman..."
+  gem install foreman
 fi
 
 # Provide some default values that allow the user to login.

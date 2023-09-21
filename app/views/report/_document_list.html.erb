@@ -1,16 +1,46 @@
-<% content_for :head do %>
-  <script type="text/javascript">
-    report_model = {
-      total_rows: <%= @response['response']['numFound'] %>,
-      data_url: <%= report_data_url(params.to_unsafe_h.merge(format: 'json')).to_json.html_safe %>,
-      download_url: <%= report_download_url(params.to_unsafe_h).to_json.html_safe %>,
-      column_model: <%= Report::COLUMN_MODEL.to_json.html_safe %>
-    }
-  </script>
-<% end %>
+<div class="mt-3"
+     data-controller="object-reporter"
+     data-object-reporter-data-url-value='<%= report_data_url %>'
+     data-object-reporter-data-url-params-value='<%= params.to_unsafe_h.except(:controller, :action).merge(format: 'json', sort: 'id asc').to_json.html_safe %>'
+     data-object-reporter-download-url-value='<%= report_download_url %>'
+     data-object-reporter-column-model-value='<%= Report::COLUMN_MODEL.to_json.html_safe %>'
+  >
 
-<div id="report_container" data-controller="report">
-  <table id="report_grid"></table>
-  <div id="preport_grid"></div>
+  <div class="mt-1 mb-1">
+    <button data-action="click->object-reporter#openColumnSelectorModal">Columns</button>
+    <button data-action="click->object-reporter#downloadCSV">Download CSV</button>
+  </div>
+
+  <div id="objectsTable"></div>
+
+  <div class="modal fade" data-object-reporter-target="columnSelector" tabindex="-1" role="dialog" aria-labelledby="columnSelectorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="columnSelectorModalLabel">Select Columns to Display and Download</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <% Report::REPORT_FIELDS.each_slice((Report::REPORT_FIELDS.size/Report::COLUMN_SELECTOR_COLUMN_SIZE.to_f).ceil) do |field_group| %>
+                <div class="col">
+                  <% field_group.each do |field| %>
+                    <div class="form-check">
+                      <label for="<%= field[:field] %>" class="form-check-label"><%= field[:label] %>
+                        <%= check_box_tag field[:field], field[:label], field[:default], { class: "form-check-input", data: { action: "change->object-reporter#toggleColumn" } } %>
+                      </label>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<%= render 'report/column_selector' %>
