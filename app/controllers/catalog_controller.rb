@@ -156,24 +156,8 @@ class CatalogController < ApplicationController
     config.add_facet_field "empties", label: "Empty Fields", home: false,
       component: true,
       query: {
-        no_source_id: {label: "No Source ID", fq: "-source_id_ssim:*"},
-        no_rights_characteristics: {label: "No Rights Characteristics", fq: "-rights_characteristics_ssim:*"},
-        no_object_title: {label: "No Object Title", fq: "-#{SolrDocument::FIELD_TITLE}:*"},
-        no_collection_title: {label: "No Collection Title", fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*"},
-        no_copyright: {label: "No Copyright", fq: "-#{SolrDocument::FIELD_COPYRIGHT}:*"},
-        no_license: {label: "No License", fq: "-use_license_machine_ssi:*"},
-        no_sw_author_ssim: {label: "No SW Author", fq: "-sw_author_ssim:*"},
-        # TODO: mods extent (?)
-        # TODO: mods form (?)
-        no_sw_genre: {label: "No SW Genre", fq: "-sw_genre_ssim:*"}, # spec said "mods genre"
-        no_sw_language_ssim: {label: "No SW Language", fq: "-sw_language_ssim:*"},
         no_mods_typeOfResource_ssim: {label: "No MODS typeOfResource", fq: "-mods_typeOfResource_ssim:*"},
-        no_sw_pub_date_sort: {label: "No SW Date", fq: "-sw_pub_date_sort_ssi:*"},
-        no_sw_topic_ssim: {label: "No SW Topic", fq: "-sw_topic_ssim:*"},
-        no_sw_subject_temporal: {label: "No SW Era", fq: "-sw_subject_temporal_ssim:*"},
-        no_sw_subject_geographic: {label: "No SW Region", fq: "-sw_subject_geographic_ssim:*"},
-        no_sw_format: {label: "No SW Resource Type", fq: "-sw_format_ssim:*"},
-        no_use_statement: {label: "No Use & Reproduction Statement", fq: "-#{SolrDocument::FIELD_USE_STATEMENT}:*"}
+        no_sw_format: {label: "No SW Resource Type", fq: "-sw_format_ssim:*"}
       }
 
     config.add_facet_field "sw_format_ssim", label: "SW Resource Type", component: true, limit: 10, home: false
