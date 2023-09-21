@@ -4,16 +4,16 @@ import { Controller } from '@hotwired/stimulus'
 export default class extends Controller {
   static targets = ['cocina', 'section']
 
-  connect() {
+  connect () {
     this.cocina = JSON.parse(this.cocinaTarget.innerText)
     this.collapse()
   }
 
-  expand() {
+  expand () {
     this.sectionTarget.replaceChildren(renderjson.set_show_to_level('all')(this.cocina))
   }
 
-  collapse() {
+  collapse () {
     this.sectionTarget.replaceChildren(renderjson.set_show_to_level(1)(this.cocina))
   }
 }

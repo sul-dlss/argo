@@ -1,8 +1,8 @@
 <div id='embargo_update'>
-  <%= form_with model: @change_set, url: item_embargo_path(@change_set), class: 'col-md-4' do |f| %>
+  <%= form_with model: @change_set, url: item_embargo_path(@change_set), class: "col-md-4" do |f| %>
     <div class='mb-3'>
       <%= f.label :release_date %>
-      <%= f.text_field :release_date, type: 'date', class: 'form-control' %>
+      <%= f.text_field :release_date, type: "date", class: "form-control" %>
     </div>
 
     <div class='mb-3' data-controller="access-rights">
@@ -10,6 +10,6 @@
       <%= render Edit::Item::AccessRightsComponent.new(form_builder: f, include_cdl: false) %>
     </div>
 
-    <%= f.submit 'Save', class: 'btn btn-primary' %>
+    <%= f.submit "Save", class: "btn btn-primary" %>
   <% end %>
 </div>

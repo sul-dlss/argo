@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Bulk Reindex of DOR Objects", js: true do
+RSpec.describe "Bulk Reindex of DOR Objects", :js do
   let(:current_user) { create(:user) }
 
   before do

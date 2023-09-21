@@ -1,14 +1,14 @@
-<%= form_for @form, url: { action: @form.persisted? ? 'update' : 'create'},
-             data: { controller: 'apo-form', action: 'submit->apo-form#submit' } do |f| %>
+<%= form_for @form, url: {action: @form.persisted? ? "update" : "create"},
+      data: {controller: "apo-form", action: "submit->apo-form#submit"} do |f| %>
   <div class="mb-3">
     <%= f.label :title %>
-    <%= f.text_field :title, class: 'form-control', required: true %>
+    <%= f.text_field :title, class: "form-control", required: true %>
     <span id="title-err-msg-elt" class="apo-register-error"></span>
   </div>
 
   <div class="mb-3">
     <label>Agreement</label>
-    <%= f.select :agreement_object_id, options_for_select(agreement_options, @form.agreement_object_id), {}, class: 'form-select' %>
+    <%= f.select :agreement_object_id, options_for_select(agreement_options, @form.agreement_object_id), {}, class: "form-select" %>
   </div>
 
   <sharing data-permissions="<%= @form.permissions.to_json %>"></sharing>
@@ -18,7 +18,7 @@
       <legend>Default Collections</legend>
       <% @form.default_collection_objects.each_with_index do |solr_doc, index| %>
         <%= hidden_field_tag "apo[collections_for_registration][#{index}][id]", solr_doc.id %>
-        <%= link_to solr_doc.label, solr_doc %> <%= link_to('(remove)', delete_collection_apo_path(collection: solr_doc.id, id: @form), data: { turbo_confirm: 'You are about to leave the page, are you sure?' }) %><br>
+        <%= link_to solr_doc.label, solr_doc %> <%= link_to("(remove)", delete_collection_apo_path(collection: solr_doc.id, id: @form), data: {turbo_confirm: "You are about to leave the page, are you sure?"}) %><br>
       <% end %>
     </fieldset>
   <% end %>
@@ -26,7 +26,7 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <%= f.radio_button :collection_radio, 'none', checked: true, class: 'form-check-input', data: { action: 'apo-form#hideCollection' } %>
+      <%= f.radio_button :collection_radio, "none", checked: true, class: "form-check-input", data: {action: "apo-form#hideCollection"} %>
       Don't add a Collection
     </label>
   </div>
@@ -34,21 +34,21 @@
   <% unless @form.persisted? %>
     <div class="form-check">
       <label class="form-check-label">
-        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { action: 'apo-form#revealCreateCollection' } %>
+        <%= f.radio_button :collection_radio, "create", class: "form-check-input", data: {action: "apo-form#revealCreateCollection"} %>
         Create a Collection
       </label>
     </div>
 
     <div class="form-check">
       <label class="form-check-label">
-        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { action: 'apo-form#revealCreateCollectionCatalogRecordId' } %>
+        <%= f.radio_button :collection_radio, "create", class: "form-check-input", data: {action: "apo-form#revealCreateCollectionCatalogRecordId"} %>
         Create a Collection from <%= CatalogRecordId.type.capitalize %>
       </label>
     </div>
   <% else %>
     <div class="form-check">
       <label class="form-check-label">
-        <%= f.radio_button :collection_radio, 'select', class: 'form-check-input', data: { action: 'apo-form#revealSelectCollection' } %>
+        <%= f.radio_button :collection_radio, "select", class: "form-check-input", data: {action: "apo-form#revealSelectCollection"} %>
         Choose a Default Collection
       </label>
     </div>
@@ -56,27 +56,27 @@
 
   <%= f.fields_for :collection do |collection| %>
     <div id="select-collection" data-apo-form-target="selectCollectionFields" hidden class="mb-3">
-      <%= collection.select :collection, options_for_select(current_user.permitted_collections), {}, class: 'form-select' %>
+      <%= collection.select :collection, options_for_select(current_user.permitted_collections), {}, class: "form-select" %>
     </div>
     <div id="create-collection" data-apo-form-target="createCollectionFields" hidden>
       <div class="mb-3">
         <%= collection.label :collection_title, "Collection Title", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.text_field :collection_title, class: 'form-control' %>
+          <%= collection.text_field :collection_title, class: "form-control" %>
         </div>
       </div>
 
       <div class="mb-3">
         <%= collection.label :collection_abstract, "Collection Abstract", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.text_area :collection_abstract, class: 'form-control' %>
+          <%= collection.text_area :collection_abstract, class: "form-control" %>
         </div>
       </div>
 
       <div class="mb-3">
         <%= collection.label :collection_rights, "Collection Rights", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.select :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-select' %>
+          <%= collection.select :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, "world"), {}, class: "form-select" %>
         </div>
       </div>
     </div>
@@ -85,18 +85,17 @@
       <div class="mb-3">
         <%= collection.label :collection_catalog_record_id, "Collection #{CatalogRecordId.label}", class: "col-sm-4 control-label" %>
         <div class="col-sm-8">
-          <%= collection.text_field :collection_catalog_record_id, class: 'form-control', pattern: CatalogRecordId.html_pattern_string %>
+          <%= collection.text_field :collection_catalog_record_id, class: "form-control", pattern: CatalogRecordId.html_pattern_string %>
         </div>
       </div>
       <div class="mb-3">
         <%= collection.label :collection_rights_catalog_record_id, "Collection Rights", class: "col-sm-4 control-label" %>
         <div class="col-sm-8">
-          <%= collection.select :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-select' %>
+          <%= collection.select :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, "world"), {}, class: "form-select" %>
         </div>
       </div>
     </div>
   <% end %>
-
 
   <fieldset class="mt-5">
     <legend>Object defaults</legend>
@@ -108,36 +107,36 @@
     </fieldset>
 
     <div class="mb-3">
-      <%= f.label :use_statement, "Default Use and Reproduction statement", class: 'form-label' %>
-      <p class="form-text">See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Use and Reproduction statements.</p>
-      <%= f.text_area :use_statement, class: "form-control", rows:"2" %>
+      <%= f.label :use_statement, "Default Use and Reproduction statement", class: "form-label" %>
+      <p class="form-text">See <%= link_to "here", "https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements", target: "_blank", rel: "noopener" %> for sample Use and Reproduction statements.</p>
+      <%= f.text_area :use_statement, class: "form-control", rows: "2" %>
     </div>
 
     <div class="mb-3">
-      <%= f.label :copyright_statement, "Default Copyright statement", class: 'form-label' %>
-      <p class="form-text">See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Copyright statements.</p>
-      <%= f.text_area :copyright_statement, class: "form-control", rows:"2" %>
+      <%= f.label :copyright_statement, "Default Copyright statement", class: "form-label" %>
+      <p class="form-text">See <%= link_to "here", "https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements", target: "_blank", rel: "noopener" %> for sample Copyright statements.</p>
+      <%= f.text_area :copyright_statement, class: "form-control", rows: "2" %>
     </div>
     <div class="mb-3">
-      <%= f.label :use_license, "Default use license", class: 'form-label' %>
-      <%= f.select :use_license, options_for_select(@form.license_options, @form.use_license), {}, class: 'form-select' %>
+      <%= f.label :use_license, "Default use license", class: "form-label" %>
+      <%= f.select :use_license, options_for_select(@form.license_options, @form.use_license), {}, class: "form-select" %>
     </div>
 
     <div class="mb-3">
-      <%= f.label :default_workflows, class: 'form-label' %>
+      <%= f.label :default_workflows, class: "form-label" %>
       <%= f.select :default_workflows, options_for_select(workflow_options, @form.default_workflows),
-                                      {}, multiple: true, class: 'form-select' %>
+            {}, multiple: true, class: "form-select" %>
     </div>
 
   </fieldset>
 
   <div class="mb-3">
     <% unless @form.persisted? %>
-      <%= submit_tag 'Register APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', '/', class: 'btn btn-secondary' %>
+      <%= submit_tag "Register APO", class: "btn btn-primary" %>
+      <%= link_to "Cancel", "/", class: "btn btn-secondary" %>
     <% else %>
-      <%= submit_tag 'Update APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-secondary' %>
+      <%= submit_tag "Update APO", class: "btn btn-primary" %>
+      <%= link_to "Cancel", solr_document_path(@form), class: "btn btn-secondary" %>
     <% end %>
   </div>
 <% end %>

@@ -3,14 +3,14 @@
     <div class="alert alert-danger"><%= @errors.to_sentence %></div>
   <% end %>
   <%= form_with url: item_descriptive_path(item_id: @cocina.externalIdentifier),
-               method: :put, local: true, multipart: true,
-               html: { class: 'col-lg-8 mb-5' } do |f| %>
+        method: :put, local: true, multipart: true,
+        html: {class: "col-lg-8 mb-5"} do |f| %>
     <div class="mb-3">
-      <%= f.label :data, class: 'form-label' do %>
+      <%= f.label :data, class: "form-label" do %>
         Upload Cocina descriptive metadata spreadsheet for <%= @cocina.externalIdentifier %>
       <% end %>
-      <%= f.file_field :data, class: 'form-control', accept: '.csv,.xlsx', required: true %>
+      <%= f.file_field :data, class: "form-control", accept: ".csv,.xlsx", required: true %>
     </div>
-    <%= f.submit 'Upload', class: 'btn btn-primary' %>
+    <%= f.submit "Upload", class: "btn btn-primary" %>
   <% end %>
 </turbo-frame>

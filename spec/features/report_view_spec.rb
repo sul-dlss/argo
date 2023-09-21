@@ -7,7 +7,7 @@ RSpec.describe "Report view" do
     sign_in create(:user), groups: ["sdr:administrator-role"]
   end
 
-  describe "the show page", js: true do
+  describe "the show page", :js do
     let(:blacklight_config) { CatalogController.blacklight_config }
     let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 

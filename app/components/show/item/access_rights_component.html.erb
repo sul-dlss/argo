@@ -1,7 +1,7 @@
 <turbo-frame id="access-rights">
   <%= access_rights %>
   <% if allows_modification? %>
-    <%= link_to edit_rights_item_path(id: id), aria: { label: 'Edit rights' } do %>
+    <%= link_to edit_rights_item_path(id: id), aria: {label: "Edit rights"} do %>
       <span class="bi-pencil"></span>
     <% end %>
   <% end %>

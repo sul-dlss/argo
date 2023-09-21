@@ -19,7 +19,22 @@ rescue LoadError
   end
 end
 
+desc "Run erblint against ERB files"
+task :erblint do
+  puts "Running erblint..."
+  system("bundle exec erblint --lint-all --format compact")
+end
+
+desc "Run Yarn linter against JS files"
+task :jslint do
+  puts "Running JS linters..."
+  system("yarn run lint")
+end
+
+desc "Run all configured linters"
+task lint: %i[rubocop erblint jslint]
+
 task(:default).clear
 
-desc "run linter and tests (for CI)"
-task default: ["rubocop", "spec"]
+desc "run linters and tests (for CI)"
+task default: %i[lint spec]

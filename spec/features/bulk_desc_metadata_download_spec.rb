@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Bulk Descriptive Metadata Download", js: true do
+RSpec.describe "Bulk Descriptive Metadata Download", :js do
   let(:current_user) { create(:user) }
 
   before do

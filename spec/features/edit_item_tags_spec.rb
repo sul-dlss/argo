@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Edit administrative tags for a single item", js: true do
+RSpec.describe "Edit administrative tags for a single item", :js do
   let(:user) { create(:user) }
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)

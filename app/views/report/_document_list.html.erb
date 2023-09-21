@@ -1,10 +1,9 @@
 <div class="mt-3"
      data-controller="object-reporter"
      data-object-reporter-data-url-value='<%= report_data_url %>'
-     data-object-reporter-data-url-params-value='<%= params.to_unsafe_h.except(:controller, :action).merge(format: 'json', sort: 'id asc').to_json.html_safe %>'
+     data-object-reporter-data-url-params-value='<%= params.to_unsafe_h.except(:controller, :action).merge(format: "json", sort: "id asc").to_json.html_safe %>'
      data-object-reporter-download-url-value='<%= report_download_url %>'
-     data-object-reporter-column-model-value='<%= Report::COLUMN_MODEL.to_json.html_safe %>'
-  >
+     data-object-reporter-column-model-value='<%= Report::COLUMN_MODEL.to_json.html_safe %>'>
 
   <div class="mt-1 mb-1">
     <button data-action="click->object-reporter#openColumnSelectorModal">Columns</button>
@@ -23,12 +22,12 @@
         <div class="modal-body">
           <div class="container">
             <div class="row">
-              <% Report::REPORT_FIELDS.each_slice((Report::REPORT_FIELDS.size/Report::COLUMN_SELECTOR_COLUMN_SIZE.to_f).ceil) do |field_group| %>
+              <% Report::REPORT_FIELDS.each_slice((Report::REPORT_FIELDS.size / Report::COLUMN_SELECTOR_COLUMN_SIZE.to_f).ceil) do |field_group| %>
                 <div class="col">
                   <% field_group.each do |field| %>
                     <div class="form-check">
                       <label for="<%= field[:field] %>" class="form-check-label"><%= field[:label] %>
-                        <%= check_box_tag field[:field], field[:label], field[:default], { class: "form-check-input", data: { action: "change->object-reporter#toggleColumn" } } %>
+                        <%= check_box_tag field[:field], field[:label], field[:default], {class: "form-check-input", data: {action: "change->object-reporter#toggleColumn"}} %>
                       </label>
                     </div>
                   <% end %>

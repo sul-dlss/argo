@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Create an apo", js: true do
+RSpec.describe "Create an apo", :js do
   let(:user) { create(:user) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }

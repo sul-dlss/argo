@@ -9,30 +9,30 @@
       <% end %>
     </li>
 
-    <li class="nav-item"><%= link_to 'Home', root_path, class: 'nav-link' %></li>
+    <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link" %></li>
 
     <% if session[:groups].present? %>
       <li class='dropdown nav-item'>
         <a href='#' class='dropdown-toggle impersonating nav-link' data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
-          Impersonating: <%= session[:groups].join(' ') %>
+          Impersonating: <%= session[:groups].join(" ") %>
           <span class='caret'></span>
         </a>
         <ul class='dropdown-menu'>
           <li>
-            <%= link_to 'Stop Impersonating', auth_forget_impersonated_groups_path %>
+            <%= link_to "Stop Impersonating", auth_forget_impersonated_groups_path %>
           </li>
         </ul>
       </li>
     <% elsif can? :impersonate, User %>
       <li class="nav-item">
-        <%= link_to 'Impersonate', auth_groups_path, class: 'nav-link' %>
+        <%= link_to "Impersonate", auth_groups_path, class: "nav-link" %>
       </li>
     <% end %>
 
-    <li class="nav-item"><%= link_to 'All&nbsp;Workflows'.html_safe, report_workflow_grid_path, class: 'nav-link' %></li>
+    <li class="nav-item"><%= link_to "All&nbsp;Workflows".html_safe, report_workflow_grid_path, class: "nav-link" %></li>
 
     <li class='nav-item'>
-      <%= link_to 'Bulk Actions', bulk_actions_path, class: 'nav-link' %>
+      <%= link_to "Bulk Actions", bulk_actions_path, class: "nav-link" %>
     </li>
 
     <li class='nav-item dropdown'>
@@ -41,14 +41,14 @@
         <span class='caret'></span>
       </a>
       <div class="dropdown-menu" aria-labelledby="registerDropdown">
-        <%= link_to 'Register Items', registration_path, class: 'dropdown-item' %>
+        <%= link_to "Register Items", registration_path, class: "dropdown-item" %>
         <% if can? :create, Cocina::Models::AdminPolicy %>
-          <%= link_to 'Register APO', new_apo_path, class: 'dropdown-item' %>
+          <%= link_to "Register APO", new_apo_path, class: "dropdown-item" %>
         <% end %>
-        <%= link_to 'Agreement', new_agreement_path, class: 'dropdown-item' %>
+        <%= link_to "Agreement", new_agreement_path, class: "dropdown-item" %>
       </div>
     </li>
 
-    <li class="nav-item"><%= link_to 'Feedback', 'mailto:argo-feedback@lists.stanford.edu', class: 'nav-link' %></li>
+    <li class="nav-item"><%= link_to "Feedback", "mailto:argo-feedback@lists.stanford.edu", class: "nav-link" %></li>
   </ul>
 </div>

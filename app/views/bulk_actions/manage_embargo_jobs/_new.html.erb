@@ -1,12 +1,12 @@
-<%= form_with url: manage_embargo_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: manage_embargo_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Manage embargoes with a CSV
   </span>
 
   <div class='mb-3'>
-    <%= f.label :csv_file, 'Upload a CSV file' %>
+    <%= f.label :csv_file, "Upload a CSV file" %>
     <p><small><em>Please note that each row should have headers for:
     <ul>
       <li>druid</li>
@@ -16,8 +16,8 @@
       <li>location (optional)</li>
     </ul>
     </em></small></p>
-    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+    <%= f.file_field :csv_file, class: "form-control", accept: ".csv" %>
   </div>
 
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

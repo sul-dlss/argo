@@ -2,23 +2,31 @@ import { Controller } from '@hotwired/stimulus'
 
 // This handles editing the access rights for a DRO
 export default class extends Controller {
-  static targets = ["view", "download", "location", "cdl", "downloadRow", "locationRow", "cdlRow"]
+  static targets = [
+    'view',
+    'download',
+    'location',
+    'cdl',
+    'downloadRow',
+    'locationRow',
+    'cdlRow'
+  ]
 
-  connect() {
+  connect () {
     this.render()
   }
 
   // Called when the view menu changes
-  updateView() {
+  updateView () {
     this.render()
   }
 
   // Called when the download menu changes
-  updateDownload() {
+  updateDownload () {
     this.render()
   }
 
-  render() {
+  render () {
     switch (this.currentView()) {
       case 'dark':
       case 'citation-only':
@@ -36,30 +44,31 @@ export default class extends Controller {
     }
   }
 
-  setCitationOrDark() {
+  setCitationOrDark () {
     this.disableDownload()
     this.disableLocation()
     this.disableCdl()
   }
 
-  setWorldView() {
+  setWorldView () {
     this.enableDownload(false)
     this.maybeEnableLocation()
     this.disableCdl()
   }
 
-  setLocationBasedView() {
+  setLocationBasedView () {
     this.enableDownload(true)
     this.enableLocation()
     this.disableCdl()
   }
 
-  setStanfordView() {
+  setStanfordView () {
     this.enableDownload(false)
     this.maybeEnableLocation()
 
-    if (this.currentDownload() == 'none')
+    if (this.currentDownload() === 'none') {
       return this.enableCdl()
+    }
 
     this.disableCdl()
 
@@ -67,46 +76,50 @@ export default class extends Controller {
     this.activateWorldDownload(false)
   }
 
-  maybeEnableLocation() {
-    if (this.currentDownload() == 'location-based')
+  maybeEnableLocation () {
+    if (this.currentDownload() === 'location-based') {
       this.enableLocation()
-    else
+    } else {
       this.disableLocation()
+    }
   }
 
-  disableDownload() {
+  disableDownload () {
     this.downloadRowTarget.hidden = true
     this.downloadTarget.disabled = true
   }
 
-  worldDownloadOption() {
+  worldDownloadOption () {
     return this.downloadTarget.querySelector('[value="world"]')
   }
 
-  stanfordDownloadOption() {
+  stanfordDownloadOption () {
     return this.downloadTarget.querySelector('[value="stanford"]')
   }
+
   // **
   // * @param {bool} state If true, then the World option can be selected
-  activateWorldDownload(state) {
+  activateWorldDownload (state) {
     const option = this.worldDownloadOption()
     option.disabled = !state
-    if (!state)
+    if (!state) {
       option.selected = false
+    }
   }
 
   // **
   // * @param {bool} state If true, then the Stanford option can be selected
-  activateStanfordDownload(state) {
+  activateStanfordDownload (state) {
     const option = this.stanfordDownloadOption()
     option.disabled = !state
-    if (!state)
+    if (!state) {
       option.selected = false
+    }
   }
 
   // **
   // * @param {bool} forLocation If true, then the download menu prevents World or Stanford from being selected.
-  enableDownload(forLocation) {
+  enableDownload (forLocation) {
     this.activateWorldDownload(!forLocation)
     this.activateStanfordDownload(!forLocation)
 
@@ -114,33 +127,33 @@ export default class extends Controller {
     this.downloadTarget.disabled = false
   }
 
-  disableLocation() {
+  disableLocation () {
     this.locationRowTarget.hidden = true
     this.locationTarget.disabled = true
   }
 
-  enableLocation() {
+  enableLocation () {
     this.locationRowTarget.hidden = false
     this.locationTarget.disabled = false
   }
 
-  disableCdl() {
+  disableCdl () {
     this.cdlRowTarget.hidden = true
     // Set this to false, so that it gets updated when we merge the params
     // from the form with those in the cocina-model
     this.cdlTarget.value = false
   }
 
-  enableCdl() {
+  enableCdl () {
     this.cdlRowTarget.hidden = false
     this.cdlTarget.disabled = false
   }
 
-  currentView() {
+  currentView () {
     return this.viewTarget.selectedOptions[0].value
   }
 
-  currentDownload() {
+  currentDownload () {
     return this.downloadTarget.selectedOptions[0].value
   }
 }

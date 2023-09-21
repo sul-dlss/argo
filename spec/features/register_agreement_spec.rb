@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Register an Agreement", js: true do
+RSpec.describe "Register an Agreement", :js do
   include Dry::Monads[:result]
 
   let(:user) { create(:user) }

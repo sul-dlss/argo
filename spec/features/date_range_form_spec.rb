@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Date range form", js: true do
+RSpec.describe "Date range form", :js do
   let(:tomorrow) { 1.day.from_now.strftime("%m/%d/%Y") }
   let(:last_modified) { Time.new.utc.beginning_of_day.iso8601 }
   let(:blacklight_config) { CatalogController.blacklight_config }

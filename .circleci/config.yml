@@ -185,6 +185,8 @@ workflows:
     jobs:
       - test
       - lint
+      - erblint
+      - lint_js
 jobs:
   lint:
     executor: default
@@ -193,6 +195,24 @@ jobs:
       - ruby/install-deps:
           key: gems-v2
       - ruby/rubocop-check
+  erblint:
+    executor: default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          key: gems-v2
+      - run:
+          name: Lint ERBs
+          command: bundle exec erblint --lint-all --format compact
+  lint_js:
+    executor: default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Lint JavaScript
+          command: yarn run lint
   test:
     environment:
       TZ: 'America/Los_Angeles'

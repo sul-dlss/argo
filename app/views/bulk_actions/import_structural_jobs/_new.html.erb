@@ -1,13 +1,13 @@
-<%= form_with url: import_structural_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: import_structural_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Upload structural metadata as CSV (comma-separated values)
   </span>
   <div class='mb-3' id="import-csv">
-    <%= f.label :csv_file, 'Upload a CSV file' %>
-    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+    <%= f.label :csv_file, "Upload a CSV file" %>
+    <%= f.file_field :csv_file, class: "form-control", accept: ".csv" %>
   </div>
 
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

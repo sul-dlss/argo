@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "retrieve a token for sdr-api", js: true do
+RSpec.describe "retrieve a token for sdr-api", :js do
   let(:conn) { instance_double(SdrClient::Connection, post: response) }
   let(:response) { instance_double(Faraday::Response, status: 200, body:) }
   let(:body) do

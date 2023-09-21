@@ -3,10 +3,10 @@
   <h1>Bulk Actions</h1>
   <div class="row">
     <div class="col-md-10">
-      <%= link_to 'New Bulk Action', new_bulk_action_path(search_state.reset_search.to_h), class: 'btn btn-primary' %>
+      <%= link_to "New Bulk Action", new_bulk_action_path(search_state.reset_search.to_h), class: "btn btn-primary" %>
     </div>
     <div class="col-md-2">
-      <%= link_back_to_catalog label: 'Back to search', class: 'btn btn-default' %>
+      <%= link_back_to_catalog label: "Back to search", class: "btn btn-default" %>
     </div>
   </div>
 
@@ -34,10 +34,10 @@
             <%= bulk_action.druid_count_success %> /
             <%= bulk_action.druid_count_fail %>
           </td>
-          <td><%= link_to('Log', file_bulk_action_path(bulk_action.id, filename: Settings.bulk_metadata.log), download: true) %></td>
+          <td><%= link_to("Log", file_bulk_action_path(bulk_action.id, filename: Settings.bulk_metadata.log), download: true) %></td>
           <td><%= render_bulk_action_type(bulk_action) %></td>
           <td>
-            <%= link_to 'Delete', bulk_action, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            <%= link_to "Delete", bulk_action, data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-danger" %>
           </td>
         </tr>
       <% end %>

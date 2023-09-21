@@ -1,10 +1,10 @@
-<%= form_with url: close_version_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: close_version_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
   </span>
 
-  <%= render 'bulk_actions/druids', f: f %>
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/druids", f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

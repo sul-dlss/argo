@@ -54,7 +54,7 @@ gem "sdr-client", "~> 2.0"
 
 group :test, :development do
   gem "byebug", platform: :mri # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "erb_lint", "~> 0.0.31", require: false
+  gem "erb_lint", "~> 0.4.0", require: false
   gem "factory_bot_rails"
   gem "http_logger", require: false # Change this to `true` to see all http requests logged
   gem "pry-remote" # allows you to attach remote session to pry

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Bulk set content type", js: true do
+RSpec.describe "Bulk set content type", :js do
   let(:current_user) { create(:user) }
   let(:bulk_action) { instance_double(BulkAction, save: true, enqueue_job: nil) }
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "More facet view", js: true do
+RSpec.describe "More facet view", :js do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
