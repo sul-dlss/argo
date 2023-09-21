@@ -2,12 +2,12 @@
   <div class="row mb-3">
     <label for="registration_collection" class="col-sm-3 col-form-label">Collection</label>
     <div class="col-sm-9">
-      <%= select_tag 'registration[collection]', options_for_select(@collections, params[:collection]), prompt: 'None', class: 'form-select' %>
+      <%= select_tag "registration[collection]", options_for_select(@collections, params[:collection]), prompt: "None", class: "form-select" %>
     </div>
   </div>
 
   <div data-controller="access-rights">
-    <%= fields_for('registration', @access_template) do |f| %>
+    <%= fields_for("registration", @access_template) do |f| %>
       <%= render Create::Item::AccessRightsComponent.new(form_builder: f) %>
     <% end %>
   </div>
@@ -15,7 +15,7 @@
   <div class="row mb-3">
     <label for="registration_workflow_id" class="col-sm-3 col-form-label">Initial Workflow</label>
     <div class="col-sm-9">
-      <%= select_tag 'registration[workflow_id]', options_for_select(@workflows, params[:workflow_id]), 'data-rcparam': 'workflowId', class: 'form-select' %>
+      <%= select_tag "registration[workflow_id]", options_for_select(@workflows, params[:workflow_id]), "data-rcparam": "workflowId", class: "form-select" %>
     </div>
   </div>
 </turbo-frame>

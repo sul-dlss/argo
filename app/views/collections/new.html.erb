@@ -1,5 +1,5 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Create Collection' } %>
+  <% component.header { "Create Collection" } %>
   <% component.body do %>
     <div data-controller="collection-editor">
       <h4>APO &mdash; <%= @cocina.label %></h4>
@@ -9,9 +9,9 @@
             <label class="form-check-label" for="from-title">
               Create a Collection from Title/Abstract
             </label>
-            <%= radio_button_tag 'collection_radio', 'create', true, id: 'from-title',
-                  class: 'form-check-input',
-                  data: { action: 'change->collection-editor#revealCreateCollection' } %>
+            <%= radio_button_tag "collection_radio", "create", true, id: "from-title",
+                  class: "form-check-input",
+                  data: {action: "change->collection-editor#revealCreateCollection"} %>
           </div>
 
           <% unless Settings.ils_cutover_in_progress %>
@@ -19,9 +19,9 @@
               <label class="form-check-label" for="from-catalog">
                 Create a Collection from <%= CatalogRecordId.type.capitalize %>
               </label>
-              <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-catalog',
-                    class: 'form-check-input',
-                    data: { action: 'change->collection-editor#revealCreateCollectionCatalogRecordId' } %>
+              <%= radio_button_tag "collection_radio", "create", false, id: "from-catalog",
+                    class: "form-check-input",
+                    data: {action: "change->collection-editor#revealCreateCollectionCatalogRecordId"} %>
             </div>
           <% end %>
         </div>
@@ -31,20 +31,20 @@
             <label for="collection_title">
               Collection Title
             </label>
-            <%= text_field_tag 'collection_title', nil, class: 'form-control', data: { action: 'collection-editor#checkTitle' } %>
+            <%= text_field_tag "collection_title", nil, class: "form-control", data: {action: "collection-editor#checkTitle"}, autocomplete: "off" %>
             <div data-collection-editor-target="titleWarning" class="mt-2 alert alert-warning" hidden>Collection with this title already exists.</div>
           </div>
           <div class="mb-3">
             <label for="collection_abstract">
               Collection Abstract
             </label>
-            <%= text_area_tag 'collection_abstract', nil, class: 'form-control' %>
+            <%= text_area_tag "collection_abstract", nil, class: "form-control" %>
           </div>
           <div class="mb-3">
             <label for="collection_rights">
               Collection Object Visibility
             </label>
-            <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
+            <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, "world"), class: "form-select" %>
           </div>
         </div>
 
@@ -53,23 +53,25 @@
             <label for="collection_catalog_record_id">
               Collection <%= CatalogRecordId.label %>
             </label>
-            <%= text_field_tag 'collection_catalog_record_id', nil, class: 'form-control', data: { action: 'collection-editor#checkCatalogRecordId' } %>
+            <%= text_field_tag "collection_catalog_record_id", nil, class: "form-control", data: {action: "collection-editor#checkCatalogRecordId"}, autocomplete: "off" %>
             <span data-collection-editor-target="catalogRecordIdWarning" class="mt-2 alert alert-warning" hidden>Collection with this <%= CatalogRecordId.label %> already exists.</span>
           </div>
           <div class="mb-3">
             <label for="collection_rights_catalog_record_id">
               Collection Object Visibility
             </label>
-            <%= select_tag :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
+            <%= select_tag :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, "world"), class: "form-select" %>
           </div>
         </div>
         <div class="mb-3">
-          <%= button_tag 'register', id: 'register', class: 'btn btn-secondary' do 'Register Collection' end %>
+          <%= button_tag "register", id: "register", class: "btn btn-secondary" do %>
+            Register Collection
+          <% end %>
         </div>
 
         <% if !request.xhr? %>
           <div class="mb-3">
-            <%= button_to 'Cancel', solr_document_path(@cocina.externalIdentifier), method: :get, class: 'btn btn-secondary' %>
+            <%= button_to "Cancel", solr_document_path(@cocina.externalIdentifier), method: :get, class: "btn btn-secondary" %>
           </div>
         <% end %>
       <% end %>

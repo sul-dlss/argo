@@ -3,7 +3,7 @@
 
 <div class="row mt-3">
     <div class="col-md-8"><strong>Spreadsheet bulk upload for APO <%= @document.id %></strong></div>
-    <div class="col-md-3"><%= link_to 'Download blank spreadsheet', spreadsheet_template_apo_index_path %></div>
+    <div class="col-md-3"><%= link_to "Download blank spreadsheet", spreadsheet_template_apo_index_path %></div>
 </div>
 
 <div class="row">
@@ -11,11 +11,11 @@
 </div>
 <div class="row mt-3">
     <div class="col-md-12">
-      <%= link_to('Submit new file ...', new_apo_upload_path(@document.id), class: 'button btn btn-primary', data: { blacklight_modal: 'trigger', ajax_modal_title: 'MODS Bulk Loads' }) %>
+      <%= link_to("Submit new file ...", new_apo_upload_path(@document.id), class: "button btn btn-primary", data: {blacklight_modal: "trigger", ajax_modal_title: "MODS Bulk Loads"}) %>
     </div>
 </div>
 
-<%= render 'bulk_index_table' %>
+<%= render "bulk_index_table" %>
 
 <%# this should be in a partial -%>
 <div id="document" class="<%= render_document_class %>">

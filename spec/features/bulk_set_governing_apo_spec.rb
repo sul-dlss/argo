@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Bulk Update of Governing APO", js: true do
+RSpec.describe "Bulk Update of Governing APO", :js do
   let(:current_user) { create(:user) }
 
   before do

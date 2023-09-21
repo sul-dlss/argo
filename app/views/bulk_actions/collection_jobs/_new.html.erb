@@ -1,13 +1,13 @@
-<%= form_with url: collection_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: collection_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Set collection
   </span>
   <div class='mb-3'>
-    <%= f.label :new_collection_id, 'Collection:' %>
-    <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: 'form-select') %>
+    <%= f.label :new_collection_id, "Collection:" %>
+    <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: "form-select") %>
   </div>
-  <%= render 'bulk_actions/druids', f: f %>
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/druids", f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

@@ -1,16 +1,16 @@
 <%# workflow update requires id, workflow, process, and status parameters %>
 <%= form_tag item_workflow_path(druid, workflow_name),
-             method: 'put',
-             data: { turbo_confirm: confirm } do %>
-  <%= hidden_field_tag('process', name) %>
+      method: "put",
+      data: {turbo_confirm: confirm} do %>
+  <%= hidden_field_tag("process", name) %>
   <div class="input-group">
-    <%= select_tag('status',
-                   options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]),
-                   prompt: 'Select',
-                   class: 'form-select') %>
+    <%= select_tag("status",
+          options_for_select([["Rerun", "waiting"], ["Skip", "skipped"], ["Complete", "completed"]]),
+          prompt: "Select",
+          class: "form-select") %>
     <span class="input-group-append">
-        <%= button_tag('Save', type: 'submit',
-                               class: 'btn btn-secondary') %>
+        <%= button_tag("Save", type: "submit",
+              class: "btn btn-secondary") %>
     </span>
   </div>
 <% end %>

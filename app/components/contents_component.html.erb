@@ -1,7 +1,7 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="document-contents-heading">
     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#document-contents-section" aria-expanded="true" aria-controls="document-contents-section">
-      Content (<%= pluralize number_of_file_sets, 'Resource' %>)
+      Content (<%= pluralize number_of_file_sets, "Resource" %>)
     </button>
   </h2>
   <div id="document-contents-section" class="accordion-collapse collapse show" aria-labelledby="document-contents-heading">
@@ -9,21 +9,21 @@
       <div class="mb-3">
         <%= render DownloadAllButtonComponent.new(cocina: @cocina, document: @document) %>
         <% if allows_modification? %>
-          <%= button_tag class: 'btn btn-link float-end', data: { action: 'click->structural#open' } do %>
+          <%= button_tag class: "btn btn-link float-end", data: {action: "click->structural#open"} do %>
             <span class="bi-upload"></span> Upload CSV
           <% end %>
         <% end %>
-        <%= link_to item_structure_path(@document, format: :csv), download: true, class: 'btn btn-link float-end' do %>
+        <%= link_to item_structure_path(@document, format: :csv), download: true, class: "btn btn-link float-end" do %>
           <span class="bi-download"></span> Download CSV
         <% end %>
       </div>
       <div data-structural-target="form" class="mb-3" hidden>
-        <%= form_with url: item_structure_path(@document), method: :put, target: '_top' do |form| %>
-          <%= form.label :csv, 'Upload a CSV' %>
+        <%= form_with url: item_structure_path(@document), method: :put, target: "_top" do |form| %>
+          <%= form.label :csv, "Upload a CSV" %>
           <div class="mb-3">
-            <%= form.file_field :csv, class: 'form-control', accept:".csv", required: true %>
+            <%= form.file_field :csv, class: "form-control", accept: ".csv", required: true %>
           </div>
-          <%= form.submit class: 'btn btn-primary' %>
+          <%= form.submit class: "btn btn-primary" %>
           <button class="btn btn-outline-primary" type="button" data-action="click->structural#close">Cancel</button>
         <% end %>
       </div>

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Bulk Object Release", js: true do
+RSpec.describe "Bulk Object Release", :js do
   let(:current_user) { create(:user) }
 
   before do

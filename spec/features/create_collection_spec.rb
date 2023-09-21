@@ -16,7 +16,7 @@ RSpec.describe "Add collection" do
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, label: "hey", externalIdentifier: apo_id) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
-  describe "during folio cutover when collection catalog_record_id is provided", js: true do
+  describe "during folio cutover when collection catalog_record_id is provided", :js do
     before do
       allow(Settings).to receive(:ils_cutover_in_progress).and_return(true)
     end
@@ -27,7 +27,7 @@ RSpec.describe "Add collection" do
     end
   end
 
-  describe "when collection catalog_record_id is provided", js: true do
+  describe "when collection catalog_record_id is provided", :js do
     it "warns if catalog_record_id exists" do
       visit new_apo_collection_path apo_id
       choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
@@ -38,7 +38,7 @@ RSpec.describe "Add collection" do
     end
   end
 
-  describe "when collection title is provided", js: true do
+  describe "when collection title is provided", :js do
     it "warns if title exists" do
       visit new_apo_collection_path apo_id
       expect(page).to have_text("Collection Title")

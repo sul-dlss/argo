@@ -1,10 +1,10 @@
-<%= turbo_frame_tag 'access-rights' do %>
-  <%= form_with model: @change_set, data: { controller: 'access-rights' } do |f| %>
+<%= turbo_frame_tag "access-rights" do %>
+  <%= form_with model: @change_set, data: {controller: "access-rights"} do |f| %>
     <%= render Edit::Item::AccessRightsComponent.new(form_builder: f) %>
 
     <div class="float-end">
-      <%= link_to 'Cancel', show_rights_item_path(params[:id]) %>
-      <%= f.submit 'Save', class: 'btn btn-primary' %>
+      <%= link_to "Cancel", show_rights_item_path(params[:id]) %>
+      <%= f.submit "Save", class: "btn btn-primary" %>
     </div>
   <% end %>
 <% end %>

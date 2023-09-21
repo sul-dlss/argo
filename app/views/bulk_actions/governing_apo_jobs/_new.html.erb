@@ -1,15 +1,15 @@
-<%= form_with url: governing_apo_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: governing_apo_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Moves the object to a new governing APO.
   </span>
 
   <div class='mb-3'>
-    <%= f.label :new_apo_id, 'New governing APO' %>
-    <%= f.select(:new_apo_id, @apo_list, {}, class: 'form-select') %>
+    <%= f.label :new_apo_id, "New governing APO" %>
+    <%= f.select(:new_apo_id, @apo_list, {}, class: "form-select") %>
   </div>
 
-  <%= render 'bulk_actions/druids', f: f %>
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/druids", f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

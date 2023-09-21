@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Item view", js: true do
+RSpec.describe "Item view", :js do
   before do
     sign_in create(:user), groups: ["sdr:administrator-role"]
   end

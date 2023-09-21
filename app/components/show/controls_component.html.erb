@@ -17,18 +17,18 @@
         Manage PURL
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdown-purl">
-        <li><%= link_to 'Publish', item_publish_path(doc), class: "dropdown-item disabled",
-                        data: {
-                          turbo_method: 'post',
-                          controller: 'button',
-                          button_check_url_value: published_workflow_service_path(druid)
-                        } %></li>
-        <li><%= link_to 'Unpublish', item_publish_path(doc), class: "dropdown-item disabled",
-                        data: {
-                          turbo_method: 'delete',
-                          controller: 'button',
-                          button_check_url_value: published_workflow_service_path(druid)
-                        } %></li>
+        <li><%= link_to "Publish", item_publish_path(doc), class: "dropdown-item disabled",
+                  data: {
+                    turbo_method: "post",
+                    controller: "button",
+                    button_check_url_value: published_workflow_service_path(druid)
+                  } %></li>
+        <li><%= link_to "Unpublish", item_publish_path(doc), class: "dropdown-item disabled",
+                  data: {
+                    turbo_method: "delete",
+                    controller: "button",
+                    button_check_url_value: published_workflow_service_path(druid)
+                  } %></li>
       </ul>
     </div>
     <%= add_workflow_button %>
@@ -39,19 +39,19 @@
       <ul class="dropdown-menu" aria-labelledby="dropdown-descriptive">
         <% if catalog_record? %>
           <li><%= link_to refresh_button_label, refresh_metadata_item_path(id: druid),
-                                     class: "dropdown-item #{'disabled' if button_disabled? || Settings.ils_cutover_in_progress}",
-                                     data: { turbo_method: 'post' } %></li>
+                    class: "dropdown-item #{"disabled" if button_disabled? || Settings.ils_cutover_in_progress}",
+                    data: {turbo_method: "post"} %></li>
         <% end %>
-        <li><%= link_to 'Download Cocina spreadsheet', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>
+        <li><%= link_to "Download Cocina spreadsheet", item_descriptive_path(doc, format: :csv), class: "dropdown-item" %></li>
         <% if allows_modification? %>
-          <li><%= link_to 'Upload Cocina spreadsheet', edit_item_descriptive_path(doc),
-                                        class: 'dropdown-item',
-                                        data: { controller: 'button', action: 'click->button#open'} %></li>
+          <li><%= link_to "Upload Cocina spreadsheet", edit_item_descriptive_path(doc),
+                    class: "dropdown-item",
+                    data: {controller: "button", action: "click->button#open"} %></li>
         <% end %>
         <% if catalog_record? && item? %>
-          <li><%= link_to 'Manage serials', edit_item_serials_path(doc),
-                                            class: 'dropdown-item',
-                                            data: { controller: 'button', action: 'click->button#open'} %></li>
+          <li><%= link_to "Manage serials", edit_item_serials_path(doc),
+                    class: "dropdown-item",
+                    data: {controller: "button", action: "click->button#open"} %></li>
         <% end %>
       </ul>
     </div>

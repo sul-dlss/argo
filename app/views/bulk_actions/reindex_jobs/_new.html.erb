@@ -1,10 +1,10 @@
-<%= form_with url: reindex_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: reindex_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Reindexes the DOR object to Solr
   </span>
 
-  <%= render 'bulk_actions/druids', f: f %>
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/druids", f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

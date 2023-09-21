@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<% druids = @registration_form.created.map(&:externalIdentifier).map { |druid| "druid[]=#{druid}"}.join('&') %>
+<% druids = @registration_form.created.map(&:externalIdentifier).map { |druid| "druid[]=#{druid}" }.join("&") %>
 <%= link_to "/registration/tracksheet?name=#{@registration_form.project}&sequence=1&#{druids}", class: "btn btn-outline-primary my-5" do %>
   Tracking sheets
 <% end %>

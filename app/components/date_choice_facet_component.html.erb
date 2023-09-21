@@ -9,18 +9,18 @@
       <div class='mb-3'>
         <label for="<%= @facet_field.key %>_after_datepicker">From:</label>
         <input maxlength="10" size="10" id="<%= @facet_field.key %>_after_datepicker" type="text"
-               data-date-choice-target="afterDate" data-action="change->date-choice#updateQuery">
+               data-date-choice-target="afterDate" data-action="change->date-choice#updateQuery" autocomplete="off">
       </div>
       <div class='mb-3'>
         <label for="<%= @facet_field.key %>_before_datepicker">Through:</label>
         <input maxlength="10" size="10" id="<%= @facet_field.key %>_before_datepicker" type="text"
-               data-date-choice-target="beforeDate" data-action="change->date-choice#updateQuery">
+               data-date-choice-target="beforeDate" data-action="change->date-choice#updateQuery" autocomplete="off">
       </div>
       <div>
         <%= form_tag search_catalog_path, method: :get do %>
           <%= render Blacklight::HiddenSearchStateComponent.new(params: search_params) %>
-          <%= hidden_field_tag "f[#{solr_field_name}][]", '[* TO *]', data: { date_choice_target: "queryField" } %>
-          <%= submit_tag('submit', class: 'btn btn-primary') %>
+          <%= hidden_field_tag "f[#{solr_field_name}][]", "[* TO *]", data: {date_choice_target: "queryField"} %>
+          <%= submit_tag("submit", class: "btn btn-primary") %>
         <% end %>
       </div>
     </div>

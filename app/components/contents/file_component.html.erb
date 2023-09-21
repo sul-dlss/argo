@@ -1,7 +1,7 @@
 <tr class="file">
   <td>
     <% if viewable? %>
-      <%= link_to filename, item_files_path(link_attrs), data: { blacklight_modal: 'trigger' } %>
+      <%= link_to filename, item_files_path(link_attrs), data: {blacklight_modal: "trigger"} %>
     <% else %>
       <%= filename %>
     <% end %>
@@ -13,9 +13,9 @@
     <td><%= width %></td>
   <% end %>
   <td><%= role %></td>
-  <td class="ps-4"><%= tag :span, class: 'bi-check' if publish %></td>
-  <td class="ps-4"><%= tag :span, class: 'bi-check' if shelve %></td>
-  <td class="ps-4"><%= tag :span, class: 'bi-check' if sdrPreserve %></td>
+  <td class="ps-4"><%= tag :span, class: "bi-check" if publish %></td>
+  <td class="ps-4"><%= tag :span, class: "bi-check" if shelve %></td>
+  <td class="ps-4"><%= tag :span, class: "bi-check" if sdrPreserve %></td>
   <td><%= view_access %></td>
   <td><%= download_access %></td>
 </tr>

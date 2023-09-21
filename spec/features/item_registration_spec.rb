@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Item registration page", js: true do
+RSpec.describe "Item registration page", :js do
   let(:barcode) { "6772719-1001" }
   let(:source_id) { "sul:#{SecureRandom.uuid}" }
   let(:user) { create(:user) }

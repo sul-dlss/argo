@@ -1,6 +1,6 @@
 <%= form_tag item_workflows_path do %>
   <div class='mb-3'>
-    <%= select_tag :wf, options_for_select(workflow_options, Settings.apo.default_workflow_option), class: 'form-select' %>
+    <%= select_tag :wf, options_for_select(workflow_options, Settings.apo.default_workflow_option), class: "form-select" %>
   </div>
   <button class='btn btn-primary'>
     Add

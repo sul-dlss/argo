@@ -2,8 +2,8 @@
 
 <% if allows_modification? && item? %>
   <%= link_to source_id_ui_item_path(id: id),
-              aria: { label: 'Change source id' },
-              data: { controller: 'button', action: 'click->button#open' } do %>
+        aria: {label: "Change source id"},
+        data: {controller: "button", action: "click->button#open"} do %>
     <span class="bi-pencil"></span>
   <% end %>
 <% end %>

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Item registration page", js: true do
+RSpec.describe "Item registration page", :js do
   let(:user) { create(:user) }
 
   before do

@@ -4,7 +4,7 @@ require "rails_helper"
 
 # This is an integration test (with DSA), because we need to show that the
 # data we submit from here doesn't cause a round trip to MODS error.
-RSpec.describe "Update serials metadata", js: true do
+RSpec.describe "Update serials metadata", :js do
   let(:user) { create(:user) }
   # We need to set a catalog_record_id on this item, but we can't do it when it's created,
   # because we don't have an ILS (Folio) hooked up in our test environment. If you register

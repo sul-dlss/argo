@@ -14,7 +14,7 @@ RSpec.describe "Open and close a version" do
     dsc.accession.start(workflow: "accessionWF", significance: "major", description: "test version")
   end
 
-  it "opens an object", js: true do
+  it "opens an object", :js do
     visit solr_document_path item.externalIdentifier
     # The initial accessioning step will already be complete; this completes the rest.
     (accession_step_count - 1).times do

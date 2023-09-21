@@ -1,21 +1,21 @@
-<%= form_with url: open_version_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
-  <%= render 'bulk_actions/errors' %>
-  
+<%= form_with url: open_version_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
+  <%= render "bulk_actions/errors" %>
+
   <span class='help-block'>
     Open items not yet open for versioning.
   </span>
   <div class='mb-3'>
-    <%= f.label :significance, 'Change type' %>
+    <%= f.label :significance, "Change type" %>
     <%= f.select :significance,
-                              [['Major', 'major'], ['Minor', 'minor'], ['Admin', 'admin']],
-                              class: 'form-select' %>
+          [["Major", "major"], ["Minor", "minor"], ["Admin", "admin"]],
+          class: "form-select" %>
   </div>
 
   <div class='mb-3'>
-    <%= f.label :version_description, 'Describe this version' %>
-    <%= f.text_area :version_description, class: 'form-control', required: true %>
+    <%= f.label :version_description, "Describe this version" %>
+    <%= f.text_area :version_description, class: "form-control", required: true %>
   </div>
 
-  <%= render 'bulk_actions/druids', f: f %>
-  <%= render 'bulk_actions/common_fields', f: f %>
+  <%= render "bulk_actions/druids", f: f %>
+  <%= render "bulk_actions/common_fields", f: f %>
 <% end %>

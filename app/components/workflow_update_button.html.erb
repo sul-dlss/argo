@@ -1,8 +1,8 @@
 <%# workflow update requires id, workflow, process, and status parameters %>
 <% unless completed? %>
-  <%= form_tag item_workflow_path(druid, workflow_name), method: 'put' do %>
-    <%= hidden_field_tag('process', name) %>
-    <%= hidden_field_tag('status', next_status) %>
-    <%= button_tag(label, id: "workflow-status-set-#{name}-#{next_status}", type: 'submit', class: 'btn btn-secondary') %>
+  <%= form_tag item_workflow_path(druid, workflow_name), method: "put" do %>
+    <%= hidden_field_tag("process", name) %>
+    <%= hidden_field_tag("status", next_status) %>
+    <%= button_tag(label, id: "workflow-status-set-#{name}-#{next_status}", type: "submit", class: "btn btn-secondary") %>
   <% end %>
 <% end %>
