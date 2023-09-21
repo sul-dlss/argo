@@ -14,7 +14,7 @@ class Report
     include ValueHelper
   end
 
-  COLUMN_SELECTOR_COLUMN_SIZE = 3
+  COLUMN_SELECTOR_COLUMN_SIZE = 3 # Helps display report columns in neatly lined up columns.
   ROWS_PER_PAGE = 100
 
   REPORT_FIELDS = [
@@ -165,7 +165,7 @@ class Report
       # data set has loaded, namely that we are loading data sets progressively
       # as users scroll down the reports view to keep performance satisfactory.
       # Sorting a partial data set only to scroll to the bottom and have more
-      # rows load will look strange, and give users false confident that they
+      # rows load will look strange, and give users false confidence that they
       # are looking at the complete data set.
       "headerSort" => false # spec[:sort]
     }

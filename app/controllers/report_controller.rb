@@ -11,11 +11,15 @@ class ReportController < CatalogController
 
   def data
     params[:per_page] = params[:per_page] ? params[:per_page].to_i : Report::ROWS_PER_PAGE
+    # The client-side tooling will automagically increment this param as it
+    # progressively loads report results via the server-side API
+    # (ReportController & Report model).
     params[:page] ||= 1
     @report = Report.new(params, current_user:)
 
     respond_to do |format|
       format.json do
+        # The returned JSON aligns the server-side impl with what the client-side wants.
         render json: {
           page: params[:page].to_i,
           last_page: (@report.num_found / params[:per_page].to_f).ceil,
