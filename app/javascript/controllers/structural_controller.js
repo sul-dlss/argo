@@ -1,13 +1,13 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-    static targets = ["form"]
+  static targets = ['form']
 
-    open() {
-      this.formTarget.hidden = false
-    }
+  open () {
+    this.formTarget.hidden = false
+  }
 
-    close() {
-      this.formTarget.hidden = true
-    }
+  close () {
+    this.formTarget.hidden = true
+  }
 }

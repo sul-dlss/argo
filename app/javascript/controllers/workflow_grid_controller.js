@@ -1,23 +1,23 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  connect() {
+  connect () {
     this.load()
 
-    if (this.data.has("refreshInterval")) {
+    if (this.data.has('refreshInterval')) {
       this.startRefreshing()
     }
   }
 
-  startRefreshing() {
+  startRefreshing () {
     setInterval(() => {
       this.load()
-    }, this.data.get("refreshInterval"))
+    }, this.data.get('refreshInterval'))
   }
 
-  load() {
+  load () {
     // We're setting this header so that the controller can check for request.xhr?
-    fetch(this.data.get("url"), { headers: { 'X-Requester': 'frontend' }})
+    fetch(this.data.get('url'), { headers: { 'X-Requester': 'frontend' } })
       .then(response => response.text())
       .then(html => {
         this.element.innerHTML = html

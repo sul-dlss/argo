@@ -1,3 +1,4 @@
+import bootstrap from 'bootstrap/dist/js/bootstrap'
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
@@ -5,19 +6,18 @@ export default class extends Controller {
     checkUrl: String
   }
 
-  connect() {
+  connect () {
     if (this.checkUrlValue) {
       // If this URL returns "true", then remove the disabled class
       fetch(this.checkUrlValue)
         .then(response => response.json())
         .then(res => {
-          if (res)
-            this.element.classList.remove("disabled")
+          if (res) { this.element.classList.remove('disabled') }
         })
     }
   }
 
-  open(event) {
+  open (event) {
     event.preventDefault()
     const href = this.element.getAttribute('href')
     const element = document.getElementById('edit-modal')

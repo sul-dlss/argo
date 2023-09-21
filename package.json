@@ -15,6 +15,11 @@
     "tabulator-tables": "^5.5.2"
   },
   "devDependencies": {
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
     "standard": "^17.1.0"
   },
   "license": "Apache-2.0",

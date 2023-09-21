@@ -82,10 +82,10 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     bin/rails test:prepare
     ```
 
-5. **Run the linter and the tests**
+5. **Run the linters and the tests**
 
     ```
-    bin/rake
+    bin/rake && yarn run lint
     ```
 
 ## Docker

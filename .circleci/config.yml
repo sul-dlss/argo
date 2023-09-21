@@ -184,15 +184,25 @@ workflows:
   test:
     jobs:
       - test
-      - lint
+      - lint_ruby
+      - lint_js
 jobs:
-  lint:
+  lint_ruby:
     executor: default
     steps:
       - checkout
       - ruby/install-deps:
           key: gems-v2
       - ruby/rubocop-check
+  lint_js:
+    executor: default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Lint JavaScript
+          command: yarn run lint
   test:
     environment:
       TZ: 'America/Los_Angeles'

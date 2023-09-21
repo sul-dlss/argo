@@ -1,40 +1,39 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ["add_item", "template"]
+  static targets = ['add_item', 'template']
   static values = { selector: String }
 
-  initialize() {
+  initialize () {
     this.count = 1
   }
 
-  addAssociation(event) {
+  addAssociation (event) {
     event.preventDefault()
     const content = this.templateTarget.innerHTML.replace(/TEMPLATE_RECORD/g, crypto.randomUUID())
     this.add_itemTarget.insertAdjacentHTML('beforebegin', content)
     this.count++
   }
 
-  removeAssociation(event) {
+  removeAssociation (event) {
     event.preventDefault()
     event.target.closest(this.selectorValue).remove()
     this.count--
   }
 
-  populateFromPastedData(event) {
-    const paste = (event.clipboardData || window.clipboardData).getData('text');
+  populateFromPastedData (event) {
+    const paste = (event.clipboardData || window.clipboardData).getData('text')
     const lines = paste.split(/\r?\n/)
 
     // Add extra lines as needed
-    while(this.count < lines.length) {
+    while (this.count < lines.length) {
       this.addAssociation(new Event('dummy'))
     }
 
     const rowsOnPage = this.element.querySelectorAll(this.selectorValue)
 
     lines.forEach((line, index) => {
-      let sourceId, catalogRecordId, label, barcode;
-      [barcode, catalogRecordId, sourceId, label] = line.split(/\t/)
+      const [barcode, catalogRecordId, sourceId, label] = line.split(/\t/)
 
       const elements = rowsOnPage[index].querySelectorAll('input')
       elements[0].value = barcode
