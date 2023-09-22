@@ -45,7 +45,7 @@ class DescriptionImport
     split_address(address).map do |part|
       next part unless part.is_a?(Integer)
 
-      part.to_s.rjust(3, "0")
+      part.to_s.rjust(4, "0")
     end.join(".")
   end
 
