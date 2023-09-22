@@ -41,7 +41,7 @@ class Report
       proc: ->(doc) { doc.title },
       solr_fields: [SolrDocument::FIELD_TITLE,
         SolrDocument::FIELD_LABEL],
-      sort: false, default: false, width: 100
+      sort: false, default: true, width: 100
     },
     {
       field: :citation, label: "Citation",
@@ -75,7 +75,7 @@ class Report
     {
       field: SolrDocument::FIELD_COLLECTION_TITLE, label: "Collection",
       proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_TITLE].join(",") },
-      sort: false, default: false, width: 100
+      sort: false, default: true, width: 100
     },
     {
       field: :project_tag_ssim, label: "Project",
@@ -125,7 +125,7 @@ class Report
     },
     {
       field: SolrDocument::FIELD_ACCESS_RIGHTS.to_sym, label: "Access Rights",
-      sort: false, default: false, width: 100
+      sort: false, default: true, width: 100
     },
     {
       field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: "Embargo Release Date",
@@ -140,7 +140,7 @@ class Report
     {
       field: :published_earliest_dttsi, label: "Pub. Date",
       proc: ->(doc) { DatePresenter.render(doc[:published_earliest_dttsi]) },
-      sort: true, default: true, width: 100
+      sort: true, default: false, width: 100
     },
     {
       field: SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym, label: "Errors",
@@ -163,7 +163,7 @@ class Report
       field: :resource_count, label: "Resources",
       proc: ->(doc) { doc[:resource_count_itsi] },
       solr_fields: %w[resource_count_itsi],
-      sort: false, default: true, width: 50
+      sort: false, default: false, width: 50
     },
     {
       field: :preserved_size, label: "Preservation Size",
@@ -175,7 +175,7 @@ class Report
       field: :dissertation_id, label: "Dissertation ID",
       proc: ->(doc) { doc[:identifier_ssim].filter { |id| id.include?("dissertationid") }.map { |id| id.split(":").last } },
       solr_fields: %w[identifier_ssim],
-      sort: false, default: true, width: 50
+      sort: false, default: false, width: 50
     }
   ].freeze
 
