@@ -30,6 +30,11 @@ class Report
       sort: false, default: false, width: 100
     },
     {
+      field: SolrDocument::FIELD_RELEASED_TO, label: "Released To",
+      proc: ->(doc) { doc.released_to.presence&.to_sentence || "Not released" },
+      sort: false, default: false, width: 100
+    },
+    {
       field: :title, label: "Title",
       proc: ->(doc) { doc.title },
       solr_fields: [SolrDocument::FIELD_TITLE,
@@ -48,7 +53,7 @@ class Report
       sort: false, default: false, width: 100
     },
     {
-      field: :source_id_ssim, label: "Source Id",
+      field: :source_id_ssim, label: "Source ID",
       sort: false, default: true, width: 100
     },
     {
@@ -96,6 +101,11 @@ class Report
       sort: true, default: false, width: 100
     },
     {
+      field: SolrDocument::FIELD_CONSTITUENTS.to_sym, label: "Constituents",
+      proc: ->(doc) { doc[SolrDocument::FIELD_CONSTITUENTS]&.size || "Not a virtual object" },
+      sort: true, default: false, width: 100
+    },
+    {
       field: CatalogRecordId.index_field, label: CatalogRecordId.label,
       sort: true, default: false, width: 100
     },
@@ -104,8 +114,21 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :status_ssi, label: "Status",
+      field: SolrDocument::FIELD_CURRENT_VERSION.to_sym, label: "Version",
       sort: false, default: true, width: 100
+    },
+    {
+      field: :processing_status_text_ssi, label: "Status",
+      sort: false, default: true, width: 100
+    },
+    {
+      field: SolrDocument::FIELD_ACCESS_RIGHTS.to_sym, label: "Access Rights",
+      sort: false, default: false, width: 100
+    },
+    {
+      field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: "Embargo Release Date",
+      proc: ->(doc) { doc.embargo_release_date || "Not embargoed" },
+      sort: false, default: false, width: 100
     },
     {
       field: :accessioned_earliest_dttsi, label: "Accession. Datetime",
@@ -118,9 +141,9 @@ class Report
       sort: true, default: true, width: 100
     },
     {
-      field: :workflow_status_ssim, label: "Errors",
-      proc: ->(doc) { doc[:workflow_status_ssim].first.split("|")[2] },
-      sort: true, default: false, width: 100
+      field: SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym, label: "Errors",
+      proc: ->(doc) { doc[SolrDocument::FIELD_WORKFLOW_ERRORS] },
+      sort: false, default: false, width: 100
     },
     {
       field: :file_count, label: "Files",

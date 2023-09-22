@@ -3,6 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Report do
+  # A helper method so this test does not couple to implementation details such
+  # as knowing what order the report fields are in.
+  def report_field_index(field_name)
+    described_class::REPORT_FIELDS.index { |field| field[:field] == field_name }
+  end
+
   let(:user) { instance_double(User, admin?: true) }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
@@ -29,11 +35,11 @@ RSpec.describe Report do
       rows = CSV.parse(csv)
       expect(rows).to be_a(Array)
       expect(rows.length).to be > 1 # at least headers + data
-      expect(rows[0].length).to eq(26) # default headers
+      expect(rows[report_field_index(:druid)].length).to eq(described_class::REPORT_FIELDS.size) # default headers
     end
 
     it "forces double quotes for all fields" do
-      expect(csv[0]).to eq('"')
+      expect(csv[report_field_index(:druid)]).to eq('"')
     end
 
     context "when a field has double quotes" do
@@ -44,8 +50,8 @@ RSpec.describe Report do
       end
 
       it "handles a title with double quotes in it" do
-        row = CSV.parse(csv).find { |row| row[0] == "hj185xx2222" }
-        expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953') # 2 == title field
+        row = CSV.parse(csv).find { |row| row[report_field_index(:druid)] == "hj185xx2222" }
+        expect(row[report_field_index(:title)]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
       end
     end
 
@@ -57,8 +63,8 @@ RSpec.describe Report do
       end
 
       it "handles a multivalued fields" do
-        row = CSV.parse(csv).find { |row| row[0] == "xb482ww9999" }
-        expect(row[12].split(";").length).to eq(2) # 12 == tag field
+        row = CSV.parse(csv).find { |row| row[report_field_index(:druid)] == "xb482ww9999" }
+        expect(row[report_field_index(:tag_ssim)].split(";").length).to eq(2)
       end
     end
   end
@@ -67,7 +73,6 @@ RSpec.describe Report do
     subject(:report_fields) { described_class::REPORT_FIELDS }
 
     it "has report fields" do
-      expect(report_fields.length).to eq(26)
       expect(report_fields).to be_all { |f| f[:field].is_a? Symbol } # all :field keys are symbols
     end
 
@@ -78,7 +83,7 @@ RSpec.describe Report do
         :citation,
         :source_id_ssim,
         SolrDocument::FIELD_APO_TITLE,
-        :status_ssi,
+        :processing_status_text_ssi,
         :published_earliest_dttsi,
         :file_count,
         :shelved_file_count,
@@ -105,7 +110,7 @@ RSpec.describe Report do
         CatalogRecordId.index_field,
         :barcode_id_ssim,
         :accessioned_earliest_dttsi,
-        :workflow_status_ssim
+        SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym
       ].each do |k|
         expect(report_fields).to be_any { |f| f[:field] == k }
       end
