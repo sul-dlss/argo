@@ -59,7 +59,7 @@ class BulkJobsController < ApplicationController
   private
 
   def find(id)
-    search_service.fetch(id).last
+    search_service.fetch(id)
   end
 
   # Given a DRUID, loads any metadata bulk upload information associated with that DRUID into a hash.

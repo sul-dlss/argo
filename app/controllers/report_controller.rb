@@ -73,7 +73,7 @@ class ReportController < CatalogController
 
   # This draws the full page that supports the workflow grid
   def workflow_grid
-    (@response, _deprecated_document_list) = search_service.search_results
+    @response = search_service.search_results
     return unless request.headers['X-Requester'] == 'frontend'
 
     # This is triggered by javascript that refreshes the data every 10s

@@ -2,8 +2,8 @@
 
 class CatalogController < ApplicationController
   include Blacklight::Catalog
-  helper ArgoHelper
   include DateFacetConfigurations
+  include ArgoHelper
 
   before_action :limit_facets_on_home_page, only: [:index]
 
@@ -15,8 +15,12 @@ class CatalogController < ApplicationController
     #  https://github.com/projectblacklight/blacklight/issues/1324 and more recent issues in Aug 2021 with large solr queries being sent over GET
     config.http_method = :post
 
-    # Configure the SearchState to know that "druids_only", is part of the state we care about.
-    config.search_state_fields << :druids_only
+    # Configure the SearchState to know which params are part of the state we care about.
+    config.search_state_fields += %i[druids_only id commit registration apo_id
+                                     size item_id time apo description druids all raw access_location
+                                     controlled_digital_lending download_access view_access workflow_id csv_file
+                                     new_apo_id current_resource_type new_content_type new_resource_type
+                                     viewing_direction collection data tag to what who]
 
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
@@ -26,6 +30,8 @@ class CatalogController < ApplicationController
     # When we test with solr 6 we can have:
     # config.document_solr_path = 'get'
     config.index.document_presenter_class = ArgoIndexPresenter
+    config.index.sidebar_component = Search::SidebarComponent
+
     config.show.document_presenter_class = ArgoShowPresenter
 
     config.index.display_type_field = SolrDocument::FIELD_CONTENT_TYPE
@@ -58,28 +64,19 @@ class CatalogController < ApplicationController
     # to get the hierarchy.
     config.add_facet_field 'exploded_tag_ssim', label: 'Tag', limit: 9999,
                                                 component: LazyTagFacetComponent,
-                                                unless: lambda { |controller, _config, _response|
-                                                          controller.params[:no_tags]
-                                                        }
-    config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
-    config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10, home: false
-    config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10, home: false
-    config.add_facet_field 'rights_descriptions_ssim', label: 'Access Rights', component: true, limit: 1000,
-                                                       sort: 'index', home: false
-    config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10, home: false
-    config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
-                                                                 more_limit: 9999, sort: 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim', label: 'Admin Policy', component: true, limit: 10,
-                                                       more_limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim', label: 'Hydrus Admin Policy', component: true, limit: 10,
-                                                    more_limit: 9999, sort: 'index', home: false
-    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10,
-                                                                home: false
-    config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10,
-                                                         home: false
+                                                unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    config.add_facet_field 'objectType_ssim', label: 'Object Type', limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', limit: 10
+    config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', limit: 10, home: false
+    config.add_facet_field 'content_file_roles_ssim', label: 'File Role', limit: 10, home: false
+    config.add_facet_field 'rights_descriptions_ssim', label: 'Access Rights', limit: 1000, sort: 'index', home: false
+    config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', limit: 10, home: false
+    config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', limit: 10, more_limit: 9999, sort: 'index'
+    config.add_facet_field 'nonhydrus_apo_title_ssim', label: 'Admin Policy', limit: 10, more_limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim', label: 'Hydrus Admin Policy', limit: 10, more_limit: 9999, sort: 'index', home: false
+    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', limit: 10, home: false
+    config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', limit: 10, home: false
     config.add_facet_field 'released_to_earthworks',
-                           component: true,
                            query: {
                              week: {
                                label: 'Last week',
@@ -103,7 +100,6 @@ class CatalogController < ApplicationController
                              }
                            }
     config.add_facet_field 'released_to_searchworks',
-                           component: true,
                            query: {
                              week: {
                                label: 'Last week',
@@ -137,48 +133,40 @@ class CatalogController < ApplicationController
                                           component: Blacklight::Hierarchy::FacetFieldListComponent,
                                           limit: 9999,
                                           home: false
-
-    config.add_facet_field 'metadata_source_ssim', label: 'Metadata Source', home: false,
-                                                   component: true
+    config.add_facet_field 'metadata_source_ssim', label: 'Metadata Source', home: false
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
     config.add_facet_field SolrDocument::FIELD_CONSTITUENTS, label: 'Virtual Objects', home: false,
-                                                             component: true,
                                                              query: {
                                                                has_constituents: { label: 'Virtual Objects', fq: "#{SolrDocument::FIELD_CONSTITUENTS}:*" }
                                                              }
 
     # This will help us find records that need to be fixed before we can move to cocina.
-    config.add_facet_field 'data_quality_ssim', label: 'Data Quality', home: false, component: true
+    config.add_facet_field 'data_quality_ssim', label: 'Data Quality', home: false
 
     config.add_facet_field 'identifiers', label: 'Identifiers',
-                                          component: true,
                                           query: {
-                                            has_orcids: { label: 'Has contributor ORCIDs',
-                                                          fq: '+contributor_orcids_ssim:*' },
+                                            has_orcids: { label: 'Has contributor ORCIDs', fq: '+contributor_orcids_ssim:*' },
                                             has_doi: { label: 'Has DOI', fq: '+doi_ssim:*' },
                                             has_barcode: { label: 'Has barcode', fq: '+barcode_id_ssim:*' }
                                           }
 
     config.add_facet_field 'empties', label: 'Empty Fields', home: false,
-                                      component: true,
                                       query: {
-                                        no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
-                                                                       fq: '-mods_typeOfResource_ssim:*' },
+                                        no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource', fq: '-mods_typeOfResource_ssim:*' },
                                         no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' }
                                       }
 
-    config.add_facet_field 'sw_format_ssim', label: 'SW Resource Type', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10, home: false
-    config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_language_ssim', label: 'SW Language', component: true, limit: 10, home: false
-    config.add_facet_field 'mods_typeOfResource_ssim', label: 'MODS Resource Type', component: true, limit: 10,
-                                                       home: false
+    config.add_facet_field 'sw_format_ssim', label: 'SW Resource Type', limit: 10, home: false
+    config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', limit: 10, home: false
+    config.add_facet_field 'topic_ssim', label: 'SW Topic', limit: 10, home: false
+    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', limit: 10, home: false
+    config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', limit: 10, home: false
+    config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', limit: 10, home: false
+    config.add_facet_field 'sw_language_ssim', label: 'SW Language', limit: 10, home: false
+    config.add_facet_field 'mods_typeOfResource_ssim', label: 'MODS Resource Type', limit: 10, home: false
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field 'is_governed_by_ssim', if: false
     config.add_facet_field 'is_member_of_collection_ssim', if: false
@@ -221,8 +209,8 @@ class CatalogController < ApplicationController
   end
 
   def lazy_tag_facet
-    (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('exploded_tag_ssim')
+    response = search_service.search_results
+    facet_config = helpers.facet_configuration_for_field('exploded_tag_ssim')
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_tag_facet'
@@ -230,7 +218,7 @@ class CatalogController < ApplicationController
 
   def show
     params[:id] = Druid.new(params[:id]).with_namespace
-    _deprecated_response, @document = search_service.fetch(params[:id])
+    @document = search_service.fetch(params[:id])
 
     @cocina = Repository.find_lite(params[:id], structural: false)
     if @cocina.instance_of?(NilModel)
@@ -271,7 +259,7 @@ class CatalogController < ApplicationController
   end
 
   # do not add the druids_only search param to the blacklight search history (used in bulk actions only)
-  def blacklisted_search_session_params
+  def nonpersisted_search_session_params
     super << :druids_only
   end
 

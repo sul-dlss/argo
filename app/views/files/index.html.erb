@@ -1,22 +1,30 @@
-<%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { 'File Availability' } %>
-  <% component.body do %>
-    <% if @file.administrative.shelve %>
-      <% if @file.access.download == 'none' %>
+<%= render Blacklight::System::ModalComponent.new do |component| %>
+  <% component.with_title { 'File Availability' } %>
+  <% component.with_body do %>
+    <div class="modal-body">
+      <% if @file.administrative.shelve %>
+        <% if @file.access.download == 'none' %>
+          <p>
+            Stacks: <%= stacks_url_full_size(params[:item_id], params[:id]) %> <em>(not available for download)</em>
+          </p>
+        <% else %>
+          <p>
+            Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>
+          </p>
+        <% end %>
+      <% end %>
+
+      <% if @file.administrative.sdrPreserve && @has_been_accessioned %>
         <p>
-          Stacks: <%= stacks_url_full_size(params[:item_id], params[:id]) %> <em>(not available for download)</em>
-        </p>
-      <% else %>
-        <p>
-          Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>
+          Preservation:
+          <%= link_to params[:file], preserved_item_file_path(item_id: params[:item_id], id: params[:id], version: @last_accessioned_version) %>
         </p>
       <% end %>
-    <% end %>
-    <% if @file.administrative.sdrPreserve && @has_been_accessioned %>
-      <p>
-        Preservation:
-        <%= link_to params[:file], preserved_item_file_path(item_id: params[:item_id], id: params[:id], version: @last_accessioned_version) %>
-      </p>
-    <% end %>
+    </div>
+  <% end %>
+  <% component.with_footer do %>
+    <button type="button" class="btn btn-secondary close blacklight-modal-close" data-bl-dismiss="modal" aria-label="Cancel File Availability Modal">
+      Cancel
+    </button>
   <% end %>
 <% end %>
