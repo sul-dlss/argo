@@ -1,7 +1,7 @@
 <table class="table table-hover my-3">
   <tr>
     <th>When</th><th>Who</th><th>File Name</th><th>Note</th>
-    <th>Status <%= link_to status_help_apo_bulk_jobs_path, aria: {label: "Status information"},
+    <th>Status <%= link_to status_help_apo_bulk_jobs_path(@document.id), aria: {label: "Status information"},
                      data: {blacklight_modal: "trigger", ajax_modal_title: "Status Information"} do %>
       <span class="icon-question-sign" aria-hidden="true"></span>
     <% end %></th>
@@ -21,7 +21,7 @@
       <td><%= job["argo.bulk_metadata.bulk_log_record_count"] %></td>
       <td><%= job["argo.bulk_metadata.bulk_log_druids_loaded"] %></td>
 
-      <% if(job.key?('dir')) %>
+      <% if job.key?('dir') %>
         <% druid_and_time = job["dir"].split(%r{/}) %>
         <td><%= link_to("Log", show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: {blacklight_modal: "trigger", ajax_modal_title: "MODS Bulk Load Log"}) %></td>
         <td><%= link_to("XML", show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)) %></td>
@@ -43,17 +43,18 @@
   <% end %>
 </table>
 
-<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<dialog class="modal" id="confirm-delete-modal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <%= render BlacklightModalComponent.new do |component| %>
-        <% component.header { "Confirm Delete" } %>
-        <% component.body do %>
-          Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
+      <%= render Blacklight::System::ModalComponent.new do |component| %>
+        <% component.with_title { "Confirm Delete" } %>
+        <% component.with_body do %>
+          <div class="modal-body">
+            Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
+          </div>
         <% end %>
-        <% component.footer do %>
-        <% end %>
+        <% component.with_footer {} %>
       <% end %>
     </div>
   </div>
-</div>
+</dialog>

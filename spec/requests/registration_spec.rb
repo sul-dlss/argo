@@ -119,7 +119,7 @@ RSpec.describe "Registration" do
       end
       let(:solr_doc) do
         {
-          "sw_display_title_tesim" => [
+          sw_display_title_tesim: [
             "Annual report of the State Corporation Commission showing the condition " \
             "of the incorporated state banks and other institutions operating in " \
             "Virginia at the close of business"

@@ -307,7 +307,7 @@ RSpec.describe ApoForm do
         instance_double(SolrDocument, label:)
       end
     end
-    let(:search_service_result) { [nil, default_collection_objects] }
+    let(:search_service_result) { default_collection_objects }
     let(:search_service) { instance_double(Blacklight::SearchService) }
 
     before do

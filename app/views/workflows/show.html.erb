@@ -1,10 +1,12 @@
-<%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { "Workflow view" } %>
-  <% component.body do %>
-    <% if params[:raw] %>
-      <%= @presenter.pretty_xml %>
-    <% else %>
-      <%= render "show" %>
-    <% end %>
+<%= render Blacklight::System::ModalComponent.new do |component| %>
+  <% component.with_title { "Workflow view" } %>
+  <% component.with_body do %>
+    <div class="modal-body">
+      <% if params[:raw] %>
+        <%= @presenter.pretty_xml %>
+      <% else %>
+        <%= render "show" %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>

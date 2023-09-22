@@ -42,7 +42,7 @@ gem "view_component", "~>  2.74.1" # TODO: ?? Unpin when bug in 2.75.0 is fixed 
 gem "zip_tricks"
 
 # Stanford related gems
-gem "blacklight", "~> 7.25"
+gem "blacklight", "~> 8.0"
 gem "blacklight-hierarchy", "~> 6.1"
 gem "dor-services-client", "~> 12.18"
 gem "dor-workflow-client", "~> 6.0"

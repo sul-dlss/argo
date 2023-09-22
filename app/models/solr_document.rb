@@ -27,73 +27,67 @@ class SolrDocument
   FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
   FIELD_RELEASED_TO = :released_to_ssim
 
-  FIELD_TITLE = "sw_display_title_tesim"
-  FIELD_AUTHOR = "sw_author_tesim"
-  FIELD_LABEL = "obj_label_tesim"
-  FIELD_PLACE = "originInfo_place_placeTerm_tesim"
-  FIELD_PUBLISHER = "originInfo_publisher_tesim"
-  FIELD_MODS_CREATED_DATE = "originInfo_date_created_tesim"
-  FIELD_CURRENT_VERSION = "current_version_isi"
-  FIELD_STATUS = "status_ssi"
-  FIELD_ACCESS_RIGHTS = "rights_descriptions_ssim"
-  FIELD_DEFAULT_ACCESS_RIGHTS = "default_rights_descriptions_ssim"
-  FIELD_COPYRIGHT = "copyright_ssim"
-  FIELD_USE_STATEMENT = "use_statement_ssim"
-  FIELD_LICENSE = "use_license_machine_ssi"
-  FIELD_PROJECT_TAG = "project_tag_ssim"
-  FIELD_TAGS = "tag_ssim"
-  FIELD_SOURCE_ID = "source_id_ssim"
-  FIELD_BARCODE_ID = "barcode_id_ssim"
-  FIELD_WORKFLOW_ERRORS = "wf_error_ssim"
-  FIELD_CONSTITUENTS = "has_constituents_ssim"
+  FIELD_TITLE = :sw_display_title_tesim
+  FIELD_AUTHOR = :sw_author_tesim
+  FIELD_LABEL = :obj_label_tesim
+  FIELD_PLACE = :originInfo_place_placeTerm_tesim
+  FIELD_PUBLISHER = :originInfo_publisher_tesim
+  FIELD_MODS_CREATED_DATE = :originInfo_date_created_tesim
+  FIELD_CURRENT_VERSION = :current_version_isi
+  FIELD_STATUS = :status_ssi
+  FIELD_ACCESS_RIGHTS = :rights_descriptions_ssim
+  FIELD_DEFAULT_ACCESS_RIGHTS = :default_rights_descriptions_ssim
+  FIELD_COPYRIGHT = :copyright_ssim
+  FIELD_USE_STATEMENT = :use_statement_ssim
+  FIELD_LICENSE = :use_license_machine_ssi
+  FIELD_PROJECT_TAG = :project_tag_ssim
+  FIELD_TAGS = :tag_ssim
+  FIELD_SOURCE_ID = :source_id_ssim
+  FIELD_BARCODE_ID = :barcode_id_ssim
+  FIELD_WORKFLOW_ERRORS = :wf_error_ssim
+  FIELD_CONSTITUENTS = :has_constituents_ssim
 
-  attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
-  attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
-  attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
-  attribute :folio_instance_hrid, Blacklight::Types::String, FIELD_FOLIO_INSTANCE_HRID
-  attribute :doi, Blacklight::Types::String, FIELD_DOI
-  attribute :orcids, Blacklight::Types::Array, FIELD_ORCIDS
-  attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
-  attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
-  attribute :embargo_release_date, Blacklight::Types::Date, FIELD_EMBARGO_RELEASE_DATE
-  attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
+  attribute :object_type, :string, field: FIELD_OBJECT_TYPE
+  attribute :content_type, :string, field: FIELD_CONTENT_TYPE
+  attribute :catkey, :string, field: FIELD_CATKEY_ID
+  attribute :folio_instance_hrid, :string, field: FIELD_FOLIO_INSTANCE_HRID
+  attribute :doi, :string, field: FIELD_DOI
+  attribute :orcids, :array, field: FIELD_ORCIDS
+  attribute :current_version, :string, field: FIELD_CURRENT_VERSION
+  attribute :embargo_status, :string, field: FIELD_EMBARGO_STATUS
+  attribute :embargo_release_date, :date, field: FIELD_EMBARGO_RELEASE_DATE
+  attribute :first_shelved_image, :string, field: :first_shelved_image_ss
 
-  attribute :registered_date, Blacklight::Types::Date, FIELD_REGISTERED_DATE
-  attribute :accessioned_date, Blacklight::Types::Array, FIELD_LAST_ACCESSIONED_DATE
-  attribute :published_date, Blacklight::Types::Array, FIELD_LAST_PUBLISHED_DATE
-  attribute :submitted_date, Blacklight::Types::Array, FIELD_LAST_SUBMITTED_DATE
-  attribute :deposited_date, Blacklight::Types::Array, FIELD_LAST_DEPOSITED_DATE
-  attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
-  attribute :created_date, Blacklight::Types::Date, FIELD_CREATED_DATE
-  attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
-  attribute :preservation_size, Blacklight::Types::String, FIELD_PRESERVATION_SIZE
-  attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
+  attribute :registered_date, :date, field: FIELD_REGISTERED_DATE
+  attribute :accessioned_date, :array, field: FIELD_LAST_ACCESSIONED_DATE
+  attribute :published_date, :array, field: FIELD_LAST_PUBLISHED_DATE
+  attribute :submitted_date, :array, field: FIELD_LAST_SUBMITTED_DATE
+  attribute :deposited_date, :array, field: FIELD_LAST_DEPOSITED_DATE
+  attribute :modified_date, :array, field: FIELD_LAST_MODIFIED_DATE
+  attribute :created_date, :date, field: FIELD_CREATED_DATE
+  attribute :opened_date, :array, field: FIELD_LAST_OPENED_DATE
+  attribute :preservation_size, :value, field: FIELD_PRESERVATION_SIZE
+  attribute :released_to, :array, field: FIELD_RELEASED_TO
 
-  attribute :label, Blacklight::Types::String, FIELD_LABEL
-  attribute :sw_title, Blacklight::Types::Array, FIELD_TITLE
-  attribute :author, Blacklight::Types::String, FIELD_AUTHOR
-  attribute :place, Blacklight::Types::String, FIELD_PLACE
-  attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
-  attribute :mods_created_date, Blacklight::Types::String, FIELD_MODS_CREATED_DATE
-  attribute :status, Blacklight::Types::String, FIELD_STATUS
-  attribute :access_rights, Blacklight::Types::Array, FIELD_ACCESS_RIGHTS
-  attribute :default_access_rights, Blacklight::Types::String, FIELD_DEFAULT_ACCESS_RIGHTS
-  attribute :copyright, Blacklight::Types::String, FIELD_COPYRIGHT
-  attribute :use_statement, Blacklight::Types::String, FIELD_USE_STATEMENT
-  attribute :license, Blacklight::Types::String, FIELD_LICENSE
-  attribute :project_tag, Blacklight::Types::String, FIELD_PROJECT_TAG
-  attribute :source_id, Blacklight::Types::String, FIELD_SOURCE_ID
-  attribute :barcode, Blacklight::Types::String, FIELD_BARCODE_ID
-  attribute :tags, Blacklight::Types::Array, FIELD_TAGS
-  attribute :constituents, Blacklight::Types::Array, FIELD_CONSTITUENTS
+  attribute :label, :string, field: FIELD_LABEL
+  attribute :sw_title, :array, field: FIELD_TITLE
+  attribute :author, :string, field: FIELD_AUTHOR
+  attribute :place, :string, field: FIELD_PLACE
+  attribute :publisher, :string, field: FIELD_PUBLISHER
+  attribute :mods_created_date, :string, field: FIELD_MODS_CREATED_DATE
+  attribute :status, :string, field: FIELD_STATUS
+  attribute :access_rights, :array, field: FIELD_ACCESS_RIGHTS
+  attribute :default_access_rights, :string, field: FIELD_DEFAULT_ACCESS_RIGHTS
+  attribute :copyright, :string, field: FIELD_COPYRIGHT
+  attribute :use_statement, :string, field: FIELD_USE_STATEMENT
+  attribute :license, :string, field: FIELD_LICENSE
+  attribute :project_tag, :string, field: FIELD_PROJECT_TAG
+  attribute :source_id, :string, field: FIELD_SOURCE_ID
+  attribute :barcode, :string, field: FIELD_BARCODE_ID
+  attribute :tags, :array, field: FIELD_TAGS
+  attribute :constituents, :array, field: FIELD_CONSTITUENTS
 
   # self.unique_key = 'id'
-
-  # Email uses the semantic field mappings below to generate the body of an email.
-  SolrDocument.use_extension(Blacklight::Document::Email)
-
-  # SMS uses the semantic field mappings below to generate the body of an SMS email.
-  SolrDocument.use_extension(Blacklight::Document::Sms)
 
   # DublinCore uses the semantic field mappings below to assemble an OAI-compliant Dublin Core document
   # Semantic mappings of solr stored fields. Fields may be multi or

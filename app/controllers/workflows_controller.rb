@@ -8,7 +8,7 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       format.html do
         @presenter = build_show_presenter(workflow)
-        render "show", layout: !request.xhr?
+        render "show", layout: false # !request.xhr?
       end
       format.xml { render xml: }
     end

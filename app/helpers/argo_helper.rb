@@ -2,8 +2,19 @@
 
 # Overrides for Blacklight helpers
 module ArgoHelper
+  include Blacklight::DocumentHelperBehavior
   include BlacklightHelper
   include ValueHelper
+
+  def document_presenter(document)
+    super.tap do |presenter|
+      presenter.view_token = @verified_token_with_expiration if presenter.respond_to? :view_token
+      if presenter.respond_to? :cocina
+        presenter.cocina = @cocina
+        presenter.state_service = StateService.new(@cocina)
+      end
+    end
+  end
 
   # This overrides a blacklight helper so that the page is full-width
   def container_classes

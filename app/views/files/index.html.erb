@@ -1,17 +1,19 @@
-<%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { "File Availability" } %>
-  <% component.body do %>
-    <% if @file.administrative.shelve %>
-      <p>
-        Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>
-      </p>
-    <% end %>
+<%= render Blacklight::System::ModalComponent.new do |component| %>
+  <% component.with_title { "File Availability" } %>
+  <% component.with_body do %>
+    <div class="modal-body">
+      <% if @file.administrative.shelve %>
+        <p>
+          Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>
+        </p>
+      <% end %>
 
-    <% if @file.administrative.sdrPreserve && @has_been_accessioned %>
-      <p>
-        Preservation:
-        <%= link_to params[:file], preserved_item_file_path(item_id: params[:item_id], id: params[:id], version: @last_accessioned_version) %>
-      </p>
-    <% end %>
+      <% if @file.administrative.sdrPreserve && @has_been_accessioned %>
+        <p>
+          Preservation:
+          <%= link_to params[:file], preserved_item_file_path(item_id: params[:item_id], id: params[:id], version: @last_accessioned_version) %>
+        </p>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
