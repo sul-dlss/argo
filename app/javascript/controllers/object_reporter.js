@@ -1,7 +1,7 @@
 import bootstrap from 'bootstrap/dist/js/bootstrap'
 import qs from 'qs'
 import { Controller } from '@hotwired/stimulus'
-import { TabulatorFull as Tabulator } from 'tabulator-tables'
+import { TabulatorFull as Tabulator, FormatModule } from 'tabulator-tables'
 
 export default class extends Controller {
   static targets = ['columnSelector']
@@ -14,6 +14,8 @@ export default class extends Controller {
   }
 
   connect () {
+    this.registerCustomFormatters()
+
     this.table = new Tabulator('#objectsTable', {
       layout: 'fitDataTable',
       height: '70vh',
@@ -24,6 +26,20 @@ export default class extends Controller {
       ajaxURL: this.dataUrlValue,
       ajaxParams: this.dataUrlParamsValue
     })
+  }
+
+  // Tabulator requires custom formatters to be handled via functions for
+  // individual columns, but we dynamically generate column data as JSON on the
+  // server (via `this.columnModelValue`), and JSON does not have a data type
+  // for functions. To get around this, we extend the list of formatters (which
+  // are referenced in REPORT_FIELDS in the Report model) with our custom
+  // formatters.
+  registerCustomFormatters () {
+    FormatModule.formatters = {
+      ...FormatModule.formatters,
+      linkToPurl: (cell) => `<a target="_blank" href="${cell.getValue()}">${cell.getValue()}</a>`,
+      linkToArgo: (cell) => `<a target="_blank" href="/view/druid:${cell.getValue()}">${cell.getValue()}</a>`
+    }
   }
 
   downloadCSV (event) {

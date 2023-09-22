@@ -12,6 +12,8 @@ class Report
 
   class << self
     include ValueHelper
+    include Rails.application.routes.url_helpers
+    include ActionView::Helpers::UrlHelper
   end
 
   COLUMN_SELECTOR_COLUMN_SIZE = 3 # Helps display report columns in neatly lined up columns.
@@ -21,13 +23,13 @@ class Report
     {
       field: :druid, label: "Druid",
       proc: ->(doc) { doc.druid },
-      sort: true, default: true, width: 100
+      sort: true, default: true, width: 100, formatter: "linkToArgo"
     },
     {
       field: :purl, label: "Purl",
-      proc: ->(doc) { File.join(Settings.purl_url, doc.druid) },
+      proc: ->(doc) { "#{Settings.purl_url}/#{doc.druid}" },
       solr_fields: %w[id],
-      sort: false, default: false, width: 100
+      sort: false, default: false, width: 100, formatter: "linkToPurl"
     },
     {
       field: :title, label: "Title",
@@ -160,6 +162,7 @@ class Report
       "title" => spec[:label],
       "visible" => spec[:default],
       "minWidth" => spec[:width],
+      "formatter" => spec[:formatter],
       # Disable sorting due to behavior that will confuse users, namely the
       # likelihood of a user attempting to sort a column before the full report
       # data set has loaded, namely that we are loading data sets progressively
