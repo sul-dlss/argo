@@ -12,9 +12,5 @@ class ContentsComponent < ApplicationComponent
     @cocina.respond_to?(:structural)
   end
 
-  def number_of_file_sets
-    @cocina.structural.contains.size
-  end
-
   delegate :allows_modification?, to: :@state_service
 end

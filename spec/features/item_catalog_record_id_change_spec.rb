@@ -35,6 +35,7 @@ RSpec.describe "Item catalog_record_id change" do
     let(:object_client) do
       instance_double(Dor::Services::Client::Object,
         find: cocina_model,
+        find_lite: cocina_model, # Note: This should really be a DROLite
         events: events_client,
         update: true,
         version: version_client)

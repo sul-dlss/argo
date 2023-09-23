@@ -72,7 +72,7 @@ RSpec.describe "Item view", :js do
         end
 
         before do
-          allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ""))
+          allow(object_client).to receive(:find_lite).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ""))
         end
 
         it "shows the page" do
@@ -84,13 +84,15 @@ RSpec.describe "Item view", :js do
       context "when the cocina_model exists" do
         let(:object_client) do
           instance_double(Dor::Services::Client::Object,
-            find: cocina_model,
+            find_lite: cocina_object_lite,
+            find: cocina_object,
             version: version_client,
             events: events_client)
         end
-        let(:cocina_model) do
-          model = Cocina::Models::DRO.new(props)
-          Cocina::Models.with_metadata(model, "abc123")
+        let(:cocina_object_lite) { Cocina::Models::DROLite.new(props) }
+        let(:cocina_object) do
+          cocina_object = Cocina::Models::DRO.new(props)
+          Cocina::Models.with_metadata(cocina_object, "abc123")
         end
 
         let(:props) do
