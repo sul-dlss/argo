@@ -1,6 +1,5 @@
 // Entry point for the build script in your package.json
 
-import 'jquery' // Blacklight 7 needs jQuery. Remove when we upgrade to Blacklight 8?
 import bootstrap from 'bootstrap/dist/js/bootstrap'
 import Blacklight from 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 
