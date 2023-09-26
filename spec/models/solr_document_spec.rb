@@ -250,26 +250,6 @@ RSpec.describe SolrDocument do
     end
   end
 
-  describe "#submitted_date" do
-    let(:document_attributes) do
-      {SolrDocument::FIELD_LAST_SUBMITTED_DATE => single_date}
-    end
-
-    it "returns date" do
-      expect(document.submitted_date).to match_array(single_date)
-    end
-  end
-
-  describe "#deposited_date" do
-    let(:document_attributes) do
-      {SolrDocument::FIELD_LAST_DEPOSITED_DATE => single_date}
-    end
-
-    it "returns date" do
-      expect(document.deposited_date).to match_array(single_date)
-    end
-  end
-
   describe "#modified_date" do
     let(:document_attributes) do
       {SolrDocument::FIELD_LAST_MODIFIED_DATE => single_date}

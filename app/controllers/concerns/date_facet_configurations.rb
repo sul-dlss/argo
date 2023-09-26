@@ -46,23 +46,6 @@ module DateFacetConfigurations
         }, raw_facet_field: SolrDocument::FIELD_LAST_PUBLISHED_DATE
       config.add_facet_field SolrDocument::FIELD_LAST_PUBLISHED_DATE, label: "Last Published", if: false, home: false
 
-      config.add_facet_field "submitted_latest_date", home: false, label: "Last Submitted",
-        component: DateChoiceFacetComponent,
-        query: {
-          days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_LAST_SUBMITTED_DATE}:[NOW/DAY-7DAYS TO *]"},
-          days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_LAST_SUBMITTED_DATE}:[NOW/DAY-30DAYS TO *]"}
-        }, raw_facet_field: SolrDocument::FIELD_LAST_SUBMITTED_DATE
-      config.add_facet_field SolrDocument::FIELD_LAST_SUBMITTED_DATE, label: "Last Submitted", if: false, home: false
-
-      config.add_facet_field "deposited_date", home: false, label: "Last Ingested",
-        component: DateChoiceFacetComponent,
-        query: {
-          days_1: {label: "today", fq: "#{SolrDocument::FIELD_LAST_DEPOSITED_DATE}:[NOW/DAY TO *]"},
-          days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_LAST_DEPOSITED_DATE}:[NOW/DAY-7DAYS TO *]"},
-          days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_LAST_DEPOSITED_DATE}:[NOW/DAY-30DAYS TO *]"}
-        }, raw_facet_field: SolrDocument::FIELD_LAST_DEPOSITED_DATE
-      config.add_facet_field SolrDocument::FIELD_LAST_DEPOSITED_DATE, label: "Last Ingested", if: false, home: false
-
       config.add_facet_field "object_modified_date", home: false, label: "Last Modified",
         component: DateChoiceFacetComponent,
         query: {
