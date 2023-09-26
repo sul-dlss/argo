@@ -33,14 +33,14 @@ RSpec.describe AdminPolicyOptions do
       context "when rows are returned" do
         let(:result_rows) do
           [
-            {"id" => 1, "tag_ssim" => "prefix : suffix", "sw_display_title_tesim" => "z"},
-            {"id" => 2, "tag_ssim" => "AdminPolicy : default", "sw_display_title_tesim" => "y"},
-            {"id" => 3, "tag_ssim" => "prefix : suffix2", "sw_display_title_tesim" => "x"}
+            {"id" => 1, "tag_ssim" => "prefix : suffix", "sw_display_title_tesim" => ["z"]},
+            {"id" => 2, "tag_ssim" => "AdminPolicy : default", "sw_display_title_tesim" => ["[y]"]},
+            {"id" => 3, "tag_ssim" => "prefix : suffix2", "sw_display_title_tesim" => ["x"]}
           ]
         end
 
         it "sorts the results and formats them correctly" do
-          expect(result).to eq [%w[y 2], %w[x 3], %w[z 1]]
+          expect(result).to eq [%w[x 3], %w[[y] 2], %w[z 1]]
         end
       end
     end
