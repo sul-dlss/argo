@@ -1,8 +1,3 @@
-// Here we override blacklight to wrap the $logo-image in a url()
-.navbar-logo {  // The main logo image for the Blacklight instance
-  background: transparent url("logo.png") no-repeat top left;
-}
-
 .topbar.bg-dark {
   @extend .bg-primary; // make the topbar red
 }

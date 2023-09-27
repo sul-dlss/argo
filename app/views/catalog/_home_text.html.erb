@@ -1,12 +1,10 @@
-<div id="getting-started">
-  <h1 class="h3">Welcome to Argo!</h1>
-  <% if @presenter.view_something? %>
-    <p>
-      Enter one or more search terms or select a facet on the left to begin.
-    </p>
-  <% else %>
-    <p>
-      You do not appear to have permission to view any items in Argo. Please contact an administrator.
-    </p>
-  <% end %>
-</div>
+<h1 class="h3">Welcome to Argo!</h1>
+<% if @presenter.view_something? %>
+  <p>
+    Enter one or more search terms or select a facet on the left to begin.
+  </p>
+<% else %>
+  <p>
+    You do not appear to have permission to view any items in Argo. Please contact an administrator.
+  </p>
+<% end %>
