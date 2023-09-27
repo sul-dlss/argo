@@ -58,21 +58,17 @@ class RegistrationsController < ApplicationController
 
   # Allow the front end to check if a catalog record ID exists
   def catalog_record_id
-    begin
-      if Settings.enabled_features.folio
-        Dor::Services::Client.marcxml.marcxml(folio_instance_hrid: params[:catalog_record_id])
-      else
-        Dor::Services::Client.marcxml.marcxml(catkey: params[:catalog_record_id])
-      end
-      resp = true
+    resp = begin
+      Dor::Services::Client.marcxml.marcxml(folio_instance_hrid: params[:catalog_record_id])
+      true
     rescue Dor::Services::Client::NotFoundResponse
-      resp = false
+      false
     rescue Dor::Services::Client::UnexpectedResponse => e
       # In production, this will prevent registration attempt when ILS (Folio) is not available.
       # In other environments, where Folio is never available, it will allow registration.
       return render plain: e.message, status: :bad_gateway if Rails.env.production?
 
-      resp = true
+      true
     end
     render json: resp.to_json, layout: false
   end

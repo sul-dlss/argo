@@ -7,30 +7,13 @@ RSpec.describe RefreshModsJob do
   let(:groups) { [] }
   let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
-
-  let(:catalog_record_ids) do
-    if Settings.enabled_features.folio
-      ["a123"]
-    else
-      ["123"]
-    end
-  end
-
+  let(:catalog_record_ids) { ["a123"] }
   let(:cocina1) do
-    if Settings.enabled_features.folio
-      build(:dro_with_metadata, id: druids[0], folio_instance_hrids: catalog_record_ids)
-    else
-      build(:dro_with_metadata, id: druids[0], catkeys: catalog_record_ids)
-    end
+    build(:dro_with_metadata, id: druids[0], folio_instance_hrids: catalog_record_ids)
   end
   let(:cocina2) do
-    if Settings.enabled_features.folio
-      build(:dro_with_metadata, id: druids[1], folio_instance_hrids: catalog_record_ids)
-    else
-      build(:dro_with_metadata, id: druids[1], catkeys: catalog_record_ids)
-    end
+    build(:dro_with_metadata, id: druids[1], folio_instance_hrids: catalog_record_ids)
   end
-
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, refresh_descriptive_metadata_from_ils: true) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, refresh_descriptive_metadata_from_ils: true) }
   let(:logger) { double("logger", puts: nil) }

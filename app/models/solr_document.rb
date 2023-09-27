@@ -146,9 +146,7 @@ class SolrDocument
   end
 
   def catalog_record_id
-    return folio_instance_hrid if Settings.enabled_features.folio
-
-    catkey
+    folio_instance_hrid
   end
 
   ##

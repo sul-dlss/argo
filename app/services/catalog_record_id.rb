@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class CatalogRecordId
-  # NOTE: This block is a junk drawer of simple class methods meant to help
-  #       switch between Symphony and Folio catalog implementations, and can be
-  #       dumped or in-lined once we're done with Symphony for good.
+  # NOTE: This block is a container of simple class methods meant to impose an
+  #       abstraction layer atop our specific library catalog implementation.
   class << self
     def other_links(model)
       new(model).other_links.map(&:catalogRecordId)
@@ -14,51 +13,35 @@ class CatalogRecordId
     end
 
     def label
-      return "Folio Instance HRID" if Settings.enabled_features.folio
-
-      "Catkey"
+      "Folio Instance HRID"
     end
 
     def manage_label
-      return "Manage Folio Instance HRID" if Settings.enabled_features.folio
-
-      "Manage catkey"
+      "Manage #{label}"
     end
 
     def index_field
-      return SolrDocument::FIELD_FOLIO_INSTANCE_HRID if Settings.enabled_features.folio
-
-      SolrDocument::FIELD_CATKEY_ID
+      SolrDocument::FIELD_FOLIO_INSTANCE_HRID
     end
 
     def pattern_string
-      return "\\A(L|a|in)[0-9]+\\z" if Settings.enabled_features.folio
-
-      "\\A[0-9]+\\z"
+      "\\A(L|a|in)[0-9]+\\z"
     end
 
     def html_pattern_string
-      return "^(L|a|in)[0-9]+$" if Settings.enabled_features.folio
-
-      "^[0-9]+$"
+      "^(L|a|in)[0-9]+$"
     end
 
     def indexing_prefix
-      return "folio" if Settings.enabled_features.folio
-
-      "catkey"
+      "folio"
     end
 
     def type
-      return "folio" if Settings.enabled_features.folio
-
-      "symphony"
+      "folio"
     end
 
     def previous_type
-      return "previous folio" if Settings.enabled_features.folio
-
-      "previous symphony"
+      "previous #{type}"
     end
   end
 

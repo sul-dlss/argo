@@ -7,11 +7,7 @@ RSpec.describe "Refresh metadata" do
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }
   let(:cocina_model) do
-    if Settings.enabled_features.folio
-      build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a12345"])
-    else
-      build(:dro_with_metadata, id: druid, catkeys: ["12345"])
-    end
+    build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a12345"])
   end
 
   before do
@@ -41,7 +37,7 @@ RSpec.describe "Refresh metadata" do
         expect(object_service).to have_received(:refresh_metadata)
 
         expect(response).to redirect_to solr_document_path(druid)
-        expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from #{CatalogRecordId.label}: #{"a" if Settings.enabled_features.folio}12345"
+        expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from #{CatalogRecordId.label}: a12345"
       end
     end
 
