@@ -149,7 +149,7 @@ RSpec.describe "Set catalog record ID" do
             {
               identification: {
                 catalogLinks: [{catalog: "folio", catalogRecordId: "a12345", refresh: true},
-                               {catalog: "folio", catalogRecordId: "a45678", refresh: false}],
+                  {catalog: "folio", catalogRecordId: "a45678", refresh: false}],
                 sourceId: "sul:1234"
               }
             }
@@ -182,7 +182,7 @@ RSpec.describe "Set catalog record ID" do
             {
               identification: {
                 catalogLinks: [{catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
-                               {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
+                  {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
                 sourceId: "sul:1234"
               }
             }
@@ -194,7 +194,7 @@ RSpec.describe "Set catalog record ID" do
             {
               identification: {
                 catalogLinks: [{catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
-                               {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
+                  {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
                 sourceId: "sul:1234"
               }
             }
@@ -209,7 +209,7 @@ RSpec.describe "Set catalog record ID" do
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
 
-        it "deletes the catalog_record_id, moving it to previous symphony, and then adds a new one" do
+        it "deletes the catalog_record_id, moving it to previous, and then adds a new one" do
           patch item_catalog_record_id_path(druid), params: delete_catalog_record_id_params
 
           expect(object_client).to have_received(:update)
@@ -231,7 +231,7 @@ RSpec.describe "Set catalog record ID" do
             {
               identification: {
                 catalogLinks: [{catalog: "folio", catalogRecordId: "a45678", refresh: true},
-                               {catalog: "folio", catalogRecordId: "a99999", refresh: false}],
+                  {catalog: "folio", catalogRecordId: "a99999", refresh: false}],
                 sourceId: "sul:1234"
               }
             }
@@ -259,8 +259,8 @@ RSpec.describe "Set catalog record ID" do
             {
               identification: {
                 catalogLinks: [{catalog: "previous folio", catalogRecordId: "a55555", refresh: false},
-                               {catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
-                               {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
+                  {catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
+                  {catalog: "folio", catalogRecordId: "a12345", refresh: true}],
                 sourceId: "sul:1234"
               }
             }
@@ -271,8 +271,8 @@ RSpec.describe "Set catalog record ID" do
             {
               identification: {
                 catalogLinks: [{catalog: "previous folio", catalogRecordId: "a55555", refresh: false},
-                               {catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
-                               {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
+                  {catalog: "previous folio", catalogRecordId: "a99999", refresh: false},
+                  {catalog: "folio", catalogRecordId: "a45678", refresh: true}],
                 sourceId: "sul:1234"
               }
             }
@@ -283,7 +283,7 @@ RSpec.describe "Set catalog record ID" do
           cocina_model.identification.catalogLinks << Cocina::Models::CatalogLink[catalog: "previous folio", refresh: false, catalogRecordId: "a55555"]
         end
 
-        it "updates the single catalog_record_id, preserving previous symphony catalog_record_id" do
+        it "updates the single catalog_record_id, preserving previous catalog_record_id" do
           patch item_catalog_record_id_path(druid), params: catalog_record_id_params
 
           expect(object_client).to have_received(:update)
@@ -291,7 +291,7 @@ RSpec.describe "Set catalog record ID" do
           expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
 
-        it "deletes a single catalog_record_id, adding it to the existing previous symphony catalog_record_id list, and then adds a new one" do
+        it "deletes a single catalog_record_id, adding it to the existing previous catalog_record_id list, and then adds a new one" do
           patch item_catalog_record_id_path(druid), params: delete_catalog_record_id_params
 
           expect(object_client).to have_received(:update)

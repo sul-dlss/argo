@@ -67,7 +67,7 @@ class CatalogRecordIdForm < Reform::Form
   end
 
   def single_catalog_record_id_refresh
-    # at most one catalog record ID per catalog (Symphony/Folio) can be set to refresh == true
+    # at most one catalog record ID per catalog (e.g., Folio) can be set to refresh == true
     errors.add(:refresh, "is only allowed for a single catalog record ID.") if catalog_record_ids.count { |id| id.refresh && id._destroy != "1" } > 1
   end
 

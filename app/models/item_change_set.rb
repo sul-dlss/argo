@@ -4,7 +4,7 @@
 class ItemChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
   property :catalog_record_ids, virtual: true
-  # NOTE: Only needed while using Symphony and Folio, as a way to quietly keep
+  # NOTE: Only needed while retaining Symphony IDs, as a way to quietly keep
   #       the non-active catalog's values in Cocina w/o wiping them out.
   property :other_catalog_record_ids, virtual: true
   property :refresh, virtual: true
