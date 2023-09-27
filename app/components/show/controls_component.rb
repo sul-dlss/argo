@@ -49,8 +49,6 @@ module Show
     end
 
     def refresh_button_label
-      return "Refresh (disabled during ILS cutover)" if Settings.ils_cutover_in_progress
-
       "Refresh"
     end
 

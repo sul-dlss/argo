@@ -102,5 +102,3 @@ redis_url: 'redis://localhost:6379/'
 
 enabled_features:
   folio: true
-
-ils_cutover_in_progress: false

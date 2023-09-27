@@ -43,11 +43,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     validates_each :catalog_record_id do |record, attr, value|
       next if value.blank?
 
-      if Settings.ils_cutover_in_progress
-        record.errors.add(attr, "must be blank")
-      elsif !value.match?(Regexp.new(CatalogRecordId.pattern_string))
-        record.errors.add(attr, "is invalid")
-      end
+      record.errors.add(attr, "is invalid") if !value.match?(Regexp.new(CatalogRecordId.pattern_string))
     end
   end
 

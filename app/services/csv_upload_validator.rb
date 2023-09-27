@@ -15,10 +15,7 @@ class CsvUploadValidator
 
   # @return [Array<String>] array of error messages
   def errors
-    @errors ||= [].tap do |errors|
-      errors.concat(header_errors)
-      errors.concat(data_errors)
-    end
+    @errors ||= header_errors
   end
 
   private
@@ -30,18 +27,6 @@ class CsvUploadValidator
     csv_table = CSV.parse(header_line, headers: true)
     missing_headers = headers.select { |header| csv_table.headers.exclude?(header) }
     return ["missing headers: #{missing_headers.join(", ")}."] if missing_headers.present?
-
-    []
-  end
-
-  # NOTE: this method can be removed when we remove the ils_cutover_in_progress flag
-  def data_errors
-    return [] unless Settings.ils_cutover_in_progress
-
-    CSV.parse(csv, headers: true).each do |row|
-      # Short-circuit the iteration as soon as a problematic row is encountered
-      return ["rows may not contain catalog record IDs during the ILS cutover"] if row[catalog_record_id_column].present?
-    end
 
     []
   end
