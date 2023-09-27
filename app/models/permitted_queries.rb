@@ -5,7 +5,7 @@
 class PermittedQueries
   attr_reader :groups, :known_roles
 
-  PERMITTED_COLLECTIONS_LIMIT = 5000
+  PERMITTED_QUERIES_LIMIT = 5000
   INACTIVE_TAG = "collection status : inactive"
 
   ##
@@ -32,15 +32,16 @@ class PermittedQueries
         "apo_role_#{role}_ssim:(#{query})"
       end
     end
+    q = clauses.join(" OR ")
 
-    resp = repository.search(
-      q: clauses.join(" OR "),
-      defType: "lucene",
-      rows: 1000,
-      fl: "id",
-      fq: ["objectType_ssim:adminPolicy", "!project_tag_ssim:Hydrus"]
-    )["response"]["docs"]
-    resp.map { |doc| doc["id"] }
+    repository
+      .search(
+        q:, defType: "lucene", rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
+        fq: ["objectType_ssim:adminPolicy", "!project_tag_ssim:Hydrus"]
+      )
+      .dig("response", "docs")
+      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).first.downcase.delete("[]") }
+      .map { |doc| doc["id"] }
   end
 
   ##
@@ -55,21 +56,18 @@ class PermittedQueries
       permitted_apos.map { |druid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{druid}\"" }.join(" OR ")
     end
 
-    # Note that if there are more than PERMITTED_COLLECTIONS_LIMIT collections, not all collections may be returned,
+    # Note that if there are more than PERMITTED_QUERIES_LIMIT collections, not all collections may be returned,
     # especially for admins.
-    result = repository.search(
-      q:,
-      defType: "lucene",
-      rows: PERMITTED_COLLECTIONS_LIMIT,
-      fl: "id,sw_display_title_tesim",
-      fq: ["objectType_ssim:collection", "!tag_ssim:\"#{INACTIVE_TAG}\""]
-    )["response"]["docs"]
-    result.sort! do |a, b|
-      a["sw_display_title_tesim"].to_s <=> b["sw_display_title_tesim"].to_s
-    end
+    result = repository
+      .search(
+        q:, defType: "lucene", rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
+        fq: ["objectType_ssim:collection", "!tag_ssim:\"#{INACTIVE_TAG}\""]
+      )
+      .dig("response", "docs")
+      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc["id"]).first.downcase.delete("[]") }
 
     [["None", ""]] + result.map do |doc|
-      ["#{Array(doc["sw_display_title_tesim"]).first} (#{doc["id"]})", doc["id"].to_s]
+      ["#{Array(doc[SolrDocument::FIELD_TITLE]).first} (#{doc["id"]})", doc["id"].to_s]
     end
   end
 
