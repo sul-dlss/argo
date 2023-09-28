@@ -51,7 +51,7 @@ RSpec.describe ItemChangeSetPersister do
     end
     let(:use_statement_before) { "My First Use Statement" }
     let(:barcode_before) { "36105014757517" }
-    let(:catalog_record_id_before) { "#{"a" if Settings.enabled_features.folio}367268" }
+    let(:catalog_record_id_before) { "a367268" }
     let(:change_set) { ItemChangeSet.new(model) }
 
     before do
@@ -241,7 +241,7 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context "when change set has changed catalog_record_id" do
-      let(:new_catalog_record_ids) { ["#{"a" if Settings.enabled_features.folio}367269"] }
+      let(:new_catalog_record_ids) { ["a367269"] }
 
       before do
         change_set.validate(catalog_record_ids: new_catalog_record_ids)

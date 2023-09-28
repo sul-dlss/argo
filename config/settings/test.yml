@@ -4,6 +4,3 @@ bulk_metadata:
 # URLs
 solrizer_url: 'http://localhost:8983/solr/argo'
 dor_indexing_url: http://localhost:3004/dor
-
-enabled_features:
-  folio: true

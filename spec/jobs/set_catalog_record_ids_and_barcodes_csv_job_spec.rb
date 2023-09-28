@@ -12,29 +12,17 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
   let(:refresh) { ["true", "", "false"] }
   let(:barcodes) { ["36105014757517", "", "36105014757518"] }
   let(:buffer) { StringIO.new }
-  let(:catalog_record_id_column) do
-    Settings.enabled_features.folio ? "Folio Instance HRID" : "Catkey"
-  end
-  let(:catalog_record_id_prefix) do
-    Settings.enabled_features.folio ? "in" : ""
-  end
+  let(:catalog_record_id_column) { "Folio Instance HRID" }
+  let(:catalog_record_id_prefix) { "in" }
 
   # Replace catalog_record_id on this item
   let(:item1) do
-    if Settings.enabled_features.folio
-      build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", folio_instance_hrids: ["a12346"])
-    else
-      build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", catkeys: ["12346"])
-    end
+    build(:dro_with_metadata, id: druids[0], barcode: "36105014757519", folio_instance_hrids: ["a12346"])
   end
 
   # Remove catalog_record_id on this item
   let(:item2) do
-    if Settings.enabled_features.folio
-      build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", folio_instance_hrids: ["a12347"])
-    else
-      build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", catkeys: ["12347"])
-    end
+    build(:dro_with_metadata, id: druids[1], barcode: "36105014757510", folio_instance_hrids: ["a12347"])
   end
 
   # Add catalog_record_id on this item

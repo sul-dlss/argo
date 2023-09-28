@@ -85,60 +85,6 @@ RSpec.describe "Create a new item" do
     end
   end
 
-  context "when ILS cutover flag is enabled" do
-    let(:submitted) do
-      {
-        registration: {
-          admin_policy: "druid:hv992ry2431",
-          workflow_id: "registrationWF",
-          tag: ["Registered By : mjgiarlo"],
-          view_access: "world",
-          download_access: "world",
-          controlled_digital_lending: "false",
-          content_type: "https://cocina.sul.stanford.edu/models/book",
-          items: [
-            {
-              catalog_record_id:,
-              source_id: "sul:#{SecureRandom.uuid}",
-              label: "test parameters for registration"
-            }
-          ]
-        }
-      }
-    end
-
-    around do |spec|
-      original_value = Settings.ils_cutover_in_progress
-      Settings.ils_cutover_in_progress = true
-      spec.run
-      Settings.ils_cutover_in_progress = original_value
-    end
-
-    context "when item has catalog record IDs" do
-      let(:catalog_record_id) { "a12345" }
-
-      before do
-        allow(AdminPolicyOptions).to receive(:for).and_return(["APO 1", "APO 2", "APO 3"])
-      end
-
-      it "displays an error" do
-        post "/registration", params: submitted
-        expect(response.body).to include "Catalog record must be blank"
-
-        expect(workflow_service).not_to have_received(:create_workflow_by_name)
-      end
-    end
-
-    context "when item lacks catalog record ID values" do
-      let(:catalog_record_id) { "" }
-
-      it "registers the object" do
-        post "/registration", params: submitted
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
-
   context "when register is successful with default rights" do
     let(:submitted) do
       {

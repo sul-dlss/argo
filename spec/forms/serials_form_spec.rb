@@ -324,53 +324,28 @@ RSpec.describe SerialsForm do
 
     context "when catalog links present" do
       let(:cocina_item) do
-        if Settings.enabled_features.folio
-          build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a6671606"])
-        else
-          build(:dro_with_metadata, id: druid, catkeys: ["6671606"])
-        end
+        build(:dro_with_metadata, id: druid, folio_instance_hrids: ["a6671606"])
       end
 
       let(:expected) do
-        if Settings.enabled_features.folio
-          build(:dro_with_metadata, id: druid).new(
-            description: {
-              title: [
-                {
-                  structuredValue: [
-                    {value: "factory DRO title", type: "main title"}
-                  ]
-                }
-              ],
-              purl: "https://purl.stanford.edu/bc123df4567"
-            },
-            identification: {
-              catalogLinks: [
-                {catalog: "folio", refresh: false, catalogRecordId: "a6671606"}
-              ],
-              sourceId: "sul:1234"
-            }
-          )
-        else
-          build(:dro_with_metadata, id: druid).new(
-            description: {
-              title: [
-                {
-                  structuredValue: [
-                    {value: "factory DRO title", type: "main title"}
-                  ]
-                }
-              ],
-              purl: "https://purl.stanford.edu/bc123df4567"
-            },
-            identification: {
-              catalogLinks: [
-                {catalog: "symphony", refresh: false, catalogRecordId: "6671606"}
-              ],
-              sourceId: "sul:1234"
-            }
-          )
-        end
+        build(:dro_with_metadata, id: druid).new(
+          description: {
+            title: [
+              {
+                structuredValue: [
+                  {value: "factory DRO title", type: "main title"}
+                ]
+              }
+            ],
+            purl: "https://purl.stanford.edu/bc123df4567"
+          },
+          identification: {
+            catalogLinks: [
+              {catalog: "folio", refresh: false, catalogRecordId: "a6671606"}
+            ],
+            sourceId: "sul:1234"
+          }
+        )
       end
 
       before do

@@ -9,7 +9,6 @@ class SolrDocument
   FIELD_CONTENT_TYPE = :content_type_ssim
   FIELD_EMBARGO_STATUS = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
-  FIELD_CATKEY_ID = :catkey_id_ssim
   FIELD_FOLIO_INSTANCE_HRID = :folio_instance_hrid_ssim
   FIELD_DOI = :doi_ssim
   FIELD_ORCIDS = :contributor_orcids_ssim
@@ -47,7 +46,6 @@ class SolrDocument
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
-  attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
   attribute :folio_instance_hrid, Blacklight::Types::String, FIELD_FOLIO_INSTANCE_HRID
   attribute :doi, Blacklight::Types::String, FIELD_DOI
   attribute :orcids, Blacklight::Types::Array, FIELD_ORCIDS
@@ -146,9 +144,7 @@ class SolrDocument
   end
 
   def catalog_record_id
-    return folio_instance_hrid if Settings.enabled_features.folio
-
-    catkey
+    folio_instance_hrid
   end
 
   ##

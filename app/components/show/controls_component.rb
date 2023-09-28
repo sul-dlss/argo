@@ -49,15 +49,13 @@ module Show
     end
 
     def refresh_button_label
-      return "Refresh (disabled during ILS cutover)" if Settings.ils_cutover_in_progress
-
       "Refresh"
     end
 
     private
 
     def manage_release
-      render ActionButton.new(url: item_manage_release_path(druid), label: "Manage release", open_modal: true) unless Settings.disable_release_prior_to_ils_cutover
+      render ActionButton.new(url: item_manage_release_path(druid), label: "Manage release", open_modal: true)
     end
 
     def apply_apo_defaults
