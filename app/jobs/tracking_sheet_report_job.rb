@@ -19,7 +19,7 @@ class TrackingSheetReportJob < GenericJob
         pdf = TrackSheet.new(druids).generate_tracking_pdf
         pdf.render_file(generate_report_filename(bulk_action.output_directory))
         bulk_action.update(druid_count_success: druids.length)
-      rescue => e
+      rescue StandardError => e
         bulk_action.update(druid_count_fail: druids.length)
         error_message = "#{Time.current} TrackingSheetReportJob creation failed #{e.class} #{e.message}"
         log.puts(error_message) # this one goes to the user via the bulk action log

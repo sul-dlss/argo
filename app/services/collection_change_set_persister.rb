@@ -16,8 +16,8 @@ class CollectionChangeSetPersister
 
   def update
     updated_model = update_identification(model)
-      .then { |updated| updated_access(updated) }
-      .then { |updated| updated_administrative(updated) }
+                    .then { |updated| updated_access(updated) }
+                    .then { |updated| updated_administrative(updated) }
 
     Repository.store(updated_model)
   end
@@ -58,7 +58,10 @@ class CollectionChangeSetPersister
     return updated unless changed?(:source_id) || changed?(:catalog_record_ids)
 
     identification_props = updated.identification&.to_h || {}
-    identification_props[:catalogLinks] = CatalogRecordId.serialize(model, catalog_record_ids) if changed?(:catalog_record_ids)
+    if changed?(:catalog_record_ids)
+      identification_props[:catalogLinks] =
+        CatalogRecordId.serialize(model, catalog_record_ids)
+    end
     updated.new(identification: identification_props.compact.presence)
   end
 

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :persisted_apo, class: "Cocina::Models::RequestAdminPolicy" do
+  factory :persisted_apo, class: 'Cocina::Models::RequestAdminPolicy' do
     initialize_with do |*_args|
       ApoMethodSender.new(
         Cocina::Models.build_request({
-          "type" => type,
-          "label" => "test apo",
-          "version" => 1,
-          "administrative" => {
-            "hasAdminPolicy" => admin_policy_id,
-            "hasAgreement" => agreement_id,
-            "accessTemplate" => {
-              "view" => "world",
-              "download" => "world"
-            }
-          }
-        })
+                                       'type' => type,
+                                       'label' => 'test apo',
+                                       'version' => 1,
+                                       'administrative' => {
+                                         'hasAdminPolicy' => admin_policy_id,
+                                         'hasAgreement' => agreement_id,
+                                         'accessTemplate' => {
+                                           'view' => 'world',
+                                           'download' => 'world'
+                                         }
+                                       }
+                                     })
       )
     end
 
@@ -27,9 +27,9 @@ FactoryBot.define do
       end
     end
 
-    admin_policy_id { "druid:hv992ry2431" }
+    admin_policy_id { 'druid:hv992ry2431' }
 
-    agreement_id { "druid:hp308wm0436" }
+    agreement_id { 'druid:hp308wm0436' }
 
     type { Cocina::Models::ObjectType.admin_policy }
   end

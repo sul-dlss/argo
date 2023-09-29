@@ -3,6 +3,6 @@
 module BulkActions
   class ReindexJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = "RemoteIndexingJob"
+    self.action_type = 'RemoteIndexingJob'
   end
 end

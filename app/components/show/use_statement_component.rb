@@ -8,7 +8,7 @@ module Show
     end
 
     def use_statement
-      @change_set.use_statement || "Not entered"
+      @change_set.use_statement || 'Not entered'
     end
 
     delegate :allows_modification?, to: :@state_service

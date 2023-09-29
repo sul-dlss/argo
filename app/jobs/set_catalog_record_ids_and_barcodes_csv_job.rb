@@ -17,27 +17,29 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < SetCatalogRecordIdsAndBarcodesJob
     barcodes = nil
     refresh = nil
     CSV.parse(params[:csv_file], headers: true).each do |row|
-      update_druids << row["Druid"]
+      update_druids << row['Druid']
       if row.header?(CatalogRecordId.label)
         catalog_record_ids ||= []
         refresh ||= []
         catalog_record_ids << catalog_record_id_cols(row)
         refresh << refresh?(row)
       end
-      if row.header?("Barcode")
+      if row.header?('Barcode')
         barcodes ||= []
-        barcodes << row["Barcode"].presence
+        barcodes << row['Barcode'].presence
       end
     end
     [update_druids, catalog_record_ids, barcodes, refresh]
   end
 
   def refresh?(row)
-    (row["Refresh"]&.downcase != "false")
+    (row['Refresh']&.downcase != 'false')
   end
 
   def catalog_record_id_cols(row)
-    catalog_record_id_cols = row.headers.flat_map.with_index { |header, index| index if header == CatalogRecordId.label }.compact
+    catalog_record_id_cols = row.headers.flat_map.with_index do |header, index|
+      index if header == CatalogRecordId.label
+    end.compact
     row.values_at(*catalog_record_id_cols).compact
   end
 end

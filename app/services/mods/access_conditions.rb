@@ -29,15 +29,15 @@ module Mods
 
     # clear out any existing accessConditions
     def clear_existing_access_conditions
-      public_mods.xpath("//mods:accessCondition", "mods" => ModsService::MODS_NS).each(&:remove)
+      public_mods.xpath('//mods:accessCondition', 'mods' => ModsService::MODS_NS).each(&:remove)
     end
 
     def add_use_statement
-      add_access_condition(access.useAndReproductionStatement, "useAndReproduction")
+      add_access_condition(access.useAndReproductionStatement, 'useAndReproduction')
     end
 
     def add_copyright
-      add_access_condition(access.copyright, "copyright")
+      add_access_condition(access.copyright, 'copyright')
     end
 
     def add_license
@@ -48,10 +48,10 @@ module Mods
       # configured here:
       # https://github.com/sul-dlss/dor-services/blob/ef7cd8c8d787e4b9781e5d00282d1d112d0e1f4f/lib/dor/datastreams/desc_metadata_ds.rb#L9-L14
       # We use this namespace when we add accessCondition
-      public_mods.root.add_namespace_definition "xlink", "http://www.w3.org/1999/xlink"
+      public_mods.root.add_namespace_definition 'xlink', 'http://www.w3.org/1999/xlink'
 
-      last_element.add_next_sibling public_mods.create_element("accessCondition", license_description,
-        :type => "license", "xlink:href" => access.license, :xmlns => ModsService::MODS_NS)
+      last_element.add_next_sibling public_mods.create_element('accessCondition', license_description,
+                                                               :type => 'license', 'xlink:href' => access.license, :xmlns => ModsService::MODS_NS)
     end
 
     def license_description
@@ -61,7 +61,8 @@ module Mods
     def add_access_condition(text, type)
       return if text.blank?
 
-      last_element.add_next_sibling public_mods.create_element("accessCondition", text, type:, xmlns: ModsService::MODS_NS)
+      last_element.add_next_sibling public_mods.create_element('accessCondition', text, type:,
+                                                                                        xmlns: ModsService::MODS_NS)
     end
 
     def last_element

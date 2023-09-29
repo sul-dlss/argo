@@ -14,15 +14,15 @@ module Show
       end
 
       def copyright
-        @default_access.copyright || "None"
+        @default_access.copyright || 'None'
       end
 
       def license
-        @default_access.license || "None"
+        @default_access.license || 'None'
       end
 
       def use_and_reproduction
-        @default_access.useAndReproductionStatement || "None"
+        @default_access.useAndReproductionStatement || 'None'
       end
     end
   end

@@ -14,11 +14,11 @@ class WorkflowUpdateButton < ApplicationComponent
   end
 
   def next_status
-    error_state? ? "waiting" : "completed"
+    error_state? ? 'waiting' : 'completed'
   end
 
   def completed?
-    process.status == "completed"
+    process.status == 'completed'
   end
 
   private
@@ -32,6 +32,6 @@ class WorkflowUpdateButton < ApplicationComponent
   end
 
   def error_state?
-    process.status == "error"
+    process.status == 'error'
   end
 end

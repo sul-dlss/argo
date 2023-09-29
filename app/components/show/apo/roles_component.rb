@@ -19,23 +19,23 @@ module Show
       end
 
       def manage_permissions
-        manage_role = model.administrative.roles&.find { |role| role.name == "dor-apo-manager" }
+        manage_role = model.administrative.roles&.find { |role| role.name == 'dor-apo-manager' }
         managers = manage_role ? manage_role.members.map { |member| "#{member.type}:#{member.identifier}" } : []
-        build_permissions(managers, "manage")
+        build_permissions(managers, 'manage')
       end
 
       def view_permissions
-        view_role = model.administrative.roles&.find { |role| role.name == "dor-apo-viewer" }
+        view_role = model.administrative.roles&.find { |role| role.name == 'dor-apo-viewer' }
         viewers = view_role ? view_role.members.map { |member| "#{member.type}:#{member.identifier}" } : []
-        build_permissions(viewers, "view")
+        build_permissions(viewers, 'view')
       end
 
       def build_permissions(role_list, access)
         role_list.map do |name|
-          if name.starts_with? "workgroup:"
-            {name: name.sub(/^workgroup:[^:]*:/, ""), type: "group", access:}
+          if name.starts_with? 'workgroup:'
+            { name: name.sub(/^workgroup:[^:]*:/, ''), type: 'group', access: }
           else
-            {name: name.sub(/^sunetid:/, ""), type: "person", access:}
+            { name: name.sub(/^sunetid:/, ''), type: 'person', access: }
           end
         end
       end

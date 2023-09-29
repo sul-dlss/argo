@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :persisted_collection, class: "Cocina::Models::RequestCollection" do
+  factory :persisted_collection, class: 'Cocina::Models::RequestCollection' do
     initialize_with do |*_args|
       CollectionMethodSender.new(
         Cocina::Models.build_request({
-          "type" => type,
-          "label" => "test collection",
-          "version" => 1,
-          "administrative" => {
-            "hasAdminPolicy" => admin_policy_id
-          },
-          :identification => {sourceId: "sul:#{SecureRandom.uuid}"},
-          "access" => {}
-        })
+                                       'type' => type,
+                                       'label' => 'test collection',
+                                       'version' => 1,
+                                       'administrative' => {
+                                         'hasAdminPolicy' => admin_policy_id
+                                       },
+                                       :identification => { sourceId: "sul:#{SecureRandom.uuid}" },
+                                       'access' => {}
+                                     })
       )
     end
 
@@ -24,7 +24,7 @@ FactoryBot.define do
       end
     end
 
-    admin_policy_id { "druid:hv992ry2431" }
+    admin_policy_id { 'druid:hv992ry2431' }
 
     type { Cocina::Models::ObjectType.collection }
   end

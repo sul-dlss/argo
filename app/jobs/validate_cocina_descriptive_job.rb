@@ -12,13 +12,13 @@ class ValidateCocinaDescriptiveJob < GenericJob
     super
 
     csv = CSV.parse(params[:csv_file], headers: true)
-    with_csv_items(csv, name: "Validate Cocina descriptive metadata") do |cocina_object, csv_row, success, failure|
+    with_csv_items(csv, name: 'Validate Cocina descriptive metadata') do |cocina_object, csv_row, success, failure|
       DescriptionImport.import(csv_row:)
-        .bind { |description| CocinaValidator.validate(cocina_object, description:) }
-        .either(
-          ->(_validated) { success.call("Successfully validated") },
-          ->(error) { failure.call(error) }
-        )
+                       .bind { |description| CocinaValidator.validate(cocina_object, description:) }
+                       .either(
+                         ->(_validated) { success.call('Successfully validated') },
+                         ->(error) { failure.call(error) }
+                       )
     end
   end
 end

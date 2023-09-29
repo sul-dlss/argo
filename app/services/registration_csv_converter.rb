@@ -5,15 +5,15 @@ class RegistrationCsvConverter
   include Dry::Monads[:result]
 
   CONTENT_TYPES = [Cocina::Models::ObjectType.book,
-    Cocina::Models::ObjectType.document,
-    Cocina::Models::ObjectType.file,
-    Cocina::Models::ObjectType.geo,
-    Cocina::Models::ObjectType.image,
-    Cocina::Models::ObjectType.map,
-    Cocina::Models::ObjectType.media,
-    Cocina::Models::ObjectType.three_dimensional,
-    Cocina::Models::ObjectType.webarchive_binary,
-    Cocina::Models::ObjectType.webarchive_seed].freeze
+                   Cocina::Models::ObjectType.document,
+                   Cocina::Models::ObjectType.file,
+                   Cocina::Models::ObjectType.geo,
+                   Cocina::Models::ObjectType.image,
+                   Cocina::Models::ObjectType.map,
+                   Cocina::Models::ObjectType.media,
+                   Cocina::Models::ObjectType.three_dimensional,
+                   Cocina::Models::ObjectType.webarchive_binary,
+                   Cocina::Models::ObjectType.webarchive_seed].freeze
 
   # @param [String] csv_string CSV string
   # @return [Array<Result>] a list of registration requests suitable for passing off to dor-services-client
@@ -55,47 +55,52 @@ class RegistrationCsvConverter
   def convert_row(row)
     model = Cocina::Models::RequestDRO.new(model_params(row))
     Success(model:,
-      workflow: params[:initial_workflow] || row.fetch("initial_workflow"),
-      tags: tags(row))
+            workflow: params[:initial_workflow] || row.fetch('initial_workflow'),
+            tags: tags(row))
   rescue Cocina::Models::ValidationError => e
     Failure(e)
   end
 
   def model_params(row)
     model_params = {
-      type: dro_type(params[:content_type] || row.fetch("content_type")),
+      type: dro_type(params[:content_type] || row.fetch('content_type')),
       version: 1,
-      label: row[catalog_record_id_column] ? row["label"] : row.fetch("label"),
+      label: row[catalog_record_id_column] ? row['label'] : row.fetch('label'),
       administrative: {
-        hasAdminPolicy: params[:administrative_policy_object] || row.fetch("administrative_policy_object")
+        hasAdminPolicy: params[:administrative_policy_object] || row.fetch('administrative_policy_object')
       },
       identification: {
-        sourceId: row.fetch("source_id"),
-        barcode: row["barcode"],
+        sourceId: row.fetch('source_id'),
+        barcode: row['barcode'],
         catalogLinks: catalog_links(row)
       }.compact
     }
 
     model_params[:structural] = structural(row)
     model_params[:access] = access(row)
-    project_name = params[:project_name] || row["project_name"]
+    project_name = params[:project_name] || row['project_name']
     model_params[:administrative][:partOfProject] = project_name if project_name.present?
     model_params
   end
 
   def catalog_links(row)
-    row[catalog_record_id_column] ? [{catalog: CatalogRecordId.type, catalogRecordId: row[catalog_record_id_column], refresh: true}] : []
+    if row[catalog_record_id_column]
+      [{ catalog: CatalogRecordId.type, catalogRecordId: row[catalog_record_id_column],
+         refresh: true }]
+    else
+      []
+    end
   end
 
   def catalog_record_id_column
-    CatalogRecordId.label.downcase.tr(" ", "_")
+    CatalogRecordId.label.downcase.tr(' ', '_')
   end
 
   def tags(row)
     tags = params[:tags] || []
     if tags.empty?
-      tag_count = row.headers.count("tags")
-      tag_count.times { |n| tags << row.field("tags", n + row.index("tags")) }
+      tag_count = row.headers.count('tags')
+      tag_count.times { |n| tags << row.field('tags', n + row.index('tags')) }
     end
     tags.compact
   end
@@ -105,25 +110,25 @@ class RegistrationCsvConverter
     return content_type if CONTENT_TYPES.include?(content_type)
 
     case content_type.downcase
-    when "image"
+    when 'image'
       Cocina::Models::ObjectType.image
-    when "3d"
+    when '3d'
       Cocina::Models::ObjectType.three_dimensional
-    when "map"
+    when 'map'
       Cocina::Models::ObjectType.map
-    when "media"
+    when 'media'
       Cocina::Models::ObjectType.media
-    when "document"
+    when 'document'
       Cocina::Models::ObjectType.document
     when /^manuscript/
       Cocina::Models::ObjectType.manuscript
-    when "book", "book (ltr)", "book (rtl)"
+    when 'book', 'book (ltr)', 'book (rtl)'
       Cocina::Models::ObjectType.book
-    when "geo"
+    when 'geo'
       Cocina::Models::ObjectType.geo
-    when "webarchive-seed"
+    when 'webarchive-seed'
       Cocina::Models::ObjectType.webarchive_seed
-    when "webarchive-binary"
+    when 'webarchive-binary'
       Cocina::Models::ObjectType.webarchive_binary
     else
       Cocina::Models::ObjectType.object
@@ -132,19 +137,21 @@ class RegistrationCsvConverter
 
   def structural(row)
     {}.tap do |structural|
-      collection = params[:collection] || row["collection"]
+      collection = params[:collection] || row['collection']
       structural[:isMemberOf] = [collection] if collection
-      reading_order = params[:reading_order] || row["reading_order"]
-      structural[:hasMemberOrders] = [{viewingDirection: reading_order}] if reading_order.present?
+      reading_order = params[:reading_order] || row['reading_order']
+      structural[:hasMemberOrders] = [{ viewingDirection: reading_order }] if reading_order.present?
     end
   end
 
   def access(row)
     {}.tap do |access|
-      access[:view] = params[:rights_view] || row["rights_view"]
-      access[:download] = params[:rights_download] || row["rights_download"] || ("none" if %w[citation-only dark].include? access[:view])
-      access[:location] = (params[:rights_location] || row.fetch("rights_location")) if [access[:view], access[:download]].include?("location-based")
-      cdl = params[:rights_controlledDigitalLending] || row["rights_controlledDigitalLending"]
+      access[:view] = params[:rights_view] || row['rights_view']
+      access[:download] =
+        params[:rights_download] || row['rights_download'] || ('none' if %w[citation-only dark].include? access[:view])
+      access[:location] = (params[:rights_location] || row.fetch('rights_location')) if [access[:view],
+                                                                                         access[:download]].include?('location-based')
+      cdl = params[:rights_controlledDigitalLending] || row['rights_controlledDigitalLending']
       access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(cdl) if cdl.present?
     end.compact
   end

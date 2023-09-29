@@ -4,40 +4,40 @@
 class BulkAction < ApplicationRecord
   belongs_to :user
   validates :action_type,
-    inclusion: {
-      in: %w[GenericJob
-        AddWorkflowJob
-        ApplyApoDefaultsJob
-        DescmetadataDownloadJob
-        DescriptiveMetadataExportJob
-        DescriptiveMetadataImportJob
-        ReleaseObjectJob
-        RemoteIndexingJob
-        PurgeJob
-        SetGoverningApoJob
-        SetCatalogRecordIdsAndBarcodesJob
-        SetCatalogRecordIdsAndBarcodesCsvJob
-        OpenVersionJob
-        RefreshModsJob
-        RepublishJob
-        CloseVersionJob
-        ChecksumReportJob
-        CreateVirtualObjectsJob
-        ExportTagsJob
-        ImportTagsJob
-        ExportStructuralJob
-        ImportStructuralJob
-        RegisterDruidsJob
-        SetLicenseAndRightsStatementsJob
-        SetSourceIdsCsvJob
-        SetContentTypeJob
-        ManageEmbargoesJob
-        SetCollectionJob
-        SetRightsJob
-        ValidateCocinaDescriptiveJob
-        TrackingSheetReportJob
-        ExportCocinaJsonJob]
-    }
+            inclusion: {
+              in: %w[GenericJob
+                     AddWorkflowJob
+                     ApplyApoDefaultsJob
+                     DescmetadataDownloadJob
+                     DescriptiveMetadataExportJob
+                     DescriptiveMetadataImportJob
+                     ReleaseObjectJob
+                     RemoteIndexingJob
+                     PurgeJob
+                     SetGoverningApoJob
+                     SetCatalogRecordIdsAndBarcodesJob
+                     SetCatalogRecordIdsAndBarcodesCsvJob
+                     OpenVersionJob
+                     RefreshModsJob
+                     RepublishJob
+                     CloseVersionJob
+                     ChecksumReportJob
+                     CreateVirtualObjectsJob
+                     ExportTagsJob
+                     ImportTagsJob
+                     ExportStructuralJob
+                     ImportStructuralJob
+                     RegisterDruidsJob
+                     SetLicenseAndRightsStatementsJob
+                     SetSourceIdsCsvJob
+                     SetContentTypeJob
+                     ManageEmbargoesJob
+                     SetCollectionJob
+                     SetRightsJob
+                     ValidateCocinaDescriptiveJob
+                     TrackingSheetReportJob
+                     ExportCocinaJsonJob]
+            }
 
   after_create :create_output_directory, :create_log_file
   before_destroy :remove_output_directory
@@ -47,7 +47,7 @@ class BulkAction < ApplicationRecord
   end
 
   def completed?
-    status == "Completed"
+    status == 'Completed'
   end
 
   def has_report?(filename)
@@ -79,7 +79,7 @@ class BulkAction < ApplicationRecord
 
   def enqueue_job(job_params)
     active_job_class.perform_later(id, job_params)
-    update(status: "Scheduled Action")
+    update(status: 'Scheduled Action')
   end
 
   private

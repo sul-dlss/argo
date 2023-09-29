@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe SetRightsJob do
-  let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2233"] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2233'] }
   let(:groups) { [] }
 
   let(:bulk_action) do
     create(
       :bulk_action,
-      action_type: "SetRightsJob"
+      action_type: 'SetRightsJob'
     )
   end
 
@@ -18,22 +18,22 @@ RSpec.describe SetRightsJob do
   let(:cocina1) do
     build(:dro_with_metadata, id: druids[0]).new(
       access: {
-        view: "stanford",
-        download: "stanford"
+        view: 'stanford',
+        download: 'stanford'
       },
       structural: {
         contains: [
           {
             type: Cocina::Models::FileSetType.page,
-            label: "Book page",
+            label: 'Book page',
             version: 1,
-            externalIdentifier: "abc123456",
+            externalIdentifier: 'abc123456',
             structural: {
               contains: [
                 {
-                  filename: "p1.jpg",
-                  externalIdentifier: "abc123456",
-                  label: "p1.jpg",
+                  filename: 'p1.jpg',
+                  externalIdentifier: 'abc123456',
+                  label: 'p1.jpg',
                   type: Cocina::Models::ObjectType.file,
                   version: 1,
                   administrative: {
@@ -43,8 +43,8 @@ RSpec.describe SetRightsJob do
                   },
                   hasMessageDigests: [],
                   access: {
-                    view: "stanford",
-                    download: "stanford"
+                    view: 'stanford',
+                    download: 'stanford'
                   }
                 }
               ]
@@ -52,15 +52,15 @@ RSpec.describe SetRightsJob do
           },
           {
             type: Cocina::Models::FileSetType.image,
-            label: "Book page 2",
+            label: 'Book page 2',
             version: 1,
-            externalIdentifier: "abc789012",
+            externalIdentifier: 'abc789012',
             structural: {
               contains: [
                 {
-                  filename: "p2.jpg",
-                  externalIdentifier: "abc123456",
-                  label: "p2.jpg",
+                  filename: 'p2.jpg',
+                  externalIdentifier: 'abc123456',
+                  label: 'p2.jpg',
                   type: Cocina::Models::ObjectType.file,
                   version: 1,
                   administrative: {
@@ -70,8 +70,8 @@ RSpec.describe SetRightsJob do
                   },
                   hasMessageDigests: [],
                   access: {
-                    view: "stanford",
-                    download: "stanford"
+                    view: 'stanford',
+                    download: 'stanford'
                   }
                 }
               ]
@@ -85,22 +85,22 @@ RSpec.describe SetRightsJob do
   let(:cocina2) do
     build(:dro_with_metadata, id: druids[1]).new(
       access: {
-        view: "world",
-        download: "world"
+        view: 'world',
+        download: 'world'
       },
       structural: {
         contains: [
           {
             type: Cocina::Models::FileSetType.page,
-            label: "Book page",
+            label: 'Book page',
             version: 1,
-            externalIdentifier: "abc123456",
+            externalIdentifier: 'abc123456',
             structural: {
               contains: [
                 {
-                  filename: "p1.jpg",
-                  externalIdentifier: "abc123456",
-                  label: "p1.jpg",
+                  filename: 'p1.jpg',
+                  externalIdentifier: 'abc123456',
+                  label: 'p1.jpg',
                   type: Cocina::Models::ObjectType.file,
                   version: 1,
                   administrative: {
@@ -110,8 +110,8 @@ RSpec.describe SetRightsJob do
                   },
                   hasMessageDigests: [],
                   access: {
-                    view: "stanford",
-                    download: "stanford"
+                    view: 'stanford',
+                    download: 'stanford'
                   }
                 }
               ]
@@ -119,15 +119,15 @@ RSpec.describe SetRightsJob do
           },
           {
             type: Cocina::Models::FileSetType.image,
-            label: "Book page 2",
+            label: 'Book page 2',
             version: 1,
-            externalIdentifier: "abc789012",
+            externalIdentifier: 'abc789012',
             structural: {
               contains: [
                 {
-                  filename: "p2.jpg",
-                  externalIdentifier: "abc789012",
-                  label: "p2.jpg",
+                  filename: 'p2.jpg',
+                  externalIdentifier: 'abc789012',
+                  label: 'p2.jpg',
                   type: Cocina::Models::ObjectType.file,
                   version: 1,
                   administrative: {
@@ -137,8 +137,8 @@ RSpec.describe SetRightsJob do
                   },
                   hasMessageDigests: [],
                   access: {
-                    view: "stanford",
-                    download: "stanford"
+                    view: 'stanford',
+                    download: 'stanford'
                   }
                 }
               ]
@@ -167,24 +167,24 @@ RSpec.describe SetRightsJob do
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
-  context "when updating one object" do
+  context 'when updating one object' do
     let(:params) do
       {
         druids: [druids[0]],
-        view_access: "world",
-        download_access: "world",
-        controlled_digital_lending: "0"
+        view_access: 'world',
+        download_access: 'world',
+        controlled_digital_lending: '0'
       }
     end
 
-    it "changes access to world and logs success" do
+    it 'changes access to world and logs success' do
       subject.perform(bulk_action.id, params)
       expect(object_client1).to have_received(:update)
         .with(
           params: cocina_object_with(
             access: {
-              view: "world",
-              download: "world"
+              view: 'world',
+              download: 'world'
             }
           )
         )
@@ -193,25 +193,25 @@ RSpec.describe SetRightsJob do
     end
   end
 
-  context "when updating two objects" do
+  context 'when updating two objects' do
     let(:params) do
       {
         druids:,
-        view_access: "world",
-        download_access: "world",
-        controlled_digital_lending: "0"
+        view_access: 'world',
+        download_access: 'world',
+        controlled_digital_lending: '0'
       }
     end
 
-    it "changes access to world and logs success" do
+    it 'changes access to world and logs success' do
       subject.perform(bulk_action.id, params)
 
       expect(object_client1).to have_received(:update)
         .with(
           params: cocina_object_with(
             access: {
-              view: "world",
-              download: "world"
+              view: 'world',
+              download: 'world'
             }
           )
         )
@@ -220,8 +220,8 @@ RSpec.describe SetRightsJob do
         .with(
           params: cocina_object_with(
             access: {
-              view: "world",
-              download: "world"
+              view: 'world',
+              download: 'world'
             }
           )
         )

@@ -4,7 +4,7 @@
 # an APO.
 class ModsulatorJob < ApplicationJob
   # A somewhat easy to understand and informative time stamp format
-  TIME_FORMAT = "%Y-%m-%d %H:%M%P"
+  TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
   # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
@@ -17,7 +17,7 @@ class ModsulatorJob < ApplicationJob
   # @param  [String]  filetype           One of 'xml, 'spreadsheet', or 'xml_only'. If not 'xml', the input is to be loaded as MODS.
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
-  def perform(apo_id, uploaded_filename, output_directory, user, groups, filetype = "spreadsheet", note = "")
+  def perform(apo_id, uploaded_filename, output_directory, user, groups, filetype = 'spreadsheet', note = '')
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
     persist_metadata = load_to_dor?(filetype)
@@ -26,18 +26,19 @@ class ModsulatorJob < ApplicationJob
     user.set_groups_to_impersonate(groups)
     ability = Ability.new(user)
 
-    File.open(log_filename, "a") do |log|
+    File.open(log_filename, 'a') do |log|
       start_log(log, user, original_filename, note)
 
       # If a modsulator request fails, the job will fail and automatically be retried
-      response_xml = if method == "normalize"
-        ModsulatorClient.normalize_mods(uploaded_filename:, pretty_filename: original_filename, log:)
-      else
-        ModsulatorClient.convert_spreadsheet_to_mods(uploaded_filename:, pretty_filename: original_filename, log:)
-      end
+      response_xml = if method == 'normalize'
+                       ModsulatorClient.normalize_mods(uploaded_filename:, pretty_filename: original_filename, log:)
+                     else
+                       ModsulatorClient.convert_spreadsheet_to_mods(uploaded_filename:,
+                                                                    pretty_filename: original_filename, log:)
+                     end
 
       if response_xml.nil?
-        log.puts("argo.bulk_metadata.bulk_log_error_exception Got no response from server")
+        log.puts('argo.bulk_metadata.bulk_log_error_exception Got no response from server')
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.zone.now.strftime(TIME_FORMAT)}")
         return nil
       end
@@ -46,7 +47,7 @@ class ModsulatorJob < ApplicationJob
       save_metadata_xml(response_xml, metadata_path, log)
 
       if persist_metadata
-        log.puts("argo.bulk_metadata.bulk_log_xml_only false")
+        log.puts('argo.bulk_metadata.bulk_log_xml_only false')
         update_metadata(apo_id, response_xml, original_filename, ability, log) # Load into DOR
       end
 
@@ -59,11 +60,11 @@ class ModsulatorJob < ApplicationJob
 
   # When filetype = 'xml' the user just wants to convert submitted spreadsheet to MODS. No need to load into DOR
   def load_to_dor?(filetype)
-    filetype != "xml"
+    filetype != 'xml'
   end
 
   def operation(filetype)
-    (filetype == "xml_only") ? "normalize" : "convert"
+    filetype == 'xml_only' ? 'normalize' : 'convert'
   end
 
   # Upload metadata into DOR.
@@ -80,9 +81,9 @@ class ModsulatorJob < ApplicationJob
     root = Nokogiri::XML(xml_string).root
 
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
-    mods_list = root.xpath("//x:xmlDoc", "x" => root.namespace.href)
+    mods_list = root.xpath('//x:xmlDoc', 'x' => root.namespace.href)
     mods_list.each do |xmldoc_node|
-      item_druid = Druid.new(xmldoc_node.attr("objectId")).with_namespace
+      item_druid = Druid.new(xmldoc_node.attr('objectId')).with_namespace
 
       unless DruidTools::Druid.valid? item_druid
         log.puts("argo.bulk_metadata.bulk_log_invalid_druid #{item_druid}")
@@ -93,11 +94,11 @@ class ModsulatorJob < ApplicationJob
         cocina = Repository.find(item_druid)
 
         ApplyModsMetadata.new(apo_druid: druid,
-          mods: xmldoc_node.first_element_child.to_s,
-          cocina:,
-          original_filename:,
-          ability:,
-          log:).apply
+                              mods: xmldoc_node.first_element_child.to_s,
+                              cocina:,
+                              original_filename:,
+                              ability:,
+                              log:).apply
       rescue Dor::Services::Client::NotFoundResponse => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{item_druid}")
         log.puts(e.message.to_s)
@@ -124,7 +125,7 @@ class ModsulatorJob < ApplicationJob
   # @return [String] A prettier version of the uploaded filename.
   def generate_original_filename(uploaded_filename)
     original_filename = File.basename(uploaded_filename)
-    original_filename.slice(0, original_filename.rindex("."))
+    original_filename.slice(0, original_filename.rindex('.'))
   end
 
   # Write initial job information to the log file.
@@ -133,7 +134,7 @@ class ModsulatorJob < ApplicationJob
   # @param [user] username The login name of the current user.
   # @param [String] filename The name of this job's input file.
   # @param [String] note An optional comment that describes this job.
-  def start_log(log_file, user, filename, note = "")
+  def start_log(log_file, user, filename, note = '')
     log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_user #{user.sunetid}")
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
@@ -153,7 +154,7 @@ class ModsulatorJob < ApplicationJob
     File.write(output_filename, xml)
     log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_xml_filename #{File.basename(output_filename)}")
-    log_file.puts("argo.bulk_metadata.bulk_log_record_count #{xml.scan("<xmlDoc id").size}")
+    log_file.puts("argo.bulk_metadata.bulk_log_record_count #{xml.scan('<xmlDoc id').size}")
   end
 
   # Generates a filename for the MODS XML that this job creates.
@@ -161,6 +162,6 @@ class ModsulatorJob < ApplicationJob
   # @param  [String]   original_filename    The name of the original file that the user uploaded.
   # @return [String]
   def generate_xml_filename(original_filename)
-    File.basename(original_filename, ".*") + "-" + Settings.bulk_metadata.xml + ".xml"
+    File.basename(original_filename, '.*') + '-' + Settings.bulk_metadata.xml + '.xml'
   end
 end

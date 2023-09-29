@@ -8,7 +8,7 @@ class FilesController < ApplicationController
   ##
   # Brings up a modal dialog that lists all locations of the file
   def index
-    raise ArgumentError, "Missing file parameter" if filename.blank?
+    raise ArgumentError, 'Missing file parameter' if filename.blank?
 
     @has_been_accessioned = StateService.new(@cocina_model).accessioned?
     files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
@@ -37,11 +37,11 @@ class FilesController < ApplicationController
 
     # Set headers on the response before writing to the response stream
     send_file_headers!(
-      type: "application/octet-stream",
-      disposition: "attachment",
+      type: 'application/octet-stream',
+      disposition: 'attachment',
       filename: CGI.escape(filename)
     )
-    response.headers["Last-Modified"] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
+    response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
 
     Preservation::Client.objects.content(
       druid: @cocina_model.externalIdentifier,
@@ -51,8 +51,8 @@ class FilesController < ApplicationController
     )
   rescue Preservation::Client::NotFoundError => e
     # Undo the header setting above for the streaming response. Not relevant here.
-    response.headers.delete("Last-Modified")
-    response.headers.delete("Content-Disposition")
+    response.headers.delete('Last-Modified')
+    response.headers.delete('Content-Disposition')
 
     render status: :not_found, plain: "Preserved file not found: #{e}"
   rescue Preservation::Client::Error => e
@@ -68,14 +68,15 @@ class FilesController < ApplicationController
     authorize! :view_content, @cocina_model
 
     send_file_headers!(
-      type: "application/zip",
-      disposition: "attachment",
+      type: 'application/zip',
+      disposition: 'attachment',
       filename: "#{Druid.new(@cocina_model).without_namespace}.zip"
     )
-    response.headers["Last-Modified"] = Time.now.httpdate.to_s
-    response.headers["X-Accel-Buffering"] = "no"
+    response.headers['Last-Modified'] = Time.now.httpdate.to_s
+    response.headers['X-Accel-Buffering'] = 'no'
 
-    PresStreamer.stream(druid: @cocina_model.externalIdentifier, version: last_accessioned_version(@cocina_model.externalIdentifier), filenames: preserved_files(@cocina_model)) do |chunk|
+    PresStreamer.stream(druid: @cocina_model.externalIdentifier,
+                        version: last_accessioned_version(@cocina_model.externalIdentifier), filenames: preserved_files(@cocina_model)) do |chunk|
       response.stream.write(chunk)
     end
   ensure
@@ -130,11 +131,13 @@ class FilesController < ApplicationController
         filenames.each do |filename|
           Rails.logger.info("Adding #{filename} to zip")
           zip.write_deflated_file(filename) do |file_writer|
-            Preservation::Client.objects.content(druid: druid,
-              filepath: filename,
-              version: version,
-              on_data: proc { |data, _count| file_writer.write data })
-          rescue => e
+            Preservation::Client.objects.content(druid:,
+                                                 filepath: filename,
+                                                 version:,
+                                                 on_data: proc { |data, _count|
+                                                            file_writer.write data
+                                                          })
+          rescue StandardError => e
             file_writer.close
             message = "Could not zip #{filename} (#{druid}) for download: #{e}"
             Rails.logger.error(message)

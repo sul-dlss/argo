@@ -5,7 +5,7 @@ class Repository
   # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy,NilModel] cocina model instance corresponding to the given druid
   # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the given object ID
   def self.find(id)
-    raise ArgumentError, "Missing identifier" unless id
+    raise ArgumentError, 'Missing identifier' unless id
 
     object_client = Dor::Services::Client.object(id)
     object_client.find
@@ -18,10 +18,10 @@ class Repository
   # @return [Cocina::Models::DROLite,Cocina::Models::CollectionLite,Cocina::Models::AdminPolicyLite,NilModel] cocina model instance corresponding to the given druid
   # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the given object ID
   def self.find_lite(id, structural: true)
-    raise ArgumentError, "Missing identifier" unless id
+    raise ArgumentError, 'Missing identifier' unless id
 
     object_client = Dor::Services::Client.object(id)
-    object_client.find_lite(structural: structural)
+    object_client.find_lite(structural:)
   rescue Dor::Services::Client::UnexpectedResponse
     NilModel.new(id)
   end

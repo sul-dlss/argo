@@ -33,11 +33,11 @@ class ModsulatorClient
   end
 
   def normalize_mods
-    call_remote_modsulator(Settings.normalizer_url, "application/xml")
+    call_remote_modsulator(Settings.normalizer_url, 'application/xml')
   end
 
   def convert_spreadsheet_to_mods
-    call_remote_modsulator(Settings.modsulator_url, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    call_remote_modsulator(Settings.modsulator_url, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   end
 
   private
@@ -65,19 +65,19 @@ class ModsulatorClient
       req.url url
       req.options.timeout = TIMEOUT
       req.options.open_timeout = TIMEOUT
-      req.body = {file: payload, filename: pretty_filename}
+      req.body = { file: payload, filename: pretty_filename }
     end
     response_xml.body
   rescue Faraday::ResourceNotFound => e
-    log_request_error(e, url, "argo.bulk_metadata.bulk_log_invalid_url")
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_invalid_url')
   rescue Errno::ENOENT => e
-    log_request_error(e, url, "argo.bulk_metadata.bulk_log_nonexistent_file")
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_nonexistent_file')
   rescue Errno::EACCES => e
-    log_request_error(e, url, "argo.bulk_metadata.bulk_log_invalid_permission")
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_invalid_permission')
   rescue Faraday::Error => e
-    log_request_error(e, url, "argo.bulk_metadata.bulk_log_internal_error")
-  rescue => e
-    log_request_error(e, url, "argo.bulk_metadata.bulk_log_error_exception")
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_internal_error')
+  rescue StandardError => e
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_error_exception')
   ensure
     log.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end

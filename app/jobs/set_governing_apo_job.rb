@@ -12,17 +12,18 @@ class SetGoverningApoJob < GenericJob
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
     super
-    @new_apo_id = params["new_apo_id"]
+    @new_apo_id = params['new_apo_id']
 
-    with_items(params[:druids], name: "Set governing APO") do |cocina_item, success, failure|
-      next failure.call("user not authorized to move item to #{new_apo_id}") unless ability.can?(:manage_governing_apo, cocina_item, new_apo_id)
+    with_items(params[:druids], name: 'Set governing APO') do |cocina_item, success, failure|
+      next failure.call("user not authorized to move item to #{new_apo_id}") unless ability.can?(:manage_governing_apo,
+                                                                                                 cocina_item, new_apo_id)
 
-      cocina_item = open_new_version_if_needed(cocina_item, "Set new governing APO")
+      cocina_item = open_new_version_if_needed(cocina_item, 'Set new governing APO')
 
       change_set = ItemChangeSet.new(cocina_item)
       change_set.validate(admin_policy_id: new_apo_id)
       change_set.save
-      success.call("Governing APO updated")
+      success.call('Governing APO updated')
     end
   end
 end

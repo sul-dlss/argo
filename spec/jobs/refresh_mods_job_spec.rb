@@ -1,22 +1,26 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe RefreshModsJob do
-  let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222"] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
-  let(:catalog_record_ids) { ["a123"] }
+  let(:catalog_record_ids) { ['a123'] }
   let(:cocina1) do
     build(:dro_with_metadata, id: druids[0], folio_instance_hrids: catalog_record_ids)
   end
   let(:cocina2) do
     build(:dro_with_metadata, id: druids[1], folio_instance_hrids: catalog_record_ids)
   end
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, refresh_descriptive_metadata_from_ils: true) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, refresh_descriptive_metadata_from_ils: true) }
-  let(:logger) { double("logger", puts: nil) }
+  let(:object_client1) do
+    instance_double(Dor::Services::Client::Object, find: cocina1, refresh_descriptive_metadata_from_ils: true)
+  end
+  let(:object_client2) do
+    instance_double(Dor::Services::Client::Object, find: cocina2, refresh_descriptive_metadata_from_ils: true)
+  end
+  let(:logger) { double('logger', puts: nil) }
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
@@ -25,18 +29,18 @@ RSpec.describe RefreshModsJob do
     allow(BulkJobLog).to receive(:open).and_yield(logger)
 
     described_class.perform_now(bulk_action.id,
-      druids:,
-      groups:,
-      user:)
+                                druids:,
+                                groups:,
+                                user:)
   end
 
-  context "with manage ability" do
+  context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
 
-    context "without catalog_record_id" do
+    context 'without catalog_record_id' do
       let(:catalog_record_ids) { [] }
 
-      it "logs errors" do
+      it 'logs errors' do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
         expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a #{CatalogRecordId.label} for druid:bb111cc2222/)
         expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a #{CatalogRecordId.label} for druid:cc111dd2222/)
@@ -46,8 +50,8 @@ RSpec.describe RefreshModsJob do
       end
     end
 
-    context "with catalog_record_id" do
-      it "refreshes" do
+    context 'with catalog_record_id' do
+      it 'refreshes' do
         expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
         expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)
         expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:cc111dd2222/)
@@ -58,10 +62,10 @@ RSpec.describe RefreshModsJob do
     end
   end
 
-  context "without manage ability" do
+  context 'without manage ability' do
     let(:ability) { instance_double(Ability, can?: false) }
 
-    it "does not refresh" do
+    it 'does not refresh' do
       expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
       expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)
       expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)

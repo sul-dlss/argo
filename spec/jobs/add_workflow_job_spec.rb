@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe AddWorkflowJob do
-  let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222"] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
@@ -17,7 +17,7 @@ RSpec.describe AddWorkflowJob do
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
-  let(:logger) { double("logger", puts: nil) }
+  let(:logger) { double('logger', puts: nil) }
   let(:wf_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: true, workflow: wf_response) }
   let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: active) }
   let(:active) { false }
@@ -30,19 +30,19 @@ RSpec.describe AddWorkflowJob do
     allow(BulkJobLog).to receive(:open).and_yield(logger)
 
     described_class.perform_now(bulk_action.id,
-      druids:,
-      workflow: "accessionWF",
-      groups:,
-      user:)
+                                druids:,
+                                workflow: 'accessionWF',
+                                groups:,
+                                user:)
   end
 
-  context "with manage ability" do
+  context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
 
-    context "when the workflow already exists" do
+    context 'when the workflow already exists' do
       let(:active) { true }
 
-      it "does not create a workflow" do
+      it 'does not create a workflow' do
         expect(logger).to have_received(:puts).with(/Starting AddWorkflowJob for BulkAction/)
         expect(logger).to have_received(:puts).with(/accessionWF already exists for druid:bb111cc2222/)
         expect(logger).to have_received(:puts).with(/accessionWF already exists for druid:cc111dd2222/)
@@ -52,7 +52,7 @@ RSpec.describe AddWorkflowJob do
     end
 
     context "when the workflow doesn't exist" do
-      it "creates a workflow" do
+      it 'creates a workflow' do
         expect(logger).to have_received(:puts).with(/Starting AddWorkflowJob for BulkAction/)
         expect(logger).to have_received(:puts).with(/started accessionWF for druid:bb111cc2222/)
         expect(logger).to have_received(:puts).with(/started accessionWF for druid:bb111cc2222/)
@@ -62,10 +62,10 @@ RSpec.describe AddWorkflowJob do
     end
   end
 
-  context "without manage ability" do
+  context 'without manage ability' do
     let(:ability) { instance_double(Ability, can?: false) }
 
-    it "does not create a workflow" do
+    it 'does not create a workflow' do
       expect(logger).to have_received(:puts).with(/Starting AddWorkflowJob for BulkAction/)
       expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)
       expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)

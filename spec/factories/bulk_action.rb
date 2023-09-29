@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :bulk_action do
-    action_type { "RemoteIndexingJob" }
+    action_type { 'RemoteIndexingJob' }
     user
-    log_name { "tmp/log.txt" }
+    log_name { 'tmp/log.txt' }
   end
 end

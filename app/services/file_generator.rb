@@ -56,8 +56,8 @@ class FileGenerator
 
   def message_digests
     [
-      {type: "md5", digest: md5},
-      {type: "sha1", digest: sha1}
+      { type: 'md5', digest: md5 },
+      { type: 'sha1', digest: sha1 }
     ]
   end
 
@@ -66,7 +66,7 @@ class FileGenerator
   end
 
   def access
-    {view: "dark", download: "none"}
+    { view: 'dark', download: 'none' }
   end
 
   def file_path(key)
@@ -74,6 +74,6 @@ class FileGenerator
   end
 
   def base64_to_hexdigest(base64)
-    Base64.decode64(base64).unpack1("H*")
+    Base64.decode64(base64).unpack1('H*')
   end
 end

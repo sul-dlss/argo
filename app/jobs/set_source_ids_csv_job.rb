@@ -18,7 +18,7 @@ class SetSourceIdsCsvJob < GenericJob
       update_druid_count(count: update_druids.count)
       update_druids.each_with_index do |current_druid, i|
         update_one(current_druid, source_ids[i], log)
-      rescue => e
+      rescue StandardError => e
         log.puts("#{Time.current} Unexpected error setting source_id for #{current_druid}: #{e.message}")
         bulk_action.increment(:druid_count_fail).save
       end
@@ -52,8 +52,8 @@ class SetSourceIdsCsvJob < GenericJob
     update_druids = []
     source_ids = []
     CSV.parse(params[:csv_file], headers: true).each do |row|
-      update_druids << row["druid"]
-      source_ids << row["source_id"]
+      update_druids << row['druid']
+      source_ids << row['source_id']
     end
     [update_druids, source_ids]
   end
@@ -70,11 +70,11 @@ class SetSourceIdsCsvJob < GenericJob
   end
 
   def log_update(change_set, log)
-    verb = change_set.source_id ? "Adding" : "Removing"
+    verb = change_set.source_id ? 'Adding' : 'Removing'
     log.puts("#{Time.current} #{verb} source ID of #{change_set.source_id}")
   end
 
   def version_message(source_id)
-    source_id ? "Source ID updated to #{source_id}." : "Source ID removed."
+    source_id ? "Source ID updated to #{source_id}." : 'Source ID removed.'
   end
 end

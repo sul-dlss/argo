@@ -17,9 +17,9 @@ class ItemChangeSetPersister
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   def update
     updated_model = update_identification(model)
-      .then { |updated| updated_administrative(updated) }
-      .then { |updated| updated_structural_collections(updated) }
-      .then { |updated| updated_access(updated) }
+                    .then { |updated| updated_administrative(updated) }
+                    .then { |updated| updated_structural_collections(updated) }
+                    .then { |updated| updated_access(updated) }
 
     Repository.store(updated_model)
   end
@@ -40,8 +40,8 @@ class ItemChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :admin_policy_id, :barcode, :catalog_record_ids, :refresh, :source_id, :collection_ids,
-    *ACCESS_FIELDS.keys, :rights_changed?,
-    :changed?, to: :change_set
+           *ACCESS_FIELDS.keys, :rights_changed?,
+           :changed?, to: :change_set
 
   def object_client
     Dor::Services::Client.object(model.externalIdentifier)
@@ -58,10 +58,10 @@ class ItemChangeSetPersister
     return updated unless changed?(:collection_ids)
 
     updated_structural = if collection_ids
-      updated.structural.new(isMemberOf: collection_ids)
-    else
-      updated.structural.to_h.without(:isMemberOf) # clear collection membership
-    end
+                           updated.structural.new(isMemberOf: collection_ids)
+                         else
+                           updated.structural.to_h.without(:isMemberOf) # clear collection membership
+                         end
     updated.new(structural: updated_structural)
   end
 
@@ -86,18 +86,18 @@ class ItemChangeSetPersister
     Array(structure_hash[:contains]).each do |fileset|
       fileset[:structural][:contains].each do |file|
         case view_access
-        when "dark"
+        when 'dark'
           # Ensure files attached to dark objects are neither published nor shelved
-          file[:access].merge!(view: "dark", download: "none", controlledDigitalLending: false, location: nil)
+          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
           file[:administrative][:publish] = false
           file[:administrative].merge!(shelve: false)
-        when "citation-only"
-          file[:access].merge!(view: "dark", download: "none", controlledDigitalLending: false, location: nil)
+        when 'citation-only'
+          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
         else
           file[:access].merge!(view: view_access,
-            download: download_access,
-            controlledDigitalLending: controlled_digital_lending,
-            location: access_location)
+                               download: download_access,
+                               controlledDigitalLending: controlled_digital_lending,
+                               location: access_location)
         end
       end
     end
@@ -130,7 +130,11 @@ class ItemChangeSetPersister
 
     identification_props = updated.identification.to_h
     identification_props[:sourceId] = source_id if changed?(:source_id)
-    identification_props[:catalogLinks] = CatalogRecordId.serialize(model, catalog_record_ids, refresh:) if changed?(:catalog_record_ids) || changed?(:refresh)
+    if changed?(:catalog_record_ids) || changed?(:refresh)
+      identification_props[:catalogLinks] =
+        CatalogRecordId.serialize(model, catalog_record_ids,
+                                  refresh:)
+    end
     identification_props[:barcode] = barcode.presence if changed?(:barcode)
 
     updated.new(identification: identification_props.presence)

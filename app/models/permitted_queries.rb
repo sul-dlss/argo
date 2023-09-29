@@ -6,7 +6,7 @@ class PermittedQueries
   attr_reader :groups, :known_roles
 
   PERMITTED_QUERIES_LIMIT = 5000
-  INACTIVE_TAG = "collection status : inactive"
+  INACTIVE_TAG = 'collection status : inactive'
 
   ##
   # @params groups
@@ -23,25 +23,25 @@ class PermittedQueries
   # Also queries Solr based on groups
   # @return [Array[String]] list of DRUIDs from APOs that this User can view
   def permitted_apos
-    query = groups.map { |g| RSolr.solr_escape(g) }.join(" OR ")
+    query = groups.map { |g| RSolr.solr_escape(g) }.join(' OR ')
 
     clauses = if admin?
-      ["*:*"]
-    else
-      known_roles.map do |role|
-        "apo_role_#{role}_ssim:(#{query})"
-      end
-    end
-    q = clauses.join(" OR ")
+                ['*:*']
+              else
+                known_roles.map do |role|
+                  "apo_role_#{role}_ssim:(#{query})"
+                end
+              end
+    q = clauses.join(' OR ')
 
     repository
       .search(
-        q:, defType: "lucene", rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
-        fq: ["objectType_ssim:adminPolicy", "!project_tag_ssim:Hydrus"]
+        q:, defType: 'lucene', rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
+        fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:Hydrus']
       )
-      .dig("response", "docs")
-      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).first.downcase.delete("[]") }
-      .map { |doc| doc["id"] }
+      .dig('response', 'docs')
+      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).first.downcase.delete('[]') }
+      .map { |doc| doc['id'] }
   end
 
   ##
@@ -49,25 +49,25 @@ class PermittedQueries
   # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (DRUID)", "DRUID"]
   def permitted_collections
     q = if admin?
-      "*:*"
-    elsif permitted_apos.empty?
-      "-id:*"
-    else
-      permitted_apos.map { |druid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{druid}\"" }.join(" OR ")
-    end
+          '*:*'
+        elsif permitted_apos.empty?
+          '-id:*'
+        else
+          permitted_apos.map { |druid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{druid}\"" }.join(' OR ')
+        end
 
     # Note that if there are more than PERMITTED_QUERIES_LIMIT collections, not all collections may be returned,
     # especially for admins.
     result = repository
-      .search(
-        q:, defType: "lucene", rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
-        fq: ["objectType_ssim:collection", "!tag_ssim:\"#{INACTIVE_TAG}\""]
-      )
-      .dig("response", "docs")
-      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc["id"]).first.downcase.delete("[]") }
+             .search(
+               q:, defType: 'lucene', rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
+               fq: ['objectType_ssim:collection', "!tag_ssim:\"#{INACTIVE_TAG}\""]
+             )
+             .dig('response', 'docs')
+             .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc['id']).first.downcase.delete('[]') }
 
-    [["None", ""]] + result.map do |doc|
-      ["#{Array(doc[SolrDocument::FIELD_TITLE]).first} (#{doc["id"]})", doc["id"].to_s]
+    [['None', '']] + result.map do |doc|
+      ["#{Array(doc[SolrDocument::FIELD_TITLE]).first} (#{doc['id']})", doc['id'].to_s]
     end
   end
 

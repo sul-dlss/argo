@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "items/_source_id_ui" do
+RSpec.describe 'items/_source_id_ui' do
   before do
-    @cocina = build(:dro, source_id: "sul:99999")
+    @cocina = build(:dro, source_id: 'sul:99999')
   end
 
-  it "renders the partial content" do
+  it 'renders the partial content' do
     render
     expect(rendered)
       .to have_css 'form input.form-control[value="sul:99999"]'
-    expect(rendered).to have_css "p.form-text"
-    expect(rendered).to have_css "button.btn.btn-primary", text: "Update"
+    expect(rendered).to have_css 'p.form-text'
+    expect(rendered).to have_css 'button.btn.btn-primary', text: 'Update'
   end
 end

@@ -11,12 +11,12 @@ class ExportTagsJob < GenericJob
     with_bulk_action_log do |log_buffer|
       update_druid_count
 
-      CSV.open(csv_download_path, "w") do |csv|
+      CSV.open(csv_download_path, 'w') do |csv|
         druids.each do |druid|
           log_buffer.puts("#{Time.current} #{self.class}: Exporting tags for #{druid} (bulk_action.id=#{bulk_action_id})")
           csv << [druid, *export_tags(druid)]
           bulk_action.increment(:druid_count_success).save
-        rescue => e
+        rescue StandardError => e
           log_buffer.puts("#{Time.current} #{self.class}: Unexpected error exporting tags for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")
           bulk_action.increment(:druid_count_fail).save
         end

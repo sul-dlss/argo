@@ -7,14 +7,14 @@ module Show
     end
 
     def tags
-      render_field "tag_ssim"
+      render_field 'tag_ssim'
     end
 
     def edit_tags
       link_to edit_item_tags_path(item_id: id),
-        aria: {label: "Edit tags"},
-        data: {controller: "button", action: "click->button#open"} do
-        tag.span class: "bi-pencil"
+              aria: { label: 'Edit tags' },
+              data: { controller: 'button', action: 'click->button#open' } do
+        tag.span class: 'bi-pencil'
       end
     end
 

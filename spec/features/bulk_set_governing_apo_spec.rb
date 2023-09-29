@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "Bulk Update of Governing APO", :js do
+RSpec.describe 'Bulk Update of Governing APO', :js do
   let(:current_user) { create(:user) }
 
   before do
     sign_in current_user
-    allow(AdminPolicyOptions).to receive(:for).and_return(["APO 1", "APO 2", "APO 3"])
+    allow(AdminPolicyOptions).to receive(:for).and_return(['APO 1', 'APO 2', 'APO 3'])
   end
 
-  it "Creates a new job" do
+  it 'Creates a new job' do
     visit new_bulk_action_path
-    select "Update governing APO"
-    select "APO 2"
-    fill_in "Druids to perform bulk action on", with: "druid:ab123gg7777"
-    click_button "Submit"
+    select 'Update governing APO'
+    select 'APO 2'
+    fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
+    click_button 'Submit'
 
-    expect(page).to have_css "h1", text: "Bulk Actions"
+    expect(page).to have_css 'h1', text: 'Bulk Actions'
     reload_page_until_timeout do
-      page.has_css?("td", text: "SetGoverningApoJob") &&
-        page.has_css?("td", text: "Completed")
+      page.has_css?('td', text: 'SetGoverningApoJob') &&
+        page.has_css?('td', text: 'Completed')
     end
   end
 end

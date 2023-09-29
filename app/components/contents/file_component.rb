@@ -19,11 +19,12 @@ module Contents
       @image
     end
 
-    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, :use, :presentation, to: :file
+    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, :use, :presentation,
+             to: :file
     delegate :publish, :shelve, :sdrPreserve, to: :administrative
 
     def view_access
-      if access.view == "location-based"
+      if access.view == 'location-based'
         access.location
       else
         access.view.capitalize
@@ -31,7 +32,7 @@ module Contents
     end
 
     def download_access
-      if access.download == "location-based"
+      if access.download == 'location-based'
         access.location
       else
         access.download.capitalize
@@ -39,23 +40,23 @@ module Contents
     end
 
     def role
-      return "No role" if use.blank?
+      return 'No role' if use.blank?
 
       use.capitalize
     end
 
     def link_attrs
-      {item_id: object_id, id: filename}
+      { item_id: object_id, id: filename }
     end
 
     def height
-      return "" if presentation&.height.blank?
+      return '' if presentation&.height.blank?
 
       "#{presentation.height} px"
     end
 
     def width
-      return "" if presentation&.width.blank?
+      return '' if presentation&.width.blank?
 
       "#{presentation.width} px"
     end

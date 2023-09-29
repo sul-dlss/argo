@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe RemoteIndexingJob do
   let(:bulk_action) do
     create(
       :bulk_action,
-      action_type: "RemoteIndexingJob"
+      action_type: 'RemoteIndexingJob'
     )
   end
 
@@ -17,12 +17,12 @@ RSpec.describe RemoteIndexingJob do
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
   end
 
-  describe "#perform" do
-    let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222", "druid:dd111ee2222"] }
-    let(:params) { {druids:} }
+  describe '#perform' do
+    let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ee2222'] }
+    let(:params) { { druids: } }
 
-    context "in a happy world" do
-      it "updates the total druid count, attempts to update the APO for each druid, and commits to solr" do
+    context 'in a happy world' do
+      it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
         druids.each do |druid|
           expect(subject).to receive(:reindex_druid_safely).with(druid, log_buffer)
         end
@@ -30,7 +30,7 @@ RSpec.describe RemoteIndexingJob do
         expect(bulk_action.druid_count_total).to eq druids.length
       end
 
-      it "logs info about progress" do
+      it 'logs info about progress' do
         allow(subject).to receive(:reindex_druid_safely)
         subject.perform(bulk_action.id, params)
         bulk_action_id = bulk_action.id
@@ -41,8 +41,8 @@ RSpec.describe RemoteIndexingJob do
         expect(log_buffer.string).to include "Finished RemoteIndexingJob for BulkAction #{bulk_action_id}"
       end
 
-      it "increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update" do
-        timeout_err = Argo::Exceptions::ReindexError.new("Timed out connecting to server")
+      it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
+        timeout_err = Argo::Exceptions::ReindexError.new('Timed out connecting to server')
         expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druids[0])
         expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druids[1]).and_raise(StandardError)
         expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druids[2]).and_raise(timeout_err)
@@ -59,10 +59,10 @@ RSpec.describe RemoteIndexingJob do
     end
   end
 
-  describe "#reindex_druid_safely" do
-    let(:druid) { "123" }
+  describe '#reindex_druid_safely' do
+    let(:druid) { '123' }
 
-    it "logs a success and increments the success count if reindexing works" do
+    it 'logs a success and increments the success count if reindexing works' do
       expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druid)
 
       subject.send(:reindex_druid_safely, druid, log_buffer)
@@ -71,7 +71,7 @@ RSpec.describe RemoteIndexingJob do
       expect(bulk_action.druid_count_fail).to eq 0
     end
 
-    it "logs an error and increments the error count if reindexing works, but does not raise an error itself" do
+    it 'logs an error and increments the error count if reindexing works, but does not raise an error itself' do
       expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druid).and_raise("didn't see that one coming")
 
       expect { subject.send(:reindex_druid_safely, druid, log_buffer) }.not_to raise_error

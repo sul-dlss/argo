@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe ReportSearchBuilder do
   subject { report_search_builder.with(user_params) }
@@ -11,8 +11,8 @@ RSpec.describe ReportSearchBuilder do
 
   let(:report_search_builder) { described_class.new(context) }
 
-  describe "#initialize" do
-    it "has add_access_controls_to_solr_params in chain once" do
+  describe '#initialize' do
+    it 'has add_access_controls_to_solr_params in chain once' do
       expect(subject.processor_chain)
         .to include :add_access_controls_to_solr_params
       expect(subject.processor_chain
@@ -24,7 +24,7 @@ RSpec.describe ReportSearchBuilder do
         .count { |x| x == :add_access_controls_to_solr_params }).to eq 1
     end
 
-    it "has add_date_field_queries in chain once" do
+    it 'has add_date_field_queries in chain once' do
       expect(subject.processor_chain)
         .to include :add_date_field_queries
       expect(subject.processor_chain

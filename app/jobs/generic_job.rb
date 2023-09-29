@@ -13,7 +13,7 @@
 # objects in the batch might undergo the same action more than once.
 class GenericJob < ApplicationJob
   # A somewhat easy to understand and informative time stamp format
-  TIME_FORMAT = "%Y-%m-%d %H:%M%P"
+  TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
   attr_reader :druids, :groups
 
@@ -22,9 +22,9 @@ class GenericJob < ApplicationJob
   end
 
   around_perform do |_job, block|
-    bulk_action.update_attribute(:status, "Processing")
+    bulk_action.update_attribute(:status, 'Processing')
     block.call
-    bulk_action.update_attribute(:status, "Completed")
+    bulk_action.update_attribute(:status, 'Completed')
   end
 
   ##
@@ -89,9 +89,9 @@ class GenericJob < ApplicationJob
 
         cocina_object = Repository.find(druid)
         yield(cocina_object, success, failure, idx)
-      rescue => e
+      rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
-        Honeybadger.notify(e, context: {druid:})
+        Honeybadger.notify(e, context: { druid: })
       end
     end
   end
@@ -117,7 +117,7 @@ class GenericJob < ApplicationJob
   #       failure.call("Something went wrong")
   #     end
   #   end
-  def with_csv_items(csv, name:, druid_column: "druid", filename: nil)
+  def with_csv_items(csv, name:, druid_column: 'druid', filename: nil)
     update_druid_count(count: csv.size)
     with_bulk_action_log do |log|
       log.puts("CSV filename: #{filename}") if filename
@@ -137,9 +137,9 @@ class GenericJob < ApplicationJob
 
         cocina_object = Repository.find(druid)
         yield(cocina_object, csv_row, success, failure, row_num)
-      rescue => e
+      rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
-        Honeybadger.notify(e, context: {druid:})
+        Honeybadger.notify(e, context: { druid: })
       end
     end
   end
@@ -171,12 +171,12 @@ class GenericJob < ApplicationJob
   # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with the new version
   def open_new_version(cocina_object, description)
     wf_status = DorObjectWorkflowStatus.new(cocina_object.externalIdentifier, version: cocina_object.version)
-    raise "Unable to open new version" unless wf_status.can_open_version?
+    raise 'Unable to open new version' unless wf_status.can_open_version?
 
     VersionService.open(identifier: cocina_object.externalIdentifier,
-      significance: "minor",
-      description:,
-      opening_user_name: bulk_action.user.to_s)
+                        significance: 'minor',
+                        description:,
+                        opening_user_name: bulk_action.user.to_s)
   end
 
   # Opens a new minor version of the provided cocina object unless the object is already open for modification.

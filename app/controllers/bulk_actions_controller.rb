@@ -7,17 +7,16 @@ class BulkActionsController < ApplicationController
 
   # GET /bulk_actions
   def index
-    @bulk_actions = BulkAction.where(user: current_user).order("created_at DESC")
+    @bulk_actions = BulkAction.where(user: current_user).order('created_at DESC')
   end
 
   # GET /bulk_actions/new
-  def new
-  end
+  def new; end
 
   # DELETE /bulk_actions/1
   def destroy
     @bulk_action.destroy
-    redirect_to bulk_actions_url, notice: "Bulk action was deleted."
+    redirect_to bulk_actions_url, notice: 'Bulk action was deleted.'
   end
 
   # GET /bulk_actions/1/file
@@ -31,6 +30,6 @@ class BulkActionsController < ApplicationController
   def set_bulk_action
     @bulk_action = current_user.bulk_actions.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render plain: "Object Not Found", status: :not_found
+    render plain: 'Object Not Found', status: :not_found
   end
 end

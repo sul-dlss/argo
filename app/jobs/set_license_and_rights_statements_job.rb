@@ -21,24 +21,26 @@ class SetLicenseAndRightsStatementsJob < GenericJob
       argument_hash[:use_statement] = dig_from_params_if_option_set(params, :use_statement)
     end.compact
 
-    with_items(params[:druids], name: "Set license and rights statement") do |cocina_object, success, failure|
-      next failure.call("Not authorized") unless ability.can?(:update, cocina_object)
-      next failure.call("Not an item or collection (#{cocina_object.type})") unless cocina_object.dro? || cocina_object.collection?
+    with_items(params[:druids], name: 'Set license and rights statement') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+      unless cocina_object.dro? || cocina_object.collection?
+        next failure.call("Not an item or collection (#{cocina_object.type})")
+      end
 
       klass = change_set_class(cocina_object)
       change_set = klass.new(cocina_object)
       change_set.validate(args)
 
-      next success.call("No changes made") unless change_set.changed?
+      next success.call('No changes made') unless change_set.changed?
 
       updated_object = open_new_version_if_needed(cocina_object,
-        "updated license, copyright statement, and/or use and reproduction statement")
+                                                  'updated license, copyright statement, and/or use and reproduction statement')
 
       change_set = klass.new(updated_object)
       change_set.validate(args)
       change_set.save
 
-      success.call("License/copyright/use statement(s) updated successfully")
+      success.call('License/copyright/use statement(s) updated successfully')
     end
   end
 
@@ -54,6 +56,6 @@ class SetLicenseAndRightsStatementsJob < GenericJob
   end
 
   def dig_from_params_if_option_set(params, key)
-    params.fetch(key) if params["#{key}_option"] == "1"
+    params.fetch(key) if params["#{key}_option"] == '1'
   end
 end

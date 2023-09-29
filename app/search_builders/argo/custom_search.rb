@@ -10,7 +10,7 @@ module Argo
       return unless blacklight_params[:druids_only]
 
       solr_parameters[:fl] ||= []
-      solr_parameters[:fl] << "id"
+      solr_parameters[:fl] << 'id'
       solr_parameters[:rows] = 99_999_999
       solr_parameters[:facet] = false
     end

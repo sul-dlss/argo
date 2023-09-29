@@ -32,12 +32,12 @@ class ReportController < CatalogController
 
   def download
     # Tells Rack to stream the response instead of filling a buffer
-    response.headers.delete("Content-Length")
-    response.headers["Cache-Control"] = "no-cache"
-    response.headers["Content-Type"] = "text/csv"
-    response.headers["Content-Disposition"] = "attachment; filename=\"report.csv\""
-    response.headers["Last-Modified"] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    response.headers["X-Accel-Buffering"] = "no"
+    response.headers.delete('Content-Length')
+    response.headers['Cache-Control'] = 'no-cache'
+    response.headers['Content-Type'] = 'text/csv'
+    response.headers['Content-Disposition'] = 'attachment; filename="report.csv"'
+    response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
+    response.headers['X-Accel-Buffering'] = 'no'
 
     self.response_body = Report.new(params, current_user:).to_csv
   end
@@ -53,19 +53,19 @@ class ReportController < CatalogController
       druid = Druid.new(druid).with_namespace
       cocina = Repository.find(druid)
 
-      next unless current_ability.can_update_workflow?("waiting", cocina)
+      next unless current_ability.can_update_workflow?('waiting', cocina)
 
       WorkflowClientFactory.build.update_status(
         druid:,
         workflow:,
         process: step,
-        current_status: "error",
-        status: "waiting"
+        current_status: 'error',
+        status: 'waiting'
       )
     rescue Dor::WorkflowException => e
       # NOTE: this may be triggered if the step being set to waiting is no longer in error
       # which should not normally happen, because the list of druids fetched by `Report` should all be in error
-      Honeybadger.notify(e, context: {druid:})
+      Honeybadger.notify(e, context: { druid: })
     end
     message = "#{ids.size} objects were reset back to waiting for #{workflow}:#{step}.  It may take a few seconds to update."
     redirect_back(fallback_location: report_workflow_grid_path, notice: message)
@@ -74,19 +74,19 @@ class ReportController < CatalogController
   # This draws the full page that supports the workflow grid
   def workflow_grid
     (@response, _deprecated_document_list) = search_service.search_results
-    return unless request.headers["X-Requester"] == "frontend"
+    return unless request.headers['X-Requester'] == 'frontend'
 
     # This is triggered by javascript that refreshes the data every 10s
-    facet_id = "wf_wps_ssim"
+    facet_id = 'wf_wps_ssim'
     facet = blacklight_config.facet_fields[facet_id]
     display_facet = @response.aggregations[facet.field]
     presenter = facet.presenter.new(facet, display_facet, self, search_state)
     @facet_tree = Blacklight::Hierarchy::FacetTree.build(
-      prefix: "wf_wps",
+      prefix: 'wf_wps',
       facet_display: blacklight_config.facet_display,
       facet_field: presenter
     )[facet_id]
 
-    render partial: "workflow_grid"
+    render partial: 'workflow_grid'
   end
 end

@@ -16,12 +16,12 @@ class RegisterDruidsJob < GenericJob
     report_filename = generate_report_filename(bulk_action.output_directory)
     with_bulk_action_log do |log|
       update_druid_count(count: results.length)
-      CSV.open(report_filename, "wb") do |report|
-        report << ["Druid", "Barcode", CatalogRecordId.label, "Source Id", "Label"]
+      CSV.open(report_filename, 'wb') do |report|
+        report << ['Druid', 'Barcode', CatalogRecordId.label, 'Source Id', 'Label']
 
         results.each do |parse_result|
           parse_result.either(->(value) { register(value, bulk_action:, log:, report:) },
-            ->(error) { log_error(error, bulk_action:, log:) })
+                              ->(error) { log_error(error, bulk_action:, log:) })
         end
       end
     end
@@ -35,12 +35,13 @@ class RegisterDruidsJob < GenericJob
     log.puts("#{Time.current} #{self.class}: Registering with #{value.inspect}")
     registration_result = RegistrationService.register(**value)
     registration_result.either(->(cocina_model) { log_success(cocina_model, bulk_action:, log:, report:) },
-      ->(error) { log_error(error, bulk_action:, log:) })
+                               ->(error) { log_error(error, bulk_action:, log:) })
   end
 
   def log_success(model, bulk_action:, log:, report:)
     log.puts("#{Time.current} #{self.class}: Successfully registered #{model.externalIdentifier}")
-    report << [Druid.new(model).without_namespace, model.identification.barcode, model.identification.catalogLinks.first&.catalogRecordId, model.identification.sourceId, model.label]
+    report << [Druid.new(model).without_namespace, model.identification.barcode,
+               model.identification.catalogLinks.first&.catalogRecordId, model.identification.sourceId, model.label]
     bulk_action.increment(:druid_count_success).save
   end
 

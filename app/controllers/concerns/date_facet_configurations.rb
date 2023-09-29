@@ -41,40 +41,51 @@ module DateFacetConfigurations
         }, raw_facet_field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE
       config.add_facet_field SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: "Earliest Accessioned", if: false, home: false
 
-      config.add_facet_field "published_latest_date", home: false, label: "Last Published",
-        component: DateChoiceFacetComponent,
-        query: {
-          days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_LAST_PUBLISHED_DATE}:[NOW/DAY-7DAYS TO *]"},
-          days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_LAST_PUBLISHED_DATE}:[NOW/DAY-30DAYS TO *]"}
-        }, raw_facet_field: SolrDocument::FIELD_LAST_PUBLISHED_DATE
-      config.add_facet_field SolrDocument::FIELD_LAST_PUBLISHED_DATE, label: "Last Published", if: false, home: false
+      config.add_facet_field 'published_latest_date', home: false, label: 'Last Published',
+                                                      component: DateChoiceFacetComponent,
+                                                      query: {
+                                                        days_7: { label: 'within 7 days',
+                                                                  fq: "#{SolrDocument::FIELD_LAST_PUBLISHED_DATE}:[NOW/DAY-7DAYS TO *]" },
+                                                        days_30: { label: 'within 30 days',
+                                                                   fq: "#{SolrDocument::FIELD_LAST_PUBLISHED_DATE}:[NOW/DAY-30DAYS TO *]" }
+                                                      }, raw_facet_field: SolrDocument::FIELD_LAST_PUBLISHED_DATE
+      config.add_facet_field SolrDocument::FIELD_LAST_PUBLISHED_DATE, label: 'Last Published', if: false, home: false
 
-      config.add_facet_field "object_modified_date", home: false, label: "Last Modified",
-        component: DateChoiceFacetComponent,
-        query: {
-          days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_LAST_MODIFIED_DATE}:[NOW/DAY-7DAYS TO *]"},
-          days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_LAST_MODIFIED_DATE}:[NOW/DAY-30DAYS TO *]"}
-        }, raw_facet_field: SolrDocument::FIELD_LAST_MODIFIED_DATE
+      config.add_facet_field 'object_modified_date', home: false, label: 'Last Modified',
+                                                     component: DateChoiceFacetComponent,
+                                                     query: {
+                                                       days_7: { label: 'within 7 days',
+                                                                 fq: "#{SolrDocument::FIELD_LAST_MODIFIED_DATE}:[NOW/DAY-7DAYS TO *]" },
+                                                       days_30: { label: 'within 30 days',
+                                                                  fq: "#{SolrDocument::FIELD_LAST_MODIFIED_DATE}:[NOW/DAY-30DAYS TO *]" }
+                                                     }, raw_facet_field: SolrDocument::FIELD_LAST_MODIFIED_DATE
 
-      config.add_facet_field SolrDocument::FIELD_LAST_MODIFIED_DATE, label: "Last Modified", if: false, home: false
+      config.add_facet_field SolrDocument::FIELD_LAST_MODIFIED_DATE, label: 'Last Modified', if: false, home: false
 
-      config.add_facet_field "version_opened_date", home: false, label: "Last Opened",
-        component: DateChoiceFacetComponent,
-        query: {
-          all: {label: "All", fq: "#{SolrDocument::FIELD_LAST_OPENED_DATE}:*"},
-          days_7: {label: "more than 7 days", fq: "#{SolrDocument::FIELD_LAST_OPENED_DATE}:[* TO NOW/DAY-7DAYS]"},
-          days_30: {label: "more than 30 days", fq: "#{SolrDocument::FIELD_LAST_OPENED_DATE}:[* TO NOW/DAY-30DAYS]"}
-        }, raw_facet_field: SolrDocument::FIELD_LAST_OPENED_DATE
-      config.add_facet_field SolrDocument::FIELD_LAST_OPENED_DATE, label: "Last Opened", if: false, home: false
+      config.add_facet_field 'version_opened_date', home: false, label: 'Last Opened',
+                                                    component: DateChoiceFacetComponent,
+                                                    query: {
+                                                      all: { label: 'All',
+                                                             fq: "#{SolrDocument::FIELD_LAST_OPENED_DATE}:*" },
+                                                      days_7: { label: 'more than 7 days',
+                                                                fq: "#{SolrDocument::FIELD_LAST_OPENED_DATE}:[* TO NOW/DAY-7DAYS]" },
+                                                      days_30: { label: 'more than 30 days',
+                                                                 fq: "#{SolrDocument::FIELD_LAST_OPENED_DATE}:[* TO NOW/DAY-30DAYS]" }
+                                                    }, raw_facet_field: SolrDocument::FIELD_LAST_OPENED_DATE
+      config.add_facet_field SolrDocument::FIELD_LAST_OPENED_DATE, label: 'Last Opened', if: false, home: false
 
-      config.add_facet_field "embargo_release_date", home: false, label: "Embargo Release Date",
-        component: DateChoiceFacetComponent,
-        query: {
-          days_7: {label: "up to 7 days", fq: "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:[NOW TO NOW/DAY+7DAYS]"},
-          days_30: {label: "up to 30 days", fq: "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:[NOW TO NOW/DAY+30DAYS]"},
-          all: {label: "All", fq: "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:*"}
-        }, raw_facet_field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE
-      config.add_facet_field SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: "Embargo Release Date", if: false, home: false
+      config.add_facet_field 'embargo_release_date', home: false, label: 'Embargo Release Date',
+                                                     component: DateChoiceFacetComponent,
+                                                     query: {
+                                                       days_7: { label: 'up to 7 days',
+                                                                 fq: "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:[NOW TO NOW/DAY+7DAYS]" },
+                                                       days_30: { label: 'up to 30 days',
+                                                                  fq: "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:[NOW TO NOW/DAY+30DAYS]" },
+                                                       all: { label: 'All',
+                                                              fq: "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:*" }
+                                                     }, raw_facet_field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE
+      config.add_facet_field SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: 'Embargo Release Date', if: false,
+                                                                       home: false
     end
   end
 end

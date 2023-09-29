@@ -3,6 +3,6 @@
 module BulkActions
   class ExportCocinaJsonJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = "ExportCocinaJsonJob"
+    self.action_type = 'ExportCocinaJsonJob'
   end
 end

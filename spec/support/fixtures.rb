@@ -1,5 +1,5 @@
 def fixture_dir
-  @fixture_dir ||= File.join(File.dirname(__FILE__), "../fixtures")
+  @fixture_dir ||= File.join(File.dirname(__FILE__), '../fixtures')
 end
 
 def read_fixture(fname)

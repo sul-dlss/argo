@@ -3,7 +3,7 @@
 module BulkActions
   class AddWorkflowJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = "AddWorkflowJob"
+    self.action_type = 'AddWorkflowJob'
 
     def job_params
       super.merge(workflow: params[:workflow])

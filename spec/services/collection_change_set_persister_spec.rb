@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe CollectionChangeSetPersister do
-  describe ".update" do
+  describe '.update' do
     let(:change_set) { instance_double(CollectionChangeSet) }
     let(:instance) { instance_double(described_class, update: nil) }
     let(:model) { instance_double(Cocina::Models::CollectionWithMetadata) }
@@ -13,53 +13,53 @@ RSpec.describe CollectionChangeSetPersister do
       described_class.update(model, change_set)
     end
 
-    it "calls #update on a new instance" do
+    it 'calls #update on a new instance' do
       expect(instance).to have_received(:update).once
     end
   end
 
-  describe "#update" do
-    let(:copyright_statement_before) { "My First Copyright Statement" }
+  describe '#update' do
+    let(:copyright_statement_before) { 'My First Copyright Statement' }
     let(:instance) do
       described_class.new(model, change_set)
     end
     let(:change_set) { CollectionChangeSet.new(model) }
-    let(:license_before) { "https://opendatacommons.org/licenses/pddl/1-0/" }
+    let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
       model = Cocina::Models::Collection.new(
-        externalIdentifier: "druid:bc123df4568",
-        label: "test",
+        externalIdentifier: 'druid:bc123df4568',
+        label: 'test',
         type: Cocina::Models::ObjectType.collection,
         version: 1,
         description: {
-          title: [{value: "test"}],
-          purl: "https://purl.stanford.edu/bc123df4568"
+          title: [{ value: 'test' }],
+          purl: 'https://purl.stanford.edu/bc123df4568'
         },
-        identification: {sourceId: "sul:1234"},
+        identification: { sourceId: 'sul:1234' },
         access: {
           copyright: copyright_statement_before,
           license: license_before,
           useAndReproductionStatement: use_statement_before
         },
-        administrative: {hasAdminPolicy: "druid:bc123df4569"}
+        administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
-      Cocina::Models.with_metadata(model, "abc123")
+      Cocina::Models.with_metadata(model, 'abc123')
     end
-    let(:use_statement_before) { "My First Use Statement" }
+    let(:use_statement_before) { 'My First Use Statement' }
 
     before do
       allow(Repository).to receive(:store)
     end
 
-    context "when change set has changed copyright statement" do
+    context 'when change set has changed copyright statement' do
       before do
         change_set.validate(copyright: new_copyright_statement)
         instance.update
       end
 
-      let(:new_copyright_statement) { "A Changed Copyright Statement" }
+      let(:new_copyright_statement) { 'A Changed Copyright Statement' }
 
-      it "invokes object client with collection that has new copyright statement" do
+      it 'invokes object client with collection that has new copyright statement' do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             access: {
@@ -72,15 +72,15 @@ RSpec.describe CollectionChangeSetPersister do
       end
     end
 
-    context "when change set has changed license" do
+    context 'when change set has changed license' do
       before do
         change_set.validate(license: new_license)
         instance.update
       end
 
-      let(:new_license) { "https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode" }
+      let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' }
 
-      it "invokes object client with collection that has new license" do
+      it 'invokes object client with collection that has new license' do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             access: {
@@ -93,15 +93,15 @@ RSpec.describe CollectionChangeSetPersister do
       end
     end
 
-    context "when change set has changed use statement" do
+    context 'when change set has changed use statement' do
       before do
         change_set.validate(use_statement: new_use_statement)
         instance.update
       end
 
-      let(:new_use_statement) { "A Changed Use Statement" }
+      let(:new_use_statement) { 'A Changed Use Statement' }
 
-      it "invokes object client with collection that has new use statement" do
+      it 'invokes object client with collection that has new use statement' do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             access: {
@@ -114,12 +114,12 @@ RSpec.describe CollectionChangeSetPersister do
       end
     end
 
-    context "when change set has no changes" do
+    context 'when change set has no changes' do
       before do
         instance.update
       end
 
-      it "invokes object client with collection as before" do
+      it 'invokes object client with collection as before' do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             access: {
@@ -132,15 +132,15 @@ RSpec.describe CollectionChangeSetPersister do
       end
     end
 
-    context "when change set has changed APO" do
+    context 'when change set has changed APO' do
       before do
         change_set.validate(admin_policy_id: new_apo)
         instance.update
       end
 
-      let(:new_apo) { "druid:dc123df4569" }
+      let(:new_apo) { 'druid:dc123df4569' }
 
-      it "invokes object client with collection that has new APO" do
+      it 'invokes object client with collection that has new APO' do
         expect(Repository).to have_received(:store).with(
           cocina_object_with(
             administrative: {

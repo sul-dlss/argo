@@ -9,12 +9,12 @@ module Show
       end
 
       def access_rights
-        return "CDL" if controlled_digital_lending
+        return 'CDL' if controlled_digital_lending
 
         val = "View: #{humanize_value(view_access)}"
-        val += ": #{access_location}" if view_access == "location-based"
+        val += ": #{access_location}" if view_access == 'location-based'
         val += ", Download: #{humanize_value(download_access)}"
-        val += ": #{access_location}" if download_access == "location-based"
+        val += ": #{access_location}" if download_access == 'location-based'
         val
       end
 
@@ -22,7 +22,7 @@ module Show
       delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :@change_set
 
       def humanize_value(val)
-        (val == "location-based") ? "Location" : val.capitalize
+        val == 'location-based' ? 'Location' : val.capitalize
       end
     end
   end

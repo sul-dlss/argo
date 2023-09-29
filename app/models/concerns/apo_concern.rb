@@ -6,8 +6,8 @@ module ApoConcern
   FIELD_APO_ID = :is_governed_by_ssim
   FIELD_APO_TITLE = :apo_title_ssim
 
-  UBER_APO_ID = "druid:hv992ry2431" # TODO: Uber-APO is hardcoded
-  HYDRUS_UBER_APO_ID = "druid:zw306xn5593" # TODO: Hydrus Uber-APO is hardcoded
+  UBER_APO_ID = 'druid:hv992ry2431' # TODO: Uber-APO is hardcoded
+  HYDRUS_UBER_APO_ID = 'druid:zw306xn5593' # TODO: Hydrus Uber-APO is hardcoded
   UBER_APO_IDS = [UBER_APO_ID, HYDRUS_UBER_APO_ID].freeze
 
   ##
@@ -25,7 +25,7 @@ module ApoConcern
   # Access a SolrDocument's APO druid without the `info:fedora/` prefix
   # @return [String, nil]
   def apo_druid
-    apo_id&.gsub("info:fedora/", "")
+    apo_id&.gsub('info:fedora/', '')
   end
 
   ##

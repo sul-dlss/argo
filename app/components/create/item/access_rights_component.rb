@@ -14,25 +14,25 @@ module Create
 
       def view_label(value)
         label = super
-        label += " (APO default)" if access_template.default_view?(value)
+        label += ' (APO default)' if access_template.default_view?(value)
         label
       end
 
       def download_label(value)
         label = super
-        label += " (APO default)" if access_template.default_download?(value)
+        label += ' (APO default)' if access_template.default_download?(value)
         label
       end
 
       def location_label(value)
         label = super
-        label += " (APO default)" if access_template.default_location?(value)
+        label += ' (APO default)' if access_template.default_location?(value)
         label
       end
 
       def cdl_label(value)
         label = super
-        label += " (APO default)" if access_template.default_controlled_digital_lending?(value)
+        label += ' (APO default)' if access_template.default_controlled_digital_lending?(value)
         label
       end
 

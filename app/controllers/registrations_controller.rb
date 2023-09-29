@@ -20,31 +20,31 @@ class RegistrationsController < ApplicationController
 
   def tracksheet
     druids = Array(params[:druid]).map { |druid| Druid.new(druid).without_namespace }
-    name = params[:name] || "tracksheet"
+    name = params[:name] || 'tracksheet'
     sequence = params[:sequence] || 1
-    response["content-disposition"] = "attachment; filename=#{name}-#{sequence}.pdf"
+    response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
     pdf = TrackSheet.new(druids).generate_tracking_pdf
     render plain: pdf.render, content_type: :pdf
   end
 
   def autocomplete
-    facet_field = "project_tag_ssim"
+    facet_field = 'project_tag_ssim'
     response = SearchService.query(
-      "*:*",
+      '*:*',
       rows: 0,
       "facet.field": facet_field,
       "facet.prefix": params[:term].titlecase,
       "facet.mincount": 1,
       "facet.limit": 15,
-      "json.nl": "map"
+      "json.nl": 'map'
     )
-    result = response["facet_counts"]["facet_fields"][facet_field].keys.sort
+    result = response['facet_counts']['facet_fields'][facet_field].keys.sort
     render json: result
   end
 
   # Allow the front end to check if a source Id already exists
   def source_id
-    raise "Malformed input" unless Regexp.new(Settings.source_id_regex).match?(params[:source_id])
+    raise 'Malformed input' unless Regexp.new(Settings.source_id_regex).match?(params[:source_id])
 
     begin
       Dor::Services::Client.objects.find(source_id: params[:source_id])
@@ -77,9 +77,9 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       format.csv do
         csv_template = CSV.generate do |csv|
-          csv << ["barcode", CatalogRecordId.label.downcase.tr(" ", "_"), "source_id", "label"]
+          csv << ['barcode', CatalogRecordId.label.downcase.tr(' ', '_'), 'source_id', 'label']
         end
-        send_data csv_template, filename: "registration.csv"
+        send_data csv_template, filename: 'registration.csv'
       end
     end
   end
@@ -91,7 +91,7 @@ class RegistrationsController < ApplicationController
   end
 
   def render_failure(error)
-    return render plain: error.message, status: :conflict if error.errors.first&.fetch("status") == "422"
+    return render plain: error.message, status: :conflict if error.errors.first&.fetch('status') == '422'
 
     render plain: error.message, status: :bad_request
   end
@@ -100,7 +100,7 @@ class RegistrationsController < ApplicationController
     @registration_form = RegistrationForm.new(nil)
     create_params = params.require(:registration).to_unsafe_h.merge(current_user:)
     if @registration_form.validate(create_params) && @registration_form.save
-      render "create_status"
+      render 'create_status'
     else
       prepopulate
       render :show, status: :bad_request
@@ -115,7 +115,7 @@ class RegistrationsController < ApplicationController
       # search_state_subset = search_state.to_h.except(:authenticity_token, :druids, :druids_only, :description)
       # path_params = Blacklight::Parameters.sanitize(search_state_subset)
       # redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
-      redirect_to bulk_actions_path, status: :see_other, notice: "Register druids job was successfully created."
+      redirect_to bulk_actions_path, status: :see_other, notice: 'Register druids job was successfully created.'
     else
       prepopulate
       render :show, status: :bad_request
