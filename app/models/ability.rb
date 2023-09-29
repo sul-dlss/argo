@@ -11,9 +11,9 @@
 class Ability
   include CanCan::Ability
 
-  DRO_MODELS = [Cocina::Models::DRO, Cocina::Models::DROWithMetadata].freeze
-  COLLECTION_MODELS = [Cocina::Models::Collection, Cocina::Models::CollectionWithMetadata].freeze
-  ADMIN_POLICY_MODELS = [Cocina::Models::AdminPolicy, Cocina::Models::AdminPolicyWithMetadata].freeze
+  DRO_MODELS = [Cocina::Models::DRO, Cocina::Models::DROWithMetadata, Cocina::Models::DROLite].freeze
+  COLLECTION_MODELS = [Cocina::Models::Collection, Cocina::Models::CollectionWithMetadata, Cocina::Models::CollectionLite].freeze
+  ADMIN_POLICY_MODELS = [Cocina::Models::AdminPolicy, Cocina::Models::AdminPolicyWithMetadata, Cocina::Models::AdminPolicyLite].freeze
 
   def initialize(current_user)
     @current_user = current_user || guest_user

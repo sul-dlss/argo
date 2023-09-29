@@ -7,13 +7,16 @@ RSpec.describe Ability do
   subject(:ability) { described_class.new(user) }
 
   let(:dro) { build(:dro, id: new_cocina_object_id, admin_policy_id: apo_id) }
-  let(:dro_with_metadata) { build(:dro, id: new_cocina_object_id, admin_policy_id: apo_id) }
+  let(:dro_with_metadata) { Cocina::Models.with_metadata(dro, "123") }
+  let(:dro_lite) { Cocina::Models.build_lite(dro.to_h) }
 
   let(:admin_policy) { build(:admin_policy, id: new_cocina_object_id, admin_policy_id: apo_id) }
-  let(:admin_policy_with_metadata) { build(:admin_policy, id: new_cocina_object_id, admin_policy_id: apo_id) }
+  let(:admin_policy_with_metadata) { Cocina::Models.with_metadata(admin_policy, "123") }
+  let(:admin_policy_lite) { Cocina::Models.build_lite(admin_policy.to_h) }
 
   let(:collection) { build(:collection, id: new_cocina_object_id, admin_policy_id: apo_id) }
-  let(:collection_with_metadata) { build(:collection, id: new_cocina_object_id, admin_policy_id: apo_id) }
+  let(:collection_with_metadata) { Cocina::Models.with_metadata(collection, "123") }
+  let(:collection_lite) { Cocina::Models.build_lite(collection.to_h) }
 
   let(:user) do
     instance_double(User,
@@ -50,6 +53,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.to be_able_to(:view_content, dro_lite) }
     it { is_expected.to be_able_to(:update, :workflow) }
   end
 
@@ -66,6 +70,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.to be_able_to(:view_content, dro_lite) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
@@ -80,12 +85,16 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
     it { is_expected.to be_able_to(:read, dro) }
     it { is_expected.to be_able_to(:read, dro_with_metadata) }
+    it { is_expected.to be_able_to(:read, dro_lite) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.to be_able_to(:view_content, dro_lite) }
     it { is_expected.to be_able_to(:read, admin_policy) }
     it { is_expected.to be_able_to(:read, admin_policy_with_metadata) }
+    it { is_expected.to be_able_to(:read, admin_policy_lite) }
     it { is_expected.to be_able_to(:read, collection) }
     it { is_expected.to be_able_to(:read, collection_with_metadata) }
+    it { is_expected.to be_able_to(:read, collection_lite) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
@@ -100,12 +109,16 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
     it { is_expected.not_to be_able_to(:read, dro) }
     it { is_expected.not_to be_able_to(:read, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, dro_lite) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:view_content, dro_lite) }
     it { is_expected.not_to be_able_to(:read, admin_policy) }
     it { is_expected.not_to be_able_to(:read, admin_policy_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, admin_policy_lite) }
     it { is_expected.not_to be_able_to(:read, collection) }
     it { is_expected.not_to be_able_to(:read, collection_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, collection_lite) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
@@ -116,6 +129,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:view_content, dro_lite) }
   end
 
   context "with the manage role on the parent APO" do
@@ -131,12 +145,16 @@ RSpec.describe Ability do
 
     it { is_expected.to be_able_to(:read, dro) }
     it { is_expected.to be_able_to(:read, dro_with_metadata) }
+    it { is_expected.to be_able_to(:read, dro_lite) }
     it { is_expected.to be_able_to(:read, collection) }
     it { is_expected.to be_able_to(:read, collection_with_metadata) }
+    it { is_expected.to be_able_to(:read, collection_lite) }
     it { is_expected.to be_able_to(:read, admin_policy) }
     it { is_expected.to be_able_to(:read, admin_policy_with_metadata) }
+    it { is_expected.to be_able_to(:read, admin_policy_lite) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.to be_able_to(:view_content, dro_lite) }
   end
 
   context "with the manage role on the cocina_object" do
@@ -152,12 +170,16 @@ RSpec.describe Ability do
 
     it { is_expected.not_to be_able_to(:read, dro) }
     it { is_expected.not_to be_able_to(:read, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, dro_lite) }
     it { is_expected.not_to be_able_to(:read, collection) }
     it { is_expected.not_to be_able_to(:read, collection_with_metadata) }
+    it { is_expected.not_to be_able_to(:read, collection_lite) }
     it { is_expected.to be_able_to(:read, admin_policy) }
     it { is_expected.to be_able_to(:read, admin_policy_with_metadata) }
+    it { is_expected.to be_able_to(:read, admin_policy_lite) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:view_content, dro_lite) }
   end
 
   context "with the edit role on the parent APO" do
@@ -172,6 +194,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.not_to be_able_to(:view_content, dro_lite) }
   end
 
   context "with the view role on the parent APO" do
@@ -186,5 +209,6 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
+    it { is_expected.to be_able_to(:view_content, dro_lite) }
   end
 end
