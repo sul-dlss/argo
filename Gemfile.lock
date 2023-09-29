@@ -576,18 +576,6 @@ GEM
     sshkit (1.21.5)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    standard (1.31.1)
-      language_server-protocol (~> 3.17.0.2)
-      lint_roller (~> 1.0)
-      rubocop (~> 1.56.2)
-      standard-custom (~> 1.0.0)
-      standard-performance (~> 1.2)
-    standard-custom (1.0.2)
-      lint_roller (~> 1.0)
-      rubocop (~> 1.50)
-    standard-performance (1.2.0)
-      lint_roller (~> 1.1)
-      rubocop-performance (~> 1.19.0)
     standard-rails (0.2.0)
       lint_roller (~> 1.0)
       rubocop-rails (~> 2.20.2)
@@ -702,6 +690,7 @@ DEPENDENCIES
   rsolr
   rspec-rails (~> 5.0)
   rspec_junit_formatter
+  rubocop-performance
   rubocop-rspec
   ruby-prof
   rubyzip
@@ -710,7 +699,6 @@ DEPENDENCIES
   sidekiq (~> 7.1)
   simplecov
   sqlite3 (~> 1.4.2)
-  standard
   standard-rails
   turbo-rails (~> 1.0)
   view_component (~> 2.74.1)
