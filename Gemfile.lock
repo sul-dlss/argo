@@ -271,6 +271,12 @@ GEM
     faraday-retry (2.2.0)
       faraday (~> 2.0)
     ffi (1.16.2)
+    folio_client (0.13.0)
+      activesupport (>= 4.2, < 8)
+      dry-monads
+      faraday
+      marc
+      zeitwerk
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.0.1)
@@ -320,6 +326,10 @@ GEM
       net-imap
       net-pop
       net-smtp
+    marc (1.2.0)
+      rexml
+      scrub_rb (>= 1.0.1, < 2)
+      unf
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
@@ -535,6 +545,7 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    scrub_rb (1.0.1)
     sdr-client (2.6.0)
       activesupport
       cocina-models (~> 0.91.0)
@@ -598,6 +609,9 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8.2)
     unicode-display_width (2.5.0)
     view_component (2.74.1)
       activesupport (>= 5.0.0, < 8.0)
@@ -659,6 +673,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   faraday-multipart
+  folio_client (~> 0.13)
   honeybadger (~> 4.1)
   http_logger
   jbuilder (~> 2.5)

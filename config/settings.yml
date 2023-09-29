@@ -74,6 +74,13 @@ workflow:
 apo:
   default_workflow_option: 'registrationWF'
 
+catalog:
+  folio:
+    okapi:
+      url: "https://okapi-dev.example.com"
+      username: "app"
+      password: "supersecret"
+    tenant_id: "example_tenant"
 
 sdr_api:
   email: argo@dlss.sul.stanford.edu
