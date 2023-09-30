@@ -140,7 +140,7 @@ RSpec.describe ModsService do
                     note: [{ value: 'Property rights reside with the repository.' }] } }
       end
 
-      it 'adds collections and generates accessConditions' do # rubocop:disable RSpec/MultipleExpectations
+      it 'adds collections and generates accessConditions' do
         doc = Nokogiri::XML(xml)
         expect(doc.encoding).to eq('UTF-8')
         expect(doc.xpath('//comment()').size).to eq 0

@@ -16,7 +16,7 @@ RSpec.describe 'Draw a list of bulk actions' do
     allow_any_instance_of(BulkAction).to receive(:has_report?).and_return(true)
   end
 
-  it 'authorizes the view' do # rubocop:disable RSpec/MultipleExpectations
+  it 'authorizes the view' do
     sign_in user, groups: ['sdr:administrator-role']
     get '/bulk_actions'
     expect(response).to have_http_status(:success)
