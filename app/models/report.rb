@@ -166,7 +166,7 @@ class Report
       sort: false, default: false, width: 50
     },
     {
-      field: :preserved_size, label: "Preservation Size",
+      field: :preserved_size, label: "Preservation Size (bytes)",
       proc: ->(doc) { doc.preservation_size },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50
