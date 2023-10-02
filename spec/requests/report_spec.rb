@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Reports from a search' do
   before do
-    sign_in user, groups: ["sdr:administrator-role"]
+    sign_in user, groups: ['sdr:administrator-role']
   end
 
   let(:blacklight_config) { CatalogController.blacklight_config }

@@ -4,9 +4,9 @@
     Select View
     <span class='caret'></span>
   </button>
-  <div class='dropdown-menu <%= "dropdown-menu-right" if catalog_view? %>' aria-labelledby='argo-view-dropdown'>
+  <div class='dropdown-menu <%= 'dropdown-menu-right' if catalog_view? %>' aria-labelledby='argo-view-dropdown'>
     <% views_to_switch.each do |view| %>
-      <div class="dropdown-item <%= "active" if send("#{view.name}_view?") %>">
+      <div class="dropdown-item <%= 'active' if send("#{view.name}_view?") %>">
         <%= link_to t("argo.search.#{view.name}_view"), send(view.path, cleaned_params) %>
       </div>
     <% end %>

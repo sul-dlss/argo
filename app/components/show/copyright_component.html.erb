@@ -1,7 +1,7 @@
 <turbo-frame id="copyright">
   <%= copyright %>
   <% if allows_modification? %>
-    <%= link_to edit_copyright_item_path(id: id), aria: {label: "Edit copyright"} do %>
+    <%= link_to edit_copyright_item_path(id:), aria: { label: 'Edit copyright' } do %>
       <span class="bi-pencil"></span>
     <% end %>
   <% end %>

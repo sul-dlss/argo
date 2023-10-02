@@ -1,5 +1,5 @@
-<%= form_with url: rights_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
-  <%= render "bulk_actions/errors" %>
+<%= form_with url: rights_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
 
   <span class="help-block">
     Edit rights
@@ -9,6 +9,6 @@
     <%= render Edit::Item::AccessRightsComponent.new(form_builder: f) %>
   </div>
 
-  <%= render "bulk_actions/druids", f: f %>
-  <%= render "bulk_actions/common_fields", f: f %>
+  <%= render 'bulk_actions/druids', f: %>
+  <%= render 'bulk_actions/common_fields', f: %>
 <% end %>

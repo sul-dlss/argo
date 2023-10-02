@@ -1,5 +1,5 @@
-<%= form_with url: license_and_rights_statement_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
-  <%= render "bulk_actions/errors" %>
+<%= form_with url: license_and_rights_statement_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
 
   <span class='help-block'>
     Edit license, copyright statement, and/or use &amp; reproduction statements
@@ -7,37 +7,37 @@
 
   <div class="mb-3">
     <%= f.check_box :use_statement_option %>
-    <%= f.label :use_statement_option, "Update use and reproduction statement.", class: "ms-2" %>
+    <%= f.label :use_statement_option, 'Update use and reproduction statement.', class: 'ms-2' %>
 
-    <%= link_to "Sample use and reproduction statements.", "https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements", target: "_blank", rel: "noopener" %>
+    <%= link_to 'Sample use and reproduction statements.', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %>
   </div>
 
   <div class="ms-4 mb-5">
-    <%= f.text_area :use_statement, class: "form-control", rows: 2, placeholder: "Check the box and leave this area blank to remove existing use and reproduction statements" %>
+    <%= f.text_area :use_statement, class: 'form-control', rows: 2, placeholder: 'Check the box and leave this area blank to remove existing use and reproduction statements' %>
   </div>
 
   <div class="mb-3">
     <%= f.check_box :copyright_statement_option %>
-    <%= f.label :copyright_statement_option, "Update copyright statement.", class: "ms-2" %>
+    <%= f.label :copyright_statement_option, 'Update copyright statement.', class: 'ms-2' %>
 
-   <%= link_to "Sample copyright statements.", "https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements", target: "_blank", rel: "noopener" %>
+   <%= link_to 'Sample copyright statements.', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %>
   </div>
 
   <div class="ms-4 mb-5">
-    <%= f.text_area :copyright_statement, class: "form-control", rows: 2, placeholder: "Check the box and leave this area blank to remove existing copyright statements" %>
+    <%= f.text_area :copyright_statement, class: 'form-control', rows: 2, placeholder: 'Check the box and leave this area blank to remove existing copyright statements' %>
   </div>
 
   <div class="mb-3">
     <%= f.check_box :license_option %>
-    <%= f.label :license_option, "Select new license.", class: "ms-2" %>
+    <%= f.label :license_option, 'Select new license.', class: 'ms-2' %>
 
     Select 'No license' to remove existing licenses.
   </div>
 
   <div class="ms-4 mb-5">
-    <%= f.select :license, @license_options, {}, class: "form-select" %>
+    <%= f.select :license, @license_options, {}, class: 'form-select' %>
   </div>
 
-  <%= render "bulk_actions/druids", f: f %>
-  <%= render "bulk_actions/common_fields", f: f %>
+  <%= render 'bulk_actions/druids', f: %>
+  <%= render 'bulk_actions/common_fields', f: %>
 <% end %>

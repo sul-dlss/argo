@@ -1,7 +1,7 @@
 <tr class="d-none last_step<%= version %>">
  <td><span style="cursor: pointer;" onclick="document.querySelectorAll('.version<%= version %>').forEach((elem) => elem.classList.toggle('d-none'));document.querySelector('.last_step<%= version %>').classList.toggle('d-none')">+</span><%= version %></td>
- <td><%= steps["accessioned"][:display] || steps.keys.first.titleize %></td>
- <td><%= steps["accessioned"][:time].nil? ? "pending" : steps["accessioned"][:time].in_time_zone.to_s %></td>
+ <td><%= steps['accessioned'][:display] || steps.keys.first.titleize %></td>
+ <td><%= steps['accessioned'][:time].nil? ? 'pending' : steps['accessioned'][:time].in_time_zone.to_s %></td>
 </tr>
 
 <tr class="version<%= version %>">
@@ -14,6 +14,6 @@
 <tr class="version<%= version %>">
   <td></td>
   <td><%= m[:display] || k.titleize %></td>
-  <td><%= m[:time].nil? ? "pending" : m[:time].in_time_zone.to_s %></td>
+  <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s %></td>
 </tr>
 <% end %>

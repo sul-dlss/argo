@@ -1,16 +1,16 @@
-<%= tag.h1 "Register DOR Items", class: "h2 my-4 fw-bolder" %>
+<%= tag.h1 'Register DOR Items', class: 'h2 my-4 fw-bolder' %>
 
 <%= form_with model: @registration_form, url: registration_path,
-      data: {
-        controller: "registration",
-        turbo: false # We need to return data, and turbo requires a redirect on form success
-      }, class: "container" do |f| %>
+              data: {
+                controller: 'registration',
+                turbo: false # We need to return data, and turbo requires a redirect on form success
+              }, class: 'container' do |f| %>
   <div class="row mt-3" data-controller="content-type">
     <div class="col-md-5">
       <div class="row mb-3">
-        <%= f.label :admin_policy, "Admin Policy", class: "col-sm-3 col-form-label" %>
+        <%= f.label :admin_policy, 'Admin Policy', class: 'col-sm-3 col-form-label' %>
         <div class="col-sm-9">
-          <%= f.select :admin_policy, @apo_list, {}, class: "form-select", onChange: "document.querySelector('#registration-options').src = `/apo/${this.selectedOptions[0].value}/registration_options`" %>
+          <%= f.select :admin_policy, @apo_list, {}, class: 'form-select', onChange: "document.querySelector('#registration-options').src = `/apo/${this.selectedOptions[0].value}/registration_options`" %>
         </div>
       </div>
 
@@ -18,25 +18,25 @@
       <turbo-frame id="registration-options" src="<%= registration_options_apo_path(@registration_form.admin_policy, collection: @registration_form.collection, view_access: @registration_form.view_access, download_access: @registration_form.download_access, access_location: @registration_form.access_location, controlled_digital_lending: @registration_form.controlled_digital_lending, workflow_id: @registration_form.workflow_id) %>"></turbo-frame>
 
       <div class="row mb-3">
-        <%= f.label :content_type, "Content Type", class: "col-sm-3 col-form-label" %>
+        <%= f.label :content_type, 'Content Type', class: 'col-sm-3 col-form-label' %>
         <div class="col-sm-9">
           <%= f.select :content_type, ContentTypeForm::CONTENT_TYPES, {},
-                class: "form-select", data: {content_type_target: "contentType", action: "content-type#render"} %>
+                       class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' } %>
         </div>
       </div>
       <div data-content-type-target="directionRow" class="row mb-3">
-        <%= f.label :viewing_direction, "Viewing Direction", class: "col-sm-3 col-form-label" %>
+        <%= f.label :viewing_direction, 'Viewing Direction', class: 'col-sm-3 col-form-label' %>
         <div class="col-sm-9">
           <%= f.select :viewing_direction, ContentTypeForm::DIRECTIONS, {},
-                include_blank: "none", class: "form-select", data: {content_type_target: "direction"} %>
+                       include_blank: 'none', class: 'form-select', data: { content_type_target: 'direction' } %>
         </div>
       </div>
     </div>
     <div class="col-md-5 offset-md-2">
       <div class="row mb-3">
-        <%= f.label :project, "Project Name", class: "col-sm-3 col-form-label" %>
+        <%= f.label :project, 'Project Name', class: 'col-sm-3 col-form-label' %>
         <div class="col-sm-9">
-          <%= f.text_field :project, data: {project_autocomplete: true}, class: "form-control" %>
+          <%= f.text_field :project, data: { project_autocomplete: true }, class: 'form-control' %>
         </div>
       </div>
       <div class="row mb-3">
@@ -44,7 +44,7 @@
         <div class="col-sm-9">
           <span id="tags" style="width: auto">
             <%= f.fields_for :tags do |tags_form| %>
-              <%= tags_form.text_field :name, class: "form-control mb-2", data: {controller: "tag-validation", action: "change->tag-validation#validate", tag_autocomplete: true} %>
+              <%= tags_form.text_field :name, class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
             <% end %>
           </span>
         </div>
@@ -66,14 +66,14 @@
     <ul class="nav nav-pills" role="tablist">
       <% is_form = f.object.instance_of?(RegistrationForm) %>
       <li class="nav-item" role="presentation">
-        <button class="nav-link<%= is_form ? " active" : "" %>" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="<%= is_form %>" data-action="registration-tabs#toggleForm">Fill in form</button>
+        <button class="nav-link<%= is_form ? ' active' : '' %>" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="<%= is_form %>" data-action="registration-tabs#toggleForm">Fill in form</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link<%= is_form ? "" : " active" %>" id="csv-tab" data-bs-toggle="tab" data-bs-target="#csv" type="button" role="tab" aria-controls="csv" aria-selected="<%= !is_form %>" data-action="registration-tabs#toggleCsv">Upload CSV</button>
+        <button class="nav-link<%= is_form ? '' : ' active' %>" id="csv-tab" data-bs-toggle="tab" data-bs-target="#csv" type="button" role="tab" aria-controls="csv" aria-selected="<%= !is_form %>" data-action="registration-tabs#toggleCsv">Upload CSV</button>
       </li>
     </ul>
     <div class="tab-content">
-      <div class="tab-pane<%= is_form ? " active" : "" %>" id="form" role="tabpanel" aria-labelledby="form-tab">
+      <div class="tab-pane<%= is_form ? ' active' : '' %>" id="form" role="tabpanel" aria-labelledby="form-tab">
         <div class="my-3 col-lg-7" data-controller="registration-items" data-registration-items-selector-value=".plain-container">
           <label for="pasteHere" class="form-label">Enter a tab-delimited list of Barcode, <%= CatalogRecordId.label %>, Source ID, and Label in the large data entry box below or enter them individually in the text fields below. Suggested maximum of 500 rows.</label>
           <textarea data-action="paste->registration-items#populateFromPastedData" id="pasteHere" class="form-control mb-5"></textarea>
@@ -81,44 +81,44 @@
             <div class="plain-container" style="position: relative" data-controller="registration-item-row">
               <hr class="my-4">
               <div style="position: absolute; right: -40px">
-                <%= button_tag type: "button", class: "btn btn-link",
-                      aria: {label: "Remove"},
-                      data: {action: "click->registration-items#removeAssociation"} do %>
+                <%= button_tag type: 'button', class: 'btn btn-link',
+                               aria: { label: 'Remove' },
+                               data: { action: 'click->registration-items#removeAssociation' } do %>
                   <span class='bi bi-trash'></span>
                 <% end %>
               </div>
 
-              <%= f.fields_for :items, child_index: "TEMPLATE_RECORD" do |item_form| %>
-                <% render "item_row", item_form: %>
+              <%= f.fields_for :items, child_index: 'TEMPLATE_RECORD' do |item_form| %>
+                <% render 'item_row', item_form: %>
               <% end %>
             <div>
           </template>
 
           <div class="plain-container" style="position: relative" data-controller="registration-item-row">
             <%= f.fields_for :items do |item_form| %>
-              <% render "item_row", item_form: %>
+              <% render 'item_row', item_form: %>
             <% end %>
           </div>
 
           <div data-registration-items-target="add_item">
-            <%= button_tag type: "button", class: "btn btn-sm btn-outline-primary", data: {action: "registration-items#addAssociation"} do %>
+            <%= button_tag type: 'button', class: 'btn btn-sm btn-outline-primary', data: { action: 'registration-items#addAssociation' } do %>
               <span class="bi bi-plus"></span>Add another row
             <% end %>
           </div>
         </div>
       </div>
-      <div class="tab-pane <%= is_form ? "" : " active" %>" id="csv" role="tabpanel" aria-labelledby="csv-tab">
+      <div class="tab-pane <%= is_form ? '' : ' active' %>" id="csv" role="tabpanel" aria-labelledby="csv-tab">
         <div class="my-3">
-          <%= link_to spreadsheet_registration_path(format: :csv), download: true, class: "btn btn-link my-2" do %>
+          <%= link_to spreadsheet_registration_path(format: :csv), download: true, class: 'btn btn-link my-2' do %>
             <span class="bi-download"></span> Download CSV template
           <% end %>
-          <%= f.file_field :csv_file, class: "form-control", accept: ".csv", data: {registration_tabs_target: "requiredCsvField"}, "aria-label": "Upload a CSV file" %>
+          <%= f.file_field :csv_file, class: 'form-control', accept: '.csv', data: { registration_tabs_target: 'requiredCsvField' }, "aria-label": 'Upload a CSV file' %>
         </div>
       </div>
     </div>
   </div>
 
   <div class="mt-3">
-    <%= f.submit "Register", class: "btn btn-primary" %>
+    <%= f.submit 'Register', class: 'btn btn-primary' %>
   </div>
 <% end %>

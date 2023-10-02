@@ -1,3 +1,3 @@
 <% if bulk_action.has_report?(Settings.export_structural_job.csv_filename) %>
-  <%= link_to("Download Exported Structural Metadata (CSV)", file_bulk_action_path(bulk_action.id, filename: Settings.export_structural_job.csv_filename, mime_type: "text/csv"), download: true) %>
+  <%= link_to('Download Exported Structural Metadata (CSV)', file_bulk_action_path(bulk_action.id, filename: Settings.export_structural_job.csv_filename, mime_type: 'text/csv'), download: true) %>
 <% end %>

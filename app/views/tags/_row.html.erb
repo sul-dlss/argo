@@ -1,14 +1,14 @@
 <div class="mb-3 row plain-container">
   <div class="col-sm-2">
-    <%= form.label :name, "Tag", class: "col-form-label" %>
+    <%= form.label :name, 'Tag', class: 'col-form-label' %>
   </div>
   <div class="col-sm-10 col-xl-8">
-    <%= form.text_field :name, class: "form-control" %>
+    <%= form.text_field :name, class: 'form-control' %>
   </div>
   <div class="col-sm-1">
-    <%= button_tag type: "button", class: "btn", aria: {label: "Remove"},
-          data: {action: "click->nested-form#removeAssociation",
-                 plain: true} do %>
+    <%= button_tag type: 'button', class: 'btn', aria: { label: 'Remove' },
+                   data: { action: 'click->nested-form#removeAssociation',
+                           plain: true } do %>
       <span class='bi bi-trash'></span>
     <% end %>
     <%= form.hidden_field :_destroy %>

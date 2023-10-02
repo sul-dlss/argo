@@ -2,8 +2,8 @@
 
 <% if allows_modification? %>
   <%= link_to edit_item_catalog_record_id_path(item_id: id),
-        aria: {label: manage_label},
-        data: {controller: "button", action: "click->button#open"} do %>
+              aria: { label: manage_label },
+              data: { controller: 'button', action: 'click->button#open' } do %>
     <span class="bi-pencil"></span>
   <% end %>
 <% end %>

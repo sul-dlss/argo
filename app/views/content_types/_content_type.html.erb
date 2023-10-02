@@ -1,27 +1,27 @@
-<p><%= I18n.t("argo.content_type.update_explanation_single") %></p>
-<p><%= I18n.t("argo.content_type.suggeted_mappings").html_safe %></p>
+<p><%= I18n.t('argo.content_type.update_explanation_single') %></p>
+<p><%= I18n.t('argo.content_type.suggeted_mappings').html_safe %></p>
 <p>More complex updates should be executed through use of the structural metadata CSV.</p>
 
 <%= form_with model: @form, url: item_content_type_path(item_id: @cocina.externalIdentifier),
-      method: :patch,
-      data: {controller: "content-type"} do |f| %>
+              method: :patch,
+              data: { controller: 'content-type' } do |f| %>
   <div class='mb-3'>
     <%= f.label :old_resource_type %>
-    <%= f.select :old_resource_type, options_for_select(Constants::RESOURCE_TYPES), {include_blank: "none"}, class: "form-select" %>
+    <%= f.select :old_resource_type, options_for_select(Constants::RESOURCE_TYPES), { include_blank: 'none' }, class: 'form-select' %>
   </div>
   <div class='mb-3'>
     <%= f.label :new_content_type %>
-    <%= f.select :new_content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), {include_blank: "none"},
-          class: "form-select", data: {content_type_target: "contentType", action: "content-type#render"} %>
+    <%= f.select :new_content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), { include_blank: 'none' },
+                 class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' } %>
   </div>
   <div class='mb-3' data-content-type-target="directionRow">
     <%= f.label :viewing_direction %>
-    <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), {include_blank: "none"},
-          class: "form-select", data: {content_type_target: "direction"} %>
+    <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), { include_blank: 'none' },
+                 class: 'form-select', data: { content_type_target: 'direction' } %>
   </div>
   <div class='mb-3'>
     <%= f.label :new_resource_type %>
-    <%= f.select :new_resource_type, options_for_select(Constants::RESOURCE_TYPES), {include_blank: "none"}, class: "form-select" %>
+    <%= f.select :new_resource_type, options_for_select(Constants::RESOURCE_TYPES), { include_blank: 'none' }, class: 'form-select' %>
   </div>
   <button class='btn btn-primary'>Update</button>
 <% end %>

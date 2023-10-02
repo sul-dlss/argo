@@ -42,16 +42,16 @@ gem 'view_component', '~>  2.74.1' # TODO: ?? Unpin when bug in 2.75.0 is fixed 
 gem 'zip_tricks'
 
 # Stanford related gems
-gem "blacklight", "~> 7.25"
-gem "blacklight-hierarchy", "~> 6.1"
-gem "dor-services-client", "~> 12.18"
-gem "dor-workflow-client", "~> 6.0"
-gem "druid-tools"
-gem "folio_client", "~> 0.13"
-gem "mods_display", "~> 1.0"
-gem "preservation-client", "~> 6.2"
-gem "rsolr"
-gem "sdr-client", "~> 2.0"
+gem 'blacklight', '~> 7.25'
+gem 'blacklight-hierarchy', '~> 6.1'
+gem 'dor-services-client', '~> 12.18'
+gem 'dor-workflow-client', '~> 6.0'
+gem 'druid-tools'
+gem 'folio_client', '~> 0.13'
+gem 'mods_display', '~> 1.0'
+gem 'preservation-client', '~> 6.2'
+gem 'rsolr'
+gem 'sdr-client', '~> 2.0'
 
 group :test, :development do
   gem 'byebug', platform: :mri # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -61,9 +61,9 @@ group :test, :development do
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rspec-rails', '~> 5.0'
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
   gem 'rubocop-rspec'
   gem 'sqlite3', '~> 1.4.2'
-  gem 'standard-rails'
 end
 
 group :development do

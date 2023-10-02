@@ -10,10 +10,10 @@
         <dl class="defList">
           <dt>Lifecycle</dt>
           <dt>
-            <%= link_to "(xml)", history_item_workflows_path(document), data: {blacklight_modal: "trigger"} %>
+            <%= link_to '(xml)', history_item_workflows_path(document), data: { blacklight_modal: 'trigger' } %>
           </dt>
           <dd style="width:30em;">
-            <%= render "catalog/show_milestones", document: document %>
+            <%= render 'catalog/show_milestones', document: %>
           </dd>
         </dl>
       </div>
@@ -22,7 +22,7 @@
         <dl class="defList">
           <dt>Workflows</dt>
           <dd>
-            <%= render "catalog/show_workflows", document_id: document.id, workflows: @workflows %>
+            <%= render 'catalog/show_workflows', document_id: document.id, workflows: @workflows %>
           </dd>
         </dl>
       </div>
@@ -33,7 +33,7 @@
             <dl>
               <dt>Releases</dt>
               <dd>
-                <%= render "show_releases", release_tags: @cocina.administrative.releaseTags %>
+                <%= render 'show_releases', release_tags: @cocina.administrative.releaseTags %>
               </dd>
             </dl>
           </div>

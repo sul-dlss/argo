@@ -1,21 +1,21 @@
 <div class='mb-3'>
   <div class='form-check'>
     <label class='form-check-label'>
-      <%= form.radio_button :tag, true, checked: true, class: "form-check-input" %>
+      <%= form.radio_button :tag, true, checked: true, class: 'form-check-input' %>
       Release this object*
     </label>
   </div>
   <div class='form-check'>
     <label class='form-check-label'>
-      <%= form.radio_button :tag, false, class: "form-check-input" %>
+      <%= form.radio_button :tag, false, class: 'form-check-input' %>
       Do not release this object*
     </label>
   </div>
 </div>
 <div class='mb-3'>
   <label for='bulk_action_manage_release_to'>to</label>
-  <%= form.select :to, Constants::RELEASE_TARGETS, {}, class: "form-select" %>
+  <%= form.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-select' %>
 </div>
-<%= form.hidden_field("what", value: "self") %>
-<%= form.hidden_field("who", value: current_user.sunetid) %>
+<%= form.hidden_field('what', value: 'self') %>
+<%= form.hidden_field('who', value: current_user.sunetid) %>
 <span class='form-text'>* for items this overrides any collection release instructions; for a collection this releases the collection object itself, not its members</span>

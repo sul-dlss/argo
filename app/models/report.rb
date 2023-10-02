@@ -5,6 +5,7 @@ require 'csv'
 # Runs a query against solr and returns the results.
 # Does exactly what blacklight does, paginates the solr requests until all results
 # have been received
+# rubocop:disable Metrics/ClassLength
 class Report
   include Blacklight::Configurable
   include DateFacetConfigurations
@@ -167,13 +168,13 @@ class Report
       sort: false, default: false, width: 50
     },
     {
-      field: :preserved_size_human, label: "Preservation Size",
+      field: :preserved_size_human, label: 'Preservation Size',
       proc: ->(doc) { number_to_human_size(doc.preservation_size) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50
     },
     {
-      field: :preserved_size, label: "Preservation Size (bytes)",
+      field: :preserved_size, label: 'Preservation Size (bytes)',
       proc: ->(doc) { number_with_precision(doc.preservation_size, precision: 0) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50
@@ -327,3 +328,4 @@ class Report
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

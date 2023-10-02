@@ -1,15 +1,15 @@
-<%= form_with url: import_tag_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
-  <%= render "bulk_actions/errors" %>
+<%= form_with url: import_tag_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
 
   <span class='help-block'>
     Upload tags as CSV (comma-separated values)
   </span>
   <div class='mb-3' id="import-csv">
-    <%= f.label :csv_file, "Upload a CSV file" %>
+    <%= f.label :csv_file, 'Upload a CSV file' %>
       <br>
       <small>Each row in the CSV should start with the druid in the first field, followed by a comma-separated list of the tags to be assigned to that druid. <br> To remove all tags from an object, include only the druid and no tags or commas.</small>
-    <%= f.file_field :csv_file, class: "form-control", accept: ".csv" %>
+    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
   </div>
 
-  <%= render "bulk_actions/common_fields", f: f %>
+  <%= render 'bulk_actions/common_fields', f: %>
 <% end %>

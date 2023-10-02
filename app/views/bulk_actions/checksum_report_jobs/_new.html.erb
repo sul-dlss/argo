@@ -1,10 +1,10 @@
-<%= form_with url: checksum_report_job_path, class: "new_bulk_action", data: {turbo_frame: "_top"} do |f| %>
-  <%= render "bulk_actions/errors" %>
+<%= form_with url: checksum_report_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
 
   <span class='help-block'>
     Download checksums of files in objects (as csv).
   </span>
 
-  <%= render "bulk_actions/druids", f: f %>
-  <%= render "bulk_actions/common_fields", f: f %>
+  <%= render 'bulk_actions/druids', f: %>
+  <%= render 'bulk_actions/common_fields', f: %>
 <% end %>

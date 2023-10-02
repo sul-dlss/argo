@@ -7,12 +7,12 @@
   <ul>
     <% children_files.each do |file| %>
       <li>
-        <%= render Show::Item::Structure::FileComponent.new(file: file) %>
+        <%= render Show::Item::Structure::FileComponent.new(file:) %>
       </li>
     <% end %>
     <% children_directories.each do |directory| %>
       <li>
-        <%= render Show::Item::Structure::DirectoryComponent.new(directory: directory) %>
+        <%= render Show::Item::Structure::DirectoryComponent.new(directory:) %>
       </li>
     <% end %>
   </ul>

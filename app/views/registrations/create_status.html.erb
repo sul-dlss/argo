@@ -28,11 +28,11 @@
   </div>
 </div>
 
-<% druids = @registration_form.created.map(&:externalIdentifier).map { |druid| "druid[]=#{druid}" }.join("&") %>
-<%= link_to "/registration/tracksheet?name=#{@registration_form.project}&sequence=1&#{druids}", class: "btn btn-outline-primary my-5" do %>
+<% druids = @registration_form.created.map(&:externalIdentifier).map { |druid| "druid[]=#{druid}" }.join('&') %>
+<%= link_to "/registration/tracksheet?name=#{@registration_form.project}&sequence=1&#{druids}", class: 'btn btn-outline-primary my-5' do %>
   Tracking sheets
 <% end %>
 
-<%= link_to registration_path(registration: params[:registration].to_unsafe_h.except(:items_attributes)), class: "btn btn-link my-5" do %>
+<%= link_to registration_path(registration: params[:registration].to_unsafe_h.except(:items_attributes)), class: 'btn btn-link my-5' do %>
   Back to form
 <% end %>

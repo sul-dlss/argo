@@ -1,12 +1,12 @@
 <%= content_tag :div,
-      id: @id,
-      data: {
-        "document-id": @document.id.to_s.parameterize,
-        "document-counter": @counter
-      },
-      itemscope: true,
-      itemtype: @document.itemtype,
-      class: "document document-component" do %>
+                id: @id,
+                data: {
+                  "document-id": @document.id.to_s.parameterize,
+                  "document-counter": @counter
+                },
+                itemscope: true,
+                itemtype: @document.itemtype,
+                class: 'document document-component' do %>
   <%= title component: DocumentTitleComponent %>
 
   <%= render child_component %>

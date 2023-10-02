@@ -1,5 +1,5 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { "Dublin Core (derived from MODS)" } %>
+  <% component.header { 'Dublin Core (derived from MODS)' } %>
   <% component.body do %>
     <%= CodeRay::Duo[:xml, :div].highlight(@content).html_safe %>
   <% end %>

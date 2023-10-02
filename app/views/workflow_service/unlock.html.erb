@@ -1,11 +1,11 @@
 <turbo-frame id="lock">
   <%= link_to close_ui_item_versions_path(item_id: id),
-        title: "Close Version",
-        class: "btn",
-        data: {
-          controller: "open-close",
-          action: "click->open-close#open"
-        } do %>
-    <%= tag.span class: "bi-unlock-fill" %>
+              title: 'Close Version',
+              class: 'btn',
+              data: {
+                controller: 'open-close',
+                action: 'click->open-close#open'
+              } do %>
+    <%= tag.span class: 'bi-unlock-fill' %>
   <% end %>
 </turbo-frame>

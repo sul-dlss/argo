@@ -1,12 +1,12 @@
-<%= turbo_frame_tag "barcode" do %>
+<%= turbo_frame_tag 'barcode' do %>
   <%= form_with model: @change_set do |f| %>
     <div class="mb-3">
-      <%= f.label :barcode, class: "visually-hidden" %>
-      <%= f.text_field :barcode, class: "form-control" %>
+      <%= f.label :barcode, class: 'visually-hidden' %>
+      <%= f.text_field :barcode, class: 'form-control' %>
     </div>
     <div class="float-end">
-      <%= link_to "Cancel", show_barcode_item_path(params[:id]) %>
-      <%= f.submit "Save", class: "btn btn-primary" %>
+      <%= link_to 'Cancel', show_barcode_item_path(params[:id]) %>
+      <%= f.submit 'Save', class: 'btn btn-primary' %>
     </div>
   <% end %>
 <% end %>

@@ -9,9 +9,9 @@
       <div class="col-sm-1"></div>
     </div>
     <%= form_with model: @form,
-          url: item_catalog_record_id_path(@cocina.externalIdentifier),
-          method: :patch,
-          data: {controller: "nested-form", nested_form_selector_value: ".plain-container"} do |form| %>
+                  url: item_catalog_record_id_path(@cocina.externalIdentifier),
+                  method: :patch,
+                  data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
 
         <% if @form.errors.full_messages.present? %>
           <div id="error_explanation">
@@ -24,21 +24,21 @@
         <% end %>
 
         <template data-nested-form-target='template'>
-          <%= form.fields_for :catalog_record_ids, CatalogRecordIdForm::Row.new, child_index: "TEMPLATE_RECORD" do |catalog_record_id_form| %>
-            <%= render "row", form: catalog_record_id_form, hidden: false %>
+          <%= form.fields_for :catalog_record_ids, CatalogRecordIdForm::Row.new, child_index: 'TEMPLATE_RECORD' do |catalog_record_id_form| %>
+            <%= render 'row', form: catalog_record_id_form, hidden: false %>
           <% end %>
         </template>
 
         <%= form.fields_for :catalog_record_ids do |catalog_record_id_form| %>
-          <%= render "row", form: catalog_record_id_form, hidden: false %>
+          <%= render 'row', form: catalog_record_id_form, hidden: false %>
         <% end %>
 
         <%= form.fields_for :other_catalog_record_ids do |catalog_record_id_form| %>
-          <%= render "row", form: catalog_record_id_form, hidden: true %>
+          <%= render 'row', form: catalog_record_id_form, hidden: true %>
         <% end %>
 
         <div data-nested-form-target="add_item" class="mb-5">
-          <%= button_tag "+ Add another #{CatalogRecordId.label}", type: "button", class: "col-sm-2 btn btn-outline-primary", data: {action: "nested-form#addAssociation"} %>
+          <%= button_tag "+ Add another #{CatalogRecordId.label}", type: 'button', class: 'col-sm-2 btn btn-outline-primary', data: { action: 'nested-form#addAssociation' } %>
         </div>
 
         <button class='btn btn-primary'>Update</button>

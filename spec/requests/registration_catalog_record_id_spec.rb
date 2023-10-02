@@ -17,8 +17,8 @@ RSpec.describe 'Registration catalog_record_id check' do
     it 'returns true' do
       get '/registration/catalog_record_id?catalog_record_id=123'
 
-      expect(response.body).to eq("true")
-      expect(FolioClient).to have_received(:fetch_marc_hash).with(instance_hrid: "123")
+      expect(response.body).to eq('true')
+      expect(FolioClient).to have_received(:fetch_marc_hash).with(instance_hrid: '123')
     end
   end
 

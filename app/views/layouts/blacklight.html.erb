@@ -1,11 +1,11 @@
 <%# We are overriding this Blacklight layout to address WCAG21 1.3.2 (Level A) %>
 <% content_for(:content) do %>
   <% if content_for? :sidebar %>
-    <section id="sidebar" class="<%= sidebar_classes %> order-first" aria-label="<%= t("blacklight.search.documents.aria.limit_search") %>">
+    <section id="sidebar" class="<%= sidebar_classes %> order-first" aria-label="<%= t('blacklight.search.documents.aria.limit_search') %>">
       <%= content_for(:sidebar) %>
     </section>
 
-    <section id="content" class="<%= main_content_classes %> order-last" aria-label="<%= t("blacklight.search.documents.aria.search_results") %>">
+    <section id="content" class="<%= main_content_classes %> order-last" aria-label="<%= t('blacklight.search.documents.aria.search_results') %>">
       <%= yield %>
     </section>
   <% else %>
@@ -15,4 +15,4 @@
   <% end %>
 <% end %>
 
-<%= render template: "layouts/blacklight/base" %>
+<%= render template: 'layouts/blacklight/base' %>
