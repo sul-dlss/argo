@@ -234,7 +234,7 @@ Argo uses systemd to manage and monitor its Sidekiq-based background job workers
 
 ### Steps
 
-1. Reset the database: `bin/rails -e p db:reset`.
+1. [Reset the database](https://github.com/sul-dlss/DeveloperPlaybook/blob/main/best-practices/db_reset.md)
 2. Clear the bulk directory: `rm -fr /workspace/bulk/*`
 
 ## Further reading
