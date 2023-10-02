@@ -54,6 +54,11 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_ssim', label: 'Tags', link_to_facet: true
     config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
+    # exploded_project_tag_ssim indexes all project tag prefixes whereas project tag_ssim only indexes whole tags.
+    # we want to facet on exploded_project_tag_ssim to get the hierarchy.
+    config.add_facet_field 'exploded_project_tag_ssim', label: 'Project Tag', limit: 9999,
+                                                        component: LazyProjectTagFacetComponent,
+                                                        unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
@@ -199,7 +204,8 @@ class CatalogController < ApplicationController
         'wf_wps' => [['ssim'], ':'],
         'wf_wsp' => [['ssim'], ':'],
         'wf_swp' => [['ssim'], ':'],
-        'exploded_tag' => [['ssim'], ':']
+        'exploded_tag' => [['ssim'], ':'],
+        'exploded_project_tag' => [['ssim'], ':']
       }
     }
 
@@ -281,6 +287,14 @@ class CatalogController < ApplicationController
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_tag_facet'
+  end
+
+  def lazy_project_tag_facet
+    (response,) = search_service.search_results
+    facet_config = facet_configuration_for_field('exploded_project_tag_ssim')
+    display_facet = response.aggregations[facet_config.field]
+    @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
+    render partial: 'lazy_project_tag_facet'
   end
 
   def show

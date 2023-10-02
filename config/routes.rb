@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Rails.application.routes.draw do
+Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   require 'sidekiq/web'
   mount Sidekiq::Web => '/queues'
 
@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     concerns :searchable
     member do
       get 'lazy_tag_facet'
+      get 'lazy_project_tag_facet'
     end
   end
 
