@@ -89,6 +89,7 @@ RSpec.describe Report do
         :shelved_file_count,
         :resource_count,
         :preserved_size,
+        :preserved_size_human,
         :dissertation_id
       ].each do |k|
         expect(report_fields).to be_any { |f| f[:field] == k }

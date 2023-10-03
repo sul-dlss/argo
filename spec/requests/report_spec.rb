@@ -4,11 +4,6 @@ require "rails_helper"
 
 RSpec.describe "Reports from a search" do
   before do
-    ResetSolr.reset_solr
-    solr_conn.add(id: "druid:xb482ww9999",
-      objectType_ssim: "item",
-      obj_label_tesim: "Report about stuff")
-    solr_conn.commit
     sign_in user, groups: ["sdr:administrator-role"]
   end
 
