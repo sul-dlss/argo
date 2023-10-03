@@ -2,11 +2,16 @@
   <% component.header { "File Availability" } %>
   <% component.body do %>
     <% if @file.administrative.shelve %>
-      <p>
-        Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>
-      </p>
+      <% if @file.access.download == 'none' %>
+        <p>
+          Stacks: <%= stacks_url_full_size(params[:item_id], params[:id]) %> <em>(not available for download)</em>
+        </p>
+      <% else %>
+        <p>
+          Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>
+        </p>
+      <% end %>
     <% end %>
-
     <% if @file.administrative.sdrPreserve && @has_been_accessioned %>
       <p>
         Preservation:
