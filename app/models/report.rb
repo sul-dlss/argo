@@ -3,7 +3,7 @@
 require "csv"
 
 # Runs a query against solr and returns the results.
-# Does exactly what blacklight does, paginates the solr requests untill all results
+# Does exactly what blacklight does, paginates the solr requests until all results
 # have been received
 class Report
   include Blacklight::Configurable
@@ -14,6 +14,7 @@ class Report
     include ValueHelper
     include Rails.application.routes.url_helpers
     include ActionView::Helpers::UrlHelper
+    include ActionView::Helpers::NumberHelper
   end
 
   COLUMN_SELECTOR_COLUMN_SIZE = 3 # Helps display report columns in neatly lined up columns.
@@ -166,8 +167,14 @@ class Report
       sort: false, default: false, width: 50
     },
     {
+      field: :preserved_size_human, label: "Preservation Size",
+      proc: ->(doc) { number_to_human_size(doc.preservation_size) },
+      solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
+      sort: false, default: true, width: 50
+    },
+    {
       field: :preserved_size, label: "Preservation Size (bytes)",
-      proc: ->(doc) { doc.preservation_size },
+      proc: ->(doc) { number_with_precision(doc.preservation_size, precision: 0) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50
     },
