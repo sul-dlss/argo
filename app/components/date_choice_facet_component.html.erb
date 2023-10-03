@@ -6,15 +6,15 @@
      <%= render Blacklight::FacetFieldListComponent.new(facet_field: @facet_field, layout: false) %>
 
     <div data-controller="date-choice">
-      <div class='mb-3'>
-        <label for="<%= @facet_field.key %>_after_datepicker">From:</label>
-        <input maxlength="10" size="10" id="<%= @facet_field.key %>_after_datepicker" type="text"
-               data-date-choice-target="afterDate" data-action="change->date-choice#updateQuery" autocomplete="off">
+      <div class='mb-3 row'>
+        <div class="col-3"><label for="<%= @facet_field.key %>_after_datepicker">From:</label></div>
+        <div class="col"><input id="<%= @facet_field.key %>_after_datepicker" type="date"
+               data-date-choice-target="afterDate" data-action="change->date-choice#updateQuery" autocomplete="off"></div>
       </div>
-      <div class='mb-3'>
-        <label for="<%= @facet_field.key %>_before_datepicker">Through:</label>
-        <input maxlength="10" size="10" id="<%= @facet_field.key %>_before_datepicker" type="text"
-               data-date-choice-target="beforeDate" data-action="change->date-choice#updateQuery" autocomplete="off">
+      <div class='mb-3 row'>
+        <div class="col-3"><label for="<%= @facet_field.key %>_before_datepicker">Through:</label></div>
+        <div class="col"><input id="<%= @facet_field.key %>_before_datepicker" type="date"
+               data-date-choice-target="beforeDate" data-action="change->date-choice#updateQuery" autocomplete="off"></div>
       </div>
       <div>
         <%= form_tag search_catalog_path, method: :get do %>
