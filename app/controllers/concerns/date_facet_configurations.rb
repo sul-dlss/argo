@@ -14,6 +14,7 @@ module DateFacetConfigurations
       config.add_facet_field "registered_date", home: false, label: "Registered",
         component: DateChoiceFacetComponent,
         query: {
+          all: {label: "All", fq: "#{SolrDocument::FIELD_REGISTERED_DATE}:*"},
           days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_REGISTERED_DATE}:[NOW/DAY-7DAYS TO *]"},
           days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_REGISTERED_DATE}:[NOW/DAY-30DAYS TO *]"}
         }, raw_facet_field: SolrDocument::FIELD_REGISTERED_DATE
@@ -22,6 +23,7 @@ module DateFacetConfigurations
       config.add_facet_field "accessioned_latest_date", home: false, label: "Last Accessioned",
         component: DateChoiceFacetComponent,
         query: {
+          all: {label: "All", fq: "#{SolrDocument::FIELD_LAST_ACCESSIONED_DATE}:*"},
           days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_LAST_ACCESSIONED_DATE}:[NOW/DAY-7DAYS TO *]"},
           days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_LAST_ACCESSIONED_DATE}:[NOW/DAY-30DAYS TO *]"}
         }, raw_facet_field: SolrDocument::FIELD_LAST_ACCESSIONED_DATE
@@ -30,6 +32,7 @@ module DateFacetConfigurations
       config.add_facet_field "accessioned_earliest_date", home: false, label: "Earliest Accessioned",
         component: DateChoiceFacetComponent,
         query: {
+          all: {label: "All", fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:*"},
           days_1: {label: "within the last day", fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-1DAYS TO *]"},
           days_7: {label: "within 7 days", fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-7DAYS TO *]"},
           days_30: {label: "within 30 days", fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-30DAYS TO *]"},
