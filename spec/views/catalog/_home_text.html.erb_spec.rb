@@ -12,8 +12,8 @@ RSpec.describe "catalog/_home_text" do
     let(:presenter) { instance_double(HomeTextPresenter, view_something?: true) }
 
     it "shows the home page text" do
-      expect(rendered).to have_css "p", text: "Enter one or more search terms " \
-                                              "or select a facet on the left to begin."
+      expect(rendered).to have_css "p", text: "To begin, enter one or more search terms, " \
+                                              "or select a facet under the 'Limit your search' panel."
     end
   end
 
