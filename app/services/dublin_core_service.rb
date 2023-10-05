@@ -2,7 +2,7 @@
 
 class DublinCoreService
   MODS_TO_DC_XSLT = Nokogiri::XSLT(File.new(File.expand_path("#{File.dirname(__FILE__)}/dublin_core/mods2dc.xslt")))
-  XMLNS_OAI_DC = "http://www.openarchives.org/OAI/2.0/oai_dc/"
+  XMLNS_OAI_DC = 'http://www.openarchives.org/OAI/2.0/oai_dc/'
 
   # @param [Nokogiri::XML::Document] the MODS XML to generate the DublinCore for.
   def initialize(desc_md_xml)

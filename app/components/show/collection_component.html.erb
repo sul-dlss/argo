@@ -1,26 +1,26 @@
-<%= render ShowEmbargoComponent.new(presenter: presenter) %>
+<%= render ShowEmbargoComponent.new(presenter:) %>
 
 <div class="row">
   <div class="col">
-    <%= render Show::ExternalLinksComponent.new(document: document) %>
-    <%= render Show::ControlsComponent.new(presenter: presenter,
-          manager: helpers.can?(:update, cocina)) %>
+    <%= render Show::ExternalLinksComponent.new(document:) %>
+    <%= render Show::ControlsComponent.new(presenter:,
+                                           manager: helpers.can?(:update, cocina)) %>
   </div>
 </div>
 
-<%= render Show::WorkflowErrorComponent.new(document: document) %>
+<%= render Show::WorkflowErrorComponent.new(document:) %>
 
 <div class="row mt-5">
   <div class="col-md-6">
-    <%= render Show::Collection::OverviewComponent.new(presenter: presenter) %>
+    <%= render Show::Collection::OverviewComponent.new(presenter:) %>
   </div>
   <div class="col-md-6">
-    <%= render Show::Collection::DetailsComponent.new(presenter: presenter) %>
+    <%= render Show::Collection::DetailsComponent.new(presenter:) %>
   </div>
 </div>
 
 <div class="accordion">
-  <%= render "events_default", view_token: view_token %>
-  <%= render "cocina_default", view_token: view_token %>
-  <%= render "history_default", document: document %>
+  <%= render 'events_default', view_token: %>
+  <%= render 'cocina_default', view_token: %>
+  <%= render 'history_default', document: %>
 </div>

@@ -20,7 +20,7 @@ class MetadataController < ApplicationController
   end
 
   def full_dc
-    nodes = dublin_core.xpath("/oai_dc:dc/*", oai_dc: "http://www.openarchives.org/OAI/2.0/oai_dc/")
+    nodes = dublin_core.xpath('/oai_dc:dc/*', oai_dc: 'http://www.openarchives.org/OAI/2.0/oai_dc/')
     @fields = nodes.map { |node| Field.new(node.name.humanize, node.text) }
 
     respond_to do |format|

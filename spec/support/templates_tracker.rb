@@ -16,7 +16,7 @@ module TemplatesTracker
     end
 
     def print
-      if mode == "debug"
+      if mode == 'debug'
         puts "\n======== Used Templates =========\n\n"
         puts used.join("\n")
       end
@@ -57,8 +57,8 @@ module TemplatesTracker
   end
 end
 
-if ENV["TT"]
-  TemplatesTracker.start(ENV.fetch("TT"))
+if ENV['TT']
+  TemplatesTracker.start(ENV.fetch('TT'))
 
   RSpec.configure do |config|
     config.after(:suite) do

@@ -23,13 +23,13 @@ class FileHierarchyService
   end
 
   def self.to_hierarchy(cocina_object:)
-    new(cocina_object: cocina_object).to_hierarchy
+    new(cocina_object:).to_hierarchy
   end
 
   def initialize(cocina_object:)
     @cocina_object = cocina_object
     @index = 0
-    @root_directory = Directory.new("", [], [], next_index)
+    @root_directory = Directory.new('', [], [], next_index)
   end
 
   def to_hierarchy
@@ -52,7 +52,7 @@ class FileHierarchyService
   end
 
   def add_to_hierarchy(cocina_file)
-    paths = cocina_file.filename.split("/")
+    paths = cocina_file.filename.split('/')
     filename = paths.pop
 
     directory = directory_for(paths, root_directory)

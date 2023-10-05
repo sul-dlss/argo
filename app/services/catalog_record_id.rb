@@ -13,7 +13,7 @@ class CatalogRecordId
     end
 
     def label
-      "Folio Instance HRID"
+      'Folio Instance HRID'
     end
 
     def manage_label
@@ -25,19 +25,19 @@ class CatalogRecordId
     end
 
     def pattern_string
-      "\\A(L|a|in)[0-9]+\\z"
+      '\\A(L|a|in)[0-9]+\\z'
     end
 
     def html_pattern_string
-      "^(L|a|in)[0-9]+$"
+      '^(L|a|in)[0-9]+$'
     end
 
     def indexing_prefix
-      "folio"
+      'folio'
     end
 
     def type
-      "folio"
+      'folio'
     end
 
     def previous_type
@@ -67,10 +67,14 @@ class CatalogRecordId
   # @return [Array<Hash>] a list of catalog links
   def serialize(new_catalog_record_ids, refresh: true)
     removed_links = links - new_catalog_record_ids
-    links = (previous_links + removed_links).map { |record_id| {catalog: self.class.previous_type, catalogRecordId: record_id, refresh: false} }.uniq
+    links = (previous_links + removed_links).map do |record_id|
+      { catalog: self.class.previous_type, catalogRecordId: record_id, refresh: false }
+    end.uniq
     links +
       other_links.map(&:to_h) +
-      new_catalog_record_ids.map.with_index { |record_id, index| {catalog: self.class.type, catalogRecordId: record_id, refresh: refresh && index.zero?} }
+      new_catalog_record_ids.map.with_index do |record_id, index|
+        { catalog: self.class.type, catalogRecordId: record_id, refresh: refresh && index.zero? }
+      end
   end
 
   def links

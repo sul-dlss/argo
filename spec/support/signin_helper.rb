@@ -3,7 +3,7 @@
 module SigninHelper
   def mock_user(attributes = {})
     double(:webauth_user, {
-      login: "sunetid",
+      login: 'sunetid',
       logged_in?: true,
       privgroup: [],
       groups: [],

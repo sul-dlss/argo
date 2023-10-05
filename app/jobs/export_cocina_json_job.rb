@@ -10,10 +10,10 @@ class ExportCocinaJsonJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    File.open(json_download_path, "w") do |jsonl_file|
-      with_items(params[:druids], name: "Export Cocina JSON") do |cocina_object, success, failure|
+    File.open(json_download_path, 'w') do |jsonl_file|
+      with_items(params[:druids], name: 'Export Cocina JSON') do |cocina_object, success, _failure|
         jsonl_file << "#{cocina_object.to_json}\n"
-        success.call("Exported full Cocina JSON")
+        success.call('Exported full Cocina JSON')
       end
     end
     gzip_file
@@ -32,7 +32,7 @@ class ExportCocinaJsonJob < GenericJob
 
   def gzip_file
     gzip = ActiveSupport::Gzip.compress(File.read(json_download_path))
-    File.write(gzip_download_path, gzip, mode: "wb")
+    File.write(gzip_download_path, gzip, mode: 'wb')
     FileUtils.rm_f(json_download_path)
   end
 end

@@ -8,13 +8,12 @@ module CreatesBulkActions
     class_attribute :action_type
   end
 
-  def new
-  end
+  def new; end
 
   def create
     begin
       bulk_action_job_params = job_params
-    rescue => e
+    rescue StandardError => e
       # if job_params calls CsvUploadNormalizer, CSV::MalformedCSVError may be raised
       @errors = ["Error starting bulk action: #{e.message}"]
       return render :new, status: :unprocessable_entity
@@ -49,7 +48,7 @@ module CreatesBulkActions
 
   # NOTE: It's important that this is a HashWithIndifferentAccess, because the jobs are expecting that interface
   def job_params
-    {druids: identifiers, groups: current_user.groups}.with_indifferent_access
+    { druids: identifiers, groups: current_user.groups }.with_indifferent_access
   end
 
   # add druid: prefix to list of druids if it doesn't have it yet

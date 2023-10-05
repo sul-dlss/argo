@@ -17,22 +17,24 @@ class ChecksumReportJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count
       begin
-        raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, Cocina::Models::DRO)
+        raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(
+          :view_content, Cocina::Models::DRO
+        )
 
-        CSV.open(report_filename, "w") do |csv|
+        CSV.open(report_filename, 'w') do |csv|
           druids.each do |druid|
             report = Preservation::Client.objects.checksum(druid:)
             report.each do |row|
-              csv << [druid, row["filename"], row["md5"], row["sha1"], row["sha256"], row["filesize"]]
+              csv << [druid, row['filename'], row['md5'], row['sha1'], row['sha256'], row['filesize']]
             end
             bulk_action.increment(:druid_count_success).save
           rescue Preservation::Client::NotFoundError
-            csv << [druid, "object not found or not fully accessioned"]
+            csv << [druid, 'object not found or not fully accessioned']
             bulk_action.increment(:druid_count_fail).save
             log.puts("#{Time.current} object not found or not fully accessioned for #{druid}")
           end
         end
-      rescue => e
+      rescue StandardError => e
         bulk_action.update(druid_count_fail: druids.length, druid_count_success: 0)
         message = exception_message_for(e)
         log.puts(message) # this one goes to the user via the bulk action log
@@ -65,6 +67,5 @@ class ChecksumReportJob < GenericJob
     File.join(output_dir, Settings.checksum_report_job.csv_filename)
   end
 
-  def generate_report
-  end
+  def generate_report; end
 end

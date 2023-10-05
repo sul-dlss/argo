@@ -68,7 +68,7 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
 
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} #{CatalogRecordId.label}/barcode added/updated/removed successfully")
-    rescue => e
+    rescue StandardError => e
       log.puts("#{Time.current} #{CatalogRecordId.label}/barcode failed #{e.class} #{e.message}")
       Honeybadger.context(args:, druid: cocina_object.externalIdentifier)
       Honeybadger.notify(e)
@@ -83,13 +83,13 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
   end
 
   def catalog_record_ids_from_params(params)
-    return unless params["use_catalog_record_ids_option"] == "1"
+    return unless params['use_catalog_record_ids_option'] == '1'
 
-    lines_for(params, :catalog_record_ids).map { |line| line.split(",") }
+    lines_for(params, :catalog_record_ids).map { |line| line.split(',') }
   end
 
   def barcodes_from_params(params)
-    return unless params["use_barcodes_option"] == "1"
+    return unless params['use_barcodes_option'] == '1'
 
     lines_for(params, :barcodes).map(&:strip).map(&:presence)
   end
@@ -102,17 +102,17 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
   def log_update(change_set, log)
     if change_set.changed?(:catalog_record_ids)
       if change_set.catalog_record_ids.present?
-        log.puts("#{Time.current} Adding #{CatalogRecordId.label} of #{change_set.catalog_record_ids.join(", ")}")
+        log.puts("#{Time.current} Adding #{CatalogRecordId.label} of #{change_set.catalog_record_ids.join(', ')}")
       else
         log.puts("#{Time.current} Removing #{CatalogRecordId.label}")
       end
     end
-    if change_set.changed?(:barcode)
-      if change_set.barcode
-        log.puts("#{Time.current} Adding barcode of #{change_set.barcode}")
-      else
-        log.puts("#{Time.current} Removing barcode")
-      end
+    return unless change_set.changed?(:barcode)
+
+    if change_set.barcode
+      log.puts("#{Time.current} Adding barcode of #{change_set.barcode}")
+    else
+      log.puts("#{Time.current} Removing barcode")
     end
   end
 
@@ -120,18 +120,18 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
     msgs = []
     if change_set.changed?(:catalog_record_ids)
       msgs << if change_set.catalog_record_ids.present?
-        "#{CatalogRecordId.label} updated to #{change_set.catalog_record_ids.join(", ")}."
-      else
-        "#{CatalogRecordId.label} removed."
-      end
+                "#{CatalogRecordId.label} updated to #{change_set.catalog_record_ids.join(', ')}."
+              else
+                "#{CatalogRecordId.label} removed."
+              end
     end
     if change_set.changed?(:barcode)
       msgs << if change_set.barcode
-        "Barcode updated to #{change_set.barcode}."
-      else
-        "Barcode removed."
-      end
+                "Barcode updated to #{change_set.barcode}."
+              else
+                'Barcode removed.'
+              end
     end
-    msgs.join(" ")
+    msgs.join(' ')
   end
 end

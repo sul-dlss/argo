@@ -8,7 +8,7 @@ module Show
     end
 
     def catalog_record_id
-      @change_set.catalog_record_ids.presence&.join(", ") || "None assigned"
+      @change_set.catalog_record_ids.presence&.join(', ') || 'None assigned'
     end
 
     delegate :allows_modification?, to: :@state_service

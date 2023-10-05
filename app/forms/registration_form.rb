@@ -23,27 +23,27 @@ class RegistrationForm < Reform::Form
   property :project, virtual: true
 
   collection :tags, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
-    prepopulator: ->(*) { (6 - tags.count).times { tags << VirtualModel.new } } do
+                    prepopulator: ->(*) { (6 - tags.count).times { tags << VirtualModel.new } } do
     property :name, virtual: true
-    validates :name, allow_blank: true, format: {with: /.+( : .+)+/, message: "must include the pattern:
+    validates :name, allow_blank: true, format: { with: /.+( : .+)+/, message: "must include the pattern:
 
 [term] : [term]
 
-It's legal to have more than one colon in a hierarchy, but at least one colon is required."}
+It's legal to have more than one colon in a hierarchy, but at least one colon is required." }
   end
 
   collection :items, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
-    prepopulator: ->(*) { (1 - items.count).times { items << VirtualModel.new } } do
+                     prepopulator: ->(*) { (1 - items.count).times { items << VirtualModel.new } } do
     property :source_id, virtual: true
     property :catalog_record_id, virtual: true
     property :label, virtual: true
     property :barcode, virtual: true
-    validates :source_id, format: {with: /\A.+:.+\z/, message: "ID is invalid"}
-    validates :barcode, allow_blank: true, format: {with: VALID_BARCODE_REGEX, message: "is invalid"}
+    validates :source_id, format: { with: /\A.+:.+\z/, message: 'ID is invalid' }
+    validates :barcode, allow_blank: true, format: { with: VALID_BARCODE_REGEX, message: 'is invalid' }
     validates_each :catalog_record_id do |record, attr, value|
       next if value.blank?
 
-      record.errors.add(attr, "is invalid") if !value.match?(Regexp.new(CatalogRecordId.pattern_string))
+      record.errors.add(attr, 'is invalid') unless value.match?(Regexp.new(CatalogRecordId.pattern_string))
     end
   end
 
@@ -100,7 +100,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
       location: access_location,
       controlledDigitalLending: ::ActiveModel::Type::Boolean.new.cast(controlled_digital_lending)
     }.tap do |access_params|
-      access_params[:download] = "none" if %w[dark citation-only].include?(access_params[:view])
+      access_params[:download] = 'none' if %w[dark citation-only].include?(access_params[:view])
     end.compact_blank
   end
 
@@ -122,13 +122,13 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   def structural
     structural = {}
     structural[:isMemberOf] = [collection] if collection.present?
-    structural[:hasMemberOrders] = [{viewingDirection: viewing_direction}] if viewing_direction.present?
+    structural[:hasMemberOrders] = [{ viewingDirection: viewing_direction }] if viewing_direction.present?
     structural
   end
 
   def catalog_links(item)
     return [] if item.catalog_record_id.blank?
 
-    [{catalog: CatalogRecordId.type, catalogRecordId: item.catalog_record_id, refresh: true}]
+    [{ catalog: CatalogRecordId.type, catalogRecordId: item.catalog_record_id, refresh: true }]
   end
 end

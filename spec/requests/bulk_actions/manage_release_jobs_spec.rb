@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "BulkActions::ManageReleaseJobs" do
+RSpec.describe 'BulkActions::ManageReleaseJobs' do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
 
-  describe "GET #new" do
+  describe 'GET #new' do
     before do
-      sign_in build(:user, sunetid: "frank"), groups: ["sdr:administrator-role"]
+      sign_in build(:user, sunetid: 'frank'), groups: ['sdr:administrator-role']
     end
 
-    it "draws the form" do
-      get "/bulk_actions/manage_release_job/new"
+    it 'draws the form' do
+      get '/bulk_actions/manage_release_job/new'
 
       expect(rendered).to have_css 'textarea[name="druids"]'
       expect(rendered).to have_css 'textarea[name="description"]'

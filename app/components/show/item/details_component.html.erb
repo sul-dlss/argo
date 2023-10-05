@@ -11,7 +11,7 @@
       <tr>
         <th class="col-3" scope="row">Content type</th>
         <td>
-          <%= render Show::ContentTypeComponent.new(document: @solr_document, state_service: state_service) %>
+          <%= render Show::ContentTypeComponent.new(document: @solr_document, state_service:) %>
         </td>
       </tr>
 
@@ -25,7 +25,7 @@
       <tr>
         <th class="col-3" scope="row">Source IDs</th>
         <td>
-          <%= render Show::SourceIdComponent.new(document: @solr_document, state_service: state_service) %>
+          <%= render Show::SourceIdComponent.new(document: @solr_document, state_service:) %>
         </td>
       </tr>
 
@@ -53,14 +53,14 @@
       <tr>
         <th class="col-3" scope="row"><%= catalog_record_id_label %></th>
         <td>
-          <%= render Show::CatalogRecordIdComponent.new(change_set: @presenter.change_set, state_service: state_service) %>
+          <%= render Show::CatalogRecordIdComponent.new(change_set: @presenter.change_set, state_service:) %>
         </td>
       </tr>
 
       <tr>
         <th class="col-3" scope="row">Barcode</th>
         <td>
-          <%= render Show::BarcodeComponent.new(change_set: @presenter.change_set, state_service: state_service) %>
+          <%= render Show::BarcodeComponent.new(change_set: @presenter.change_set, state_service:) %>
         </td>
       </tr>
 
@@ -77,7 +77,7 @@
         <tr>
           <th class="col-3" scope="row">Contributor ORCIDs</th>
           <td>
-            <%= orcids.join(", ") %>
+            <%= orcids.join(', ') %>
           </td>
         </tr>
       <% end %>

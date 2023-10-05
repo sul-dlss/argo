@@ -1,9 +1,9 @@
 <%= collection %>
 
 <% if allows_modification? %>
-  <%= link_to collection_ui_item_path(id: id),
-        aria: {label: "Edit collections"},
-        data: {controller: "button", action: "click->button#open"} do %>
+  <%= link_to collection_ui_item_path(id:),
+              aria: { label: 'Edit collections' },
+              data: { controller: 'button', action: 'click->button#open' } do %>
     <span class="bi-pencil"></span>
   <% end %>
 <% end %>

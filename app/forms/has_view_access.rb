@@ -11,19 +11,19 @@ module HasViewAccess
     validates :view_access, inclusion: {
       in: %w[world stanford location-based citation-only dark],
       allow_blank: true,
-      message: '"%{value}" is not a valid option'
+      message: '"%<value>s" is not a valid option'
     }
 
     validates :download_access, inclusion: {
       in: %w[world stanford location-based none],
       allow_blank: true,
-      message: '"%{value}" is not a valid option'
+      message: '"%<value>s" is not a valid option'
     }
 
     validates :access_location, inclusion: {
       in: %w[spec music ars art hoover m&m],
       allow_blank: true,
-      message: '"%{value}" is not a valid option'
+      message: '"%<value>s" is not a valid option'
     }
   end
 

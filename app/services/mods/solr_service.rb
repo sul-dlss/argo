@@ -6,7 +6,7 @@ module Mods
     include Singleton
 
     def options
-      {url: Settings.solrizer_url}
+      { url: Settings.solrizer_url }
     end
 
     def conn
@@ -19,7 +19,7 @@ module Mods
       # @param [Hash] options
       def get(query, args = {})
         args = args.merge(q: query, wt: :json)
-        conn.get("select", params: args)
+        conn.get('select', params: args)
       end
     end
   end

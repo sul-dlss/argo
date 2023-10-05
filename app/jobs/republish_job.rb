@@ -30,18 +30,18 @@ class RepublishJob < GenericJob
       log_buffer.puts("#{Time.current} #{self.class}: Did not republish #{current_druid} because it is never been published (bulk_action.id=#{bulk_action.id})")
       bulk_action.increment(:druid_count_fail).save
     end
-  rescue => e
+  rescue StandardError => e
     log_buffer.puts("#{Time.current} #{self.class}: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e}")
     bulk_action.increment(:druid_count_fail).save
   end
 
   def publishable?(maybe_cocina_object)
     return false if maybe_cocina_object.is_a?(NilModel) ||
-      maybe_cocina_object.admin_policy? ||
-      maybe_cocina_object.type == Cocina::Models::ObjectType.agreement
+                    maybe_cocina_object.admin_policy? ||
+                    maybe_cocina_object.type == Cocina::Models::ObjectType.agreement
 
     true
-  rescue
+  rescue StandardError
     false
   end
 end

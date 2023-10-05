@@ -4,8 +4,8 @@ module ValueHelper
   # TODO: dynamically generate these methods so we don't hardcode Solr field identifiers
 
   def value_for_wf_error(args)
-    _wf, step, message = args[:document].fetch(args[:field], ["::"]).first.split(":", 3)
-    step + " : " + message
+    _wf, step, message = args[:document].fetch(args[:field], ['::']).first.split(':', 3)
+    step + ' : ' + message
   end
 
   ##
@@ -29,9 +29,10 @@ module ValueHelper
   # @return [String]
   def link_to_admin_policy_with_objs(args)
     policy_link = link_to_admin_policy(args)
-    facet_config = facet_configuration_for_field("is_governed_by_ssim")
-    path_for_facet = facet_item_presenter(facet_config, "info:fedora/#{args[:document].apo_druid}", "is_governed_by_ssim").href
-    objs_link = link_to "All objects with this APO", path_for_facet
+    facet_config = facet_configuration_for_field('is_governed_by_ssim')
+    path_for_facet = facet_item_presenter(facet_config, "info:fedora/#{args[:document].apo_druid}",
+                                          'is_governed_by_ssim').href
+    objs_link = link_to 'All objects with this APO', path_for_facet
     "#{policy_link} (#{objs_link})".html_safe
   end
 
@@ -52,22 +53,22 @@ module ValueHelper
   # @return [String]
   def links_to_collections_with_objs(**args)
     with_objs = args.fetch(:with_objs, true)
-    facet_config = facet_configuration_for_field("is_member_of_collection_ssim")
+    facet_config = facet_configuration_for_field('is_member_of_collection_ssim')
 
     args[:value].map.with_index do |val, i|
       collection_link = link_to(
         args[:document].collection_titles[i],
-        solr_document_path(val.gsub("info:fedora/", ""))
+        solr_document_path(val.gsub('info:fedora/', ''))
       )
-      path_for_facet = facet_item_presenter(facet_config, val, "is_member_of_collection_ssim").href
+      path_for_facet = facet_item_presenter(facet_config, val, 'is_member_of_collection_ssim').href
 
-      objs_link = link_to "All objects in this collection", path_for_facet
+      objs_link = link_to 'All objects in this collection', path_for_facet
       with_objs ? "#{collection_link} (#{objs_link})" : collection_link
-    end.join("<br>").html_safe
+    end.join('<br>').html_safe
   end
 
   def value_for_identifier_tesim(args)
     val = args[:document][args[:field]]
-    Array(val).reject { |v| v == args[:document]["id"] }.sort.uniq.join(", ")
+    Array(val).reject { |v| v == args[:document]['id'] }.sort.uniq.join(', ')
   end
 end

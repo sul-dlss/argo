@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-set :application, "argo"
-set :repo_url, "https://github.com/sul-dlss/argo.git"
+set :application, 'argo'
+set :repo_url, 'https://github.com/sul-dlss/argo.git'
 
 # Default branch is :main
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/opt/app/lyberadmin/argo"
+set :deploy_to, '/opt/app/lyberadmin/argo'
 
-set :rails_env, "production"
-set :bundle_without, %w[deployment test development].join(" ")
+set :rails_env, 'production'
+set :bundle_without, %w[deployment test development].join(' ')
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -43,10 +43,10 @@ set :sidekiq_systemd_use_hooks, true
 set :honeybadger_env, fetch(:stage)
 
 # update shared_configs before restarting app
-before "deploy:restart", "shared_configs:update"
+before 'deploy:restart', 'shared_configs:update'
 
 # configure capistrano-rails to work with propshaft instead of sprockets
 # (we don't have public/assets/.sprockets-manifest* or public/assets/manifest*.*)
 set :assets_manifests, lambda {
-  [release_path.join("public", fetch(:assets_prefix), ".manifest.json")]
+  [release_path.join('public', fetch(:assets_prefix), '.manifest.json')]
 }

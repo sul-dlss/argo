@@ -7,9 +7,9 @@ class AgreementForm < Reform::Form
   property :agreement_file2, virtual: true
 
   validates :title, presence: true
-  validates :source_id, format: {with: Regexp.new(Settings.source_id_regex),
-                                 message: "must have a single colon in the middle"},
-    presence: true
+  validates :source_id, format: { with: Regexp.new(Settings.source_id_regex),
+                                  message: 'must have a single colon in the middle' },
+                        presence: true
   validates :agreement_file1, presence: true
 
   def persisted?
@@ -32,26 +32,26 @@ class AgreementForm < Reform::Form
 
   def new_resource(title:, source_id:)
     Cocina::Models.build_request({
-      "type" => Cocina::Models::ObjectType.agreement,
-      "label" => title,
-      "version" => 1,
-      "access" => {"view" => "dark"},
-      "description" => {"title" => [{"value" => title}]},
-      "administrative" => {"hasAdminPolicy" => ApoConcern::UBER_APO_ID},
-      "identification" => {"sourceId" => source_id},
-      "structural" => {
-        "contains" => [
-          {
-            "type" => Cocina::Models::FileSetType.file,
-            "label" => "Agreement",
-            "version" => 1,
-            "structural" => {
-              "contains" => agreement_files.map { |file| file_structure(file).to_h }
-            }
-          }
-        ]
-      }
-    })
+                                   'type' => Cocina::Models::ObjectType.agreement,
+                                   'label' => title,
+                                   'version' => 1,
+                                   'access' => { 'view' => 'dark' },
+                                   'description' => { 'title' => [{ 'value' => title }] },
+                                   'administrative' => { 'hasAdminPolicy' => ApoConcern::UBER_APO_ID },
+                                   'identification' => { 'sourceId' => source_id },
+                                   'structural' => {
+                                     'contains' => [
+                                       {
+                                         'type' => Cocina::Models::FileSetType.file,
+                                         'label' => 'Agreement',
+                                         'version' => 1,
+                                         'structural' => {
+                                           'contains' => agreement_files.map { |file| file_structure(file).to_h }
+                                         }
+                                       }
+                                     ]
+                                   }
+                                 })
   end
 
   def agreement_files
@@ -61,9 +61,9 @@ class AgreementForm < Reform::Form
   def file_structure(file)
     path = file_path(file)
     FileGenerator.generate(uploaded_file: file,
-      label: "Agreement file",
-      md5: md5(path),
-      sha1: sha1(path))
+                           label: 'Agreement file',
+                           md5: md5(path),
+                           sha1: sha1(path))
   end
 
   def md5(path)

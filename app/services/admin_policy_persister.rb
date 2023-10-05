@@ -28,7 +28,7 @@ class AdminPolicyPersister
       administrative: {
         hasAdminPolicy: SolrDocument::UBER_APO_ID,
         hasAgreement: agreement_object_id,
-        accessTemplate: {view: "world", download: "world"}
+        accessTemplate: { view: 'world', download: 'world' }
       }
     )
   end
@@ -54,14 +54,14 @@ class AdminPolicyPersister
     response = update
 
     # Kick off the accessionWF after all updates are complete.
-    WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, "accessionWF", version: "1")
+    WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
 
     response
   end
 
   def sync
     # Do not allow invalid access combinations (we do the same in the ItemChangeSet)
-    form.download_access = "none" if clear_download?
+    form.download_access = 'none' if clear_download?
     form.access_location = nil if clear_location?
 
     updated = model
@@ -75,17 +75,17 @@ class AdminPolicyPersister
   attr_reader :model, :form
 
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
-    :title, :default_workflows, :permissions,
-    :view_access, :download_access, :access_location, :controlled_digital_lending,
-    :collection_radio, :collections_for_registration, :collection,
-    :registered_by, :changed?, to: :form
+           :title, :default_workflows, :permissions,
+           :view_access, :download_access, :access_location, :controlled_digital_lending,
+           :collection_radio, :collections_for_registration, :collection,
+           :registered_by, :changed?, to: :form
 
   def clear_download?
-    %w[dark citation-only].include?(view_access) && download_access != "none"
+    %w[dark citation-only].include?(view_access) && download_access != 'none'
   end
 
   def clear_location?
-    (changed?(:view_access) || changed?(:download_access)) && view_access != "location-based" && download_access != "location-based"
+    (changed?(:view_access) || changed?(:download_access)) && view_access != 'location-based' && download_access != 'location-based'
   end
 
   def tag_registered_by(druid)
@@ -99,7 +99,7 @@ class AdminPolicyPersister
   end
 
   def updated_description(updated)
-    description = {title: [{value: title}], purl: model.description.purl}
+    description = { title: [{ value: title }], purl: model.description.purl }
     updated_description = updated.description.new(description)
     updated.new(description: updated_description)
   end
@@ -152,7 +152,7 @@ class AdminPolicyPersister
   def collection_ids
     # Get the ids of the existing collections from the form.
     collection_ids = Hash(collections_for_registration).values.map { |elem| elem.fetch(:id) }
-    if collection_radio == "create"
+    if collection_radio == 'create'
       collection_ids << create_collection(model.externalIdentifier)
     elsif collection[:collection].present? # guard against empty string
       collection_ids << collection[:collection]
@@ -172,8 +172,8 @@ class AdminPolicyPersister
 
   # Translate the value used on the form to the value used in Cocina
   ROLE_NAME = {
-    "manage" => "dor-apo-manager",
-    "view" => "dor-apo-viewer"
+    'manage' => 'dor-apo-manager',
+    'view' => 'dor-apo-viewer'
   }.freeze
 
   def roles
@@ -183,9 +183,9 @@ class AdminPolicyPersister
     ungrouped_perms = attributes.each_with_object({}) do |perm, grouped|
       role_name = ROLE_NAME.fetch(perm[:access])
       grouped[role_name] ||= []
-      grouped[role_name] << {type: "workgroup", identifier: "sdr:#{perm[:name]}"}
+      grouped[role_name] << { type: 'workgroup', identifier: "sdr:#{perm[:name]}" }
     end
 
-    ungrouped_perms.map { |name, members| {name:, members:} }
+    ungrouped_perms.map { |name, members| { name:, members: } }
   end
 end

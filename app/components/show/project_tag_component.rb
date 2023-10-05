@@ -7,7 +7,7 @@ module Show
     end
 
     def call
-      render_field "project_tag_ssim"
+      render_field 'project_tag_ssim'
     end
 
     private

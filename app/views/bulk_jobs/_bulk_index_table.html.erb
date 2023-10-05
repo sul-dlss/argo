@@ -1,38 +1,38 @@
 <table class="table table-hover my-3">
   <tr>
     <th>When</th><th>Who</th><th>File Name</th><th>Note</th>
-    <th>Status <%= link_to status_help_apo_bulk_jobs_path, aria: {label: "Status information"},
-                     data: {blacklight_modal: "trigger", ajax_modal_title: "Status Information"} do %>
+    <th>Status <%= link_to status_help_apo_bulk_jobs_path, aria: { label: 'Status information' },
+                                                           data: { blacklight_modal: 'trigger', ajax_modal_title: 'Status Information' } do %>
       <span class="icon-question-sign" aria-hidden="true"></span>
     <% end %></th>
     <th>Druids</th><th>Success</th><th /><th />
   </tr>
   <% @bulk_jobs.each do |job| %>
-    <% job_status = "not started"
-       job_status = "in progress" if job.key?("dir")
-       job_status = "completed" if job["argo.bulk_metadata.bulk_log_job_complete"]
-       job_status += " (with system errors)" if job.key?("error") %>
+    <% job_status = 'not started'
+       job_status = 'in progress' if job.key?('dir')
+       job_status = 'completed' if job['argo.bulk_metadata.bulk_log_job_complete']
+       job_status += ' (with system errors)' if job.key?('error') %>
     <tr>
-      <td><%= job["argo.bulk_metadata.bulk_log_job_start"] %></td>
-      <td><%= job["argo.bulk_metadata.bulk_log_user"] %></td>
-      <td><%= job["argo.bulk_metadata.bulk_log_input_file"] %></td>
-      <td><%= job["argo.bulk_metadata.bulk_log_note"] %></td>
+      <td><%= job['argo.bulk_metadata.bulk_log_job_start'] %></td>
+      <td><%= job['argo.bulk_metadata.bulk_log_user'] %></td>
+      <td><%= job['argo.bulk_metadata.bulk_log_input_file'] %></td>
+      <td><%= job['argo.bulk_metadata.bulk_log_note'] %></td>
       <td><%= job_status %></td>
-      <td><%= job["argo.bulk_metadata.bulk_log_record_count"] %></td>
-      <td><%= job["argo.bulk_metadata.bulk_log_druids_loaded"] %></td>
+      <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
+      <td><%= job['argo.bulk_metadata.bulk_log_druids_loaded'] %></td>
 
       <% if(job.key?('dir')) %>
-        <% druid_and_time = job["dir"].split(%r{/}) %>
-        <td><%= link_to("Log", show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: {blacklight_modal: "trigger", ajax_modal_title: "MODS Bulk Load Log"}) %></td>
-        <td><%= link_to("XML", show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)) %></td>
+        <% druid_and_time = job['dir'].split(%r{/}) %>
+        <td><%= link_to('Log', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: { blacklight_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
+        <td><%= link_to('XML', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)) %></td>
       <% else %>
         <td>error:  job log dir not found</td>
         <td>error:  job log dir not found</td>
       <% end %>
       <td>
         <% if(job.has_key?('dir')) %>
-          <%= form_tag(apo_bulk_jobs_path(@document.id), method: :delete, data: {controller: "bulk-upload-jobs"}) do %>
-            <%= hidden_field_tag("dir", job["dir"]) %>
+          <%= form_tag(apo_bulk_jobs_path(@document.id), method: :delete, data: { controller: 'bulk-upload-jobs' }) do %>
+            <%= hidden_field_tag('dir', job['dir']) %>
             <button type="button" class="btn btn-primary" data-action="bulk-upload-jobs#openModal">Delete</button>
           <% end %>
         <% else %>
@@ -47,7 +47,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <%= render BlacklightModalComponent.new do |component| %>
-        <% component.header { "Confirm Delete" } %>
+        <% component.header { 'Confirm Delete' } %>
         <% component.body do %>
           Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
         <% end %>

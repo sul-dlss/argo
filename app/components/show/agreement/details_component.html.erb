@@ -11,7 +11,7 @@
       <tr>
         <th class="col-3" scope="row">Content type</th>
         <td>
-          <%= render Show::ContentTypeComponent.new(document: @solr_document, state_service: state_service) %>
+          <%= render Show::ContentTypeComponent.new(document: @solr_document, state_service:) %>
         </td>
       </tr>
 
@@ -25,7 +25,7 @@
       <tr>
         <th class="col-3" scope="row">Source IDs</th>
         <td>
-          <%= render Show::SourceIdComponent.new(document: @solr_document, state_service: state_service) %>
+          <%= render Show::SourceIdComponent.new(document: @solr_document, state_service:) %>
         </td>
       </tr>
 

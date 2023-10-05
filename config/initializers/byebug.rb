@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-if Rails.env.development? && ENV.fetch("REMOTE_DEBUGGER", nil) == "byebug"
-  require "byebug/core"
+if Rails.env.development? && ENV.fetch('REMOTE_DEBUGGER', nil) == 'byebug'
+  require 'byebug/core'
 
-  debugger_host = ENV.fetch("DEBUGGER_HOST", "localhost")
-  debugger_port = ENV.fetch("DEBUGGER_PORT", 8989).to_i
+  debugger_host = ENV.fetch('DEBUGGER_HOST', 'localhost')
+  debugger_port = ENV.fetch('DEBUGGER_PORT', 8989).to_i
 
   begin
     Byebug.start_server(debugger_host, debugger_port)

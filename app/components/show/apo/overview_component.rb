@@ -11,7 +11,7 @@ module Show
       end
 
       def registration_workflow
-        @registration_workflow.present? ? @registration_workflow.join(", ") : "None"
+        @registration_workflow.present? ? @registration_workflow.join(', ') : 'None'
       end
 
       delegate :id, :status, to: :@solr_document

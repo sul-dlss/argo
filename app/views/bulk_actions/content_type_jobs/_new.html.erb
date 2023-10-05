@@ -1,5 +1,5 @@
-<%= form_with url: content_type_job_path, class: "new_bulk_action", data: {controller: "content-type", turbo_frame: "_top"} do |f| %>
-  <%= render "bulk_actions/errors" %>
+<%= form_with url: content_type_job_path, class: 'new_bulk_action', data: { controller: 'content-type', turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
 
   <span class='help-block'>
     Set content type
@@ -16,23 +16,23 @@
       <li>Document: document</li>
     </ul>
 
-    <%= f.label :current_resource_type, "Current resource type" %>
-    <%= f.select :current_resource_type, options_for_select(Constants::RESOURCE_TYPES), {include_blank: "none"}, class: "form-select" %>
+    <%= f.label :current_resource_type, 'Current resource type' %>
+    <%= f.select :current_resource_type, options_for_select(Constants::RESOURCE_TYPES), { include_blank: 'none' }, class: 'form-select' %>
 
     <%= f.label :new_content_type %>
-    <%= f.select :new_content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), {include_blank: "none"},
-          class: "form-select", data: {content_type_target: "contentType", action: "content-type#render"} %>
+    <%= f.select :new_content_type, options_for_select(ContentTypeForm::CONTENT_TYPES), { include_blank: 'none' },
+                 class: 'form-select', data: { content_type_target: 'contentType', action: 'content-type#render' } %>
 
     <span data-content-type-target="directionRow">
       <%= f.label :viewing_direction %>
-      <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), {include_blank: "none"},
-            class: "form-select", data: {content_type_target: "direction"} %>
+      <%= f.select :viewing_direction, options_for_select(ContentTypeForm::DIRECTIONS), { include_blank: 'none' },
+                   class: 'form-select', data: { content_type_target: 'direction' } %>
     </span>
 
-    <%= f.label :new_resource_type, "New resource type" %>
-    <%= f.select :new_resource_type, options_for_select(Constants::RESOURCE_TYPES), {include_blank: "none"}, class: "form-select" %>
+    <%= f.label :new_resource_type, 'New resource type' %>
+    <%= f.select :new_resource_type, options_for_select(Constants::RESOURCE_TYPES), { include_blank: 'none' }, class: 'form-select' %>
   </span>
 
-  <%= render "bulk_actions/druids", f: f %>
-  <%= render "bulk_actions/common_fields", f: f %>
+  <%= render 'bulk_actions/druids', f: %>
+  <%= render 'bulk_actions/common_fields', f: %>
 <% end %>

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe ContentsComponent, type: :component do
   let(:presenter) do
     instance_double(ArgoShowPresenter,
-      document: solr_doc, cocina:,
-      view_token: "skret-t0k3n",
-      state_service:)
+                    document: solr_doc, cocina:,
+                    view_token: 'skret-t0k3n',
+                    state_service:)
   end
   let(:component) { described_class.new(presenter:) }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
   let(:rendered) { render_inline(component) }
 
-  context "with an Item" do
+  context 'with an Item' do
     let(:solr_doc) do
-      SolrDocument.new(id: "druid:bb000zn0114")
+      SolrDocument.new(id: 'druid:bb000zn0114')
     end
     let(:cocina) { build(:dro) }
 
@@ -24,23 +24,23 @@ RSpec.describe ContentsComponent, type: :component do
       allow(controller).to receive(:can?).and_return(true)
     end
 
-    context "with unlocked object" do
+    context 'with unlocked object' do
       let(:allows_modification) { true }
 
-      it "renders a turbo frame" do
-        expect(rendered.css("turbo-frame").first["src"]).to eq "/items/skret-t0k3n/structure"
+      it 'renders a turbo frame' do
+        expect(rendered.css('turbo-frame').first['src']).to eq '/items/skret-t0k3n/structure'
       end
 
-      it "shows Upload CSV button" do
-        expect(rendered.css(".bi-upload")).to be_present
+      it 'shows Upload CSV button' do
+        expect(rendered.css('.bi-upload')).to be_present
       end
     end
 
-    context "with locked object" do
+    context 'with locked object' do
       let(:allows_modification) { false }
 
-      it "hides Upload CSV button" do
-        expect(rendered.css(".bi-upload")).not_to be_present
+      it 'hides Upload CSV button' do
+        expect(rendered.css('.bi-upload')).not_to be_present
       end
     end
   end

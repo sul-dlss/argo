@@ -9,15 +9,15 @@ class PublishesController < ApplicationController
 
     Dor::Services::Client.object(@cocina.externalIdentifier).publish
     redirect_to solr_document_path(@cocina.externalIdentifier),
-      notice: "Object published! You still need to use the normal versioning " \
-              "process to make sure your changes are preserved."
+                notice: 'Object published! You still need to use the normal versioning ' \
+                        'process to make sure your changes are preserved.'
   end
 
   def destroy
     authorize! :update, @cocina
 
     Dor::Services::Client.object(@cocina.externalIdentifier).unpublish
-    redirect_to solr_document_path(@cocina.externalIdentifier), notice: "Object unpublished!"
+    redirect_to solr_document_path(@cocina.externalIdentifier), notice: 'Object unpublished!'
   end
 
   private

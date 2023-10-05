@@ -10,7 +10,7 @@ module Mods
     class LegacyLicenseError < StandardError; end
 
     def self.licenses
-      @licenses ||= Rails.application.config_for(:licenses, env: "production").stringify_keys
+      @licenses ||= Rails.application.config_for(:licenses, env: 'production').stringify_keys
     end
 
     def initialize(url:)

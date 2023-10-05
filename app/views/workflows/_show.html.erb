@@ -1,8 +1,8 @@
 <span class="section-head-link">
   View:
-  <%= link_to "XML", item_workflow_path(item_id: @presenter.druid, id: @presenter.workflow_name, raw: "true"),
-        title: @presenter.workflow_name,
-        data: {blacklight_modal: "trigger"} %>
+  <%= link_to 'XML', item_workflow_path(item_id: @presenter.druid, id: @presenter.workflow_name, raw: 'true'),
+              title: @presenter.workflow_name,
+              data: { blacklight_modal: 'trigger' } %>
 </span>
 <%= @presenter.druid %>
 
@@ -22,7 +22,7 @@
   <tbody>
     <% if @presenter.processes.any? %>
       <% @presenter.processes.each_with_index do |process, index| %>
-        <%= render WorkflowProcessRow.new(index: index, process: process, cocina_object: @presenter.cocina_object) %>
+        <%= render WorkflowProcessRow.new(index:, process:, cocina_object: @presenter.cocina_object) %>
       <% end %>
     <% else %>
       <tr><td colspan="8">No processes defined for this workflow.</td></tr>

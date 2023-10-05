@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Show::Item::DetailsComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
@@ -12,43 +12,43 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
   let(:allows_modification) { true }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
   let(:doc) do
-    SolrDocument.new("id" => "druid:kv840xx0000",
-      SolrDocument::FIELD_REGISTERED_DATE => ["2012-04-05T01:00:04.148Z"],
-      SolrDocument::FIELD_OBJECT_TYPE => object_type,
-      SolrDocument::FIELD_DOI => "10.25740/yr775yn6440",
-      SolrDocument::FIELD_ORCIDS => ["0000-0002-7262-6251", "0000-0002-7262-999X"])
+    SolrDocument.new('id' => 'druid:kv840xx0000',
+                     SolrDocument::FIELD_REGISTERED_DATE => ['2012-04-05T01:00:04.148Z'],
+                     SolrDocument::FIELD_OBJECT_TYPE => object_type,
+                     SolrDocument::FIELD_DOI => '10.25740/yr775yn6440',
+                     SolrDocument::FIELD_ORCIDS => %w[0000-0002-7262-6251 0000-0002-7262-999X])
   end
-  let(:object_type) { "item" }
+  let(:object_type) { 'item' }
 
   let(:content_type_button) { rendered.css("a[aria-label='Set content type']") }
   let(:source_id_button) { rendered.css("a[aria-label='Change source id']") }
   let(:catalog_record_id_button) { rendered.css("a[aria-label='#{CatalogRecordId.manage_label}']") }
   let(:barcode_button) { rendered.css("a[aria-label='Edit barcode']") }
 
-  context "when allows_modification is true" do
-    it "creates a edit buttons" do
+  context 'when allows_modification is true' do
+    it 'creates a edit buttons' do
       expect(source_id_button).to be_present
-      expect(rendered.to_html).to include "Not released"
-      expect(rendered.to_html).to include "Not recorded"
-      expect(rendered.to_html).to include "None assigned"
+      expect(rendered.to_html).to include 'Not released'
+      expect(rendered.to_html).to include 'Not recorded'
+      expect(rendered.to_html).to include 'None assigned'
       expect(catalog_record_id_button).to be_present
       expect(content_type_button).to be_present
       expect(barcode_button).to be_present
-      expect(rendered.to_html).to include "Preservation size"
-      expect(rendered.to_html).to include "Content type"
+      expect(rendered.to_html).to include 'Preservation size'
+      expect(rendered.to_html).to include 'Content type'
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
     end
 
-    it "includes doi and orcid when available" do
-      expect(rendered.to_html).to include "10.25740/yr775yn6440"
-      expect(rendered.to_html).to include "0000-0002-7262-6251, 0000-0002-7262-999X"
+    it 'includes doi and orcid when available' do
+      expect(rendered.to_html).to include '10.25740/yr775yn6440'
+      expect(rendered.to_html).to include '0000-0002-7262-6251, 0000-0002-7262-999X'
     end
   end
 
-  context "when allows_modification is false" do
+  context 'when allows_modification is false' do
     let(:allows_modification) { false }
 
-    it "creates only the tag edit buttons" do
+    it 'creates only the tag edit buttons' do
       expect(source_id_button).not_to be_present
       expect(catalog_record_id_button).not_to be_present
       expect(content_type_button).not_to be_present

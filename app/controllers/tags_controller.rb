@@ -5,7 +5,7 @@ class TagsController < ApplicationController
   def search
     render json: Dor::Services::Client.administrative_tags.search(q: params[:q])
   rescue Dor::Services::Client::ConnectionFailed
-    Honeybadger.notify("connection to DSA to search for tags failed", q: params[:q])
+    Honeybadger.notify('connection to DSA to search for tags failed', q: params[:q])
     render json: []
   end
 
@@ -45,8 +45,7 @@ class TagsController < ApplicationController
     end
 
     # from https://github.com/rails/rails/blob/f95c0b7e96eb36bc3efc0c5beffbb9e84ea664e4/activerecord/lib/active_record/nested_attributes.rb#L382-L384
-    def _destroy
-    end
+    def _destroy; end
 
     def persisted?
       id.present?
@@ -67,7 +66,7 @@ class TagsController < ApplicationController
         format.html { redirect_to solr_document_path(params[:item_id], format: :html), notice: msg }
       else
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("modal-frame", partial: "edit"), status: :unprocessable_entity
+          render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_entity
         end
       end
     end

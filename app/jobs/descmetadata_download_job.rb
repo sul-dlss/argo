@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "zip"
+require 'zip'
 
 # Download metadata as a zip of xml files.
 class DescmetadataDownloadJob < GenericJob
@@ -18,7 +18,7 @@ class DescmetadataDownloadJob < GenericJob
         log.puts("argo.bulk_metadata.bulk_log_bulk_action_not_found (looking for #{bulk_action_id})")
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.zone.now.strftime(TIME_FORMAT)}")
       else
-        start_log(log, bulk_action.user_id, "", bulk_action.description)
+        start_log(log, bulk_action.user_id, '', bulk_action.description)
         update_druid_count
         ::Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
           druids.each_with_index do |current_druid, index|
@@ -49,7 +49,7 @@ class DescmetadataDownloadJob < GenericJob
     write_to_zip(desc_metadata, current_druid, zip_file)
     log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
     bulk_action.increment(:druid_count_success).save
-  rescue => e
+  rescue StandardError => e
     log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
     log.puts(e.message)
     log.puts(e.backtrace)
@@ -84,7 +84,7 @@ class DescmetadataDownloadJob < GenericJob
   # @param [String]  username  The login name of the current user.
   # @param [String]  filename  An optional input filename
   # @param [String]  note      An optional comment that describes this job.
-  def start_log(log_file, username, filename = "", note = "")
+  def start_log(log_file, username, filename = '', note = '')
     log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_user #{username}")
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}") if filename.present?

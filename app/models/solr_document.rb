@@ -24,25 +24,25 @@ class SolrDocument
   FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
   FIELD_RELEASED_TO = :released_to_ssim
 
-  FIELD_TITLE = "sw_display_title_tesim"
-  FIELD_AUTHOR = "sw_author_tesim"
-  FIELD_LABEL = "obj_label_tesim"
-  FIELD_PLACE = "originInfo_place_placeTerm_tesim"
-  FIELD_PUBLISHER = "originInfo_publisher_tesim"
-  FIELD_MODS_CREATED_DATE = "originInfo_date_created_tesim"
-  FIELD_CURRENT_VERSION = "current_version_isi"
-  FIELD_STATUS = "status_ssi"
-  FIELD_ACCESS_RIGHTS = "rights_descriptions_ssim"
-  FIELD_DEFAULT_ACCESS_RIGHTS = "default_rights_descriptions_ssim"
-  FIELD_COPYRIGHT = "copyright_ssim"
-  FIELD_USE_STATEMENT = "use_statement_ssim"
-  FIELD_LICENSE = "use_license_machine_ssi"
-  FIELD_PROJECT_TAG = "project_tag_ssim"
-  FIELD_TAGS = "tag_ssim"
-  FIELD_SOURCE_ID = "source_id_ssim"
-  FIELD_BARCODE_ID = "barcode_id_ssim"
-  FIELD_WORKFLOW_ERRORS = "wf_error_ssim"
-  FIELD_CONSTITUENTS = "has_constituents_ssim"
+  FIELD_TITLE = 'sw_display_title_tesim'
+  FIELD_AUTHOR = 'sw_author_tesim'
+  FIELD_LABEL = 'obj_label_tesim'
+  FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
+  FIELD_PUBLISHER = 'originInfo_publisher_tesim'
+  FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
+  FIELD_CURRENT_VERSION = 'current_version_isi'
+  FIELD_STATUS = 'status_ssi'
+  FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssim'
+  FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
+  FIELD_COPYRIGHT = 'copyright_ssim'
+  FIELD_USE_STATEMENT = 'use_statement_ssim'
+  FIELD_LICENSE = 'use_license_machine_ssi'
+  FIELD_PROJECT_TAG = 'project_tag_ssim'
+  FIELD_TAGS = 'tag_ssim'
+  FIELD_SOURCE_ID = 'source_id_ssim'
+  FIELD_BARCODE_ID = 'barcode_id_ssim'
+  FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
+  FIELD_CONSTITUENTS = 'has_constituents_ssim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
@@ -97,13 +97,13 @@ class SolrDocument
   use_extension(Blacklight::Document::DublinCore)
   field_semantics.merge!(
     title: FIELD_TITLE,
-    author: "dc_creator_ssi",
-    language: "sw_language_ssim",
-    format: "sw_format_ssim"
+    author: 'dc_creator_ssi',
+    language: 'sw_language_ssim',
+    format: 'sw_format_ssim'
   )
 
   def embargoed?
-    embargo_status == "embargoed"
+    embargo_status == 'embargoed'
   end
 
   # @return [boolean] true if NOT an adminPolicy or an agreement
@@ -112,15 +112,15 @@ class SolrDocument
   end
 
   def admin_policy?
-    object_type == "adminPolicy"
+    object_type == 'adminPolicy'
   end
 
   def agreement?
-    object_type == "agreement"
+    object_type == 'agreement'
   end
 
   def item?
-    object_type == "item"
+    object_type == 'item'
   end
 
   def virtual_object?
@@ -130,14 +130,14 @@ class SolrDocument
   end
 
   def collection?
-    object_type == "collection"
+    object_type == 'collection'
   end
 
   def thumbnail_url
     return nil unless first_shelved_image
 
     @thumbnail_url ||= begin
-      file_id = File.basename(first_shelved_image, ".*")
+      file_id = File.basename(first_shelved_image, '.*')
       druid = Druid.new(id).without_namespace
       "#{Settings.stacks_url}/iiif/#{druid}%2F#{ERB::Util.url_encode(file_id)}/full/!400,400/0/default.jpg"
     end
@@ -155,7 +155,7 @@ class SolrDocument
   end
 
   def title
-    (sw_title.presence || [label]).join(" -- ")
+    (sw_title.presence || [label]).join(' -- ')
   end
 
   def inspect

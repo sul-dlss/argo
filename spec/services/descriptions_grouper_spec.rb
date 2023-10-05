@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe DescriptionsGrouper do
   subject(:run) { described_class.group(descriptions:) }
 
   let(:descriptions) do
     {
-      druid1 => DescriptionExport.export(description: description1, source_id: ""),
-      druid2 => DescriptionExport.export(description: description2, source_id: ""),
-      druid3 => DescriptionExport.export(description: description3, source_id: "")
+      druid1 => DescriptionExport.export(description: description1, source_id: ''),
+      druid2 => DescriptionExport.export(description: description2, source_id: ''),
+      druid3 => DescriptionExport.export(description: description3, source_id: '')
     }
   end
 
@@ -162,123 +162,123 @@ RSpec.describe DescriptionsGrouper do
             "value": "141 Ridge Street, New York, NY",
             "displayLabel": "Place of creation"
           }]
-        }      
+        }#{'      '}
       JSON
     )
   end
 
-  let(:druid1) { "druid:bb467kj6050" }
-  let(:druid2) { "druid:bb560fk6027" }
-  let(:druid3) { "druid:bb976rq0538" }
+  let(:druid1) { 'druid:bb467kj6050' }
+  let(:druid2) { 'druid:bb560fk6027' }
+  let(:druid3) { 'druid:bb976rq0538' }
 
-  it "groups forms as expected" do
-    expect(run.dig(druid1, "form1.source.value")).to eq("MODS resource types")
-    expect(run.dig(druid1, "form1.type")).to eq("resource type")
-    expect(run.dig(druid1, "form1.value")).to eq("still image")
-    expect(run.dig(druid1, "form2.type")).to be_nil
-    expect(run.dig(druid1, "form2.value")).to be_nil
-    expect(run.dig(druid1, "form3.type")).to eq("form")
-    expect(run.dig(druid1, "form3.value")).to eq("oil on canvas")
-    expect(run.dig(druid1, "form4.type")).to eq("extent")
-    expect(run.dig(druid1, "form4.value")).to eq("36 x 36 inches")
-    expect(run.dig(druid1, "form5.type")).to eq("digital origin")
-    expect(run.dig(druid1, "form5.value")).to eq("reformatted digital")
-    expect(run.dig(druid1, "form5.source.value")).to eq("MODS digital origin terms")
-    expect(run.dig(druid1, "form6.type")).to eq("genre")
-    expect(run.dig(druid1, "form6.value")).to eq("Portrait")
-    expect(run.dig(druid1, "form7.value")).to eq("manuscript")
-    expect(run.dig(druid1, "form7.source.value")).to eq("MODS resource types")
-    expect(run.dig(druid1, "form8.note1.value")).to be_nil
+  it 'groups forms as expected' do
+    expect(run.dig(druid1, 'form1.source.value')).to eq('MODS resource types')
+    expect(run.dig(druid1, 'form1.type')).to eq('resource type')
+    expect(run.dig(druid1, 'form1.value')).to eq('still image')
+    expect(run.dig(druid1, 'form2.type')).to be_nil
+    expect(run.dig(druid1, 'form2.value')).to be_nil
+    expect(run.dig(druid1, 'form3.type')).to eq('form')
+    expect(run.dig(druid1, 'form3.value')).to eq('oil on canvas')
+    expect(run.dig(druid1, 'form4.type')).to eq('extent')
+    expect(run.dig(druid1, 'form4.value')).to eq('36 x 36 inches')
+    expect(run.dig(druid1, 'form5.type')).to eq('digital origin')
+    expect(run.dig(druid1, 'form5.value')).to eq('reformatted digital')
+    expect(run.dig(druid1, 'form5.source.value')).to eq('MODS digital origin terms')
+    expect(run.dig(druid1, 'form6.type')).to eq('genre')
+    expect(run.dig(druid1, 'form6.value')).to eq('Portrait')
+    expect(run.dig(druid1, 'form7.value')).to eq('manuscript')
+    expect(run.dig(druid1, 'form7.source.value')).to eq('MODS resource types')
+    expect(run.dig(druid1, 'form8.note1.value')).to be_nil
 
-    expect(run.dig(druid2, "form1.source.value")).to eq("MODS resource types")
-    expect(run.dig(druid2, "form1.type")).to eq("resource type")
-    expect(run.dig(druid2, "form1.value")).to eq("still image")
-    expect(run.dig(druid2, "form2.type")).to eq("resource type")
-    expect(run.dig(druid2, "form2.value")).to eq("moving image")
-    expect(run.dig(druid2, "form3.type")).to eq("form")
-    expect(run.dig(druid2, "form3.value")).to eq("ink on paper")
-    expect(run.dig(druid2, "form4.type")).to eq("extent")
-    expect(run.dig(druid2, "form4.value")).to eq("14 x 11 inches")
-    expect(run.dig(druid2, "form5.type")).to eq("digital origin")
-    expect(run.dig(druid2, "form5.value")).to eq("reformatted digital")
-    expect(run.dig(druid2, "form5.source.value")).to eq("MODS digital origin terms")
-    expect(run.dig(druid2, "form6.type")).to eq("genre")
-    expect(run.dig(druid2, "form6.value")).to eq("Still life")
-    expect(run.dig(druid2, "form7.value")).to eq("manuscript")
-    expect(run.dig(druid2, "form7.source.value")).to eq("MODS resource types")
-    expect(run.dig(druid2, "form8.note1.value")).to be_nil
+    expect(run.dig(druid2, 'form1.source.value')).to eq('MODS resource types')
+    expect(run.dig(druid2, 'form1.type')).to eq('resource type')
+    expect(run.dig(druid2, 'form1.value')).to eq('still image')
+    expect(run.dig(druid2, 'form2.type')).to eq('resource type')
+    expect(run.dig(druid2, 'form2.value')).to eq('moving image')
+    expect(run.dig(druid2, 'form3.type')).to eq('form')
+    expect(run.dig(druid2, 'form3.value')).to eq('ink on paper')
+    expect(run.dig(druid2, 'form4.type')).to eq('extent')
+    expect(run.dig(druid2, 'form4.value')).to eq('14 x 11 inches')
+    expect(run.dig(druid2, 'form5.type')).to eq('digital origin')
+    expect(run.dig(druid2, 'form5.value')).to eq('reformatted digital')
+    expect(run.dig(druid2, 'form5.source.value')).to eq('MODS digital origin terms')
+    expect(run.dig(druid2, 'form6.type')).to eq('genre')
+    expect(run.dig(druid2, 'form6.value')).to eq('Still life')
+    expect(run.dig(druid2, 'form7.value')).to eq('manuscript')
+    expect(run.dig(druid2, 'form7.source.value')).to eq('MODS resource types')
+    expect(run.dig(druid2, 'form8.note1.value')).to be_nil
 
-    expect(run.dig(druid3, "form1.source.value")).to eq("MODS resource types")
-    expect(run.dig(druid3, "form1.type")).to eq("resource type")
-    expect(run.dig(druid3, "form1.value")).to eq("still image")
-    expect(run.dig(druid3, "form2.type")).to be_nil
-    expect(run.dig(druid3, "form2.value")).to be_nil
-    expect(run.dig(druid3, "form3.type")).to eq("form")
-    expect(run.dig(druid3, "form3.value")).to eq("acrylic on board")
-    expect(run.dig(druid3, "form4.type")).to eq("extent")
-    expect(run.dig(druid3, "form4.value")).to eq("23 x 23 inches")
-    expect(run.dig(druid3, "form5.note1.value")).to be_nil
-    expect(run.dig(druid3, "form5.type")).to eq("digital origin")
-    expect(run.dig(druid3, "form5.value")).to eq("reformatted digital")
-    expect(run.dig(druid3, "form5.source.value")).to eq("MODS digital origin terms")
-    expect(run.dig(druid3, "form6.type")).to be_nil
-    expect(run.dig(druid3, "form6.value")).to be_nil
-    expect(run.dig(druid3, "form7.value")).to eq("manuscript")
-    expect(run.dig(druid3, "form7.source.value")).to eq("MODS resource types")
-    expect(run.dig(druid3, "form8.note1.value")).to eq("trapezoid")
+    expect(run.dig(druid3, 'form1.source.value')).to eq('MODS resource types')
+    expect(run.dig(druid3, 'form1.type')).to eq('resource type')
+    expect(run.dig(druid3, 'form1.value')).to eq('still image')
+    expect(run.dig(druid3, 'form2.type')).to be_nil
+    expect(run.dig(druid3, 'form2.value')).to be_nil
+    expect(run.dig(druid3, 'form3.type')).to eq('form')
+    expect(run.dig(druid3, 'form3.value')).to eq('acrylic on board')
+    expect(run.dig(druid3, 'form4.type')).to eq('extent')
+    expect(run.dig(druid3, 'form4.value')).to eq('23 x 23 inches')
+    expect(run.dig(druid3, 'form5.note1.value')).to be_nil
+    expect(run.dig(druid3, 'form5.type')).to eq('digital origin')
+    expect(run.dig(druid3, 'form5.value')).to eq('reformatted digital')
+    expect(run.dig(druid3, 'form5.source.value')).to eq('MODS digital origin terms')
+    expect(run.dig(druid3, 'form6.type')).to be_nil
+    expect(run.dig(druid3, 'form6.value')).to be_nil
+    expect(run.dig(druid3, 'form7.value')).to eq('manuscript')
+    expect(run.dig(druid3, 'form7.source.value')).to eq('MODS resource types')
+    expect(run.dig(druid3, 'form8.note1.value')).to eq('trapezoid')
   end
 
-  it "groups notes as expected" do
-    expect(run.dig(druid1, "note1.displayLabel")).to eq("Provenance")
-    expect(run.dig(druid1, "note1.type")).to eq("ownership")
-    expect(run.dig(druid1, "note2.displayLabel")).to eq("Provenance")
-    expect(run.dig(druid1, "note2.type")).to eq("ownership")
-    expect(run.dig(druid1, "note3.displayLabel")).to eq("Place of creation")
-    expect(run.dig(druid1, "note3.type")).to be_nil
-    expect(run.dig(druid1, "note4.displayLabel")).to be_nil
-    expect(run.dig(druid1, "note4.type")).to eq("abstract")
-    expect(run.dig(druid1, "note5.displayLabel")).to be_nil
-    expect(run.dig(druid1, "note5.type")).to be_nil
+  it 'groups notes as expected' do
+    expect(run.dig(druid1, 'note1.displayLabel')).to eq('Provenance')
+    expect(run.dig(druid1, 'note1.type')).to eq('ownership')
+    expect(run.dig(druid1, 'note2.displayLabel')).to eq('Provenance')
+    expect(run.dig(druid1, 'note2.type')).to eq('ownership')
+    expect(run.dig(druid1, 'note3.displayLabel')).to eq('Place of creation')
+    expect(run.dig(druid1, 'note3.type')).to be_nil
+    expect(run.dig(druid1, 'note4.displayLabel')).to be_nil
+    expect(run.dig(druid1, 'note4.type')).to eq('abstract')
+    expect(run.dig(druid1, 'note5.displayLabel')).to be_nil
+    expect(run.dig(druid1, 'note5.type')).to be_nil
 
-    expect(run.dig(druid2, "note1.displayLabel")).to eq("Provenance")
-    expect(run.dig(druid2, "note1.type")).to eq("ownership")
-    expect(run.dig(druid2, "note2.displayLabel")).to be_nil
-    expect(run.dig(druid2, "note2.type")).to be_nil
-    expect(run.dig(druid2, "note3.displayLabel")).to be_nil
-    expect(run.dig(druid2, "note3.type")).to be_nil
-    expect(run.dig(druid2, "note4.displayLabel")).to be_nil
-    expect(run.dig(druid2, "note4.type")).to be_nil
-    expect(run.dig(druid2, "note5.displayLabel")).to be_nil
-    expect(run.dig(druid2, "note5.type")).to be_nil
+    expect(run.dig(druid2, 'note1.displayLabel')).to eq('Provenance')
+    expect(run.dig(druid2, 'note1.type')).to eq('ownership')
+    expect(run.dig(druid2, 'note2.displayLabel')).to be_nil
+    expect(run.dig(druid2, 'note2.type')).to be_nil
+    expect(run.dig(druid2, 'note3.displayLabel')).to be_nil
+    expect(run.dig(druid2, 'note3.type')).to be_nil
+    expect(run.dig(druid2, 'note4.displayLabel')).to be_nil
+    expect(run.dig(druid2, 'note4.type')).to be_nil
+    expect(run.dig(druid2, 'note5.displayLabel')).to be_nil
+    expect(run.dig(druid2, 'note5.type')).to be_nil
 
-    expect(run.dig(druid3, "note1.displayLabel")).to eq("Provenance")
-    expect(run.dig(druid3, "note1.type")).to eq("ownership")
-    expect(run.dig(druid2, "note2.displayLabel")).to be_nil
-    expect(run.dig(druid2, "note2.type")).to be_nil
-    expect(run.dig(druid3, "note3.displayLabel")).to eq("Place of creation")
-    expect(run.dig(druid3, "note3.type")).to be_nil
-    expect(run.dig(druid3, "note4.displayLabel")).to be_nil
-    expect(run.dig(druid3, "note4.type")).to be_nil
-    expect(run.dig(druid3, "note5.displayLabel")).to eq("Exhibition history")
-    expect(run.dig(druid3, "note5.type")).to eq("exhibitions")
+    expect(run.dig(druid3, 'note1.displayLabel')).to eq('Provenance')
+    expect(run.dig(druid3, 'note1.type')).to eq('ownership')
+    expect(run.dig(druid2, 'note2.displayLabel')).to be_nil
+    expect(run.dig(druid2, 'note2.type')).to be_nil
+    expect(run.dig(druid3, 'note3.displayLabel')).to eq('Place of creation')
+    expect(run.dig(druid3, 'note3.type')).to be_nil
+    expect(run.dig(druid3, 'note4.displayLabel')).to be_nil
+    expect(run.dig(druid3, 'note4.type')).to be_nil
+    expect(run.dig(druid3, 'note5.displayLabel')).to eq('Exhibition history')
+    expect(run.dig(druid3, 'note5.type')).to eq('exhibitions')
   end
 
-  context "with a more complex example containing multiple repeat values" do
+  context 'with a more complex example containing multiple repeat values' do
     let(:descriptions) do
       {
-        druid1 => DescriptionExport.export(description: description1, source_id: ""),
-        druid2 => DescriptionExport.export(description: description2, source_id: ""),
-        druid3 => DescriptionExport.export(description: description3, source_id: ""),
-        druid4 => DescriptionExport.export(description: description4, source_id: ""),
-        druid5 => DescriptionExport.export(description: description5, source_id: ""),
-        druid6 => DescriptionExport.export(description: description6, source_id: "")
+        druid1 => DescriptionExport.export(description: description1, source_id: ''),
+        druid2 => DescriptionExport.export(description: description2, source_id: ''),
+        druid3 => DescriptionExport.export(description: description3, source_id: ''),
+        druid4 => DescriptionExport.export(description: description4, source_id: ''),
+        druid5 => DescriptionExport.export(description: description5, source_id: ''),
+        druid6 => DescriptionExport.export(description: description6, source_id: '')
       }
     end
 
     let(:description1) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "form": [{
               "value": "computer program",
               "type": "genre",
@@ -398,7 +398,7 @@ RSpec.describe DescriptionsGrouper do
     let(:description3) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "form": [{
               "value": "computer dataset",
               "type": "genre",
@@ -453,14 +453,14 @@ RSpec.describe DescriptionsGrouper do
               "value": "note with type but not display label",
               "type": "condition"
             }]
-          }        
+          }#{'        '}
         JSON
       )
     end
     let(:description4) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "form": [{
               "value": "Databases",
               "type": "genre",
@@ -514,14 +514,14 @@ RSpec.describe DescriptionsGrouper do
                 "type": "record origin"
               }]
             }
-          }        
+          }#{'        '}
         JSON
       )
     end
     let(:description5) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "form": [{
               "value": "Data sets",
               "type": "genre",
@@ -582,13 +582,13 @@ RSpec.describe DescriptionsGrouper do
                 "type": "use and reproduction"
               }]
             },
-            "adminMetadata": {            
+            "adminMetadata": {#{'            '}
               "note": [{
                 "value": "Converted from MARCXML to MODS version 3.7 using MARC21slim2MODS3-7_SDR_v2-5.xsl (SUL 3.7 version 2.5 20210421; LC Revision 1.140 20200717)",
                 "type": "record origin"
               }]
             }
-          }        
+          }#{'        '}
         JSON
       )
     end
@@ -644,237 +644,246 @@ RSpec.describe DescriptionsGrouper do
                 "type": "record origin"
               }]
             }
-          }        
+          }#{'        '}
         JSON
       )
     end
 
-    let(:druid1) { "druid:kg986pw1063" }
-    let(:druid2) { "druid:qg486xd2400" }
-    let(:druid3) { "druid:sm561bg8999" }
-    let(:druid4) { "druid:tr125sy5253" }
-    let(:druid5) { "druid:tw155vv5117" }
-    let(:druid6) { "druid:vc609bv8108" }
+    let(:druid1) { 'druid:kg986pw1063' }
+    let(:druid2) { 'druid:qg486xd2400' }
+    let(:druid3) { 'druid:sm561bg8999' }
+    let(:druid4) { 'druid:tr125sy5253' }
+    let(:druid5) { 'druid:tw155vv5117' }
+    let(:druid6) { 'druid:vc609bv8108' }
 
-    it "groups forms as expected" do
-      expect(run.dig(druid1, "form1.value")).to eq("software, multimedia")
-      expect(run.dig(druid1, "form1.type")).to eq("resource type")
-      expect(run.dig(druid1, "form2.type")).to be_nil
-      expect(run.dig(druid1, "form2.value")).to be_nil
-      expect(run.dig(druid1, "form3.value")).to eq("computer program")
-      expect(run.dig(druid1, "form3.type")).to eq("genre")
-      expect(run.dig(druid1, "form4.value")).to eq("optical disc")
-      expect(run.dig(druid1, "form4.type")).to eq("form")
-      expect(run.dig(druid1, "form5.value")).to eq("3 computer discs ; 4 3/4 in.")
-      expect(run.dig(druid1, "form5.type")).to eq("extent")
-      expect(run.dig(druid1, "form6.value")).to eq("computer")
-      expect(run.dig(druid1, "form6.type")).to eq("media")
-      expect(run.dig(druid1, "form7.value")).to eq("disc")
-      expect(run.dig(druid1, "form7.type")).to eq("media")
-      expect(run.dig(druid1, "form8.value")).to eq("computer disc")
-      expect(run.dig(druid1, "form8.type")).to eq("carrier")
+    it 'groups forms as expected' do
+      expect(run.dig(druid1, 'form1.value')).to eq('software, multimedia')
+      expect(run.dig(druid1, 'form1.type')).to eq('resource type')
+      expect(run.dig(druid1, 'form2.type')).to be_nil
+      expect(run.dig(druid1, 'form2.value')).to be_nil
+      expect(run.dig(druid1, 'form3.value')).to eq('computer program')
+      expect(run.dig(druid1, 'form3.type')).to eq('genre')
+      expect(run.dig(druid1, 'form4.value')).to eq('optical disc')
+      expect(run.dig(druid1, 'form4.type')).to eq('form')
+      expect(run.dig(druid1, 'form5.value')).to eq('3 computer discs ; 4 3/4 in.')
+      expect(run.dig(druid1, 'form5.type')).to eq('extent')
+      expect(run.dig(druid1, 'form6.value')).to eq('computer')
+      expect(run.dig(druid1, 'form6.type')).to eq('media')
+      expect(run.dig(druid1, 'form7.value')).to eq('disc')
+      expect(run.dig(druid1, 'form7.type')).to eq('media')
+      expect(run.dig(druid1, 'form8.value')).to eq('computer disc')
+      expect(run.dig(druid1, 'form8.type')).to eq('carrier')
 
-      expect(run.dig(druid2, "form1.value")).to eq("software, multimedia")
-      expect(run.dig(druid2, "form1.type")).to eq("resource type")
-      expect(run.dig(druid2, "form2.value")).to eq("text")
-      expect(run.dig(druid2, "form2.type")).to eq("resource type")
-      expect(run.dig(druid2, "form3.value")).to eq("numeric data")
-      expect(run.dig(druid2, "form3.type")).to eq("genre")
-      expect(run.dig(druid2, "form4.value")).to eq("electronic resource")
-      expect(run.dig(druid2, "form4.type")).to eq("form")
-      expect(run.dig(druid2, "form5.value")).to eq("1 CD-ROM ; 4 3/4 in. + 1 users guide (loose-leaf ; 23 cm.)")
-      expect(run.dig(druid2, "form5.type")).to eq("extent")
-      expect(run.dig(druid2, "form6.value")).to be_nil
-      expect(run.dig(druid2, "form6.type")).to be_nil
-      expect(run.dig(druid2, "form7.value")).to be_nil
-      expect(run.dig(druid2, "form7.type")).to be_nil
-      expect(run.dig(druid2, "form8.value")).to be_nil
-      expect(run.dig(druid2, "form8.type")).to be_nil
+      expect(run.dig(druid2, 'form1.value')).to eq('software, multimedia')
+      expect(run.dig(druid2, 'form1.type')).to eq('resource type')
+      expect(run.dig(druid2, 'form2.value')).to eq('text')
+      expect(run.dig(druid2, 'form2.type')).to eq('resource type')
+      expect(run.dig(druid2, 'form3.value')).to eq('numeric data')
+      expect(run.dig(druid2, 'form3.type')).to eq('genre')
+      expect(run.dig(druid2, 'form4.value')).to eq('electronic resource')
+      expect(run.dig(druid2, 'form4.type')).to eq('form')
+      expect(run.dig(druid2, 'form5.value')).to eq('1 CD-ROM ; 4 3/4 in. + 1 users guide (loose-leaf ; 23 cm.)')
+      expect(run.dig(druid2, 'form5.type')).to eq('extent')
+      expect(run.dig(druid2, 'form6.value')).to be_nil
+      expect(run.dig(druid2, 'form6.type')).to be_nil
+      expect(run.dig(druid2, 'form7.value')).to be_nil
+      expect(run.dig(druid2, 'form7.type')).to be_nil
+      expect(run.dig(druid2, 'form8.value')).to be_nil
+      expect(run.dig(druid2, 'form8.type')).to be_nil
 
-      expect(run.dig(druid3, "form1.value")).to eq("software, multimedia")
-      expect(run.dig(druid3, "form1.type")).to eq("resource type")
-      expect(run.dig(druid3, "form2.value")).to eq("text")
-      expect(run.dig(druid3, "form2.type")).to eq("resource type")
-      expect(run.dig(druid3, "form3.value")).to eq("computer dataset")
-      expect(run.dig(druid3, "form3.type")).to eq("genre")
-      expect(run.dig(druid3, "form4.value")).to eq("optical disc")
-      expect(run.dig(druid3, "form4.type")).to eq("form")
-      expect(run.dig(druid3, "form5.value")).to eq("1 computer disc : CD-ROM ; 4 3/4 in. + 1 user guide (12 leaves : illustrations ; 28 cm.)")
-      expect(run.dig(druid3, "form5.type")).to eq("extent")
-      expect(run.dig(druid3, "form6.value")).to eq("computer")
-      expect(run.dig(druid3, "form6.type")).to eq("media")
-      expect(run.dig(druid3, "form7.value")).to be_nil
-      expect(run.dig(druid3, "form7.type")).to be_nil
-      expect(run.dig(druid3, "form8.value")).to eq("computer disc")
-      expect(run.dig(druid3, "form8.type")).to eq("carrier")
+      expect(run.dig(druid3, 'form1.value')).to eq('software, multimedia')
+      expect(run.dig(druid3, 'form1.type')).to eq('resource type')
+      expect(run.dig(druid3, 'form2.value')).to eq('text')
+      expect(run.dig(druid3, 'form2.type')).to eq('resource type')
+      expect(run.dig(druid3, 'form3.value')).to eq('computer dataset')
+      expect(run.dig(druid3, 'form3.type')).to eq('genre')
+      expect(run.dig(druid3, 'form4.value')).to eq('optical disc')
+      expect(run.dig(druid3, 'form4.type')).to eq('form')
+      expect(run.dig(druid3,
+                     'form5.value')).to eq('1 computer disc : CD-ROM ; 4 3/4 in. + 1 user guide (12 leaves : illustrations ; 28 cm.)')
+      expect(run.dig(druid3, 'form5.type')).to eq('extent')
+      expect(run.dig(druid3, 'form6.value')).to eq('computer')
+      expect(run.dig(druid3, 'form6.type')).to eq('media')
+      expect(run.dig(druid3, 'form7.value')).to be_nil
+      expect(run.dig(druid3, 'form7.type')).to be_nil
+      expect(run.dig(druid3, 'form8.value')).to eq('computer disc')
+      expect(run.dig(druid3, 'form8.type')).to eq('carrier')
 
-      expect(run.dig(druid4, "form1.value")).to eq("software, multimedia")
-      expect(run.dig(druid4, "form1.type")).to eq("resource type")
-      expect(run.dig(druid4, "form2.value")).to eq("text")
-      expect(run.dig(druid4, "form2.type")).to eq("resource type")
-      expect(run.dig(druid4, "form3.value")).to eq("Databases")
-      expect(run.dig(druid4, "form3.type")).to eq("genre")
-      expect(run.dig(druid4, "form4.value")).to eq("optical disc")
-      expect(run.dig(druid4, "form4.type")).to eq("form")
-      expect(run.dig(druid4, "form5.value")).to eq("1 computer disc ; 4 3/4 in. + 1 volume (9 leaves : illustrations ; 28 cm)")
-      expect(run.dig(druid4, "form5.type")).to eq("extent")
-      expect(run.dig(druid4, "form6.value")).to eq("computer")
-      expect(run.dig(druid4, "form6.type")).to eq("media")
-      expect(run.dig(druid4, "form7.value")).to be_nil
-      expect(run.dig(druid4, "form7.type")).to be_nil
-      expect(run.dig(druid4, "form8.value")).to eq("computer disc")
-      expect(run.dig(druid4, "form8.type")).to eq("carrier")
+      expect(run.dig(druid4, 'form1.value')).to eq('software, multimedia')
+      expect(run.dig(druid4, 'form1.type')).to eq('resource type')
+      expect(run.dig(druid4, 'form2.value')).to eq('text')
+      expect(run.dig(druid4, 'form2.type')).to eq('resource type')
+      expect(run.dig(druid4, 'form3.value')).to eq('Databases')
+      expect(run.dig(druid4, 'form3.type')).to eq('genre')
+      expect(run.dig(druid4, 'form4.value')).to eq('optical disc')
+      expect(run.dig(druid4, 'form4.type')).to eq('form')
+      expect(run.dig(druid4,
+                     'form5.value')).to eq('1 computer disc ; 4 3/4 in. + 1 volume (9 leaves : illustrations ; 28 cm)')
+      expect(run.dig(druid4, 'form5.type')).to eq('extent')
+      expect(run.dig(druid4, 'form6.value')).to eq('computer')
+      expect(run.dig(druid4, 'form6.type')).to eq('media')
+      expect(run.dig(druid4, 'form7.value')).to be_nil
+      expect(run.dig(druid4, 'form7.type')).to be_nil
+      expect(run.dig(druid4, 'form8.value')).to eq('computer disc')
+      expect(run.dig(druid4, 'form8.type')).to eq('carrier')
 
-      expect(run.dig(druid5, "form1.value")).to eq("software, multimedia")
-      expect(run.dig(druid5, "form1.type")).to eq("resource type")
-      expect(run.dig(druid5, "form2.value")).to be_nil
-      expect(run.dig(druid5, "form2.type")).to be_nil
-      expect(run.dig(druid5, "form3.value")).to eq("Data sets")
-      expect(run.dig(druid5, "form3.type")).to eq("genre")
-      expect(run.dig(druid5, "form4.value")).to eq("remote")
-      expect(run.dig(druid5, "form4.type")).to eq("form")
-      expect(run.dig(druid5, "form5.value")).to eq("1 online resource")
-      expect(run.dig(druid5, "form5.type")).to eq("extent")
-      expect(run.dig(druid5, "form6.value")).to eq("computer")
-      expect(run.dig(druid5, "form6.type")).to eq("media")
-      expect(run.dig(druid5, "form7.value")).to be_nil
-      expect(run.dig(druid5, "form7.type")).to be_nil
-      expect(run.dig(druid5, "form8.value")).to eq("online resource")
-      expect(run.dig(druid5, "form8.type")).to eq("carrier")
+      expect(run.dig(druid5, 'form1.value')).to eq('software, multimedia')
+      expect(run.dig(druid5, 'form1.type')).to eq('resource type')
+      expect(run.dig(druid5, 'form2.value')).to be_nil
+      expect(run.dig(druid5, 'form2.type')).to be_nil
+      expect(run.dig(druid5, 'form3.value')).to eq('Data sets')
+      expect(run.dig(druid5, 'form3.type')).to eq('genre')
+      expect(run.dig(druid5, 'form4.value')).to eq('remote')
+      expect(run.dig(druid5, 'form4.type')).to eq('form')
+      expect(run.dig(druid5, 'form5.value')).to eq('1 online resource')
+      expect(run.dig(druid5, 'form5.type')).to eq('extent')
+      expect(run.dig(druid5, 'form6.value')).to eq('computer')
+      expect(run.dig(druid5, 'form6.type')).to eq('media')
+      expect(run.dig(druid5, 'form7.value')).to be_nil
+      expect(run.dig(druid5, 'form7.type')).to be_nil
+      expect(run.dig(druid5, 'form8.value')).to eq('online resource')
+      expect(run.dig(druid5, 'form8.type')).to eq('carrier')
 
-      expect(run.dig(druid6, "form1.value")).to eq("software, multimedia")
-      expect(run.dig(druid6, "form1.type")).to eq("resource type")
-      expect(run.dig(druid6, "form2.value")).to be_nil
-      expect(run.dig(druid6, "form2.type")).to be_nil
-      expect(run.dig(druid6, "form3.value")).to eq("numeric data")
-      expect(run.dig(druid6, "form3.type")).to eq("genre")
-      expect(run.dig(druid6, "form4.value")).to eq("electronic")
-      expect(run.dig(druid6, "form4.type")).to eq("form")
-      expect(run.dig(druid6, "form5.value")).to eq("6 USB hard drives : 3.5 USB 3.0 to SATA III HDD enclosure with UASP support")
-      expect(run.dig(druid6, "form5.type")).to eq("extent")
-      expect(run.dig(druid6, "form6.value")).to be_nil
-      expect(run.dig(druid6, "form6.type")).to be_nil
-      expect(run.dig(druid6, "form7.value")).to be_nil
-      expect(run.dig(druid6, "form7.type")).to be_nil
-      expect(run.dig(druid6, "form8.value")).to be_nil
-      expect(run.dig(druid6, "form8.type")).to be_nil
+      expect(run.dig(druid6, 'form1.value')).to eq('software, multimedia')
+      expect(run.dig(druid6, 'form1.type')).to eq('resource type')
+      expect(run.dig(druid6, 'form2.value')).to be_nil
+      expect(run.dig(druid6, 'form2.type')).to be_nil
+      expect(run.dig(druid6, 'form3.value')).to eq('numeric data')
+      expect(run.dig(druid6, 'form3.type')).to eq('genre')
+      expect(run.dig(druid6, 'form4.value')).to eq('electronic')
+      expect(run.dig(druid6, 'form4.type')).to eq('form')
+      expect(run.dig(druid6,
+                     'form5.value')).to eq('6 USB hard drives : 3.5 USB 3.0 to SATA III HDD enclosure with UASP support')
+      expect(run.dig(druid6, 'form5.type')).to eq('extent')
+      expect(run.dig(druid6, 'form6.value')).to be_nil
+      expect(run.dig(druid6, 'form6.type')).to be_nil
+      expect(run.dig(druid6, 'form7.value')).to be_nil
+      expect(run.dig(druid6, 'form7.type')).to be_nil
+      expect(run.dig(druid6, 'form8.value')).to be_nil
+      expect(run.dig(druid6, 'form8.type')).to be_nil
     end
 
-    it "groups notes as expected" do
-      expect(run.dig(druid1, "note1.value")).to eq("Title from disc label.")
-      expect(run.dig(druid1, "note2.value")).to be_nil
-      expect(run.dig(druid1, "note3.value")).to be_nil
-      expect(run.dig(druid1, "note4.value")).to be_nil
-      expect(run.dig(druid1, "note5.value")).to eq("note with display label")
-      expect(run.dig(druid1, "note5.displayLabel")).to eq("Display label")
-      expect(run.dig(druid1, "note6.value")).to eq("Another note with display label")
-      expect(run.dig(druid1, "note6.displayLabel")).to eq("Display label")
-      expect(run.dig(druid1, "note7.value")).to eq("Federal Financial Institutions Examination Council.")
-      expect(run.dig(druid1, "note7.type")).to eq("statement of responsibility")
-      expect(run.dig(druid1, "note8.value")).to eq("Disc characteristics: CD-ROM.")
-      expect(run.dig(druid1, "note8.type")).to eq("system details")
-      expect(run.dig(druid1, "note9.value")).to eq("note with display label and type")
-      expect(run.dig(druid1, "note9.type")).to eq("condition")
-      expect(run.dig(druid1, "note9.displayLabel")).to eq("Another label")
-      expect(run.dig(druid1, "note10.value")).to be_nil
-      expect(run.dig(druid1, "note11.value")).to be_nil
-      expect(run.dig(druid1, "note12.value")).to be_nil
+    it 'groups notes as expected' do
+      expect(run.dig(druid1, 'note1.value')).to eq('Title from disc label.')
+      expect(run.dig(druid1, 'note2.value')).to be_nil
+      expect(run.dig(druid1, 'note3.value')).to be_nil
+      expect(run.dig(druid1, 'note4.value')).to be_nil
+      expect(run.dig(druid1, 'note5.value')).to eq('note with display label')
+      expect(run.dig(druid1, 'note5.displayLabel')).to eq('Display label')
+      expect(run.dig(druid1, 'note6.value')).to eq('Another note with display label')
+      expect(run.dig(druid1, 'note6.displayLabel')).to eq('Display label')
+      expect(run.dig(druid1, 'note7.value')).to eq('Federal Financial Institutions Examination Council.')
+      expect(run.dig(druid1, 'note7.type')).to eq('statement of responsibility')
+      expect(run.dig(druid1, 'note8.value')).to eq('Disc characteristics: CD-ROM.')
+      expect(run.dig(druid1, 'note8.type')).to eq('system details')
+      expect(run.dig(druid1, 'note9.value')).to eq('note with display label and type')
+      expect(run.dig(druid1, 'note9.type')).to eq('condition')
+      expect(run.dig(druid1, 'note9.displayLabel')).to eq('Another label')
+      expect(run.dig(druid1, 'note10.value')).to be_nil
+      expect(run.dig(druid1, 'note11.value')).to be_nil
+      expect(run.dig(druid1, 'note12.value')).to be_nil
 
-      expect(run.dig(druid2, "note1.value")).to eq("Title from disc label.")
-      expect(run.dig(druid2, "note2.value")).to eq("May 2004.")
-      expect(run.dig(druid2, "note3.value")).to eq("Users guide entitled: NIST surface structure database (SSD) with interactive analysis and visualization / authors, P.R. Watson, M.A. Van Hove, K. Herrmann.")
-      expect(run.dig(druid2, "note4.value")).to eq("Provides extensive structural information about surface structures determined from experiment.")
-      expect(run.dig(druid2, "note4.type")).to eq("abstract")
-      expect(run.dig(druid2, "note5.value")).to eq("note with display label")
-      expect(run.dig(druid2, "note5.displayLabel")).to eq("Display label")
-      expect(run.dig(druid2, "note6.value")).to be_nil
-      expect(run.dig(druid2, "note7.value")).to be_nil
-      expect(run.dig(druid2, "note8.value")).to eq("System requirements: Intel Pentium processor")
-      expect(run.dig(druid2, "note8.type")).to eq("system details")
-      expect(run.dig(druid2, "note9.value")).to eq("note with display label and type")
-      expect(run.dig(druid2, "note9.type")).to eq("condition")
-      expect(run.dig(druid2, "note9.displayLabel")).to eq("Another label")
-      expect(run.dig(druid2, "note10.value")).to be_nil
-      expect(run.dig(druid2, "note11.value")).to be_nil
-      expect(run.dig(druid2, "note12.value")).to be_nil
+      expect(run.dig(druid2, 'note1.value')).to eq('Title from disc label.')
+      expect(run.dig(druid2, 'note2.value')).to eq('May 2004.')
+      expect(run.dig(druid2,
+                     'note3.value')).to eq('Users guide entitled: NIST surface structure database (SSD) with interactive analysis and visualization / authors, P.R. Watson, M.A. Van Hove, K. Herrmann.')
+      expect(run.dig(druid2,
+                     'note4.value')).to eq('Provides extensive structural information about surface structures determined from experiment.')
+      expect(run.dig(druid2, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid2, 'note5.value')).to eq('note with display label')
+      expect(run.dig(druid2, 'note5.displayLabel')).to eq('Display label')
+      expect(run.dig(druid2, 'note6.value')).to be_nil
+      expect(run.dig(druid2, 'note7.value')).to be_nil
+      expect(run.dig(druid2, 'note8.value')).to eq('System requirements: Intel Pentium processor')
+      expect(run.dig(druid2, 'note8.type')).to eq('system details')
+      expect(run.dig(druid2, 'note9.value')).to eq('note with display label and type')
+      expect(run.dig(druid2, 'note9.type')).to eq('condition')
+      expect(run.dig(druid2, 'note9.displayLabel')).to eq('Another label')
+      expect(run.dig(druid2, 'note10.value')).to be_nil
+      expect(run.dig(druid2, 'note11.value')).to be_nil
+      expect(run.dig(druid2, 'note12.value')).to be_nil
 
-      expect(run.dig(druid3, "note1.value")).to eq("Title from disc label.")
-      expect(run.dig(druid3, "note2.value")).to eq("Accompanying user guide is for an earlier version, Â©2008.")
-      expect(run.dig(druid3, "note3.value")).to be_nil
-      expect(run.dig(druid3, "note4.value")).to eq("Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.")
-      expect(run.dig(druid3, "note4.type")).to eq("abstract")
-      expect(run.dig(druid3, "note5.value")).to be_nil
-      expect(run.dig(druid3, "note6.value")).to be_nil
-      expect(run.dig(druid3, "note7.value")).to eq("GeoLytics, Inc.")
-      expect(run.dig(druid3, "note7.type")).to eq("statement of responsibility")
-      expect(run.dig(druid3, "note8.value")).to be_nil
-      expect(run.dig(druid3, "note9.value")).to be_nil
-      expect(run.dig(druid3, "note10.value")).to eq("note with type but not display label")
-      expect(run.dig(druid3, "note10.type")).to eq("condition")
-      expect(run.dig(druid3, "note11.value")).to be_nil
-      expect(run.dig(druid3, "note12.value")).to be_nil
+      expect(run.dig(druid3, 'note1.value')).to eq('Title from disc label.')
+      expect(run.dig(druid3, 'note2.value')).to eq('Accompanying user guide is for an earlier version, Â©2008.')
+      expect(run.dig(druid3, 'note3.value')).to be_nil
+      expect(run.dig(druid3,
+                     'note4.value')).to eq('Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.')
+      expect(run.dig(druid3, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid3, 'note5.value')).to be_nil
+      expect(run.dig(druid3, 'note6.value')).to be_nil
+      expect(run.dig(druid3, 'note7.value')).to eq('GeoLytics, Inc.')
+      expect(run.dig(druid3, 'note7.type')).to eq('statement of responsibility')
+      expect(run.dig(druid3, 'note8.value')).to be_nil
+      expect(run.dig(druid3, 'note9.value')).to be_nil
+      expect(run.dig(druid3, 'note10.value')).to eq('note with type but not display label')
+      expect(run.dig(druid3, 'note10.type')).to eq('condition')
+      expect(run.dig(druid3, 'note11.value')).to be_nil
+      expect(run.dig(druid3, 'note12.value')).to be_nil
 
-      expect(run.dig(druid4, "note1.value")).to eq("2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.")
-      expect(run.dig(druid4, "note2.value")).to be_nil
-      expect(run.dig(druid4, "note3.value")).to be_nil
-      expect(run.dig(druid4, "note4.value")).to be_nil
-      expect(run.dig(druid4, "note5.value")).to be_nil
-      expect(run.dig(druid4, "note6.value")).to be_nil
-      expect(run.dig(druid4, "note7.value")).to be_nil
-      expect(run.dig(druid4, "note8.value")).to be_nil
-      expect(run.dig(druid4, "note9.value")).to be_nil
-      expect(run.dig(druid4, "note10.value")).to be_nil
-      expect(run.dig(druid4, "note11.value")).to be_nil
-      expect(run.dig(druid4, "note12.value")).to be_nil
+      expect(run.dig(druid4, 'note1.value')).to eq('2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.')
+      expect(run.dig(druid4, 'note2.value')).to be_nil
+      expect(run.dig(druid4, 'note3.value')).to be_nil
+      expect(run.dig(druid4, 'note4.value')).to be_nil
+      expect(run.dig(druid4, 'note5.value')).to be_nil
+      expect(run.dig(druid4, 'note6.value')).to be_nil
+      expect(run.dig(druid4, 'note7.value')).to be_nil
+      expect(run.dig(druid4, 'note8.value')).to be_nil
+      expect(run.dig(druid4, 'note9.value')).to be_nil
+      expect(run.dig(druid4, 'note10.value')).to be_nil
+      expect(run.dig(druid4, 'note11.value')).to be_nil
+      expect(run.dig(druid4, 'note12.value')).to be_nil
 
-      expect(run.dig(druid5, "note1.value")).to eq("Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)")
-      expect(run.dig(druid5, "note2.value")).to be_nil
-      expect(run.dig(druid5, "note3.value")).to be_nil
-      expect(run.dig(druid5, "note4.value")).to eq("40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).")
-      expect(run.dig(druid5, "note4.type")).to eq("abstract")
-      expect(run.dig(druid5, "note5.value")).to be_nil
-      expect(run.dig(druid5, "note6.value")).to be_nil
-      expect(run.dig(druid5, "note7.value")).to be_nil
-      expect(run.dig(druid5, "note8.value")).to be_nil
-      expect(run.dig(druid5, "note9.value")).to be_nil
-      expect(run.dig(druid5, "note10.value")).to be_nil
-      expect(run.dig(druid5, "note11.value")).to eq("Initial file, 1980-2020-")
-      expect(run.dig(druid5, "note11.type")).to eq("date/sequential designation")
-      expect(run.dig(druid5, "note12.value")).to be_nil
+      expect(run.dig(druid5,
+                     'note1.value')).to eq('Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)')
+      expect(run.dig(druid5, 'note2.value')).to be_nil
+      expect(run.dig(druid5, 'note3.value')).to be_nil
+      expect(run.dig(druid5,
+                     'note4.value')).to eq('40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).')
+      expect(run.dig(druid5, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid5, 'note5.value')).to be_nil
+      expect(run.dig(druid5, 'note6.value')).to be_nil
+      expect(run.dig(druid5, 'note7.value')).to be_nil
+      expect(run.dig(druid5, 'note8.value')).to be_nil
+      expect(run.dig(druid5, 'note9.value')).to be_nil
+      expect(run.dig(druid5, 'note10.value')).to be_nil
+      expect(run.dig(druid5, 'note11.value')).to eq('Initial file, 1980-2020-')
+      expect(run.dig(druid5, 'note11.type')).to eq('date/sequential designation')
+      expect(run.dig(druid5, 'note12.value')).to be_nil
 
-      expect(run.dig(druid6, "note1.value")).to be_nil
-      expect(run.dig(druid6, "note2.value")).to be_nil
-      expect(run.dig(druid6, "note3.value")).to be_nil
-      expect(run.dig(druid6, "note4.value")).to eq("Associated Press Collections includes decades worth of access to an array of internal AP publications and records from select AP bureaus. Contents provided by Associated Press Corporate Archives, AP Images, and AP Archive.")
-      expect(run.dig(druid6, "note4.type")).to eq("abstract")
-      expect(run.dig(druid6, "note5.value")).to be_nil
-      expect(run.dig(druid6, "note6.value")).to be_nil
-      expect(run.dig(druid6, "note7.value")).to be_nil
-      expect(run.dig(druid6, "note8.value")).to be_nil
-      expect(run.dig(druid6, "note9.value")).to be_nil
-      expect(run.dig(druid6, "note10.value")).to be_nil
-      expect(run.dig(druid6, "note11.value")).to be_nil
-      expect(run.dig(druid6, "note12.type")).to eq("table of contents")
-      expect(run.dig(druid6, "note12.displayLabel")).to eq("Contents")
+      expect(run.dig(druid6, 'note1.value')).to be_nil
+      expect(run.dig(druid6, 'note2.value')).to be_nil
+      expect(run.dig(druid6, 'note3.value')).to be_nil
+      expect(run.dig(druid6,
+                     'note4.value')).to eq('Associated Press Collections includes decades worth of access to an array of internal AP publications and records from select AP bureaus. Contents provided by Associated Press Corporate Archives, AP Images, and AP Archive.')
+      expect(run.dig(druid6, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid6, 'note5.value')).to be_nil
+      expect(run.dig(druid6, 'note6.value')).to be_nil
+      expect(run.dig(druid6, 'note7.value')).to be_nil
+      expect(run.dig(druid6, 'note8.value')).to be_nil
+      expect(run.dig(druid6, 'note9.value')).to be_nil
+      expect(run.dig(druid6, 'note10.value')).to be_nil
+      expect(run.dig(druid6, 'note11.value')).to be_nil
+      expect(run.dig(druid6, 'note12.type')).to eq('table of contents')
+      expect(run.dig(druid6, 'note12.displayLabel')).to eq('Contents')
     end
   end
 
-  context "with notes containing multiple repeat values including those with no displayLabel or type" do
+  context 'with notes containing multiple repeat values including those with no displayLabel or type' do
     let(:descriptions) do
       {
-        druid1 => DescriptionExport.export(description: description1, source_id: ""),
-        druid2 => DescriptionExport.export(description: description2, source_id: ""),
-        druid3 => DescriptionExport.export(description: description3, source_id: ""),
-        druid4 => DescriptionExport.export(description: description4, source_id: ""),
-        druid5 => DescriptionExport.export(description: description5, source_id: ""),
-        druid6 => DescriptionExport.export(description: description6, source_id: "")
+        druid1 => DescriptionExport.export(description: description1, source_id: ''),
+        druid2 => DescriptionExport.export(description: description2, source_id: ''),
+        druid3 => DescriptionExport.export(description: description3, source_id: ''),
+        druid4 => DescriptionExport.export(description: description4, source_id: ''),
+        druid5 => DescriptionExport.export(description: description5, source_id: ''),
+        druid6 => DescriptionExport.export(description: description6, source_id: '')
       }
     end
 
     let(:description1) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "note": [{
               "value": "Federal Financial Institutions Examination Council.",
               "type": "statement of responsibility"
@@ -929,7 +938,7 @@ RSpec.describe DescriptionsGrouper do
     let(:description3) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "note": [{
               "value": "Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.",
               "type": "abstract"
@@ -946,14 +955,14 @@ RSpec.describe DescriptionsGrouper do
               "value": "note with type but not display label",
               "type": "condition"
             }]
-          }        
+          }#{'        '}
         JSON
       )
     end
     let(:description4) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "note": [{
               "value": "Title from disc surface."
             }, {
@@ -961,14 +970,14 @@ RSpec.describe DescriptionsGrouper do
             }, {
               "value": "2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections."
             }]
-          }        
+          }#{'        '}
         JSON
       )
     end
     let(:description5) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "note": [{
               "value": "40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).",
               "type": "abstract"
@@ -978,7 +987,7 @@ RSpec.describe DescriptionsGrouper do
             }, {
               "value": "Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)"
             }]
-          }        
+          }#{'        '}
         JSON
       )
     end
@@ -1006,129 +1015,135 @@ RSpec.describe DescriptionsGrouper do
               "type": "table of contents",
               "displayLabel": "Contents"
             }]
-          }        
+          }#{'        '}
         JSON
       )
     end
 
-    let(:druid1) { "druid:kg986pw1063" }
-    let(:druid2) { "druid:qg486xd2400" }
-    let(:druid3) { "druid:sm561bg8999" }
-    let(:druid4) { "druid:tr125sy5253" }
-    let(:druid5) { "druid:tw155vv5117" }
-    let(:druid6) { "druid:vc609bv8108" }
+    let(:druid1) { 'druid:kg986pw1063' }
+    let(:druid2) { 'druid:qg486xd2400' }
+    let(:druid3) { 'druid:sm561bg8999' }
+    let(:druid4) { 'druid:tr125sy5253' }
+    let(:druid5) { 'druid:tw155vv5117' }
+    let(:druid6) { 'druid:vc609bv8108' }
 
-    it "groups notes as expected" do
-      expect(run.dig(druid1, "note1.value")).to eq("Title from disc label.")
-      expect(run.dig(druid1, "note2.value")).to be_nil
-      expect(run.dig(druid1, "note3.value")).to be_nil
-      expect(run.dig(druid1, "note4.value")).to be_nil
-      expect(run.dig(druid1, "note5.value")).to eq("note with display label")
-      expect(run.dig(druid1, "note5.displayLabel")).to eq("Display label")
-      expect(run.dig(druid1, "note6.value")).to eq("Another note with display label")
-      expect(run.dig(druid1, "note6.displayLabel")).to eq("Display label")
-      expect(run.dig(druid1, "note7.value")).to eq("Federal Financial Institutions Examination Council.")
-      expect(run.dig(druid1, "note7.type")).to eq("statement of responsibility")
-      expect(run.dig(druid1, "note8.value")).to eq("Disc characteristics: CD-ROM.")
-      expect(run.dig(druid1, "note8.type")).to eq("system details")
-      expect(run.dig(druid1, "note9.value")).to eq("note with display label and type")
-      expect(run.dig(druid1, "note9.type")).to eq("condition")
-      expect(run.dig(druid1, "note9.displayLabel")).to eq("Another label")
-      expect(run.dig(druid1, "note10.value")).to be_nil
-      expect(run.dig(druid1, "note11.value")).to be_nil
-      expect(run.dig(druid1, "note12.value")).to be_nil
+    it 'groups notes as expected' do
+      expect(run.dig(druid1, 'note1.value')).to eq('Title from disc label.')
+      expect(run.dig(druid1, 'note2.value')).to be_nil
+      expect(run.dig(druid1, 'note3.value')).to be_nil
+      expect(run.dig(druid1, 'note4.value')).to be_nil
+      expect(run.dig(druid1, 'note5.value')).to eq('note with display label')
+      expect(run.dig(druid1, 'note5.displayLabel')).to eq('Display label')
+      expect(run.dig(druid1, 'note6.value')).to eq('Another note with display label')
+      expect(run.dig(druid1, 'note6.displayLabel')).to eq('Display label')
+      expect(run.dig(druid1, 'note7.value')).to eq('Federal Financial Institutions Examination Council.')
+      expect(run.dig(druid1, 'note7.type')).to eq('statement of responsibility')
+      expect(run.dig(druid1, 'note8.value')).to eq('Disc characteristics: CD-ROM.')
+      expect(run.dig(druid1, 'note8.type')).to eq('system details')
+      expect(run.dig(druid1, 'note9.value')).to eq('note with display label and type')
+      expect(run.dig(druid1, 'note9.type')).to eq('condition')
+      expect(run.dig(druid1, 'note9.displayLabel')).to eq('Another label')
+      expect(run.dig(druid1, 'note10.value')).to be_nil
+      expect(run.dig(druid1, 'note11.value')).to be_nil
+      expect(run.dig(druid1, 'note12.value')).to be_nil
 
-      expect(run.dig(druid2, "note1.value")).to eq("May 2004.")
-      expect(run.dig(druid2, "note2.value")).to eq("Title from disc label.")
-      expect(run.dig(druid2, "note3.value")).to eq("Users guide entitled: NIST surface structure database (SSD) with interactive analysis and visualization / authors, P.R. Watson, M.A. Van Hove, K. Herrmann.")
-      expect(run.dig(druid2, "note4.value")).to eq("Provides extensive structural information about surface structures determined from experiment.")
-      expect(run.dig(druid2, "note4.type")).to eq("abstract")
-      expect(run.dig(druid2, "note5.value")).to eq("note with display label")
-      expect(run.dig(druid2, "note5.displayLabel")).to eq("Display label")
-      expect(run.dig(druid2, "note6.value")).to be_nil
-      expect(run.dig(druid2, "note7.value")).to be_nil
-      expect(run.dig(druid2, "note8.value")).to eq("System requirements: Intel Pentium processor")
-      expect(run.dig(druid2, "note8.type")).to eq("system details")
-      expect(run.dig(druid2, "note9.value")).to eq("note with display label and type")
-      expect(run.dig(druid2, "note9.type")).to eq("condition")
-      expect(run.dig(druid2, "note9.displayLabel")).to eq("Another label")
-      expect(run.dig(druid2, "note10.value")).to be_nil
-      expect(run.dig(druid2, "note11.value")).to be_nil
-      expect(run.dig(druid2, "note12.value")).to be_nil
+      expect(run.dig(druid2, 'note1.value')).to eq('May 2004.')
+      expect(run.dig(druid2, 'note2.value')).to eq('Title from disc label.')
+      expect(run.dig(druid2,
+                     'note3.value')).to eq('Users guide entitled: NIST surface structure database (SSD) with interactive analysis and visualization / authors, P.R. Watson, M.A. Van Hove, K. Herrmann.')
+      expect(run.dig(druid2,
+                     'note4.value')).to eq('Provides extensive structural information about surface structures determined from experiment.')
+      expect(run.dig(druid2, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid2, 'note5.value')).to eq('note with display label')
+      expect(run.dig(druid2, 'note5.displayLabel')).to eq('Display label')
+      expect(run.dig(druid2, 'note6.value')).to be_nil
+      expect(run.dig(druid2, 'note7.value')).to be_nil
+      expect(run.dig(druid2, 'note8.value')).to eq('System requirements: Intel Pentium processor')
+      expect(run.dig(druid2, 'note8.type')).to eq('system details')
+      expect(run.dig(druid2, 'note9.value')).to eq('note with display label and type')
+      expect(run.dig(druid2, 'note9.type')).to eq('condition')
+      expect(run.dig(druid2, 'note9.displayLabel')).to eq('Another label')
+      expect(run.dig(druid2, 'note10.value')).to be_nil
+      expect(run.dig(druid2, 'note11.value')).to be_nil
+      expect(run.dig(druid2, 'note12.value')).to be_nil
 
-      expect(run.dig(druid3, "note1.value")).to eq("A note without type or label.")
-      expect(run.dig(druid3, "note2.value")).to eq("Title from disc label.")
-      expect(run.dig(druid3, "note3.value")).to eq("Accompanying user guide is for an earlier version, Â©2008.")
-      expect(run.dig(druid3, "note4.value")).to eq("Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.")
-      expect(run.dig(druid3, "note4.type")).to eq("abstract")
-      expect(run.dig(druid3, "note5.value")).to be_nil
-      expect(run.dig(druid3, "note6.value")).to be_nil
-      expect(run.dig(druid3, "note7.value")).to eq("GeoLytics, Inc.")
-      expect(run.dig(druid3, "note7.type")).to eq("statement of responsibility")
-      expect(run.dig(druid3, "note8.value")).to be_nil
-      expect(run.dig(druid3, "note9.value")).to be_nil
-      expect(run.dig(druid3, "note10.value")).to eq("note with type but not display label")
-      expect(run.dig(druid3, "note10.type")).to eq("condition")
-      expect(run.dig(druid3, "note11.value")).to be_nil
-      expect(run.dig(druid3, "note12.value")).to be_nil
+      expect(run.dig(druid3, 'note1.value')).to eq('A note without type or label.')
+      expect(run.dig(druid3, 'note2.value')).to eq('Title from disc label.')
+      expect(run.dig(druid3, 'note3.value')).to eq('Accompanying user guide is for an earlier version, Â©2008.')
+      expect(run.dig(druid3,
+                     'note4.value')).to eq('Converts input addresses to geographical coordinates (latitude-longitude) and then converts those to Census Block codes.The Geocoder with 2012 Estimates and 2017 Projections appends additional demographic variables from the 2012 Estimates and 2017 Projections. It includes a comprehensive set of variables including population counts, age, race, households, income, and housing.')
+      expect(run.dig(druid3, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid3, 'note5.value')).to be_nil
+      expect(run.dig(druid3, 'note6.value')).to be_nil
+      expect(run.dig(druid3, 'note7.value')).to eq('GeoLytics, Inc.')
+      expect(run.dig(druid3, 'note7.type')).to eq('statement of responsibility')
+      expect(run.dig(druid3, 'note8.value')).to be_nil
+      expect(run.dig(druid3, 'note9.value')).to be_nil
+      expect(run.dig(druid3, 'note10.value')).to eq('note with type but not display label')
+      expect(run.dig(druid3, 'note10.type')).to eq('condition')
+      expect(run.dig(druid3, 'note11.value')).to be_nil
+      expect(run.dig(druid3, 'note12.value')).to be_nil
 
-      expect(run.dig(druid4, "note1.value")).to eq("Title from disc surface.")
-      expect(run.dig(druid4, "note2.value")).to eq("Accompanying booklet is user guide.")
-      expect(run.dig(druid4, "note3.value")).to eq("2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.")
-      expect(run.dig(druid4, "note4.value")).to be_nil
-      expect(run.dig(druid4, "note5.value")).to be_nil
-      expect(run.dig(druid4, "note6.value")).to be_nil
-      expect(run.dig(druid4, "note7.value")).to be_nil
-      expect(run.dig(druid4, "note8.value")).to be_nil
-      expect(run.dig(druid4, "note9.value")).to be_nil
-      expect(run.dig(druid4, "note10.value")).to be_nil
-      expect(run.dig(druid4, "note11.value")).to be_nil
-      expect(run.dig(druid4, "note12.value")).to be_nil
+      expect(run.dig(druid4, 'note1.value')).to eq('Title from disc surface.')
+      expect(run.dig(druid4, 'note2.value')).to eq('Accompanying booklet is user guide.')
+      expect(run.dig(druid4, 'note3.value')).to eq('2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.')
+      expect(run.dig(druid4, 'note4.value')).to be_nil
+      expect(run.dig(druid4, 'note5.value')).to be_nil
+      expect(run.dig(druid4, 'note6.value')).to be_nil
+      expect(run.dig(druid4, 'note7.value')).to be_nil
+      expect(run.dig(druid4, 'note8.value')).to be_nil
+      expect(run.dig(druid4, 'note9.value')).to be_nil
+      expect(run.dig(druid4, 'note10.value')).to be_nil
+      expect(run.dig(druid4, 'note11.value')).to be_nil
+      expect(run.dig(druid4, 'note12.value')).to be_nil
 
-      expect(run.dig(druid5, "note1.value")).to eq("Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)")
-      expect(run.dig(druid5, "note2.value")).to be_nil
-      expect(run.dig(druid5, "note3.value")).to be_nil
-      expect(run.dig(druid5, "note4.value")).to eq("40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).")
-      expect(run.dig(druid5, "note4.type")).to eq("abstract")
-      expect(run.dig(druid5, "note5.value")).to be_nil
-      expect(run.dig(druid5, "note6.value")).to be_nil
-      expect(run.dig(druid5, "note7.value")).to be_nil
-      expect(run.dig(druid5, "note8.value")).to be_nil
-      expect(run.dig(druid5, "note9.value")).to be_nil
-      expect(run.dig(druid5, "note10.value")).to be_nil
-      expect(run.dig(druid5, "note11.value")).to eq("Initial file, 1980-2020-")
-      expect(run.dig(druid5, "note11.type")).to eq("date/sequential designation")
-      expect(run.dig(druid5, "note12.value")).to be_nil
+      expect(run.dig(druid5,
+                     'note1.value')).to eq('Description based on online resource, title from email from The New York Times Business Development (Stanford University Libraries, viewed November 2, 2021)')
+      expect(run.dig(druid5, 'note2.value')).to be_nil
+      expect(run.dig(druid5, 'note3.value')).to be_nil
+      expect(run.dig(druid5,
+                     'note4.value')).to eq('40-Year Textual Digital Archive of nytimes.com, initially: 1/1/1980-12/31/2020, which consists of all available articles (approximately 3,000,000) published by The New York Times, including but not limited to news, lifestyle, opinion and The New York Times Magazine, and excludes reader comments, paid obituaries and the kids section. The archives are packed by year, and the naming convention is nyt_nitf_YYYY.tar.gz. Inside the tar archive will be one folder per month, named YYYYMM, and inside of those folders will be individual files for each story moved that year. The naming convention for the stories is YYYY and then an internal ID number. Stories are marked up using News Industry Text Format (NITF 3.3).')
+      expect(run.dig(druid5, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid5, 'note5.value')).to be_nil
+      expect(run.dig(druid5, 'note6.value')).to be_nil
+      expect(run.dig(druid5, 'note7.value')).to be_nil
+      expect(run.dig(druid5, 'note8.value')).to be_nil
+      expect(run.dig(druid5, 'note9.value')).to be_nil
+      expect(run.dig(druid5, 'note10.value')).to be_nil
+      expect(run.dig(druid5, 'note11.value')).to eq('Initial file, 1980-2020-')
+      expect(run.dig(druid5, 'note11.type')).to eq('date/sequential designation')
+      expect(run.dig(druid5, 'note12.value')).to be_nil
 
-      expect(run.dig(druid6, "note1.value")).to be_nil
-      expect(run.dig(druid6, "note2.value")).to be_nil
-      expect(run.dig(druid6, "note3.value")).to be_nil
-      expect(run.dig(druid6, "note4.value")).to eq("Associated Press Collections includes decades worth of access to an array of internal AP publications and records from select AP bureaus. Contents provided by Associated Press Corporate Archives, AP Images, and AP Archive.")
-      expect(run.dig(druid6, "note4.type")).to eq("abstract")
-      expect(run.dig(druid6, "note5.value")).to be_nil
-      expect(run.dig(druid6, "note6.value")).to be_nil
-      expect(run.dig(druid6, "note7.value")).to be_nil
-      expect(run.dig(druid6, "note8.value")).to be_nil
-      expect(run.dig(druid6, "note9.value")).to be_nil
-      expect(run.dig(druid6, "note10.value")).to be_nil
-      expect(run.dig(druid6, "note11.value")).to be_nil
-      expect(run.dig(druid6, "note12.type")).to eq("table of contents")
-      expect(run.dig(druid6, "note12.displayLabel")).to eq("Contents")
+      expect(run.dig(druid6, 'note1.value')).to be_nil
+      expect(run.dig(druid6, 'note2.value')).to be_nil
+      expect(run.dig(druid6, 'note3.value')).to be_nil
+      expect(run.dig(druid6,
+                     'note4.value')).to eq('Associated Press Collections includes decades worth of access to an array of internal AP publications and records from select AP bureaus. Contents provided by Associated Press Corporate Archives, AP Images, and AP Archive.')
+      expect(run.dig(druid6, 'note4.type')).to eq('abstract')
+      expect(run.dig(druid6, 'note5.value')).to be_nil
+      expect(run.dig(druid6, 'note6.value')).to be_nil
+      expect(run.dig(druid6, 'note7.value')).to be_nil
+      expect(run.dig(druid6, 'note8.value')).to be_nil
+      expect(run.dig(druid6, 'note9.value')).to be_nil
+      expect(run.dig(druid6, 'note10.value')).to be_nil
+      expect(run.dig(druid6, 'note11.value')).to be_nil
+      expect(run.dig(druid6, 'note12.type')).to eq('table of contents')
+      expect(run.dig(druid6, 'note12.displayLabel')).to eq('Contents')
     end
   end
 
-  context "with all notes lacking displayLabel or type" do
+  context 'with all notes lacking displayLabel or type' do
     let(:descriptions) do
       {
-        druid1 => DescriptionExport.export(description: description1, source_id: ""),
-        druid2 => DescriptionExport.export(description: description2, source_id: "")
+        druid1 => DescriptionExport.export(description: description1, source_id: ''),
+        druid2 => DescriptionExport.export(description: description2, source_id: '')
       }
     end
 
     let(:description1) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "note": [{
               "value": "One Title from disc label."
             }, {
@@ -1156,35 +1171,36 @@ RSpec.describe DescriptionsGrouper do
       )
     end
 
-    it "groups notes with no empty columns at start of row" do
-      expect(run.dig(druid1, "note1.value")).to eq("One Title from disc label.")
-      expect(run.dig(druid1, "note2.value")).to eq("Two Disc characteristics: CD-ROM.")
-      expect(run.dig(druid1, "note3.value")).to eq("Three note with display label")
+    it 'groups notes with no empty columns at start of row' do
+      expect(run.dig(druid1, 'note1.value')).to eq('One Title from disc label.')
+      expect(run.dig(druid1, 'note2.value')).to eq('Two Disc characteristics: CD-ROM.')
+      expect(run.dig(druid1, 'note3.value')).to eq('Three note with display label')
 
-      expect(run.dig(druid2, "note1.value")).to eq("One May 2004.")
-      expect(run.dig(druid2, "note2.value")).to eq("Two Title from disc label.")
-      expect(run.dig(druid2, "note3.value")).to eq("Three Provides extensive structural information about surface structures determined from experiment.")
+      expect(run.dig(druid2, 'note1.value')).to eq('One May 2004.')
+      expect(run.dig(druid2, 'note2.value')).to eq('Two Title from disc label.')
+      expect(run.dig(druid2,
+                     'note3.value')).to eq('Three Provides extensive structural information about surface structures determined from experiment.')
     end
   end
 
-  context "with an item with several unique notes" do
+  context 'with an item with several unique notes' do
     let(:descriptions) do
       {
-        druid1 => DescriptionExport.export(description: description1, source_id: ""),
-        druid2 => DescriptionExport.export(description: description2, source_id: "")
+        druid1 => DescriptionExport.export(description: description1, source_id: ''),
+        druid2 => DescriptionExport.export(description: description2, source_id: '')
       }
     end
 
     let(:description1) do
       JSON.parse(
         <<~JSON
-          {          
+          {#{'          '}
             "note": [{
               "value": "One Title from disc label."
             }, {
               "value": "Two Disc characteristics: CD-ROM."
             }, {
-              "value": "Three note with display label"  
+              "value": "Three note with display label"#{'  '}
             }]
           }
         JSON
@@ -1214,24 +1230,25 @@ RSpec.describe DescriptionsGrouper do
       )
     end
 
-    it "groups notes as expected" do
-      expect(run.dig(druid1, "note1.value")).to eq("One Title from disc label.")
-      expect(run.dig(druid1, "note2.value")).to eq("Two Disc characteristics: CD-ROM.")
-      expect(run.dig(druid1, "note3.value")).to eq("Three note with display label")
-      expect(run.dig(druid1, "note4.value")).to be_nil
-      expect(run.dig(druid1, "note5.value")).to be_nil
-      expect(run.dig(druid1, "note5.type")).to be_nil
-      expect(run.dig(druid1, "note6.value")).to be_nil
-      expect(run.dig(druid1, "note6.type")).to be_nil
+    it 'groups notes as expected' do
+      expect(run.dig(druid1, 'note1.value')).to eq('One Title from disc label.')
+      expect(run.dig(druid1, 'note2.value')).to eq('Two Disc characteristics: CD-ROM.')
+      expect(run.dig(druid1, 'note3.value')).to eq('Three note with display label')
+      expect(run.dig(druid1, 'note4.value')).to be_nil
+      expect(run.dig(druid1, 'note5.value')).to be_nil
+      expect(run.dig(druid1, 'note5.type')).to be_nil
+      expect(run.dig(druid1, 'note6.value')).to be_nil
+      expect(run.dig(druid1, 'note6.type')).to be_nil
 
-      expect(run.dig(druid2, "note1.value")).to eq("One May 2004.")
-      expect(run.dig(druid2, "note2.value")).to eq("Two Title from disc label.")
-      expect(run.dig(druid2, "note3.value")).to eq("Three Provides extensive structural information about surface structures determined from experiment.")
-      expect(run.dig(druid2, "note4.value")).to eq("An additional note.")
-      expect(run.dig(druid2, "note5.value")).to eq("Example abstract")
-      expect(run.dig(druid2, "note5.type")).to eq("abstract")
-      expect(run.dig(druid2, "note6.value")).to eq("An author")
-      expect(run.dig(druid2, "note6.type")).to eq("statement of responsibility")
+      expect(run.dig(druid2, 'note1.value')).to eq('One May 2004.')
+      expect(run.dig(druid2, 'note2.value')).to eq('Two Title from disc label.')
+      expect(run.dig(druid2,
+                     'note3.value')).to eq('Three Provides extensive structural information about surface structures determined from experiment.')
+      expect(run.dig(druid2, 'note4.value')).to eq('An additional note.')
+      expect(run.dig(druid2, 'note5.value')).to eq('Example abstract')
+      expect(run.dig(druid2, 'note5.type')).to eq('abstract')
+      expect(run.dig(druid2, 'note6.value')).to eq('An author')
+      expect(run.dig(druid2, 'note6.type')).to eq('statement of responsibility')
     end
   end
 end

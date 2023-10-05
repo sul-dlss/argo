@@ -13,19 +13,20 @@ class DescriptiveMetadataImportJob < GenericJob
   def perform(bulk_action_id, params)
     super
     csv = CSV.parse(params[:csv_file], headers: true)
-    with_csv_items(csv, name: "Import descriptive metadata", filename: params[:csv_filename]) do |cocina_object, csv_row, success, failure|
-      next failure.call("Not authorized") unless ability.can?(:update, cocina_object)
+    with_csv_items(csv, name: 'Import descriptive metadata',
+                        filename: params[:csv_filename]) do |cocina_object, csv_row, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       DescriptionImport.import(csv_row:)
-        .bind { |description| validate_input(cocina_object, description) }
-        .bind { |description| validate_changed(cocina_object, description) }
-        .bind { |description| open_version(cocina_object, description) }
-        .bind { |description, new_cocina_object| save(new_cocina_object, description) }
-        .bind { |new_cocina_object| close_version(new_cocina_object) }
-        .either(
-          ->(_updated) { success.call("Successfully updated") },
-          ->(messages) { failure.call(messages.to_sentence) }
-        )
+                       .bind { |description| validate_input(cocina_object, description) }
+                       .bind { |description| validate_changed(cocina_object, description) }
+                       .bind { |description| open_version(cocina_object, description) }
+                       .bind { |description, new_cocina_object| save(new_cocina_object, description) }
+                       .bind { |new_cocina_object| close_version(new_cocina_object) }
+                       .either(
+                         ->(_updated) { success.call('Successfully updated') },
+                         ->(messages) { failure.call(messages.to_sentence) }
+                       )
     end
   end
 
@@ -40,13 +41,13 @@ class DescriptiveMetadataImportJob < GenericJob
   end
 
   def validate_changed(cocina_object, description)
-    return Failure(["Description unchanged"]) if cocina_object.description == description
+    return Failure(['Description unchanged']) if cocina_object.description == description
 
     Success(description)
   end
 
   def open_version(cocina_object, description)
-    cocina_object = open_new_version_if_needed(cocina_object, "Descriptive metadata upload")
+    cocina_object = open_new_version_if_needed(cocina_object, 'Descriptive metadata upload')
 
     Success([description, cocina_object])
   rescue RuntimeError => e
@@ -62,7 +63,9 @@ class DescriptiveMetadataImportJob < GenericJob
   end
 
   def close_version(cocina_object)
-    VersionService.close(identifier: cocina_object.externalIdentifier) unless StateService.new(cocina_object).object_state == :unlock_inactive
+    unless StateService.new(cocina_object).object_state == :unlock_inactive
+      VersionService.close(identifier: cocina_object.externalIdentifier)
+    end
     Success()
   rescue RuntimeError => e
     Failure([e.message])

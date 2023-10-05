@@ -1,24 +1,16 @@
-inherit_mode:
-  merge:
-    - Exclude
-
 require:
-  - standard
-  - standard-custom
-  - standard-performance
-  - standard-rails
   - rubocop-performance
-  - rubocop-rails
   - rubocop-rspec
+  - rubocop-rails
 
-inherit_gem:
-  standard: config/base.yml
-  standard-performance: config/base.yml
-  standard-custom: config/base.yml
-  standard-rails: config/base.yml
+AllCops:
+  TargetRubyVersion: 3.2
+  DisplayCopNames: true
+  SuggestExtensions: false
+  NewCops: disable
+  Exclude:
+    - bin/**
+    - vendor/bundle/**/*
 
 inherit_from:
-  - .rubocop/custom.yml
   - .rubocop_todo.yml
-
-# Where are all the new RSpec/Capybara/FactoryBot cops? .rubocop/custom.yml

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe ExportStructuralJob do
   subject(:job) { described_class.new }
 
-  let(:bulk_action) { create(:bulk_action, action_type: "ExportStructuralJob") }
+  let(:bulk_action) { create(:bulk_action, action_type: 'ExportStructuralJob') }
   let(:csv_path) { File.join(bulk_action.output_directory, Settings.export_structural_job.csv_filename) }
   let(:log_buffer) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: obj1) }
@@ -199,7 +199,7 @@ RSpec.describe ExportStructuralJob do
   end
   let(:obj1) do
     obj = Cocina::Models.build(JSON.parse(json1))
-    Cocina::Models.with_metadata(obj, "abc123")
+    Cocina::Models.with_metadata(obj, 'abc123')
   end
   let(:json2) do
     <<~JSON
@@ -390,7 +390,7 @@ RSpec.describe ExportStructuralJob do
   end
   let(:obj2) do
     obj = Cocina::Models.build(JSON.parse(json2))
-    Cocina::Models.with_metadata(obj, "abc123")
+    Cocina::Models.with_metadata(obj, 'abc123')
   end
 
   before do
@@ -404,22 +404,22 @@ RSpec.describe ExportStructuralJob do
     FileUtils.rm_f(csv_path)
   end
 
-  describe "#perform_now" do
+  describe '#perform_now' do
     let(:druids) { [druid1, druid2] }
-    let(:druid1) { "druid:bc123df4567" }
-    let(:druid2) { "druid:bd123fg5678" }
+    let(:druid1) { 'druid:bc123df4567' }
+    let(:druid2) { 'druid:bd123fg5678' }
     let(:groups) { [] }
-    let(:user) { instance_double(User, to_s: "jcoyne85") }
+    let(:user) { instance_double(User, to_s: 'jcoyne85') }
 
-    context "when happy path" do
+    context 'when happy path' do
       before do
         job.perform(bulk_action.id,
-          druids:,
-          groups:,
-          user:)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
-      it "logs messages and creates a file" do
+      it 'logs messages and creates a file' do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to eq druids.length
         expect(bulk_action.druid_count_fail).to be_zero
@@ -428,39 +428,39 @@ RSpec.describe ExportStructuralJob do
         expect(File).to exist(csv_path)
       end
 
-      it "is valid csv and druids are prefixless" do
+      it 'is valid csv and druids are prefixless' do
         output = CSV.read(csv_path, headers: true)
         expect(output.size).to eq 8
         output.each do |row|
-          expect(row["druid"]).not_to match(/^druid:/)
+          expect(row['druid']).not_to match(/^druid:/)
         end
       end
     end
 
-    context "when an exception is raised" do
+    context 'when an exception is raised' do
       before do
-        allow(object_client1).to receive(:find).and_raise(StandardError, "ruh roh")
-        allow(object_client2).to receive(:find).and_raise(StandardError, "ruh roh")
+        allow(object_client1).to receive(:find).and_raise(StandardError, 'ruh roh')
+        allow(object_client2).to receive(:find).and_raise(StandardError, 'ruh roh')
         job.perform(bulk_action.id,
-          druids:,
-          groups:,
-          user:)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
-      it "records all failures and creates an empty file" do
+      it 'records all failures and creates an empty file' do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
         expect(log_buffer.string).to include "Export structural metadata failed StandardError ruh roh for #{druid1}"
         expect(log_buffer.string).to include "Export structural metadata failed StandardError ruh roh for #{druid2}"
         expect(File).to exist(csv_path)
-        File.open(csv_path, "r") do |file|
+        File.open(csv_path, 'r') do |file|
           expect(file.readlines.size).to eq 1 # just a header row
         end
       end
     end
 
-    context "when an no structural metadata is present" do
+    context 'when an no structural metadata is present' do
       let(:json1) do
         <<~JSON
           {
@@ -522,19 +522,19 @@ RSpec.describe ExportStructuralJob do
 
       before do
         job.perform(bulk_action.id,
-          druids:,
-          groups:,
-          user:)
+                    druids:,
+                    groups:,
+                    user:)
       end
 
-      it "records all failures and creates an empty file" do
+      it 'records all failures and creates an empty file' do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(log_buffer.string).to include "No structural metadata to export for druid:bc123df4567"
-        expect(log_buffer.string).to include "No structural metadata to export for druid:bd123fg5678"
+        expect(log_buffer.string).to include 'No structural metadata to export for druid:bc123df4567'
+        expect(log_buffer.string).to include 'No structural metadata to export for druid:bd123fg5678'
         expect(File).to exist(csv_path)
-        File.open(csv_path, "r") do |file|
+        File.open(csv_path, 'r') do |file|
           expect(file.readlines.size).to eq 1 # just a header row
         end
       end

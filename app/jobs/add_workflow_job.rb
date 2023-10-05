@@ -13,15 +13,16 @@ class AddWorkflowJob < GenericJob
   def perform(bulk_action_id, params)
     super
     @workflow_name = params.fetch(:workflow)
-    with_items(params[:druids], name: "Workflow creation") do |cocina_object, success, failure|
-      next failure.call("Not authorized") unless ability.can?(:update, cocina_object)
+    with_items(params[:druids], name: 'Workflow creation') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       # check the workflow is present and active (not archived)
-      next failure.call("#{workflow_name} already exists") if workflow_active?(cocina_object.externalIdentifier, cocina_object.version)
+      next failure.call("#{workflow_name} already exists") if workflow_active?(cocina_object.externalIdentifier,
+                                                                               cocina_object.version)
 
       client.create_workflow_by_name(cocina_object.externalIdentifier,
-        workflow_name,
-        version: cocina_object.version)
+                                     workflow_name,
+                                     version: cocina_object.version)
       success.call("started #{workflow_name}")
     end
   end

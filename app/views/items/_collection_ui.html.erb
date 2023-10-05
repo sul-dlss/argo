@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "collection-management" do %>
+<%= turbo_frame_tag 'collection-management' do %>
   <% if response_message %>
     <div class="alert alert-info"><%= response_message %></div>
   <% end %>
@@ -11,9 +11,9 @@
       <div class='panel-body'>
         <ul class='list-group'>
           <% @collection_list.each do |collection| %>
-            <%= render "collection_ui_line_item", collection_label: collection.label,
-                  collection_id: collection.externalIdentifier,
-                  item_id: @cocina.externalIdentifier %>
+            <%= render 'collection_ui_line_item', collection_label: collection.label,
+                                                  collection_id: collection.externalIdentifier,
+                                                  item_id: @cocina.externalIdentifier %>
           <% end %>
       </div>
     </div>
@@ -26,7 +26,7 @@
     <div class='panel-body'>
       <%= form_tag add_collection_item_path(@cocina.externalIdentifier) do %>
         <div class='mb-3'>
-          <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: "form-select" %>
+          <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-select' %>
         </div>
         <button class='btn btn-primary'>Add Collection</button>
       <% end %>

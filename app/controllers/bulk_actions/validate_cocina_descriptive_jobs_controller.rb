@@ -3,10 +3,10 @@
 module BulkActions
   class ValidateCocinaDescriptiveJobsController < ApplicationController
     include CreatesBulkActions
-    self.action_type = "ValidateCocinaDescriptiveJob"
+    self.action_type = 'ValidateCocinaDescriptiveJob'
 
     def job_params
-      {csv_file: normalized_csv}
+      { csv_file: normalized_csv }
     end
 
     def normalized_csv

@@ -16,10 +16,10 @@ class DescriptionHeaders
         # First sort by the root property sort order
         sort_order.index(field_name(header)) || headers.length,
         # Followed by sorting within a root property (title1 before title2, title10 after title9)
-        header.split(".").first[/\d+/].to_i,
+        header.split('.').first[/\d+/].to_i,
         # Then sort on properties below the root, first using the alpha
         # characters of the property then on the numeric component if present
-        *header.split(".").drop(1).flat_map { |field| [field[/\D+/], field[/\d+/].to_i] }
+        *header.split('.').drop(1).flat_map { |field| [field[/\D+/], field[/\d+/].to_i] }
       ]
     end
   end
@@ -38,6 +38,7 @@ class DescriptionHeaders
   end
 
   def sort_order
-    %w[source_id title contributor form event language note identifier access purl subject relatedResource adminMetadata geographic marcEncodedData valueAt]
+    %w[source_id title contributor form event language note identifier access purl subject relatedResource
+       adminMetadata geographic marcEncodedData valueAt]
   end
 end

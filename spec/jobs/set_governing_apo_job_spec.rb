@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe SetGoverningApoJob do
   let(:bulk_action) do
     create(
       :bulk_action,
-      action_type: "SetGoverningApoJob"
+      action_type: 'SetGoverningApoJob'
     )
   end
 
-  let(:new_apo_id) { "druid:bc111bb2222" }
-  let(:webauth) { {"privgroup" => "dorstuff", "login" => "someuser"} }
+  let(:new_apo_id) { 'druid:bc111bb2222' }
+  let(:webauth) { { 'privgroup' => 'dorstuff', 'login' => 'someuser' } }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
   end
 
-  describe "#perform" do
-    let(:druids) { ["druid:bb111cc2222", "druid:cc111dd2222", "druid:dd111ff2222"] }
+  describe '#perform' do
+    let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ff2222'] }
     let(:params) do
       {
         druids:,
@@ -35,8 +35,8 @@ RSpec.describe SetGoverningApoJob do
       allow(StateService).to receive(:new).and_return(state_service)
     end
 
-    context "when the user can modify all items" do
-      it "logs info about progress" do
+    context 'when the user can modify all items' do
+      it 'logs info about progress' do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(buffer.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action.id}"
@@ -44,7 +44,7 @@ RSpec.describe SetGoverningApoJob do
       end
     end
 
-    context "when the user lacks the ability to manage an item and items are not found" do
+    context 'when the user lacks the ability to manage an item and items are not found' do
       let(:cocina1) do
         build(:dro_with_metadata, id: druids[0])
       end
@@ -65,7 +65,7 @@ RSpec.describe SetGoverningApoJob do
       # it might be cleaner to break the testing here into smaller cases for #set_governing_apo_and_index_safely,
       # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
       # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
-      it "increments the failure and success counts and logs status of each update" do
+      it 'increments the failure and success counts and logs status of each update' do
         subject.perform(bulk_action.id, params)
         expect(state_service).to have_received(:allows_modification?)
         expect(object_client1).to have_received(:update).with(params: Cocina::Models::DROWithMetadata)
@@ -75,7 +75,7 @@ RSpec.describe SetGoverningApoJob do
 
         expect(buffer.string).to include "Governing APO updated for #{druids[0]}"
         expect(buffer.string).to include "Set governing APO failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
-        expect(buffer.string).to include "user not authorized to move item to druid:bc111bb2222 for druid:dd111ff2222"
+        expect(buffer.string).to include 'user not authorized to move item to druid:bc111bb2222 for druid:dd111ff2222'
       end
     end
   end

@@ -13,10 +13,10 @@ class CreateVirtualObjectsJob < GenericJob
     96.hours
   end
 
-  NOT_COMBINABLE_MESSAGE = "Creating some or all virtual objects failed because some objects are not combinable"
-  NOT_FOUND_MESSAGE = "Could not create virtual objects because the following virtual object druids were not found"
-  SUCCESS_MESSAGE = "Successfully created virtual objects"
-  UNAUTHORIZED_MESSAGE = "Could not create virtual objects because user lacks ability to manage the following virtual object druids"
+  NOT_COMBINABLE_MESSAGE = 'Creating some or all virtual objects failed because some objects are not combinable'
+  NOT_FOUND_MESSAGE = 'Could not create virtual objects because the following virtual object druids were not found'
+  SUCCESS_MESSAGE = 'Successfully created virtual objects'
+  UNAUTHORIZED_MESSAGE = 'Could not create virtual objects because user lacks ability to manage the following virtual object druids'
 
   ##
   # A job that creates virtual objects
@@ -32,11 +32,15 @@ class CreateVirtualObjectsJob < GenericJob
       update_druid_count(count: virtual_objects.length)
 
       # NOTE: `ability` is defined in this job's superclass, `GenericJob`
-      not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(druids: virtual_object_ids_from(virtual_objects), ability:)
+      not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(
+        druids: virtual_object_ids_from(virtual_objects), ability:
+      )
       problematic_druids = not_found_druids + unauthorized_druids
 
       if problematic_druids.any?
-        log.puts("#{Time.current} #{UNAUTHORIZED_MESSAGE}: #{unauthorized_druids.to_sentence}") if unauthorized_druids.any?
+        if unauthorized_druids.any?
+          log.puts("#{Time.current} #{UNAUTHORIZED_MESSAGE}: #{unauthorized_druids.to_sentence}")
+        end
         log.puts("#{Time.current} #{NOT_FOUND_MESSAGE}: #{not_found_druids.to_sentence}") if not_found_druids.any?
         bulk_action.increment!(:druid_count_fail, problematic_druids.length)
 
@@ -61,7 +65,7 @@ class CreateVirtualObjectsJob < GenericJob
       else
         bulk_action.increment!(:druid_count_success, virtual_objects.length - errors.length)
         bulk_action.increment!(:druid_count_fail, errors.length)
-        log.puts("#{Time.current} #{NOT_COMBINABLE_MESSAGE}: #{errors.join("; ")}")
+        log.puts("#{Time.current} #{NOT_COMBINABLE_MESSAGE}: #{errors.join('; ')}")
       end
     end
   end

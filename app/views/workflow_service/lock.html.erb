@@ -1,11 +1,11 @@
 <turbo-frame id="lock">
   <%= link_to open_ui_item_versions_path(item_id: id),
-        title: "Unlock to make changes to this object",
-        class: "btn",
-        data: {
-          controller: "open-close",
-          action: "click->open-close#open"
-        } do %>
-    <%= tag.span class: "bi-lock-fill" %>
+              title: 'Unlock to make changes to this object',
+              class: 'btn',
+              data: {
+                controller: 'open-close',
+                action: 'click->open-close#open'
+              } do %>
+    <%= tag.span class: 'bi-lock-fill' %>
   <% end %>
 </turbo-frame>

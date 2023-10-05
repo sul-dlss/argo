@@ -1,19 +1,19 @@
 <% @page_title = "#{application_name} Queue Status" %>
-<% content_for(:head) { render "catalog/opensearch_response_metadata", response: @response } %>
+<% content_for(:head) { render 'catalog/opensearch_response_metadata', response: @response } %>
 
 <% content_for(:sidebar) do %>
-  <%= render "search_sidebar" %>
+  <%= render 'search_sidebar' %>
 <% end %>
 
 <% if has_search_parameters? %>
   <% content_for(:container_header) do -%>
-    <h1 class="sr-only top-content-title"><%= t("blacklight.search.header") %></h1>
-    <%= render "did_you_mean" %>
-    <%= render "constraints" %>
+    <h1 class="sr-only top-content-title"><%= t('blacklight.search.header') %></h1>
+    <%= render 'did_you_mean' %>
+    <%= render 'constraints' %>
   <% end %>
 <% end %>
 
-<%= render "catalog/report_view_toggle" %>
+<%= render 'catalog/report_view_toggle' %>
 <a href="<%= Settings.robot_status_url %>" target="_blank">Robots queue/job status</a>
 <div data-controller="workflow-grid" data-workflow-grid-url="<%= url_for(search_state.to_h) %>" data-workflow-grid-refresh-interval="10000">
   <%= render Throbber.new %>

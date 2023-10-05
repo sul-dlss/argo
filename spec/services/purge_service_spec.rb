@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe PurgeService do
-  describe ".purge" do
-    subject(:purge) { described_class.purge(druid: "druid:ab123cd4567", user_name: "dijkstra") }
+  describe '.purge' do
+    subject(:purge) { described_class.purge(druid: 'druid:ab123cd4567', user_name: 'dijkstra') }
 
     let(:object_client) { instance_double(Dor::Services::Client::Object, destroy: true) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, delete_all_workflows: true) }
@@ -17,7 +17,7 @@ RSpec.describe PurgeService do
       allow(Blacklight::Solr::Repository).to receive(:new).and_return(repo)
     end
 
-    it "removes the object" do
+    it 'removes the object' do
       purge
       expect(object_client).to have_received(:destroy)
       expect(workflow_client).to have_received(:delete_all_workflows)

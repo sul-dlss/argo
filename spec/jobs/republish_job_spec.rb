@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe RepublishJob do
-  let(:druid) { "druid:123" }
+  let(:druid) { 'druid:123' }
   let(:druids) { Array(druid) }
   let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: "jcoyne85") }
+  let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:bulk_action) { create(:bulk_action) }
   let(:object) { FactoryBot.create_for_repository(:persisted_item) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, publish: true, find: object) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: lifecycle) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle:) }
   let(:lifecycle) { Time.zone.now }
 
   before do
@@ -18,57 +18,57 @@ RSpec.describe RepublishJob do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
 
     described_class.perform_now(bulk_action.id,
-      druids:,
-      groups:,
-      user:)
+                                druids:,
+                                groups:,
+                                user:)
   end
 
   after do
     FileUtils.rm(bulk_action.log_name)
   end
 
-  context "with already published item" do
-    it "publishes the object" do
+  context 'with already published item' do
+    it 'publishes the object' do
       expect(object_client).to have_received(:publish)
     end
   end
 
-  context "with never published item" do
+  context 'with never published item' do
     let(:lifecycle) { nil }
 
-    it "does not publish the object" do
+    it 'does not publish the object' do
       expect(object_client).not_to have_received(:publish)
     end
   end
 
-  context "with a collection" do
+  context 'with a collection' do
     let(:object) { FactoryBot.create_for_repository(:persisted_collection) }
 
-    it "publishes the object" do
+    it 'publishes the object' do
       expect(object_client).to have_received(:publish)
     end
   end
 
-  context "with an APO" do
+  context 'with an APO' do
     let(:object) { FactoryBot.create_for_repository(:persisted_apo) }
 
-    it "does not publish the object" do
+    it 'does not publish the object' do
       expect(object_client).not_to have_received(:publish)
     end
   end
 
-  context "with an agreement" do
+  context 'with an agreement' do
     let(:object) { FactoryBot.create_for_repository(:agreement) }
 
-    it "does not publish the object" do
+    it 'does not publish the object' do
       expect(object_client).not_to have_received(:publish)
     end
   end
 
-  context "with a NilModel instance" do
+  context 'with a NilModel instance' do
     let(:object) { NilModel.new(druid) }
 
-    it "does not publish the object" do
+    it 'does not publish the object' do
       expect(object_client).not_to have_received(:publish)
     end
   end

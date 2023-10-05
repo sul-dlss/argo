@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe WorkflowXmlPresenter do
   subject(:presenter) do
     described_class.new(xml:)
   end
 
-  describe "#pretty_xml" do
+  describe '#pretty_xml' do
     subject { presenter.pretty_xml }
 
     let(:xml) do

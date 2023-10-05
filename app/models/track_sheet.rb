@@ -17,7 +17,7 @@ class TrackSheet
     # FIXME: how about a MAX number of druids? And/Or a chunky use of enumeration?
     druids.each { |druid| find_or_create_in_solr_by_id(druid) }
     pdf = Prawn::Document.new(page_size: [5.5.in, 8.5.in])
-    pdf.font("Courier")
+    pdf.font('Courier')
     druids.each_with_index do |druid, i|
       generate_tracking_sheet(druid, pdf)
       pdf.start_new_page unless i + 1 == druids.length
@@ -41,12 +41,12 @@ class TrackSheet
     doc = nil
     begin
       doc = find_or_create_in_solr_by_id(druid)
-    rescue
+    rescue StandardError
       pdf.text "DRUID #{druid} not found in index", size: 15, style: :bold, align: :center
       return pdf
     end
 
-    barcode = Barby::Code128B.new(druid.delete_prefix("druid:"))
+    barcode = Barby::Code128B.new(druid.delete_prefix('druid:'))
     barcode.annotate_pdf(
       pdf,
       width: bc_width,
@@ -56,30 +56,30 @@ class TrackSheet
     )
 
     pdf.y -= (bc_height + 0.25.in)
-    pdf.text druid.delete_prefix("druid:"), size: 15, style: :bold, align: :center
+    pdf.text druid.delete_prefix('druid:'), size: 15, style: :bold, align: :center
     pdf.y -= 0.5.in
 
-    pdf.font("Courier", size: 10)
-    pdf.table(doc_to_table(doc), column_widths: [100, 224], cell_style: {borders: [], padding: 0.pt})
+    pdf.font('Courier', size: 10)
+    pdf.table(doc_to_table(doc), column_widths: [100, 224], cell_style: { borders: [], padding: 0.pt })
 
     pdf.y -= 0.5.in
 
     pdf.font_size = 14
-    pdf.text "Tracking:"
-    pdf.text " "
+    pdf.text 'Tracking:'
+    pdf.text ' '
 
     baseline = pdf.y - top_margin - pdf.font.ascender
     pdf.rectangle([0, baseline + pdf.font.ascender], pdf.font.ascender, pdf.font.ascender)
     pdf.indent(pdf.font.ascender + 4.pt) do
-      pdf.text "Scanned by:"
-      pdf.indent(pdf.width_of("Scanned by:") + 0.125.in) do
+      pdf.text 'Scanned by:'
+      pdf.indent(pdf.width_of('Scanned by:') + 0.125.in) do
         pdf.line 0, baseline, pdf.bounds.width, baseline
       end
     end
     pdf.stroke
 
     pdf.y -= 0.5.in
-    pdf.text("Notes:")
+    pdf.text('Notes:')
     pdf.stroke do
       while pdf.y >= pdf.bounds.absolute_bottom
         baseline = pdf.y - top_margin - pdf.font.height
@@ -96,16 +96,21 @@ class TrackSheet
     doc = solr_doc.with_indifferent_access # solr doc always has string keys, SolrDocument::FIELDS can be strings or symbols
     table_data = []
     labels = doc[SolrDocument::FIELD_TITLE]
-    label = labels.blank? ? "" : labels.first.truncate(110)
-    table_data.push(["Object Label:", label])
-    table_data.push(["Project Name:", doc["project_tag_ssim"].to_s]) if doc["project_tag_ssim"]
+    label = labels.blank? ? '' : labels.first.truncate(110)
+    table_data.push(['Object Label:', label])
+    table_data.push(['Project Name:', doc['project_tag_ssim'].to_s]) if doc['project_tag_ssim']
 
-    tags = Array(doc["tag_ssim"]).filter_map { |tag| /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }
-    table_data.push(["Tags:", tags.join("\n")]) unless tags.empty?
-    table_data.push(["#{CatalogRecordId.label}:", Array(doc[CatalogRecordId.index_field]).join(", ")]) if doc[CatalogRecordId.index_field].present?
-    table_data.push(["Source ID:", Array(doc["source_id_ssim"]).first]) if doc["source_id_ssim"].present?
-    table_data.push(["Barcode:", Array(doc["barcode_id_ssim"]).first]) if doc["barcode_id_ssim"].present?
-    table_data.push(["Date Printed:", Time.zone.now.strftime("%c")])
+    tags = Array(doc['tag_ssim']).filter_map do |tag|
+      /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP)
+    end
+    table_data.push(['Tags:', tags.join("\n")]) unless tags.empty?
+    if doc[CatalogRecordId.index_field].present?
+      table_data.push(["#{CatalogRecordId.label}:",
+                       Array(doc[CatalogRecordId.index_field]).join(', ')])
+    end
+    table_data.push(['Source ID:', Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
+    table_data.push(['Barcode:', Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
+    table_data.push(['Date Printed:', Time.zone.now.strftime('%c')])
     table_data
   end
 
@@ -115,10 +120,10 @@ class TrackSheet
   # @note That difference shouldn't be important for the few known fields we use here.
   def find_or_create_in_solr_by_id(druid)
     namespaced_druid = Druid.new(druid).with_namespace
-    doc = SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)["response"]["docs"].first
+    doc = SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
 
     Argo::Indexer.reindex_druid_remotely(namespaced_druid)
-    SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)["response"]["docs"].first
+    SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
   end
 end

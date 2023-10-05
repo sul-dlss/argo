@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe DescriptionImport do
   subject(:updated) { described_class.import(csv_row: csv.first) }
@@ -168,58 +168,58 @@ RSpec.describe DescriptionImport do
 
   let(:expected) { Cocina::Models::Description.new(JSON.parse(expected_json)) }
 
-  context "with a valid csv" do
+  context 'with a valid csv' do
     let(:csv) do
       # From https://argo-stage.stanford.edu/view/druid:bb041bm1345
-      CSV.read(file_fixture("descriptive-upload.csv"), headers: true)
+      CSV.read(file_fixture('descriptive-upload.csv'), headers: true)
     end
 
-    it "deserializes the item" do
+    it 'deserializes the item' do
       expect(updated.value!).to eq expected
     end
   end
 
-  context "with a valid csv with columns out of order" do
+  context 'with a valid csv with columns out of order' do
     let(:csv) do
       # Reverse the columns
-      table = CSV.read(file_fixture("descriptive-upload.csv"), headers: true)
+      table = CSV.read(file_fixture('descriptive-upload.csv'), headers: true)
       new_headers = table.headers.reverse
       CSV::Table.new([], headers: new_headers).tap do |new_table|
         new_table << new_headers.map { |header| table.first[header] }
       end
     end
 
-    it "deserializes the item" do
+    it 'deserializes the item' do
       expect(updated.value!).to eq expected
     end
   end
 
-  context "with an invalid csv" do
+  context 'with an invalid csv' do
     let(:csv) do
-      CSV.read(file_fixture("bulk_upload_structural.csv"), headers: true)
+      CSV.read(file_fixture('bulk_upload_structural.csv'), headers: true)
     end
 
-    it "returns an error" do
+    it 'returns an error' do
       expect(updated).to be_failure
     end
   end
 
-  context "with a csv that has nil values" do
+  context 'with a csv that has nil values' do
     # This case occurs when you do a bulk export of a dense and a sparse object on the same sheet
     let(:csv) do
       CSV.parse("access:accessContact1:source:code,title1:value,purl\n,my title,https://purl\n", headers: true)
     end
 
     let(:expected) do
-      Cocina::Models::Description.new(title: [{value: "my title"}], purl: "https://purl")
+      Cocina::Models::Description.new(title: [{ value: 'my title' }], purl: 'https://purl')
     end
 
-    it "ignores the empty field" do
+    it 'ignores the empty field' do
       expect(updated.value!).to eq expected
     end
   end
 
-  context "with a csv that has varied nested values" do
+  context 'with a csv that has varied nested values' do
     # This case occurs when you do a bulk import of different object structures
     let(:csv_data) do
       <<~CSV
@@ -233,45 +233,45 @@ RSpec.describe DescriptionImport do
 
     let(:expected) do
       Cocina::Models::Description.new(
-        title: [{value: "Title 2"}],
-        purl: "https://purl/jr825qh8124",
+        title: [{ value: 'Title 2' }],
+        purl: 'https://purl/jr825qh8124',
         contributor: [
-          {name: [
-            {parallelValue: [
-              {structuredValue: [
-                {value: "Parallel 1 part 1", type: "name"},
-                {value: "1800-1900", type: "life dates"}
-              ]},
-              {structuredValue: [
-                {value: "Parallel 2 part 1", type: "name"},
-                {value: "marchioness", type: "term of address"}
-              ]}
-            ]}
-          ]}
+          { name: [
+            { parallelValue: [
+              { structuredValue: [
+                { value: 'Parallel 1 part 1', type: 'name' },
+                { value: '1800-1900', type: 'life dates' }
+              ] },
+              { structuredValue: [
+                { value: 'Parallel 2 part 1', type: 'name' },
+                { value: 'marchioness', type: 'term of address' }
+              ] }
+            ] }
+          ] }
         ]
       )
     end
 
-    it "ignores the empty field" do
+    it 'ignores the empty field' do
       expect(updated.value!).to eq expected
     end
   end
 
-  context "when top level contributor" do
+  context 'when top level contributor' do
     let(:csv) do
       CSV.parse(csv_data, headers: true)
     end
     let(:expected_hash) do
       {
-        title: [{value: "my great contributor"}],
-        purl: "https://purl/jr825qh8124"
+        title: [{ value: 'my great contributor' }],
+        purl: 'https://purl/jr825qh8124'
       }.tap do |h|
         h[:contributor] = [expected_contributor] if expected_contributor
       end
     end
     let(:expected) { Cocina::Models::Description.new(expected_hash) }
 
-    [nil, "Someone"].each do |name|
+    [nil, 'Someone'].each do |name|
       context "when role as code (not value), name: '#{name}'" do
         let(:csv_data) do
           <<~CSV
@@ -282,13 +282,13 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}],
-              role: [{code: "pbl"}]
+              name: [{ value: name }],
+              role: [{ code: 'pbl' }]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
@@ -303,13 +303,13 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}],
-              role: [{value: "Publisher"}]
+              name: [{ value: name }],
+              role: [{ value: 'Publisher' }]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
@@ -324,18 +324,18 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}],
+              name: [{ value: name }],
               role: [
                 {
-                  code: "pbl",
-                  value: "Publisher"
+                  code: 'pbl',
+                  value: 'Publisher'
                 }
               ]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
@@ -350,26 +350,26 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}]
+              name: [{ value: name }]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
     end
   end
 
-  context "when nested contributor role" do
+  context 'when nested contributor role' do
     let(:csv) do
       CSV.parse(csv_data, headers: true)
     end
     let(:expected_hash) do
       {
-        title: [{value: "my great event"}],
-        purl: "https://purl/jr825qh8124"
+        title: [{ value: 'my great event' }],
+        purl: 'https://purl/jr825qh8124'
       }.tap do |h|
         contributor_value =
           if expected_contributor
@@ -384,7 +384,7 @@ RSpec.describe DescriptionImport do
               structuredValue: [],
               parallelValue: [],
               groupedValue: [],
-              value: "noted",
+              value: 'noted',
               identifier: [],
               note: [],
               appliesTo: []
@@ -400,7 +400,7 @@ RSpec.describe DescriptionImport do
     end
     let(:expected) { Cocina::Models::Description.new(expected_hash) }
 
-    [nil, "Someone"].each do |name|
+    [nil, 'Someone'].each do |name|
       context "when role as code (not value), name: '#{name}'" do
         let(:csv_data) do
           <<~CSV
@@ -411,13 +411,13 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}],
-              role: [{code: "pbl"}]
+              name: [{ value: name }],
+              role: [{ code: 'pbl' }]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
@@ -432,13 +432,13 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}],
-              role: [{value: "Publisher"}]
+              name: [{ value: name }],
+              role: [{ value: 'Publisher' }]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
@@ -453,18 +453,18 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}],
+              name: [{ value: name }],
               role: [
                 {
-                  code: "pbl",
-                  value: "Publisher"
+                  code: 'pbl',
+                  value: 'Publisher'
                 }
               ]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
@@ -479,36 +479,36 @@ RSpec.describe DescriptionImport do
         let(:expected_contributor) do
           if name
             {
-              name: [{value: name}]
+              name: [{ value: name }]
             }
           end
         end
 
-        it "has the expected value" do
+        it 'has the expected value' do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
     end
   end
 
-  context "with form property" do
-    let(:title) { "my great form" }
+  context 'with form property' do
+    let(:title) { 'my great form' }
     let(:csv) do
       CSV.parse(csv_data, headers: true)
     end
     let(:expected) { Cocina::Models::Description.new(expected_hash) }
 
-    context "when at top level" do
+    context 'when at top level' do
       let(:expected_hash) do
         {
-          title: [{value: title}],
-          purl: "https://purl/jr825qh8124"
+          title: [{ value: title }],
+          purl: 'https://purl/jr825qh8124'
         }.tap do |h|
           h[:form] = [expected_form] if expected_form
         end
       end
 
-      [nil, "prints"].each do |form_value|
+      [nil, 'prints'].each do |form_value|
         context "when type, no source, value: '#{form_value}'" do
           let(:csv_data) do
             <<~CSV
@@ -520,12 +520,12 @@ RSpec.describe DescriptionImport do
             if form_value
               {
                 value: form_value,
-                type: "genre"
+                type: 'genre'
               }
             end
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end
@@ -541,12 +541,12 @@ RSpec.describe DescriptionImport do
             if form_value
               {
                 value: form_value,
-                source: {code: "lcgft"}
+                source: { code: 'lcgft' }
               }
             end
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end
@@ -562,12 +562,12 @@ RSpec.describe DescriptionImport do
             if form_value
               {
                 value: form_value,
-                source: {value: "source-value"}
+                source: { value: 'source-value' }
               }
             end
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end
@@ -583,12 +583,12 @@ RSpec.describe DescriptionImport do
             if form_value
               {
                 value: form_value,
-                source: {uri: "http://id.loc.gov/authorities/genreForms/"}
+                source: { uri: 'http://id.loc.gov/authorities/genreForms/' }
               }
             end
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end
@@ -605,14 +605,14 @@ RSpec.describe DescriptionImport do
               {
                 value: form_value,
                 source: {
-                  code: "lcgft",
-                  uri: "http://id.loc.gov/authorities/genreForms/"
+                  code: 'lcgft',
+                  uri: 'http://id.loc.gov/authorities/genreForms/'
                 }
               }
             end
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end
@@ -625,21 +625,21 @@ RSpec.describe DescriptionImport do
             CSV
           end
           let(:expected_form) do
-            {value: form_value} if form_value
+            { value: form_value } if form_value
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end
       end
     end
 
-    context "when at nested level" do
+    context 'when at nested level' do
       let(:expected_hash) do
         {
-          title: [{value: title}],
-          purl: "https://purl/jr825qh8124"
+          title: [{ value: title }],
+          purl: 'https://purl/jr825qh8124'
         }.tap do |h|
           form_value =
             if expected_form
@@ -661,7 +661,7 @@ RSpec.describe DescriptionImport do
       end
       let(:expected) { Cocina::Models::Description.new(expected_hash) }
 
-      [nil, "prints"].each do |form_value|
+      [nil, 'prints'].each do |form_value|
         context "when form has type, no source, value: '#{form_value}'" do
           let(:csv_data) do
             <<~CSV
@@ -673,12 +673,12 @@ RSpec.describe DescriptionImport do
             if form_value
               {
                 value: form_value,
-                type: "genre"
+                type: 'genre'
               }
             end
           end
 
-          it "has the expected value" do
+          it 'has the expected value' do
             expect(updated.value!.to_h).to eq expected.to_h
           end
         end

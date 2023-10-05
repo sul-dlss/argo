@@ -12,21 +12,21 @@ class WorkflowService
   def self.workflows_for(druid:)
     all_workflows = workflow_client.workflow_routes.all_workflows pid: druid
     all_workflows.workflows.sort_by(&:workflow_name).map do |workflow|
-      error_count = processes(workflow).count { |process| process.status == "error" }
+      error_count = processes(workflow).count { |process| process.status == 'error' }
       Workflow.new(name: workflow.workflow_name, complete: workflow.complete?, error_count:)
     end
   end
 
   # @return [Boolean] if the object has been submitted or not before
   def self.submitted?(druid:)
-    return true if workflow_client.lifecycle(druid:, milestone_name: "submitted")
+    return true if workflow_client.lifecycle(druid:, milestone_name: 'submitted')
 
     false
   end
 
   # @return [Boolean] if the object has been published or not before
   def self.published?(druid:)
-    return true if workflow_client.lifecycle(druid:, milestone_name: "published")
+    return true if workflow_client.lifecycle(druid:, milestone_name: 'published')
 
     false
   end
@@ -34,7 +34,7 @@ class WorkflowService
   # Get the workflow definition from the server so we know which processes should be present
   # TODO: This could be cached for better performance
   def self.definition_process_names(workflow_name)
-    workflow_client.workflow_template(workflow_name).fetch("processes").map { |p| p["name"] }
+    workflow_client.workflow_template(workflow_name).fetch('processes').map { |p| p['name'] }
   end
   private_class_method :definition_process_names
 

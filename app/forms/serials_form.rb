@@ -6,11 +6,11 @@ class SerialsForm < ApplicationChangeSet
   property :part_number2, virtual: true
   property :sort_field, virtual: true
 
-  PART_NAME = "part name"
-  PART_NUMBER = "part number"
-  MAIN_TITLE = "main title"
-  PRIMARY = "primary"
-  NOTE_TYPE = "date/sequential designation"
+  PART_NAME = 'part name'
+  PART_NUMBER = 'part number'
+  MAIN_TITLE = 'main title'
+  PRIMARY = 'primary'
+  NOTE_TYPE = 'date/sequential designation'
 
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
@@ -69,7 +69,8 @@ class SerialsForm < ApplicationChangeSet
       title_to_change = titles.find { |title| title[:status] == PRIMARY }
       title_to_change ||= titles.first
       if title_to_change[:parallelValue].present?
-        title_to_change[:parallelValue].first[:structuredValue] = update_or_create_structured_value(title_to_change[:parallelValue].first)
+        title_to_change[:parallelValue].first[:structuredValue] =
+          update_or_create_structured_value(title_to_change[:parallelValue].first)
       else
         title_to_change[:structuredValue] = update_or_create_structured_value(title_to_change)
       end
@@ -80,7 +81,7 @@ class SerialsForm < ApplicationChangeSet
     # Convert to hash so we can mutate.
     model.description.note.map(&:to_h).tap do |notes|
       notes.delete_if { |note| note[:type] == NOTE_TYPE }
-      notes << {type: NOTE_TYPE, value: sort_field} if sort_field.present?
+      notes << { type: NOTE_TYPE, value: sort_field } if sort_field.present?
     end
   end
 
@@ -98,17 +99,17 @@ class SerialsForm < ApplicationChangeSet
 
   def update_structured_value(structured_value)
     structured_value.delete_if { |element| [PART_NAME, PART_NUMBER].include?(element[:type]) }
-    structured_value << {value: part_number, type: PART_NUMBER} if part_number.present?
-    structured_value << {value: part_name, type: PART_NAME} if part_name.present?
-    structured_value << {value: part_number2, type: PART_NUMBER} if part_number2.present?
+    structured_value << { value: part_number, type: PART_NUMBER } if part_number.present?
+    structured_value << { value: part_name, type: PART_NAME } if part_name.present?
+    structured_value << { value: part_number2, type: PART_NUMBER } if part_number2.present?
     structured_value
   end
 
   def create_structured_value_from_unstructured(unstructured)
-    [{value: unstructured.delete(:value), type: MAIN_TITLE}].tap do |structured_value|
-      structured_value << {value: part_number, type: PART_NUMBER} if part_number.present?
-      structured_value << {value: part_name, type: PART_NAME} if part_name.present?
-      structured_value << {value: part_number2, type: PART_NUMBER} if part_number2.present?
+    [{ value: unstructured.delete(:value), type: MAIN_TITLE }].tap do |structured_value|
+      structured_value << { value: part_number, type: PART_NUMBER } if part_number.present?
+      structured_value << { value: part_name, type: PART_NAME } if part_name.present?
+      structured_value << { value: part_number2, type: PART_NUMBER } if part_number2.present?
     end
   end
 

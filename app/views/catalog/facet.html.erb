@@ -1,12 +1,12 @@
 <div class="facet-pagination top row justify-content-between">
-  <%= render "facet_pagination" %>
+  <%= render 'facet_pagination' %>
 </div>
 
 <div data-controller="facet-filter">
   <%= render BlacklightModalComponent.new do |component| %>
     <% component.header { facet_field_label(@facet.key) } %>
     <% component.body do %>
-      <%= render "facet_index_navigation" if @facet.index_range && @display_facet.index? %>
+      <%= render 'facet_index_navigation' if @facet.index_range && @display_facet.index? %>
       <div data-facet-filter-target="list">
         <%= render_facet_limit(@display_facet, layout: false) %>
       </div>
@@ -16,7 +16,7 @@
         <div class="col-sm-4">
           <input type="text" id="filterInput" data-action="keyup->facet-filter#filter" placeholder="Filter..." class="form-control form-control-sm" autocomplete="off">
         </div>
-        <%= render "facet_pagination" %>
+        <%= render 'facet_pagination' %>
       </div>
     <% end %>
   <% end %>

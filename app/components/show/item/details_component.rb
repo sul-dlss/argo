@@ -21,7 +21,7 @@ module Show
       end
 
       def released_to
-        @solr_document.released_to.presence&.to_sentence || "Not released"
+        @solr_document.released_to.presence&.to_sentence || 'Not released'
       end
     end
   end

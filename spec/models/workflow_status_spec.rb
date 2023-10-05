@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe WorkflowStatus do
   subject(:workflow_status) do
     described_class.new(workflow:,
-      workflow_steps:)
+                        workflow_steps:)
   end
 
   let(:workflow) { Dor::Workflow::Response::Workflow.new(xml:) }
-  let(:workflow_name) { "accessionWF" }
+  let(:workflow_name) { 'accessionWF' }
 
   let(:workflow_steps) do
     %w[
@@ -29,7 +29,7 @@ RSpec.describe WorkflowStatus do
     ]
   end
 
-  describe "#druid" do
+  describe '#druid' do
     subject { workflow_status.druid }
 
     let(:xml) do
@@ -38,25 +38,25 @@ RSpec.describe WorkflowStatus do
         </workflow>'
     end
 
-    it { is_expected.to eq "druid:bc123df4567" }
+    it { is_expected.to eq 'druid:bc123df4567' }
   end
 
-  describe "#process_statuses" do
+  describe '#process_statuses' do
     subject { workflow_status.process_statuses }
 
-    context "when xml has no processes" do
+    context 'when xml has no processes' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
           <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
           </workflow>'
       end
 
-      it "has none" do
+      it 'has none' do
         expect(subject).to be_empty
       end
     end
 
-    context "when xml has processes" do
+    context 'when xml has processes' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
           <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
@@ -85,13 +85,13 @@ RSpec.describe WorkflowStatus do
           </workflow>'
       end
 
-      it "has one for each xml process" do
+      it 'has one for each xml process' do
         expect(subject.size).to eq 13
         expect(subject).to all(be_a Dor::Workflow::Response::Process)
       end
     end
 
-    context "when xml has multiple versions of each processes" do
+    context 'when xml has multiple versions of each processes' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
           <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
@@ -104,16 +104,16 @@ RSpec.describe WorkflowStatus do
           </workflow>'
       end
 
-      it "returns the process for the most current version" do
-        expect(subject.find { |n| n.name == "technical-metadata" }.status).to eq "queued"
+      it 'returns the process for the most current version' do
+        expect(subject.find { |n| n.name == 'technical-metadata' }.status).to eq 'queued'
       end
     end
   end
 
-  describe "#empty?" do
+  describe '#empty?' do
     subject(:empty) { workflow_status.send(:empty?) }
 
-    context "when there is xml" do
+    context 'when there is xml' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
           <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
@@ -145,8 +145,8 @@ RSpec.describe WorkflowStatus do
       it { is_expected.to be false }
     end
 
-    context "when the xml is empty" do
-      let(:xml) { "" }
+    context 'when the xml is empty' do
+      let(:xml) { '' }
 
       it { is_expected.to be true }
     end

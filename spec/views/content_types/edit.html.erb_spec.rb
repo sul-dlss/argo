@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "content_types/edit" do
-  it "renders the template" do
-    stub_template "content_types/_content_type.html.erb" => "stubbed_content_type"
+RSpec.describe 'content_types/edit' do
+  it 'renders the template' do
+    stub_template 'content_types/_content_type.html.erb' => 'stubbed_content_type'
     render
-    expect(rendered).to have_css ".modal-header h3.modal-title", text: "Set content type"
-    expect(rendered).to have_css ".modal-body", text: "stubbed_content_type"
+    expect(rendered).to have_css '.modal-header h3.modal-title', text: 'Set content type'
+    expect(rendered).to have_css '.modal-body', text: 'stubbed_content_type'
   end
 end

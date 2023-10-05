@@ -4,8 +4,8 @@
   <div class='mb-3' data-controller="bulk-actions"
        data-bulk-actions-populate-url-value="<%= search_catalog_path(search_of_druids) %>">
       <%= select_tag(:action_type, action_types,
-            class: "form-select mb-3",
-            data: {action: "change->bulk-actions#showTab", bulk_actions_target: "selector"}) %>
+                     class: 'form-select mb-3',
+                     data: { action: 'change->bulk-actions#showTab', bulk_actions_target: 'selector' }) %>
 
     <div class='tab-content'>
       <div role='tabpanel' class='tab-pane active'>
@@ -15,5 +15,5 @@
     </div>
   </div>
 
-  <%= link_to "Back", bulk_actions_path %>
+  <%= link_to 'Back', bulk_actions_path %>
 </div>
