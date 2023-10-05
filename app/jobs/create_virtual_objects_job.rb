@@ -73,6 +73,6 @@ class CreateVirtualObjectsJob < GenericJob
   private
 
   def virtual_object_ids_from(virtual_objects)
-    virtual_objects.map { |hash| hash[:virtual_object_id] }
+    virtual_objects.map { |hash| hash[:virtual_object_id] } # rubocop:disable Rails/Pluck
   end
 end

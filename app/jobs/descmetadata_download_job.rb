@@ -24,7 +24,7 @@ class DescmetadataDownloadJob < GenericJob
           druids.each_with_index do |current_druid, index|
             process_druid(current_druid, log, zip_file)
             # Commit every 250 to limit memory usage.
-            zip_file.commit if index % 250 == 0
+            zip_file.commit if (index % 250).zero?
           end
           zip_file.close
         end
@@ -64,7 +64,7 @@ class DescmetadataDownloadJob < GenericJob
     attempts ||= MAX_TRIES
     Repository.find(druid)
   rescue Faraday::TimeoutError
-    if (attempts -= 1) > 0
+    if (attempts -= 1).positive?
       log.puts "argo.bulk_metadata.bulk_log_retry #{druid}"
       sleep(SLEEP_SECONDS**attempts) unless Rails.env.test?
       retry

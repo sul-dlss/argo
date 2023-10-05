@@ -66,8 +66,8 @@ RSpec.describe 'Create an apo', :js do
     expect(find_field('View access').value).to eq('dark')
     expect(find_field('Default Copyright statement').value).to eq('Copyright statement')
     expect(find_field('Default Use and Reproduction statement').value).to eq('Use statement')
-    expect(page).to have_selector('.permissionName', text: 'developers')
-    expect(page).to have_selector('.permissionName', text: 'someone')
+    expect(page).to have_css('.permissionName', text: 'developers')
+    expect(page).to have_css('.permissionName', text: 'someone')
     expect(find_field('Default use license').value).to eq 'https://creativecommons.org/licenses/by-sa/3.0/legalcode'
     within_fieldset 'Default Collections' do
       expect(page).to have_link('New Testing Collection')
@@ -98,8 +98,8 @@ RSpec.describe 'Create an apo', :js do
     within_fieldset 'Default Collections' do
       expect(page).to have_link('New Testing Collection')
     end
-    expect(page).to have_selector('.permissionName', text: 'dpg-staff')
-    expect(page).to have_selector('.permissionName', text: 'anyone')
+    expect(page).to have_css('.permissionName', text: 'dpg-staff')
+    expect(page).to have_css('.permissionName', text: 'anyone')
 
     # This is flaky. The models value is correct, so it something to do with the rendering.
     expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/legalcode')

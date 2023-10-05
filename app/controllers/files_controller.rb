@@ -124,8 +124,8 @@ class FilesController < ApplicationController
       @filenames = filenames
     end
 
-    def each(&chunks)
-      writer = ZipTricks::BlockWrite.new(&chunks)
+    def each(&)
+      writer = ZipTricks::BlockWrite.new(&)
 
       ZipTricks::Streamer.open(writer) do |zip|
         filenames.each do |filename|

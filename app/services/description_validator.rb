@@ -31,7 +31,6 @@ class DescriptionValidator
         errors << "Value error: #{location} has 0 value in #{header}." if cell_value == '0'
         errors << "Value error: #{location} has spreadsheet formula error in #{header}." if %w[#NA #REF! #VALUE?
                                                                                                #NAME?].include? cell_value
-        # rubocop:enable Performance/CollectionLiteralInLoop
       end
     end
   end
@@ -86,7 +85,7 @@ class DescriptionValidator
   end
 
   def duplicate_druids
-    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
+    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys # rubocop:disable Rails/Pluck
   end
 
   def invalid_headers

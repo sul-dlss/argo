@@ -9,8 +9,8 @@ class MilestonesPresenter
     @versions = versions
   end
 
-  def each_version(&block)
-    milestones.keys.sort_by(&:to_i).each(&block)
+  def each_version(&)
+    milestones.keys.sort_by(&:to_i).each(&)
   end
 
   def steps_for(version)

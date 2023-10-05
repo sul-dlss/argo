@@ -54,7 +54,7 @@ class BulkAction < ApplicationRecord
     return false unless completed?
 
     path = file(filename)
-    File.exist?(path) && !File.zero?(path)
+    File.exist?(path) && !File.empty?(path)
   end
 
   def reset_druid_counts

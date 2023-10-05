@@ -20,13 +20,13 @@ rescue LoadError
 end
 
 desc 'Run erblint against ERB files'
-task :erblint do
+task erblint: :environment do
   puts 'Running erblint...'
   system('bundle exec erblint --lint-all --format compact')
 end
 
 desc 'Run Yarn linter against JS files'
-task :jslint do
+task jslint: :environment do
   puts 'Running JS linters...'
   system('yarn run lint')
 end

@@ -89,7 +89,9 @@ class CollectionsController < ApplicationController
 
     query = "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
     query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title}\"" if title
-    query += " AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:#{params[:catalog_record_id]}\"" if catalog_record_id
+    if catalog_record_id
+      query += " AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:#{params[:catalog_record_id]}\""
+    end
 
     result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
     result.dig('response', 'numFound').to_i.positive?

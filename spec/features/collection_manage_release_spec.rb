@@ -4,15 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
-  before do
-    allow(StateService).to receive(:new).and_return(state_service)
-    sign_in current_user, groups: ['sdr:administrator-role']
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    solr_conn.add(id: 'druid:gg232vv1111',
-                  objectType_ssim: 'collection')
-    solr_conn.commit
-  end
-
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -30,6 +21,15 @@ RSpec.describe 'Collection manage release' do
   end
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_id) { 'druid:gg232vv1111' }
+
+  before do
+    allow(StateService).to receive(:new).and_return(state_service)
+    sign_in current_user, groups: ['sdr:administrator-role']
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    solr_conn.add(id: 'druid:gg232vv1111',
+                  objectType_ssim: 'collection')
+    solr_conn.commit
+  end
 
   it 'Has a manage release button' do
     visit solr_document_path(collection_id)

@@ -10,7 +10,7 @@ class UploadsController < ApplicationController
   def create
     directory_name = Time.zone.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Settings.bulk_metadata.directory, params[:apo_id], directory_name)
-    temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
+    temp_spreadsheet_filename = "#{params[:spreadsheet_file].original_filename}.#{directory_name}"
 
     # Temporary files are sometimes garbage collected before the job is run, so make a copy and let the job delete it when it's done.
     temp_filename = make_tmp_filename(temp_spreadsheet_filename)

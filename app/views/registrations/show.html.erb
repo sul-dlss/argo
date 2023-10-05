@@ -112,7 +112,7 @@
           <%= link_to spreadsheet_registration_path(format: :csv), download: true, class: 'btn btn-link my-2' do %>
             <span class="bi-download"></span> Download CSV template
           <% end %>
-          <%= f.file_field :csv_file, class: 'form-control', accept: '.csv', data: { registration_tabs_target: 'requiredCsvField' }, "aria-label": 'Upload a CSV file' %>
+          <%= f.file_field :csv_file, class: 'form-control', accept: '.csv', data: { registration_tabs_target: 'requiredCsvField' }, 'aria-label': 'Upload a CSV file' %>
         </div>
       </div>
     </div>

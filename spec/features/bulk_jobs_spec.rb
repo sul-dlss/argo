@@ -6,7 +6,7 @@ require 'rails_helper'
 RSpec.describe 'Bulk jobs view', :js do
   before do
     solr_conn.add(id: apo_id, objectType_ssim: 'adminPolicy',
-                  "apo_role_dor-apo-manager_ssim": ['workgroup:sdr:map-staff'])
+                  'apo_role_dor-apo-manager_ssim': ['workgroup:sdr:map-staff'])
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:map-staff']
 

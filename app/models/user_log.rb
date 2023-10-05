@@ -129,11 +129,11 @@ class UserLog
 
   private
 
-  def each_line(&block)
+  def each_line(&)
     return unless File.exist?(log_file) && File.readable?(log_file)
 
     File.open(log_file, 'r') do |file|
-      file.each_line(&block)
+      file.each_line(&)
     end
   end
 

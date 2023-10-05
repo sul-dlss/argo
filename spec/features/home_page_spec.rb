@@ -20,8 +20,8 @@ RSpec.describe 'Home page' do
     it 'displays an abbreviated facet list' do
       visit root_path
 
-      expect(page).to have_selector '.facet-field-heading', text: 'Collection'
-      expect(page).not_to have_selector '.facet-field-heading', text: 'Version'
+      expect(page).to have_css '.facet-field-heading', text: 'Collection'
+      expect(page).not_to have_css '.facet-field-heading', text: 'Version'
     end
 
     it 'has a click-through to the full facet list' do
@@ -29,8 +29,8 @@ RSpec.describe 'Home page' do
 
       click_link 'Show more facets'
 
-      expect(page).to have_selector '.facet-field-heading', text: 'Collection'
-      expect(page).to have_selector '.facet-field-heading', text: 'Version'
+      expect(page).to have_css '.facet-field-heading', text: 'Collection'
+      expect(page).to have_css '.facet-field-heading', text: 'Version'
     end
   end
 end

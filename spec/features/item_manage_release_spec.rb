@@ -4,12 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
-  before do
-    sign_in current_user, groups: ['sdr:administrator-role']
-    allow(StateService).to receive(:new).and_return(state_service)
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-  end
-
   let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
@@ -22,6 +16,12 @@ RSpec.describe 'Item manage release' do
   end
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
+  end
+
+  before do
+    sign_in current_user, groups: ['sdr:administrator-role']
+    allow(StateService).to receive(:new).and_return(state_service)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   it 'has a manage release button' do

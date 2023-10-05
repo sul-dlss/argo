@@ -12,7 +12,7 @@ RSpec.describe ModsulatorJob do
   end
 
   let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'job_tests') }
-  let(:job) { ModsulatorJob.new }
+  let(:job) { described_class.new }
   let(:user) { build(:user, sunetid: 'foo') }
 
   describe 'update_metadata' do
@@ -80,7 +80,7 @@ RSpec.describe ModsulatorJob do
 
   describe 'generate_xml_filename' do
     it 'creates a new filename using the correct convention' do
-      expect(job.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Settings.bulk_metadata.xml + '.xml')
+      expect(job.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq("generate_xml_filename-#{Settings.bulk_metadata.xml}.xml")
     end
   end
 

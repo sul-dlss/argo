@@ -41,7 +41,7 @@ class PermittedQueries
       )
       .dig('response', 'docs')
       .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).first.downcase.delete('[]') }
-      .map { |doc| doc['id'] }
+      .map { |doc| doc['id'] } # rubocop:disable Rails/Pluck
   end
 
   ##

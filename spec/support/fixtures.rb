@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def fixture_dir
   @fixture_dir ||= File.join(File.dirname(__FILE__), '../fixtures')
 end
