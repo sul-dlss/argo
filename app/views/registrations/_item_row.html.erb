@@ -16,7 +16,7 @@
     <%= item_form.text_field :catalog_record_id, class: "form-control",
           pattern: CatalogRecordId.html_pattern_string,
           data: {
-            action: "change->registration-item-row#validateCatalogRecordId invalid->registration#displayValidation",
+            action: "change->registration-item-row#validateCatalogRecordId change->registration-item-row#validateLabel invalid->registration#displayValidation",
             registration_item_row_target: "catalogRecordId"
           } %>
   </div>
@@ -39,10 +39,11 @@
 <div class="row mb-3">
   <%= item_form.label :label, class: "col-sm-2 col-form-label" %>
   <div class="col-sm-10">
-    <%= item_form.text_field :label, class: "form-control", required: true,
+    <%= item_form.text_field :label, class: "form-control",
           data: {
-            action: "invalid->registration#displayValidation",
-            registration_tabs_target: "requiredFormField"
+            registration_item_row_target: "label",
+            registration_tabs_target: "requiredFormField",
+            action: "change->registration-item-row#validateLabel invalid->registration#displayValidation"
           } %>
   </div>
 </div>

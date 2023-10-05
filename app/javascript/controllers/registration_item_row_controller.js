@@ -1,13 +1,14 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ['barcode', 'catalogRecordId', 'sourceId']
+  static targets = ['barcode', 'catalogRecordId', 'sourceId', 'label']
 
   connect () {
     // These validations need to be run after values are pasted in.
     this.validateCatalogRecordId()
     this.validateSourceId()
     this.validateBarcode()
+    this.validateLabel()
   }
 
   // Mark any duplicate sourceIds as invalid
@@ -76,6 +77,16 @@ export default class extends Controller {
         .catch((error) => {
           this.setValidation(field, error.message)
         })
+    }
+  }
+
+  validateLabel () {
+    const field = this.labelTarget
+    if (this.catalogRecordIdTarget.value === '') {
+      field.required = true
+    } else {
+      field.required = false
+      field.classList.toggle('invalid', false)
     }
   }
 
