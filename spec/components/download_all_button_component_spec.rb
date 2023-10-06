@@ -22,12 +22,12 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
     end
 
     it { is_expected.to have_link 'Download all files', href: download_item_files_path(document) }
-    it { is_expected.to have_selector 'a[onclick="event.stopPropagation()"]' }
+    it { is_expected.to have_css 'a[onclick="event.stopPropagation()"]' }
 
     context 'with a large file' do
       let(:document) { instance_double(SolrDocument, preservation_size: 1_000_000_000) }
 
-      it { is_expected.to have_selector 'a[data-turbo-confirm="This will be a large download. Are you sure?"]' }
+      it { is_expected.to have_css 'a[data-turbo-confirm="This will be a large download. Are you sure?"]' }
     end
   end
 

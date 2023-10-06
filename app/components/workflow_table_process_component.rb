@@ -74,7 +74,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
                                reset_step: process
                              )
 
-    raw ' | ' + button_to('reset', report_reset_path(new_params), class: 'btn btn-link')
+    raw " | #{button_to('reset', report_reset_path(new_params), class: 'btn btn-link')}"
   end
 
   delegate :blacklight_config, to: :search_state

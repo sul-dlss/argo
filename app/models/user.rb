@@ -49,7 +49,7 @@ class User < ApplicationRecord
     return @role_cache[admin_policy_id] if @role_cache[admin_policy_id]
 
     # Try to retrieve a Solr doc
-    obj_doc = SearchService.query('id:"' + admin_policy_id + '"')['response']['docs'].first || {}
+    obj_doc = SearchService.query("id:\"#{admin_policy_id}\"")['response']['docs'].first || {}
     return [] if obj_doc.empty?
 
     apo_roles = Set.new

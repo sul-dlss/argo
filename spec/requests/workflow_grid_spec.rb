@@ -27,6 +27,6 @@ RSpec.describe 'Display the workflow grid' do
   it 'draws the grid' do
     get '/report/workflow_grid', headers: { 'X-Requester' => 'frontend' }
     expect(response).to be_successful
-    expect(rendered).to have_selector('table td.count.waiting', text: '500')
+    expect(rendered).to have_css('table td.count.waiting', text: '500')
   end
 end

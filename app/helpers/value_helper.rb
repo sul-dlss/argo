@@ -5,7 +5,7 @@ module ValueHelper
 
   def value_for_wf_error(args)
     _wf, step, message = args[:document].fetch(args[:field], ['::']).first.split(':', 3)
-    step + ' : ' + message
+    "#{step} : #{message}"
   end
 
   ##

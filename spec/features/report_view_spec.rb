@@ -29,11 +29,11 @@ RSpec.describe 'Report view' do
       click_button('Columns')
       expect(page).to have_content('Select Columns to Display and Download')
       # count the # of total fields
-      expect(page).to have_selector('input.form-check-input',
-                                    count: Report::REPORT_FIELDS.count)
+      expect(page).to have_css('input.form-check-input',
+                               count: Report::REPORT_FIELDS.count)
       # count the # of fields displayed by default
-      expect(page).to have_selector('input.form-check-input:checked',
-                                    count: Report::REPORT_FIELDS.count { |field| field[:default] })
+      expect(page).to have_css('input.form-check-input:checked',
+                               count: Report::REPORT_FIELDS.count { |field| field[:default] })
     end
   end
 end

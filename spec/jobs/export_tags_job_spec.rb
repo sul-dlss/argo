@@ -91,7 +91,7 @@ RSpec.describe ExportTagsJob do
 
       it 'writes an empty CSV file' do
         expect(File).to exist(csv_path)
-        expect(File.zero?(csv_path)).to be true
+        expect(File.empty?(csv_path)).to be true
       end
     end
   end

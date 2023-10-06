@@ -32,11 +32,11 @@ class RegistrationsController < ApplicationController
     response = SearchService.query(
       '*:*',
       rows: 0,
-      "facet.field": facet_field,
-      "facet.prefix": params[:term].titlecase,
-      "facet.mincount": 1,
-      "facet.limit": 15,
-      "json.nl": 'map'
+      'facet.field': facet_field,
+      'facet.prefix': params[:term].titlecase,
+      'facet.mincount': 1,
+      'facet.limit': 15,
+      'json.nl': 'map'
     )
     result = response['facet_counts']['facet_fields'][facet_field].keys.sort
     render json: result

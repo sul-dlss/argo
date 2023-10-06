@@ -34,7 +34,7 @@ RSpec.describe BulkAction do
 
     context 'when status completed but file has zero length' do
       before do
-        allow(File).to receive_messages(exist?: true, zero?: true)
+        allow(File).to receive_messages(exist?: true, empty?: true)
       end
 
       let(:status) { 'Completed' }

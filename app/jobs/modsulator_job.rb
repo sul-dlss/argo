@@ -162,6 +162,6 @@ class ModsulatorJob < ApplicationJob
   # @param  [String]   original_filename    The name of the original file that the user uploaded.
   # @return [String]
   def generate_xml_filename(original_filename)
-    File.basename(original_filename, '.*') + '-' + Settings.bulk_metadata.xml + '.xml'
+    "#{File.basename(original_filename, '.*')}-#{Settings.bulk_metadata.xml}.xml"
   end
 end
