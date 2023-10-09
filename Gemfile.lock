@@ -83,7 +83,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.34.0)
+    blacklight (7.33.1)
       deprecation
       globalid
       hashdiff
@@ -92,7 +92,7 @@ GEM
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7.1)
-      view_component (>= 2.66, < 4)
+      view_component (~> 2.66)
     blacklight-hierarchy (6.1.2)
       blacklight (>= 7.18, < 9)
       deprecation
@@ -631,7 +631,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.25)
+  blacklight (~> 7.25, < 7.34)
   blacklight-hierarchy (~> 6.1)
   bootsnap (>= 1.4.2)
   byebug
