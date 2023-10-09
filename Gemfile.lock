@@ -270,7 +270,7 @@ GEM
     faraday-net_http (3.0.2)
     faraday-retry (2.2.0)
       faraday (~> 2.0)
-    ffi (1.16.2)
+    ffi (1.16.3)
     folio_client (0.13.0)
       activesupport (>= 4.2, < 8)
       dry-monads
@@ -353,7 +353,7 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.3.0)
     mysql2 (0.5.5)
-    net-imap (0.3.7)
+    net-imap (0.4.0)
       date
       net-protocol
     net-pop (0.1.2)
@@ -386,7 +386,7 @@ GEM
     orm_adapter (0.5.0)
     ostruct (0.5.5)
     parallel (1.23.0)
-    parser (3.2.2.3)
+    parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
@@ -556,7 +556,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (7.1.4)
+    sidekiq (7.1.5)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
@@ -631,7 +631,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.25)
+  blacklight (~> 7.25, < 7.34)
   blacklight-hierarchy (~> 6.1)
   bootsnap (>= 1.4.2)
   byebug

@@ -1,4 +1,0 @@
-parallel: true
-format: progress
-plugins:
-  - standard-rails
