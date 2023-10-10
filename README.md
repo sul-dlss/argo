@@ -226,6 +226,11 @@ and in development or testing mode:
 - Capybara
 - Chrome
 
+## Solr configuration
+The Solr configuration is https://github.com/sul-dlss/sul-solr-configs/tree/master/argo_prod
+
+To update this configuration, see the [README](https://github.com/sul-dlss/sul-solr-configs#updating-configurations).
+
 ## Background Job Workers (in deployed environments)
 
 Argo uses systemd to manage and monitor its Sidekiq-based background job workers in all deployed environments. See  [Sidekiq via systemd](https://github.com/sul-dlss/dlss-capistrano#sidekiq-via-systemd)
