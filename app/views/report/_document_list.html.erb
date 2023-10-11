@@ -6,8 +6,8 @@
      data-object-reporter-column-model-value='<%= Report::COLUMN_MODEL.to_json.html_safe %>'>
 
   <div class="mt-1 mb-1">
-    <button data-action="click->object-reporter#openColumnSelectorModal">Columns</button>
-    <button data-action="click->object-reporter#downloadCSV">Download CSV</button>
+    <button class="btn btn-outline-secondary" data-action="click->object-reporter#openColumnSelectorModal">Columns</button>
+    <a class="btn btn-outline-secondary" href="" target="_blank" data-action="click->object-reporter#downloadCSV">Download CSV</a>
   </div>
 
   <div id="objectsTable"></div>
