@@ -62,7 +62,15 @@ class CatalogController < ApplicationController
                                                           controller.params[:no_tags]
                                                         }
     config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE,
+                           label: 'Content Type',
+                           component: true,
+                           query: (ContentTypeForm::CONTENT_TYPES.keys.flat_map do |type_label|
+      [
+        [type_label.to_sym, { label: type_label, fq: "#{SolrDocument::FIELD_CONTENT_TYPE}:#{type_label}" }],
+        ["exclude_#{type_label}".to_sym, { label: "Exclude #{type_label}", fq: "-#{SolrDocument::FIELD_CONTENT_TYPE}:#{type_label}" }]
+      ]
+    end.to_h)
     config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10, home: false
     config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10, home: false
     config.add_facet_field 'rights_descriptions_ssim', label: 'Access Rights', component: true, limit: 1000,
