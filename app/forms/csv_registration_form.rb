@@ -63,7 +63,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     }.merge(access_params).compact
   end
 
-  # TODO: Similar code is in the ItemChangeSet
+  # Note that similar code is in the ItemChangeSet
   def access_params
     {
       rights_view: view_access,
@@ -71,7 +71,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
       rights_location: access_location,
       rights_controlledDigitalLending: ::ActiveModel::Type::Boolean.new.cast(controlled_digital_lending)
     }.tap do |access_params|
-      access_params[:download] = 'none' if %w[dark citation-only].include?(access_params[:view])
+      access_params[:rights_download] = 'none' if %w[dark citation-only].include?(access_params[:rights_view])
     end.compact_blank
   end
 
