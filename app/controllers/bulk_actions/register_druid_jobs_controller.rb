@@ -10,6 +10,8 @@ module BulkActions
       administrative_policy_object
       source_id
       initial_workflow
+      rights_view
+      rights_download
     ].freeze
 
     def job_params
