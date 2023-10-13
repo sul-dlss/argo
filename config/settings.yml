@@ -106,3 +106,5 @@ tech_md_service:
   token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmdvLXRlc3QifQ.nhJQsj8V98agZxzDP2OSCVPkIb70yE9_dyLUiTzcKko'
 
 redis_url: 'redis://localhost:6379/'
+
+google_analytics: false
