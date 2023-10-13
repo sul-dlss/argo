@@ -43,48 +43,7 @@ export default class extends Controller {
   }
 
   downloadCSV (event) {
-    event.target.disabled = true
-    this.table.alert('Your CSV report is being generated. Please hold...')
-
-    fetch(`${this.downloadUrlValue}?${this.downloadQueryParams()}`)
-      .then((response) => {
-        const reader = response.body.getReader()
-        return new ReadableStream({
-          start (controller) {
-            return pump()
-            function pump () {
-              return reader.read().then(({ done, value }) => {
-                // When no more data needs to be consumed, close the stream
-                if (done) {
-                  controller.close()
-                  return
-                }
-                // Enqueue the next data chunk into our target stream
-                controller.enqueue(value)
-                return pump()
-              })
-            }
-          }
-        })
-      })
-      .then((stream) => new Response(stream))
-      .then((response) => response.blob())
-      .then((blob) => URL.createObjectURL(blob))
-      .then((href) => {
-        const anchor = document.createElement('a')
-        anchor.href = href
-        anchor.setAttribute('download', 'report.csv')
-        anchor.setAttribute('target', '_blank')
-        anchor.click()
-        URL.revokeObjectURL(href)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-      .finally(() => {
-        event.target.disabled = false
-        this.table.clearAlert()
-      })
+    event.target.href = `${this.downloadUrlValue}?${this.downloadQueryParams()}`
   }
 
   downloadQueryParams () {
