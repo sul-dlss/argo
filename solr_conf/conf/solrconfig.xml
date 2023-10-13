@@ -5,12 +5,12 @@
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
 
   <!-- NOTE: various comments and unused configuration possibilities have been purged
-     from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
-     as well as the default solrconfig file included with Solr -->
+    from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
+    as well as the default solrconfig file included with Solr, and with blacklight -->
 
   <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
 
-  <luceneMatchVersion>6.6.0</luceneMatchVersion>
+  <luceneMatchVersion>8.11.2</luceneMatchVersion>
 
   <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}"/>
 
@@ -22,13 +22,7 @@
     </updateLog>
   </updateHandler>
 
-  <jmx />
-
-  <!-- Used by reports via queries that pass qt=search -->
   <requestHandler name="search" class="solr.SearchHandler" default="true">
-    <!-- default values for query parameters can be specified, these
-         will be overridden by parameters in the request
-      -->
     <lst name="defaults">
       <str name="defType">edismax</str>
       <str name="echoParams">explicit</str>
@@ -37,68 +31,147 @@
       <int name="qs">1</int>
       <int name="ps">2</int>
       <float name="tie">0.01</float>
-      <!-- this qf and pf are used by default, if not otherwise specified by
-           client. The default blacklight_config will use these for the
-           "keywords" search. See the author_qf/author_pf, title_qf, etc
-           below, which the default blacklight_config will specify for
-           those searches. You may also be interested in:
-           http://wiki.apache.org/solr/LocalParams
-      -->
-       <str name="qf">
-         id
-         all_text_timv
-       </str>
-       <str name="pf">
-         all_text_timv^10
-       </str>
-
-      <str name="author_qf"></str>
-      <str name="author_pf"></str>
-      <str name="title_qf"></str>
-      <str name="title_pf"></str>
-      <str name="subject_qf"></str>
-      <str name="subject_pf"></str>
+      <bool name="lowercaseOperators">true</bool>
       <str name="fl"> *, score</str>
+
+      <str name="qf">
+        id
+        all_text_timv
+        object_type_ssim
+      </str>
+      <str name="pf">
+        all_text_timv^10
+      </str>
 
       <str name="facet">true</str>
       <str name="facet.mincount">1</str>
       <str name="facet.limit">10</str>
-
-      <str name="spellcheck">true</str>
-      <str name="spellcheck.dictionary">default</str>
-      <str name="spellcheck.onlyMorePopular">true</str>
-      <str name="spellcheck.extendedResults">true</str>
-      <str name="spellcheck.collate">false</str>
-      <str name="spellcheck.count">5</str>
+      <str name="facet.field">objectType_ssim</str>
+      <str name="f.objectType_ssim.facet.sort">index</str>
+      <str name="f.objectType_ssim.facet.method">enum</str>
+      <str name="facet.field">content_type_ssim</str>
+      <str name="f.content_type_ssim.facet.sort">index</str>
+      <str name="f.content_type_ssim.facet.method">enum</str>
+      <str name="facet.field">nonhydrus_apo_title_ssim</str>
+      <str name="facet.field">released_to_earthworks_dtsi</str>
+      <str name="facet.field">released_to_searchworks_dtsi</str>
     </lst>
-    <arr name="last-components">
-      <str>spellcheck</str>
-    </arr>
   </requestHandler>
 
-  <requestHandler name="/argosearch" class="solr.SearchHandler"> <!-- experimental/useless -->
+  <!-- for relevancy experiments -->
+  <requestHandler name="/qttest" class="solr.SearchHandler">
     <lst name="defaults">
-      <str name="defType">lucene</str>
-      <str name="df">has_model_s</str>
-      <str name="q.alt">*:*</str>
-      <str name="q.op">AND</str>
-      <str name="facet">on</str>
-      <str name="facet.mincount">1</str>
+      <str name="defType">edismax</str>
       <str name="echoParams">explicit</str>
+      <str name="q.alt">*:*</str>
+      <str name="mm">6&lt;-1 6&lt;90%</str>
+      <int name="qs">1</int>
+      <int name="ps">2</int>
       <float name="tie">0.01</float>
-      <str name="qf_dismax">id^0.8 id_t^0.8 title_t^0.3 mods_t^0.2</str>
-      <str name="pf_dismax">id^0.9 id_t^0.9 title_t^0.5 mods_t^0.2</str>
-      <str name="fl"> *, score</str>
-      <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
-      <int name="ps">100</int>
+      <bool name="lowercaseOperators">true</bool>
+
+      <str name="qf">
+        sw_display_title_tesim^5
+        sw_author_tesim^3
+        topic_tesim^2
+
+        collection_title_tesim
+
+        exploded_project_tag_ssim^2
+        exploded_nonproject_tag_ssim
+        exploded_tag_ssim
+        tag_ssim
+
+        content_type_ssim
+        sw_format_ssim
+        object_type_ssim
+
+        id
+        objectId_tesim
+        identifier_ssim
+        identifier_tesim
+        barcode_id_ssim
+        folio_instance_hrid_ssim
+        source_id_ssim^3
+        source_id_text_nostem_i
+        previous_ils_ids_ssim
+        doi_ssim
+        contributor_orcids_ssim
+      </str>
+      <str name="pf">  <!-- (phrase boost within result set) -->
+        sw_display_title_tesim^25
+        sw_author_tesim^15
+        topic_tesim^10
+
+        collection_title_tesim^5
+
+        objectId_tesim^5
+        identifier_tesim^5
+        source_id_text_nostem_i^5
+      </str>
+      <str name="pf3">  <!-- (token trigrams boost within result set) -->
+        sw_display_title_tesim^15
+        sw_author_tesim^9
+        topic_tesim^6
+
+        collection_title_tesim^3
+
+        objectId_tesim^3
+        identifier_tesim^3
+        source_id_text_nostem_i^3
+      </str>
+      <str name="pf2"> <!--(token bigrams boost within result set) -->
+        sw_display_title_tesim^10
+        sw_author_tesim^6
+        topic_tesim^4
+
+        collection_title_tesim^2
+
+        objectId_tesim^2
+        identifier_tesim^2
+        source_id_text_nostem_i^2
+      </str>
+
+      <str name="facet">true</str>
+      <str name="facet.mincount">1</str>
+      <str name="facet.limit">10</str>
+      <str name="facet.field">exploded_project_tag_ssim</str>
+      <str name="facet.field">exploded_nonproject_tag_ssim</str>
+      <str name="facet.field">objectType_ssim</str>
+      <str name="f.objectType_ssim.facet.sort">index</str>
+      <str name="f.objectType_ssim.facet.method">enum</str>
+      <str name="facet.field">content_type_ssim</str>
+      <str name="f.content_type_ssim.facet.sort">index</str>
+      <str name="f.content_type_ssim.facet.method">enum</str>
+      <str name="facet.field">collection_title_ssim</str>
+      <str name="facet.field">nonhydrus_apo_title_ssim</str>
+      <str name="facet.field">contributor_orcids_ssim</str>
+      <str name="facet.field">wf_wps_ssim</str>
+      <str name="facet.field">wf_wsp_ssim</str>
+      <str name="facet.field">wf_swp_ssim</str>
+      <str name="facet.field">doi_ssim</str>
+      <str name="facet.field">barcode_id_ssim</str>
+      <str name="facet.field">content_file_roles_ssim</str>
+      <str name="f.content_file_roles_ssim.facet.sort">index</str>
+      <str name="f.content_file_roles_ssim.facet.method">enum</str>
+      <str name="facet.field">rights_descriptions_ssim</str>
+      <str name="f.rights_descriptions_ssim.facet.sort">index</str>
+      <str name="f.rights_descriptions_ssim.facet.method">enum</str>
+      <str name="facet.field">use_license_machine_ssi</str>
+      <str name="f.use_license_machine_ssi.facet.sort">index</str>
+      <str name="f.use_license_machine_ssi.facet.method">enum</str>
+      <str name="facet.field">processing_status_text_ssi</str>
+      <str name="f.processing_status_text_ssi.facet.method">enum</str>
+      <str name="facet.field">metadata_source_ssim</str>
+      <str name="f.metadata_source_ssim.facet.method">enum</str>
     </lst>
   </requestHandler>
 
   <requestHandler name="standard" class="solr.SearchHandler">
-     <lst name="defaults">
-       <str name="echoParams">explicit</str>
-       <str name="defType">lucene</str>
-     </lst>
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="defType">lucene</str>
+    </lst>
   </requestHandler>
 
   <!-- for requests to get a single document; use id=666 instead of q=id:666 -->
@@ -110,19 +183,6 @@
       <str name="q">{!raw f=id v=$id}</str> <!-- use id=666 instead of q=id:666 -->
     </lst>
   </requestHandler>
-
-  <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
-    <str name="queryAnalyzerFieldType">textSpell</str>
-    <!-- Multiple "Spell Checkers" can be declared and used by this component
-      (e.g. for title_spell field)
-      -->
-    <lst name="spellchecker">
-      <str name="name">default</str>
-      <str name="field">spell</str>
-      <str name="spellcheckIndexDir">./spell</str>
-      <str name="buildOnOptimize">true</str>
-    </lst>
-  </searchComponent>
 
   <requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" />
 
@@ -139,7 +199,6 @@
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
   <requestHandler name="/update" class="solr.UpdateRequestHandler"  />
 
-
   <requestHandler name="/admin/ping" class="solr.PingRequestHandler">
     <lst name="invariants">
       <str name="q">solrpingquery</str>
@@ -149,9 +208,8 @@
     </lst>
   </requestHandler>
 
-  <!-- config for the admin interface -->
+  <!-- for the admin interface -->
   <admin>
     <defaultQuery>search</defaultQuery>
   </admin>
-
 </config>

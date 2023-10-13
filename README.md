@@ -231,6 +231,8 @@ The Solr configuration is https://github.com/sul-dlss/sul-solr-configs/tree/mast
 
 To update this configuration, see the [README](https://github.com/sul-dlss/sul-solr-configs#updating-configurations).
 
+When this configuration is updated, the configuration in `solr_conf/` should also be updated for Argo testing using a Solr container.
+
 ## Background Job Workers (in deployed environments)
 
 Argo uses systemd to manage and monitor its Sidekiq-based background job workers in all deployed environments. See  [Sidekiq via systemd](https://github.com/sul-dlss/dlss-capistrano#sidekiq-via-systemd)
