@@ -7,6 +7,7 @@ class CatalogController < ApplicationController
 
   before_action :limit_facets_on_home_page, only: [:index]
 
+  # NOTE: any Solr parameters configured here will override parameters in the Solr configuration files.
   configure_blacklight do |config|
     ## Class for converting Blacklight's url parameters to into request parameters for the search index
     config.search_builder_class = ::SearchBuilder
@@ -217,6 +218,32 @@ class CatalogController < ApplicationController
 
   def index
     @presenter = HomeTextPresenter.new(current_user)
+    # For comparison of search results with different Solr params:
+    # if qt param is passed to Argo, we can also change the params we send to Solr.
+    # This allows us to compare, e.g. search results with different Solr qf params.
+    # Request handlers can be wholly configured in Solr, in which case you can remove
+    # default_solr_params to use what is in the Solr configuration.
+    if params.key?(:qt)
+      blacklight_config.default_solr_params = {
+        qt: params[:qt],
+        defType: 'dismax',
+        'q.alt': '*:*',
+        qf: %(
+          id
+          collection_title_tesim
+          dor_id_tesim
+          identifier_tesim
+          obj_label_tesim
+          objectId_tesim
+          originInfo_place_placeTerm_tesim
+          originInfo_publisher_tesim
+          sw_display_title_tesim
+          source_id_ssim
+          tag_ssim
+          topic_tesim
+        )
+      }
+    end
     super
   end
 

@@ -59,7 +59,7 @@
   </requestHandler>
 
   <!-- for relevancy experiments -->
-  <requestHandler name="/qttest" class="solr.SearchHandler">
+  <requestHandler name="qttest" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="defType">edismax</str>
       <str name="echoParams">explicit</str>
