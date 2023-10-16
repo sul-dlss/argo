@@ -11,9 +11,6 @@
     <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
     <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
 
-    <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
-    <field name="all_text_timv" type="text" stored="true" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
-
     <!-- NOTE:  not all possible Solr field types are represented in the dynamic fields -->
 
     <!-- string (_s...) -->

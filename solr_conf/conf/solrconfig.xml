@@ -36,11 +36,15 @@
 
       <str name="qf">
         id
-        all_text_timv
+        descriptive_tiv
+        descriptive_text_nostem_i
+        descriptive_teiv
         object_type_ssim
       </str>
       <str name="pf">
-        all_text_timv^10
+        descriptive_tiv^10
+        descriptive_text_nostem_i^5
+        descriptive_teiv^3
       </str>
 
       <str name="facet">true</str>
@@ -75,8 +79,6 @@
         sw_author_tesim^3
         topic_tesim^2
 
-        collection_title_tesim
-
         exploded_project_tag_ssim^2
         exploded_nonproject_tag_ssim
         exploded_tag_ssim
@@ -86,6 +88,12 @@
         sw_format_ssim
         object_type_ssim
 
+        descriptive_tiv
+        descriptive_text_nostem_i
+        descriptive_teiv
+
+        collection_title_tesim
+
         id
         objectId_tesim
         identifier_ssim
@@ -93,7 +101,8 @@
         barcode_id_ssim
         folio_instance_hrid_ssim
         source_id_ssim^3
-        source_id_text_nostem_i
+        source_id_ssi
+        source_id_text_nostem_i^3
         previous_ils_ids_ssim
         doi_ssim
         contributor_orcids_ssim
@@ -102,6 +111,10 @@
         sw_display_title_tesim^25
         sw_author_tesim^15
         topic_tesim^10
+
+        descriptive_tiv^5
+        descriptive_text_nostem_i^3
+        descriptive_teiv^2
 
         collection_title_tesim^5
 
@@ -114,6 +127,10 @@
         sw_author_tesim^9
         topic_tesim^6
 
+        descriptive_tiv^15
+        descriptive_text_nostem_i^9
+        descriptive_teiv^6
+
         collection_title_tesim^3
 
         objectId_tesim^3
@@ -124,6 +141,10 @@
         sw_display_title_tesim^10
         sw_author_tesim^6
         topic_tesim^4
+
+        descriptive_tiv^10
+        descriptive_text_nostem_i^6
+        descriptive_teiv^4
 
         collection_title_tesim^2
 
