@@ -19,7 +19,8 @@ export default class extends Controller {
     const popover = new bootstrap.Popover(event.target, {
       content: 'Copied.',
       placement: 'top',
-      trigger: 'manual'
+      trigger: 'manual',
+      title: 'List'
     })
     popover.show()
     setTimeout(function () { popover.dispose() }, 1500)

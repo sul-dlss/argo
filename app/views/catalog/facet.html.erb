@@ -6,7 +6,7 @@
   <%= render BlacklightModalComponent.new do |component| %>
     <% component.header do %>
       <%= facet_field_label(@facet.key) %>
-      <a class="copy-button" data-controller="copy" data-action="copy#copy" aria-label="Copy facet values" href=""><i class="bi bi-clipboard"></i></a>
+      <a class="copy-button" data-controller="copy" data-action="copy#copy" aria-label="Copy this list" href="#"><i class="bi bi-clipboard" title="Copy this list"></i></a>
      <% end %>
     <% component.body do %>
 
