@@ -237,14 +237,14 @@ class Report
                 REPORT_FIELDS
               end
     @params = params
-    (@response,) = search_results(@params)
+    @response = search_results(@params)
     @num_found = @response['response']['numFound'].to_i
   end
 
   def druids(opts = {})
     params[:page] = 1
     params[:per_page] = ROWS_PER_PAGE
-    (@response,) = search_results(params)
+    @response = search_results(params)
     druids = []
     until @response.documents.empty?
       report_data.each do |rec|
@@ -261,7 +261,7 @@ class Report
         end
       end
       params[:page] += 1
-      (@response,) = search_results(params)
+      @response = search_results(params)
     end
 
     druids
@@ -285,7 +285,7 @@ class Report
           yielder << CSV.generate_line(@fields.map { |field| record[field.fetch(:field)].to_s }, force_quotes: true)
         end
         @params[:page] += 1
-        (@response,) = search_results(@params)
+        @response = search_results(@params)
       end
     end
   end
@@ -303,11 +303,6 @@ class Report
     search_service_class.new(config: blacklight_config,
                              user_params: params,
                              current_user:)
-  end
-
-  # We can remove this when https://github.com/projectblacklight/blacklight/pull/2320 is merged into Blacklight
-  def search_service_class
-    Blacklight::SearchService
   end
 
   # @param [Array<SolrDocument>] docs

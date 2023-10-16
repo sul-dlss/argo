@@ -22,7 +22,7 @@ RSpec.describe 'View the full dublin core' do
       expect(response).to be_successful
       rendered = Capybara::Node::Simple.new(response.body)
       expect(rendered)
-        .to have_css '.modal-header h3.modal-title', text: 'Dublin Core (derived from MODS)'
+        .to have_css '.modal-header h1.modal-title', text: 'Dublin Core (derived from MODS)'
       expect(rendered).to have_css '.modal-body', text: 'Kurdish Democratic Party'
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe 'View the full dublin core' do
       expect(response).to be_successful
       rendered = Capybara::Node::Simple.new(response.body)
       expect(rendered)
-        .to have_css '.modal-header h3.modal-title', text: 'Dublin Core (derived from MODS)'
+        .to have_css '.modal-header h1.modal-title', text: 'Dublin Core (derived from MODS)'
       expect(rendered).to have_css '.modal-body', text: '<dc:title>Kurdish Democratic Party</dc:title>'
     end
   end

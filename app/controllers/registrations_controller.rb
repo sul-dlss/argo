@@ -110,11 +110,6 @@ class RegistrationsController < ApplicationController
   def csv_create
     @registration_form = CsvRegistrationForm.new(nil)
     if @registration_form.validate(create_params) && @registration_form.save
-      # # strip the CSRF token, and the parameters that happened to be in the bulk job creation form
-      # # this can be removed when this is resolved: https://github.com/projectblacklight/blacklight/issues/2683
-      # search_state_subset = search_state.to_h.except(:authenticity_token, :druids, :druids_only, :description)
-      # path_params = Blacklight::Parameters.sanitize(search_state_subset)
-      # redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
       redirect_to bulk_actions_path, status: :see_other, notice: 'Register druids job was successfully created.'
     else
       prepopulate

@@ -4,7 +4,7 @@
     "@hotwired/turbo-rails": "^7.0.1",
     "@popperjs/core": "^2.10.2",
     "autocomplete.js": "^0.37.1",
-    "blacklight-frontend": "^7.20.2",
+    "blacklight-frontend": "^8.0.1",
     "blacklight-hierarchy": "^6.0.2",
     "bootstrap": "^5.1.0",
     "esbuild": "^0.12.28",
@@ -24,7 +24,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --inject:app/javascript/jquery-shim.js --define:global=window --outdir=app/assets/builds",
+    "build": "esbuild app/javascript/*.* --bundle --define:global=window --outdir=app/assets/builds",
     "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules",
     "lint": "standard app/javascript/**/*.js",
     "lint_fix": "standard --fix app/javascript/**/*.js"

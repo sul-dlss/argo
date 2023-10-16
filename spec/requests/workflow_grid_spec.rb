@@ -7,8 +7,8 @@ RSpec.describe 'Display the workflow grid' do
     Capybara::Node::Simple.new(response.body)
   end
   let(:user) { create(:user) }
-  let(:service) { instance_double(Blacklight::SearchService, search_results: [results, nil]) }
-  let(:results) { Blacklight::Solr::Response.new(solr_response, nil, {}) }
+  let(:service) { instance_double(Blacklight::SearchService, search_results:) }
+  let(:search_results) { Blacklight::Solr::Response.new(solr_response, nil, blacklight_config: Blacklight::Configuration.new) }
   let(:solr_response) do
     {
       'response' => { 'docs' => [] },

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 # This models the component that appears when you click one of the blue buttons to modify an object.
-# It does not depend on the BlacklightModalComponent, which has a bunch of jquery javascript for
-# doing the ajax.  That javascript prevents us from showing errors after a form is submitted.
+# It does not depend on the Blacklight::System::ModalComponent, which does not use Turbo.
 class EditModalComponent < ApplicationComponent
   renders_one :header
   renders_one :body

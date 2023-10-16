@@ -4,23 +4,16 @@ import ProjectAutocomplete from './modules/project_autocomplete'
 require('@github/time-elements')
 
 export default class Argo {
-    initialize() {
-        this.tagsAutocomplete()
-        this.projectAutocomplete()
-        this.blacklight()
-    }
+  initialize () {
+    this.tagsAutocomplete()
+    this.projectAutocomplete()
+  }
 
-    // Because blacklight doesn't yet support turbo, we need to manually initialize
-    // the features we care about.
-    blacklight() {
-      Blacklight.activate()
-    }
+  tagsAutocomplete () {
+    new TagsAutocomplete().initialize()
+  }
 
-    tagsAutocomplete() {
-      new TagsAutocomplete().initialize()
-    }
-
-    projectAutocomplete() {
-      new ProjectAutocomplete().initialize()
-    }
+  projectAutocomplete () {
+    new ProjectAutocomplete().initialize()
+  }
 }
