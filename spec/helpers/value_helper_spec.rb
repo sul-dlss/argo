@@ -9,7 +9,7 @@ RSpec.describe ValueHelper do
   let(:search_state) { Blacklight::SearchState.new({}, blacklight_config) }
   let(:search_action_path) { '/search_action_path' }
   let(:collection) do
-    double('collection', label: 'Boring Fedora Object Label', pid: 'druid:abc123')
+    double('collection', label: 'Boring Object Label', pid: 'druid:abc123')
   end
   let(:honeybadger) { double(Honeybadger) }
 

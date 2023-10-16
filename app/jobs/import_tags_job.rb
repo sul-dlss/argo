@@ -34,8 +34,7 @@ class ImportTagsJob < GenericJob
     else
       Dor::Services::Client.object(druid).administrative_tags.replace(tags:)
     end
-    # tags require immediate reindexing since they do not touch Fedora (and thus do
-    # not send messages to Solr)
+    # tags require immediate reindexing since they do not send messages to Solr
     Argo::Indexer.reindex_druid_remotely(druid)
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e
