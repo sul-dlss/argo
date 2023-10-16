@@ -211,10 +211,10 @@ Note that in all cases, you will need a web server of some kind running (either 
 
 ## Internals
 
-Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
+Argo uses Blacklight and Solr to expose the repository contents, and `dor-services-app` to enable editing and updating. Its key components include:
 
-- Rails 5.2
-- Blacklight 7
+- Rails
+- Blacklight
 - dor-services-client
 - RSolr
 - Sidekiq
@@ -248,7 +248,7 @@ Argo uses systemd to manage and monitor its Sidekiq-based background job workers
 
 ### Indexing (including bulk reindexing)
 
-For further reading on how indexing from Fedora to Solr works in Argo, see [INDEXING.md](INDEXING.md).  This explains how single object reindexing works, how the bulk reindexing mechanism works, and how to build custom reindexing runs.
+For further reading on how indexing from Cocina works in Argo, see dor_indexing_app.  [INDEXING.md](INDEXING.md) is likely outdated, but explains how single object reindexing works, how the bulk reindexing mechanism works, and how to build custom reindexing runs.
 
 ### Profiling
 

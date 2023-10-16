@@ -10,7 +10,6 @@ class DublinCoreService
   end
 
   # Generates Dublin Core from the MODS in the descMetadata datastream using the LoC mods2dc stylesheet
-  #    Should not be used for the Fedora DC datastream
   # @return [Nokogiri::XML::Document] the DublinCore XML document object
   def ng_xml
     MODS_TO_DC_XSLT.transform(desc_md_xml)
