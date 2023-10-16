@@ -227,22 +227,42 @@ class CatalogController < ApplicationController
       blacklight_config.default_solr_params = {
         qt: params[:qt],
         defType: 'dismax',
-        'q.alt': '*:*',
-        qf: %(
-          id
-          collection_title_tesim
-          dor_id_tesim
-          identifier_tesim
-          obj_label_tesim
-          objectId_tesim
-          originInfo_place_placeTerm_tesim
-          originInfo_publisher_tesim
-          sw_display_title_tesim
-          source_id_ssim
-          tag_ssim
-          topic_tesim
-        )
+        'q.alt': '*:*'
+        # qf: %(
+        # sw_display_title_tesim^5
+        # sw_author_tesim^3
+        # topic_tesim^2
+
+        # exploded_project_tag_ssim^2
+        # exploded_nonproject_tag_ssim
+        # exploded_tag_ssim
+        # tag_ssim
+
+        # content_type_ssim
+        # sw_format_ssim
+        # object_type_ssim
+
+        # descriptive_tiv
+        # descriptive_text_nostem_i
+        # descriptive_teiv
+
+        # collection_title_tesim
+
+        # id
+        # objectId_tesim
+        # identifier_ssim
+        # identifier_tesim
+        # barcode_id_ssim
+        # folio_instance_hrid_ssim
+        # source_id_ssim^3
+        # source_id_ssi
+        # source_id_text_nostem_i^3
+        # previous_ils_ids_ssim
+        # doi_ssim
+        # contributor_orcids_ssim
+        # )
       }
+      blacklight_config.default_solr_params.delete(:qf) # use what is in solrconfig.xml for the request handler
     end
     super
   end
