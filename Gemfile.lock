@@ -138,7 +138,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    cocina-models (0.91.2)
+    cocina-models (0.91.3)
       activesupport
       deprecation
       dry-struct (~> 1.0)
