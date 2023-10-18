@@ -15,7 +15,7 @@ gem 'dry-monads'
 gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'faraday' # HTTP client library
 gem 'faraday-multipart'
-gem 'honeybadger', '~> 4.1'
+gem 'honeybadger'
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jsbundling-rails', '~> 1.0'
 gem 'lograge'
