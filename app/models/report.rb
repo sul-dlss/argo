@@ -20,6 +20,7 @@ class Report
 
   COLUMN_SELECTOR_COLUMN_SIZE = 3 # Helps display report columns in neatly lined up columns.
   ROWS_PER_PAGE = 100
+  ROWS_PER_PAGE_CSV = 10_000
 
   REPORT_FIELDS = [
     {
@@ -216,7 +217,7 @@ class Report
   configure_blacklight do |config|
     config.search_builder_class = ReportSearchBuilder # leave off faceting for report queries
 
-    config.default_solr_params[:rows] = ROWS_PER_PAGE
+    config.max_per_page = ROWS_PER_PAGE_CSV # Must be >= max number of rows want returned.
     config.default_solr_params[:fl] = REPORT_FIELDS.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
 
     config.sort_fields.clear
@@ -277,9 +278,10 @@ class Report
   # @return [Enumerator] data in CSV format
   def to_csv
     @params[:page] = 1
-    @params[:per_page] = ROWS_PER_PAGE
+    @params[:per_page] = ROWS_PER_PAGE_CSV
     Enumerator.new do |yielder|
       yielder << CSV.generate_line(@fields.map { |field| field.fetch(:label) }, force_quotes: true) # header row
+      (@response,) = search_results(params)
       until @response.documents.empty?
         report_data.each do |record|
           yielder << CSV.generate_line(@fields.map { |field| record[field.fetch(:field)].to_s }, force_quotes: true)
