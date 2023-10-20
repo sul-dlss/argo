@@ -79,7 +79,7 @@ executors:
         <<: *ruby_envs
       - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
-      - image: suldss/argo-solr
+      - image: suldlss/argo-solr
         command: server/scripts/ci-start.sh
         name: solr
       - image: rabbitmq:3
