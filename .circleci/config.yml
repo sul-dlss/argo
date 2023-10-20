@@ -36,9 +36,9 @@ commands:
         default: '8983'
         type: string
     steps:
-      - run:
-          command: 'dockerize -wait tcp://<< parameters.solr_host >>:<< parameters.solr_port >> -timeout 1m'
-          name: Wait for Solr
+      # - run:
+      #     command: 'dockerize -wait tcp://<< parameters.solr_host >>:<< parameters.solr_port >> -timeout 1m'
+      #     name: Wait for Solr
       - run:
           command: >
             cd << parameters.solr_config_path >>
