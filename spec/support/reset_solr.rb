@@ -4,7 +4,6 @@ module ResetSolr
   def self.reset_solr
     blacklight_config = CatalogController.blacklight_config
     solr_conn = blacklight_config.repository_class.new(blacklight_config).connection
-    solr_conn.get('select', params: { q: '*:*', rows: 0, facet: false })
     solr_conn.delete_by_query('*:*')
 
     # Solves an odd bootstrapping problem, where the dor-indexing-app can only index cocina-models,
