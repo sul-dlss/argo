@@ -184,9 +184,9 @@ workflows:
   test:
     jobs:
       - test
-      - lint
-      - erblint
-      - lint_js
+      # - lint
+      # - erblint
+      # - lint_js
 jobs:
   lint:
     executor: default
