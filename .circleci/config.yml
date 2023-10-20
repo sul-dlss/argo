@@ -79,24 +79,9 @@ executors:
         <<: *ruby_envs
       - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
-      - image: zookeeper:3.9.1
-        name: zookeeper
-        # command:
-        #   [
-        #     'sh',
-        #     '-c',
-        #     'wget -O /tmp/security.json "https://gist.githubusercontent.com/eliotjordan/a27be341dc2e7a532bad99203e0f55b7/raw/5866efab9242f953764c1b03d17763309e22948f/security.json" && server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:2181 -cmd putfile /security.json /tmp/security.json'
-        #   ]
       - image: solr:8.11.2
+        command: bin/solr -cloud -noprompt -f
         name: solr
-          # curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8888/solr/admin/configs?action=UPLOAD&name=cicognara"
-          # curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8888/api/collections/ -d '{create: {name: cicognara, config: cicognara, numShards: 1}}'
-        command:
-          [
-            'sh',
-            '-c',
-            'wget -O /tmp/security.json "https://gist.githubusercontent.com/eliotjordan/a27be341dc2e7a532bad99203e0f55b7/raw/5866efab9242f953764c1b03d17763309e22948f/security.json" && server/scripts/cloud-scripts/zkcli.sh -zkhost zookeeper:2181 -cmd putfile /security.json /tmp/security.json && bin/solr -cloud -noprompt -f -z zookeeper:2181'
-          ]
       - image: rabbitmq:3
         name: rabbitmq
       - image: suldlss/dor-indexing-app:latest
@@ -199,35 +184,35 @@ workflows:
   test:
     jobs:
       - test
-      # - lint
-      # - erblint
-      # - lint_js
+      - lint
+      - erblint
+      - lint_js
 jobs:
-  # lint:
-  #   executor: default
-  #   steps:
-  #     - checkout
-  #     - ruby/install-deps:
-  #         key: gems-v2
-  #     - ruby/rubocop-check
-  # erblint:
-  #   executor: default
-  #   steps:
-  #     - checkout
-  #     - ruby/install-deps:
-  #         key: gems-v2
-  #     - run:
-  #         name: Lint ERBs
-  #         command: bundle exec erblint --lint-all --format compact
-  # lint_js:
-  #   executor: default
-  #   steps:
-  #     - checkout
-  #     - node/install-packages:
-  #         pkg-manager: yarn
-  #     - run:
-  #         name: Lint JavaScript
-  #         command: yarn run lint
+  lint:
+    executor: default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          key: gems-v2
+      - ruby/rubocop-check
+  erblint:
+    executor: default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          key: gems-v2
+      - run:
+          name: Lint ERBs
+          command: bundle exec erblint --lint-all --format compact
+  lint_js:
+    executor: default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Lint JavaScript
+          command: yarn run lint
   test:
     environment:
       TZ: 'America/Los_Angeles'
@@ -260,13 +245,6 @@ jobs:
       - run:
           name: Build assets
           command: bin/rails assets:precompile
-      # - run:
-          # name: Solr gets configs and collection created
-          # command: |
-          #   cd solr_conf/
-          #   zip -1 -r solr_config.zip ./*
-          #   curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8983/solr/admin/configs?action=UPLOAD&name=argo"
-          #   curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8983/api/collections/ -d '{create: {name: argo, config: argo, numShards: 1}}'
       - configure_solr:
           solr_config_path: solr_conf/conf
       - run:
