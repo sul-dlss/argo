@@ -30,7 +30,7 @@ commands:
         default: solr/config
         type: string
       solr_host:
-        default: 'solr'
+        default: 'localhost'
         type: string
       solr_port:
         default: '8983'
