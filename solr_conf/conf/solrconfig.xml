@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
   <!-- NOTE:  these 2 lib dirs are here for testing only and do NOT go in the prod file -->
-  <!-- seemingly needing for local testing, but cause error in CI -->
-  <!-- <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" /> -->
+  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
+  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
 
   <!-- NOTE: various comments and unused configuration possibilities have been purged
     from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
