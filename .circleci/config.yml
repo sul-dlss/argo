@@ -80,14 +80,21 @@ executors:
       - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
       - image: zookeeper:3.9.1
-      - image: solr:8.11.2
-        name: solr
+        name: zookeeper
         command:
           [
             'sh',
             '-c',
-            'wget -O /tmp/security.json "https://gist.githubusercontent.com/eliotjordan/a27be341dc2e7a532bad99203e0f55b7/raw/5866efab9242f953764c1b03d17763309e22948f/security.json" && server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:2181 -cmd putfile /security.json /tmp/security.json && bin/solr -cloud -noprompt -f -z localhost:2181'
+            'wget -O /tmp/security.json "https://gist.githubusercontent.com/eliotjordan/a27be341dc2e7a532bad99203e0f55b7/raw/5866efab9242f953764c1b03d17763309e22948f/security.json" && server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:2181 -cmd putfile /security.json /tmp/security.json'
           ]
+      - image: solr:8.11.2
+        name: solr
+        command: bin/solr -cloud -noprompt -f -z localhost:2181'
+          # [
+          #   'sh',
+          #   '-c',
+          #   'wget -O /tmp/security.json "https://gist.githubusercontent.com/eliotjordan/a27be341dc2e7a532bad99203e0f55b7/raw/5866efab9242f953764c1b03d17763309e22948f/security.json" && server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:2181 -cmd putfile /security.json /tmp/security.json && bin/solr -cloud -noprompt -f -z localhost:2181'
+          # ]
       - image: rabbitmq:3
         name: rabbitmq
       - image: suldlss/dor-indexing-app:latest
