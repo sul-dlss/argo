@@ -81,8 +81,7 @@ executors:
         <<: *postgres_envs
       - image: zookeeper:3.9.1
       - image: solr:8.11.2
-        # name: solr
-        # command: bin/solr -cloud -noprompt -f
+        name: solr
         command:
           [
             "sh",
