@@ -46,10 +46,10 @@ commands:
             zip -1 -r solr_config.zip ./*
 
             curl -H "Content-type:application/octet-stream" --data-binary
-            @solr_config.zip "http://<< parameters.solr_host >>:<< parameters.solr_port
+            @solr_config.zip "http://solr:SolrRocks@<< parameters.solr_host >>:<< parameters.solr_port
             >>/solr/admin/configs?action=UPLOAD&name=solrconfig"
 
-            curl -H 'Content-type: application/json' http://<< parameters.solr_host >>:<<
+            curl -H 'Content-type: application/json' http://solr:SolrRocks@<< parameters.solr_host >>:<<
             parameters.solr_port >>/api/collections/ -d '{create: {name: <<
             parameters.core_name >>, config: solrconfig, numShards: 1}}'
           name: Load config into solr
@@ -79,9 +79,11 @@ executors:
         <<: *ruby_envs
       - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
+      # - image: solr:8.11.2
+      # - command: bin/solr -cloud -noprompt -f
       - image: suldlss/argo-solr
-        command: server/scripts/ci-start.sh
         name: solr
+        command: server/scripts/ci-start.sh
       - image: rabbitmq:3
         name: rabbitmq
       - image: suldlss/dor-indexing-app:latest
