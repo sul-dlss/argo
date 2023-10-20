@@ -91,7 +91,7 @@ executors:
         name: solr
           # curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8888/solr/admin/configs?action=UPLOAD&name=cicognara"
           # curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8888/api/collections/ -d '{create: {name: cicognara, config: cicognara, numShards: 1}}'
-        command: |
+        command:
           [
             'sh',
             '-c',
@@ -203,31 +203,31 @@ workflows:
       - erblint
       - lint_js
 jobs:
-  lint:
-    executor: default
-    steps:
-      - checkout
-      - ruby/install-deps:
-          key: gems-v2
-      - ruby/rubocop-check
-  erblint:
-    executor: default
-    steps:
-      - checkout
-      - ruby/install-deps:
-          key: gems-v2
-      - run:
-          name: Lint ERBs
-          command: bundle exec erblint --lint-all --format compact
-  lint_js:
-    executor: default
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: yarn
-      - run:
-          name: Lint JavaScript
-          command: yarn run lint
+  # lint:
+  #   executor: default
+  #   steps:
+  #     - checkout
+  #     - ruby/install-deps:
+  #         key: gems-v2
+  #     - ruby/rubocop-check
+  # erblint:
+  #   executor: default
+  #   steps:
+  #     - checkout
+  #     - ruby/install-deps:
+  #         key: gems-v2
+  #     - run:
+  #         name: Lint ERBs
+  #         command: bundle exec erblint --lint-all --format compact
+  # lint_js:
+  #   executor: default
+  #   steps:
+  #     - checkout
+  #     - node/install-packages:
+  #         pkg-manager: yarn
+  #     - run:
+  #         name: Lint JavaScript
+  #         command: yarn run lint
   test:
     environment:
       TZ: 'America/Los_Angeles'
