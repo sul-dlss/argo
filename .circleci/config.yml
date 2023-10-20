@@ -79,8 +79,8 @@ executors:
         <<: *ruby_envs
       - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
-      - image: solr:8.11.2
-        command: bin/solr -cloud -noprompt -f
+      - image: suldss/argo-solr
+        command: server/scripts/ci-start.sh
         name: solr
       - image: rabbitmq:3
         name: rabbitmq
