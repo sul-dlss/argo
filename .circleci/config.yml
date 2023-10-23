@@ -18,39 +18,6 @@ references:
     environment:
       POSTGRES_DB: dor-services-app
       POSTGRES_PASSWORD: sekret
-
-commands:
-  configure_solr:
-    description: Installs a solr core into a running Solr docker container.
-    parameters:
-      core_name:
-        default: argo
-        type: string
-      solr_config_path:
-        default: solr/config
-        type: string
-      solr_host:
-        default: 'solr'
-        type: string
-      solr_port:
-        default: '8983'
-        type: string
-    steps:
-      - run:
-          command: >
-            cd << parameters.solr_config_path >>
-
-            zip -1 -r solr_config.zip ./*
-
-            curl -H "Content-type:application/octet-stream" --data-binary
-            @solr_config.zip "http://solr:SolrRocks@<< parameters.solr_host >>:<< parameters.solr_port
-            >>/solr/admin/configs?action=UPLOAD&name=solrconfig"
-
-            curl -H 'Content-type: application/json' http://solr:SolrRocks@<< parameters.solr_host >>:<<
-            parameters.solr_port >>/api/collections/ -d '{create: {name: <<
-            parameters.core_name >>, config: solrconfig, numShards: 1}}'
-          name: Load config into solr
-
 executors:
   default:
     parameters:
@@ -76,30 +43,17 @@ executors:
         <<: *ruby_envs
       - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
-      - image: zookeeper:3.9.1
-        name: zookeeper
-      - image: solr:8.11.2
-        name: solr
-        # In order to have access to Solr contrib/analysis-extras/lib etc. for the ICU tokenizers and filters,
-        # Solr 8 Cloud requires permissions to add a collection to Zookeeper. This is kludgy but it works.
-        # It would be a lot easier if Circle's docker executor allowed us to use a mounted volumes for the permissions,
-        # like we do for our local docker compose setup.
-        command: [
-          'sh',
-          '-c',
-          'wget -O /tmp/security.json "https://gist.githubusercontent.com/eliotjordan/a27be341dc2e7a532bad99203e0f55b7/raw/5866efab9242f953764c1b03d17763309e22948f/security.json" && server/scripts/cloud-scripts/zkcli.sh -zkhost zookeeper:2181 -cmd putfile /security.json /tmp/security.json && bin/solr -cloud -noprompt -f -z zookeeper:2181',
-        ]
       - image: rabbitmq:3
         name: rabbitmq
       - image: suldlss/dor-indexing-app:latest
         name: dor-indexing-app
         environment:
-          SOLR_URL: http://solr:SolrRocks@solr:8983/solr/argo
-          SETTINGS__SOLR__URL: http://solr:SolrRocks@solr:8983/solr/argo
+          SOLR_URL: http://solr:8983/solr/argo
+          SETTINGS__SOLR__URL: http://solr:8983/solr/argo
           SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
           # To generate the token: docker-compose run dor-services-app rake generate_token
           SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-          SETTINGS__SOLRIZER_URL: http://solr:SolrRocks@solr:8983/solr/argo
+          SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
           SETTINGS__WORKFLOW_URL: http://workflow:3000
       - image: suldlss/dor-indexing-app:latest
         name: dor-indexing-workers
@@ -110,12 +64,12 @@ executors:
             'timeout 30 docker/wait-port.sh rabbitmq 5672 ; bin/rake rabbitmq:setup sneakers:run',
           ]
         environment:
-          SOLR_URL: http://solr:SolrRocks@solr:8983/solr/argo
-          SETTINGS__SOLR__URL: http://solr:SolrRocks@solr:8983/solr/argo
+          SOLR_URL: http://solr:8983/solr/argo
+          SETTINGS__SOLR__URL: http://solr:8983/solr/argo
           SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
           # To generate the token: docker-compose run dor-services-app rake generate_token
           SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-          SETTINGS__SOLRIZER_URL: http://solr:SolrRocks@solr:8983/solr/argo
+          SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
           SETTINGS__WORKFLOW_URL: http://workflow:3000
           SETTINGS__RABBITMQ__HOSTNAME: rabbitmq
       - image: suldlss/dor-services-app:latest
@@ -127,9 +81,9 @@ executors:
           DATABASE_HOSTNAME: db
           DATABASE_PORT: 5432
           SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
-          SOLR_URL: http://solr:SolrRocks@solr:8983/solr/argo
+          SOLR_URL: http://solr:8983/solr/argo
           SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
-          SETTINGS__SOLR__URL: http://solr:SolrRocks@solr:8983/solr/argo
+          SETTINGS__SOLR__URL: http://solr:8983/solr/argo
           SETTINGS__SURI__URL: http://suri:3000
           SETTINGS__WORKFLOW_URL: http://workflow:3000
           SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
@@ -230,17 +184,24 @@ jobs:
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
       SETTINGS__REDIS_URL: redis://redis:6379/
       SETTINGS__SDR_API__URL: http://sdr-api:3000
-      SETTINGS__SOLRIZER_URL: http://solr:SolrRocks@solr:8983/solr/argo
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       TT: 1 # track templates
     executor: ruby_with_all_deps
     steps:
+      - setup_remote_docker
       - checkout
+      - run:
+          name: Build and run solr (using repo's solr configuration)
+          command: |
+            docker build -f docker/Dockerfile-solr -t "argo-solr:latest" .
+            network=`docker network ls --filter label=task-network --format "{{.ID}}"`
+            docker run -d --name solr -p 8983:8983 --network-alias solr --network $network argo-solr:latest
       - ruby/install-deps:
           key: gems-v2
       - node/install-packages:
-          pkg-manager: yarn
+          pkg-manager: yarn      
       # Check DB status
       - run:
           name: Wait for DB
@@ -252,8 +213,6 @@ jobs:
       - run:
           name: Build assets
           command: bin/rails assets:precompile
-      - configure_solr:
-          solr_config_path: solr_conf/conf
       - run:
           name: Set up CodeClimate
           command: |

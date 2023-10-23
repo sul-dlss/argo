@@ -1,0 +1,5 @@
+FROM solr:8.11.2
+
+COPY solr_conf/conf/* /myconfig/
+
+CMD ["solr-create", "-c", "argo", "-d", "/myconfig"]
