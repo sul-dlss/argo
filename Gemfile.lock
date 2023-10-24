@@ -188,7 +188,7 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (13.1.0)
+    dor-services-client (13.1.1)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.91.0)
       deprecation
