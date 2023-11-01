@@ -39,14 +39,14 @@ module BlacklightConfigHelper
         contributor_orcids_ssim
       ),
       facet: true,
-      "facet.mincount": 1,
-      "f.wf_wps_ssim.facet.limit": -1,
-      "f.wf_wsp_ssim.facet.limit": -1,
-      "f.wf_swp_ssim.facet.limit": -1,
-      "f.exploded_project_tag_ssim.facet.limit": -1,
-      "f.exploded_project_tag_ssim.facet.sort": 'index',
-      "f.exploed_nonproject_tag_ssim.facet.limit": -1,
-      "f.exploded_nonproject_tag_ssim.facet.sort": 'index'
+      'facet.mincount': 1,
+      'f.wf_wps_ssim.facet.limit': -1,
+      'f.wf_wsp_ssim.facet.limit': -1,
+      'f.wf_swp_ssim.facet.limit': -1,
+      'f.exploded_project_tag_ssim.facet.limit': -1,
+      'f.exploded_project_tag_ssim.facet.sort': 'index',
+      'f.exploed_nonproject_tag_ssim.facet.limit': -1,
+      'f.exploded_nonproject_tag_ssim.facet.sort': 'index'
     }
   end
 end
