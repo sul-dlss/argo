@@ -70,7 +70,7 @@ RSpec.describe 'Reports from a search' do
     let(:csv) { "Druid,Purl,Source Id,Tags\nab123gg7777\nqh056qq6868" }
 
     it 'downloads valid CSV data for specific fields' do
-      get '/report/download?fields=druid,purl,source_id_ssim,tag_ssim'
+      get '/report/download?fields=druid,purl,source_id_ssi,tag_ssim'
 
       expect(response).to have_http_status(:ok)
       data = CSV.parse(response.body)

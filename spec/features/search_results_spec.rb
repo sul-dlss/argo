@@ -54,7 +54,7 @@ RSpec.describe 'Search results' do
                     SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
                     SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
                     :project_tag_ssim => 'Fuller Slides',
-                    :source_id_ssim => 'fuller:M1090_S15_B02_F01_0126',
+                    :source_id_ssi => 'fuller:M1090_S15_B02_F01_0126',
                     :identifier_tesim => ['fuller:M1090_S15_B02_F01_0126',
                                           'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
                     :tag_ssim => ['Project : Fuller Slides', 'Registered By : renzo'])

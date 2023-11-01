@@ -58,7 +58,7 @@ class Report
       sort: false, default: false, width: 100
     },
     {
-      field: :source_id_ssim, label: 'Source ID',
+      field: :source_id_ssi, label: 'Source ID',
       sort: false, default: true, width: 100
     },
     {
@@ -250,7 +250,7 @@ class Report
     until @response.documents.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
-          druids << ("#{rec[:druid]}\t#{rec[:source_id_ssim]}")
+          druids << ("#{rec[:druid]}\t#{rec[:source_id_ssi]}")
         elsif opts[:tags].present?
           tags = ''
           rec[:tag_ssim]&.split(';')&.each do |tag|

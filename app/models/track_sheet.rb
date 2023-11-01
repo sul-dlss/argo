@@ -108,7 +108,7 @@ class TrackSheet
       table_data.push(["#{CatalogRecordId.label}:",
                        Array(doc[CatalogRecordId.index_field]).join(', ')])
     end
-    table_data.push(['Source ID:', Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
+    table_data.push(['Source ID:', doc['source_id_ssi']]) if doc['source_id_ssi'].present?
     table_data.push(['Barcode:', Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
     table_data.push(['Date Printed:', Time.zone.now.strftime('%c')])
     table_data

@@ -262,8 +262,8 @@ class CatalogController < ApplicationController
           identifier_tesim
           barcode_id_ssim
           folio_instance_hrid_ssim
-          source_id_ssi
           source_id_text_nostem_i^3
+          source_id_ssi
           previous_ils_ids_ssim
           doi_ssim
           contributor_orcids_ssim
