@@ -221,28 +221,55 @@ class CatalogController < ApplicationController
     # For comparison of search results with different Solr params:
     # if qt param is passed to Argo, we can also change the params we send to Solr.
     # This allows us to compare, e.g. search results with different Solr qf params.
-    # Request handlers can be wholly configured in Solr, in which case you can remove
-    # default_solr_params to use what is in the Solr configuration.
+    # Request handlers can be configured:
+    #  1. in Solr, in which case you can remove default_solr_params to use only
+    #     what is in the Solr configuration.
+    #  2. in Argo/Blacklight BUT the request handler (qt param) must match an existing request handler in Solr.
+    #  3. configured with url params, e.g. qt=wingnut BUT - if default_solr_params are in play,
+    #     you cannot override those params with url params, and the qt param value has to match an
+    #     existing request handler in Solr.
+    #  4. a combination of the above - some params can be configured in Solr, some in Argo/Blacklight, and some
+    #     in the url.
     if params.key?(:qt)
       blacklight_config.default_solr_params = {
         qt: params[:qt],
         defType: 'dismax',
         'q.alt': '*:*',
         qf: %(
-          id
-          collection_title_tesim
-          dor_id_tesim
-          identifier_tesim
-          obj_label_tesim
-          objectId_tesim
-          originInfo_place_placeTerm_tesim
-          originInfo_publisher_tesim
-          sw_display_title_tesim
-          source_id_ssim
+          sw_display_title_tesim^5
+          contributor_text_nostem_im^3
+          topic_tesim^2
+
+          exploded_project_tag_ssim^2
+          exploded_nonproject_tag_ssim
+          exploded_tag_ssim
           tag_ssim
-          topic_tesim
+
+          content_type_ssim
+          sw_format_ssim
+          object_type_ssim
+
+          descriptive_text_nostem_i
+          descriptive_tiv
+          descriptive_teiv
+
+          collection_title_tesim
+
+          id
+          objectId_tesim
+          identifier_ssim
+          identifier_tesim
+          barcode_id_ssim
+          folio_instance_hrid_ssim
+          source_id_ssi
+          source_id_text_nostem_i^3
+          previous_ils_ids_ssim
+          doi_ssim
+          contributor_orcids_ssim
         )
       }
+      # NOTE: if you want to use the qf in solrconfig.xml, you can delete the qf param here:
+      # blacklight_config.default_solr_params.delete(:qf) # use what is in solrconfig.xml for the request handler
     end
     super
   end
