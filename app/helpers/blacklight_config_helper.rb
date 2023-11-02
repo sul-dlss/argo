@@ -6,18 +6,38 @@ module BlacklightConfigHelper
       'q.alt': '*:*',
       defType: 'dismax',
       qf: %(
-        id
-        collection_title_tesim
-        dor_id_tesim
-        identifier_tesim
-        obj_label_tesim
-        objectId_tesim
+        sw_display_title_tesim^5
+        contributor_text_nostem_im^3
+        topic_tesim^2
+
+        tag_ssim
+
         originInfo_place_placeTerm_tesim
         originInfo_publisher_tesim
-        sw_display_title_tesim
+
+        content_type_ssim
+        sw_format_ssim
+        object_type_ssim
+
+        descriptive_text_nostem_i
+        descriptive_tiv
+        descriptive_teiv
+
+        collection_title_tesim
+
+        id
+        objectId_tesim
+        obj_label_tesim
+        identifier_ssim
+        identifier_tesim
+        barcode_id_ssim
+        folio_instance_hrid_ssim
         source_id_ssim
-        tag_ssim
-        topic_tesim
+        source_id_ssi
+        source_id_text_nostem_i^3
+        previous_ils_ids_ssim
+        doi_ssim
+        contributor_orcids_ssim
       ),
       facet: true,
       'facet.mincount': 1,
