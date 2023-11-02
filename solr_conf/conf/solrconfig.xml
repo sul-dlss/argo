@@ -35,16 +35,86 @@
       <str name="fl"> *, score</str>
 
       <str name="qf">
-        id
-        descriptive_tiv
-        descriptive_text_nostem_i
-        descriptive_teiv
+        sw_display_title_tesim^5
+        contributor_text_nostem_im^3
+        topic_tesim^2
+
+        tag_ssim
+
+        originInfo_place_placeTerm_tesim
+        originInfo_publisher_tesim
+
+        content_type_ssim
+        sw_format_ssim
         object_type_ssim
+
+        descriptive_text_nostem_i
+        descriptive_tiv
+        descriptive_teiv
+
+        collection_title_tesim
+
+        id
+        objectId_tesim
+        obj_label_tesim
+        identifier_ssim
+        identifier_tesim
+        barcode_id_ssim
+        folio_instance_hrid_ssim
+        source_id_ssim^3
+        source_id_ssi
+        source_id_text_nostem_i^3
+        previous_ils_ids_ssim
+        doi_ssim
+        contributor_orcids_ssim
       </str>
-      <str name="pf">
-        descriptive_tiv^10
+      <str name="pf">  <!-- (defType dismax, edismax: phrase boost within result set) -->
+        sw_display_title_tesim^25
+        contributor_text_nostem_im^15
+        topic_tesim^10
+
         descriptive_text_nostem_i^5
-        descriptive_teiv^3
+        descriptive_tiv^3
+        descriptive_teiv^2
+
+        collection_title_tesim^5
+
+        objectId_tesim^5
+        obj_label_tesim^5
+        identifier_tesim^5
+        source_id_text_nostem_i^5
+      </str>
+      <str name="pf3">  <!-- (defType edismax: token trigrams boost within result set) -->
+        sw_display_title_tesim^15
+        contributor_text_nostem_im^9
+        topic_tesim^6
+
+        descriptive_text_nostem_i^15
+        descriptive_tiv^9
+        descriptive_teiv^6
+
+        collection_title_tesim^3
+
+        objectId_tesim^3
+        obj_label_tesim^3
+        identifier_tesim^3
+        source_id_text_nostem_i^3
+      </str>
+      <str name="pf2"> <!--(defType edismax: token bigrams boost within result set) -->
+        sw_display_title_tesim^10
+        contributor_text_nostem_im^6
+        topic_tesim^4
+
+        descriptive_text_nostem_i^10
+        descriptive_tiv^6
+        descriptive_teiv^4
+
+        collection_title_tesim^2
+
+        objectId_tesim^2
+        obj_label_tesim^2
+        identifier_tesim^2
+        source_id_text_nostem_i^2
       </str>
 
       <str name="facet">true</str>
@@ -76,26 +146,27 @@
 
       <str name="qf">
         sw_display_title_tesim^5
-        sw_author_tesim^3
+        contributor_text_nostem_im^3
         topic_tesim^2
 
-        exploded_project_tag_ssim^2
-        exploded_nonproject_tag_ssim
-        exploded_tag_ssim
         tag_ssim
+
+        originInfo_place_placeTerm_tesim
+        originInfo_publisher_tesim
 
         content_type_ssim
         sw_format_ssim
         object_type_ssim
 
-        descriptive_tiv
         descriptive_text_nostem_i
+        descriptive_tiv
         descriptive_teiv
 
         collection_title_tesim
 
         id
         objectId_tesim
+        obj_label_tesim
         identifier_ssim
         identifier_tesim
         barcode_id_ssim
@@ -107,48 +178,51 @@
         doi_ssim
         contributor_orcids_ssim
       </str>
-      <str name="pf">  <!-- (phrase boost within result set) -->
+      <str name="pf">  <!-- (defType dismax, edismax: phrase boost within result set) -->
         sw_display_title_tesim^25
-        sw_author_tesim^15
+        contributor_text_nostem_im^15
         topic_tesim^10
 
-        descriptive_tiv^5
-        descriptive_text_nostem_i^3
+        descriptive_text_nostem_i^5
+        descriptive_tiv^3
         descriptive_teiv^2
 
         collection_title_tesim^5
 
         objectId_tesim^5
+        obj_label_tesim^5
         identifier_tesim^5
         source_id_text_nostem_i^5
       </str>
-      <str name="pf3">  <!-- (token trigrams boost within result set) -->
+      <str name="pf3">  <!-- (defType edismax: token trigrams boost within result set) -->
         sw_display_title_tesim^15
-        sw_author_tesim^9
+        contributor_text_nostem_im^9
         topic_tesim^6
 
-        descriptive_tiv^15
-        descriptive_text_nostem_i^9
+        descriptive_text_nostem_i^15
+        descriptive_tiv^9
         descriptive_teiv^6
 
         collection_title_tesim^3
 
         objectId_tesim^3
+        obj_label_tesim^3
         identifier_tesim^3
         source_id_text_nostem_i^3
       </str>
-      <str name="pf2"> <!--(token bigrams boost within result set) -->
+      <str name="pf2"> <!--(defType edismax: token bigrams boost within result set) -->
         sw_display_title_tesim^10
-        sw_author_tesim^6
+        contributor_text_nostem_im^6
         topic_tesim^4
 
-        descriptive_tiv^10
-        descriptive_text_nostem_i^6
+        descriptive_text_nostem_i^10
+        descriptive_tiv^6
         descriptive_teiv^4
 
         collection_title_tesim^2
 
         objectId_tesim^2
+        obj_label_tesim^2
         identifier_tesim^2
         source_id_text_nostem_i^2
       </str>
