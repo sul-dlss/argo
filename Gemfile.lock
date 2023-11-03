@@ -138,13 +138,14 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    cocina-models (0.91.4)
+    cocina-models (0.92.0)
       activesupport
       deprecation
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
       edtf
       equivalent-xml
+      i18n
       jsonpath
       nokogiri
       openapi3_parser
@@ -188,9 +189,9 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (13.1.1)
+    dor-services-client (13.2.0)
       activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.91.0)
+      cocina-models (~> 0.92.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -420,7 +421,7 @@ GEM
     public_suffix (5.0.3)
     puma (5.6.7)
       nio4r (~> 2.0)
-    racc (1.7.1)
+    racc (1.7.2)
     rack (2.2.8)
     rack-mini-profiler (3.1.1)
       rack (>= 1.2.0)
@@ -549,9 +550,9 @@ GEM
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     scrub_rb (1.0.1)
-    sdr-client (2.6.0)
+    sdr-client (2.7.0)
       activesupport
-      cocina-models (~> 0.91.0)
+      cocina-models (~> 0.92.0)
       config
       dry-monads
       faraday (>= 0.16)
