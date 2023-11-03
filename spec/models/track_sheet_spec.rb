@@ -172,7 +172,7 @@ RSpec.describe TrackSheet do
     context 'with a source_id' do
       let(:solr_doc) do
         base_solr_doc.merge({
-                              'source_id_ssim' => ['source:123']
+                              'source_id_ssi' => 'source:123'
                             })
       end
 

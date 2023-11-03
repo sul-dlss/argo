@@ -39,7 +39,7 @@ class SolrDocument
   FIELD_LICENSE = 'use_license_machine_ssi'
   FIELD_PROJECT_TAG = 'project_tag_ssim'
   FIELD_TAGS = 'tag_ssim'
-  FIELD_SOURCE_ID = 'source_id_ssim'
+  FIELD_SOURCE_ID = 'source_id_ssi'
   FIELD_BARCODE_ID = 'barcode_id_ssim'
   FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
   FIELD_CONSTITUENTS = 'has_constituents_ssim'

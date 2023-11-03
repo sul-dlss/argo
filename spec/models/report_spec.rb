@@ -81,7 +81,7 @@ RSpec.describe Report do
         :druid,
         :purl,
         :citation,
-        :source_id_ssim,
+        :source_id_ssi,
         SolrDocument::FIELD_APO_TITLE,
         :processing_status_text_ssi,
         :published_earliest_dttsi,
@@ -146,7 +146,7 @@ RSpec.describe Report do
     end
 
     it 'returns druids and source ids' do
-      doc = { id: 'druid:qq613vj0238', source_id_ssim: 'sul:36105011952764' }
+      doc = { id: 'druid:qq613vj0238', source_id_ssi: 'sul:36105011952764' }
       service = instance_double(Blacklight::SearchService)
       allow(Blacklight::SearchService).to receive(:new).and_return(service)
       allow(service).to receive(:search_results).and_return(
