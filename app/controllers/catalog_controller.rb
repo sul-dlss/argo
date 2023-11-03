@@ -54,14 +54,16 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_ssim', label: 'Tags', link_to_facet: true
     config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
-    # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
-    # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
-    # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim', label: 'Tag', limit: 9999,
-                                                component: LazyTagFacetComponent,
-                                                unless: lambda { |controller, _config, _response|
-                                                          controller.params[:no_tags]
-                                                        }
+    # exploded_project_tag_ssim indexes all project tag prefixes for hierarchical facet display, whereas
+    #   project tag_ssim only indexes whole tags
+    config.add_facet_field 'exploded_project_tag_ssim', label: 'Project', limit: 9999,
+                                                        component: LazyProjectTagFacetComponent,
+                                                        unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    # exploded_nonproject_tag_ssim indexes all tag prefixes, except project tags, for hierarchical facet display,
+    #   whereas tag_ssim only indexes whole tags.
+    config.add_facet_field 'exploded_nonproject_tag_ssim', label: 'Tag', limit: 9999,
+                                                           component: LazyNonprojectTagFacetComponent,
+                                                           unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10, home: false
@@ -199,7 +201,8 @@ class CatalogController < ApplicationController
         'wf_wps' => [['ssim'], ':'],
         'wf_wsp' => [['ssim'], ':'],
         'wf_swp' => [['ssim'], ':'],
-        'exploded_tag' => [['ssim'], ':']
+        'exploded_nonproject_tag' => [['ssim'], ':'],
+        'exploded_project_tag' => [['ssim'], ':']
       }
     }
 
@@ -275,12 +278,20 @@ class CatalogController < ApplicationController
     super
   end
 
-  def lazy_tag_facet
+  def lazy_nonproject_tag_facet
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('exploded_tag_ssim')
+    facet_config = facet_configuration_for_field('exploded_nonproject_tag_ssim')
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
-    render partial: 'lazy_tag_facet'
+    render partial: 'lazy_nonproject_tag_facet'
+  end
+
+  def lazy_project_tag_facet
+    (response,) = search_service.search_results
+    facet_config = facet_configuration_for_field('exploded_project_tag_ssim')
+    display_facet = response.aggregations[facet_config.field]
+    @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
+    render partial: 'lazy_project_tag_facet'
   end
 
   def show

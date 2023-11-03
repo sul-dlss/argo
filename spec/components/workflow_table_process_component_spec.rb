@@ -18,7 +18,8 @@ RSpec.describe WorkflowTableProcessComponent, type: :component do
             'wf_wps' => [['ssim'], ':'],
             'wf_wsp' => [['ssim'], ':'],
             'wf_swp' => [['ssim'], ':'],
-            'exploded_tag' => [['ssim'], ':']
+            'exploded_nonproject_tag' => [['ssim'], ':'],
+            'exploded_project_tag' => [['ssim'], ':']
           }
         }
       end

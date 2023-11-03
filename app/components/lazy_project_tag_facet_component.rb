@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class LazyTagFacetComponent < ViewComponent::Base
+class LazyProjectTagFacetComponent < ViewComponent::Base
   def initialize(**); end
 end

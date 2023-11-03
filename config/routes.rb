@@ -63,7 +63,8 @@ Rails.application.routes.draw do
   resource :catalog, only: [:index], controller: 'catalog', path: '/catalog' do
     concerns :searchable
     member do
-      get 'lazy_tag_facet'
+      get 'lazy_nonproject_tag_facet'
+      get 'lazy_project_tag_facet'
     end
   end
 
