@@ -2,7 +2,8 @@
 
 class StructureSerializer
   HEADERS = %w[druid resource_label resource_type sequence filename file_label publish
-               shelve preserve rights_view rights_download rights_location mimetype role].freeze
+               shelve preserve rights_view rights_download rights_location mimetype
+               role file_language].freeze
 
   def self.as_csv(druid, structural)
     new(druid, structural).as_csv
@@ -28,7 +29,8 @@ class StructureSerializer
         yield [@druid, resource.label, type(resource), n, file.filename, file.label,
                to_yes_no(file.administrative.publish), to_yes_no(file.administrative.shelve),
                to_yes_no(file.administrative.sdrPreserve), file.access.view,
-               file.access.download, file.access.location, file.hasMimeType, file.use]
+               file.access.download, file.access.location, file.hasMimeType, file.use,
+               file.languageTag]
       end
     end
   end

@@ -57,6 +57,7 @@ RSpec.describe StructureUpdater do
                     "label": "bb045jk9908_0001.tiff",
                     "filename": "bb045jk9908_0001.tiff",
                     "size": 22454748,
+                    "use": "master",
                     "version": 1,
                     "hasMimeType": "image/tiff",
                     "hasMessageDigests": [
@@ -134,6 +135,7 @@ RSpec.describe StructureUpdater do
                     "size": 19962338,
                     "version": 1,
                     "hasMimeType": "image/tiff",
+                    "languageTag": "it-IT",
                     "hasMessageDigests": [
                       {
                         "type": "sha1",
@@ -206,11 +208,11 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that has file properties changed' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
-        #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/one,
-        #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription
-        #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,
-        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,location-based,location-based,music,image/four,
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language
+        #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/one,,en-US
+        #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription,
+        #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,,
+        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,location-based,location-based,music,image/four,,
       CSV
     end
 
@@ -237,8 +239,8 @@ RSpec.describe StructureUpdater do
          nil], ['world', 'world', nil], ['stanford', 'none', nil], %w[location-based location-based music]
       ]
 
-      use = new_files.map(&:use)
-      expect(use).to eq [nil, 'transcription', nil, nil]
+      expect(new_files.map(&:use)).to eq [nil, 'transcription', nil, nil]
+      expect(new_files.map(&:languageTag)).to eq ['en-US', nil, nil, nil]
     end
 
     it 'produces valid cocina' do

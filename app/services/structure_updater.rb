@@ -72,8 +72,10 @@ class StructureUpdater
 
   def update_file(existing_file, row)
     attributes = {
-      hasMimeType: row['mimetype'],
       label: row['file_label'],
+      hasMimeType: row['mimetype'],
+      use: row['role'],
+      languageTag: row['file_language'],
       administrative: existing_file.administrative.new(
         publish: row['publish'] == 'yes',
         shelve: row['shelve'] == 'yes',
@@ -89,7 +91,7 @@ class StructureUpdater
         }.compact
       )
     }
-    attributes[:use] = row['role'] if row['role'] # nil is not permitted
+
     existing_file.new(**attributes)
   end
 
