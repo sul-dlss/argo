@@ -240,10 +240,10 @@ class CatalogController < ApplicationController
           contributor_text_nostem_im^3
           topic_tesim^2
 
-          exploded_project_tag_ssim^2
-          exploded_nonproject_tag_ssim
-          exploded_tag_ssim
           tag_ssim
+
+          originInfo_place_placeTerm_tesim
+          originInfo_publisher_tesim
 
           content_type_ssim
           sw_format_ssim
@@ -257,6 +257,7 @@ class CatalogController < ApplicationController
 
           id
           objectId_tesim
+          obj_label_tesim
           identifier_ssim
           identifier_tesim
           barcode_id_ssim

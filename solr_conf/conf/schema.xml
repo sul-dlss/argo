@@ -8,37 +8,61 @@
 
   <fields>
     <field name="id" type="string" stored="true" indexed="true" multiValued="false" required="true"/>
+    <!-- DEPRECATED: "long" is a Trie based field type; use solr.LongPointField class instead ... -->
     <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
+    <!-- DEPRECATED: "date" is a Trie based field type; use solr.DatePointField class instead ... -->
     <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
 
     <!-- NOTE:  not all possible Solr field types are represented in the dynamic fields -->
 
     <!-- string (_s...) -->
-    <dynamicField name="*_si"    type="string"    stored="false" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_sim"   type="string"    stored="false" indexed="true"  multiValued="true"/>
-    <dynamicField name="*_ss"    type="string"    stored="true" indexed="false" multiValued="false"/>
-    <dynamicField name="*_ssm"   type="string"    stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_ssi"   type="string"    stored="true" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_ssim"  type="string"    stored="true" indexed="true"  multiValued="true"/>
-    <dynamicField name="*_ssort" type="alphaSort" stored="false" indexed="true"  multiValued="false"/>
+    <!-- docValues true makes for faster facets, but more storage -->
+    <dynamicField name="*_si"     type="string"    stored="false" indexed="true"  multiValued="false"/>
+    <dynamicField name="*_sim"    type="string"    stored="false" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_ss"     type="string"    stored="true"  indexed="false" multiValued="false"/>
+    <dynamicField name="*_ssm"    type="string"    stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_ssi"    type="string"    stored="true"  indexed="true"  multiValued="false"/>
+    <dynamicField name="*_ssidv"  type="string"    stored="true"  indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_ssim"   type="string"    stored="true"  indexed="true"  multiValued="true"/>
+    <dynamicField name="*_ssimdv" type="string"    stored="true"  indexed="true"  multiValued="true"  docValues="true"/>
 
-    <!-- integer (_i...) -->
+    <!-- IntPointField integer (_ip...) (very efficient searches for specific values, or ranges of values) -->
+    <!-- docValues true makes for faster facets, but more storage -->
+    <dynamicField name="*_ipi"    type="intPoint" stored="false" indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_ipim"   type="intPoint" stored="false" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_ips"    type="intPoint" stored="true"  indexed="false" multiValued="false" docValues="true"/>
+    <dynamicField name="*_ipsm"   type="intPoint" stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_ipsi"   type="intPoint" stored="true"  indexed="true"  multiValued="false"/>
+    <dynamicField name="*_ipsidv" type="intPoint" stored="true"  indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_ipsim"  type="intPoint" stored="true"  indexed="true"  multiValued="true"/>
+    <!-- DEPRECATED: use IntPointField (_ip...) instead as type int is TrieInteger integer (_i...) -->
     <dynamicField name="*_ii"   type="int" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_iim"  type="int" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_is"   type="int" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_ism"  type="int" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_isi"  type="int" stored="true" indexed="true"  multiValued="false"/>
     <dynamicField name="*_isim" type="int" stored="true" indexed="true"  multiValued="true"/>
-
-    <!-- trie integer (_it...) (for faster range queries) -->
+    <!-- DEPRECATED: trie integer (_it...) (for faster range queries) -->
     <dynamicField name="*_iti"   type="tint" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_itim"  type="tint" stored="false" indexed="true"  multiValued="true"/>
-    <dynamicField name="*_its"   type="tint" stored="true" indexed="false" multiValued="false"/>
-    <dynamicField name="*_itsm"  type="tint" stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_itsi"  type="tint" stored="true" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_itsim" type="tint" stored="true" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_its"   type="tint" stored="true"  indexed="false" multiValued="false"/>
+    <dynamicField name="*_itsm"  type="tint" stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_itsi"  type="tint" stored="true"  indexed="true"  multiValued="false"/>
+    <dynamicField name="*_itsim" type="tint" stored="true"  indexed="true"  multiValued="true"/>
 
-    <!-- date (_dt...) -->
+    <!-- DatePointField (_dtp...) (very efficient searches for specific values, or ranges of values) -->
+    <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
+         Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z -->
+    <!-- docValues true makes for faster facets, but more storage -->
+    <dynamicField name="*_dtpi"     type="datePoint" stored="false" indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_dtpim"    type="datePoint" stored="false" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_dtps"     type="datePoint" stored="true"  indexed="false" multiValued="false" docValues="true"/>
+    <dynamicField name="*_dtpsm"    type="datePoint" stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_dtpsi"    type="datePoint" stored="true"  indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_dtpsidv"  type="datePoint" stored="true"  indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_dtpsim"   type="datePoint" stored="true"  indexed="true"  multiValued="true"/>
+    <dynamicField name="*_dtpsimdv" type="datePoint" stored="true"  indexed="true"  multiValued="true"  docValues="true"/>
+    <!-- DEPRECATED: (_dt...) type date is a TrieDate -->
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
          Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z -->
     <dynamicField name="*_dti"   type="date" stored="false" indexed="true"  multiValued="false"/>
@@ -47,8 +71,7 @@
     <dynamicField name="*_dtsm"  type="date" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_dtsi"  type="date" stored="true" indexed="true"  multiValued="false"/>
     <dynamicField name="*_dtsim" type="date" stored="true" indexed="true"  multiValued="true"/>
-
-    <!-- trie date (_dtt...) (for faster range queries) -->
+    <!-- DEPRECATED: trie date (_dtt...) (for faster range queries) -->
     <dynamicField name="*_dtti"   type="tdate" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_dttim"  type="tdate" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_dtts"   type="tdate" stored="true" indexed="false" multiValued="false"/>
@@ -56,31 +79,21 @@
     <dynamicField name="*_dttsi"  type="tdate" stored="true" indexed="true"  multiValued="false"/>
     <dynamicField name="*_dttsim" type="tdate" stored="true" indexed="true"  multiValued="true"/>
 
-    <!-- long (_l...) -->
-    <dynamicField name="*_li"   type="long" stored="false" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_lim"  type="long" stored="false" indexed="true"  multiValued="true"/>
-    <dynamicField name="*_ls"   type="long" stored="true" indexed="false" multiValued="false"/>
-    <dynamicField name="*_lsm"  type="long" stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_lsi"  type="long" stored="true" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_lsim" type="long" stored="true" indexed="true"  multiValued="true"/>
-
-    <!-- trie long (_lt...) (for faster range queries) -->
-    <dynamicField name="*_lti"   type="tlong" stored="false" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_ltim"  type="tlong" stored="false" indexed="true"  multiValued="true"/>
-    <dynamicField name="*_lts"   type="tlong" stored="true" indexed="false" multiValued="false"/>
-    <dynamicField name="*_ltsm"  type="tlong" stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_ltsi"  type="tlong" stored="true" indexed="true"  multiValued="false"/>
-    <dynamicField name="*_ltsim" type="tlong" stored="true" indexed="true"  multiValued="true"/>
-
-    <!-- double (_db...) -->
+    <!-- DoublePointField (_dbp...) (very efficient searches for specific values, or ranges of values) -->
+    <dynamicField name="*_dbpi"   type="doublePoint" stored="false" indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_dbpim"  type="doublePoint" stored="false" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_dbps"   type="doublePoint" stored="true"  indexed="false" multiValued="false" docValues="true"/>
+    <dynamicField name="*_dbpsm"  type="doublePoint" stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_dbpsi"  type="doublePoint" stored="true"  indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_dbpsim" type="doublePoint" stored="true"  indexed="true"  multiValued="true"/>
+    <!-- DEPRECATED: double is a TrieDouble (_db...) -->
     <dynamicField name="*_dbi"   type="double" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_dbim"  type="double" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_dbs"   type="double" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_dbsm"  type="double" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_dbsi"  type="double" stored="true" indexed="true"  multiValued="false"/>
     <dynamicField name="*_dbsim" type="double" stored="true" indexed="true"  multiValued="true"/>
-
-    <!-- trie double (_dbt...) (for faster range queries) -->
+    <!-- DEPRECATED: trie double (_dbt...) (for faster range queries) -->
     <dynamicField name="*_dbti"   type="tdouble" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_dbtim"  type="tdouble" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_dbts"   type="tdouble" stored="true" indexed="false" multiValued="false"/>
@@ -93,7 +106,18 @@
     <dynamicField name="*_bs"  type="boolean" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_bsi" type="boolean" stored="true" indexed="true"  multiValued="false"/>
 
-    <!-- text (_t...) -->
+    <!-- English text (_ten...) -->
+    <dynamicField name="*_teni"    type="textEnglish" stored="false" indexed="true"  multiValued="false"/>
+    <dynamicField name="*_tenim"   type="textEnglish" stored="false" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_tens"    type="textEnglish" stored="true"  indexed="false" multiValued="false"/>
+    <dynamicField name="*_tensm"   type="textEnglish" stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_tensi"   type="textEnglish" stored="true"  indexed="true"  multiValued="false"/>
+    <dynamicField name="*_tensim"  type="textEnglish" stored="true"  indexed="true"  multiValued="true"/>
+    <dynamicField name="*_teniv"   type="textEnglish" stored="false" indexed="true"  multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
+    <dynamicField name="*_tenimv"  type="textEnglish" stored="false" indexed="true"  multiValued="true"  termVectors="true" termPositions="true" termOffsets="true"/>
+    <dynamicField name="*_tensiv"  type="textEnglish" stored="true"  indexed="true"  multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
+    <dynamicField name="*_tensimv" type="textEnglish" stored="true"  indexed="true"  multiValued="true"  termVectors="true" termPositions="true" termOffsets="true"/>
+    <!-- DEPRECATED: use textEnglish (_ten...) or textUnstemmed (..text_unstemmed...) instead -->
     <dynamicField name="*_ti"    type="text" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_tim"   type="text" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_ts"    type="text" stored="true" indexed="false" multiValued="false"/>
@@ -104,8 +128,7 @@
     <dynamicField name="*_timv"  type="text" stored="false" indexed="true"  multiValued="true"  termVectors="true" termPositions="true" termOffsets="true"/>
     <dynamicField name="*_tsiv"  type="text" stored="true" indexed="true"  multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
     <dynamicField name="*_tsimv" type="text" stored="true" indexed="true"  multiValued="true"  termVectors="true" termPositions="true" termOffsets="true"/>
-
-    <!-- English text (_te...) -->
+    <!-- DEPRECATED: text_en is a deprecated type -->
     <dynamicField name="*_tei"    type="text_en" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_teim"   type="text_en" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_tes"    type="text_en" stored="true" indexed="false" multiValued="false"/>
@@ -117,19 +140,27 @@
     <dynamicField name="*_tesiv"  type="text_en" stored="true" indexed="true"  multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
     <dynamicField name="*_tesimv" type="text_en" stored="true" indexed="true"  multiValued="true"  termVectors="true" termPositions="true" termOffsets="true"/>
 
+    <!-- Text tokenized without stemming -->
+    <dynamicField name="*_text_unstemmed_i"  type="textUnstemmed" indexed="true"  stored="false" multiValued="false"/>
+    <dynamicField name="*_text_unstemmed_im" type="textUnstemmed" indexed="true"  stored="false" multiValued="true"/>
+    <!-- DEPRECATED:  textNoStem is a deprecated type -->
     <dynamicField name="*_text_nostem_i"  type="textNoStem" indexed="true"  stored="false" multiValued="false"/>
-    <dynamicField name="*_text_nostem_im"  type="textNoStem" indexed="true"  stored="false" multiValued="true"/>
+    <dynamicField name="*_text_nostem_im" type="textNoStem" indexed="true"  stored="false" multiValued="true"/>
 
-    <dynamicField name="random*" type="rand" />
-
-    <dynamicField name="*_sort"    type="alphaSort" indexed="true"  stored="false" multiValued="false" />
-    <dynamicField name="*_dt_sort" type="tdate"     indexed="true"  stored="false" multiValued="false" />
+    <!-- Text tokenized without stemming but left and right anchored, for "exactish" matches -->
+    <dynamicField name="*_text_anchored_i"  type="textAnchored" indexed="true"  stored="false" multiValued="false"/>
+    <dynamicField name="*_text_anchored_im" type="textAnchored" indexed="true"  stored="false" multiValued="true"/>
   </fields>
 
   <types>
     <fieldType name="string"  class="solr.StrField" sortMissingLast="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
-    <fieldType name="rand"    class="solr.RandomSortField" omitNorms="true"/>
+
+    <fieldType name="intPoint" class="solr.IntPointField" />
+    <fieldType name="datePoint" class="solr.DatePointField" />
+    <fieldType name="doublePoint" class="solr.DoublePointField" />
+
+    <!-- DEPRECATED: All Trie* numeric and date field types have been deprecated in favor of *Point field types. -->
 
     <!-- Default numeric field types.  -->
     <fieldType name="int"     class="solr.TrieIntField"    precisionStep="0" positionIncrementGap="0"/>
@@ -140,7 +171,6 @@
     <!-- trie numeric field types for faster range queries -->
     <fieldType name="tint"    class="solr.TrieIntField"    precisionStep="8" positionIncrementGap="0"/>
     <fieldType name="tfloat"  class="solr.TrieFloatField"  precisionStep="8" positionIncrementGap="0"/>
-    <fieldType name="tlong"   class="solr.TrieLongField"   precisionStep="8" positionIncrementGap="0"/>
     <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
@@ -150,6 +180,86 @@
     <!-- A Trie based date field for faster date range queries and date faceting. -->
     <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
 
+   <!-- Text stemmed for English -->
+    <fieldtype name="textEnglish" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+      <analyzer type="index">
+        <!-- remove stand-alone punctuation, which gets dropped by the WDGFF but an empty hole is left in the position and screws up phrase searches -->
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\p{Punct}+)\s+" replacement=" " />
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC_Casefold, diacritics removed -->
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+          splitOnCaseChange="1" generateWordParts="1" catenateWords="1"
+          splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1"
+          catenateAll="0" preserveOriginal="0" stemEnglishPossessive="1" />
+        <filter class="solr.FlattenGraphFilterFactory"/>
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+        <filter class="solr.SnowballPorterFilterFactory" language="English"/>
+      </analyzer>
+      <analyzer type="query">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\p{Punct}+)\s+" replacement=" " />
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+          splitOnCaseChange="1" generateWordParts="1" catenateWords="1"
+          splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1"
+          catenateAll="0" preserveOriginal="0" stemEnglishPossessive="1" />
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+        <filter class="solr.SnowballPorterFilterFactory" language="English"/>
+      </analyzer>
+    </fieldtype>
+
+    <!-- Text tokenized and case folded but not stemmed -->
+    <fieldtype name="textUnstemmed" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+      <analyzer type="index">
+        <!-- for whitespace separated chars that will be processed as their own token stream at query time, e.g. in 'felines : warm and fuzzy' -->
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\p{Punct}+)\s+" replacement=" " />
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC_Casefold, diacritics removed -->
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+          splitOnCaseChange="1" generateWordParts="1" catenateWords="1"
+          splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1"
+          catenateAll="0" preserveOriginal="0" stemEnglishPossessive="0" />
+        <filter class="solr.FlattenGraphFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\p{Punct}+)\s+" replacement=" " />
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+          splitOnCaseChange="1" generateWordParts="1" catenateWords="1"
+          splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1"
+          catenateAll="0" preserveOriginal="0" stemEnglishPossessive="0" />
+      </analyzer>
+    </fieldtype>
+
+    <!-- Left and right anchored tokenized text, without stemming, for "exactish" matches -->
+    <fieldtype name="textAnchored" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+      <analyzer type="index">
+        <!-- for whitespace separated chars that will be processed as their own token stream at query time, e.g. in 'felines : warm and fuzzy' -->
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\p{Punct}+)\s+" replacement=" " />
+        <!-- anchor beginning and ending of field value, removing trailing chars -->
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="^\s*(.*[\S&amp;&amp;[^\.\,:;/=&lt;&gt;\(\)\[\]\&amp;\|]])[\s\.\,:;/=&lt;&gt;\(\)\[\]\&amp;\|]*$" replacement="aaaaaa$1zzzzzz"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC_Casefold, diacritics removed -->
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+          splitOnCaseChange="1" generateWordParts="1" catenateWords="1"
+          splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1"
+          catenateAll="0" preserveOriginal="0" stemEnglishPossessive="1" />
+        <filter class="solr.FlattenGraphFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="\s+(\p{Punct}+)\s+" replacement=" " />
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="^\s*(.*[\S&amp;&amp;[^\.\,:;/=&lt;&gt;\(\)\[\]\&amp;\|]])[\s\.\,:;/=&lt;&gt;\(\)\[\]\&amp;\|]*$" replacement="aaaaaa$1zzzzzz"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+          splitOnCaseChange="1" generateWordParts="1" catenateWords="1"
+          splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1"
+          catenateAll="0" preserveOriginal="0" stemEnglishPossessive="1" />
+      </analyzer>
+    </fieldtype>
+
+    <!-- DEPRECATED:  use textUnstemmed or textEnglish. tokenized, case folded -->
     <fieldType name="text" class="solr.TextField" omitNorms="false">
       <analyzer>
         <tokenizer class="solr.ICUTokenizerFactory"/>
@@ -158,15 +268,7 @@
       </analyzer>
     </fieldType>
 
-    <!-- A text field that only splits on whitespace for exact matching of words -->
-    <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.TrimFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <!-- Analyzed Text, no Stemming or Synonyms -->
+   <!-- DEPRECATED:  use textUnstemmed, as WordDelimiterFilterFactory is deprecated.  Analyzed Text, no Stemming or Synonyms -->
     <fieldtype name="textNoStem" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
@@ -177,7 +279,7 @@
       </analyzer>
     </fieldtype>
 
-    <!-- A text field with defaults appropriate for English -->
+    <!-- DEPRECATED:  use textEnglish, as more aggressive stemming desired.  A text field with defaults appropriate for English -->
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
         <tokenizer class="solr.ICUTokenizerFactory"/>
@@ -188,14 +290,5 @@
         <filter class="solr.TrimFilterFactory"/>
       </analyzer>
     </fieldType>
-
-    <!-- single token analyzed text, for sorting.  Punctuation is significant. -->
-    <fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory" />
-        <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.TrimFilterFactory" />
-      </analyzer>
-    </fieldtype>
   </types>
 </schema>
