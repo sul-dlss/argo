@@ -346,7 +346,7 @@ GEM
       iso-639
       nokogiri (>= 1.6.6)
       nom-xml (~> 1.0)
-    mods_display (1.3.2)
+    mods_display (1.3.5)
       i18n
       rails_autolink
       stanford-mods (~> 3.3, >= 3.3.7)
@@ -355,7 +355,7 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.3.0)
     mysql2 (0.5.5)
-    net-imap (0.4.2)
+    net-imap (0.4.4)
       date
       net-protocol
     net-pop (0.1.2)
@@ -421,7 +421,7 @@ GEM
     public_suffix (5.0.3)
     puma (5.6.7)
       nio4r (~> 2.0)
-    racc (1.7.2)
+    racc (1.7.3)
     rack (2.2.8)
     rack-mini-profiler (3.1.1)
       rack (>= 1.2.0)
@@ -557,11 +557,11 @@ GEM
       dry-monads
       faraday (>= 0.16)
       launchy
-    selenium-webdriver (4.14.0)
+    selenium-webdriver (4.15.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (7.1.6)
+    sidekiq (7.2.0)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
