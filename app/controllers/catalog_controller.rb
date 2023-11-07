@@ -75,8 +75,6 @@ class CatalogController < ApplicationController
                                                                  more_limit: 9999, sort: 'index'
     config.add_facet_field 'nonhydrus_apo_title_ssim', label: 'Admin Policy', component: true, limit: 10,
                                                        more_limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim', label: 'Hydrus Admin Policy', component: true, limit: 10,
-                                                    more_limit: 9999, sort: 'index', home: false
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10,
                                                                 home: false
     config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10,
