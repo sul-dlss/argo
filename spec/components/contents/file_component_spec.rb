@@ -74,7 +74,7 @@ RSpec.describe Contents::FileComponent, type: :component do
       instance_double(Cocina::Models::FileAccess, view: 'stanford', location: 'hoover', download: 'location-based')
     end
 
-    it 'renders the donwload location' do
+    it 'renders the download location' do
       expect(rendered.to_html).to include 'Stanford'
       expect(rendered.to_html).to include 'hoover'
     end
