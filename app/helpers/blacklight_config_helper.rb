@@ -45,7 +45,7 @@ module BlacklightConfigHelper
       'f.wf_swp_ssim.facet.limit': -1,
       'f.exploded_project_tag_ssim.facet.limit': -1,
       'f.exploded_project_tag_ssim.facet.sort': 'index',
-      'f.exploed_nonproject_tag_ssim.facet.limit': -1,
+      'f.exploded_nonproject_tag_ssim.facet.limit': -1,
       'f.exploded_nonproject_tag_ssim.facet.sort': 'index'
     }
   end
