@@ -1,0 +1,6 @@
+<turbo-frame id="wps-workflow-facet" target="_top">
+  <%= render Blacklight::Hierarchy::FacetFieldListComponent.new(
+        facet_field: @facet_field_presenter,
+        layout: Blacklight::FacetFieldComponent
+      ) %>
+</turbo-frame>
