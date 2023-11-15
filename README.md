@@ -41,6 +41,7 @@ Brings up app at localhost:3000 with some test data:
 
 ```
 gem install foreman
+yarn install
 docker compose up -d
 docker compose stop web
 REMOTE_DEBUGGER=byebug bin/dev # omit REMOTE_DEBUGGER if you don't need a debugger
