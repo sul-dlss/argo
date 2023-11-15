@@ -56,12 +56,12 @@ class CatalogController < ApplicationController
 
     # exploded_project_tag_ssim indexes all project tag prefixes for hierarchical facet display, whereas
     #   project tag_ssim only indexes whole tags
-    config.add_facet_field 'exploded_project_tag_ssim', label: 'Project', limit: 9999,
+    config.add_facet_field 'exploded_project_tag_ssim', label: 'Project', limit: 100_000,
                                                         component: LazyProjectTagFacetComponent,
                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     # exploded_nonproject_tag_ssim indexes all tag prefixes, except project tags, for hierarchical facet display,
     #   whereas tag_ssim only indexes whole tags.
-    config.add_facet_field 'exploded_nonproject_tag_ssim', label: 'Tag', limit: 9999,
+    config.add_facet_field 'exploded_nonproject_tag_ssim', label: 'Tag', limit: 100_000,
                                                            component: LazyNonprojectTagFacetComponent,
                                                            unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
