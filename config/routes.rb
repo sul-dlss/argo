@@ -65,6 +65,7 @@ Rails.application.routes.draw do
     member do
       get 'lazy_nonproject_tag_facet'
       get 'lazy_project_tag_facet'
+      get 'lazy_wps_workflow_facet'
     end
   end
 

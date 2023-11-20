@@ -6,6 +6,29 @@ class CatalogController < ApplicationController
   include DateFacetConfigurations
 
   before_action :limit_facets_on_home_page, only: [:index]
+  before_action :adjust_lazy_limits, only: [:index]
+
+  # The subset of facets that are displayed on the home page.
+  # (Before a user clicks "Show more facets")
+  HOME_FACETS = [
+    'exploded_project_tag_ssim',
+    'exploded_nonproject_tag_ssim',
+    'objectType_ssim',
+    SolrDocument::FIELD_CONTENT_TYPE,
+    SolrDocument::FIELD_COLLECTION_TITLE,
+    'nonhydrus_apo_title_ssim',
+    'released_to_earthworks',
+    'released_to_searchworks',
+    'wf_wps_ssim',
+    'identifier_tesim'
+  ].map(&:to_s).freeze
+
+  # Facets that are configured for lazy loading.
+  LAZY_FACETS = %w[
+    exploded_project_tag_ssim
+    exploded_nonproject_tag_ssim
+    wf_wps_ssim
+  ].map(&:to_s).freeze
 
   # NOTE: any Solr parameters configured here will override parameters in the Solr configuration files.
   configure_blacklight do |config|
@@ -66,19 +89,17 @@ class CatalogController < ApplicationController
                                                            unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
-    config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10, home: false
-    config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10, home: false
+    config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10
+    config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10
     config.add_facet_field 'rights_descriptions_ssim', label: 'Access Rights', component: true, limit: 1000,
-                                                       sort: 'index', home: false
-    config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10, home: false
+                                                       sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
                                                                  more_limit: 9999, sort: 'index'
     config.add_facet_field 'nonhydrus_apo_title_ssim', label: 'Admin Policy', component: true, limit: 10,
                                                        more_limit: 9999, sort: 'index'
-    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10,
-                                                                home: false
-    config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10,
-                                                         home: false
+    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
+    config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10
     config.add_facet_field 'released_to_earthworks',
                            component: true,
                            query: {
@@ -127,32 +148,27 @@ class CatalogController < ApplicationController
                                fq: "-#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[* TO *]"
                              }
                            }
-    config.add_facet_field 'wf_wps_ssim', label: 'Workflows (WPS)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999
+    config.add_facet_field 'wf_wps_ssim', label: 'Workflows (WPS)', limit: 9999,
+                                          component: LazyWpsWorkflowFacetComponent
     config.add_facet_field 'wf_wsp_ssim', label: 'Workflows (WSP)',
                                           component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999,
-                                          home: false
+                                          limit: 9999
     config.add_facet_field 'wf_swp_ssim', label: 'Workflows (SWP)',
                                           component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999,
-                                          home: false
+                                          limit: 9999
 
-    config.add_facet_field 'metadata_source_ssim', label: 'Metadata Source', home: false,
-                                                   component: true
+    config.add_facet_field 'metadata_source_ssim', label: 'Metadata Source', component: true
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
-    config.add_facet_field SolrDocument::FIELD_CONSTITUENTS, label: 'Virtual Objects', home: false,
-                                                             component: true,
+    config.add_facet_field SolrDocument::FIELD_CONSTITUENTS, label: 'Virtual Objects', component: true,
                                                              query: {
                                                                has_constituents: { label: 'Virtual Objects', fq: "#{SolrDocument::FIELD_CONSTITUENTS}:*" }
                                                              }
 
     # This will help us find records that need to be fixed before we can move to cocina.
-    config.add_facet_field 'data_quality_ssim', label: 'Data Quality', home: false, component: true
+    config.add_facet_field 'data_quality_ssim', label: 'Data Quality', component: true
 
     config.add_facet_field 'identifiers', label: 'Identifiers',
                                           component: true,
@@ -163,23 +179,21 @@ class CatalogController < ApplicationController
                                             has_barcode: { label: 'Has barcode', fq: '+barcode_id_ssim:*' }
                                           }
 
-    config.add_facet_field 'empties', label: 'Empty Fields', home: false,
-                                      component: true,
+    config.add_facet_field 'empties', label: 'Empty Fields', component: true,
                                       query: {
                                         no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
                                                                        fq: '-mods_typeOfResource_ssim:*' },
                                         no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' }
                                       }
 
-    config.add_facet_field 'sw_format_ssim', label: 'SW Resource Type', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10, home: false
-    config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', component: true, limit: 10, home: false
-    config.add_facet_field 'sw_language_ssim', label: 'SW Language', component: true, limit: 10, home: false
-    config.add_facet_field 'mods_typeOfResource_ssim', label: 'MODS Resource Type', component: true, limit: 10,
-                                                       home: false
+    config.add_facet_field 'sw_format_ssim', label: 'SW Resource Type', component: true, limit: 10
+    config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10
+    config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10
+    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', component: true, limit: 10
+    config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10
+    config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', component: true, limit: 10
+    config.add_facet_field 'sw_language_ssim', label: 'SW Language', component: true, limit: 10
+    config.add_facet_field 'mods_typeOfResource_ssim', label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field 'is_governed_by_ssim', if: false
     config.add_facet_field 'is_member_of_collection_ssim', if: false
@@ -277,6 +291,7 @@ class CatalogController < ApplicationController
   end
 
   def lazy_nonproject_tag_facet
+    limit_facets_to(['exploded_nonproject_tag_ssim'])
     (response,) = search_service.search_results
     facet_config = facet_configuration_for_field('exploded_nonproject_tag_ssim')
     display_facet = response.aggregations[facet_config.field]
@@ -285,11 +300,23 @@ class CatalogController < ApplicationController
   end
 
   def lazy_project_tag_facet
+    limit_facets_to(['exploded_project_tag_ssim'])
+
     (response,) = search_service.search_results
     facet_config = facet_configuration_for_field('exploded_project_tag_ssim')
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_project_tag_facet'
+  end
+
+  def lazy_wps_workflow_facet
+    limit_facets_to(['wf_wps_ssim'])
+
+    (response,) = search_service.search_results
+    facet_config = facet_configuration_for_field('wf_wps_ssim')
+    display_facet = response.aggregations[facet_config.field]
+    @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
+    render partial: 'lazy_wps_workflow_facet'
   end
 
   def show
@@ -329,8 +356,20 @@ class CatalogController < ApplicationController
   def limit_facets_on_home_page
     return if has_search_parameters? || params[:all]
 
-    blacklight_config.facet_fields.each do |_k, v|
-      v.include_in_request = false if v.home == false
+    limit_facets_to(HOME_FACETS)
+  end
+
+  # Removes facets that won't be displayed for faster querying.
+  def limit_facets_to(fields)
+    blacklight_config.facet_fields.each do |field, params|
+      params.include_in_request = false unless fields.include?(field)
+    end
+  end
+
+  # Lowers the limits for facets that are configured for lazy loading for faster querying.
+  def adjust_lazy_limits
+    blacklight_config.facet_fields.each do |field, params|
+      params.limit = 1 if LAZY_FACETS.include?(field)
     end
   end
 
