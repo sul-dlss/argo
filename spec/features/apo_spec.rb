@@ -20,8 +20,8 @@ RSpec.describe 'Create an apo', :js do
   let(:agreement) { FactoryBot.create_for_repository(:agreement) }
   let!(:preexisting_collection) do
     FactoryBot.create_for_repository(:persisted_collection,
-                                     label: 'Another type of collection',
-                                     title: 'Another type of collection',
+                                     label: 'Another type of collection label',
+                                     title: 'Another type of collection title',
                                      admin_policy_id: agreement.administrative.hasAdminPolicy)
   end
 
@@ -111,10 +111,10 @@ RSpec.describe 'Create an apo', :js do
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
 
-    # Add testing for adding another default collection to this apo.
+    # Add another default collection to this apo.
     within_fieldset 'Default Collections' do
       expect(page).to have_text 'New Testing Collection'
-      expect(page).to have_text 'Another type of collection'
+      expect(page).to have_text 'Another type of collection title'
     end
   end
 end
