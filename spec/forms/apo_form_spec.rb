@@ -303,8 +303,8 @@ RSpec.describe ApoForm do
     let(:default_collection_druids) { administrative[:collectionsForRegistration] }
     let(:default_collection_objects) do
       default_collection_druids.map do |druid|
-        label = druid[-1].to_i.even? ? druid : druid.upcase # introduce arbitrary mixed case to test sorting
-        instance_double(SolrDocument, label:)
+        title = druid[-1].to_i.even? ? druid : druid.upcase # introduce arbitrary mixed case to test sorting
+        instance_double(SolrDocument, title:)
       end
     end
     let(:search_service_result) { [nil, default_collection_objects] }
@@ -315,6 +315,6 @@ RSpec.describe ApoForm do
                                               .and_return(search_service_result)
     end
 
-    it { is_expected.to eq(default_collection_objects.sort_by { |solr_doc| solr_doc.label.downcase }) }
+    it { is_expected.to eq(default_collection_objects.sort_by { |solr_doc| solr_doc.title.downcase }) }
   end
 end
