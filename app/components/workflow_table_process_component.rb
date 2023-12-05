@@ -59,7 +59,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
   end
 
   def facet_order(prefix)
-    param_name = "#{prefix}_facet_order".to_sym
+    param_name = "#{prefix}_facet_order".to_sym # rubocop:disable Lint/SymbolConversion
     params[param_name] || blacklight_config.facet_display[:hierarchy][prefix].first
   end
 

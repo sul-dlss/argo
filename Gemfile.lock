@@ -189,7 +189,7 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (13.3.0)
+    dor-services-client (13.4.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.93.0)
       deprecation
@@ -272,7 +272,7 @@ GEM
     faraday-retry (2.2.0)
       faraday (~> 2.0)
     ffi (1.16.3)
-    folio_client (0.14.0)
+    folio_client (0.15.0)
       activesupport (>= 4.2, < 8)
       dry-monads
       faraday
@@ -292,7 +292,7 @@ GEM
       activesupport (>= 5.0.0)
     jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
-    json (2.6.3)
+    json (2.7.0)
     jsonpath (1.1.5)
       multi_json
     kaminari (1.2.2)
@@ -355,7 +355,7 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.3.0)
     mysql2 (0.5.5)
-    net-imap (0.4.6)
+    net-imap (0.4.7)
       date
       net-protocol
     net-pop (0.1.2)
@@ -367,7 +367,7 @@ GEM
     net-smtp (0.4.0)
       net-protocol
     net-ssh (7.2.0)
-    nio4r (2.6.1)
+    nio4r (2.7.0)
     nokogiri (1.15.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -516,7 +516,7 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     rss (0.3.0)
       rexml
-    rubocop (1.57.2)
+    rubocop (1.58.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -524,7 +524,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.28.1, < 2.0)
+      rubocop-ast (>= 1.30.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.30.0)
@@ -581,7 +581,7 @@ GEM
     sshkit (1.21.6)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    stanford-mods (3.3.7)
+    stanford-mods (3.3.9)
       activesupport
       mods (~> 3.0, >= 3.0.4)
     super_diff (0.10.0)

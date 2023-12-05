@@ -57,7 +57,7 @@ class CollectionChangeSetPersister
   def update_identification(updated)
     return updated unless changed?(:source_id) || changed?(:catalog_record_ids)
 
-    identification_props = updated.identification&.to_h || {}
+    identification_props = updated.identification&.to_h || {} # rubocop:disable Lint/RedundantSafeNavigation
     if changed?(:catalog_record_ids)
       identification_props[:catalogLinks] =
         CatalogRecordId.serialize(model, catalog_record_ids)
