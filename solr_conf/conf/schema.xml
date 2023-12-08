@@ -141,8 +141,10 @@
     <dynamicField name="*_tesimv" type="text_en" stored="true" indexed="true"  multiValued="true"  termVectors="true" termPositions="true" termOffsets="true"/>
 
     <!-- Text tokenized without stemming -->
-    <dynamicField name="*_text_unstemmed_i"  type="textUnstemmed" indexed="true"  stored="false" multiValued="false"/>
-    <dynamicField name="*_text_unstemmed_im" type="textUnstemmed" indexed="true"  stored="false" multiValued="true"/>
+    <dynamicField name="*_text_unstemmed_i"   type="textUnstemmed" indexed="true"  stored="false" multiValued="false"/>
+    <dynamicField name="*_text_unstemmed_im"  type="textUnstemmed" indexed="true"  stored="false" multiValued="true"/>
+    <dynamicField name="*_text_unstemmed_si"  type="textUnstemmed" indexed="true"  stored="true"  multiValued="false"/>
+    <dynamicField name="*_text_unstemmed_sim" type="textUnstemmed" indexed="true"  stored="true"  multiValued="true"/>
     <!-- DEPRECATED:  textNoStem is a deprecated type -->
     <dynamicField name="*_text_nostem_i"  type="textNoStem" indexed="true"  stored="false" multiValued="false"/>
     <dynamicField name="*_text_nostem_im" type="textNoStem" indexed="true"  stored="false" multiValued="true"/>
