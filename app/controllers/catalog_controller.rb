@@ -255,7 +255,7 @@ class CatalogController < ApplicationController
           contributor_text_nostem_im^3
           topic_tesim^2
 
-          tag_ssim
+          tag_text_unstemmed_im
 
           originInfo_place_placeTerm_tesim
           originInfo_publisher_tesim
