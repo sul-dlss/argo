@@ -29,7 +29,17 @@ RSpec.describe CatalogRecordId do
       let(:record_ids) { [] }
       let(:refresh) { nil }
 
-      it { is_expected.to have_attributes(count: 6) }
+      it do
+        expect(subject).to eq(
+          [
+            { catalog: 'previous folio', catalogRecordId: 'a1441', refresh: false },
+            { catalog: 'previous folio', catalogRecordId: 'a4114', refresh: false },
+            { catalog: 'previous symphony', refresh: false, catalogRecordId: '6671606' },
+            { catalog: 'previous symphony', refresh: false, catalogRecordId: '6671' },
+            { catalog: 'previous symphony', refresh: false, catalogRecordId: '1441' }
+          ]
+        )
+      end
     end
   end
 end

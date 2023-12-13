@@ -43,10 +43,14 @@ class CatalogRecordId
     def previous_type
       "previous #{type}"
     end
+
+    def other_type
+      'symphony'
+    end
   end
 
   def self.links(model)
-    new(model).links
+    new(model).links.map(&:catalogRecordId)
   end
 
   def self.serialize(model, catalog_record_ids, refresh: true)
@@ -66,8 +70,8 @@ class CatalogRecordId
   # @param [boolean] refresh first catalog record ID
   # @return [Array<Hash>] a list of catalog links
   def serialize(new_catalog_record_ids, refresh: true)
-    removed_links = links - new_catalog_record_ids
-    links = (previous_links + removed_links).map do |record_id|
+    removed_links = links.map(&:catalogRecordId) - new_catalog_record_ids
+    links = (previous_links.map(&:catalogRecordId) + removed_links).map do |record_id|
       { catalog: self.class.previous_type, catalogRecordId: record_id, refresh: false }
     end.uniq
     links +
@@ -82,7 +86,8 @@ class CatalogRecordId
   end
 
   def other_links
-    find_not(self.class.type)
+    # Remove symphony links. See https://github.com/sul-dlss/argo/issues/4289
+    find_not(self.class.type) - find(self.class.other_type)
   end
 
   def link_refresh
@@ -98,7 +103,7 @@ class CatalogRecordId
   end
 
   def find(type)
-    Array(@model.identification.catalogLinks).filter_map { |link| link.catalogRecordId if link.catalog == type }
+    Array(@model.identification.catalogLinks).filter { |link| link.catalog == type }
   end
 
   def find_first(type)
