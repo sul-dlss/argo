@@ -21,7 +21,7 @@ RSpec.describe 'More facet view', :js do
 
     expect(page).to have_content('Annual report of the State Corporation Commission')
     filter_field.fill_in(with: 'foo')
-    expect(page).not_to have_content('Annual report of the State Corporation Commission')
+    expect(page).to have_no_content('Annual report of the State Corporation Commission')
     filter_field.fill_in(with: 'report')
     expect(page).to have_content('Annual report of the State Corporation Commission')
   end

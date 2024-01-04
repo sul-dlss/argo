@@ -319,7 +319,7 @@ RSpec.describe 'Item view', :js do
 
     it 'does not show release history' do
       visit solr_document_path id
-      expect(page).not_to have_css 'dt', text: 'Releases'
+      expect(page).to have_no_css 'dt', text: 'Releases'
     end
   end
 end

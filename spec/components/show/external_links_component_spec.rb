@@ -16,10 +16,10 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
     end
 
     it 'links to Solr and Cocina' do
-      expect(page).not_to have_link 'SearchWorks'
-      expect(page).not_to have_link 'MODS'
-      expect(page).not_to have_link 'PURL'
-      expect(page).not_to have_link 'Dublin Core'
+      expect(page).to have_no_link 'SearchWorks'
+      expect(page).to have_no_link 'MODS'
+      expect(page).to have_no_link 'PURL'
+      expect(page).to have_no_link 'Dublin Core'
 
       expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
       expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
@@ -41,7 +41,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
 
     context 'when not released' do
       it 'links to purl and the Solr document' do
-        expect(page).not_to have_link 'SearchWorks'
+        expect(page).to have_no_link 'SearchWorks'
         expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
         expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
         expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'

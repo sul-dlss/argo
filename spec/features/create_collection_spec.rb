@@ -23,7 +23,7 @@ RSpec.describe 'Add collection' do
       visit new_apo_collection_path apo_id
       choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
       expect(page).to have_text("Collection #{CatalogRecordId.label}")
-      expect(page).not_to have_text('already exists')
+      expect(page).to have_no_text('already exists')
       fill_in 'collection_catalog_record_id', with: 'foo'
       expect(page).to have_text('already exists')
     end
@@ -33,7 +33,7 @@ RSpec.describe 'Add collection' do
     it 'warns if title exists' do
       visit new_apo_collection_path apo_id
       expect(page).to have_text('Collection Title')
-      expect(page).not_to have_text('already exists')
+      expect(page).to have_no_text('already exists')
       fill_in 'collection_title', with: 'foo'
       expect(page).to have_text('already exists')
     end

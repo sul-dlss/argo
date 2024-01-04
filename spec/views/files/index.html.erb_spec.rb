@@ -22,7 +22,7 @@ RSpec.describe 'files/index' do
       expect(rendered).to have_content 'Stacks'
       expect(rendered).to have_content 'Preservation'
       expect(rendered).to have_link file_url, href: file_url
-      expect(rendered).not_to have_content '(not available for download)'
+      expect(rendered).to have_no_content '(not available for download)'
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe 'files/index' do
     it 'renders the partial content without links' do
       expect(rendered).to have_content 'Stacks'
       expect(rendered).to have_content 'Preservation'
-      expect(rendered).not_to have_link file_url, href: file_url
+      expect(rendered).to have_no_link file_url, href: file_url
       expect(rendered).to have_content '(not available for download)'
     end
   end

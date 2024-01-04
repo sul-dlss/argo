@@ -56,7 +56,7 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
     end
     expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
     within_table('Details') do
-      expect(page).not_to have_content replacement_tag
+      expect(page).to have_no_content replacement_tag
       expect(page).to have_content second_new_tag
     end
 
@@ -67,8 +67,8 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
     end
     expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
     within_table('Details') do
-      expect(page).not_to have_content replacement_tag
-      expect(page).not_to have_content second_new_tag
+      expect(page).to have_no_content replacement_tag
+      expect(page).to have_no_content second_new_tag
     end
   end
 end
