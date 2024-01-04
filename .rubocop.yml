@@ -307,6 +307,7 @@ Performance/Sum: # new in 1.8
   Enabled: true
 Capybara/ClickLinkOrButtonStyle: # new in 2.19
   Enabled: true
+  EnforcedStyle: strict
 Capybara/MatchStyle: # new in 2.17
   Enabled: true
 Capybara/NegationMatcher: # new in 2.14

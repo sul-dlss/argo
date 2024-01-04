@@ -28,8 +28,8 @@ RSpec.describe 'auth/groups' do
 
     it 'does not show groups or form' do
       render
-      expect(rendered).not_to have_css 'h3', text: 'Your Current Groups'
-      expect(rendered).not_to have_css 'form'
+      expect(rendered).to have_no_css 'h3', text: 'Your Current Groups'
+      expect(rendered).to have_no_css 'form'
     end
   end
 end

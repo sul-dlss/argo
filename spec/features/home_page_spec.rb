@@ -21,7 +21,7 @@ RSpec.describe 'Home page' do
       visit root_path
 
       expect(page).to have_css '.facet-field-heading', text: 'Collection'
-      expect(page).not_to have_css '.facet-field-heading', text: 'Version'
+      expect(page).to have_no_css '.facet-field-heading', text: 'Version'
     end
 
     it 'has a click-through to the full facet list' do

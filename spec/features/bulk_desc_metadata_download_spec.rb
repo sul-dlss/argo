@@ -29,7 +29,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download', :js do
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     click_link 'New Bulk Action'
     expect(page).to have_css 'h1', text: 'New Bulk Action'
-    expect(page).not_to have_button 'Populate with previous search'
+    expect(page).to have_no_button 'Populate with previous search'
   end
 
   it 'Creates a new jobs' do

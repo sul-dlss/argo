@@ -79,7 +79,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
-        expect(page).not_to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
+        expect(page).to have_no_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
 
         # these buttons are disabled since object is locked
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
@@ -111,8 +111,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(page).to have_link 'Upload MODS', href: '/apos/druid:zt570qh4444/bulk_jobs'
       expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete']").inner_text).to eq 'Purge'
       expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:zt570qh4444/apply_apo_defaults']").size).to eq 0 # no apply APO defaults for APOs
-      expect(page).not_to have_link 'Republish'
-      expect(page).not_to have_link 'Manage release'
+      expect(page).to have_no_link 'Republish'
+      expect(page).to have_no_link 'Manage release'
 
       expect(rendered.css('a').size).to eq 6
     end
@@ -150,7 +150,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
       it 'includes the descriptive metadata refresh button without "Manage Serials" and the correct count of actions' do
         expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
-        expect(page).not_to have_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
+        expect(page).to have_no_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
 
         expect(rendered.css('a').size).to eq(10)
       end

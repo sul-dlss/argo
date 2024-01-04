@@ -37,6 +37,6 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
       render_inline(component)
     end
 
-    it { is_expected.not_to have_link 'Download all files', href: download_item_files_path(document) }
+    it { is_expected.to have_no_link 'Download all files', href: download_item_files_path(document) }
   end
 end
