@@ -38,7 +38,7 @@ gem 'ruby-prof'
 gem 'rubyzip'
 gem 'sidekiq', '~> 7.1'
 gem 'turbo-rails', '~> 1.0'
-gem 'view_component', '~>  2.74.1' # TODO: ?? Unpin when bug in 2.75.0 is fixed and released ??
+gem 'view_component'
 gem 'zip_tricks'
 
 # Stanford related gems

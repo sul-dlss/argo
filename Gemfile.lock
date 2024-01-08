@@ -606,8 +606,8 @@ GEM
       unf_ext
     unf_ext (0.0.9.1)
     unicode-display_width (2.5.0)
-    view_component (2.74.1)
-      activesupport (>= 5.0.0, < 8.0)
+    view_component (2.82.0)
+      activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     warden (1.2.9)
@@ -707,7 +707,7 @@ DEPENDENCIES
   simplecov
   sqlite3 (~> 1.4.2)
   turbo-rails (~> 1.0)
-  view_component (~> 2.74.1)
+  view_component
   web-console
   webmock
   write_xlsx
