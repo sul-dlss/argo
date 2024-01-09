@@ -93,7 +93,7 @@ class RegistrationCsvConverter
   end
 
   def catalog_record_id_column
-    CatalogRecordId.label.downcase.tr(' ', '_')
+    CatalogRecordId.csv_header
   end
 
   def tags(row)

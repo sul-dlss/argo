@@ -83,8 +83,15 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     @job_csv ||= CsvUploadNormalizer.read(csv_file.path)
   end
 
+  def header_validators
+    [
+      CsvUploadValidator::RequiredHeaderValidator.new(headers: ['source_id']),
+      CsvUploadValidator::OrRequiredDataValidator.new(headers: ['label', CatalogRecordId.csv_header])
+    ]
+  end
+
   def csv_file_validation
-    validator = CsvUploadValidator.new(csv: job_csv, headers: ['source_id'])
+    validator = CsvUploadValidator.new(csv: job_csv, header_validators:)
     errors.add(:csv_file, validator.errors.join(' ')) unless validator.valid?
   rescue CSV::MalformedCSVError => e
     errors.add :csv_file, "is invalid: #{e.message}"
