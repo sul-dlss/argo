@@ -77,7 +77,7 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       format.csv do
         csv_template = CSV.generate do |csv|
-          csv << ['barcode', CatalogRecordId.label.downcase.tr(' ', '_'), 'source_id', 'label']
+          csv << ['barcode', CatalogRecordId.csv_header, 'source_id', 'label']
         end
         send_data csv_template, filename: 'registration.csv'
       end

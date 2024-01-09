@@ -47,6 +47,10 @@ class CatalogRecordId
     def other_type
       'symphony'
     end
+
+    def csv_header
+      @csv_header ||= label.downcase.tr(' ', '_')
+    end
   end
 
   def self.links(model)

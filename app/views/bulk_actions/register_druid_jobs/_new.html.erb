@@ -14,9 +14,9 @@
         <li>content_type (required)</li>
         <li>reading_order (required if "content_type" is "book" or "image")</li>
         <li>source_id (required)</li>
-        <li><%= CatalogRecordId.label.downcase.tr(' ', '_') %> (optional)</li>
+        <li><%= CatalogRecordId.csv_header %> (optional)</li>
         <li>barcode (optional)</li>
-        <li>label (required unless a <%= CatalogRecordId.label.downcase.tr(' ', '_') %> has been entered)</li>
+        <li>label (required unless a <%= CatalogRecordId.csv_header %> has been entered)</li>
         <li>rights_view (required)</li>
         <li>rights_download (required)</li>
         <li>rights_location (required if "view" or "download" uses "location-based")</li>
