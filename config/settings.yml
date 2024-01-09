@@ -26,13 +26,6 @@ register_druids_job:
 tracking_sheet_report_job:
   pdf_filename: 'tracking_sheet.pdf'
 
-# Profiler
-profiler:
-  ##
-  # A bit different but for RackMiniProfiler https://github.com/MiniProfiler/rack-mini-profiler
-  # useful for profiling blocking HTTP requests and partial rendering
-  rackmini_enabled: false
-
 dor_services:
   url: 'http://localhost:3003'
   # To generate the token: docker-compose run dor-services-app rake generate_token

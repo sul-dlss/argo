@@ -34,7 +34,6 @@ gem 'reform-rails'
 gem 'retries'
 gem 'roo', '~> 2.9.0' # work with newer Excel files and other types (xlsx, ods, csv)
 gem 'roo-xls' # needed to work with legacy Excel files (xls)
-gem 'ruby-prof'
 gem 'rubyzip'
 gem 'sidekiq', '~> 7.1'
 gem 'turbo-rails', '~> 1.0'
@@ -68,7 +67,6 @@ end
 
 group :development do
   gem 'listen', '~> 3.2' # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'rack-mini-profiler', require: false # used for performance profiling
   gem 'web-console'
 end
 
