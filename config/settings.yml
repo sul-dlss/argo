@@ -1,10 +1,4 @@
-# Example settings for configuration
-# NOTE:  Please use lowercase.
-#   The config gem documents the correct usage as lowercase: https://github.com/railsconfig/config#embedded-ruby-erb
-#   If we use uppercase the config gem ends up creating methods with the ruby convention for constants, which is confusing.
-
 # General
-date_format_str: '%Y-%m-%d %H:%M:%S.%L'
 source_id_regex: \A.+:.+\z
 
 # Bulk Metadata
@@ -38,12 +32,6 @@ profiler:
   # A bit different but for RackMiniProfiler https://github.com/MiniProfiler/rack-mini-profiler
   # useful for profiling blocking HTTP requests and partial rendering
   rackmini_enabled: false
-
-# # SSL
-# ssl:
-#   cert_file: 'cert_name.crt'
-#   key_file: 'key_name.key'
-#   key_pass: 'password'
 
 dor_services:
   url: 'http://localhost:3003'
