@@ -20,6 +20,13 @@
     <updateLog>
       <str name="dir">${solr.core1.data.dir:}</str>
     </updateLog>
+    <autoCommit>
+      <maxTime>${solr.autoCommit.maxTime:600000}</maxTime><!-- 10 minutes -->
+      <openSearcher>false</openSearcher>
+    </autoCommit>
+    <autoSoftCommit>
+      <maxTime>${solr.autoSoftCommit.maxTime:5000}</maxTime><!-- 5 seconds -->
+    </autoSoftCommit>
   </updateHandler>
 
   <requestHandler name="search" class="solr.SearchHandler" default="true">
