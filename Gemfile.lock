@@ -1,3 +1,16 @@
+GIT
+  remote: https://github.com/sul-dlss/folio_client.git
+  revision: 06a26dcc5f755950368d1b859bf9087aa9e2daa9
+  branch: internal-config-refactoring
+  specs:
+    folio_client (0.15.0)
+      activesupport (>= 4.2, < 8)
+      dry-monads
+      faraday
+      faraday-cookie_jar
+      marc
+      zeitwerk
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -73,7 +86,6 @@ GEM
     ast (2.4.2)
     attr_extras (7.1.0)
     barby (0.6.9)
-    base64 (0.2.0)
     bcrypt (3.1.20)
     better_html (2.0.2)
       actionview (>= 6.0)
@@ -190,6 +202,7 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
+    domain_name (0.6.20240107)
     dor-services-client (13.4.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.93.0)
@@ -264,26 +277,24 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    faraday (2.8.1)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-cookie_jar (0.0.7)
+      faraday (>= 0.8.0)
+      http-cookie (~> 1.0.0)
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
-    faraday-net_http (3.0.2)
+    faraday-net_http (3.1.0)
+      net-http
     faraday-retry (2.2.0)
       faraday (~> 2.0)
     ffi (1.16.3)
-    folio_client (0.15.0)
-      activesupport (>= 4.2, < 8)
-      dry-monads
-      faraday
-      marc
-      zeitwerk
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
     honeybadger (5.4.1)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
     http_logger (0.7.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -358,6 +369,8 @@ GEM
     multipart-post (2.3.0)
     mutex_m (0.2.0)
     mysql2 (0.5.5)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.9.1)
       date
       net-protocol
@@ -552,7 +565,6 @@ GEM
     ruby-ole (1.2.12.2)
     ruby-prof (1.7.0)
     ruby-progressbar (1.13.0)
-    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     scrub_rb (1.0.1)
     sdr-client (2.8.0)
@@ -608,6 +620,7 @@ GEM
       unf_ext
     unf_ext (0.0.9.1)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
     view_component (2.83.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
@@ -669,7 +682,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   faraday-multipart
-  folio_client (~> 0.13)
+  folio_client!
   honeybadger
   http_logger
   jbuilder (~> 2.5)
