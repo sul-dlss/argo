@@ -1,6 +1,3 @@
-profiler:
-  rackmini_enabled: true
-
 # URLs
 dor_indexing_url: 'http://localhost:3004/dor'
 solrizer_url: 'http://localhost:8983/solr/argo'
