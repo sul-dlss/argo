@@ -156,7 +156,7 @@ GEM
       zeitwerk (~> 2.1)
     coderay (1.1.3)
     commonmarker (0.23.10)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     config (5.1.0)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
@@ -197,7 +197,7 @@ GEM
       faraday (~> 2.0)
       faraday-retry
       zeitwerk (~> 2.1)
-    dor-workflow-client (6.0.0)
+    dor-workflow-client (7.0.2)
       activesupport (>= 3.2.1, < 8)
       deprecation (>= 0.99.0)
       faraday (~> 2.0)
@@ -668,7 +668,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano
   dor-services-client (~> 13.0)
-  dor-workflow-client (~> 6.0)
+  dor-workflow-client (~> 7.0)
   druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
