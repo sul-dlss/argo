@@ -81,7 +81,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.1.5)
+    bigdecimal (3.1.6)
     bindex (0.8.1)
     blacklight (7.33.1)
       deprecation
@@ -138,7 +138,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    cocina-models (0.93.1)
+    cocina-models (0.94.0)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -190,9 +190,9 @@ GEM
       capistrano-shared_configs
     docile (1.4.0)
     domain_name (0.6.20240107)
-    dor-services-client (13.4.0)
+    dor-services-client (14.1.0)
       activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.93.0)
+      cocina-models (~> 0.94.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -342,7 +342,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.21.1)
+    minitest (5.21.2)
     moab-versioning (6.1.0)
       druid-tools (>= 1.0.0)
       json
@@ -560,9 +560,9 @@ GEM
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
     scrub_rb (1.0.1)
-    sdr-client (2.8.0)
+    sdr-client (2.9.0)
       activesupport
-      cocina-models (~> 0.93.0)
+      cocina-models (~> 0.94.0)
       config
       dry-monads
       faraday (>= 0.16)
@@ -667,7 +667,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client (~> 13.0)
+  dor-services-client (~> 14.0)
   dor-workflow-client (~> 7.0)
   druid-tools
   dry-monads
