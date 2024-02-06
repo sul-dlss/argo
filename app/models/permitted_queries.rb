@@ -40,7 +40,7 @@ class PermittedQueries
         fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:Hydrus']
       )
       .dig('response', 'docs')
-      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).first.downcase.delete('[]') }
+      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).downcase.delete('[]') }
       .map { |doc| doc['id'] } # rubocop:disable Rails/Pluck
   end
 
@@ -67,7 +67,7 @@ class PermittedQueries
              .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc['id']).first.downcase.delete('[]') }
 
     [['None', '']] + result.map do |doc|
-      ["#{Array(doc[SolrDocument::FIELD_TITLE]).first} (#{doc['id']})", doc['id'].to_s]
+      ["#{doc[SolrDocument::FIELD_TITLE]} (#{doc['id']})", doc['id'].to_s]
     end
   end
 
