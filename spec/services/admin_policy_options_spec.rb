@@ -28,7 +28,7 @@ RSpec.describe AdminPolicyOptions do
           'apo_register_permissions_ssim:"workgroup:dlss:mock-group2"',
           defType: 'lucene',
           rows: 99_999,
-          fl: 'id,tag_ssim,sw_display_title_tesim',
+          fl: 'id,tag_ssim,display_title_ss',
           fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
         )
       end
@@ -36,9 +36,9 @@ RSpec.describe AdminPolicyOptions do
       context 'when rows are returned' do
         let(:result_rows) do
           [
-            { 'id' => 1, 'tag_ssim' => 'prefix : suffix', 'sw_display_title_tesim' => ['z'] },
-            { 'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'sw_display_title_tesim' => ['[y]'] },
-            { 'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'sw_display_title_tesim' => ['x'] }
+            { 'id' => 1, 'tag_ssim' => 'prefix : suffix', 'display_title_ss' => ['z'] },
+            { 'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'display_title_ss' => ['[y]'] },
+            { 'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'display_title_ss' => ['x'] }
           ]
         end
 

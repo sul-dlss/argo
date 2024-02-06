@@ -64,7 +64,7 @@ RSpec.describe ModsService do
     context 'with isConstituentOf relationships' do
       let(:virtual_object_solr_docs) do
         [{ 'id' => 'druid:hj097bm8879',
-           'sw_display_title_tesim' => ["Carey's American Atlas: Containing Twenty Maps"] }]
+           'display_title_ss' => ["Carey's American Atlas: Containing Twenty Maps"] }]
       end
 
       it 'writes the relationships into MODS' do
@@ -79,7 +79,7 @@ RSpec.describe ModsService do
         expect(solr_client).to have_received(:get)
           .with('select', params: {
                   q: 'has_constituents_ssim:druid\:bc123df4567',
-                  fl: 'id sw_display_title_tesim',
+                  fl: 'id display_title_ss',
                   wt: :json
                 })
       end

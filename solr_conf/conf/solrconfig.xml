@@ -42,7 +42,14 @@
       <str name="fl"> *, score</str>
 
       <str name="qf">
-        sw_display_title_tesim^5
+        main_title_text_anchored_im^100
+        main_title_text_unstemmed_im^50
+        main_title_tenim^10
+        full_title_unstemmed_im^10
+        full_title_tenim^5
+        additional_titles_unstemmed_im^5
+        additional_titles_tenim^3
+
         contributor_text_nostem_im^3
         topic_tesim^2
 
@@ -76,7 +83,14 @@
         contributor_orcids_ssim
       </str>
       <str name="pf">  <!-- (defType dismax, edismax: phrase boost within result set) -->
-        sw_display_title_tesim^25
+        main_title_text_anchored_im^500
+        main_title_text_unstemmed_im^250
+        main_title_tenim^50
+        full_title_unstemmed_im^50
+        full_title_tenim^25
+        additional_titles_unstemmed_im^25
+        additional_titles_tenim^15
+
         contributor_text_nostem_im^15
         topic_tesim^10
 
@@ -91,7 +105,14 @@
         source_id_text_nostem_i^5
       </str>
       <str name="pf3">  <!-- (defType edismax: token trigrams boost within result set) -->
-        sw_display_title_tesim^15
+        main_title_text_anchored_im^300
+        main_title_text_unstemmed_im^150
+        main_title_tenim^30
+        full_title_unstemmed_im^30
+        full_title_tenim^15
+        additional_titles_unstemmed_im^15
+        additional_titles_tenim^9
+
         contributor_text_nostem_im^9
         topic_tesim^6
 
@@ -106,7 +127,14 @@
         source_id_text_nostem_i^3
       </str>
       <str name="pf2"> <!--(defType edismax: token bigrams boost within result set) -->
-        sw_display_title_tesim^10
+        main_title_text_anchored_im^200
+        main_title_text_unstemmed_im^100
+        main_title_tenim^20
+        full_title_unstemmed_im^20
+        full_title_tenim^10
+        additional_titles_unstemmed_im^10
+        additional_titles_tenim^6
+
         contributor_text_nostem_im^6
         topic_tesim^4
 
@@ -149,7 +177,14 @@
       <bool name="lowercaseOperators">true</bool>
 
       <str name="qf">
-        sw_display_title_tesim^5
+        main_title_text_anchored_im^100
+        main_title_text_unstemmed_im^50
+        main_title_tenim^10
+        full_title_unstemmed_im^10
+        full_title_tenim^5
+        additional_titles_unstemmed_im^5
+        additional_titles_tenim^3
+
         contributor_text_nostem_im^3
         topic_tesim^2
 
@@ -183,7 +218,14 @@
         contributor_orcids_ssim
       </str>
       <str name="pf">  <!-- (defType dismax, edismax: phrase boost within result set) -->
-        sw_display_title_tesim^25
+        main_title_text_anchored_im^500
+        main_title_text_unstemmed_im^250
+        main_title_tenim^50
+        full_title_unstemmed_im^50
+        full_title_tenim^25
+        additional_titles_unstemmed_im^25
+        additional_titles_tenim^15
+
         contributor_text_nostem_im^15
         topic_tesim^10
 
@@ -198,7 +240,14 @@
         source_id_text_nostem_i^5
       </str>
       <str name="pf3">  <!-- (defType edismax: token trigrams boost within result set) -->
-        sw_display_title_tesim^15
+        main_title_text_anchored_im^300
+        main_title_text_unstemmed_im^150
+        main_title_tenim^30
+        full_title_unstemmed_im^30
+        full_title_tenim^15
+        additional_titles_unstemmed_im^15
+        additional_titles_tenim^9
+
         contributor_text_nostem_im^9
         topic_tesim^6
 
@@ -213,7 +262,14 @@
         source_id_text_nostem_i^3
       </str>
       <str name="pf2"> <!--(defType edismax: token bigrams boost within result set) -->
-        sw_display_title_tesim^10
+        main_title_text_anchored_im^200
+        main_title_text_unstemmed_im^100
+        main_title_tenim^20
+        full_title_unstemmed_im^20
+        full_title_tenim^10
+        additional_titles_unstemmed_im^10
+        additional_titles_tenim^6
+
         contributor_text_nostem_im^6
         topic_tesim^4
 

@@ -45,7 +45,7 @@ RSpec.describe Report do
     context 'when a field has double quotes' do
       before do
         solr_conn.add(id: 'druid:hj185xx2222',
-                      sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+                      display_title_ss: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
         solr_conn.commit
       end
 

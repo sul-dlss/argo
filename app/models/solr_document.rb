@@ -24,7 +24,7 @@ class SolrDocument
   FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
   FIELD_RELEASED_TO = :released_to_ssim
 
-  FIELD_TITLE = 'sw_display_title_tesim'
+  FIELD_TITLE = 'display_title_ss'
   FIELD_AUTHOR = 'author_display_ss'
   FIELD_LABEL = 'obj_label_tesim'
   FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
