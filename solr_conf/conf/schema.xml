@@ -106,7 +106,7 @@
     <dynamicField name="*_bs"  type="boolean" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_bsi" type="boolean" stored="true" indexed="true"  multiValued="false"/>
 
-    <!-- English text (_ten...) -->
+    <!-- text English (_ten...) -->
     <dynamicField name="*_teni"    type="textEnglish" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_tenim"   type="textEnglish" stored="false" indexed="true"  multiValued="true"/>
     <dynamicField name="*_tens"    type="textEnglish" stored="true"  indexed="false" multiValued="false"/>
@@ -152,6 +152,17 @@
     <!-- Text tokenized without stemming but left and right anchored, for "exactish" matches -->
     <dynamicField name="*_text_anchored_i"  type="textAnchored" indexed="true"  stored="false" multiValued="false"/>
     <dynamicField name="*_text_anchored_im" type="textAnchored" indexed="true"  stored="false" multiValued="true"/>
+
+    <!-- copyFields must have explicitly declared destination fields -->
+    <field name="main_title_text_anchored_im" type="textAnchored" indexed="true" stored="false" multiValued="true"/>
+    <field name="main_title_text_unstemmed_im" type="textUnstemmed" indexed="true" stored="false" multiValued="true"/>
+    <field name="full_title_unstemmed_im" type="textUnstemmed" indexed="true" stored="false" multiValued="true"/>
+    <field name="additional_titles_unstemmed_im" type="textUnstemmed" indexed="true" stored="false" multiValued="true"/>
+
+    <copyField source="main_title_tenim" dest="main_title_text_anchored_im" maxChars="5000" />
+    <copyField source="main_title_tenim" dest="main_title_text_unstemmed_im" maxChars="5000" />
+    <copyField source="full_title_tenim" dest="full_title_unstemmed_im" maxChars="5000" />
+    <copyField source="additional_titles_tenim" dest="additional_titles_unstemmed_im" maxChars="5000" />
   </fields>
 
   <types>
