@@ -9,7 +9,7 @@ RSpec.describe 'Home page' do
   before do
     solr_conn.add(id: 'druid:xb482bw3983',
                   objectType_ssim: 'item',
-                  obj_label_tesim: 'Report about stuff',
+                  main_title_tenim: 'Report about stuff',
                   collection_title_ssim: '123',
                   current_version_isi: '1')
     solr_conn.commit

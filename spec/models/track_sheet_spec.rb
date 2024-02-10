@@ -50,7 +50,7 @@ RSpec.describe TrackSheet do
 
     let(:base_solr_doc) do
       {
-        'obj_label_tesim' => ['bogus label'] # the fedora label
+        'main_title_tenim' => ['main_title']
       }
     end
 
