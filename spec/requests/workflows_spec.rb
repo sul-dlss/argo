@@ -65,7 +65,6 @@ RSpec.describe 'WorkflowsController' do
   end
 
   describe '#show' do
-    let(:workflow) { instance_double(Dor::Workflow::Document) }
     let(:workflow_status) { instance_double(WorkflowStatus) }
     let(:template_response) { { 'processes' => workflow_steps } }
     let(:workflow_steps) do
