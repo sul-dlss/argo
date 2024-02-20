@@ -49,7 +49,17 @@ class RegistrationCsvConverter
   #  14: tags (optional, may repeat)
 
   def convert
-    CSV.parse(csv_string, headers: true).map { |row| convert_row(row) }
+    csv_table = CSV.parse(csv_string, headers: true)
+    remove_blank_rows_at_end(csv_table)
+    csv_table.map { |row| convert_row(row) }
+  end
+
+  def remove_blank_rows_at_end(csv_table)
+    last = csv_table.size - 1
+    while csv_table[last].fields.all?(&:blank?) && last != 0
+      csv_table.delete(last) if csv_table[last].fields.all?(&:blank?)
+      last -= 1
+    end
   end
 
   def convert_row(row)

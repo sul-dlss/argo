@@ -57,4 +57,22 @@ RSpec.describe CsvUploadValidator do
       expect(validator.errors).to eq(['missing data. For each row, one of these must be provided: Label, folio_instance_hrid'])
     end
   end
+
+  context 'when blank rows at end' do
+    let(:headers) { %w[source_id] }
+    let(:or_headers) { ['label', CatalogRecordId.csv_header] }
+    let(:csv) do
+      <<~CSV
+        barcode,folio_instance_hrid,source_id,label
+        ,,not:blank001,not blank
+        ,,not:blank002,blank rows below this line
+        ,,,,
+        ,,,,
+      CSV
+    end
+
+    it 'ignores the blank rows at the END' do
+      expect(validator).to be_valid
+    end
+  end
 end
