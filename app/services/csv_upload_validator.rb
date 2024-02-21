@@ -72,6 +72,18 @@ class CsvUploadValidator
   attr_reader :raw_csv, :header_validators
 
   def csv
-    @csv ||= CSV.parse(raw_csv, headers: true)
+    @csv ||= begin
+      parsed = CSV.parse(raw_csv, headers: true)
+      remove_blank_rows_at_end(parsed)
+    end
+  end
+
+  def remove_blank_rows_at_end(csv_table)
+    last = csv_table.size - 1
+    while csv_table[last].fields.all?(&:blank?) && last != 0
+      csv_table.delete(last) if csv_table[last].fields.all?(&:blank?)
+      last -= 1
+    end
+    csv_table
   end
 end

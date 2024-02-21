@@ -148,4 +148,113 @@ RSpec.describe RegistrationCsvConverter do
                                                                                'download' => 'none' }))
     end
   end
+
+  context 'when CSV ends with lines of blanks and commas only' do
+    # preserve leading whitespace for this heredoc
+    # rubocop:disable Layout/IndentationWidth
+    # rubocop:disable Layout/HeredocIndentation
+    let(:csv_string) do
+<<-CSV
+source_id,label
+bar:123,My new object
+,
+fred:123,A label
+,missing source_id
+wilma:123,
+   ,
+
+,
+CSV
+    end
+    # rubocop:enable Layout/IndentationWidth
+    # rubocop:enable Layout/HeredocIndentation
+
+    let(:params) do
+      {
+        administrative_policy_object: 'druid:bc123df4567',
+        collection: 'druid:bk024qs1808',
+        initial_workflow: 'accessionWF',
+        content_type: Cocina::Models::ObjectType.book,
+        rights_view: 'world',
+        rights_download: 'world'
+      }
+    end
+
+    it 'returns results but not for blank lines at end' do
+      expect(results.size).to be 5
+      expect(results.first.success?).to be true
+      expect(results.second.success?).to be false
+      expect(results[2].success?).to be true
+      expect(results[3].success?).to be false
+      expect(results[4].success?).to be false
+    end
+  end
+
+  context 'when CSV is lines of blanks and commas only' do
+    # preserve leading whitespace for this heredoc
+    # rubocop:disable Layout/IndentationWidth
+    # rubocop:disable Layout/HeredocIndentation
+    let(:csv_string) do
+<<-CSV
+source_id,label
+,
+       ,
+
+,
+CSV
+    end
+    # rubocop:enable Layout/IndentationWidth
+    # rubocop:enable Layout/HeredocIndentation
+
+    let(:params) do
+      {
+        administrative_policy_object: 'druid:bc123df4567',
+        collection: 'druid:bk024qs1808',
+        initial_workflow: 'accessionWF',
+        content_type: Cocina::Models::ObjectType.book,
+        rights_view: 'world',
+        rights_download: 'world'
+      }
+    end
+
+    it 'returns one failed result' do
+      expect(results.size).to be 1
+      expect(results.first.success?).to be false
+    end
+  end
+
+  context 'example from Andrew: when CSV ends with lines of blanks and commas only' do
+    # preserve leading whitespace for this heredoc
+    # rubocop:disable Layout/IndentationWidth
+    # rubocop:disable Layout/HeredocIndentation
+    let(:csv_string) do
+<<-CSV
+barcode,folio_instance_hrid,source_id,label
+,,not:blank001,not blank
+,,not:blank002,blank rows below this line
+,,,,
+,,,,
+
+CSV
+    end
+    # rubocop:enable Layout/IndentationWidth
+    # rubocop:enable Layout/HeredocIndentation
+
+    let(:params) do
+      {
+        administrative_policy_object: 'druid:bc123df4567',
+        collection: 'druid:bk024qs1808',
+        initial_workflow: 'accessionWF',
+        content_type: Cocina::Models::ObjectType.book,
+        rights_view: 'world',
+        rights_download: 'world'
+      }
+    end
+
+    it 'returns results but not for blank lines at end' do
+      expect(results.size).to be 2
+      expect(results.first.success?).to be true
+      expect(results.second.success?).to be true
+    end
+  end
 end
