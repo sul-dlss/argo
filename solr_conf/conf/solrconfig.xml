@@ -62,7 +62,8 @@
         collection_title_tesim
 
         id
-        objectId_tesim
+        druid_bare_ssi
+        druid_prefixed_ssi
         obj_label_tesim
         identifier_ssim
         identifier_tesim
@@ -85,7 +86,6 @@
 
         collection_title_tesim^5
 
-        objectId_tesim^5
         obj_label_tesim^5
         identifier_tesim^5
         source_id_text_nostem_i^5
@@ -101,7 +101,6 @@
 
         collection_title_tesim^3
 
-        objectId_tesim^3
         obj_label_tesim^3
         identifier_tesim^3
         source_id_text_nostem_i^3
@@ -117,7 +116,6 @@
 
         collection_title_tesim^2
 
-        objectId_tesim^2
         obj_label_tesim^2
         identifier_tesim^2
         source_id_text_nostem_i^2
@@ -171,7 +169,8 @@
         collection_title_tesim
 
         id
-        objectId_tesim
+        druid_bare_ssi
+        druid_prefixed_ssi
         obj_label_tesim
         identifier_ssim
         identifier_tesim
@@ -194,7 +193,6 @@
 
         collection_title_tesim^5
 
-        objectId_tesim^5
         obj_label_tesim^5
         identifier_tesim^5
         source_id_text_nostem_i^5
@@ -210,7 +208,6 @@
 
         collection_title_tesim^3
 
-        objectId_tesim^3
         obj_label_tesim^3
         identifier_tesim^3
         source_id_text_nostem_i^3
@@ -226,7 +223,6 @@
 
         collection_title_tesim^2
 
-        objectId_tesim^2
         obj_label_tesim^2
         identifier_tesim^2
         source_id_text_nostem_i^2
