@@ -271,7 +271,8 @@ class CatalogController < ApplicationController
           collection_title_tesim
 
           id
-          objectId_tesim
+          druid_bare_ssi
+          druid_prefixed_ssi
           obj_label_tesim
           identifier_ssim
           identifier_tesim
