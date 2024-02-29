@@ -28,6 +28,12 @@ Rails:
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
 
+Lint/MissingSuper:
+  Enabled: true
+  Exclude:
+    - 'app/components/**/*'
+    - 'config/initializers/okcomputer.rb'
+
 Metrics/BlockLength:
   Max: 27
   AllowedMethods:
@@ -59,12 +65,6 @@ RSpec/ExampleLength:
 
 RSpec/MultipleExpectations:
   Enabled: false
-
-Lint/MissingSuper:
-  Enabled: true
-  Exclude:
-    - 'app/components/**/*'
-    - 'config/initializers/okcomputer.rb'
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: true
