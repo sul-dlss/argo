@@ -86,7 +86,7 @@ RSpec.describe DescmetadataDownloadJob do
       expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
       download_job.perform(bulk_action.id, dl_job_params)
-      expect(File).to be_exist(output_zip_filename)
+      expect(File).to exist(output_zip_filename)
       Zip::File.open(output_zip_filename) do |open_file|
         expect(open_file.glob('*').map(&:name).sort).to eq ["#{druid_list.first}.xml", "#{druid_list.second}.xml"].sort
       end
@@ -111,7 +111,7 @@ RSpec.describe DescmetadataDownloadJob do
         expect(object_client2).to have_received(:find).exactly(described_class::MAX_TRIES).times
         expect(bulk_action).to have_received(:increment).with(:druid_count_fail).twice
         expect(download_job).to have_received(:bulk_action).at_least(:once)
-        expect(File).to be_exist(output_zip_filename)
+        expect(File).to exist(output_zip_filename)
         expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{druid_list.first}").twice
         expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{druid_list.first}").once
         expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{druid_list.last}").twice
@@ -134,7 +134,7 @@ RSpec.describe DescmetadataDownloadJob do
 
         download_job.perform(bulk_action.id, dl_job_params)
 
-        expect(File).to be_exist(output_zip_filename)
+        expect(File).to exist(output_zip_filename)
         Zip::File.open(output_zip_filename) do |open_file|
           expect(open_file.glob('*').map(&:name)).to eq ["#{druid_list.first}.xml"]
         end
