@@ -9,7 +9,7 @@ RSpec.describe 'application and dependency monitoring' do
     expect(page).to have_text('Application is running')
   end
 
-  context 'all checks' do
+  describe 'all checks' do
     before do
       stub_request(:get, Settings.spreadsheet_url)
         .to_return(status: 200, body: '', headers: {})

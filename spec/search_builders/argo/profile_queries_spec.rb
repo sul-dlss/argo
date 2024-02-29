@@ -32,7 +32,7 @@ RSpec.describe Argo::ProfileQueries do
     allow(subject).to receive(:blacklight_params).and_return(blacklight_params)
   end
 
-  context 'in ProfileController' do
+  context 'from ProfileController' do
     let(:blacklight_params) { { 'controller' => 'profile' } }
 
     it 'adds in required facet fields' do
@@ -82,7 +82,7 @@ RSpec.describe Argo::ProfileQueries do
     end
   end
 
-  context 'in another Controller' do
+  context 'from another Controller' do
     let(:blacklight_params) { { 'controller' => 'catalog' } }
 
     it 'does not modify solr_params' do

@@ -14,8 +14,8 @@ RSpec.describe 'Item registration page', :js do
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
   end
 
-  # this mocks a failed registration response from DSA
-  context 'failed registration' do
+  context 'when registration fails' do
+    # this mocks a failed registration response from DSA
     let(:ur_apo_id) { 'druid:hv992ry2431' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find_lite: cocina_model, find: cocina_model) }
     let(:cocina_model) do
@@ -103,8 +103,7 @@ RSpec.describe 'Item registration page', :js do
     end
   end
 
-  # this successfully registers an object
-  context 'successful registration' do
+  context 'when registration succeeds' do
     it 'register an item correctly' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
@@ -159,7 +158,7 @@ RSpec.describe 'Item registration page', :js do
     end
   end
 
-  context 'invalid catalog_record_id' do
+  context 'when invalid catalog_record_id' do
     it 'does not register' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
@@ -183,7 +182,7 @@ RSpec.describe 'Item registration page', :js do
     end
   end
 
-  context 'invalid barcode' do
+  context 'when invalid barcode' do
     it 'does not register' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"

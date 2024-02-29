@@ -54,7 +54,7 @@ RSpec.describe TrackSheet do
       }
     end
 
-    context 'normal length title' do
+    context 'when normal length title' do
       let(:solr_doc) do
         base_solr_doc.merge(
           {
@@ -73,7 +73,7 @@ RSpec.describe TrackSheet do
       end
     end
 
-    context 'really long title' do
+    context 'when really long title' do
       let(:solr_doc) do
         base_solr_doc.merge(
           {
@@ -92,7 +92,7 @@ RSpec.describe TrackSheet do
       end
     end
 
-    context 'no title' do
+    context 'when no title' do
       let(:solr_doc) do
         base_solr_doc.merge({
                               'sw_display_title_tesim' => ['']

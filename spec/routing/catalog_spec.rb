@@ -13,10 +13,10 @@ RSpec.describe CatalogController do
         .to route_to('catalog#show', id: 'druid:xyz')
     end
 
-    context 'redirections' do
+    describe 'redirections' do
       include RSpec::Rails::RequestExampleGroup
 
-      it 'redirects to /view' do
+      it 'druid directly after catalog/ redirects to /view' do
         get '/catalog/druid:xyz'
         expect(response).to redirect_to('/view/druid:xyz')
       end

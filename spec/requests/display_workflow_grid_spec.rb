@@ -10,7 +10,7 @@ RSpec.describe 'The workflow grid' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    it 'is displayed properly' do
+    it 'displays properly' do
       get '/report/workflow_grid'
       expect(response).to have_http_status(:ok)
       expect(response.body).to include 'workflow-grid'

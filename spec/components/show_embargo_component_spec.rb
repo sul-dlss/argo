@@ -8,7 +8,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document:, state_service:) }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
-  context 'embargoed with release date' do
+  describe 'embargo with release date' do
     let(:document) do
       SolrDocument.new(
         :id => 'druid:kv840xx0000',
@@ -38,7 +38,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
     end
   end
 
-  context 'embargoed without release date' do
+  context 'for embargo without release date' do
     let(:allows_modification) { true }
     let(:document) do
       SolrDocument.new(
@@ -52,7 +52,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
     end
   end
 
-  context 'not embargoed with release date' do
+  context 'for bad embargo status with release date' do
     let(:allows_modification) { true }
     let(:document) do
       SolrDocument.new(

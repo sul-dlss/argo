@@ -123,7 +123,7 @@ RSpec.describe DescmetadataDownloadJob do
       end
     end
 
-    context 'user lacks permission to view metadata on one of the objects' do
+    context 'when user lacks permission to view metadata on one of the objects' do
       before do
         allow(ability).to receive(:can?).with(:read, cocina_object1).and_return(true)
         allow(ability).to receive(:can?).with(:read, cocina_object2).and_return(false)

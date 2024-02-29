@@ -9,7 +9,7 @@ RSpec.describe 'Item registration page', :js do
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
   end
 
-  context 'successful registration' do
+  context 'when successful registration' do
     let(:bulk_action) { instance_double(BulkAction, save: true, enqueue_job: true) }
 
     before do
@@ -59,7 +59,7 @@ RSpec.describe 'Item registration page', :js do
     end
   end
 
-  context 'successful registration with dark' do
+  context 'when successful registration with dark' do
     let(:bulk_action) { instance_double(BulkAction, save: true, enqueue_job: true) }
 
     before do
@@ -107,7 +107,7 @@ RSpec.describe 'Item registration page', :js do
     end
   end
 
-  context 'registration fails validation' do
+  context 'when registration fails validation' do
     it 'reports error' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
@@ -131,7 +131,7 @@ RSpec.describe 'Item registration page', :js do
     end
   end
 
-  context 'invalid CSV' do
+  context 'when invalid CSV' do
     it 'reports error' do
       visit registration_path
       select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"

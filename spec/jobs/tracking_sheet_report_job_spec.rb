@@ -36,7 +36,7 @@ RSpec.describe TrackingSheetReportJob do
           .and_return(response)
       end
 
-      context 'happy path' do
+      context 'when happy path' do
         it 'writes a pdf tracking sheet' do
           subject.perform(bulk_action.id, druids:, groups:, user:)
           expect(File).to exist(File.join(output_directory, Settings.tracking_sheet_report_job.pdf_filename))

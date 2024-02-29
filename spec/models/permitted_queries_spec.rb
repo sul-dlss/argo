@@ -16,7 +16,7 @@ RSpec.describe PermittedQueries do
       end
     end
 
-    context 'personal workgroups' do
+    context 'for personal workgroups' do
       it 'does not raise an RSolr syntax error' do
         user.set_groups_to_impersonate ['~sunetid:somegroup']
         expect { user.permitted_apos }.not_to raise_error

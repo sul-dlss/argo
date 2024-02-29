@@ -18,7 +18,7 @@ RSpec.describe 'Set APO for an object' do
       allow(StateService).to receive(:new).and_return(state_service)
     end
 
-    context 'object modification not allowed' do
+    context 'when object modification not allowed' do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it 'redirects with an error' do
@@ -28,7 +28,7 @@ RSpec.describe 'Set APO for an object' do
       end
     end
 
-    context 'user not authorized to manage governing APOs' do
+    context 'when user not authorized to manage governing APOs' do
       let(:ability) { instance_double(Ability) }
 
       before do
@@ -44,7 +44,7 @@ RSpec.describe 'Set APO for an object' do
       end
     end
 
-    context 'user authorized to manage governing APOs' do
+    context 'when user authorized to manage governing APOs' do
       let(:updated_model) do
         cocina_model.new('administrative' => { 'hasAdminPolicy' => new_apo_id })
       end

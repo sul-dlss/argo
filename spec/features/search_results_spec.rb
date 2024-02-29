@@ -43,7 +43,7 @@ RSpec.describe 'Search results' do
     end
   end
 
-  context 'the result' do
+  describe 'an individual result' do
     before do
       solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
@@ -87,7 +87,7 @@ RSpec.describe 'Search results' do
     end
   end
 
-  context 'the thumbnail' do
+  describe 'the thumbnail' do
     before do
       solr_conn.add(:id => 'druid:hj185xx2222',
                     SolrDocument::FIELD_OBJECT_TYPE => 'item',

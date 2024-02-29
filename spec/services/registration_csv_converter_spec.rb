@@ -223,7 +223,7 @@ CSV
     end
   end
 
-  context 'example from Andrew: when CSV ends with lines of blanks and commas only' do
+  context 'when CSV ends with lines of blanks and commas only (example from Andrew)' do
     # preserve leading whitespace for this heredoc
     # rubocop:disable Layout/IndentationWidth
     # rubocop:disable Layout/HeredocIndentation
