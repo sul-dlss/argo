@@ -279,7 +279,7 @@ RSpec.describe User do
 
     let(:user) { build(:user, sunetid: 'asdf', webauth_groups:) }
 
-    context 'specified' do
+    context 'when specified' do
       let(:webauth_groups) { %w[dlss:testgroup1 dlss:testgroup2 dlss:testgroup3] }
 
       it 'returns the groups by webauth' do
@@ -288,14 +288,14 @@ RSpec.describe User do
       end
     end
 
-    context 'when impersonating' do
+    describe 'impersonating' do
       let(:groups) { %w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2] }
 
       before do
         user.set_groups_to_impersonate(groups)
       end
 
-      context 'and the groups include SDR_API_AUTHORIZED_GROUPS' do
+      context 'when the groups include SDR_API_AUTHORIZED_GROUPS' do
         let(:groups) do
           %w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2] + User::SDR_API_AUTHORIZED_GROUPS
         end
@@ -306,7 +306,7 @@ RSpec.describe User do
         end
       end
 
-      context 'and the impersonating user is an admin' do
+      context 'when the impersonating user is an admin' do
         let(:webauth_groups) { User::ADMIN_GROUPS }
 
         it 'returns only the impersonated groups' do
@@ -314,7 +314,7 @@ RSpec.describe User do
         end
       end
 
-      context 'and the impersonating user is an manager' do
+      context 'when the impersonating user is an manager' do
         let(:webauth_groups) { User::MANAGER_GROUPS }
 
         it 'returns only the impersonated groups' do
@@ -322,7 +322,7 @@ RSpec.describe User do
         end
       end
 
-      context 'and the impersonating user is a viewer' do
+      context 'when the impersonating user is a viewer' do
         let(:webauth_groups) { User::VIEWER_GROUPS }
 
         it 'returns only the impersonated groups' do

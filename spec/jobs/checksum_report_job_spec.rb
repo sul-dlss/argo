@@ -46,7 +46,7 @@ RSpec.describe ChecksumReportJob do
     context 'with authorization' do
       let(:ability) { instance_double(Ability, can?: true) }
 
-      context 'happy path' do
+      context 'when happy path' do
         before do
           allow(Preservation::Client.objects).to receive(:checksum).with(druid: druids[0]).and_return(checksum_response)
           allow(Preservation::Client.objects).to receive(:checksum).with(druid: druids[1]).and_raise(Preservation::Client::NotFoundError)
@@ -70,7 +70,7 @@ RSpec.describe ChecksumReportJob do
         end
       end
 
-      context 'Preservation::Client throws error' do
+      context 'when Preservation::Client throws error' do
         before do
           allow(Preservation::Client.objects).to receive(:checksum).and_raise(
             Preservation::Client::UnexpectedResponseError, 'ruh roh'

@@ -28,22 +28,22 @@ RSpec.describe 'Viewing an Admin policy' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  context 'item dialogs' do
-    context 'open version ui' do
+  describe 'item dialogs' do
+    context 'for open version ui' do
       it 'renders the open version ui' do
         visit "/items/#{apo_druid}/versions/open_ui"
         expect(page).to have_content('description')
       end
     end
 
-    context 'close version ui' do
+    context 'for close version ui' do
       it 'renders the close version ui' do
         visit "/items/#{apo_druid}/versions/close_ui"
         expect(page).to have_content('description')
       end
     end
 
-    context 'add workflow' do
+    context 'for add workflow' do
       let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
 
       before do
@@ -56,7 +56,7 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'open collection ui' do
+    context 'for open collection ui' do
       let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, collections: []) }
 
       it 'renders the add collection ui' do
@@ -66,7 +66,7 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'tag ui' do
+    context 'for tag ui' do
       let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
       let(:object_client) do
         instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)

@@ -23,7 +23,7 @@ RSpec.describe 'auth/groups' do
     end
   end
 
-  context 'not admin' do
+  context 'not as admin' do
     let(:user) { mock_user(admin?: false, sdr_api_authorized?: false) }
 
     it 'does not show groups or form' do

@@ -21,7 +21,7 @@ RSpec.describe RemoteIndexingJob do
     let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ee2222'] }
     let(:params) { { druids: } }
 
-    context 'in a happy world' do
+    context 'when happy path' do
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
         druids.each do |druid|
           expect(subject).to receive(:reindex_druid_safely).with(druid, log_buffer)

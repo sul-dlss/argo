@@ -38,7 +38,7 @@ RSpec.describe ReleaseObjectJob do
     context 'with already published objects' do
       let(:client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil, lifecycle: Time.zone.now) }
 
-      context 'in a happy world' do
+      context 'when happy path' do
         let(:object_client1) { instance_double(Dor::Services::Client::Object, update: true) }
         let(:object_client2) { instance_double(Dor::Services::Client::Object, update: true) }
 

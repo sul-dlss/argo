@@ -44,7 +44,7 @@ RSpec.describe 'Reset failed workflow steps' do
     end
   end
 
-  context 'a non admin who has access' do
+  context 'as a non admin with access' do
     let(:report) { instance_double(Report, druids: %w[xb482ww9999]) }
 
     before do
@@ -61,7 +61,7 @@ RSpec.describe 'Reset failed workflow steps' do
     end
   end
 
-  context 'a non admin who has no access' do
+  context 'as a non admin without access' do
     let(:report) { instance_double(Report, druids: %w[xb482ww9999]) }
 
     before do

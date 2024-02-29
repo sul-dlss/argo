@@ -20,7 +20,7 @@ RSpec.describe 'Bulk jobs view', :js do
   let(:cocina_model) { build(:admin_policy_with_metadata, id: apo_id) }
   let(:apo_id) { 'druid:hv992yv2222' }
 
-  context 'on the page with the list of bulk jobs' do
+  context 'when on the page with the list of bulk jobs' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
 
     before do
@@ -36,7 +36,7 @@ RSpec.describe 'Bulk jobs view', :js do
     end
   end
 
-  context 'on the form for creating a new bulk job' do
+  context 'when on the form for creating a new bulk job' do
     let(:bulk_job_data_path) { file_fixture('crowdsourcing_bridget_1.xml') }
 
     before do

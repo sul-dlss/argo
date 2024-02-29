@@ -163,7 +163,7 @@ RSpec.describe ApplyModsMetadata do
       expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{druid}")
     end
 
-    context 'the object is in the registered state' do
+    context 'when the object is in the registered state' do
       let(:status_code) { 1 }
 
       it 'does not update the version' do
@@ -173,7 +173,7 @@ RSpec.describe ApplyModsMetadata do
       end
     end
 
-    context 'the object is in the opened state' do
+    context 'when the object is in the opened state' do
       let(:status_code) { 9 }
 
       it 'does not update the version' do

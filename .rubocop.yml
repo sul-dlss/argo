@@ -55,6 +55,18 @@ Naming/PredicateName:
   ForbiddenPrefixes:
     - is_
 
+RSpec/ContextWording:
+  Enabled: true
+  Prefixes:
+    - when
+    - with
+    - without
+    - for
+    - if
+    - as
+    - 'not as'
+    - from
+
 # We exclude feature specs here because they have a lot of setup overhead, so
 # testing a bunch of things in one go is more efficient.
 RSpec/ExampleLength:
