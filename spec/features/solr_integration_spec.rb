@@ -4,9 +4,17 @@ require 'rails_helper'
 
 RSpec.describe 'Search behaviors' do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    visit '/'
+  end
+
+  after do
+    solr_conn.delete_by_id(item.externalIdentifier)
+    solr_conn.commit
   end
 
   # case folding happens for searching
@@ -142,42 +150,11 @@ RSpec.describe 'Search behaviors' do
     end
   end
 
-  describe 'source id searching' do
-    # Manuscript number (Annie) - this would be present as a partial source ID or partial tag
-    # Works in SearchWorks, not in Argo: M2549
-    # Results in Argo (none), results in SW (multiple)
-    # SPEC:  Source ID: M2549_2022-259_stertzer, where M2549 is the collection number and 2022-259 is the accession number
-
-    it 'matches on a partial string (tokenized)' do
-      skip('write this test')
-    end
-
-    it 'matches whole string' do
-      skip('write this test')
-    end
-
-    it 'matches with or without "Source ID" prefix' do
-      # source id searching with “:“ must still work
-      skip('write this test')
-    end
-
-    it 'is not case sensitive' do
-      skip('write this test')
-    end
-
-    it 'matches when there is a colon in the sourceid' do
-      skip('write this test')
-    end
-
-    # worddelimiterfactory choices?
-  end
-
   describe 'identifier searching' do
     context 'for druids' do
       let(:prefixed_druid) { item.externalIdentifier }
 
       it 'matches query with bare druid' do
-        visit '/'
         fill_in 'q', with: prefixed_druid.split(':').last
         click_button 'search'
         expect(page).to have_content('1 entry found')
@@ -185,28 +162,113 @@ RSpec.describe 'Search behaviors' do
       end
 
       it 'matches query with prefixed druid' do
-        visit '/'
         fill_in 'q', with: prefixed_druid
         click_button 'search'
         expect(page).to have_content('1 entry found')
         expect(page).to have_css('dd.blacklight-id', text: prefixed_druid)
       end
     end
-    # ditto barcodes
-    # folio instance hrids
-    # doi
-    # is there are reason to tokenize any of the above?
 
     context 'for sourceids' do
+      # SPEC: Source ID: M2549_2022-259_stertzer, where M2549 is the collection number and 2022-259 is the accession number
+      # sul:M0997_S1_B473_021_0001 (S is for series, B is for box, F is for folder ...)
+      let(:source_id) { "sul:M2549_2022-259_stertzer_#{SecureRandom.alphanumeric(12)}" }
+      let(:item) { FactoryBot.create_for_repository(:persisted_item, source_id:) }
+      let(:druid) { item.externalIdentifier }
 
-    end
-    # source ids sold separately
-    it 'folio identifiers match with a, in, ... prefixes' do
-      skip('write this test')
+      before do
+        item.identification.sourceId # ensure item is created before searching
+      end
+
+      it 'matches whole string, including prefix before first colon' do
+        fill_in 'q', with: source_id
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: druid)
+      end
+
+      it 'matches without prefix before the first colon' do
+        fill_in 'q', with: source_id.split(':').last
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: druid)
+      end
+
+      it 'matches source_id fragments' do
+        fragments = [
+          'M2549',
+          '2022-259', # accession number
+          'M2549_2022-259',
+          'M2549 2022 259',
+          'stertzer',
+          '259_stertzer',
+          '259-stertzer',
+          '259 stertzer'
+        ]
+        fragments.each do |fragment|
+          fill_in 'q', with: fragment
+          click_button 'search'
+          expect(page).to have_content('1 entry found')
+          expect(page).to have_css('dd.blacklight-id', text: druid)
+        end
+      end
+
+      it 'is not case sensitive' do
+        fill_in 'q', with: 'm2549 STERTZER'
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: druid)
+      end
+
+      punctuation_source_ids = [
+        'sulcons:8552-RB_Miscellanies_agabory,Before treatment photos',
+        'Archiginnasio:Bassi_Box10_Folder2_Item3.14',
+        'Revs:2012-015GHEW-CO-1980-b1_1.16_0007'
+      ]
+      punctuation_source_ids.each do |punctuation_source_id|
+        context "when punctuation in #{punctuation_source_id}" do
+          let(:source_id) { "#{punctuation_source_id}.#{SecureRandom.alphanumeric(4)}" }
+
+          it 'matches without punctuation' do
+            fill_in 'q', with: source_id.gsub(/[_\-:.,]/, ' ')
+            click_button 'search'
+            expect(page).to have_content('1 entry found')
+            expect(page).to have_css('dd.blacklight-id', text: druid)
+          end
+        end
+      end
     end
 
-    it 'folio identifiers match without their a/in/xx prefixes' do
-      skip('write this test')
+    context 'for barcodes' do
+      it 'matches query with bare barcode' do
+        skip('write this test')
+      end
+
+      it 'matches query with prefixed druid' do
+        skip('write this test')
+      end
+    end
+
+    context 'for ILS (folio) identifiers' do
+      it 'folio identifiers match with a, in, ... prefixes' do
+        skip('write this test')
+      end
+
+      it 'folio identifiers match without their a/in/xx prefixes' do
+        skip('write this test')
+      end
+    end
+
+    context 'for DOIs' do
+      it 'matches bare DOI' do
+        skip('write this test')
+      end
+
+      it 'matches DOI with "doi:" prefix' do
+        skip('write this test')
+      end
+
+      # is there a reason to tokenize DOIs?
     end
   end
 

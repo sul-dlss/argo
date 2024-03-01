@@ -9,7 +9,7 @@ FactoryBot.define do
                                        'label' => label,
                                        'version' => 1,
                                        'identification' => {
-                                         'sourceId' => "sul:#{SecureRandom.uuid}"
+                                         'sourceId' => source_id
                                        },
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
@@ -30,6 +30,7 @@ FactoryBot.define do
     admin_policy_id { 'druid:hv992ry2431' }
     label { 'test object' }
     type { Cocina::Models::ObjectType.object }
+    source_id { "sul:#{SecureRandom.uuid}" }
 
     factory :agreement do
       type { Cocina::Models::ObjectType.agreement }
