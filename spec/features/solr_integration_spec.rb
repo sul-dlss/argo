@@ -240,12 +240,31 @@ RSpec.describe 'Search behaviors' do
     end
 
     context 'for barcodes' do
-      it 'matches query with bare barcode' do
-        skip('write this test')
+      let(:barcode) { '20503740296' }
+      let(:item) do
+        FactoryBot.create_for_repository(:persisted_item, identification: {
+                                           'sourceId' => "sul:#{SecureRandom.uuid}",
+                                           'barcode' => barcode
+                                         })
+      end
+      let(:druid) { item.externalIdentifier }
+
+      before do
+        item.identification.barcode # ensure item is created before searching
       end
 
-      it 'matches query with prefixed druid' do
-        skip('write this test')
+      it 'matches query with bare barcode' do
+        fill_in 'q', with: barcode
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: druid)
+      end
+
+      it 'matches query with prefixed barcode' do
+        fill_in 'q', with: "barcode:#{barcode}"
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: druid)
       end
     end
 

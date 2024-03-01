@@ -8,9 +8,7 @@ FactoryBot.define do
                                        'type' => type,
                                        'label' => label,
                                        'version' => 1,
-                                       'identification' => {
-                                         'sourceId' => source_id
-                                       },
+                                       'identification' => identification,
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
                                        },
@@ -31,6 +29,11 @@ FactoryBot.define do
     label { 'test object' }
     type { Cocina::Models::ObjectType.object }
     source_id { "sul:#{SecureRandom.uuid}" }
+    identification do
+      {
+        'sourceId' => source_id
+      }
+    end
 
     factory :agreement do
       type { Cocina::Models::ObjectType.agreement }
