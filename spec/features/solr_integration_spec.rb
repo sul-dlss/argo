@@ -6,6 +6,7 @@ RSpec.describe 'Search behaviors' do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+  let(:solr_id) { item.externalIdentifier }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
@@ -13,7 +14,7 @@ RSpec.describe 'Search behaviors' do
   end
 
   after do
-    solr_conn.delete_by_id(item.externalIdentifier)
+    solr_conn.delete_by_id(solr_id)
     solr_conn.commit
   end
 
@@ -158,14 +159,14 @@ RSpec.describe 'Search behaviors' do
         fill_in 'q', with: prefixed_druid.split(':').last
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: prefixed_druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
       it 'matches query with prefixed druid' do
         fill_in 'q', with: prefixed_druid
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: prefixed_druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
 
@@ -174,7 +175,6 @@ RSpec.describe 'Search behaviors' do
       # sul:M0997_S1_B473_021_0001 (S is for series, B is for box, F is for folder ...)
       let(:source_id) { "sul:M2549_2022-259_stertzer_#{SecureRandom.alphanumeric(12)}" }
       let(:item) { FactoryBot.create_for_repository(:persisted_item, source_id:) }
-      let(:druid) { item.externalIdentifier }
 
       before do
         item.identification.sourceId # ensure item is created before searching
@@ -184,14 +184,14 @@ RSpec.describe 'Search behaviors' do
         fill_in 'q', with: source_id
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
       it 'matches without prefix before the first colon' do
         fill_in 'q', with: source_id.split(':').last
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
       it 'matches source_id fragments' do
@@ -209,7 +209,7 @@ RSpec.describe 'Search behaviors' do
           fill_in 'q', with: fragment
           click_button 'search'
           expect(page).to have_content('1 entry found')
-          expect(page).to have_css('dd.blacklight-id', text: druid)
+          expect(page).to have_css('dd.blacklight-id', text: solr_id)
         end
       end
 
@@ -217,7 +217,7 @@ RSpec.describe 'Search behaviors' do
         fill_in 'q', with: 'm2549 STERTZER'
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
       punctuation_source_ids = [
@@ -233,7 +233,7 @@ RSpec.describe 'Search behaviors' do
             fill_in 'q', with: source_id.gsub(/[_\-:.,]/, ' ')
             click_button 'search'
             expect(page).to have_content('1 entry found')
-            expect(page).to have_css('dd.blacklight-id', text: druid)
+            expect(page).to have_css('dd.blacklight-id', text: solr_id)
           end
         end
       end
@@ -243,11 +243,10 @@ RSpec.describe 'Search behaviors' do
       let(:barcode) { '20503740296' }
       let(:item) do
         FactoryBot.create_for_repository(:persisted_item, identification: {
-                                           'sourceId' => "sul:#{SecureRandom.uuid}",
-                                           'barcode' => barcode
+                                           sourceId: "sul:#{SecureRandom.uuid}",
+                                           barcode: barcode
                                          })
       end
-      let(:druid) { item.externalIdentifier }
 
       before do
         item.identification.barcode # ensure item is created before searching
@@ -257,24 +256,46 @@ RSpec.describe 'Search behaviors' do
         fill_in 'q', with: barcode
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
       it 'matches query with prefixed barcode' do
         fill_in 'q', with: "barcode:#{barcode}"
         click_button 'search'
         expect(page).to have_content('1 entry found')
-        expect(page).to have_css('dd.blacklight-id', text: druid)
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
 
     context 'for ILS (folio) identifiers' do
-      it 'folio identifiers match with a, in, ... prefixes' do
-        skip('write this test')
+      let(:catalog_id) { 'a11403803' }
+      let(:item) do
+        FactoryBot.create_for_repository(:persisted_item, identification: {
+                                           sourceId: "sul:#{SecureRandom.uuid}",
+                                           catalogLinks: [{
+                                             catalog: 'folio',
+                                             refresh: false,
+                                             catalogRecordId: catalog_id
+                                           }]
+                                         })
       end
 
-      it 'folio identifiers match without their a/in/xx prefixes' do
-        skip('write this test')
+      before do
+        item.identification.catalogLinks # ensure item is created before searching
+      end
+
+      it 'matches catalog identifier with folio prefix' do
+        fill_in 'q', with: "folio:#{catalog_id}"
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
+      end
+
+      it 'matches catalog identifier without folio prefix' do
+        fill_in 'q', with: catalog_id
+        click_button 'search'
+        expect(page).to have_content('1 entry found')
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
 
