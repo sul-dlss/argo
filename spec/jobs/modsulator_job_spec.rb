@@ -92,7 +92,7 @@ RSpec.describe ModsulatorJob do
 
     it 'delivers remotely-converted data' do
       FileUtils.copy_file(xlsx_path, test_spreadsheet_path) # perform deletes upload file, so we copy fixture
-      expect(File).to be_exist test_spreadsheet_path # confirm copy
+      expect(File).to exist test_spreadsheet_path # confirm copy
       expect(ModsulatorClient).to receive(:convert_spreadsheet_to_mods).and_return(xml_data)
       job.perform(nil,
                   test_spreadsheet_path,
@@ -105,10 +105,10 @@ RSpec.describe ModsulatorJob do
       # Filename is calculated based on a millisecond timestamp, so we need to look for the generated file
       output_filename = Dir.glob("#{output_directory}/crowdsourcing_bridget*.xml")[0]
       expect(output_filename).not_to be_nil
-      expect(File).to be_exist output_filename
+      expect(File).to exist output_filename
       expect(File.read(output_filename)).to be_equivalent_to(xml_data).ignoring_attr_values('datetime', 'sourceFile')
-      expect(File).to be_exist(File.join(output_directory, Settings.bulk_metadata.log))
-      expect(File).not_to be_exist test_spreadsheet_path
+      expect(File).to exist(File.join(output_directory, Settings.bulk_metadata.log))
+      expect(File).not_to exist test_spreadsheet_path
       expect(File.read("#{output_directory}/#{Settings.bulk_metadata.log}")).to include 'argo.bulk_metadata.bulk_log_invalid_druid druid:bogus'
     end
 
