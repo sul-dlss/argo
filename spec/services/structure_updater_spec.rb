@@ -212,7 +212,7 @@ RSpec.describe StructureUpdater do
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/one,,en-US
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription,
         #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,,
-        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,location-based,location-based,music,image/four,,
+        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,,yes,yes,no,location-based,location-based,music,image/four,,
       CSV
     end
 
@@ -241,6 +241,9 @@ RSpec.describe StructureUpdater do
 
       expect(new_files.map(&:use)).to eq [nil, 'transcription', nil, nil]
       expect(new_files.map(&:languageTag)).to eq ['en-US', nil, nil, nil]
+      expect(new_files.map(&:filename)).to eq(['bb045jk9908_0001.tiff', 'bb045jk9908_0001.jp2',
+                                               'bb045jk9908_0002.tiff', 'CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx'])
+      expect(new_files.map(&:label)).to eq(['bb045jk9908_0001.tiff', 'bb045jk9908_0001.jp2', 'bb045jk9908_0002.tiff', ''])
     end
 
     it 'produces valid cocina' do
@@ -254,8 +257,8 @@ RSpec.describe StructureUpdater do
         druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
-        #{bare_druid},Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
-        #{bare_druid},Picture 2,page,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,world,world,,image/jp2,
+        #{bare_druid},,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
+        #{bare_druid},,page,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,world,world,,image/jp2,
       CSV
     end
 
@@ -268,7 +271,7 @@ RSpec.describe StructureUpdater do
 
       expect(new_filesets.map(&:label)).to eq [
         'Picture 1',
-        'Picture 2'
+        ''
       ]
     end
 
