@@ -72,7 +72,7 @@ class StructureUpdater
 
   def update_file(existing_file, row)
     attributes = {
-      label: row['file_label'],
+      label: row['file_label'] || '',
       hasMimeType: row['mimetype'],
       use: row['role'],
       languageTag: row['file_language'],
@@ -103,7 +103,7 @@ class StructureUpdater
     # Which files go in which filesets
     files_by_fileset = csv.each_with_object({}) do |row, hash|
       hash[row['sequence']] ||= []
-      fileset_attributes[row['sequence']] = { label: row['resource_label'], type: type(row['resource_type']) }
+      fileset_attributes[row['sequence']] = { label: row['resource_label'] || '', type: type(row['resource_type']) }
       hash[row['sequence']] << update_file(existing_files_by_filename[row['filename']], row)
     end
 
