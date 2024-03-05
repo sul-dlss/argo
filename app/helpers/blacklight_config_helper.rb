@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+# Used in CatalogController.  This module is split out because catalog_controller.rb
+#  contains all the required blacklight configurations and is plenty large enough.
 module BlacklightConfigHelper
+  # sending these values to Solr as arguments with search requests will override
+  #   the default params configured for Solr searching via solrconfig.xml
   def self.add_common_default_solr_params_to_config!(config)
     config.default_solr_params = {
       'q.alt': '*:*',
