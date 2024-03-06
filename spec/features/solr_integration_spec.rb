@@ -23,11 +23,6 @@ RSpec.describe 'Search behaviors' do
     solr_conn.commit
   end
 
-  # case folding happens for searching
-  # stopwords are significant for searching
-  # diacritics ignored for searching
-  # only store one flavor of same data
-
   describe 'titles' do
     describe 'main title' do
       it 'exact match (anchored) on main title is first' do
@@ -412,10 +407,8 @@ RSpec.describe 'Search behaviors' do
     end
   end
 
-  describe 'collection title' do
-    it 'does something' do
-      skip('write this test')
-    end
+  it 'items match searches that match their collection title' do
+    skip('write this test')
   end
 
   it 'date picker facet works' do
@@ -426,8 +419,51 @@ RSpec.describe 'Search behaviors' do
     skip('write this test')
   end
 
-  describe 'we are happy with our stemming algorithm' do
-    it 'does something' do
+  it 'we do not use stopwords - all words are significant for searching' do
+    skip('write this test')
+  end
+
+  it 'diacritics are ignored for searching' do
+    skip('write this test')
+  end
+
+  describe 'case folding' do
+    it 'case does not affect search results' do
+      skip('write this test, and include some non-latin scripts with case')
+    end
+
+    it 'case is honored in facets' do
+
+    end
+
+    it 'case is honored in display values' do
+
+    end
+  end
+
+  describe 'stemming' do
+    # Note:  don't check all the rules for the stemmer we use; just check that it is working
+    it 'searches with and without plurals match, but exact match is first (but only for title)' do
+      skip('write this test')
+      # sses -> ss
+      # es -> e
+      # ies -> y
+      # s -> ""
+    end
+
+    it 'searches with and without stemming "ing" match' do
+      skip('write this test')
+    end
+
+    it 'searches with and without stemming "ed" match' do
+      skip('write this test')
+    end
+
+    it "searches with and without stemming 's or ending ' match" do
+      skip('write this test')
+    end
+
+    it 'am, are, is stem to be' do
       skip('write this test')
     end
   end
