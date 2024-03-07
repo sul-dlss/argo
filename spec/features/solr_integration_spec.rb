@@ -15,6 +15,7 @@ RSpec.describe 'Search behaviors' do
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    solr_conn.commit # ensure no deletes are pending
     visit '/'
   end
 
@@ -24,84 +25,307 @@ RSpec.describe 'Search behaviors' do
   end
 
   describe 'titles' do
+    before do
+      item.description # ensure item is created before searching
+    end
+
+    describe 'simple value' do
+      let(:item) { FactoryBot.create_for_repository(:persisted_item, title: title_value_simple) }
+      let(:title_value_simple) { 'The Titlé' }
+
+      it 'there are no stopwords: all tokens are significant' do
+        fill_in 'q', with: 'The'
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
+      end
+
+      it 'searches are not case sensitive and work with and without diacritics' do
+        %w[Titlé Title titlé title].each do |token|
+          fill_in 'q', with: token
+          click_button 'search'
+          expect(page).to have_css('dd.blacklight-id', text: solr_id)
+        end
+      end
+
+      it 'relevancy order is exact match (anchored) first, then unstemmed, then stemmed' do
+        plural_and_unanchored = FactoryBot.create_for_repository(:persisted_item, title: 'doing Titles for the fools') # extra and needs stemming
+        unanchored = FactoryBot.create_for_repository(:persisted_item, title: "beyond #{title_value_simple} and more") # exact + extra
+        plural = FactoryBot.create_for_repository(:persisted_item, title: 'the titles') # anchored but needs stemming
+        fill_in 'q', with: title_value_simple
+        click_button 'search'
+        click_button 'Sort'
+        click_link 'Relevance'
+        # check for item order as a measure of relevancy ranking
+        expect(page).to have_content(/#{solr_id}.*#{plural.externalIdentifier}.*#{unanchored.externalIdentifier}.*#{plural_and_unanchored.externalIdentifier}/m)
+        solr_conn.delete_by_id([plural_and_unanchored.externalIdentifier, plural.externalIdentifier, unanchored.externalIdentifier])
+        # solr_conn.commit is in after block
+      end
+    end
+
     describe 'main title' do
-      it 'exact match (anchored) on main title is first' do
-        skip('write this test')
-      end
+      # main title is either indicated with status primary or is the first title (see cocina-models)
+      #   thus the simple title value tests above apply to main title
 
-      it 'unstemmed matches before stemmed matches' do
-        skip('write this test')
-      end
-
-      it 'tokenized matches last' do
-        skip('write this test')
-      end
-
-      it 'we do not use stopwords: all tokens are significant' do
-        skip('write this test')
-      end
-
-      it 'searches work with and without diacritics' do
-        skip('write this test')
-      end
-
-      it 'parallel values work' do
-        # search on each parallel value - same results?
-        skip('write this test')
+      it 'parallel title matches searches of either value' do
+        chinese_value = '标题'
+        greek_value = 'τίτλος'
+        parallel_title_value = {
+          parallelValue: [
+            {
+              value: chinese_value
+            },
+            {
+              value: greek_value
+            }
+          ]
+        }
+        my_item = FactoryBot.create_for_repository(:persisted_item, title_values: [parallel_title_value])
+        solr_id = my_item.externalIdentifier
+        fill_in 'q', with: chinese_value
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
+        fill_in 'q', with: greek_value
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
 
     describe 'full title' do
-      it 'exact match (anchored) on full title ...' do
-        skip('write this test')
+      # full title is different from main_title when there is a structuredValue with
+      #   parts such as subtitle, part number, etc.; the main title only includes
+      #   the 'main title' part (shockingly), but the full title includes all parts.
+      # full title is either indicated with status primary or is the first title (see cocina-models)
+      let(:main_title_value) { 'My Cat' }
+      let(:subtitle_value) { 'A Book About Wingnut' }
+      let(:structured_title_value) do
+        {
+          structuredValue: [
+            {
+              value: main_title_value,
+              type: 'main title'
+            },
+            {
+              value: subtitle_value,
+              type: 'subtitle'
+            }
+          ]
+        }
+      end
+      let(:item) { FactoryBot.create_for_repository(:persisted_item, title_values: [structured_title_value]) }
+
+      it 'there are no stopwords: all tokens are significant' do
+        fill_in 'q', with: 'A'
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
-      it 'untokenized match on (main/full) is before tokenized' do
-        skip('write this test')
+      it 'searches are not case sensitive and work with and without diacritics' do
+        %w[about aboüt About].each do |token|
+          fill_in 'q', with: token
+          click_button 'search'
+          expect(page).to have_css('dd.blacklight-id', text: solr_id)
+        end
       end
 
-      it 'we do not use stopwords: all tokens are significant' do
-        skip('write this test')
+      it 'relevancy order is exact match (anchored) first, then unanchored, then unstemmed, then stemmed' do
+        plural_and_unanchored_subtitle = "this is a #{subtitle_value} and grommits"
+        structured_title_value[:structuredValue][1][:value] = plural_and_unanchored_subtitle
+        plural_and_unanchored = FactoryBot.create_for_repository(:persisted_item, title_values: [structured_title_value]) # extra and needs stemming
+        plural_subtitle = "#{subtitle_value}s" # exact but needs stemming (or view as only first anchor match)
+        structured_title_value[:structuredValue][1][:value] = plural_subtitle
+        plural = FactoryBot.create_for_repository(:persisted_item, title_values: [structured_title_value]) # extra and needs stemming
+        unanchored_subtitle = "before #{subtitle_value} is completed" # exact + extra
+        structured_title_value[:structuredValue][1][:value] = unanchored_subtitle
+        unanchored = FactoryBot.create_for_repository(:persisted_item, title_values: [structured_title_value]) # extra and needs stemming
+        fill_in 'q', with: subtitle_value
+        click_button 'search'
+        click_button 'Sort'
+        click_link 'Relevance'
+        # check for item order as a measure of relevancy ranking
+        expect(page).to have_content(/#{solr_id}.*#{plural.externalIdentifier}.*#{unanchored.externalIdentifier}.*#{plural_and_unanchored.externalIdentifier}/m)
+        solr_conn.delete_by_id([plural_and_unanchored.externalIdentifier, plural.externalIdentifier, unanchored.externalIdentifier])
+        # solr_conn.commit is in after block
       end
 
-      it 'searches work with and without diacritics' do
-        skip('write this test')
-      end
-
-      it 'parallel values work' do
-        skip('write this test')
-      end
-
-      it 'structured values follow the order given' do
-        # search on each parallel value - same results?
-        skip('write this test')
+      it 'parallel title matches searches of either value' do
+        subtitle = 'all about Vinsky'
+        chinese_subtitle = '关于Vinsky'
+        parallel_title_value = {
+          parallelValue: [
+            {
+              structuredValue: [
+                {
+                  value: 'main',
+                  type: 'main title'
+                },
+                {
+                  value: subtitle,
+                  type: 'subtitle'
+                }
+              ]
+            },
+            {
+              structuredValue: [
+                {
+                  value: '主',
+                  type: 'main title'
+                },
+                {
+                  value: chinese_subtitle,
+                  type: 'subtitle'
+                }
+              ]
+            }
+          ]
+        }
+        my_item = FactoryBot.create_for_repository(:persisted_item, title_values: [parallel_title_value])
+        solr_id = my_item.externalIdentifier
+        fill_in 'q', with: subtitle
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
+        fill_in 'q', with: chinese_subtitle
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
 
     describe 'additional titles' do
-      it 'exact match (anchored) on full title ...' do
-        skip('write this test')
+      # additional titles are title values other than the main/full values (see cocina-models)
+      let(:primary_title) do
+        {
+          value: 'primary title',
+          status: 'primary'
+        }
+      end
+      let(:additional_title_value) { 'vegetables and fruits' }
+      let(:additional_title) { { value: additional_title_value } }
+      let(:title_values) { [primary_title, additional_title] }
+      let(:item) { FactoryBot.create_for_repository(:persisted_item, title_values:) }
+
+      it 'there are no stopwords: all tokens are significant' do
+        fill_in 'q', with: 'and'
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
 
-      it 'untokenized match on (main/full) is before tokenized' do
-        skip('write this test')
+      it 'searches are not case sensitive and work with and without diacritics' do
+        %w[Vegetåbles vegeTABLEs].each do |token|
+          fill_in 'q', with: token
+          click_button 'search'
+          expect(page).to have_css('dd.blacklight-id', text: solr_id)
+        end
       end
 
-      it 'we do not use stopwords: all tokens are significant' do
-        skip('write this test')
+      it 'relevancy order is exact match (anchored) first, then unstemmed, then stemmed (phrase), then unordered tokens' do
+        same_stems_value = 'vegetable and fruit'
+        same_stems = FactoryBot.create_for_repository(:persisted_item, title_values: [primary_title, { value: same_stems_value }])
+        order_reversed_value = 'fruits and vegetables'
+        order_reversed = FactoryBot.create_for_repository(:persisted_item, title_values: [primary_title, { value: order_reversed_value }])
+        unanchored_value = "before #{additional_title_value} and more"
+        unanchored = FactoryBot.create_for_repository(:persisted_item, title_values: [primary_title, { value: unanchored_value }])
+        fill_in 'q', with: additional_title_value
+        click_button 'search'
+        click_button 'Sort'
+        click_link 'Relevance'
+        # check for item order as a measure of relevancy ranking
+        expect(page).to have_content(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{same_stems.externalIdentifier}.*#{order_reversed.externalIdentifier}/m)
+        solr_conn.delete_by_id([same_stems.externalIdentifier, order_reversed.externalIdentifier, unanchored.externalIdentifier])
+        # solr_conn.commit is in after block
       end
 
-      it 'searches work with and without diacritics' do
-        skip('write this test')
+      it 'parallel title matches searches of either value' do
+        subtitle = 'all about Vinsky'
+        chinese_subtitle = '关于Vinsky'
+        parallel_title_value = {
+          parallelValue: [
+            {
+              structuredValue: [
+                {
+                  value: 'main',
+                  type: 'main title'
+                },
+                {
+                  value: subtitle,
+                  type: 'subtitle'
+                }
+              ]
+            },
+            {
+              structuredValue: [
+                {
+                  value: '主',
+                  type: 'main title'
+                },
+                {
+                  value: chinese_subtitle,
+                  type: 'subtitle'
+                }
+              ]
+            }
+          ]
+        }
+        title_values = [
+          primary_title,
+          parallel_title_value
+        ]
+        my_item = FactoryBot.create_for_repository(:persisted_item, title_values:)
+        solr_id = my_item.externalIdentifier
+        fill_in 'q', with: subtitle
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
+        fill_in 'q', with: chinese_subtitle
+        click_button 'search'
+        expect(page).to have_css('dd.blacklight-id', text: solr_id)
+      end
+    end
+
+    describe 'relevancy ranking between title types' do
+      let(:search_term) { 'matching' }
+      let(:main_title_match) { FactoryBot.create_for_repository(:persisted_item, title: "main title #{search_term}") }
+      let(:full_title_matching_value) do
+        {
+          structuredValue: [
+            {
+              value: 'main title',
+              type: 'main title'
+            },
+            {
+              value: "subtitle #{search_term}",
+              type: 'subtitle'
+            }
+          ]
+        }
+      end
+      let(:full_title_match) { FactoryBot.create_for_repository(:persisted_item, title_values: [full_title_matching_value]) }
+      let(:primary_title) do
+        {
+          value: 'primary title for additional title in results',
+          status: 'primary'
+        }
+      end
+      let(:additional_title_value) { search_term }
+      let(:additional_title) { { value: additional_title_value } }
+      let(:title_values) { [primary_title, additional_title] }
+      let(:additional_title_match) { FactoryBot.create_for_repository(:persisted_item, title_values:) }
+      let(:unmatching) { FactoryBot.create_for_repository(:persisted_item, title: 'not there') }
+
+      before do
+        # ensure items are created before searching
+        additional_title_match.description
+        full_title_match.description
+        main_title_match.description
+        unmatching.description
       end
 
-      it 'parallel values work' do
-        # search on each parallel value - same results?
-        skip('write this test')
-      end
-
-      it 'structured values follow the order given' do
-        skip('write this test')
+      it 'relevancy order is matches in main title before matches in full title before matches in additional title' do
+        fill_in 'q', with: search_term
+        click_button 'search'
+        click_button 'Sort'
+        click_link 'Relevance'
+        # check for item order as a measure of relevancy ranking
+        expect(page).to have_content('3 of 3') # unmatching isn't there, as expected
+        expect(page).to have_content(/#{main_title_match.externalIdentifier}.*#{full_title_match.externalIdentifier}.*#{additional_title_match.externalIdentifier}/m)
+        solr_conn.delete_by_id([main_title_match.externalIdentifier, full_title_match.externalIdentifier, additional_title_match.externalIdentifier])
       end
     end
   end
@@ -345,8 +569,9 @@ RSpec.describe 'Search behaviors' do
 
       it 'project tags are a hierarchical facet' do
         click_link_or_button 'Project'
+        # ensure facet has been expanded by javascript
         expect(page).to have_css('#project-tag-facet > .blacklight-exploded_project_tag_ssim')
-        # Note that "Project is not indexed as part of facet"
+        # Note that "Project" is not indexed as part of facet
         click_link_or_button 'ARS 78s'
         click_link_or_button 'broken'
         expect(page).to have_content('1 entry found')
@@ -355,7 +580,8 @@ RSpec.describe 'Search behaviors' do
 
       it 'non-project tags are a hierarchical facet' do
         click_link_or_button 'Tag'
-        # expect(page).to have_css('#nonproject-tag-facet > .blacklight-exploded_nonproject_tag_ssim')
+        # ensure facet has been expanded by javascript
+        expect(page).to have_css('#nonproject-tag-facet > .blacklight-exploded_nonproject_tag_ssim')
         click_link 'willet'
         skip 'FIXME: not sure why this one is failing'
         # click_button 'button.toggle-handle.collapsed'
@@ -432,12 +658,8 @@ RSpec.describe 'Search behaviors' do
       skip('write this test, and include some non-latin scripts with case')
     end
 
-    it 'case is honored in facets' do
-
-    end
-
-    it 'case is honored in display values' do
-
+    it 'case is significant in facets' do
+      skip('write this test, and include some non-latin scripts with case')
     end
   end
 
