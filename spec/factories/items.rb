@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Because we are instantiating an immutable cocina-model rather than a database record,
+#   nested hash structure values (e.g. a title value in a description)
+#   may require a setter method in ItemMethodSender before they can be passed in
 FactoryBot.define do
   factory :persisted_item, class: 'Cocina::Models::RequestDRO' do
     initialize_with do
