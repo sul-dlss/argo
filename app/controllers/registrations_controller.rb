@@ -98,7 +98,6 @@ class RegistrationsController < ApplicationController
 
   def form_create
     @registration_form = RegistrationForm.new(nil)
-    create_params = params.require(:registration).to_unsafe_h.merge(current_user:)
     if @registration_form.validate(create_params) && @registration_form.save
       render 'create_status'
     else
@@ -110,14 +109,9 @@ class RegistrationsController < ApplicationController
   def csv_create
     @registration_form = CsvRegistrationForm.new(nil)
     if @registration_form.validate(create_params) && @registration_form.save
-      # # strip the CSRF token, and the parameters that happened to be in the bulk job creation form
-      # # this can be removed when this is resolved: https://github.com/projectblacklight/blacklight/issues/2683
-      # search_state_subset = search_state.to_h.except(:authenticity_token, :druids, :druids_only, :description)
-      # path_params = Blacklight::Parameters.sanitize(search_state_subset)
-      # redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
       redirect_to bulk_actions_path, status: :see_other, notice: 'Register druids job was successfully created.'
     else
-      prepopulate
+      prepopulate(user_values: create_params) # set form values based on what user already entered
       render :show, status: :bad_request
     end
   end
@@ -126,9 +120,9 @@ class RegistrationsController < ApplicationController
     params.require(:registration).to_unsafe_h.merge(current_user:)
   end
 
-  def prepopulate
+  def prepopulate(user_values: {})
     @apo_list = AdminPolicyOptions.for(current_user)
-    @registration_form.prepopulate!
-    @registration_form.admin_policy = @apo_list.first.last
+    @registration_form.prepopulate!(user_values)
+    @registration_form.admin_policy ||= @apo_list.first.last
   end
 end

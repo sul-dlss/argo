@@ -56,7 +56,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 1. **Pull down the latest docker containers**
 
     ```
-    docker-compose pull
+    docker compose pull
     ```
 
 2. **Start up the docker services needed for testing**
@@ -64,13 +64,13 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     Once everything has been successfully pulled, start up the docker services needed for testing (all but the web container)
 
     ```
-    docker-compose up -d sdr-api techmd
+    docker compose up -d sdr-api techmd dor-indexing-workers
     ```
 
     You should do the following to make sure all the services are up:
 
     ```
-    docker-compose ps
+    docker compose ps
     ```
 
 3. **Install Chrome**
@@ -172,7 +172,7 @@ You may also need to rebuild your web container without using Docker's cache (wh
 ```
 gem update --system && gem install bundler # get the latest version of bundler locally
 bundle update --bundler  # update the Gemfile.lock to match this while not updating any gems
-docker-compose build --no-cache web # rebuild the docker container to match the latest bundler
+docker compose build --no-cache web # rebuild the docker container to match the latest bundler
 ```
 
 If you run into asset related issues, you may need to manually install yarn and compile assets in your Docker container (or local laptop by leaving off the `docker compose run --rm`):
