@@ -6,7 +6,7 @@ FactoryBot.define do
       ApoMethodSender.new(
         Cocina::Models.build_request({
                                        'type' => type,
-                                       'label' => 'test apo',
+                                       'label' => label,
                                        'version' => 1,
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id,
@@ -28,9 +28,8 @@ FactoryBot.define do
     end
 
     admin_policy_id { 'druid:hv992ry2431' }
-
     agreement_id { 'druid:hp308wm0436' }
-
+    label { 'test apo' }
     type { Cocina::Models::ObjectType.admin_policy }
   end
 end

@@ -1,6 +1,8 @@
 <%= tag.h1 'Register DOR Items', class: 'h2 my-4 fw-bolder' %>
 
-<%= form_with model: @registration_form, url: registration_path,
+<%= form_with model: @registration_form,
+              scope: :registration, # form field scope needs to be set to `registration`, not `csv_registration`
+              url: registration_path,
               data: {
                 controller: 'registration',
                 turbo: false # We need to return data, and turbo requires a redirect on form success
@@ -62,9 +64,9 @@
     <div class="alert alert-danger"><%= @registration_form.errors.full_messages.to_sentence %></div>
   <% end %>
 
-  <div data-controller="registration-tabs">
+  <% is_form = f.object.instance_of?(RegistrationForm) %>
+  <div data-controller="registration-tabs" data-registration-tabs-csv-value="<%= !is_form %>">
     <ul class="nav nav-pills" role="tablist">
-      <% is_form = f.object.instance_of?(RegistrationForm) %>
       <li class="nav-item" role="presentation">
         <button class="nav-link<%= is_form ? ' active' : '' %>" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="<%= is_form %>" data-action="registration-tabs#toggleForm">Fill in form</button>
       </li>
@@ -94,7 +96,7 @@
             <div>
           </template>
 
-          <div class="plain-container" style="position: relative" data-controller="registration-item-row">
+          <div class="plain-container" style="position: relative" data-controller="registration-item-row" data-registration-item-row-csv-value="<%= !is_form %>">
             <%= f.fields_for :items do |item_form| %>
               <% render 'item_row', item_form: %>
             <% end %>

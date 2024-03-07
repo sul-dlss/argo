@@ -2,13 +2,18 @@ import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
   static targets = ['barcode', 'catalogRecordId', 'sourceId', 'label']
+  static values = {
+    csv: Boolean
+  }
 
   connect () {
-    // These validations need to be run after values are pasted in.
-    this.validateCatalogRecordId()
-    this.validateSourceId()
-    this.validateBarcode()
-    this.validateLabel()
+    // These validations need to be run after values are pasted in, unless the form was loaded in CSV mode
+    if (!this.csvValue) {
+      this.validateCatalogRecordId()
+      this.validateSourceId()
+      this.validateBarcode()
+      this.validateLabel()
+    }
   }
 
   // Mark any duplicate sourceIds as invalid
