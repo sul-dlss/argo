@@ -24,7 +24,7 @@ class SolrDocument
   FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
   FIELD_RELEASED_TO = :released_to_ssim
 
-  FIELD_TITLE = 'sw_display_title_tesim'
+  FIELD_TITLE = 'display_title_ss'
   FIELD_AUTHOR = 'author_display_ss'
   FIELD_LABEL = 'obj_label_tesim'
   FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
@@ -64,7 +64,7 @@ class SolrDocument
   attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
 
   attribute :label, Blacklight::Types::String, FIELD_LABEL
-  attribute :sw_title, Blacklight::Types::Array, FIELD_TITLE
+  attribute :title_display, Blacklight::Types::Array, FIELD_TITLE
   attribute :author, Blacklight::Types::String, FIELD_AUTHOR
   attribute :place, Blacklight::Types::String, FIELD_PLACE
   attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
@@ -155,7 +155,7 @@ class SolrDocument
   end
 
   def title
-    (sw_title.presence || [label]).join(' -- ')
+    (title_display.presence || [label]).join(' -- ')
   end
 
   def inspect

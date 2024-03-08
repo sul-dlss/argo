@@ -45,7 +45,7 @@ RSpec.describe 'Item view', :js do
         {
           id: 'druid:hj185xx2222',
           objectType_ssim: 'item',
-          sw_display_title_tesim: title
+          display_title_ss: title
         }
       end
       let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }

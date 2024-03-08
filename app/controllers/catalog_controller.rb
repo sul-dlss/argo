@@ -203,8 +203,8 @@ class CatalogController < ApplicationController
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
     config.add_search_field 'text', label: 'All Fields'
+    config.add_sort_field 'score desc', label: 'Relevance', default: true
     config.add_sort_field 'id asc', label: 'Druid'
-    config.add_sort_field 'score desc', label: 'Relevance'
 
     config.spell_max = 5
 
@@ -251,7 +251,14 @@ class CatalogController < ApplicationController
         defType: 'dismax',
         'q.alt': '*:*',
         qf: %(
-          sw_display_title_tesim^5
+          main_title_text_anchored_im^100
+          main_title_text_unstemmed_im^50
+          main_title_tenim^10
+          full_title_unstemmed_im^10
+          full_title_tenim^5
+          additional_titles_unstemmed_im^5
+          additional_titles_tenim^3
+
           contributor_text_nostem_im^3
           topic_tesim^2
 

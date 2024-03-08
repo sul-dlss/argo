@@ -58,7 +58,7 @@ RSpec.describe TrackSheet do
       let(:solr_doc) do
         base_solr_doc.merge(
           {
-            'sw_display_title_tesim' => ['Correct title'] # the cocina title
+            'display_title_ss' => ['Correct title'] # the cocina title
           }
         )
       end
@@ -77,7 +77,7 @@ RSpec.describe TrackSheet do
       let(:solr_doc) do
         base_solr_doc.merge(
           {
-            'sw_display_title_tesim' => ['Stanford University. School of Engineeering Roger Howe Professorship: Stanford (Calif.), 2010-01-21.  And more stuff goes here']
+            'display_title_ss' => ['Stanford University. School of Engineeering Roger Howe Professorship: Stanford (Calif.), 2010-01-21.  And more stuff goes here']
           }
         )
       end
@@ -95,8 +95,7 @@ RSpec.describe TrackSheet do
     context 'when no title' do
       let(:solr_doc) do
         base_solr_doc.merge({
-                              'sw_display_title_tesim' => ['']
-
+                              'display_title_ss' => ['']
                             })
       end
 

@@ -17,8 +17,8 @@ RSpec.describe 'BulkActions::GoverningApoJobs' do
       {
         'response' => {
           'docs' => [
-            { 'id' => 'druid:123', 'sw_display_title_tesim' => 'APO 1' },
-            { 'id' => 'druid:234', 'sw_display_title_tesim' => 'APO 2' }
+            { 'id' => 'druid:123', 'display_title_ss' => 'APO 1' },
+            { 'id' => 'druid:234', 'display_title_ss' => 'APO 2' }
           ]
         }
       }
