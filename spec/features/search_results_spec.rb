@@ -28,7 +28,7 @@ RSpec.describe 'Search results' do
       within '.search-widgets' do
         expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Action'
         within '#sort-dropdown' do
-          expect(page).to have_css 'button', text: 'Sort by Druid'
+          expect(page).to have_css 'button', text: 'Sort by Relevance'
           expect(page).to have_css '.dropdown-item', count: 2
         end
         within '#per_page-dropdown' do
