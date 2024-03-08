@@ -664,7 +664,7 @@ RSpec.describe 'Search behaviors' do
   end
 
   describe 'stemming' do
-    # Note:  don't check all the rules for the stemmer we use; just check that it is working
+    # NOTE:  don't check all the rules for the stemmer we use; just check that it is working
     it 'searches with and without plurals match, but exact match is first (but only for title)' do
       skip('write this test')
       # sses -> ss
