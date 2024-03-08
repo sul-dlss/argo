@@ -468,7 +468,7 @@ RSpec.describe 'Search behaviors' do
       let(:item) do
         FactoryBot.create_for_repository(:persisted_item, identification: {
                                            sourceId: "sul:#{SecureRandom.uuid}",
-                                           barcode: barcode
+                                           barcode:
                                          })
       end
 
