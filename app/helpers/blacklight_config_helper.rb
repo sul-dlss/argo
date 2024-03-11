@@ -18,7 +18,9 @@ module BlacklightConfigHelper
         additional_titles_unstemmed_im^5
         additional_titles_tenim^3
 
-        contributor_text_nostem_im^3
+        author_text_nostem_im^3
+        contributor_text_nostem_im
+
         topic_tesim^2
 
         tag_text_unstemmed_im

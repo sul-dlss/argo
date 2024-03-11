@@ -50,7 +50,9 @@
         additional_titles_unstemmed_im^5
         additional_titles_tenim^3
 
-        contributor_text_nostem_im^3
+        author_text_nostem_im^3
+        contributor_text_nostem_im
+
         topic_tesim^2
 
         tag_text_unstemmed_im
@@ -91,7 +93,9 @@
         additional_titles_unstemmed_im^25
         additional_titles_tenim^15
 
-        contributor_text_nostem_im^15
+        author_text_nostem_im^15
+        contributor_text_nostem_im^5
+
         topic_tesim^10
 
         descriptive_text_nostem_i^5
@@ -113,7 +117,9 @@
         additional_titles_unstemmed_im^15
         additional_titles_tenim^9
 
-        contributor_text_nostem_im^9
+        author_text_nostem_im^9
+        contributor_text_nostem_im^3
+
         topic_tesim^6
 
         descriptive_text_nostem_i^15
@@ -135,7 +141,9 @@
         additional_titles_unstemmed_im^10
         additional_titles_tenim^6
 
-        contributor_text_nostem_im^6
+        author_text_nostem_im^6
+        contributor_text_nostem_im^2
+
         topic_tesim^4
 
         descriptive_text_nostem_i^10
@@ -185,7 +193,9 @@
         additional_titles_unstemmed_im^5
         additional_titles_tenim^3
 
-        contributor_text_nostem_im^3
+        author_text_nostem_im^3
+        contributor_text_nostem_im
+
         topic_tesim^2
 
         tag_text_unstemmed_im
@@ -226,7 +236,9 @@
         additional_titles_unstemmed_im^25
         additional_titles_tenim^15
 
-        contributor_text_nostem_im^15
+        author_text_nostem_im^15
+        contributor_text_nostem_im^5
+
         topic_tesim^10
 
         descriptive_text_nostem_i^5
@@ -248,7 +260,9 @@
         additional_titles_unstemmed_im^15
         additional_titles_tenim^9
 
-        contributor_text_nostem_im^9
+        author_text_nostem_im^9
+        contributor_text_nostem_im^3
+
         topic_tesim^6
 
         descriptive_text_nostem_i^15
@@ -270,7 +284,9 @@
         additional_titles_unstemmed_im^10
         additional_titles_tenim^6
 
-        contributor_text_nostem_im^6
+        author_text_nostem_im^6
+        contributor_text_nostem_im^2
+
         topic_tesim^4
 
         descriptive_text_nostem_i^10
