@@ -21,11 +21,11 @@
       <str name="dir">${solr.core1.data.dir:}</str>
     </updateLog>
     <autoCommit>
-      <maxTime>${solr.autoCommit.maxTime:600000}</maxTime><!-- 10 minutes -->
+      <maxTime>${solr.autoCommit.maxTime:500}</maxTime><!-- 0.5 seconds (for local tests) -->
       <openSearcher>false</openSearcher>
     </autoCommit>
     <autoSoftCommit>
-      <maxTime>${solr.autoSoftCommit.maxTime:5000}</maxTime><!-- 5 seconds -->
+      <maxTime>${solr.autoSoftCommit.maxTime:100}</maxTime><!-- 0.1 seconds (for local tests) -->
     </autoSoftCommit>
   </updateHandler>
 

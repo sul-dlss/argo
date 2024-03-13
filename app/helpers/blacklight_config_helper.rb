@@ -2,6 +2,8 @@
 
 # Used in CatalogController.  This module is split out because catalog_controller.rb
 #  contains all the required blacklight configurations and is plenty large enough.
+#
+# See spec/features/indexing_xxx_spec.rb for relevancy tests of Solr search results
 module BlacklightConfigHelper
   # sending these values to Solr as arguments with search requests will override
   #   the default params configured for Solr searching via solrconfig.xml
