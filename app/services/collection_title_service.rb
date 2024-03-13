@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# Looks up collection name (title) from Solr
-class CollectionNameService
-  # @return [NilClass,String] the name (title) of the collection if found in solr
+# Looks up collection title from Solr
+class CollectionTitleService
+  # @return [NilClass,String] the title of the collection if found in solr
   def self.find(collection_id)
     solr_doc = SearchService.query("id:\"#{collection_id}\"",
                                    rows: 1,
