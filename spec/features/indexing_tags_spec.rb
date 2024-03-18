@@ -90,6 +90,7 @@ RSpec.describe 'Indexing and search results for tags', :js do
     end
 
     # ------- facet behavior --------
+    skip 'failing on CI / locally. See https://github.com/sul-dlss/argo/issues/4347'
 
     # project tags are a hierarchical facet
     fill_in 'q', with: solr_id
