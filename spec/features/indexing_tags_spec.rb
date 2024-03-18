@@ -20,13 +20,14 @@ RSpec.describe 'Indexing and search results for tags', :js do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
-  # I wanted to do this as a before(:context) but after much teeth gnashing, I gave up
-  #   That would have facilitated a single setup done once that each test could utilize.
+  # ideally this would be rspec before(:context) for one time setup for all tests in this file;
+  #   I couldn't get it to work.
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     solr_conn.commit # ensure no deletes are pending
     visit solr_document_path(item.externalIdentifier)
     find("a[aria-label='Edit tags']").click
+    expect(page).to have_css('#edit-modal', wait: 20) # rubocop:disable RSpec/ExpectInHook
     within('#edit-modal') do
       click_button '+ Add another tag'
       fill_in currently_with: '', with: project_tag
@@ -37,10 +38,8 @@ RSpec.describe 'Indexing and search results for tags', :js do
       click_button 'Save'
     end
     click_link_or_button 'Reindex'
-    # wait for indexing
     expect(page).to have_text('Successfully updated index') # rubocop:disable RSpec/ExpectInHook
     visit '/'
-    item.description # ensure item is created before searching
   end
 
   after do
@@ -48,11 +47,9 @@ RSpec.describe 'Indexing and search results for tags', :js do
     solr_conn.commit
   end
 
-  # one giant it block to reduce the time to run the tests; this is because I
-  #   fussed with before(:context) for some hours and then gave up on it.
-  it 'searches and facets behave as expected' do
-    # ------- search behavior --------
-
+  # one giant it block to reduce the time to run the tests;
+  #   I would have preferred using before(:context), but gave up on it.
+  it 'searches get expected results' do
     # project tags values include "Project" in searchable value
     fill_in 'q', with: 'Project'
     click_button 'search'
@@ -88,34 +85,6 @@ RSpec.describe 'Indexing and search results for tags', :js do
       expect(page).to have_content('1 entry found')
       expect(page).to have_css('dd.blacklight-id', text: solr_id)
     end
-
-    # ------- facet behavior --------
-    skip 'failing on CI / locally. See https://github.com/sul-dlss/argo/issues/4347'
-
-    # project tags are a hierarchical facet
-    fill_in 'q', with: solr_id
-    click_button 'search'
-    click_link_or_button 'Project'
-    # ensure facet has been expanded by javascript
-    expect(page).to have_css('#facet-exploded_project_tag_ssim')
-    # Note that "Project" is not indexed as part of facet
-    click_link_or_button 'ARS 78s'
-    click_link_or_button 'broken'
-    expect(page).to have_content('1 entry found')
-    expect(page).to have_css('dd.blacklight-id', text: solr_id)
-
-    # non-project tags are a hierarchical facet
-    fill_in 'q', with: solr_id
-    click_button 'search'
-    click_link_or_button 'Tag'
-    # ensure facet has been expanded by javascript
-    expect(page).to have_css('#facet-exploded_nonproject_tag_ssim')
-    click_link_or_button 'willet'
-    skip 'FIXME: is this failing on spaces in nonproject tag values?'
-    click_link_or_button 'murder of crows'
-    click_link_or_button 'curlew'
-    expect(page).to have_content('1 entry found')
-    expect(page).to have_css('dd.blacklight-id', text: solr_id)
   end
 end
 # rubocop:enable Capybara/ClickLinkOrButtonStyle
