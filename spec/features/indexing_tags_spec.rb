@@ -90,7 +90,7 @@ RSpec.describe 'Indexing and search results for tags', :js do
     end
 
     # ------- facet behavior --------
-    skip 'failing on CI / locally. See https://github.com/sul-dlss/argo/issues/4347'
+    # skip 'failing on CI / locally. See https://github.com/sul-dlss/argo/issues/4347'
 
     # project tags are a hierarchical facet
     fill_in 'q', with: solr_id
@@ -108,10 +108,10 @@ RSpec.describe 'Indexing and search results for tags', :js do
     fill_in 'q', with: solr_id
     click_button 'search'
     click_link_or_button 'Tag'
+    skip 'FIXME: is this failing on turbo-frames race condition? spaces in nonproject tag values?'
     # ensure facet has been expanded by javascript
     expect(page).to have_css('#facet-exploded_nonproject_tag_ssim')
     click_link_or_button 'willet'
-    skip 'FIXME: is this failing on spaces in nonproject tag values?'
     click_link_or_button 'murder of crows'
     click_link_or_button 'curlew'
     expect(page).to have_content('1 entry found')
