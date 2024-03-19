@@ -64,7 +64,7 @@ class PermittedQueries
                fq: ['objectType_ssim:collection', "!tag_ssim:\"#{INACTIVE_TAG}\""]
              )
              .dig('response', 'docs')
-             .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc['id']).first.downcase.delete('[]') }
+             .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc['id']).downcase.delete('[]') }
 
     [['None', '']] + result.map do |doc|
       ["#{doc[SolrDocument::FIELD_TITLE]} (#{doc['id']})", doc['id'].to_s]

@@ -36,9 +36,9 @@ RSpec.describe AdminPolicyOptions do
       context 'when rows are returned' do
         let(:result_rows) do
           [
-            { 'id' => 1, 'tag_ssim' => 'prefix : suffix', 'display_title_ss' => ['z'] },
-            { 'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'display_title_ss' => ['[y]'] },
-            { 'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'display_title_ss' => ['x'] }
+            { 'id' => 1, 'tag_ssim' => 'prefix : suffix', 'display_title_ss' => 'z' },
+            { 'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'display_title_ss' => '[y]' },
+            { 'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'display_title_ss' => 'x' }
           ]
         end
 
