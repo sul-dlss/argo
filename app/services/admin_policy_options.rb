@@ -16,7 +16,7 @@ class AdminPolicyOptions
            fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
       )
       .dig('response', 'docs')
-      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).first.downcase.delete('[]') }
-      .map { |doc| [Array(doc[SolrDocument::FIELD_TITLE]).first, doc['id'].to_s] }
+      .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).downcase.delete('[]') }
+      .map { |doc| [doc[SolrDocument::FIELD_TITLE], doc['id'].to_s] }
   end
 end
