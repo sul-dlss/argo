@@ -54,13 +54,13 @@ RSpec.describe MilestonesPresenter do
     context 'when the version is 1' do
       let(:version) { '1' }
 
-      it { is_expected.to eq '1 (1.0.0) Initial version' }
+      it { is_expected.to eq '1 Initial version' }
     end
 
     context 'when the version is 2' do
       let(:version) { '2' }
 
-      it { is_expected.to eq '2 (1.1.0) Minor change' }
+      it { is_expected.to eq '2 Minor change' }
     end
   end
 
