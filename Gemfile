@@ -62,7 +62,7 @@ group :test, :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'sqlite3', '~> 1.4.2'
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :development do
