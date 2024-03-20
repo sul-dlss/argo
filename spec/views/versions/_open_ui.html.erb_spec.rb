@@ -9,8 +9,6 @@ RSpec.describe 'versions/_open_ui' do
 
   it 'renders the partial content' do
     render
-    expect(rendered).to have_css 'label', text: 'Type'
-    expect(rendered).to have_css 'select#significance'
     expect(rendered)
       .to have_css 'label', text: 'Version description'
     expect(rendered).to have_css 'textarea#description.form-control'

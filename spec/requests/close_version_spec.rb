@@ -25,7 +25,7 @@ RSpec.describe 'Close a version' do
 
     it 'calls dor-services to close the version' do
       expect(Argo::Indexer).to receive(:reindex_druid_remotely)
-      post "/items/#{druid}/versions/close", params: { significance: 'major', description: 'something' }
+      post "/items/#{druid}/versions/close", params: { description: 'something' }
       expect(flash[:notice]).to eq "Version 2 of #{druid} has been closed!"
       expect(version_service).to have_received(:close).with(description: 'something', significance: 'major',
                                                             user_name: user.to_s)
