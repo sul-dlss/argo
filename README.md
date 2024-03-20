@@ -24,7 +24,7 @@ cd argo
 ### Run bundler to install the Gem dependencies
 
 ```bash
-bundle install
+bundle
 ```
 
 Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
