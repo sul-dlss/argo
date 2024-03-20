@@ -1,3 +1,7 @@
-web: bin/rails server -b 0.0.0.0 -p 3000
+# NOTE: Opens up the remote debugging back-door port so that when a breakpoint
+# is hit in the server process (running under Foreman), a remote debugging
+# utility (https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg
+# for VSCode) (`rdbg -A` in a terminal) can attach and control/continue/etc. Neato!
+web: rdbg -O -n -c bin/rails -- server -b 0.0.0.0 -p 3000
 js: yarn build --watch
 css: yarn build:css --watch
