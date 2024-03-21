@@ -24,9 +24,6 @@ gem 'okcomputer' # monitors application and its dependencies
 gem 'prawn', '~> 1' # Prawn is used to create "tracksheets"
 gem 'prawn-table'
 gem 'propshaft'
-# pry is useful for debugging, even in prod
-gem 'pry' # make it possible to use pry as the rails console shell instead of IRB
-gem 'pry-byebug' # Adds step-by-step debugging and stack navigation capabilities to pry using byebug
 gem 'puma', '~> 5.6' # Use Puma as the app server
 gem 'rails', '~> 7.0.2'
 gem 'rake'
@@ -53,7 +50,7 @@ gem 'rsolr'
 gem 'sdr-client', '~> 2.0'
 
 group :test, :development do
-  gem 'byebug', platform: :mri # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'debug'
   gem 'erb_lint', '~> 0.4.0', require: false
   gem 'factory_bot_rails'
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
