@@ -23,8 +23,7 @@ RSpec.describe OpenVersionJob do
       druids:,
       groups:,
       user:,
-      version_description: 'Changed dates',
-      significance: 'major'
+      version_description: 'Changed dates'
     }.with_indifferent_access
   end
 

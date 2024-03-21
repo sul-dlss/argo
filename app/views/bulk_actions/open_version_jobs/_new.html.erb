@@ -4,12 +4,6 @@
   <span class='help-block'>
     Open items not yet open for versioning.
   </span>
-  <div class='mb-3'>
-    <%= f.label :significance, 'Change type' %>
-    <%= f.select :significance,
-                 [%w[Major major], %w[Minor minor], %w[Admin admin]],
-                 class: 'form-select' %>
-  </div>
 
   <div class='mb-3'>
     <%= f.label :version_description, 'Describe this version' %>
