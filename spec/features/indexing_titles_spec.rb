@@ -190,7 +190,7 @@ RSpec.describe 'Indexing and search results for titles' do
     let(:additional_title_value) { 'vegetables and fruits' }
     let(:additional_title) { { value: additional_title_value } }
     let(:title_values) { [primary_title, additional_title] }
-    let(:item) { FactoryBot.create_for_repository(:persisted_item, title_values: title_values) }
+    let(:item) { FactoryBot.create_for_repository(:persisted_item, title_values:) }
 
     before do
       item.description.title # ensure item is created before searching
@@ -211,7 +211,9 @@ RSpec.describe 'Indexing and search results for titles' do
       order_reversed = FactoryBot.create_for_repository(:persisted_item, title_values: [primary_title, { value: order_reversed_value }])
       unanchored_value = "before #{additional_title_value} and more"
       unanchored = FactoryBot.create_for_repository(:persisted_item, title_values: [primary_title, { value: unanchored_value }])
-      same_stems.externalIdentifier; order_reversed.externalIdentifier; unanchored.externalIdentifier # ensure items are created before searching
+      same_stems.externalIdentifier
+      order_reversed.externalIdentifier
+      unanchored.externalIdentifier # ensure items are created before searching
       fill_in 'q', with: additional_title_value
       click_button 'search'
       # check for item order as a measure of relevancy ranking
@@ -293,7 +295,7 @@ RSpec.describe 'Indexing and search results for titles' do
     let(:additional_title_value) { search_term }
     let(:additional_title) { { value: additional_title_value } }
     let(:title_values) { [primary_title, additional_title] }
-    let(:additional_title_match) { FactoryBot.create_for_repository(:persisted_item, title_values: title_values) }
+    let(:additional_title_match) { FactoryBot.create_for_repository(:persisted_item, title_values:) }
     let(:unmatching) { FactoryBot.create_for_repository(:persisted_item, title: 'not there') }
 
     before do
