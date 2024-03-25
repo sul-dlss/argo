@@ -25,6 +25,7 @@ RSpec.describe ApplyApoDefaultsJob do
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
+    allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(BulkJobLog).to receive(:open).and_yield(logger)
@@ -32,21 +33,49 @@ RSpec.describe ApplyApoDefaultsJob do
 
   context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
-    before do
+    let(:perform) do
       described_class.perform_now(bulk_action.id,
                                   druids:,
                                   groups:,
                                   user:)
     end
 
-    it 'refreshes' do
-      expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
-      expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
-      expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
+    before do
+      allow(StateService).to receive(:new).and_return(state_service)
+    end
 
-      expect(object_client1).to have_received(:apply_admin_policy_defaults)
-      expect(object_client2).to have_received(:apply_admin_policy_defaults)
+    context 'when the version is open' do
+      before { perform }
+
+      it 'refreshes' do
+        expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
+        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
+        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
+
+        expect(object_client1).to have_received(:apply_admin_policy_defaults)
+        expect(object_client2).to have_received(:apply_admin_policy_defaults)
+      end
+    end
+
+    context 'when the version is not open' do
+      let(:state_service) { instance_double(StateService, allows_modification?: false) }
+
+      before do
+        allow_any_instance_of(described_class).to receive(:open_new_version) # rubocop:disable RSpec/AnyInstance
+          .and_return(cocina1.new(version: 2), cocina2.new(version: 2))
+        perform
+      end
+
+      it 'opens a version and refreshes' do
+        expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
+        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
+        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
+
+        expect(object_client1).to have_received(:apply_admin_policy_defaults)
+        expect(object_client2).to have_received(:apply_admin_policy_defaults)
+      end
     end
   end
 
