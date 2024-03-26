@@ -24,7 +24,7 @@ RSpec.describe 'Open a version' do
     it 'calls dor-services to open a new version' do
       expect(Argo::Indexer).to receive(:reindex_druid_remotely)
 
-      post "/items/#{druid}/versions/open", params: { significance: 'major', description: 'something' }
+      post "/items/#{druid}/versions/open", params: { description: 'something' }
 
       expect(version_client).to have_received(:open).with(significance: 'major', description: 'something',
                                                           opening_user_name: user.to_s)
@@ -37,7 +37,7 @@ RSpec.describe 'Open a version' do
     end
 
     it 'returns a 403' do
-      post "/items/#{druid}/versions/open", params: { significance: 'major', description: 'something' }
+      post "/items/#{druid}/versions/open", params: { description: 'something' }
 
       expect(response).to have_http_status(:forbidden)
     end
