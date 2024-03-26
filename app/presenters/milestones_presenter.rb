@@ -21,7 +21,7 @@ class MilestonesPresenter
     val = versions.find { |this| this.versionId == version.to_i }
     return version unless val
 
-    "#{version} (#{val.tag}) #{val.message}"
+    "#{version} #{val.message}"
   end
 
   private
