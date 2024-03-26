@@ -24,7 +24,8 @@ class ReleaseObjectJob < GenericJob
       end
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      Repository.store(model_with_new_release_tag(cocina_object))
+      object_client = Dor::Services::Client.object(cocina_object.externalIdentifier)
+      object_client.release_tags.create(tag: new_tag)
 
       WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier, 'releaseWF',
                                                           version: cocina_object.version)
@@ -33,15 +34,6 @@ class ReleaseObjectJob < GenericJob
   end
 
   private
-
-  # Return a copy of the existing cocina model with a new tag appended
-  def model_with_new_release_tag(cocina)
-    cocina.new(
-      administrative: cocina.administrative.new(
-        releaseTags: Array(cocina.administrative.releaseTags) + [new_tag]
-      )
-    )
-  end
 
   def new_tag
     Cocina::Models::ReleaseTag.new(
