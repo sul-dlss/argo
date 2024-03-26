@@ -10,12 +10,10 @@ class OpenVersionJob < GenericJob
   # @option params [Array] :druids required list of druids
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required because groups are not persisted with the user.
   # @option params [Array] :user the user
-  # @option params [String] :significance
   # @option params [String] :version_description
   def perform(bulk_action_id, params)
     super
 
-    significance = params['significance']
     description = params['version_description']
 
     with_items(params[:druids], name: 'Open version') do |cocina_object, success, failure|
@@ -23,7 +21,7 @@ class OpenVersionJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       VersionService.open(identifier: cocina_object.externalIdentifier,
-                          significance:,
+                          significance: 'major',
                           description:,
                           opening_user_name: @current_user.to_s)
       success.call('Version successfully opened')

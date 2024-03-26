@@ -6,8 +6,7 @@ module BulkActions
     self.action_type = 'OpenVersionJob'
 
     def job_params
-      super.merge(significance: params[:significance],
-                  version_description: params[:version_description])
+      super.merge(version_description: params[:version_description])
     end
   end
 end
