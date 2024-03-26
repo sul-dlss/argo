@@ -194,7 +194,7 @@ GEM
       capistrano-shared_configs
     docile (1.4.0)
     domain_name (0.6.20240107)
-    dor-services-client (14.2.1)
+    dor-services-client (14.4.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.95.1)
       deprecation
@@ -477,7 +477,7 @@ GEM
       activemodel (>= 5.0)
       reform (>= 2.3.1, < 3.0.0)
     regexp_parser (2.9.0)
-    reline (0.4.3)
+    reline (0.5.0)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -497,7 +497,7 @@ GEM
       nokogiri
       roo (>= 2.0.0, < 3)
       spreadsheet (> 0.9.0)
-    rsolr (2.5.0)
+    rsolr (2.6.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
     rspec-core (3.13.0)
