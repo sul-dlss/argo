@@ -26,7 +26,7 @@ RSpec.describe 'Open a version' do
 
       post "/items/#{druid}/versions/open", params: { description: 'something' }
 
-      expect(version_client).to have_received(:open).with(significance: 'major', description: 'something',
+      expect(version_client).to have_received(:open).with(description: 'something',
                                                           opening_user_name: user.to_s)
     end
   end

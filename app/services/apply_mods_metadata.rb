@@ -95,7 +95,6 @@ class ApplyModsMetadata
   # Open a new version for the given object.
   def commit_new_version
     @cocina = VersionService.open(identifier: cocina.externalIdentifier,
-                                  significance: 'minor',
                                   description: "Descriptive metadata upload from #{original_filename}",
                                   opening_user_name: ability.current_user.sunetid)
   end

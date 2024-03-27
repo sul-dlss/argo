@@ -29,7 +29,6 @@ RSpec.describe VersionService do
     let(:version_client) { service.send(:version_client) }
     let(:options) do
       {
-        significance: 'major',
         description: 'best version ever',
         opening_user_name: 'mjgiarlo'
       }

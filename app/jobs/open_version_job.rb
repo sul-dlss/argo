@@ -21,7 +21,6 @@ class OpenVersionJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       VersionService.open(identifier: cocina_object.externalIdentifier,
-                          significance: 'major',
                           description:,
                           opening_user_name: @current_user.to_s)
       success.call('Version successfully opened')

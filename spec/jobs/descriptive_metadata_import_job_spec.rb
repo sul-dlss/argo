@@ -181,7 +181,7 @@ RSpec.describe DescriptiveMetadataImportJob do
           expect(bulk_action.druid_count_total).to eq 1
           expect(Repository).to have_received(:store).with(expected1)
           expect(state_service).to have_received(:allows_modification?)
-          expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, significance: 'minor', opening_user_name: bulk_action.user.to_s,
+          expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, opening_user_name: bulk_action.user.to_s,
                                                               description: 'Descriptive metadata upload')
           expect(version_client).to have_received(:close).once
           expect(log_buffer.string).to include "CSV filename: #{filename}"
