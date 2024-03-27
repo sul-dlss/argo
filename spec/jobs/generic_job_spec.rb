@@ -72,7 +72,6 @@ RSpec.describe GenericJob do
       expect(subject.send(:open_new_version, cocina_object, 'Set new governing APO')).to eq(new_cocina_object)
 
       expect(version_client).to have_received(:open).with(
-        significance: 'minor',
         description: 'Set new governing APO',
         opening_user_name: subject.bulk_action.user.to_s
       )

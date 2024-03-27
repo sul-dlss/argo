@@ -21,7 +21,6 @@ class VersionsController < ApplicationController
 
   def open
     VersionService.open(identifier: @cocina_object.externalIdentifier,
-                        significance: 'major',
                         description: params[:description],
                         opening_user_name: current_user.to_s)
     msg = "#{@cocina_object.externalIdentifier} is open for modification!"
@@ -34,13 +33,12 @@ class VersionsController < ApplicationController
     nil
   end
 
-  # as long as this isn't a bulk operation, and we get non-nil significance and description
-  # values, update those fields in the version service
+  # as long as this isn't a bulk operation, and we get description
+  # values, update it in the version service
   def close
     VersionService.close(
       identifier: @cocina_object.externalIdentifier,
       description: params[:description],
-      significance: 'major',
       user_name: current_user.to_s
     )
     msg = "Version #{@cocina_object.version} of #{@cocina_object.externalIdentifier} has been closed!"

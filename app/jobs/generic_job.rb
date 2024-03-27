@@ -174,7 +174,6 @@ class GenericJob < ApplicationJob
     raise 'Unable to open new version' unless wf_status.can_open_version?
 
     VersionService.open(identifier: cocina_object.externalIdentifier,
-                        significance: 'minor',
                         description:,
                         opening_user_name: bulk_action.user.to_s)
   end

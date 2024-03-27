@@ -43,8 +43,7 @@ RSpec.describe OpenVersionJob do
 
       expect(VersionService).to have_received(:open).with(identifier: anything,
                                                           description: 'Changed dates',
-                                                          opening_user_name: user.to_s,
-                                                          significance: 'major').twice
+                                                          opening_user_name: user.to_s).twice
     end
   end
 
