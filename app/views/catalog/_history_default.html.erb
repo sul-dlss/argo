@@ -27,17 +27,15 @@
         </dl>
       </div>
 
-      <% if @cocina.administrative.respond_to? :releaseTags %>
-        <% if @cocina.administrative.releaseTags.present? %>
-          <div class="col-sm-12">
-            <dl>
-              <dt>Releases</dt>
-              <dd>
-                <%= render 'show_releases', release_tags: @cocina.administrative.releaseTags %>
-              </dd>
-            </dl>
-          </div>
-        <% end %>
+      <% if @release_tags.present? %>
+        <div class="col-sm-12">
+          <dl>
+            <dt>Releases</dt>
+            <dd>
+              <%= render 'show_releases', release_tags: @release_tags %>
+            </dd>
+          </dl>
+        </div>
       <% end %>
     </div>
   </div>

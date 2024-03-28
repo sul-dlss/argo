@@ -7,12 +7,14 @@ RSpec.describe 'Item manage release' do
   let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: item,
                     find_lite: item,
                     events: events_client,
-                    version: version_client)
+                    version: version_client,
+                    release_tags: release_tags_client)
   end
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
