@@ -117,6 +117,7 @@ module Constants
 
   RELEASE_TARGETS = [
     %w[Searchworks Searchworks],
-    %w[Earthworks Earthworks]
+    %w[Earthworks Earthworks],
+    ['Search engines', 'PURL sitemap']
   ].freeze
 end
