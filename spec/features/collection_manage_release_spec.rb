@@ -9,12 +9,14 @@ RSpec.describe 'Collection manage release' do
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find_lite: cocina_model, # NOTE: This should really be a DROLite
                     find: cocina_model,
                     events: events_client,
-                    version: version_client)
+                    version: version_client,
+                    release_tags: release_tags_client)
   end
   let(:cocina_model) do
     build(:collection_with_metadata, id: collection_id)

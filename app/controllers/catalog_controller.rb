@@ -346,6 +346,7 @@ class CatalogController < ApplicationController
     object_client = Dor::Services::Client.object(params[:id])
     versions = object_client.version.inventory
     @milestones_presenter = MilestonesPresenter.new(milestones:, versions:)
+    @release_tags = @cocina.instance_of?(NilModel) || @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
     @verified_token_with_expiration = Argo.verifier.generate(
