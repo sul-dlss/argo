@@ -139,7 +139,7 @@ GEM
       capybara (>= 1.0, < 4)
       launchy
     childprocess (5.0.0)
-    cocina-models (0.95.1)
+    cocina-models (0.96.0)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -194,9 +194,9 @@ GEM
       capistrano-shared_configs
     docile (1.4.0)
     domain_name (0.6.20240107)
-    dor-services-client (14.4.0)
+    dor-services-client (14.5.0)
       activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.95.1)
+      cocina-models (~> 0.96.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -554,13 +554,14 @@ GEM
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
     scrub_rb (1.0.1)
-    sdr-client (2.10.1)
+    sdr-client (2.12.0)
       activesupport
-      cocina-models (~> 0.95.1)
+      cocina-models (~> 0.96.0)
       config
       dry-monads
       faraday (>= 0.16)
       launchy
+      zeitwerk
     selenium-webdriver (4.18.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
