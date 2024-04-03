@@ -10,7 +10,6 @@ class MilestoneService
         'registered' => {}, # each of these *could* have :display and :time elements
         'opened' => {},
         'submitted' => {},
-        'described' => {},
         'published' => {},
         'deposited' => {},
         'accessioned' => {}

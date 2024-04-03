@@ -11,7 +11,6 @@ RSpec.describe MilestonesPresenter do
     {
       'opened' => { time: '2020-05-04 18:24:14 +0000' },
       'submitted' => { time: '2020-05-04 18:24:15 +0000' },
-      'described' => { time: '2020-05-04 18:24:15 +0000' },
       'published' => { time: '2020-05-04 18:24:15 +0000' },
       'deposited' => { time: '2020-05-04 18:24:15 +0000' },
       'accessioned' => { time: '2020-05-04 18:24:15 +0000' }
@@ -22,7 +21,6 @@ RSpec.describe MilestonesPresenter do
     { '1' => {
       'registered' => { time: '2020-03-02 13:12:43 +0000' },
       'submitted' => { time: '2020-05-01 19:26:37 +0000' },
-      'described' => { time: '2020-05-01 19:26:37 +0000' },
       'published' => { time: '2020-05-01 19:26:37 +0000' },
       'deposited' => { time: '2020-05-01 19:26:37 +0000' },
       'accessioned' => { time: '2020-05-01 19:26:37 +0000' }
@@ -31,8 +29,8 @@ RSpec.describe MilestonesPresenter do
 
   let(:versions) do
     [
-      Dor::Services::Client::ObjectVersion::Version.new(versionId: 1, tag: '1.0.0', message: 'Initial version'),
-      Dor::Services::Client::ObjectVersion::Version.new(versionId: 2, tag: '1.1.0', message: 'Minor change')
+      Dor::Services::Client::ObjectVersion::Version.new(versionId: 1, message: 'Initial version'),
+      Dor::Services::Client::ObjectVersion::Version.new(versionId: 2, message: 'Minor change')
     ]
   end
 
