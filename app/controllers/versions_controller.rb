@@ -20,7 +20,7 @@ class VersionsController < ApplicationController
   end
 
   def open
-    VersionService.open(identifier: @cocina_object.externalIdentifier,
+    VersionService.open(druid: @cocina_object.externalIdentifier,
                         description: params[:description],
                         opening_user_name: current_user.to_s)
     msg = "#{@cocina_object.externalIdentifier} is open for modification!"
@@ -37,7 +37,7 @@ class VersionsController < ApplicationController
   # values, update it in the version service
   def close
     VersionService.close(
-      identifier: @cocina_object.externalIdentifier,
+      druid: @cocina_object.externalIdentifier,
       description: params[:description],
       user_name: current_user.to_s
     )

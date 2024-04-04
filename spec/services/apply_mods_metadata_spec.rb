@@ -201,7 +201,7 @@ RSpec.describe ApplyModsMetadata do
       action.send(:commit_new_version)
 
       expect(VersionService).to have_received(:open).with(
-        identifier: druid,
+        druid:,
         description: 'Descriptive metadata upload from testfile.xlsx',
         opening_user_name: user.sunetid
       )

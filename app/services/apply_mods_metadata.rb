@@ -94,7 +94,7 @@ class ApplyModsMetadata
 
   # Open a new version for the given object.
   def commit_new_version
-    @cocina = VersionService.open(identifier: cocina.externalIdentifier,
+    @cocina = VersionService.open(druid: cocina.externalIdentifier,
                                   description: "Descriptive metadata upload from #{original_filename}",
                                   opening_user_name: ability.current_user.sunetid)
   end

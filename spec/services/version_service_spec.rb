@@ -3,9 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe VersionService do
-  subject(:service) { described_class.new(identifier:) }
+  subject(:service) { described_class.new(druid:) }
 
-  let(:identifier) { 'druid:abc123xyz' }
+  let(:druid) { 'druid:bg139xz7624' }
+
+  let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, status:) }
+  let(:status) { instance_double(Dor::Services::Client::ObjectVersion::VersionStatus) }
+
+  before do
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
+  end
 
   describe '.close' do
     before do
@@ -14,19 +22,12 @@ RSpec.describe VersionService do
     end
 
     it 'calls #close on a new instance' do
-      described_class.close(identifier:)
+      described_class.close(druid:)
       expect(service).to have_received(:close).once
     end
   end
 
-  describe '#new' do
-    it 'has an identifier attribute' do
-      expect(service.identifier).to eq(identifier)
-    end
-  end
-
   describe '#open' do
-    let(:version_client) { service.send(:version_client) }
     let(:options) do
       {
         description: 'best version ever',
@@ -34,30 +35,34 @@ RSpec.describe VersionService do
       }
     end
 
-    it 'delegates to the version client' do
+    before do
       allow(version_client).to receive(:open)
+    end
+
+    it 'delegates to the version client' do
       service.open(**options)
       expect(version_client).to have_received(:open).with(**options).once
     end
   end
 
   describe '#close' do
-    let(:version_client) { service.send(:version_client) }
+    before do
+      allow(version_client).to receive(:close)
+    end
 
     it 'delegates to the version client' do
-      allow(version_client).to receive(:close)
       service.close
       expect(version_client).to have_received(:close).once
     end
   end
 
-  describe '#openable?' do
-    let(:version_client) { service.send(:version_client) }
-
+  describe 'status methods' do
     it 'delegates to the version client' do
-      allow(version_client).to receive(:openable?)
-      service.openable?
-      expect(version_client).to have_received(:openable?).once
+      %i[open? openable? assembling? accessioning? closed? closeable? version].each do |method|
+        allow(status).to receive(method)
+        service.send(method)
+        expect(status).to have_received(method).once
+      end
     end
   end
 end
