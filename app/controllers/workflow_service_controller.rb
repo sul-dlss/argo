@@ -14,7 +14,7 @@ class WorkflowServiceController < ApplicationController
   ##
   # Has an object been published?
   def published
-    @status = StateService.new(@cocina).published?
+    @status = WorkflowService.published?(druid: @cocina.externalIdentifier)
     render json: @status
   end
 

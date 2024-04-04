@@ -17,7 +17,9 @@ RSpec.describe 'WorkflowServiceController' do
 
   describe 'GET published' do
     context 'when published' do
-      before { allow(state_service).to receive(:published?).and_return(true) }
+      before do
+        allow(WorkflowService).to receive(:published?).and_return(true)
+      end
 
       it 'returns true' do
         get "/workflow_service/#{druid}/published"
@@ -27,7 +29,9 @@ RSpec.describe 'WorkflowServiceController' do
     end
 
     context 'when not published' do
-      before { allow(state_service).to receive(:published?).and_return(false) }
+      before do
+        allow(WorkflowService).to receive(:published?).and_return(false)
+      end
 
       it 'returns false' do
         get "/workflow_service/#{druid}/published"

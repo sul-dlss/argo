@@ -115,32 +115,4 @@ RSpec.describe StateService do
       end
     end
   end
-
-  describe '#published?' do
-    before do
-      allow(workflow_client).to receive(:workflow_status).with(druid:, process: 'accessioning-initiate',
-                                                               workflow: 'assemblyWF').and_return('completed')
-      allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(false)
-    end
-
-    context 'if the published lifecycle exists' do
-      before do
-        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'published').and_return(true)
-      end
-
-      it 'returns true' do
-        expect(service).to be_published
-      end
-    end
-
-    context 'if the published lifecycle does not exist' do
-      before do
-        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'published').and_return(false)
-      end
-
-      it 'returns false' do
-        expect(service).not_to be_published
-      end
-    end
-  end
 end
