@@ -3,8 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe WorkflowService do
+  let(:druid) { 'ab123cd4567' }
+
+  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
+
+  before do
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+  end
+
   describe '#workflows_for' do
-    subject(:service) { described_class.workflows_for(druid: 'druid:ab123cd4567') }
+    subject(:service) { described_class.workflows_for(druid:) }
 
     let(:xml) do
       <<~XML
@@ -70,15 +78,13 @@ RSpec.describe WorkflowService do
       ] }
     end
 
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_routes:) }
     let(:workflow_routes) do
       instance_double(Dor::Workflow::Client::WorkflowRoutes,
                       all_workflows: Dor::Workflow::Response::Workflows.new(xml:))
     end
 
     before do
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-
+      allow(workflow_client).to receive(:workflow_routes).and_return(workflow_routes)
       allow(workflow_client).to receive(:workflow_template).with('accessionWF').and_return(accession_json)
       allow(workflow_client).to receive(:workflow_template).with('assemblyWF').and_return(assembly_json)
     end
@@ -89,5 +95,28 @@ RSpec.describe WorkflowService do
         WorkflowService::Workflow.new(name: 'assemblyWF', complete: false, error_count: 1)
       ]
     }
+  end
+
+  describe '#accessioned?' do
+    context 'if the accessioned lifecycle exists' do
+      before do
+        allow(workflow_client).to receive(:lifecycle).with(druid:,
+                                                           milestone_name: 'accessioned').and_return('2022-04-20 21:55:25 +0000')
+      end
+
+      it 'returns true' do
+        expect(described_class.accessioned?(druid:)).to be true
+      end
+    end
+
+    context 'if the accessioned lifecycle does not exist' do
+      before do
+        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(nil)
+      end
+
+      it 'returns false' do
+        expect(described_class.accessioned?(druid:)).to be false
+      end
+    end
   end
 end

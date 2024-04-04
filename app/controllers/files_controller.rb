@@ -10,7 +10,7 @@ class FilesController < ApplicationController
   def index
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
-    @has_been_accessioned = StateService.new(@cocina_model).accessioned?
+    @has_been_accessioned = WorkflowService.accessioned?(druid: @cocina_model.externalIdentifier)
     files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.filename == params[:id] }
 

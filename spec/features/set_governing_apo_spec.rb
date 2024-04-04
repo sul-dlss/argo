@@ -10,7 +10,7 @@ RSpec.describe 'Set governing APO' do
   end
 
   let(:identity_md) { instance_double(Nokogiri::XML::Document, xpath: []) }
-  let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item, label: 'Foo', title: 'Test')
@@ -26,6 +26,7 @@ RSpec.describe 'Set governing APO' do
     item
 
     allow(StateService).to receive(:new).and_return(state_service)
+    allow(WorkflowService).to receive(:accessioned?).and_return(true)
     sign_in create(:user), groups:
   end
 

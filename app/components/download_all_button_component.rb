@@ -16,7 +16,7 @@ class DownloadAllButtonComponent < ViewComponent::Base
   end
 
   def render?
-    StateService.new(@cocina).accessioned?
+    WorkflowService.accessioned?(druid: @cocina.externalIdentifier)
   end
 
   attr_reader :document

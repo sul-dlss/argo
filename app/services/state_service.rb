@@ -39,16 +39,16 @@ class StateService
     STATES[:unlock_inactive]
   end
 
+  private
+
+  attr_reader :druid, :version
+
   ##
   # Ported over logic from app/helpers/dor_object_helper.rb#LN133
   # @return [Boolean]
   def accessioned?
     @accessioned ||= lifecycle('accessioned') ? true : false
   end
-
-  private
-
-  attr_reader :druid, :version
 
   def lifecycle(task)
     workflow_client.lifecycle(druid:, milestone_name: task)

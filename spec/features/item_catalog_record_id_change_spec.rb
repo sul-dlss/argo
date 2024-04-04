@@ -6,12 +6,13 @@ RSpec.describe 'Item catalog_record_id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
+    allow(WorkflowService).to receive(:accessioned?).and_return(false)
   end
 
   describe 'when modification is not allowed' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
-    let(:state_service) { instance_double(StateService, allows_modification?: false, accessioned?: false) }
+    let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'cannot change the catalog_record_id' do
       visit edit_item_catalog_record_id_path druid
@@ -29,7 +30,7 @@ RSpec.describe 'Item catalog_record_id change' do
     let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
     let(:druid) { 'druid:kv840xx0000' }
     let(:cocina_model) { build(:dro_with_metadata, id: druid) }
-    let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
@@ -49,6 +50,7 @@ RSpec.describe 'Item catalog_record_id change' do
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(WorkflowService).to receive(:accessioned?).and_return(true)
 
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
