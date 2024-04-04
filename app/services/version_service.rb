@@ -12,14 +12,39 @@ class VersionService
       new(identifier:).close(**)
     end
 
-    def openable?(identifier:)
-      new(identifier:).openable?
+    def openable?(...)
+      new(...).openable?
+    end
+
+    def open?(...)
+      new(...).open?
+    end
+
+    def assembling?(...)
+      new(...).assembling?
+    end
+
+    def accessioning?(...)
+      new(...).accessioning?
+    end
+
+    def closed?(...)
+      new(...).closed?
+    end
+
+    def closeable?(...)
+      new(...).closeable?
+    end
+
+    def version(...)
+      new(...).version
     end
   end
 
   attr_reader :identifier
 
-  delegate :close, :open, :openable?, to: :version_client
+  delegate :close, :open, to: :version_client
+  delegate :open?, :openable?, :assembling?, :accessioning?, :closed?, :closeable?, :version, to: :status
 
   def initialize(identifier:)
     @identifier = identifier
@@ -28,6 +53,10 @@ class VersionService
   private
 
   def version_client
-    Dor::Services::Client.object(identifier).version
+    @version_client ||= Dor::Services::Client.object(identifier).version
+  end
+
+  def status
+    @status ||= version_client.status
   end
 end
