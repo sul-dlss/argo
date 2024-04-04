@@ -11,7 +11,6 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
   let(:logger) { instance_double(File, puts: nil) }
 
   describe '#perform' do
-    let(:open) { true }
     let(:params) do
       {
         copyright_statement_option: '1',
@@ -22,37 +21,34 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     end
     let(:cocina_object) { build(:dro_with_metadata) }
     let(:copyright_statement) { 'the new hotness' }
-    let(:state_service) { instance_double(StateService, open?: open) }
-    let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
     before do
       allow(BulkJobLog).to receive(:open).and_yield(logger)
       allow(Repository).to receive(:find).and_return(cocina_object)
-      allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
       allow(CollectionChangeSetPersister).to receive(:update)
       allow(ItemChangeSetPersister).to receive(:update)
-      allow(VersionService).to receive(:open).and_return(cocina_object)
-      allow(StateService).to receive(:new).and_return(state_service)
+      allow(VersionService).to receive_messages(open: cocina_object, open?: false, openable?: true)
     end
 
     context 'when happy path' do
       let(:groups) { ['workgroup:sdr:administrator-role'] }
 
-      before do
-        described_class.perform_now(bulk_action.id, params)
-      end
-
       context 'with an item that is already opened' do
+        before do
+          allow(VersionService).to receive(:open?).and_return(true)
+        end
+
         it 'updates via item change set persister' do
+          described_class.perform_now(bulk_action.id, params)
           expect(VersionService).not_to have_received(:open)
           expect(ItemChangeSetPersister).to have_received(:update).twice
         end
       end
 
       context 'with an item that needs to be opened first' do
-        let(:open) { false }
-
         it 'updates via item change set persister' do
+          described_class.perform_now(bulk_action.id, params)
           expect(VersionService).to have_received(:open).twice
           expect(ItemChangeSetPersister).to have_received(:update).twice
         end
@@ -70,7 +66,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
         end
 
         it 'updates via item change set persister' do
-          expect(VersionService).not_to have_received(:open)
+          described_class.perform_now(bulk_action.id, params)
           expect(ItemChangeSetPersister).to have_received(:update).twice
         end
       end
@@ -79,7 +75,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
         let(:cocina_object) { build(:collection_with_metadata) }
 
         it 'updates via collection change set persister' do
-          expect(VersionService).not_to have_received(:open)
+          described_class.perform_now(bulk_action.id, params)
           expect(CollectionChangeSetPersister).to have_received(:update).twice
         end
       end
@@ -148,10 +144,8 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     end
 
     context 'when item cannot be opened' do
-      let(:open) { false }
-      let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: false) }
-
       before do
+        allow(VersionService).to receive(:openable?).and_return(false)
         described_class.perform_now(bulk_action.id, params)
         bulk_action.reload
       end

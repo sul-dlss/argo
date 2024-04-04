@@ -28,7 +28,6 @@ RSpec.describe ManageEmbargoesJob do
     ].join("\n")
   end
 
-  let(:state_service) { instance_double(StateService, open?: true) }
   let(:params) { { csv_file: } }
 
   before do
@@ -38,11 +37,11 @@ RSpec.describe ManageEmbargoesJob do
     allow(Repository).to receive(:find).with(druids[2]).and_return(item3)
     allow(Repository).to receive(:store)
 
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive_messages(open?: true, openable?: true)
     allow(subject.ability).to receive(:can?).and_return(true)
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
-    allow(subject).to receive(:open_new_version).and_return(item1.new(version: 2), item2.new(version: 2),
-                                                            item3.new(version: 2))
+    allow(VersionService).to receive(:open).and_return(item1.new(version: 2), item2.new(version: 2),
+                                                       item3.new(version: 2))
   end
 
   describe '#perform' do
@@ -63,25 +62,27 @@ RSpec.describe ManageEmbargoesJob do
         subject.perform(bulk_action.id, params)
         expect(Repository).to have_received(:store).exactly(3).times
         expect(bulk_action.druid_count_total).to eq druids.length
-        expect(subject).not_to have_received(:open_new_version)
+        expect(VersionService).not_to have_received(:open)
       end
     end
 
     context 'when modification is not allowed' do
-      let(:state_service) { instance_double(StateService, open?: false) }
+      before do
+        allow(VersionService).to receive(:open?).and_return(false)
+      end
 
       it 'opens new version and updates the embargo' do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq 3
         expect(bulk_action.druid_count_success).to eq 3
         expect(Repository).to have_received(:store).exactly(3).times
-        expect(subject).to have_received(:open_new_version).exactly(3).times
+        expect(VersionService).to have_received(:open).exactly(3).times
       end
     end
 
     context 'when error' do
       before do
-        allow(state_service).to receive(:open?).and_raise('oops')
+        allow(VersionService).to receive(:open?).and_raise('oops')
       end
 
       it 'logs' do
