@@ -16,7 +16,7 @@ class CloseVersionJob < GenericJob
     with_items(params[:druids], name: 'Close version') do |cocina_object, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      VersionService.close(identifier: cocina_object.externalIdentifier)
+      Dor::Services::Client.object(cocina_object.externalIdentifier).version.close
       success.call('Object successfully closed')
     end
   end

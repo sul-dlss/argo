@@ -20,9 +20,10 @@ class VersionsController < ApplicationController
   end
 
   def open
-    VersionService.open(identifier: @cocina_object.externalIdentifier,
-                        description: params[:description],
-                        opening_user_name: current_user.to_s)
+    Dor::Services::Client.object(@cocina_object.externalIdentifier).version.open(
+      description: params[:description],
+      opening_user_name: current_user.to_s
+    )
     msg = "#{@cocina_object.externalIdentifier} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
     Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
@@ -36,8 +37,7 @@ class VersionsController < ApplicationController
   # as long as this isn't a bulk operation, and we get description
   # values, update it in the version service
   def close
-    VersionService.close(
-      identifier: @cocina_object.externalIdentifier,
+    Dor::Services::Client.object(@cocina_object.externalIdentifier).version.close(
       description: params[:description],
       user_name: current_user.to_s
     )

@@ -16,8 +16,9 @@ RSpec.describe OpenVersionJob do
     build(:dro_with_metadata, id: druids[1])
   end
 
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, version: version_client) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, version: version_client) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
   let(:params) do
     {
       druids:,
@@ -29,7 +30,6 @@ RSpec.describe OpenVersionJob do
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
-    allow(VersionService).to receive(:open)
     allow(DorObjectWorkflowStatus).to receive(:new).and_return(workflow_status)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
@@ -41,8 +41,7 @@ RSpec.describe OpenVersionJob do
     it 'opens new versions' do
       described_class.perform_now(bulk_action.id, params)
 
-      expect(VersionService).to have_received(:open).with(identifier: anything,
-                                                          description: 'Changed dates',
+      expect(version_client).to have_received(:open).with(description: 'Changed dates',
                                                           opening_user_name: user.to_s).twice
     end
   end
@@ -53,7 +52,7 @@ RSpec.describe OpenVersionJob do
     it 'does not open new versions' do
       described_class.perform_now(bulk_action.id, params)
 
-      expect(VersionService).not_to have_received(:open)
+      expect(version_client).not_to have_received(:open)
     end
   end
 end

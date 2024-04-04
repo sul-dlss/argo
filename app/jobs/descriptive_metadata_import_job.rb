@@ -64,7 +64,7 @@ class DescriptiveMetadataImportJob < GenericJob
 
   def close_version(cocina_object)
     unless StateService.new(cocina_object).object_state == :unlock_inactive
-      VersionService.close(identifier: cocina_object.externalIdentifier)
+      Dor::Services::Client.object(cocina_object.externalIdentifier).version.close
     end
     Success()
   rescue RuntimeError => e

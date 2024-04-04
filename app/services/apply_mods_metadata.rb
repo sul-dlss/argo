@@ -94,9 +94,10 @@ class ApplyModsMetadata
 
   # Open a new version for the given object.
   def commit_new_version
-    @cocina = VersionService.open(identifier: cocina.externalIdentifier,
-                                  description: "Descriptive metadata upload from #{original_filename}",
-                                  opening_user_name: ability.current_user.sunetid)
+    Dor::Services::Client.object(cocina.externalIdentifier).version.open(
+      description: "Descriptive metadata upload from #{original_filename}",
+      opening_user_name: ability.current_user.sunetid
+    )
   end
 
   # Returns true if the given object is accessioned, false otherwise.

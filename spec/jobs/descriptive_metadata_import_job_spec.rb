@@ -156,7 +156,7 @@ RSpec.describe DescriptiveMetadataImportJob do
       before do
         allow(Ability).to receive(:new).and_return(ability)
         allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
-        allow(VersionService).to receive(:open).and_return(item1.new(version: 2))
+        allow(version_client).to receive(:open).and_return(item1.new(version: 2))
         subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
 
@@ -181,7 +181,7 @@ RSpec.describe DescriptiveMetadataImportJob do
           expect(bulk_action.druid_count_total).to eq 1
           expect(Repository).to have_received(:store).with(expected1)
           expect(state_service).to have_received(:allows_modification?)
-          expect(VersionService).to have_received(:open).with(identifier: item1.externalIdentifier, opening_user_name: bulk_action.user.to_s,
+          expect(version_client).to have_received(:open).with(opening_user_name: bulk_action.user.to_s,
                                                               description: 'Descriptive metadata upload')
           expect(version_client).to have_received(:close).once
           expect(log_buffer.string).to include "CSV filename: #{filename}"
@@ -200,7 +200,7 @@ RSpec.describe DescriptiveMetadataImportJob do
           expect(bulk_action.druid_count_total).to eq 1
           expect(Repository).to have_received(:store).with(expected1)
           expect(state_service).to have_received(:allows_modification?)
-          expect(VersionService).not_to have_received(:open)
+          expect(version_client).not_to have_received(:open)
           expect(version_client).not_to have_received(:close)
         end
       end

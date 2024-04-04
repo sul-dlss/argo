@@ -193,15 +193,17 @@ RSpec.describe ApplyModsMetadata do
   end
 
   describe '#commit_new_version' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
+
     before do
-      allow(VersionService).to receive(:open).and_return(cocina)
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
     it 'opens a new minor version with filename and username' do
       action.send(:commit_new_version)
 
-      expect(VersionService).to have_received(:open).with(
-        identifier: druid,
+      expect(version_client).to have_received(:open).with(
         description: 'Descriptive metadata upload from testfile.xlsx',
         opening_user_name: user.sunetid
       )

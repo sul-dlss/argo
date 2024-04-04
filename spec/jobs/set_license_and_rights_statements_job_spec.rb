@@ -24,6 +24,8 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     let(:copyright_statement) { 'the new hotness' }
     let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
     let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: cocina_object) }
 
     before do
       allow(BulkJobLog).to receive(:open).and_yield(logger)
@@ -31,7 +33,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       allow(DorObjectWorkflowStatus).to receive(:new).and_return(wf_status)
       allow(CollectionChangeSetPersister).to receive(:update)
       allow(ItemChangeSetPersister).to receive(:update)
-      allow(VersionService).to receive(:open).and_return(cocina_object)
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(StateService).to receive(:new).and_return(state_service)
     end
 
@@ -44,7 +46,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
 
       context 'with an item that is already opened' do
         it 'updates via item change set persister' do
-          expect(VersionService).not_to have_received(:open)
+          expect(version_client).not_to have_received(:open)
           expect(ItemChangeSetPersister).to have_received(:update).twice
         end
       end
@@ -53,7 +55,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
         let(:allows_modification) { false }
 
         it 'updates via item change set persister' do
-          expect(VersionService).to have_received(:open).twice
+          expect(version_client).to have_received(:open).twice
           expect(ItemChangeSetPersister).to have_received(:update).twice
         end
       end
@@ -70,7 +72,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
         end
 
         it 'updates via item change set persister' do
-          expect(VersionService).not_to have_received(:open)
+          expect(version_client).not_to have_received(:open)
           expect(ItemChangeSetPersister).to have_received(:update).twice
         end
       end
@@ -79,7 +81,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
         let(:cocina_object) { build(:collection_with_metadata) }
 
         it 'updates via collection change set persister' do
-          expect(VersionService).not_to have_received(:open)
+          expect(version_client).not_to have_received(:open)
           expect(CollectionChangeSetPersister).to have_received(:update).twice
         end
       end
@@ -115,7 +117,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       end
 
       it 'logs errors' do
-        expect(VersionService).not_to have_received(:open)
+        expect(version_client).not_to have_received(:open)
         expect(CollectionChangeSetPersister).not_to have_received(:update)
         expect(logger).to have_received(:puts).with(/No changes made/).twice
         expect(bulk_action.druid_count_total).to eq(druids.length)
