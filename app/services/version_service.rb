@@ -4,12 +4,12 @@
 class VersionService
   class << self
     # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with updated version
-    def open(identifier:, **)
-      new(identifier:).open(**)
+    def open(druid:, **)
+      new(druid:).open(**)
     end
 
-    def close(identifier:, **)
-      new(identifier:).close(**)
+    def close(druid:, **)
+      new(druid:).close(**)
     end
 
     def openable?(...)
@@ -41,19 +41,19 @@ class VersionService
     end
   end
 
-  attr_reader :identifier
+  attr_reader :druid
 
   delegate :close, :open, to: :version_client
   delegate :open?, :openable?, :assembling?, :accessioning?, :closed?, :closeable?, :version, to: :status
 
-  def initialize(identifier:)
-    @identifier = identifier
+  def initialize(druid:)
+    @druid = druid
   end
 
   private
 
   def version_client
-    @version_client ||= Dor::Services::Client.object(identifier).version
+    @version_client ||= Dor::Services::Client.object(druid).version
   end
 
   def status

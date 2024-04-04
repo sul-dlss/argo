@@ -41,7 +41,7 @@ RSpec.describe OpenVersionJob do
     it 'opens new versions' do
       described_class.perform_now(bulk_action.id, params)
 
-      expect(VersionService).to have_received(:open).with(identifier: anything,
+      expect(VersionService).to have_received(:open).with(druid: anything,
                                                           description: 'Changed dates',
                                                           opening_user_name: user.to_s).twice
     end

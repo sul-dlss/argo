@@ -3,16 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe VersionService do
-  subject(:service) { described_class.new(identifier:) }
+  subject(:service) { described_class.new(druid:) }
 
-  let(:identifier) { 'druid:bg139xz7624' }
+  let(:druid) { 'druid:bg139xz7624' }
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, status:) }
   let(:status) { instance_double(Dor::Services::Client::ObjectVersion::VersionStatus) }
 
   before do
-    allow(Dor::Services::Client).to receive(:object).with(identifier).and_return(object_client)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
   describe '.close' do
@@ -22,7 +22,7 @@ RSpec.describe VersionService do
     end
 
     it 'calls #close on a new instance' do
-      described_class.close(identifier:)
+      described_class.close(druid:)
       expect(service).to have_received(:close).once
     end
   end
