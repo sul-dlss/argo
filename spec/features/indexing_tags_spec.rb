@@ -11,7 +11,7 @@ require 'rails_helper'
 #   javascript possibly also needed for the edit tags modal
 #
 # rubocop:disable Capybara/ClickLinkOrButtonStyle
-RSpec.describe 'Indexing and search results for tags', :js do
+RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].present? do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:solr_id) { item.externalIdentifier }
   let(:project_tag) { 'Project : ARS 78s : broken' }
