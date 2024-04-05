@@ -9,15 +9,10 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
   let(:cocina) { build(:dro) }
   let(:document) { instance_double(SolrDocument, preservation_size: 0) }
   let(:component) { described_class.new(document:, cocina:) }
-  let(:state_service) { instance_double(StateService) }
-
-  before do
-    allow(StateService).to receive(:new).and_return(state_service)
-  end
 
   context 'when accessioned' do
     before do
-      allow(state_service).to receive(:accessioned?).and_return(true)
+      allow(WorkflowService).to receive(:accessioned?).and_return(true)
       render_inline(component)
     end
 
@@ -33,7 +28,7 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
 
   context 'when not accessioned' do
     before do
-      allow(state_service).to receive(:accessioned?).and_return(false)
+      allow(WorkflowService).to receive(:accessioned?).and_return(false)
       render_inline(component)
     end
 

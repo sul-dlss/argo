@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
-  let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
@@ -24,6 +24,7 @@ RSpec.describe 'Item manage release' do
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(WorkflowService).to receive(:accessioned?).and_return(true)
   end
 
   it 'has a manage release button' do

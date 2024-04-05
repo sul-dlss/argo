@@ -11,7 +11,11 @@ RSpec.describe 'Item source id change' do
   describe 'when modification is not allowed' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
-    let(:state_service) { instance_double(StateService, allows_modification?: false, accessioned?: false) }
+    let(:state_service) { instance_double(StateService, allows_modification?: false) }
+
+    before do
+      allow(WorkflowService).to receive(:accessioned?).and_return(false)
+    end
 
     it 'cannot change the source id' do
       visit source_id_ui_item_path druid
@@ -29,7 +33,7 @@ RSpec.describe 'Item source id change' do
     let(:cocina_model) do
       build(:dro_with_metadata, id: druid)
     end
-    let(:state_service) { instance_double(StateService, allows_modification?: true, accessioned?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
@@ -48,6 +52,7 @@ RSpec.describe 'Item source id change' do
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(WorkflowService).to receive(:accessioned?).and_return(true)
 
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)

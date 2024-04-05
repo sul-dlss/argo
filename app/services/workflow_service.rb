@@ -31,6 +31,13 @@ class WorkflowService
     false
   end
 
+  # @return [Boolean] if the object has been accessioned or not before
+  def self.accessioned?(druid:)
+    return true if workflow_client.lifecycle(druid:, milestone_name: 'accessioned')
+
+    false
+  end
+
   # Get the workflow definition from the server so we know which processes should be present
   # TODO: This could be cached for better performance
   def self.definition_process_names(workflow_name)
