@@ -53,8 +53,8 @@ class AdminPolicyPersister
 
     response = update
 
-    # Kick off the accessionWF after all updates are complete.
-    WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
+    # Close the version after all updates are complete.
+    VersionService.close(druid: response.externalIdentifier)
 
     response
   end
