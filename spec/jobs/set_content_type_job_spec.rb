@@ -51,7 +51,7 @@ RSpec.describe SetContentTypeJob do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
   let(:object_client3) { instance_double(Dor::Services::Client::Object, find: cocina3) }
 
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
   let(:buffer) { StringIO.new }
 
   before do
@@ -224,7 +224,7 @@ RSpec.describe SetContentTypeJob do
   end
 
   context 'when modification is not allowed' do
-    let(:state_service) { instance_double(StateService, allows_modification?: false) }
+    let(:state_service) { instance_double(StateService, open?: false) }
 
     it 'does not update and logs an error' do
       subject.perform(bulk_action.id, params)

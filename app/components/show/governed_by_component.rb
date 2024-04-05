@@ -13,7 +13,7 @@ module Show
       helpers.link_to_admin_policy_with_objs(document: @document, value: @document.apo_id)
     end
 
-    delegate :allows_modification?, to: :@state_service
+    delegate :open?, to: :@state_service
     delegate :id, to: :@document
   end
 end

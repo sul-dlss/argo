@@ -21,7 +21,7 @@ RSpec.describe DescriptiveMetadataImportJob do
     ].join("\n")
   end
 
-  let(:state_service) { instance_double(StateService, allows_modification?: true, object_state: :unlock) }
+  let(:state_service) { instance_double(StateService, open?: true, object_state: :unlock) }
 
   before do
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
@@ -58,7 +58,7 @@ RSpec.describe DescriptiveMetadataImportJob do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(Repository).to have_received(:store).with(expected1)
         expect(Repository).to have_received(:store).with(expected2)
-        expect(state_service).to have_received(:allows_modification?).twice
+        expect(state_service).to have_received(:open?).twice
         expect(state_service).to have_received(:object_state).twice
         expect(version_client).to have_received(:close).twice
       end
@@ -172,7 +172,7 @@ RSpec.describe DescriptiveMetadataImportJob do
       let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
 
       context 'when already accessioned and locked' do
-        let(:state_service) { instance_double(StateService, allows_modification?: false, object_state: :lock) }
+        let(:state_service) { instance_double(StateService, open?: false, object_state: :lock) }
         let(:expected1) do
           item1.new(version: 2, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
         end
@@ -180,7 +180,7 @@ RSpec.describe DescriptiveMetadataImportJob do
         it 'opens the item, updates the descriptive metadata and then closes the item' do
           expect(bulk_action.druid_count_total).to eq 1
           expect(Repository).to have_received(:store).with(expected1)
-          expect(state_service).to have_received(:allows_modification?)
+          expect(state_service).to have_received(:open?)
           expect(VersionService).to have_received(:open).with(druid: item1.externalIdentifier, opening_user_name: bulk_action.user.to_s,
                                                               description: 'Descriptive metadata upload')
           expect(version_client).to have_received(:close).once
@@ -190,7 +190,7 @@ RSpec.describe DescriptiveMetadataImportJob do
 
       context 'when registered v1 but no accessioningWF in progress' do
         let(:state_service) do
-          instance_double(StateService, allows_modification?: true, object_state: :unlock_inactive)
+          instance_double(StateService, open?: true, object_state: :unlock_inactive)
         end
         let(:expected1) do
           item1.new(version: 1, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
@@ -199,7 +199,7 @@ RSpec.describe DescriptiveMetadataImportJob do
         it 'updates the descriptive metadata but does not open or close the item' do
           expect(bulk_action.druid_count_total).to eq 1
           expect(Repository).to have_received(:store).with(expected1)
-          expect(state_service).to have_received(:allows_modification?)
+          expect(state_service).to have_received(:open?)
           expect(VersionService).not_to have_received(:open)
           expect(version_client).not_to have_received(:close)
         end

@@ -42,10 +42,10 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :allows_modification?, to: :presenter
+    delegate :open?, to: :presenter
 
     def button_disabled?
-      !allows_modification?
+      !open?
     end
 
     def refresh_button_label

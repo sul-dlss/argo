@@ -10,8 +10,8 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
     build(:dro)
   end
   let(:rendered) { render_inline(component) }
-  let(:allows_modification) { true }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:open) { true }
+  let(:state_service) { instance_double(StateService, open?: open) }
   let(:edit_collection_button) { rendered.css("a[aria-label='Edit collections']") }
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }
@@ -61,7 +61,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
     end
   end
 
-  context 'when allows_modification is true' do
+  context 'when open is true' do
     it 'creates a edit buttons' do
       expect(edit_governing_apo_button).to be_present
       expect(edit_rights_button).to be_present
@@ -72,8 +72,8 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
     end
   end
 
-  context 'when allows_modification is false' do
-    let(:allows_modification) { false }
+  context 'when open is false' do
+    let(:open) { false }
 
     it 'creates no edit buttons' do
       expect(edit_governing_apo_button).not_to be_present

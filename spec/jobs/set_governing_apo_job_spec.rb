@@ -28,7 +28,7 @@ RSpec.describe SetGoverningApoJob do
     end
 
     let(:buffer) { StringIO.new }
-    let(:state_service) { instance_double(StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, open?: true) }
 
     before do
       allow(BulkJobLog).to receive(:open).and_yield(buffer)
@@ -67,7 +67,7 @@ RSpec.describe SetGoverningApoJob do
       # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
       it 'increments the failure and success counts and logs status of each update' do
         subject.perform(bulk_action.id, params)
-        expect(state_service).to have_received(:allows_modification?)
+        expect(state_service).to have_received(:open?)
         expect(object_client1).to have_received(:update).with(params: Cocina::Models::DROWithMetadata)
 
         expect(bulk_action.druid_count_success).to eq 1

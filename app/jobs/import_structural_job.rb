@@ -11,7 +11,7 @@ class ImportStructuralJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_item)
 
       state_service = StateService.new(cocina_item)
-      next failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?
+      next failure.call('Object cannot be modified in its current state.') unless state_service.open?
 
       druid = cocina_item.externalIdentifier
       result = StructureUpdater.from_csv(cocina_item, item_csv(csv.headers, grouped.fetch(druid)))

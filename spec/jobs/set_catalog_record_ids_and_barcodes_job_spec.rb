@@ -186,7 +186,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       end
 
       context 'when not authorized' do
-        let(:state_service) { instance_double(StateService, allows_modification?: false) }
+        let(:state_service) { instance_double(StateService, open?: false) }
 
         before do
           allow(subject.ability).to receive(:can?).and_return(false)
@@ -204,7 +204,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
         let(:state_service) { instance_double(StateService) }
 
         before do
-          allow(state_service).to receive(:allows_modification?).and_raise('oops')
+          allow(state_service).to receive(:open?).and_raise('oops')
         end
 
         it 'logs' do
@@ -216,7 +216,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       end
 
       context 'when modification is not allowed' do
-        let(:state_service) { instance_double(StateService, allows_modification?: false) }
+        let(:state_service) { instance_double(StateService, open?: false) }
 
         it 'updates catalog_record_id and barcode and versions objects' do
           expect(subject).to receive(:open_new_version).with(previous_version,
@@ -229,7 +229,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       end
 
       context 'when modification is allowed' do
-        let(:state_service) { instance_double(StateService, allows_modification?: true) }
+        let(:state_service) { instance_double(StateService, open?: true) }
 
         it 'updates catalog_record_id and barcode and does not version objects if not needed' do
           expect(subject).not_to receive(:open_new_version).with(previous_version,
@@ -242,7 +242,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
       end
 
       context 'when catalog_record_ids are empty and barcode is nil' do
-        let(:state_service) { instance_double(StateService, allows_modification?: false) }
+        let(:state_service) { instance_double(StateService, open?: false) }
         let(:catalog_record_ids_arg) { [] }
         let(:barcode) { nil }
         let(:updated_model) do
@@ -299,7 +299,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesJob do
           end
         end
 
-        let(:state_service) { instance_double(StateService, allows_modification?: true) }
+        let(:state_service) { instance_double(StateService, open?: true) }
 
         it 'updates catalog_record_id and barcode and does not version objects if not needed' do
           expect(subject).not_to receive(:open_new_version).with(previous_version,

@@ -10,7 +10,7 @@ RSpec.describe 'Collection membership' do
   end
 
   let(:druid) { 'druid:bc123df4567' }
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
 
   describe 'adding a new collection' do
     let(:cocina_collection) { build(:dro_with_metadata, id: druid, collection_ids:) }

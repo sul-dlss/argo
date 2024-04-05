@@ -12,7 +12,7 @@ RSpec.describe 'Item catalog_record_id change' do
   describe 'when modification is not allowed' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
-    let(:state_service) { instance_double(StateService, allows_modification?: false) }
+    let(:state_service) { instance_double(StateService, open?: false) }
 
     it 'cannot change the catalog_record_id' do
       visit edit_item_catalog_record_id_path druid
@@ -30,7 +30,7 @@ RSpec.describe 'Item catalog_record_id change' do
     let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
     let(:druid) { 'druid:kv840xx0000' }
     let(:cocina_model) { build(:dro_with_metadata, id: druid) }
-    let(:state_service) { instance_double(StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, open?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }

@@ -33,7 +33,7 @@ RSpec.describe ApplyApoDefaultsJob do
 
   context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
-    let(:state_service) { instance_double(StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, open?: true) }
 
     let(:perform) do
       described_class.perform_now(bulk_action.id,
@@ -60,7 +60,7 @@ RSpec.describe ApplyApoDefaultsJob do
     end
 
     context 'when the version is not open' do
-      let(:state_service) { instance_double(StateService, allows_modification?: false) }
+      let(:state_service) { instance_double(StateService, open?: false) }
 
       before do
         allow_any_instance_of(described_class).to receive(:open_new_version) # rubocop:disable RSpec/AnyInstance

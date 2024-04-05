@@ -12,7 +12,7 @@ module Show
         view_access.capitalize
       end
 
-      delegate :allows_modification?, to: :@state_service
+      delegate :open?, to: :@state_service
       delegate :id, :view_access, to: :@change_set
     end
   end

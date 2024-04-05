@@ -17,7 +17,7 @@ class SetRightsJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       state_service = StateService.new(cocina_object)
-      next failure.call('Object cannot be modified in its current state.') unless state_service.allows_modification?
+      next failure.call('Object cannot be modified in its current state.') unless state_service.open?
 
       change_set = if cocina_object.collection?
                      # Collection only allows setting view access to dark or world

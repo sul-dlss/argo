@@ -11,7 +11,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
   let(:logger) { instance_double(File, puts: nil) }
 
   describe '#perform' do
-    let(:allows_modification) { true }
+    let(:open) { true }
     let(:params) do
       {
         copyright_statement_option: '1',
@@ -22,7 +22,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     end
     let(:cocina_object) { build(:dro_with_metadata) }
     let(:copyright_statement) { 'the new hotness' }
-    let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+    let(:state_service) { instance_double(StateService, open?: open) }
     let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
 
     before do
@@ -50,7 +50,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       end
 
       context 'with an item that needs to be opened first' do
-        let(:allows_modification) { false }
+        let(:open) { false }
 
         it 'updates via item change set persister' do
           expect(VersionService).to have_received(:open).twice
@@ -148,7 +148,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     end
 
     context 'when item cannot be opened' do
-      let(:allows_modification) { false }
+      let(:open) { false }
       let(:wf_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: false) }
 
       before do

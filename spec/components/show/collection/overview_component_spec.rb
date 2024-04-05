@@ -27,8 +27,8 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
                                    })
   end
   let(:rendered) { render_inline(component) }
-  let(:allows_modification) { true }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:open) { true }
+  let(:state_service) { instance_double(StateService, open?: open) }
 
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }

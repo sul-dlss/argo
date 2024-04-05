@@ -7,7 +7,7 @@ module Show
       @state_service = state_service
     end
 
-    delegate :allows_modification?, to: :@state_service
+    delegate :open?, to: :@state_service
     delegate :id, :source_id, :item?, to: :@document
   end
 end

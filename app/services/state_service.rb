@@ -14,7 +14,7 @@ class StateService
     @version = cocina.version
   end
 
-  def allows_modification?
+  def open?
     UNLOCKED_STATES.include? object_state
   end
 

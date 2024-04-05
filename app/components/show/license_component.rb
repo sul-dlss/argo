@@ -15,7 +15,7 @@ module Show
       value.fetch(:label)
     end
 
-    delegate :allows_modification?, to: :@state_service
+    delegate :open?, to: :@state_service
     delegate :id, to: :@change_set
   end
 end

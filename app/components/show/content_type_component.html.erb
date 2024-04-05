@@ -1,6 +1,6 @@
 <%= content_type %>
 
-<% if allows_modification? %>
+<% if open? %>
   <%= link_to edit_item_content_type_path(item_id: id),
               aria: { label: 'Set content type' },
               data: { controller: 'button', action: 'click->button#open' } do %>

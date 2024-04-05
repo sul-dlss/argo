@@ -11,7 +11,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, allows_modification?: allows_modification) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open) }
 
   before do
     rendered
@@ -30,7 +30,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:catalog_record_id) { nil }
 
     context 'when the object is unlocked' do
-      let(:allows_modification) { true }
+      let(:open) { true }
 
       it 'draws the buttons' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
@@ -69,7 +69,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when the object is locked' do
-      let(:allows_modification) { false }
+      let(:open) { false }
 
       it 'the embargo and apply APO buttons are disabled' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
@@ -93,7 +93,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
   context 'when the object is an AdminPolicy the user can manage' do
     let(:view_apo_id) { 'druid:zt570qh4444' }
-    let(:allows_modification) { true }
+    let(:open) { true }
 
     let(:doc) do
       SolrDocument.new('id' => view_apo_id,
@@ -120,7 +120,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
   context 'when the object is a Collection the user can manage' do
     let(:view_collection_id) { 'druid:kv840xx0000' }
-    let(:allows_modification) { true }
+    let(:open) { true }
 
     let(:doc) do
       SolrDocument.new('id' => view_collection_id,
@@ -160,7 +160,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   describe '#registered_only?' do
     subject { component.send(:registered_only?) }
 
-    let(:allows_modification) { true }
+    let(:open) { true }
     let(:item_id) { 'druid:kv840xx0000' }
 
     context 'when registered' do

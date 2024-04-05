@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
 
   layout :determine_layout
 
-  def allows_modification?(cocina_object)
+  def open?(cocina_object)
     state_service = StateService.new(cocina_object)
-    state_service.allows_modification?
+    state_service.open?
   end
 
   def current_user
@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
     end
 
     # if this object has been submitted and doesn't have an open version, they cannot change it.
-    return true if allows_modification?(@cocina)
+    return true if open?(@cocina)
 
     redirect_to solr_document_path(@cocina.externalIdentifier),
                 flash: { error: 'Object cannot be modified in its current state.' }
