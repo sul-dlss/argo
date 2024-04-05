@@ -18,13 +18,6 @@ class StateService
     UNLOCKED_STATES.include? object_state
   end
 
-  ##
-  # Ported over logic from app/helpers/dor_object_helper.rb#LN119
-  # @return [Boolean]
-  def published?
-    lifecycle('published') ? true : false
-  end
-
   def object_state
     # This item is currently unlocked and can be edited and moved to a locked state
     return STATES[:unlock] if !active_assembly_wf? && opened? && !submitted?
@@ -48,6 +41,13 @@ class StateService
   # @return [Boolean]
   def accessioned?
     @accessioned ||= lifecycle('accessioned') ? true : false
+  end
+
+  ##
+  # Ported over logic from app/helpers/dor_object_helper.rb#LN119
+  # @return [Boolean]
+  def published?
+    lifecycle('published') ? true : false
   end
 
   def lifecycle(task)
