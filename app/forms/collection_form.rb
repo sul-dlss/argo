@@ -41,9 +41,9 @@ class CollectionForm
 
   # @return [Cocina::Models::Collection] registers the Collection
   def register_model
-    Dor::Services::Client.objects.register(params: cocina_model).tap do |response|
-      WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
-    end
+    collection = Dor::Services::Client.objects.register(params: cocina_model)
+    VersionService.close(druid: collection.externalIdentifier)
+    collection
   end
 
   # @return [Hash] the parameters used to register a collection. Must be called after `validate`
