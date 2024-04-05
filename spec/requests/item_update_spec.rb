@@ -10,6 +10,7 @@ RSpec.describe 'Set the properties for an item' do
   before do
     allow(Repository).to receive(:find).and_return(cocina_model)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
+    allow(VersionService).to receive(:open?).and_return(true)
   end
 
   context 'when they have manage access' do

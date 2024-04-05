@@ -152,14 +152,13 @@ RSpec.describe SetRightsJob do
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
 
-  let(:state_service) { instance_double(StateService, open?: true) }
   let(:buffer) { StringIO.new }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject.ability).to receive(:can?).and_return(true)
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive(:open?).and_return(true)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(object_client1).to receive(:update)

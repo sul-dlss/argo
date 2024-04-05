@@ -11,8 +11,7 @@ class ApplicationController < ActionController::Base
   layout :determine_layout
 
   def open?(cocina_object)
-    state_service = StateService.new(cocina_object)
-    state_service.open?
+    VersionService.open?(druid: cocina_object.externalIdentifier)
   end
 
   def current_user

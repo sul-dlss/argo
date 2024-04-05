@@ -4,11 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Show::Apo::DetailsComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, state_service:) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:) }
   let(:cocina) { build(:admin_policy) }
   let(:rendered) { render_inline(component) }
-  let(:open) { true }
-  let(:state_service) { instance_double(StateService, open?: open) }
   let(:doc) do
     SolrDocument.new('id' => 'druid:kv840xx0000',
                      SolrDocument::FIELD_REGISTERED_DATE => ['2012-04-05T01:00:04.148Z'],

@@ -8,6 +8,7 @@ RSpec.describe 'Set source id for an object' do
     let(:druid) { 'druid:cc243mg0841' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) { build(:dro_with_metadata, id: druid) }
+    let(:version_service) { instance_double(VersionService, open?: true) }
 
     let(:updated_model) do
       cocina_model.new(
@@ -22,6 +23,7 @@ RSpec.describe 'Set source id for an object' do
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_druid_remotely)
+      allow(VersionService).to receive(:new).and_return(version_service)
       sign_in user, groups: ['sdr:administrator-role']
     end
 

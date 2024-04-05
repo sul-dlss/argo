@@ -2,9 +2,9 @@
 
 module Show
   class GovernedByComponent < ApplicationComponent
-    def initialize(document:, state_service:)
+    def initialize(document:, version_service:)
       @document = document
-      @state_service = state_service
+      @version_service = version_service
     end
 
     def admin_policy
@@ -13,7 +13,7 @@ module Show
       helpers.link_to_admin_policy_with_objs(document: @document, value: @document.apo_id)
     end
 
-    delegate :open?, to: :@state_service
+    delegate :open?, to: :@version_service
     delegate :id, to: :@document
   end
 end

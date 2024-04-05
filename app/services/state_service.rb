@@ -14,10 +14,6 @@ class StateService
     @version = cocina.version
   end
 
-  def open?
-    UNLOCKED_STATES.include? object_state
-  end
-
   def object_state
     # This item is currently unlocked and can be edited and moved to a locked state
     return STATES[:unlock] if !active_assembly_wf? && opened? && !submitted?

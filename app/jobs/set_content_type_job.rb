@@ -35,8 +35,7 @@ class SetContentTypeJob < GenericJob
 
     return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-    state_service = StateService.new(cocina_object)
-    return failure.call('Object cannot be modified in its current state.') unless state_service.open?
+    return failure.call('Object cannot be modified in its current state.') unless VersionService.open?(druid: cocina_object.externalIdentifier)
 
     # use dor services client to pass a hash for structural metadata and update the cocina object
     new_model = cocina_object.new(cocina_update_attributes(cocina_object))

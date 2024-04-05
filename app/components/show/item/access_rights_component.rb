@@ -3,9 +3,9 @@
 module Show
   module Item
     class AccessRightsComponent < ApplicationComponent
-      def initialize(change_set:, state_service:)
+      def initialize(change_set:, version_service:)
         @change_set = change_set
-        @state_service = state_service
+        @version_service = version_service
       end
 
       def access_rights
@@ -18,7 +18,7 @@ module Show
         val
       end
 
-      delegate :open?, to: :@state_service
+      delegate :open?, to: :@version_service
       delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :@change_set
 
       def humanize_value(val)

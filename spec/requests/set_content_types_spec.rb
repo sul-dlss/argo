@@ -74,10 +74,8 @@ RSpec.describe 'Set content type for an item' do
 
   describe 'save the updated value' do
     before do
-      allow(StateService).to receive(:new).and_return(state_service)
+      allow(VersionService).to receive(:open?).and_return(true)
     end
-
-    let(:state_service) { instance_double(StateService, open?: true) }
 
     context 'with access' do
       before do
@@ -183,7 +181,9 @@ RSpec.describe 'Set content type for an item' do
       end
 
       context 'when modification not allowed' do
-        let(:state_service) { instance_double(StateService, open?: false) }
+        before do
+          allow(VersionService).to receive(:open?).and_return(false)
+        end
 
         it 'is forbidden' do
           patch "/items/#{druid}/content_type",

@@ -7,18 +7,16 @@ RSpec.describe 'Upload the structural CSV' do
 
   let(:user) { create(:user) }
   let(:druid) { cocina_model.externalIdentifier }
-  let(:state_service) { instance_double(StateService) }
+  let(:version_service) { instance_double(VersionService, open?: open) }
 
   before do
     allow(Repository).to receive(:find).and_return(cocina_model)
-    allow(StateService).to receive(:new).and_return(state_service, open?: modifiable)
+    allow(VersionService).to receive(:new).and_return(version_service)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do
     before do
-      allow(state_service).to receive(:open?).and_return(modifiable)
-
       sign_in user, groups: ['sdr:administrator-role']
     end
 
@@ -26,7 +24,7 @@ RSpec.describe 'Upload the structural CSV' do
     let(:file) { fixture_file_upload('structure-upload.csv') }
 
     context 'when object is unlocked' do
-      let(:modifiable) { true }
+      let(:open) { true }
 
       context 'when valid' do
         before do
@@ -114,7 +112,7 @@ RSpec.describe 'Upload the structural CSV' do
     end
 
     context 'when object is locked' do
-      let(:modifiable) { false }
+      let(:open) { false }
 
       before do
         allow(Repository).to receive(:store)

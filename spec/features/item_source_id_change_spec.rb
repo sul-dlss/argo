@@ -5,13 +5,13 @@ require 'rails_helper'
 RSpec.describe 'Item source id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive(:new).and_return(version_service)
   end
 
   describe 'when modification is not allowed' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
-    let(:state_service) { instance_double(StateService, open?: false) }
+    let(:version_service) { instance_double(VersionService, open?: false) }
 
     before do
       allow(WorkflowService).to receive(:accessioned?).and_return(false)
@@ -33,7 +33,7 @@ RSpec.describe 'Item source id change' do
     let(:cocina_model) do
       build(:dro_with_metadata, id: druid)
     end
-    let(:state_service) { instance_double(StateService, open?: true) }
+    let(:version_service) { instance_double(VersionService, open?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Show::Item::AccessRightsComponent, type: :component do
-  let(:component) { described_class.new(change_set:, state_service:) }
+  let(:component) { described_class.new(change_set:, version_service:) }
   let(:change_set) { ItemChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
@@ -22,8 +22,7 @@ RSpec.describe Show::Item::AccessRightsComponent, type: :component do
                             structural: {})
   end
   let(:rendered) { render_inline(component) }
-  let(:open) { true }
-  let(:state_service) { instance_double(StateService, open?: open) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
 
   context 'with view location' do
     let(:access) do

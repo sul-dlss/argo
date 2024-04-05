@@ -9,17 +9,17 @@ RSpec.describe 'Set APO for an object' do
     let(:new_apo_id) { 'druid:bc123cd4567' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) { build(:dro_with_metadata, id: druid) }
-    let(:state_service) { instance_double(StateService, open?: true) }
+    let(:version_service) { instance_double(VersionService, open?: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
-      allow(StateService).to receive(:new).and_return(state_service)
+      allow(VersionService).to receive(:new).and_return(version_service)
     end
 
     context 'when object modification not allowed' do
-      let(:state_service) { instance_double(StateService, open?: false) }
+      let(:version_service) { instance_double(VersionService, open?: false) }
 
       it 'redirects with an error' do
         post "/items/#{druid}/set_governing_apo", params: { new_apo_id: }

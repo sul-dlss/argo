@@ -6,7 +6,7 @@ RSpec.describe 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:state_service) { instance_double(StateService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
@@ -25,7 +25,7 @@ RSpec.describe 'Collection manage release' do
   let(:collection_id) { 'druid:gg232vv1111' }
 
   before do
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive(:new).and_return(version_service)
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     solr_conn.add(id: 'druid:gg232vv1111',

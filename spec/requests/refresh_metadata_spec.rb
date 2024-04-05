@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Refresh metadata' do
   let(:druid) { 'druid:bc123df4567' }
-  let(:state_service) { instance_double(StateService, open?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }
   let(:cocina_model) do
     build(:dro_with_metadata, id: druid, folio_instance_hrids: ['a12345'])
@@ -12,7 +11,7 @@ RSpec.describe 'Refresh metadata' do
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive(:open?).and_return(true)
   end
 
   context 'when they have manage access' do
@@ -42,7 +41,9 @@ RSpec.describe 'Refresh metadata' do
     end
 
     context "when the object doesn't allow modification" do
-      let(:state_service) { instance_double(StateService, open?: false) }
+      before do
+        allow(VersionService).to receive(:open?).and_return(false)
+      end
 
       it 'redirects with an error message' do
         post "/items/#{druid}/refresh_metadata"

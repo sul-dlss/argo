@@ -3,11 +3,11 @@
 class ShowEmbargoComponent < ApplicationComponent
   def initialize(presenter:)
     @solr_document = presenter.document
-    @state_service = presenter.state_service
+    @presenter = presenter
   end
 
   delegate :id, :embargoed?, :embargo_release_date, to: :@solr_document
-  delegate :open?, to: :@state_service
+  delegate :open?, to: :@presenter
 
   def render?
     embargoed? && embargo_release_date.present?

@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Item view', :js do
   before do
+    allow(VersionService).to receive(:new).and_return(version_service)
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
@@ -42,6 +43,7 @@ RSpec.describe 'Item view', :js do
                                      release: true)
     ]
   end
+  let(:version_service) { instance_double(VersionService, open?: true) }
 
   context 'when navigating to an object' do
     before do

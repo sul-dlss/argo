@@ -6,11 +6,11 @@ RSpec.describe 'Collection membership' do
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive(:new).and_return(version_service)
   end
 
   let(:druid) { 'druid:bc123df4567' }
-  let(:state_service) { instance_double(StateService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
 
   describe 'adding a new collection' do
     let(:cocina_collection) { build(:dro_with_metadata, id: druid, collection_ids:) }

@@ -21,6 +21,11 @@ RSpec.describe 'Set catalog record ID' do
       'Turbo-Frame' => 'edit_copyright' }
   end
   let(:cocina_model) { build(:dro_with_metadata, id: druid) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
+
+  before do
+    allow(VersionService).to receive(:new).and_return(version_service)
+  end
 
   context 'without manage content access' do
     let(:cocina) { instance_double(Cocina::Models::DROWithMetadata) }
