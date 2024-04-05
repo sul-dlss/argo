@@ -152,7 +152,7 @@ RSpec.describe SetRightsJob do
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
 
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
   let(:buffer) { StringIO.new }
 
   before do

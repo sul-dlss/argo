@@ -55,7 +55,7 @@ RSpec.describe RefreshModsJob do
     end
 
     context 'with catalog_record_id' do
-      let(:state_service) { instance_double(StateService, allows_modification?: true) }
+      let(:state_service) { instance_double(StateService, open?: true) }
 
       before do
         allow(StateService).to receive(:new).and_return(state_service)
@@ -75,7 +75,7 @@ RSpec.describe RefreshModsJob do
       end
 
       context 'when the version is not open' do
-        let(:state_service) { instance_double(StateService, allows_modification?: false) }
+        let(:state_service) { instance_double(StateService, open?: false) }
 
         before do
           allow_any_instance_of(described_class).to receive(:open_new_version) # rubocop:disable RSpec/AnyInstance

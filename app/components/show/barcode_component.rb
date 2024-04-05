@@ -11,7 +11,7 @@ module Show
       @change_set.barcode || 'Not recorded'
     end
 
-    delegate :allows_modification?, to: :@state_service
+    delegate :open?, to: :@state_service
     delegate :id, to: :@change_set
   end
 end

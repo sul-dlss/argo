@@ -10,7 +10,7 @@ RSpec.describe ContentsComponent, type: :component do
                     state_service:)
   end
   let(:component) { described_class.new(presenter:) }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:state_service) { instance_double(StateService, open?: open) }
 
   let(:rendered) { render_inline(component) }
 
@@ -25,7 +25,7 @@ RSpec.describe ContentsComponent, type: :component do
     end
 
     context 'with unlocked object' do
-      let(:allows_modification) { true }
+      let(:open) { true }
 
       it 'renders a turbo frame' do
         expect(rendered.css('turbo-frame').first['src']).to eq '/items/skret-t0k3n/structure'
@@ -37,7 +37,7 @@ RSpec.describe ContentsComponent, type: :component do
     end
 
     context 'with locked object' do
-      let(:allows_modification) { false }
+      let(:open) { false }
 
       it 'hides Upload CSV button' do
         expect(rendered.css('.bi-upload')).not_to be_present

@@ -184,7 +184,7 @@ class GenericJob < ApplicationJob
   # @returns [Cocina::Models::DROWithMetadata|CollectionWithMetadata|AdminPolicyWithMetadata] cocina object with the new/existing version
   def open_new_version_if_needed(cocina_object, description)
     state_service = StateService.new(cocina_object)
-    return cocina_object if state_service.allows_modification?
+    return cocina_object if state_service.open?
 
     open_new_version(cocina_object, description)
   end

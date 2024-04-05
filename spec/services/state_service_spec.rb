@@ -15,7 +15,7 @@ RSpec.describe StateService do
   let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version: 3) }
   let(:service) { described_class.new(cocina) }
 
-  describe '#allows_modification?' do
+  describe '#open?' do
     before do
       allow(service).to receive(:object_state).and_return(:unlock)
     end
@@ -26,7 +26,7 @@ RSpec.describe StateService do
       end
 
       it 'returns true' do
-        expect(service).to be_allows_modification
+        expect(service).to be_open
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe StateService do
       end
 
       it 'returns true' do
-        expect(service).to be_allows_modification
+        expect(service).to be_open
       end
     end
 
@@ -46,7 +46,7 @@ RSpec.describe StateService do
       end
 
       it 'returns false' do
-        expect(service).not_to be_allows_modification
+        expect(service).not_to be_open
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe StateService do
       end
 
       it 'returns false' do
-        expect(service).not_to be_allows_modification
+        expect(service).not_to be_open
       end
     end
   end

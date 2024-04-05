@@ -44,7 +44,7 @@ RSpec.describe SetCollectionJob do
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
     let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }
-    let(:state_service) { instance_double(StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, open?: true) }
 
     context 'with authorization' do
       before do
@@ -76,7 +76,7 @@ RSpec.describe SetCollectionJob do
         end
 
         context 'when the version is closed' do
-          let(:state_service) { instance_double(StateService, allows_modification?: false) }
+          let(:state_service) { instance_double(StateService, open?: false) }
 
           before do
             allow(job).to receive(:open_new_version).and_return(cocina1.new(version: 2))

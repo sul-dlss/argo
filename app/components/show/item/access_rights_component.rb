@@ -18,7 +18,7 @@ module Show
         val
       end
 
-      delegate :allows_modification?, to: :@state_service
+      delegate :open?, to: :@state_service
       delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :@change_set
 
       def humanize_value(val)

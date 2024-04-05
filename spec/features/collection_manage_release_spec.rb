@@ -6,7 +6,7 @@ RSpec.describe 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }

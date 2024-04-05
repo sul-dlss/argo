@@ -10,7 +10,7 @@ RSpec.describe 'Set governing APO' do
   end
 
   let(:identity_md) { instance_double(Nokogiri::XML::Document, xpath: []) }
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
 
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item, label: 'Foo', title: 'Test')

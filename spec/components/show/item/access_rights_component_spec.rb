@@ -22,8 +22,8 @@ RSpec.describe Show::Item::AccessRightsComponent, type: :component do
                             structural: {})
   end
   let(:rendered) { render_inline(component) }
-  let(:allows_modification) { true }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:open) { true }
+  let(:state_service) { instance_double(StateService, open?: open) }
 
   context 'with view location' do
     let(:access) do

@@ -12,5 +12,5 @@ class ContentsComponent < ApplicationComponent
     @cocina.respond_to?(:structural)
   end
 
-  delegate :allows_modification?, to: :@state_service
+  delegate :open?, to: :@state_service
 end

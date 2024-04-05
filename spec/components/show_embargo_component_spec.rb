@@ -6,7 +6,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
   let(:rendered) { render_inline(component) }
   let(:presenter) { instance_double(ArgoShowPresenter, document:, state_service:) }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:state_service) { instance_double(StateService, open?: open) }
 
   describe 'embargo with release date' do
     let(:document) do
@@ -18,7 +18,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
     end
 
     context 'with unlocked object' do
-      let(:allows_modification) { true }
+      let(:open) { true }
 
       it 'displays release date and edit icon' do
         expect(rendered.to_html).to include 'Embargoed until February 24, 2259'
@@ -28,7 +28,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
     end
 
     context 'with locked object' do
-      let(:allows_modification) { false }
+      let(:open) { false }
 
       it 'displays release date but not edit link' do
         expect(rendered.to_html).to include 'Embargoed until February 24, 2259'
@@ -39,7 +39,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
   end
 
   context 'for embargo without release date' do
-    let(:allows_modification) { true }
+    let(:open) { true }
     let(:document) do
       SolrDocument.new(
         :id => 1,
@@ -53,7 +53,7 @@ RSpec.describe ShowEmbargoComponent, type: :component do
   end
 
   context 'for bad embargo status with release date' do
-    let(:allows_modification) { true }
+    let(:open) { true }
     let(:document) do
       SolrDocument.new(
         :id => 1,

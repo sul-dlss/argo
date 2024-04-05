@@ -11,13 +11,13 @@ RSpec.describe 'Upload the structural CSV' do
 
   before do
     allow(Repository).to receive(:find).and_return(cocina_model)
-    allow(StateService).to receive(:new).and_return(state_service, allows_modification?: modifiable)
+    allow(StateService).to receive(:new).and_return(state_service, open?: modifiable)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do
     before do
-      allow(state_service).to receive(:allows_modification?).and_return(modifiable)
+      allow(state_service).to receive(:open?).and_return(modifiable)
 
       sign_in user, groups: ['sdr:administrator-role']
     end

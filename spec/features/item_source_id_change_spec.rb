@@ -11,7 +11,7 @@ RSpec.describe 'Item source id change' do
   describe 'when modification is not allowed' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
-    let(:state_service) { instance_double(StateService, allows_modification?: false) }
+    let(:state_service) { instance_double(StateService, open?: false) }
 
     before do
       allow(WorkflowService).to receive(:accessioned?).and_return(false)
@@ -33,7 +33,7 @@ RSpec.describe 'Item source id change' do
     let(:cocina_model) do
       build(:dro_with_metadata, id: druid)
     end
-    let(:state_service) { instance_double(StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, open?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }

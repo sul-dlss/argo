@@ -9,8 +9,8 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
     build(:admin_policy, registration_workflow: %w[registrationWF goobiWF])
   end
   let(:rendered) { render_inline(component) }
-  let(:allows_modification) { true }
-  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
+  let(:open) { true }
+  let(:state_service) { instance_double(StateService, open?: open) }
 
   let(:doc) do
     SolrDocument.new('id' => 'druid:kv840xx0000',

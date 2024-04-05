@@ -38,7 +38,7 @@ RSpec.describe SetSourceIdsCsvJob do
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, update: true) }
   let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3, update: true) }
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
@@ -77,7 +77,7 @@ RSpec.describe SetSourceIdsCsvJob do
       end
 
       context 'when the version is closed' do
-        let(:state_service) { instance_double(StateService, allows_modification?: false) }
+        let(:state_service) { instance_double(StateService, open?: false) }
 
         before do
           allow(job).to receive(:open_new_version).and_return(item1.new(version: 2), item2.new(version: 2),

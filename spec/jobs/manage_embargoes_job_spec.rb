@@ -28,7 +28,7 @@ RSpec.describe ManageEmbargoesJob do
     ].join("\n")
   end
 
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, open?: true) }
   let(:params) { { csv_file: } }
 
   before do
@@ -68,7 +68,7 @@ RSpec.describe ManageEmbargoesJob do
     end
 
     context 'when modification is not allowed' do
-      let(:state_service) { instance_double(StateService, allows_modification?: false) }
+      let(:state_service) { instance_double(StateService, open?: false) }
 
       it 'opens new version and updates the embargo' do
         subject.perform(bulk_action.id, params)
@@ -81,7 +81,7 @@ RSpec.describe ManageEmbargoesJob do
 
     context 'when error' do
       before do
-        allow(state_service).to receive(:allows_modification?).and_raise('oops')
+        allow(state_service).to receive(:open?).and_raise('oops')
       end
 
       it 'logs' do

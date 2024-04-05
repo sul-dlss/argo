@@ -1,6 +1,6 @@
 <%= admin_policy %>
 
-<% if allows_modification? %>
+<% if open? %>
   <%= link_to set_governing_apo_ui_item_path(id:),
               aria: { label: 'Set governing APO' },
               data: { controller: 'button', action: 'click->button#open' } do %>
