@@ -6,7 +6,7 @@ require 'rails_helper'
 #   our whole stack: tests create cocina objects with factories, write them
 #   to dor-services-app, index the new objects via dor-indexing-app and then use
 #   the Argo UI to test Solr behavior such as search results and facet values.
-RSpec.describe 'Indexing and search results for titles' do
+RSpec.describe 'Indexing and search results for titles', skip: ENV['CI'].present? do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
