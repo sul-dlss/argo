@@ -2,12 +2,12 @@
 
 module Show
   class ContentTypeComponent < ApplicationComponent
-    def initialize(document:, state_service:)
+    def initialize(document:, version_service:)
       @document = document
-      @state_service = state_service
+      @version_service = version_service
     end
 
-    delegate :open?, to: :@state_service
+    delegate :open?, to: :@version_service
     delegate :id, :content_type, to: :@document
   end
 end

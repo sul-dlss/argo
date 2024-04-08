@@ -7,10 +7,9 @@ RSpec.describe ContentsComponent, type: :component do
     instance_double(ArgoShowPresenter,
                     document: solr_doc, cocina:,
                     view_token: 'skret-t0k3n',
-                    state_service:)
+                    open?: open)
   end
   let(:component) { described_class.new(presenter:) }
-  let(:state_service) { instance_double(StateService, open?: open) }
 
   let(:rendered) { render_inline(component) }
 

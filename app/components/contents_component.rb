@@ -4,7 +4,7 @@ class ContentsComponent < ApplicationComponent
   def initialize(presenter:)
     @document = presenter.document
     @cocina = presenter.cocina
-    @state_service = presenter.state_service
+    @presenter = presenter
     @view_token = presenter.view_token
   end
 
@@ -12,5 +12,5 @@ class ContentsComponent < ApplicationComponent
     @cocina.respond_to?(:structural)
   end
 
-  delegate :open?, to: :@state_service
+  delegate :open?, to: :@presenter
 end

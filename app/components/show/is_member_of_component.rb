@@ -2,9 +2,9 @@
 
 module Show
   class IsMemberOfComponent < ApplicationComponent
-    def initialize(document:, state_service:)
+    def initialize(document:, version_service:)
       @document = document
-      @state_service = state_service
+      @version_service = version_service
     end
 
     def collection
@@ -13,7 +13,7 @@ module Show
       helpers.links_to_collections_with_objs(document: @document, value: Array(@document.collection_ids))
     end
 
-    delegate :open?, to: :@state_service
+    delegate :open?, to: :@version_service
     delegate :id, to: :@document
   end
 end

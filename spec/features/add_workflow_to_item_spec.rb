@@ -31,8 +31,10 @@ RSpec.describe 'Add a workflow to an item' do
   let(:item_id) { 'druid:bg444xg6666' }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+  let(:version_service) { instance_double(VersionService, open?: true) }
 
   before do
+    allow(VersionService).to receive(:new).and_return(version_service)
     solr_conn.add(id: item_id, objectType_ssim: 'item')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']

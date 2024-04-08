@@ -15,7 +15,6 @@ module Show
       end
 
       delegate :id, :status, to: :@solr_document
-      delegate :state_service, to: :@presenter
     end
   end
 end

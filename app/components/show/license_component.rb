@@ -2,9 +2,9 @@
 
 module Show
   class LicenseComponent < ApplicationComponent
-    def initialize(change_set:, state_service:)
+    def initialize(change_set:, version_service:)
       @change_set = change_set
-      @state_service = state_service
+      @version_service = version_service
     end
 
     def license
@@ -15,7 +15,7 @@ module Show
       value.fetch(:label)
     end
 
-    delegate :open?, to: :@state_service
+    delegate :open?, to: :@version_service
     delegate :id, to: :@change_set
   end
 end

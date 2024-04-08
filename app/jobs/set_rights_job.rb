@@ -16,8 +16,7 @@ class SetRightsJob < GenericJob
     with_items(params[:druids], name: 'Set rights') do |cocina_object, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      state_service = StateService.new(cocina_object)
-      next failure.call('Object cannot be modified in its current state.') unless state_service.open?
+      next failure.call('Object cannot be modified in its current state.') unless VersionService.open?(druid: cocina_object.externalIdentifier)
 
       change_set = if cocina_object.collection?
                      # Collection only allows setting view access to dark or world

@@ -42,6 +42,7 @@ services:
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
+      SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: false
       SOLR_URL: http://solr:8983/solr/argo
       # Docker doesn't allow rails server to remove PID on shutdown
       PID_FILE: /dev/null

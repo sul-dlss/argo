@@ -12,6 +12,7 @@ module ItemsHelper
       if presenter.respond_to? :cocina
         presenter.cocina = @cocina
         presenter.state_service = StateService.new(@cocina)
+        presenter.version_service = VersionService.new(druid: @cocina.externalIdentifier)
       end
     end
   end

@@ -10,6 +10,7 @@ RSpec.describe 'Set the properties for a collection' do
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
+    allow(VersionService).to receive(:open?).and_return(true)
   end
 
   context 'when they have manage access' do

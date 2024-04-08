@@ -8,7 +8,7 @@ RSpec.describe 'Enable buttons' do
     solr_conn.add(id: item_id, objectType_ssim: 'item')
     solr_conn.commit
     allow(StateService).to receive(:new).and_return(state_service)
-    allow(state_service).to receive_messages(object_state: :unlock)
+    allow(VersionService).to receive(:new).and_return(version_service)
     allow(WorkflowService).to receive_messages(accessioned?: true, published?: true)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
@@ -16,7 +16,8 @@ RSpec.describe 'Enable buttons' do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:item_id) { 'druid:hj185xx2222' }
-  let(:state_service) { instance_double(StateService, open?: true) }
+  let(:state_service) { instance_double(StateService, object_state: :unlock) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, change_set:, state_service:) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, change_set:, version_service:) }
   let(:change_set) { CollectionChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::Collection.new(externalIdentifier: 'druid:bc234fg5678',
@@ -27,8 +27,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
                                    })
   end
   let(:rendered) { render_inline(component) }
-  let(:open) { true }
-  let(:state_service) { instance_double(StateService, open?: open) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
 
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }

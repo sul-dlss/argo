@@ -15,52 +15,6 @@ RSpec.describe StateService do
   let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version: 3) }
   let(:service) { described_class.new(cocina) }
 
-  describe '#open?' do
-    before do
-      allow(service).to receive(:object_state).and_return(:unlock)
-    end
-
-    context 'if the object state is unlock' do
-      before do
-        allow(service).to receive(:object_state).and_return(:unlock)
-      end
-
-      it 'returns true' do
-        expect(service).to be_open
-      end
-    end
-
-    context 'if the object state is unlock_inactive' do
-      before do
-        allow(service).to receive(:object_state).and_return(:unlock_inactive)
-      end
-
-      it 'returns true' do
-        expect(service).to be_open
-      end
-    end
-
-    context 'if the object state is lock' do
-      before do
-        allow(service).to receive(:object_state).and_return(:lock)
-      end
-
-      it 'returns false' do
-        expect(service).not_to be_open
-      end
-    end
-
-    context 'if the object state is lock_inactive' do
-      before do
-        allow(service).to receive(:object_state).and_return(:lock_inactive)
-      end
-
-      it 'returns false' do
-        expect(service).not_to be_open
-      end
-    end
-  end
-
   describe '#object_state' do
     context "if the object is not opened and hasn't been submitted" do
       before do

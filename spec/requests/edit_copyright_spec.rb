@@ -11,9 +11,11 @@ RSpec.describe 'Edit copyright' do
     { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}",
       'Turbo-Frame' => 'edit_copyright' }
   end
+  let(:version_service) { instance_double(VersionService, open?: true) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(VersionService).to receive(:new).and_return(version_service)
     sign_in user, groups: ['sdr:administrator-role']
   end
 

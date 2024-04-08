@@ -17,6 +17,7 @@ RSpec.describe ImportStructuralJob do
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
     allow(Argo::Indexer).to receive(:reindex_druid_remotely)
+    allow(VersionService).to receive(:open?).and_return(true)
   end
 
   describe '#perform' do

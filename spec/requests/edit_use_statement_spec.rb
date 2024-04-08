@@ -7,12 +7,14 @@ RSpec.describe 'Edit use statement' do
   let(:druid) { 'druid:dc243mg0841' }
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:version_service) { instance_double(VersionService, open?: true) }
   let(:turbo_stream_headers) do
     { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}" }
   end
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(VersionService).to receive(:new).and_return(version_service)
     sign_in user, groups: ['sdr:administrator-role']
   end
 

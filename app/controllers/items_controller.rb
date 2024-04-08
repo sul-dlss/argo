@@ -164,8 +164,8 @@ class ItemsController < ApplicationController
 
   def show_barcode
     change_set = ItemChangeSet.new(@cocina)
-    state_service = StateService.new(@cocina)
-    render Show::BarcodeComponent.new(change_set:, state_service:)
+    version_service = VersionService.new(@cocina.externalIdentifier)
+    render Show::BarcodeComponent.new(change_set:, version_service:)
   end
 
   # Draw form for copyright
@@ -175,8 +175,8 @@ class ItemsController < ApplicationController
 
   def show_copyright
     change_set = build_change_set
-    state_service = StateService.new(@cocina)
-    render Show::CopyrightComponent.new(change_set:, state_service:)
+    version_service = VersionService.new(druid: @cocina.externalIdentifier)
+    render Show::CopyrightComponent.new(change_set:, version_service:)
   end
 
   # Draw form for use and reproduction statement
@@ -186,8 +186,8 @@ class ItemsController < ApplicationController
 
   def show_use_statement
     change_set = build_change_set
-    state_service = StateService.new(@cocina)
-    render Show::UseStatementComponent.new(change_set:, state_service:)
+    version_service = VersionService.new(druid: @cocina.externalIdentifier)
+    render Show::UseStatementComponent.new(change_set:, version_service:)
   end
 
   # Draw form for setting license
@@ -197,8 +197,8 @@ class ItemsController < ApplicationController
 
   def show_license
     change_set = build_change_set
-    state_service = StateService.new(@cocina)
-    render Show::LicenseComponent.new(change_set:, state_service:)
+    version_service = VersionService.new(druid: @cocina.externalIdentifier)
+    render Show::LicenseComponent.new(change_set:, version_service:)
   end
 
   # save the form
@@ -224,13 +224,13 @@ class ItemsController < ApplicationController
 
   def show_rights
     @change_set = build_change_set
-    state_service = StateService.new(@cocina)
+    version_service = VersionService.new(druid: @cocina.externalIdentifier)
     if @cocina.collection?
       change_set = CollectionChangeSet.new(@cocina)
-      render Show::Collection::AccessRightsComponent.new(change_set:, state_service:)
+      render Show::Collection::AccessRightsComponent.new(change_set:, version_service:)
     else
       change_set = ItemChangeSet.new(@cocina)
-      render Show::Item::AccessRightsComponent.new(change_set:, state_service:)
+      render Show::Item::AccessRightsComponent.new(change_set:, version_service:)
     end
   end
 

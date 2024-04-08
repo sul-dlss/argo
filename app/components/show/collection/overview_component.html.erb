@@ -11,7 +11,7 @@
       <tr>
         <th class="col-3" scope="row">Admin policy</th>
         <td>
-          <%= render Show::GovernedByComponent.new(document: @solr_document, state_service:) %>
+          <%= render Show::GovernedByComponent.new(document: @solr_document, version_service: @presenter.version_service) %>
         </td>
       </tr>
 
@@ -25,28 +25,28 @@
       <tr>
         <th class="col-3" scope="row">Access rights</th>
         <td>
-          <%= render Show::Collection::AccessRightsComponent.new(change_set: @presenter.change_set, state_service:) %>
+          <%= render Show::Collection::AccessRightsComponent.new(change_set: @presenter.change_set, version_service: @presenter.version_service) %>
         </td>
       </tr>
 
       <tr>
         <th class="col-3" scope="row">Copyright</th>
         <td>
-          <%= render Show::CopyrightComponent.new(change_set: @presenter.change_set, state_service:) %>
+          <%= render Show::CopyrightComponent.new(change_set: @presenter.change_set, version_service: @presenter.version_service) %>
         </td>
       </tr>
 
       <tr>
         <th class="col-3" scope="row">License</th>
         <td>
-          <%= render Show::LicenseComponent.new(change_set: @presenter.change_set, state_service:) %>
+          <%= render Show::LicenseComponent.new(change_set: @presenter.change_set, version_service: @presenter.version_service) %>
         </td>
       </tr>
 
       <tr>
         <th class="col-3" scope="row">Use and reproduction</th>
         <td>
-          <%= render Show::UseStatementComponent.new(change_set: @presenter.change_set, state_service:) %>
+          <%= render Show::UseStatementComponent.new(change_set: @presenter.change_set, version_service: @presenter.version_service) %>
         </td>
       </tr>
     </tbody>
