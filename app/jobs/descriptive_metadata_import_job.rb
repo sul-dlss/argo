@@ -63,9 +63,7 @@ class DescriptiveMetadataImportJob < GenericJob
   end
 
   def close_version(cocina_object)
-    unless StateService.new(cocina_object).object_state == :unlock_inactive
-      VersionService.close(druid: cocina_object.externalIdentifier)
-    end
+    VersionService.close(druid: cocina_object.externalIdentifier)
     Success()
   rescue RuntimeError => e
     Failure([e.message])

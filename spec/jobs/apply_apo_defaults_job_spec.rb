@@ -33,7 +33,6 @@ RSpec.describe ApplyApoDefaultsJob do
 
   context 'with manage ability' do
     let(:ability) { instance_double(Ability, can?: true) }
-    let(:state_service) { instance_double(StateService, open?: true) }
 
     let(:perform) do
       described_class.perform_now(bulk_action.id,
@@ -43,7 +42,7 @@ RSpec.describe ApplyApoDefaultsJob do
     end
 
     before do
-      allow(StateService).to receive(:new).and_return(state_service)
+      allow(VersionService).to receive(:open?).and_return(true)
     end
 
     context 'when the version is open' do
@@ -63,8 +62,8 @@ RSpec.describe ApplyApoDefaultsJob do
       let(:state_service) { instance_double(StateService, open?: false) }
 
       before do
-        allow_any_instance_of(described_class).to receive(:open_new_version) # rubocop:disable RSpec/AnyInstance
-          .and_return(cocina1.new(version: 2), cocina2.new(version: 2))
+        allow(VersionService).to receive_messages(open?: false, openable?: true)
+        allow(VersionService).to receive(:open).and_return(cocina1.new(version: 2), cocina2.new(version: 2))
         perform
       end
 

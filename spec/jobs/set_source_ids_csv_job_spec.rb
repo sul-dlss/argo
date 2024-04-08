@@ -38,13 +38,12 @@ RSpec.describe SetSourceIdsCsvJob do
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, update: true) }
   let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3, update: true) }
-  let(:state_service) { instance_double(StateService, open?: true) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(Ability).to receive(:new).and_return(ability)
-    allow(StateService).to receive(:new).and_return(state_service)
+    allow(VersionService).to receive(:open?).and_return(true)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
@@ -77,9 +76,8 @@ RSpec.describe SetSourceIdsCsvJob do
       end
 
       context 'when the version is closed' do
-        let(:state_service) { instance_double(StateService, open?: false) }
-
         before do
+          allow(VersionService).to receive(:open?).and_return(false)
           allow(job).to receive(:open_new_version).and_return(item1.new(version: 2), item2.new(version: 2),
                                                               item3.new(version: 2))
           job.perform(bulk_action.id,

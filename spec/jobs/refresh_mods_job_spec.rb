@@ -55,10 +55,8 @@ RSpec.describe RefreshModsJob do
     end
 
     context 'with catalog_record_id' do
-      let(:state_service) { instance_double(StateService, open?: true) }
-
       before do
-        allow(StateService).to receive(:new).and_return(state_service)
+        allow(VersionService).to receive(:open?).and_return(true)
       end
 
       context 'when the version is open' do
@@ -75,9 +73,8 @@ RSpec.describe RefreshModsJob do
       end
 
       context 'when the version is not open' do
-        let(:state_service) { instance_double(StateService, open?: false) }
-
         before do
+          allow(VersionService).to receive(:open?).and_return(false)
           allow_any_instance_of(described_class).to receive(:open_new_version) # rubocop:disable RSpec/AnyInstance
             .and_return(cocina1.new(version: 2), cocina2.new(version: 2))
           perform
