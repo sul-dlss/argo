@@ -24,12 +24,7 @@ class ApplyModsMetadata
       return false
     end
 
-    if in_accessioning?
-      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{cocina.externalIdentifier}")
-      return false
-    end
-
-    return false unless status_ok?
+    return false unless updatable?
 
     return false unless ability.can? :update, cocina
 
@@ -76,15 +71,9 @@ class ApplyModsMetadata
     log.puts(exception.backtrace.to_s)
   end
 
-  # Open a new version for the given object if it is in the accessioned state.
+  # Open a new version for the given object if not already open
   def version_object
-    return unless accessioned?
-
-    unless DorObjectWorkflowStatus.new(cocina.externalIdentifier, version: cocina.version).can_open_version?
-      log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{cocina.externalIdentifier}") # totally unexpected
-      return
-    end
-    commit_new_version
+    open_version unless VersionService.open?(druid: cocina.externalIdentifier)
   end
 
   def update_metadata
@@ -93,39 +82,18 @@ class ApplyModsMetadata
   end
 
   # Open a new version for the given object.
-  def commit_new_version
+  def open_version
     @cocina = VersionService.open(druid: cocina.externalIdentifier,
                                   description: "Descriptive metadata upload from #{original_filename}",
                                   opening_user_name: ability.current_user.sunetid)
   end
 
-  # Returns true if the given object is accessioned, false otherwise.
-  def accessioned?
-    (6..8).cover?(status)
-  end
+  # Item must be open or openable? to be updated
+  def updatable?
+    return true if VersionService.open?(druid: cocina.externalIdentifier) || VersionService.openable?(druid: cocina.externalIdentifier)
 
-  # Checks whether or not a DOR object is in accessioning or not.
-  #
-  # @return [Boolean] true if the object is currently being accessioned, false otherwise
-  def in_accessioning?
-    (2..5).cover?(status)
-  end
-
-  # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only times we are
-  # not OK to update is if the object is currently being accessioned and if the object has status unknown.
-  #
-  # @return [Boolean] true if the object's status allows us to update the descripitive metadata, false otherwise
-  def status_ok?
-    [1, 6, 7, 8, 9].include?(status)
-  end
-
-  # Returns the status code for a DOR object
-  #
-  # @return [Integer] value corresponding to the status info list
-  def status
-    # We must provide a string version here: https://github.com/sul-dlss/dor-workflow-client/issues/169
-    @status ||= WorkflowClientFactory.build.status(druid: cocina.externalIdentifier,
-                                                   version: cocina.version.to_s).status_code
+    log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{cocina.externalIdentifier}")
+    false
   end
 
   def cocina_description
