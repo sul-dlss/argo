@@ -6,12 +6,15 @@ RSpec.describe 'Open and close a version' do
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
   end
-  let(:dsc) { Dor::Services::Client.object(item.externalIdentifier) }
-  let(:accession_step_count) { WorkflowClientFactory.build.workflow_template('accessionWF').fetch('processes').size }
+  let(:accession_step_count) { workflow_client.workflow_template('accessionWF').fetch('processes').size }
+
+  let(:workflow_client) { WorkflowClientFactory.build }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    dsc.accession.start(workflow: 'accessionWF', description: 'test version')
+    workflow_client.create_workflow_by_name(item.externalIdentifier,
+                                            'accessionWF',
+                                            version: item.version)
   end
 
   it 'opens an object', :js do
@@ -22,7 +25,6 @@ RSpec.describe 'Open and close a version' do
       click_button 'Set to completed', match: :first
     end
 
-    sleep 1 # Give time for a reindex to occur.
     visit solr_document_path item.externalIdentifier
     click_link 'Unlock to make changes to this object'
     fill_in 'Version description', with: 'Test a change'

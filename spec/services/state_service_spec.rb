@@ -3,25 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe StateService do
-  before do
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-    allow(workflow_client).to receive(:workflow_status).with(druid:, process: 'accessioning-initiate',
-                                                             workflow: 'assemblyWF').and_return('completed')
-    allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(false)
-  end
-
-  let(:druid) { 'ab12cd3456' }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
-  let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version: 3) }
   let(:service) { described_class.new(cocina) }
 
+  let(:druid) { 'bc123df4567' }
+  let(:version_service) { instance_double(VersionService, version:) }
+  let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: druid, version:) }
+  let(:version) { 3 }
+
+  before do
+    allow(VersionService).to receive(:new).and_return(version_service)
+  end
+
   describe '#object_state' do
-    context "if the object is not opened and hasn't been submitted" do
+    context 'when object is open but not closeable' do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted',
-                                                                  version: 3).and_return(false)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened',
-                                                                  version: 3).and_return(false)
+        allow(version_service).to receive_messages(open?: true, closeable?: false, closed?: false)
       end
 
       it 'returns unlock_inactive' do
@@ -29,12 +25,9 @@ RSpec.describe StateService do
       end
     end
 
-    context "if the object is open and hasn't been submitted" do
+    context 'when object is open and closeable' do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted',
-                                                                  version: 3).and_return(false)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened',
-                                                                  version: 3).and_return(true)
+        allow(version_service).to receive_messages(open?: true, closeable?: true)
       end
 
       it 'returns unlock' do
@@ -42,12 +35,21 @@ RSpec.describe StateService do
       end
     end
 
-    context 'if there is not an open version' do
+    context 'when object is open and closeable but first version' do
+      let(:version) { 1 }
+
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted',
-                                                                  version: 3).and_return(true)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened',
-                                                                  version: 3).and_return(false)
+        allow(version_service).to receive_messages(open?: true, closeable?: true, closed?: false)
+      end
+
+      it 'returns unlock' do
+        expect(service.object_state).to eq :unlock_inactive
+      end
+    end
+
+    context 'when object is closed and not openable' do
+      before do
+        allow(version_service).to receive_messages(open?: false, closed?: true, openable?: false)
       end
 
       it 'returns lock_inactive' do
@@ -55,13 +57,9 @@ RSpec.describe StateService do
       end
     end
 
-    context 'if the object is accessioned, not submitted and not opened' do
+    context 'when object is closed and openable' do
       before do
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'submitted',
-                                                                  version: 3).and_return(false)
-        allow(workflow_client).to receive(:active_lifecycle).with(druid:, milestone_name: 'opened',
-                                                                  version: 3).and_return(false)
-        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(true)
+        allow(version_service).to receive_messages(open?: false, closed?: true, openable?: true)
       end
 
       it 'returns lock' do

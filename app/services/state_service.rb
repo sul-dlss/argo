@@ -7,7 +7,6 @@ end
 class StateService
   # NOTE: each of these states must have a corresponding view with the same name in app/views/workflow_service: the names are used to render lock/unlock icons/links
   STATES = Types::Symbol.enum(:unlock, :lock, :lock_inactive, :unlock_inactive)
-  UNLOCKED_STATES = [STATES[:unlock], STATES[:unlock_inactive]].freeze
 
   def initialize(cocina)
     @druid = cocina.externalIdentifier
@@ -16,58 +15,31 @@ class StateService
 
   def object_state
     # This item is currently unlocked and can be edited and moved to a locked state
-    return STATES[:unlock] if !active_assembly_wf? && opened? && !submitted?
+    # In Argo, the user can't close a version if it's the first version
+    # (though, technically, the version is closeeable).
+    return STATES[:unlock] if open? && closeable? && !first_version?
 
     # This item is currently locked and cannot be edited, and can be moved to an unlocked state
-    return STATES[:lock] if accessioned? && !submitted? && !opened?
+    return STATES[:lock] if closed? && openable?
 
     # This item is being accessioned, so is locked but cannot currently be unlocked or edited
-    return STATES[:lock_inactive] if submitted? || opened?
+    return STATES[:lock_inactive] if closed? && !openable?
 
     # This item is registered, so it can be edited, but cannot currently be moved to a locked state
-    STATES[:unlock_inactive]
+    STATES[:unlock_inactive] # if open? && !closeable?
   end
 
   private
 
   attr_reader :druid, :version
 
-  ##
-  # Ported over logic from app/helpers/dor_object_helper.rb#LN133
-  # @return [Boolean]
-  def accessioned?
-    @accessioned ||= lifecycle('accessioned') ? true : false
+  def version_service
+    @version_service ||= VersionService.new(druid:)
   end
 
-  ##
-  # Ported over logic from app/helpers/dor_object_helper.rb#LN119
-  # @return [Boolean]
-  def published?
-    lifecycle('published') ? true : false
-  end
+  delegate :open?, :openable?, :closed?, :closeable?, :version, to: :version_service
 
-  def lifecycle(task)
-    workflow_client.lifecycle(druid:, milestone_name: task)
-  end
-
-  def active_lifecycle(task)
-    workflow_client.active_lifecycle(druid:, milestone_name: task, version:)
-  end
-
-  def opened?
-    @opened ||= active_lifecycle('opened')
-  end
-
-  def submitted?
-    @submitted ||= active_lifecycle('submitted')
-  end
-
-  def active_assembly_wf?
-    @active_assembly_wf ||= workflow_client.workflow_status(druid:, workflow: 'assemblyWF',
-                                                            process: 'accessioning-initiate') == 'waiting'
-  end
-
-  def workflow_client
-    @workflow_client ||= WorkflowClientFactory.build
+  def first_version?
+    version == 1
   end
 end
