@@ -73,7 +73,11 @@ class ApplyModsMetadata
 
   # Open a new version for the given object if not already open
   def version_object
-    open_version unless VersionService.open?(druid: cocina.externalIdentifier)
+    return if version_service.open?
+
+    @cocina = version_service.open(druid: cocina.externalIdentifier,
+                                   description: "Descriptive metadata upload from #{original_filename}",
+                                   opening_user_name: ability.current_user.sunetid)
   end
 
   def update_metadata
@@ -81,19 +85,16 @@ class ApplyModsMetadata
     object_client.update(params: cocina.new(description: cocina_description))
   end
 
-  # Open a new version for the given object.
-  def open_version
-    @cocina = VersionService.open(druid: cocina.externalIdentifier,
-                                  description: "Descriptive metadata upload from #{original_filename}",
-                                  opening_user_name: ability.current_user.sunetid)
-  end
-
   # Item must be open or openable? to be updated
   def updatable?
-    return true if VersionService.open?(druid: cocina.externalIdentifier) || VersionService.openable?(druid: cocina.externalIdentifier)
+    return true if version_service.open? || version_service.openable?
 
     log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{cocina.externalIdentifier}")
     false
+  end
+
+  def version_service
+    @version_service ||= VersionService.new(druid: cocina.externalIdentifier)
   end
 
   def cocina_description

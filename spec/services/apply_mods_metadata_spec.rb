@@ -43,18 +43,21 @@ RSpec.describe ApplyModsMetadata do
   end
 
   let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object, version: cocina)
+  end
+  let(:version_service) { instance_double(VersionService, open?: false, openable?: true) }
+
+  before do
+    allow(VersionService).to receive(:new).and_return(version_service)
+  end
 
   describe '#apply' do
     subject(:apply) { action.apply }
 
-    let(:object_client) do
-      instance_double(Dor::Services::Client::Object)
-    end
-
     before do
       allow(object_client).to receive(:update)
-      allow(VersionService).to receive_messages(open?: false, openable?: true)
-      allow(VersionService).to receive(:open).and_return(cocina)
+      allow(version_service).to receive(:open).and_return(cocina)
     end
 
     context 'with permission' do
@@ -69,6 +72,7 @@ RSpec.describe ApplyModsMetadata do
 
         it 'updates the metadata' do
           apply
+          expect(version_service).to have_received(:open)
           expect(object_client).to have_received(:update).with(params: updated_cocina)
         end
       end
@@ -110,9 +114,7 @@ RSpec.describe ApplyModsMetadata do
       end
 
       context 'when object is not updatable' do
-        before do
-          allow(VersionService).to receive_messages(open?: false, openable?: false)
-        end
+        let(:version_service) { instance_double(VersionService, open?: false, openable?: false) }
 
         it 'logs and skips' do
           apply
@@ -154,42 +156,29 @@ RSpec.describe ApplyModsMetadata do
 
   describe 'version_object' do
     context 'when item is open' do
-      before do
-        allow(VersionService).to receive_messages(open?: true, openable?: false)
-      end
+      let(:version_service) { instance_double(VersionService, open?: true, openable?: false) }
 
       it 'does not open a new version' do
-        expect(action).not_to receive(:open_version)
+        expect(action).not_to receive(:open)
         action.send(:version_object)
       end
     end
 
     context 'when item is not open' do
+      let(:version_service) { instance_double(VersionService, open?: false, openable?: true) }
+
       before do
-        allow(VersionService).to receive_messages(open?: false, openable?: true)
-        allow(VersionService).to receive(:open).and_return(cocina)
+        allow(version_service).to receive(:open).and_return(cocina)
       end
 
       it 'opens a new version' do
-        expect(action).to receive(:open_version)
         action.send(:version_object)
+        expect(version_service).to have_received(:open).with(
+          druid:,
+          description: 'Descriptive metadata upload from testfile.xlsx',
+          opening_user_name: user.sunetid
+        )
       end
-    end
-  end
-
-  describe '#open_version' do
-    before do
-      allow(VersionService).to receive(:open).and_return(cocina)
-    end
-
-    it 'opens a new version with filename and username' do
-      action.send(:open_version)
-
-      expect(VersionService).to have_received(:open).with(
-        druid:,
-        description: 'Descriptive metadata upload from testfile.xlsx',
-        opening_user_name: user.sunetid
-      )
     end
   end
 end
