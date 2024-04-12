@@ -95,8 +95,8 @@ class TrackSheet
   def doc_to_table(solr_doc)
     doc = solr_doc.with_indifferent_access # solr doc always has string keys, SolrDocument::FIELDS can be strings or symbols
     table_data = []
-    labels = doc[SolrDocument::FIELD_TITLE]
-    label = labels.blank? ? '' : labels.first.truncate(110)
+    label = doc[SolrDocument::FIELD_TITLE].is_a?(Array) ? doc[SolrDocument::FIELD_TITLE].first : doc[SolrDocument::FIELD_TITLE]
+    label = label.truncate(110)
     table_data.push(['Object Label:', label])
     table_data.push(['Project Name:', doc['project_tag_ssim'].to_s]) if doc['project_tag_ssim']
 
