@@ -154,10 +154,6 @@ class SolrDocument
     Druid.new(id).without_namespace
   end
 
-  def title
-    (title_display.presence || [label]).join(' -- ')
-  end
-
   def inspect
     "#<#{self.class.name}:#{object_id} @id=#{id}>"
   end
