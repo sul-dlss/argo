@@ -93,23 +93,18 @@ class TrackSheet
   # @param [Hash] doc Solr document or to_solr Hash
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
   def doc_to_table(solr_doc)
-    doc = solr_doc.with_indifferent_access # solr doc always has string keys, SolrDocument::FIELDS can be strings or symbols
     table_data = []
-    label = doc[SolrDocument::FIELD_TITLE].is_a?(Array) ? doc[SolrDocument::FIELD_TITLE].first : doc[SolrDocument::FIELD_TITLE]
-    label = label.truncate(110)
+    label = solr_doc.title_display.truncate(110)
     table_data.push(['Object Label:', label])
-    table_data.push(['Project Name:', doc['project_tag_ssim'].to_s]) if doc['project_tag_ssim']
+    table_data.push(['Project Name:', solr_doc.project_tag]) if solr_doc.project_tag
 
-    tags = Array(doc['tag_ssim']).filter_map do |tag|
+    tags = solr_doc.tags.filter_map do |tag|
       /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP)
     end
     table_data.push(['Tags:', tags.join("\n")]) unless tags.empty?
-    if doc[CatalogRecordId.index_field].present?
-      table_data.push(["#{CatalogRecordId.label}:",
-                       Array(doc[CatalogRecordId.index_field]).join(', ')])
-    end
-    table_data.push(['Source ID:', doc['source_id_ssi']]) if doc['source_id_ssi'].present?
-    table_data.push(['Barcode:', Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
+    table_data.push(["#{CatalogRecordId.label}:", solr_doc.catalog_record_id]) if solr_doc.catalog_record_id.present?
+    table_data.push(['Source ID:', solr_doc.source_id]) if solr_doc.source_id.present?
+    table_data.push(['Barcode:', solr_doc.barcode]) if solr_doc.barcode.present?
     table_data.push(['Date Printed:', Time.zone.now.strftime('%c')])
     table_data
   end

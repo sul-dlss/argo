@@ -16,7 +16,7 @@ RSpec.describe TrackSheet do
     end
 
     let(:response) { { 'response' => { 'docs' => docs } } }
-    let(:solr_doc) { instance_double(Hash) }
+    let(:solr_doc) { SolrDocument.new('id' => "druid:#{druid}") }
 
     context 'when the doc is found in solr' do
       let(:docs) { [solr_doc] }
@@ -48,20 +48,13 @@ RSpec.describe TrackSheet do
   describe '#doc_to_table' do
     subject(:call) { instance.send(:doc_to_table, solr_doc) }
 
-    let(:base_solr_doc) do
-      {
-        'display_title_ss' => ['main_title']
-      }
+    let(:title) { 'main title' }
+    let(:solr_doc) do
+      SolrDocument.new('id' => "druid:#{druid}", SolrDocument::FIELD_TITLE => title)
     end
 
     context 'when normal length title' do
-      let(:solr_doc) do
-        base_solr_doc.merge(
-          {
-            'display_title_ss' => ['Correct title'] # the cocina title
-          }
-        )
-      end
+      let(:title) { 'Correct title' } # the cocina title
 
       it 'builds the table for the solr doc with the correct title' do
         expect(call).to include(
@@ -74,13 +67,7 @@ RSpec.describe TrackSheet do
     end
 
     context 'when really long title' do
-      let(:solr_doc) do
-        base_solr_doc.merge(
-          {
-            'display_title_ss' => ['Stanford University. School of Engineeering Roger Howe Professorship: Stanford (Calif.), 2010-01-21.  And more stuff goes here']
-          }
-        )
-      end
+      let(:title) { 'Stanford University. School of Engineeering Roger Howe Professorship: Stanford (Calif.), 2010-01-21.  And more stuff goes here' }
 
       it 'builds the table for the solr doc with a truncated title' do
         expect(call).to include(
@@ -93,11 +80,7 @@ RSpec.describe TrackSheet do
     end
 
     context 'when no title' do
-      let(:solr_doc) do
-        base_solr_doc.merge({
-                              'display_title_ss' => ['']
-                            })
-      end
+      let(:title) { '' }
 
       it 'builds the table for the solr doc with a blank title' do
         expect(call).to include(
@@ -111,18 +94,16 @@ RSpec.describe TrackSheet do
 
     context 'with a project name' do
       let(:solr_doc) do
-        base_solr_doc.merge(
-          {
-            'project_tag_ssim' => ['School of Engineering photograph collection']
-          }
-        )
+        SolrDocument.new('id' => "druid:#{druid}",
+                         SolrDocument::FIELD_TITLE => title,
+                         SolrDocument::FIELD_PROJECT_TAG => 'School of Engineering photograph collection')
       end
 
       it 'adds the project name' do
         expect(call).to include(
           [
             'Project Name:',
-            '["School of Engineering photograph collection"]'
+            'School of Engineering photograph collection'
           ]
         )
       end
@@ -130,15 +111,13 @@ RSpec.describe TrackSheet do
 
     context 'with tags' do
       let(:solr_doc) do
-        base_solr_doc.merge(
-          {
-            'tag_ssim' => [
-              'Some : First : Tag',
-              'Some : Second : Tag',
-              'Project : Ignored'
-            ]
-          }
-        )
+        SolrDocument.new('id' => "druid:#{druid}",
+                         SolrDocument::FIELD_TITLE => title,
+                         SolrDocument::FIELD_TAGS => [
+                           'Some : First : Tag',
+                           'Some : Second : Tag',
+                           'Project : Ignored'
+                         ])
       end
 
       it 'adds the tags, ignoring a project tag' do
@@ -153,9 +132,9 @@ RSpec.describe TrackSheet do
 
     context 'with a catalog_record_id' do
       let(:solr_doc) do
-        base_solr_doc.merge({
-                              CatalogRecordId.index_field => ['catkey123']
-                            })
+        SolrDocument.new('id' => "druid:#{druid}",
+                         SolrDocument::FIELD_TITLE => title,
+                         SolrDocument::FIELD_FOLIO_INSTANCE_HRID => 'catkey123')
       end
 
       it 'adds the catkey' do
@@ -170,9 +149,9 @@ RSpec.describe TrackSheet do
 
     context 'with a source_id' do
       let(:solr_doc) do
-        base_solr_doc.merge({
-                              'source_id_ssi' => 'source:123'
-                            })
+        SolrDocument.new('id' => "druid:#{druid}",
+                         SolrDocument::FIELD_TITLE => title,
+                         SolrDocument::FIELD_SOURCE_ID => 'source:123')
       end
 
       it 'adds the catalog_record_id' do
@@ -187,9 +166,9 @@ RSpec.describe TrackSheet do
 
     context 'with a barcode' do
       let(:solr_doc) do
-        base_solr_doc.merge({
-                              'barcode_id_ssim' => ['barcode123']
-                            })
+        SolrDocument.new('id' => "druid:#{druid}",
+                         SolrDocument::FIELD_TITLE => title,
+                         SolrDocument::FIELD_BARCODE_ID => 'barcode123')
       end
 
       it 'adds the catalog_record_id' do
