@@ -16,13 +16,13 @@ RSpec.describe TrackSheet do
     end
 
     let(:response) { { 'response' => { 'docs' => docs } } }
-    let(:solr_doc) { SolrDocument.new('id' => "druid:#{druid}") }
+    let(:solr_doc) { { 'id' => "druid:#{druid}" } }
 
     context 'when the doc is found in solr' do
       let(:docs) { [solr_doc] }
 
       it 'returns the document' do
-        expect(call).to eq solr_doc
+        expect(call).to eq SolrDocument.new(solr_doc)
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe TrackSheet do
       let(:second_response) { { 'response' => { 'docs' => [solr_doc] } } }
 
       it 'reindexes and and tries again' do
-        expect(call).to eq solr_doc
+        expect(call).to eq SolrDocument.new(solr_doc)
       end
     end
   end

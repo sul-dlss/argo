@@ -31,7 +31,6 @@ class TrackSheet
   # @param [String] druid unqualified DRUID identifier
   # @param [Prawn::Document] pdf document being built (document is modified)
   # @return [Prawn::Document] the same document
-
   def generate_tracking_sheet(druid, pdf)
     bc_width = 2.25.in
     bc_height = 0.75.in
@@ -90,10 +89,9 @@ class TrackSheet
     pdf
   end
 
-  # @param [Hash] doc Solr document or to_solr Hash
+  # @param [Solr Document] doc Solr document
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
   def doc_to_table(solr_doc)
-    solr_doc = SolrDocument.new(solr_doc) unless solr_doc.is_a?(SolrDocument)
     table_data = []
     label = solr_doc.title_display.truncate(110)
     table_data.push(['Object Label:', label])
@@ -111,15 +109,15 @@ class TrackSheet
   end
 
   # @param [String] druid unqualified DRUID identifier
-  # @return [Hash] doc from Solr or to_solr
+  # @return [SolrDocument] SolrDocument build from hash of solr query
   # @note To the extent we use Solr input filters or copyField(s), the Solr version will differ from the to_solr hash.
   # @note That difference shouldn't be important for the few known fields we use here.
   def find_or_create_in_solr_by_id(druid)
     namespaced_druid = Druid.new(druid).with_namespace
     doc = SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
-    return doc unless doc.nil?
+    return SolrDocument.new(doc) unless doc.nil?
 
     Argo::Indexer.reindex_druid_remotely(namespaced_druid)
-    SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
+    SolrDocument.new(SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first)
   end
 end
