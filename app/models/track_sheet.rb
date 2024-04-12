@@ -93,6 +93,7 @@ class TrackSheet
   # @param [Hash] doc Solr document or to_solr Hash
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
   def doc_to_table(solr_doc)
+    solr_doc = SolrDocument.new(solr_doc) unless solr_doc.is_a?(SolrDocument)
     table_data = []
     label = solr_doc.title_display.truncate(110)
     table_data.push(['Object Label:', label])
