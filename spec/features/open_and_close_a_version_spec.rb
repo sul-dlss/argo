@@ -11,19 +11,21 @@ RSpec.describe 'Open and close a version' do
   let(:workflow_client) { WorkflowClientFactory.build }
 
   before do
+    VersionService.close(druid: item.externalIdentifier)
+    # This kicks off the accessionWF workflow. However, there are no robots so it
+    # will not complete. We need to manually complete each step below.
     sign_in create(:user), groups: ['sdr:administrator-role']
-    workflow_client.create_workflow_by_name(item.externalIdentifier,
-                                            'accessionWF',
-                                            version: item.version)
   end
 
   it 'opens an object', :js do
+    # Manually complete the accessionWF steps to allow the object to be openable.
     visit solr_document_path item.externalIdentifier
     accession_step_count.times do
       # Ensure every step of accessionWF is completed, this will allow us to open a new version.
       click_link 'accessionWF'
       click_button 'Set to completed', match: :first
     end
+    sleep 0.5 until VersionService.openable?(druid: item.externalIdentifier)
 
     visit solr_document_path item.externalIdentifier
     click_link 'Unlock to make changes to this object'
