@@ -80,14 +80,17 @@ module Show
 
     def edit_apo
       render ActionButton.new(
-        url: edit_apo_path(druid), label: 'Edit APO'
+        url: edit_apo_path(druid),
+        label: 'Edit APO',
+        disabled: button_disabled?
       )
     end
 
     def create_collection
       render ActionButton.new(
         url: new_apo_collection_path(apo_id: druid), label: 'Create Collection',
-        open_modal: true
+        open_modal: true,
+        disabled: button_disabled?
       )
     end
 
