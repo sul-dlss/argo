@@ -4,18 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Create an apo', :js do
   let(:user) { create(:user) }
-  let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
-  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
-  let(:workflow_client) do
-    instance_double(Dor::Workflow::Client,
-                    workflow_templates: ['accessionWF'],
-                    create_workflow_by_name: true,
-                    lifecycle: [],
-                    active_lifecycle: [],
-                    milestones: [],
-                    workflow_routes:,
-                    workflow_status: nil)
-  end
   # An Agreement object must exist to populate the dropdown on the form
   let(:agreement) { FactoryBot.create_for_repository(:agreement) }
   let!(:preexisting_collection) do
@@ -25,9 +13,9 @@ RSpec.describe 'Create an apo', :js do
                                      admin_policy_id: agreement.administrative.hasAdminPolicy)
   end
 
-  before do
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+  let(:accession_step_count) { WorkflowClientFactory.build.workflow_template('accessionWF').fetch('processes').size }
 
+  before do
     sign_in user, groups: ['sdr:administrator-role']
   end
 
@@ -59,6 +47,21 @@ RSpec.describe 'Create an apo', :js do
     # TODO: This is flaky.  Remove for now until we can figure out why.  5/5/2022
     # page.execute_script 'window.scrollTo(0,250);'
     # expect(page).to have_link 'Test Agreement', href: solr_document_path(agreement.externalIdentifier)
+    expect(page).to have_css('.disabled', text: 'Edit APO')
+    expect(page).to have_css('.disabled', text: 'Create Collection')
+
+    # Manually complete the accessionWF steps to allow the object to be openable.
+    accession_step_count.times do
+      # Ensure every step of accessionWF is completed, this will allow us to open a new version.
+      click_link 'accessionWF'
+      click_button 'Set to completed', match: :first
+    end
+
+    click_link 'Unlock to make changes to this object'
+    fill_in 'Version description', with: 'Test a change'
+
+    click_button 'Open Version'
+    expect(page).to have_content 'open for modification!'
 
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
