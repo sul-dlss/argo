@@ -43,39 +43,37 @@ RSpec.describe ApplyModsMetadata do
   end
 
   let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object, version: cocina)
+  end
+  let(:version_service) { instance_double(VersionService, open?: false, openable?: true) }
 
   before do
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+    allow(VersionService).to receive(:new).and_return(version_service)
   end
 
   describe '#apply' do
     subject(:apply) { action.apply }
 
-    let(:status_service) { instance_double(Dor::Workflow::Client::Status, status_code: 9) }
-    let(:object_client) do
-      instance_double(Dor::Services::Client::Object)
-    end
-
     before do
-      allow(workflow_client).to receive(:status).and_return(status_service)
       allow(object_client).to receive(:update)
+      allow(version_service).to receive(:open).and_return(cocina)
     end
 
     context 'with permission' do
       before do
         allow(ability).to receive(:can?).and_return(true)
-        allow(action).to receive(:log_error!)
       end
 
-      context 'when save works' do
+      context 'when successful' do
         before do
           allow(Dor::Services::Client).to receive(:object).and_return(object_client)
         end
 
-        it 'saves the metadata' do
+        it 'updates the metadata' do
           apply
+          expect(version_service).to have_received(:open)
           expect(object_client).to have_received(:update).with(params: updated_cocina)
-          expect(action).not_to have_received(:log_error!)
         end
       end
 
@@ -83,6 +81,7 @@ RSpec.describe ApplyModsMetadata do
         before do
           stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/#{druid}")
             .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
+          allow(action).to receive(:log_error!)
         end
 
         let(:json_response) do
@@ -114,6 +113,16 @@ RSpec.describe ApplyModsMetadata do
         end
       end
 
+      context 'when object is not updatable' do
+        let(:version_service) { instance_double(VersionService, open?: false, openable?: false) }
+
+        it 'logs and skips' do
+          apply
+          expect(object_client).not_to have_received(:update)
+          expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_skipped_mods druid:bc123hv8998')
+        end
+      end
+
       context 'when unchanged' do
         let(:action) do
           described_class.new(apo_druid:,
@@ -138,7 +147,7 @@ RSpec.describe ApplyModsMetadata do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      it 'saves the metadata' do
+      it 'does not update the metadata' do
         apply
         expect(object_client).not_to have_received(:update)
       end
@@ -146,103 +155,29 @@ RSpec.describe ApplyModsMetadata do
   end
 
   describe 'version_object' do
-    before do
-      allow(workflow_client).to receive(:status).and_return(status_service)
-    end
+    context 'when item is open' do
+      let(:version_service) { instance_double(VersionService, open?: true, openable?: false) }
 
-    let(:status_service) { instance_double(Dor::Workflow::Client::Status, status_code:) }
-
-    let(:status_code) { 6 }
-    let(:workflow) { instance_double(DorObjectWorkflowStatus) }
-
-    it 'writes a log error message if a version cannot be opened' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(druid, version: 1).and_return(workflow)
-      expect(workflow).to receive(:can_open_version?).and_return(false)
-
-      action.send(:version_object)
-      expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{druid}")
-    end
-
-    context 'when the object is in the registered state' do
-      let(:status_code) { 1 }
-
-      it 'does not update the version' do
-        expect(action).not_to receive(:commit_new_version)
-
+      it 'does not open a new version' do
+        expect(action).not_to receive(:open)
         action.send(:version_object)
       end
     end
 
-    context 'when the object is in the opened state' do
-      let(:status_code) { 9 }
+    context 'when item is not open' do
+      let(:version_service) { instance_double(VersionService, open?: false, openable?: true) }
 
-      it 'does not update the version' do
-        expect(action).not_to receive(:commit_new_version)
+      before do
+        allow(version_service).to receive(:open).and_return(cocina)
+      end
 
+      it 'opens a new version' do
         action.send(:version_object)
-      end
-    end
-
-    it 'updates the version if the object is past the registered state' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(druid, version: 1).and_return(workflow)
-      expect(workflow).to receive(:can_open_version?).and_return(true)
-      expect(action).to receive(:commit_new_version)
-
-      action.send(:version_object)
-    end
-  end
-
-  describe '#commit_new_version' do
-    before do
-      allow(VersionService).to receive(:open).and_return(cocina)
-    end
-
-    it 'opens a new minor version with filename and username' do
-      action.send(:commit_new_version)
-
-      expect(VersionService).to have_received(:open).with(
-        druid:,
-        description: 'Descriptive metadata upload from testfile.xlsx',
-        opening_user_name: user.sunetid
-      )
-    end
-  end
-
-  describe 'status_ok?' do
-    10.times do |i|
-      it "correctly queries the status of DOR objects (:status_code #{i})" do
-        allow(action).to receive(:status).and_return(i)
-        if [1, 6, 7, 8, 9].include?(i)
-          expect(action.send(:status_ok?)).to be_truthy
-        else
-          expect(action.send(:status_ok?)).to be_falsy
-        end
-      end
-    end
-  end
-
-  describe 'in_accessioning?' do
-    10.times do |i|
-      it "returns true for DOR objects that are currently in accessioning, false otherwise (:status_code #{i})" do
-        allow(action).to receive(:status).and_return(i)
-        if [2, 3, 4, 5].include?(i)
-          expect(action.send(:in_accessioning?)).to be_truthy
-        else
-          expect(action.send(:in_accessioning?)).to be_falsy
-        end
-      end
-    end
-  end
-
-  describe 'accessioned?' do
-    10.times do |i|
-      it "returns true for DOR objects that are accessioned, false otherwise (:status_code #{i})" do
-        allow(action).to receive(:status).and_return(i)
-        if [6, 7, 8].include?(i)
-          expect(action.send(:accessioned?)).to be_truthy
-        else
-          expect(action.send(:accessioned?)).to be_falsy
-        end
+        expect(version_service).to have_received(:open).with(
+          druid:,
+          description: 'Descriptive metadata upload from testfile.xlsx',
+          opening_user_name: user.sunetid
+        )
       end
     end
   end
