@@ -4,11 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Draw the manage release form' do
   let(:document) do
-    instance_double(SolrDocument,
-                    id: 'druid:bc123df4567',
-                    object_type: 'item',
-                    title: 'My item',
-                    released_to: ['Searchworks'])
+    SolrDocument.new(id: 'druid:bc123df4567',
+                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                     SolrDocument::FIELD_TITLE => 'My item',
+                     SolrDocument::FIELD_RELEASED_TO => ['Searchworks'])
   end
 
   let(:user) { create(:user) }

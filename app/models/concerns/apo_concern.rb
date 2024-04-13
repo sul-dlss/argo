@@ -35,7 +35,7 @@ module ApoConcern
     if has? FIELD_APO_TITLE
       first(FIELD_APO_TITLE)
     elsif UBER_APO_IDS.include?(id)
-      title
+      title_display
     end
   end
 end

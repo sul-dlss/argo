@@ -27,7 +27,7 @@ RSpec.describe TrackingSheetReportJob do
   describe '#perform_now' do
     context 'with authorization' do
       let(:response) { { 'response' => { 'docs' => docs } } }
-      let(:solr_doc) { { main_title_tenim: 'Some label' } }
+      let(:solr_doc) { { id: druids.first, SolrDocument::FIELD_TITLE => 'Some label' } }
       let(:docs) { [solr_doc] }
 
       before do

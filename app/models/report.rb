@@ -41,7 +41,7 @@ class Report
     },
     {
       field: :title, label: 'Title',
-      proc: ->(doc) { doc.title },
+      proc: ->(doc) { doc.title_display },
       solr_fields: [SolrDocument::FIELD_TITLE,
                     SolrDocument::FIELD_LABEL],
       sort: false, default: true, width: 100

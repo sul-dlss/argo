@@ -64,7 +64,7 @@ class SolrDocument
   attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
 
   attribute :label, Blacklight::Types::String, FIELD_LABEL
-  attribute :title_display, Blacklight::Types::Array, FIELD_TITLE
+  attribute :title_display, Blacklight::Types::String, FIELD_TITLE
   attribute :author, Blacklight::Types::String, FIELD_AUTHOR
   attribute :place, Blacklight::Types::String, FIELD_PLACE
   attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
@@ -152,10 +152,6 @@ class SolrDocument
   # @return [String]
   def druid
     Druid.new(id).without_namespace
-  end
-
-  def title
-    (title_display.presence || [label]).join(' -- ')
   end
 
   def inspect
