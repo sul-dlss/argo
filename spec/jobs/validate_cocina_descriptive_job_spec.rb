@@ -8,12 +8,14 @@ RSpec.describe ValidateCocinaDescriptiveJob do
   let(:item1) { build(:dro, id: druids[0]) }
   let(:item2) { build(:dro, id: druids[1]) }
   let(:logger) { instance_double(File, puts: nil) }
+  let(:validator) { instance_double(DescriptionValidator, valid?: true) }
 
   before do
     allow(BulkJobLog).to receive(:open).and_yield(logger)
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
     allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
+    allow(DescriptionValidator).to receive(:new).and_return(validator)
   end
 
   describe '#perform' do
@@ -45,12 +47,14 @@ RSpec.describe ValidateCocinaDescriptiveJob do
           [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'https://purl'].join(',')
         ].join("\n")
       end
+      let(:validator) { instance_double(DescriptionValidator, valid?: false, errors: ['error']) }
 
       before do
         subject.perform(bulk_action.id, { csv_file: })
       end
 
       it 'does not update the descriptive metadata for each item' do
+        expect(validator.valid?).to be false
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_fail).to eq druids.length
         expect(bulk_action.druid_count_success).to eq 0
@@ -65,6 +69,7 @@ RSpec.describe ValidateCocinaDescriptiveJob do
           [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'new title 2', 'https://purl'].join(',')
         ].join("\n")
       end
+      let(:validator) { instance_double(DescriptionValidator, valid?: false, errors: ['error']) }
 
       before do
         subject.perform(bulk_action.id, { csv_file: })
