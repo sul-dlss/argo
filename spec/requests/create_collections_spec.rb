@@ -34,7 +34,7 @@ RSpec.describe 'Create collections' do
     let(:cocina_model) do
       build(:admin_policy_with_metadata)
     end
-    let(:version_service) { instance_double(VersionService, open?: false, openable?: true, open: true, close: true) }
+    let(:version_service) { instance_double(VersionService, open?: false, openable?: true, open: cocina_model, close: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
