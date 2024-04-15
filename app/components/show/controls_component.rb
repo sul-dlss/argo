@@ -42,10 +42,14 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :open?, to: :presenter
+    delegate :open?, :openable?, to: :presenter
 
     def button_disabled?
       !open?
+    end
+
+    def collection_button_disabled?
+      !open? && !openable?
     end
 
     def refresh_button_label
@@ -90,7 +94,7 @@ module Show
       render ActionButton.new(
         url: new_apo_collection_path(apo_id: druid), label: 'Create Collection',
         open_modal: true,
-        disabled: button_disabled?
+        disabled: collection_button_disabled?
       )
     end
 
