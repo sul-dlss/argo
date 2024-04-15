@@ -56,5 +56,25 @@ RSpec.describe ValidateCocinaDescriptiveJob do
         expect(bulk_action.druid_count_success).to eq 0
       end
     end
+
+    context 'with duplicate columns in the cocina metadata spreadsheet' do
+      let(:csv_file) do
+        [
+          'druid,source_id,title1.structuredValue1.type,title1.structuredValue1.type,purl',
+          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'new title 1', 'https://purl'].join(','),
+          [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'new title 2', 'https://purl'].join(',')
+        ].join("\n")
+      end
+
+      before do
+        subject.perform(bulk_action.id, { csv_file: })
+      end
+
+      it 'does not update the descriptive metadata for each item' do
+        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.druid_count_fail).to eq druids.length
+        expect(bulk_action.druid_count_success).to eq 0
+      end
+    end
   end
 end
