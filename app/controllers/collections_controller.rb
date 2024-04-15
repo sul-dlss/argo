@@ -40,7 +40,7 @@ class CollectionsController < ApplicationController
     )
     Repository.store(updated_cocina_admin_policy)
     # Close the APO version and reindex
-    version_service.close(description: "Created new collection: #{collection_druid}")
+    version_service.close
     Argo::Indexer.reindex_druid_remotely(params[:apo_id])
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_druid}"
   end
