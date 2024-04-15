@@ -22,7 +22,11 @@ class CollectionsController < ApplicationController
 
     form.save
     collection_druid = form.model.externalIdentifier
+    # open version for APO if not already open
+    version_service = VersionService.new(druid: cocina_admin_policy.externalIdentifier)
+    cocina_admin_policy = version_service.open(description: "Created new collection: #{collection_druid}") unless version_service.open?
 
+    # update APO
     collections = Array(cocina_admin_policy.administrative.collectionsForRegistration).dup
     # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
     # 1. If collection is already listed, remove it temporarily
@@ -35,6 +39,8 @@ class CollectionsController < ApplicationController
       )
     )
     Repository.store(updated_cocina_admin_policy)
+    # Close the APO version and reindex
+    version_service.close
     Argo::Indexer.reindex_druid_remotely(params[:apo_id])
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_druid}"
   end

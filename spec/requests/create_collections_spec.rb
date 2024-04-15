@@ -34,9 +34,11 @@ RSpec.describe 'Create collections' do
     let(:cocina_model) do
       build(:admin_policy_with_metadata)
     end
+    let(:version_service) { instance_double(VersionService, open?: false, openable?: true, open: cocina_model, close: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(VersionService).to receive(:new).and_return(version_service)
       allow(CollectionForm).to receive(:new).and_return(form)
       allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
@@ -48,6 +50,8 @@ RSpec.describe 'Create collections' do
       expect(response).to be_redirect # redirects to catalog page
       expect(form).to have_received(:save)
       expect(object_client).to have_received(:update).with(params: cocina_admin_policy_with_registration_collections([collection_id]))
+      expect(version_service).to have_received(:open)
+      expect(version_service).to have_received(:close)
       expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(apo_id)
     end
   end

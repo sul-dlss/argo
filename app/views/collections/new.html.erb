@@ -66,12 +66,6 @@
             Register Collection
           <% end %>
         </div>
-
-        <% if !request.xhr? %>
-          <div class="mb-3">
-            <%= button_to 'Cancel', solr_document_path(@cocina.externalIdentifier), method: :get, class: 'btn btn-secondary' %>
-          </div>
-        <% end %>
       <% end %>
     </div>
   <% end %>

@@ -17,7 +17,7 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
     cocina.externalIdentifier
   end
 
-  delegate :open?, to: :version_service
+  delegate :open?, :openable?, to: :version_service
 
   attr_accessor :cocina, :view_token, :state_service, :version_service
 end
