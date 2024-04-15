@@ -164,7 +164,7 @@ class ItemsController < ApplicationController
 
   def show_barcode
     change_set = ItemChangeSet.new(@cocina)
-    version_service = VersionService.new(@cocina.externalIdentifier)
+    version_service = VersionService.new(druid: @cocina.externalIdentifier)
     render Show::BarcodeComponent.new(change_set:, version_service:)
   end
 
