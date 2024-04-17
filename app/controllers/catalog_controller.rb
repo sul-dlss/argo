@@ -124,6 +124,30 @@ class CatalogController < ApplicationController
                                fq: "-#{SolrDocument::FIELD_RELEASED_TO_EARTHWORKS}:[* TO *]"
                              }
                            }
+    config.add_facet_field 'released_to_purl_sitemap',
+                           component: true,
+                           query: {
+                             week: {
+                               label: 'Last week',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_PURL_SITEMAP}:[NOW-7DAY/DAY TO NOW]"
+                             },
+                             month: {
+                               label: 'Last month',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_PURL_SITEMAP}:[NOW-1MONTH/DAY TO NOW]"
+                             },
+                             year: {
+                               label: 'Last year',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_PURL_SITEMAP}:[NOW-1YEAR/DAY TO NOW]"
+                             },
+                             ever: {
+                               label: 'Currently released',
+                               fq: "#{SolrDocument::FIELD_RELEASED_TO_PURL_SITEMAP}:[* TO *]"
+                             },
+                             never: {
+                               label: 'Not released',
+                               fq: "-#{SolrDocument::FIELD_RELEASED_TO_PURL_SITEMAP}:[* TO *]"
+                             }
+                           }
     config.add_facet_field 'released_to_searchworks',
                            component: true,
                            query: {
