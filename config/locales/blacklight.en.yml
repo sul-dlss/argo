@@ -4,4 +4,5 @@ en:
     search:
       fields:
         released_to_earthworks: Released to Earthworks
+        released_to_purl_sitemap: Released to PURL Sitemap
         released_to_searchworks: Released to Searchworks

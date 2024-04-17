@@ -21,6 +21,7 @@ class SolrDocument
   FIELD_LAST_OPENED_DATE = :opened_latest_dttsi
   FIELD_PRESERVATION_SIZE = :preserved_size_dbtsi
   FIELD_RELEASED_TO_EARTHWORKS = :released_to_earthworks_dttsi
+  FIELD_RELEASED_TO_PURL_SITEMAP = :released_to_purl_sitemap_dttsi
   FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
   FIELD_RELEASED_TO = :released_to_ssim
 
