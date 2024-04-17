@@ -15,9 +15,7 @@ class StateService
 
   def object_state
     # This item is currently unlocked and can be edited and moved to a locked state
-    # In Argo, the user can't close a version if it's the first version
-    # (though, technically, the version is closeeable).
-    return STATES[:unlock] if open? && closeable? && !first_version?
+    return STATES[:unlock] if open? && closeable?
 
     # This item is currently locked and cannot be edited, and can be moved to an unlocked state
     return STATES[:lock] if closed? && openable?

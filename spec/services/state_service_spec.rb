@@ -35,18 +35,6 @@ RSpec.describe StateService do
       end
     end
 
-    context 'when object is open and closeable but first version' do
-      let(:version) { 1 }
-
-      before do
-        allow(version_service).to receive_messages(open?: true, closeable?: true, closed?: false)
-      end
-
-      it 'returns unlock' do
-        expect(service.object_state).to eq :unlock_inactive
-      end
-    end
-
     context 'when object is closed and not openable' do
       before do
         allow(version_service).to receive_messages(open?: false, closed?: true, openable?: false)
