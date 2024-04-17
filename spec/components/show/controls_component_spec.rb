@@ -25,9 +25,11 @@ RSpec.describe Show::ControlsComponent, type: :component do
                        'processing_status_text_ssi' => 'not registered',
                        SolrDocument::FIELD_OBJECT_TYPE => 'item',
                        CatalogRecordId.index_field => catalog_record_id,
-                       SolrDocument::FIELD_APO_ID => [governing_apo_id])
+                       SolrDocument::FIELD_APO_ID => [governing_apo_id],
+                       SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published)
     end
     let(:catalog_record_id) { nil }
+    let(:last_published) { nil }
 
     context 'when the object is unlocked' do
       let(:open) { true }
@@ -35,8 +37,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       it 'draws the buttons' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
         expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
-        expect(page).to have_link 'Publish', href: '/items/druid:kv840xx0000/publish'
-        expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
+        expect(page).to have_link 'Republish', href: '/items/druid:kv840xx0000/publish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
@@ -44,8 +45,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
         expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
 
-        expect(rendered.css('a').size).to eq(10)
-        expect(rendered.css('a.disabled').size).to eq 3 # purge, publish/unpublish are disabled
+        expect(rendered.css('a').size).to eq(9)
+        expect(rendered.css('a.disabled').size).to eq 2 # purge, republish are disabled
       end
 
       context "with a user that can't manage the object" do
@@ -63,7 +64,18 @@ RSpec.describe Show::ControlsComponent, type: :component do
           expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
           expect(page).to have_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
 
-          expect(rendered.css('a').size).to eq(12)
+          expect(rendered.css('a').size).to eq(11)
+        end
+      end
+
+      context 'when the item has previously been published' do
+        let(:last_published) { '2021-01-01T00:00:00Z' }
+
+        it 'the republish button is active' do
+          expect(page).to have_link 'Republish', href: '/items/druid:kv840xx0000/publish'
+
+          expect(rendered.css('a.disabled').size).to eq 1 # purge is disabled
+          expect(page).to have_no_css 'a.disabled', text: 'Republish'
         end
       end
     end
@@ -74,8 +86,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       it 'the embargo and apply APO buttons are disabled' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
         expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
-        expect(page).to have_link 'Publish', href: '/items/druid:kv840xx0000/publish'
-        expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
+        expect(page).to have_link 'Republish', href: '/items/druid:kv840xx0000/publish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
@@ -85,8 +96,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
 
-        expect(rendered.css('a').size).to eq(9)
-        expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, purge, publish/unpublish are disabled
+        expect(rendered.css('a').size).to eq(8)
+        expect(rendered.css('a.disabled').size).to eq 4 # create embargo, apply APO defaults, purge, republish are disabled
       end
     end
   end
@@ -135,14 +146,13 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
       expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
       expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
-      expect(page).to have_link 'Publish'
-      expect(page).to have_link 'Unpublish'
+      expect(page).to have_link 'Republish'
       expect(page).to have_text 'Manage description'
       expect(page).to have_link 'Purge', href: '/items/druid:kv840xx0000/purge'
       expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
       expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
 
-      expect(rendered.css('a').size).to eq(9)
+      expect(rendered.css('a').size).to eq(8)
     end
 
     context 'when the collection has a catalog record ID' do
@@ -152,7 +162,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
         expect(page).to have_no_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
 
-        expect(rendered.css('a').size).to eq(10)
+        expect(rendered.css('a').size).to eq(9)
       end
     end
   end
