@@ -33,6 +33,5 @@ RSpec.describe 'Enable buttons' do
   it 'buttons are enabled if the state services return unlock', :js do
     visit solr_document_path item_id
     expect(page).to have_css 'a[title="Close Version"]'
-    expect(page).to have_no_css 'a.disabled', text: 'Republish'
   end
 end

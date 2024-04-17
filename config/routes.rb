@@ -149,7 +149,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :publish, only: %i[create destroy]
+    resource :publish, only: %i[create]
     resource :content_type, only: %i[edit update]
     resource :structure, only: %i[show update] do
       collection do

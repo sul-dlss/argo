@@ -12,25 +12,7 @@
     <% unless agreement? %>
       <%= manage_release %>
     <% end %>
-    <div class="dropdown d-inline-block">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown-purl" data-bs-toggle="dropdown" aria-expanded="false">
-        Manage PURL
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdown-purl">
-        <li><%= link_to 'Publish', item_publish_path(doc), class: 'dropdown-item disabled',
-                                                           data: {
-                                                             turbo_method: 'post',
-                                                             controller: 'button',
-                                                             button_check_url_value: published_workflow_service_path(druid)
-                                                           } %></li>
-        <li><%= link_to 'Unpublish', item_publish_path(doc), class: 'dropdown-item disabled',
-                                                             data: {
-                                                               turbo_method: 'delete',
-                                                               controller: 'button',
-                                                               button_check_url_value: published_workflow_service_path(druid)
-                                                             } %></li>
-      </ul>
-    </div>
+    <%= republish_button %>
     <%= add_workflow_button %>
     <div class="dropdown d-inline-block">
       <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown-descriptive" data-bs-toggle="dropdown" aria-expanded="false">

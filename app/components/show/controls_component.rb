@@ -2,6 +2,7 @@
 
 module Show
   # determines which controls display in the top of the page
+  # rubocop:disable Metrics/ClassLength
   class ControlsComponent < ApplicationComponent
     ##
     # Ideally these methods should not make calls to external services to determine
@@ -121,6 +122,15 @@ module Show
       )
     end
 
+    def republish_button
+      render ActionButton.new(
+        url: item_publish_path(doc),
+        label: 'Republish',
+        method: 'post',
+        disabled: !published?
+      )
+    end
+
     def upload_mods
       link_to 'Upload MODS', apo_bulk_jobs_path(doc), class: 'btn btn-primary'
     end
@@ -132,5 +142,10 @@ module Show
     def registered_only?
       ['Registered', 'Unknown Status'].include?(doc['processing_status_text_ssi'])
     end
+
+    def published?
+      doc[SolrDocument::FIELD_LAST_PUBLISHED_DATE].present?
+    end
   end
+  # rubocop:enable Metrics/ClassLength
 end

@@ -13,13 +13,6 @@ class PublishesController < ApplicationController
                         'process to make sure your changes are preserved.'
   end
 
-  def destroy
-    authorize! :update, @cocina
-
-    Dor::Services::Client.object(@cocina.externalIdentifier).unpublish
-    redirect_to solr_document_path(@cocina.externalIdentifier), notice: 'Object unpublished!'
-  end
-
   private
 
   def load_cocina
