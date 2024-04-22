@@ -47,7 +47,7 @@ gem 'folio_client', '~> 0.13'
 gem 'mods_display', '~> 1.0'
 gem 'preservation-client', '~> 6.2'
 gem 'rsolr'
-gem 'sdr-client', '~> 2.0'
+gem 'sdr-client', '2.13.0.beta2' # '~> 2.0'
 
 group :test, :development do
   gem 'debug'
