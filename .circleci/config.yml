@@ -90,7 +90,7 @@ executors:
           SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
           SETTINGS__RABBITMQ__ENABLED: 'true'
           SETTINGS__RABBITMQ__HOSTNAME: rabbitmq
-          REDIS_URL: redis://redis:6379/
+          SETTINGS__REDIS_URL: redis://redis:6379/
       - image: suldlss/sdr-api:latest
         name: sdr-api
         environment:

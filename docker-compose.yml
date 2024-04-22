@@ -64,6 +64,7 @@ services:
   dor-indexing-workers:
     <<: *dor-indexing-backend
     command: ['sh', '-c', 'timeout 30 docker/wait-port.sh rabbitmq 5672 ; bin/rake rabbitmq:setup sneakers:run']
+  
   dor-services-app:
     image: suldlss/dor-services-app:latest
     ports:
@@ -86,7 +87,7 @@ services:
       SETTINGS__RABBITMQ__ENABLED: 'true'
       SETTINGS__RABBITMQ__HOSTNAME: rabbitmq
       SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
-      REDIS_URL: redis://redis:6379/
+      SETTINGS__REDIS_URL: redis://redis:6379/
     depends_on:
       - db
       - dor-indexing-app
