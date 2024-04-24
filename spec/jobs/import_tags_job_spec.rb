@@ -7,8 +7,8 @@ RSpec.describe ImportTagsJob do
 
   let(:bulk_action) { create(:bulk_action, action_type: 'ImportTagsJob') }
   let(:log_buffer) { StringIO.new }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client2) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client1, reindex: true) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client2, reindex: true) }
   let(:tags_client1) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags1, destroy: true) }
   let(:tags_client2) { instance_double(Dor::Services::Client::AdministrativeTags, replace: true) }
 
@@ -17,7 +17,6 @@ RSpec.describe ImportTagsJob do
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   describe '#perform_now' do
@@ -51,7 +50,8 @@ RSpec.describe ImportTagsJob do
       end
 
       it 'invokes the indexer for each object touched' do
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).twice
+        expect(object_client1).to have_received(:reindex)
+        expect(object_client2).to have_received(:reindex)
       end
     end
 
@@ -80,7 +80,8 @@ RSpec.describe ImportTagsJob do
       end
 
       it 'fails to invoke the indexer' do
-        expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
+        expect(object_client1).not_to have_received(:reindex)
+        expect(object_client2).not_to have_received(:reindex)
       end
     end
   end

@@ -9,7 +9,6 @@ RSpec.describe 'Download the structural CSV' do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do

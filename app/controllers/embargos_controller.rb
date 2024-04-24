@@ -32,7 +32,7 @@ class EmbargosController < ApplicationController
     change_set = EmbargoForm.new(@cocina)
     change_set.validate(update_params)
     change_set.save
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+    Dor::Services::Client.object(@cocina.externalIdentifier).reindex
 
     respond_to do |format|
       format.any do

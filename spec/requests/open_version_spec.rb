@@ -9,7 +9,6 @@ RSpec.describe 'Open a version' do
   let(:cocina_model) { build(:dro_with_metadata, id: druid) }
 
   before do
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(Dor::Services::Client).to receive(:object).and_return(object_service)
   end
 
@@ -18,16 +17,15 @@ RSpec.describe 'Open a version' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:object_service) { instance_double(Dor::Services::Client::Object, version: version_client, find: cocina_model) }
+    let(:object_service) { instance_double(Dor::Services::Client::Object, version: version_client, find: cocina_model, reindex: true) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
 
     it 'calls dor-services to open a new version' do
-      expect(Argo::Indexer).to receive(:reindex_druid_remotely)
-
       post "/items/#{druid}/versions/open", params: { description: 'something' }
 
       expect(version_client).to have_received(:open).with(description: 'something',
                                                           opening_user_name: user.to_s)
+      expect(object_service).to have_received(:reindex)
     end
   end
 

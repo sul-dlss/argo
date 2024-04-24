@@ -12,6 +12,8 @@ RSpec.describe RemoteIndexingJob do
 
   let(:log_buffer) { StringIO.new }
 
+  let(:object_client) { instance_double(Dor::Services::Client::Object, reindex: true) }
+
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
@@ -20,6 +22,9 @@ RSpec.describe RemoteIndexingJob do
   describe '#perform' do
     let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ee2222'] }
     let(:params) { { druids: } }
+
+    let(:object_client_standarderror) { instance_double(Dor::Services::Client::Object) }
+    let(:object_client_timeout) { instance_double(Dor::Services::Client::Object) }
 
     context 'when happy path' do
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
@@ -43,9 +48,11 @@ RSpec.describe RemoteIndexingJob do
 
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
         timeout_err = Argo::Exceptions::ReindexError.new('Timed out connecting to server')
-        expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druids[0])
-        expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druids[1]).and_raise(StandardError)
-        expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druids[2]).and_raise(timeout_err)
+        expect(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client)
+        expect(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client_standarderror)
+        expect(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client_timeout)
+        expect(object_client_standarderror).to receive(:reindex).and_raise(StandardError)
+        expect(object_client_timeout).to receive(:reindex).and_raise(timeout_err)
 
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_success).to eq 1
@@ -63,7 +70,7 @@ RSpec.describe RemoteIndexingJob do
     let(:druid) { '123' }
 
     it 'logs a success and increments the success count if reindexing works' do
-      expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druid)
+      expect(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
 
       subject.send(:reindex_druid_safely, druid, log_buffer)
       expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{druid} (bulk_action.id=#{bulk_action.id})"
@@ -72,7 +79,8 @@ RSpec.describe RemoteIndexingJob do
     end
 
     it 'logs an error and increments the error count if reindexing works, but does not raise an error itself' do
-      expect(Argo::Indexer).to receive(:reindex_druid_remotely).with(druid).and_raise("didn't see that one coming")
+      expect(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
+      expect(object_client).to receive(:reindex).and_raise("didn't see that one coming")
 
       expect { subject.send(:reindex_druid_safely, druid, log_buffer) }.not_to raise_error
       expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{druid} (bulk_action.id=#{bulk_action.id}): didn't see that one coming"

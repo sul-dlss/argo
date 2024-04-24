@@ -61,16 +61,16 @@ class ApoController < ApplicationController
 
     @form.save
 
-    # Index imediately, so that we have a page to send the user to. DSA indexes asynchronously.
-    Argo::Indexer.reindex_druid_remotely(@form.model.externalIdentifier)
+    # Index immediately, so that we have a page to send the user to. DSA indexes asynchronously.
+    Dor::Services::Client.object(@form.model.externalIdentifier).reindex
 
     notice = "APO #{@form.model.externalIdentifier} created."
 
     # register a collection and make it the default if requested
     if @form.model.administrative.collectionsForRegistration.present?
       notice += " Collection #{@form.model.administrative.collectionsForRegistration.first} created."
-      # Index imediately, so that we see the collection name on the page. DSA indexes asynchronously.
-      Argo::Indexer.reindex_druid_remotely(@form.model.administrative.collectionsForRegistration.first)
+      # Index immediately, so that we see the collection name on the page. DSA indexes asynchronously.
+      Dor::Services::Client.object(@form.model.administrative.collectionsForRegistration.first).reindex
     end
 
     redirect_to solr_document_path(@form.model.externalIdentifier), notice:

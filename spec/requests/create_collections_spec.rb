@@ -30,7 +30,7 @@ RSpec.describe 'Create collections' do
 
   describe 'save the form' do
     let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
     let(:cocina_model) do
       build(:admin_policy_with_metadata)
     end
@@ -40,7 +40,6 @@ RSpec.describe 'Create collections' do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(VersionService).to receive(:new).and_return(version_service)
       allow(CollectionForm).to receive(:new).and_return(form)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
     it 'creates a collection using the form' do
@@ -52,7 +51,7 @@ RSpec.describe 'Create collections' do
       expect(object_client).to have_received(:update).with(params: cocina_admin_policy_with_registration_collections([collection_id]))
       expect(version_service).to have_received(:open)
       expect(version_service).to have_received(:close)
-      expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(apo_id)
+      expect(object_client).to have_received(:reindex)
     end
   end
 

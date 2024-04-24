@@ -7,6 +7,7 @@ RSpec.describe 'Item registration page', :js do
   let(:user) { create(:user) }
 
   before do
+    ResetSolr.reset_solr
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
     allow(BulkAction).to receive(:new).and_return(bulk_action)
   end

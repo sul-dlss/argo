@@ -28,7 +28,7 @@ RSpec.describe TrackSheet do
 
     context 'when the doc is not in the search results' do
       before do
-        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
+        allow(Dor::Services::Client).to receive(:object).with("druid:#{druid}").and_return(object_client)
 
         allow(SearchService).to receive(:query)
           .with("id:\"druid:#{druid}\"", rows: 1)
@@ -37,6 +37,7 @@ RSpec.describe TrackSheet do
 
       let(:docs) { [] }
       let(:second_response) { { 'response' => { 'docs' => [solr_doc] } } }
+      let(:object_client) { instance_double(Dor::Services::Client::Object, reindex: true) }
 
       it 'reindexes and and tries again' do
         expect(call).to eq SolrDocument.new(solr_doc)

@@ -25,7 +25,8 @@ RSpec.describe 'Add a workflow to an item' do
                     find_lite: cocina_model, # NOTE: This should really be a DROLite
                     events: events_client,
                     version: version_client,
-                    release_tags: release_tags_client)
+                    release_tags: release_tags_client,
+                    reindex: true)
   end
   let(:cocina_model) { build(:dro_with_metadata, id: item_id) }
   let(:item_id) { 'druid:bg444xg6666' }
@@ -42,7 +43,6 @@ RSpec.describe 'Add a workflow to an item' do
                                                              process: 'accessioning-initiate', workflow: 'assemblyWF').and_return(true)
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   it 'redirect and display on show page' do

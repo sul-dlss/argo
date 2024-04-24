@@ -51,7 +51,7 @@ class WorkflowsController < ApplicationController
                                                         version: cocina_object.version)
 
     # Force a Solr update before redirection.
-    Argo::Indexer.reindex_druid_remotely(cocina_object.externalIdentifier)
+    Dor::Services::Client.object(cocina_object.externalIdentifier).reindex
 
     msg = "Added #{wf_name}"
     redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg

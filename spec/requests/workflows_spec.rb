@@ -12,7 +12,7 @@ RSpec.describe 'WorkflowsController' do
   end
 
   let(:cocina) { build(:dro_with_metadata, id: druid, version: 2) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina, reindex: true) }
 
   before do
     sign_in user
@@ -26,10 +26,6 @@ RSpec.describe 'WorkflowsController' do
         instance_double(Dor::Workflow::Client,
                         create_workflow_by_name: true,
                         workflow: wf_response)
-      end
-
-      before do
-        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
       context 'when the workflow is not active' do

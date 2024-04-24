@@ -16,7 +16,7 @@ class CatalogRecordIdsController < ApplicationController
 
     @form = CatalogRecordIdForm.new(@cocina)
     if @form.validate(params[:catalog_record_id]) && @form.save
-      Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+      Dor::Services::Client.object(@cocina.externalIdentifier).reindex
       msg = "#{CatalogRecordId.label}s for #{@cocina.externalIdentifier} have been updated!"
       redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
     else

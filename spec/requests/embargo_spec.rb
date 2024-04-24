@@ -8,7 +8,7 @@ RSpec.describe 'Set embargo for an object' do
   end
 
   let(:user) { create(:user) }
-  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
+  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, reindex: true) }
   let(:druid) { 'druid:bc123df4567' }
   let(:cocina) do
     build(:dro_with_metadata, id: druid).new(access: {
@@ -23,7 +23,7 @@ RSpec.describe 'Set embargo for an object' do
   end
 
   describe '#update' do
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true, reindex: true) }
 
     context "when they don't have manage access" do
       before do
@@ -39,14 +39,13 @@ RSpec.describe 'Set embargo for an object' do
     context 'when they have manage access' do
       before do
         sign_in user, groups: ['sdr:administrator-role']
-        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
       it 'calls Dor::Services::Client::Embargo#update' do
         patch "/items/#{druid}/embargo", params: { embargo: { release_date: '2100-01-01' } }
         expect(response).to have_http_status(:found) # redirect to catalog page
         expect(object_service).to have_received(:update)
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+        expect(object_service).to have_received(:reindex)
       end
 
       it 'requires a date' do

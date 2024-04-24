@@ -42,7 +42,7 @@ class DescriptivesController < ApplicationController
   def display_success
     # The title as shown to the user comes from Solr (`display_title_ss`), so we re-index to ensure any change is immediately shown
     # see https://github.com/sul-dlss/argo/issues/3656
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+    Dor::Services::Client.object(@cocina.externalIdentifier).reindex
     redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other,
                                                                 notice: 'Descriptive metadata has been updated.'
   end

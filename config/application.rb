@@ -15,7 +15,6 @@ module Argo
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    require 'indexer'
     require 'constants'
 
     # Configure action_dispatch to handle not found errors

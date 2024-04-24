@@ -12,7 +12,7 @@ class SerialsController < ApplicationController
     form = SerialsForm.new(@cocina)
     form.validate(params[:serials])
     form.save
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+    Dor::Services::Client.object(@cocina.externalIdentifier).reindex
 
     msg = 'Serials metadata has been updated!'
     redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg

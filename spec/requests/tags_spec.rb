@@ -36,13 +36,12 @@ RSpec.describe 'Tags' do
   describe '#update' do
     let(:druid) { 'druid:bc123df4567' }
     let(:object_client) do
-      instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
+      instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client, reindex: true)
     end
     let(:cocina_model) { build(:dro_with_metadata) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     end
 
     context 'when they have manage access' do
@@ -64,7 +63,7 @@ RSpec.describe 'Tags' do
           }
         }
         expect(tags_client).to have_received(:update).with(current: current_tag, new: 'Some : Thing : Else')
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+        expect(object_client).to have_received(:reindex)
       end
 
       it 'deletes tag' do
@@ -76,7 +75,7 @@ RSpec.describe 'Tags' do
           }
         }
         expect(tags_client).to have_received(:destroy).with(tag: current_tag)
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+        expect(object_client).to have_received(:reindex)
       end
 
       it 'adds a tag' do
@@ -87,7 +86,7 @@ RSpec.describe 'Tags' do
             }
           }
         }
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+        expect(object_client).to have_received(:reindex)
         expect(tags_client).to have_received(:create).with(tags: ['New : Thing'])
       end
     end

@@ -163,7 +163,6 @@ RSpec.describe SetRightsJob do
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(object_client1).to receive(:update)
     allow(object_client2).to receive(:update)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when updating one object' do
