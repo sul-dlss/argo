@@ -7,11 +7,13 @@ require 'rails_helper'
 RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:user) { create(:user) }
+  let(:object_client) { Dor::Services::Client.object(item.externalIdentifier) }
 
   before do
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(object_client).to receive(:reindex)
     sign_in user, groups: ['sdr:administrator-role']
     visit solr_document_path(item.externalIdentifier)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   after do
@@ -37,7 +39,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
       click_button 'Upload'
 
       expect(page).to have_content 'Descriptive metadata has been updated.'
-      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+      expect(object_client).to have_received(:reindex)
     end
   end
 
@@ -69,7 +71,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
       click_button 'Upload'
 
       expect(page).to have_content 'Descriptive metadata has been updated.'
-      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+      expect(object_client).to have_received(:reindex)
     end
   end
 end

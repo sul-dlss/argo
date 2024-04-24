@@ -127,7 +127,7 @@ RSpec.describe 'Item registration page', :js do
       druid_link = find('td > a')
 
       # NOTE: Unless we force a reindex here, this spec is flappy (example RSpec seed: 39128)
-      Argo::Indexer.reindex_druid_remotely(druid_link['href'].split('/').last)
+      Dor::Services::Client.object(druid_link['href'].split('/').last).reindex
 
       druid_link.click
 

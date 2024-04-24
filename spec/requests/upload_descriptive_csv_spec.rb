@@ -7,13 +7,12 @@ RSpec.describe 'Upload the descriptive CSV' do
 
   let(:user) { create(:user) }
   let(:druid) { 'druid:bc123df4567' }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
   let(:state_service) { instance_double(StateService) }
   let(:result) { Success(cocina_model.description) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do

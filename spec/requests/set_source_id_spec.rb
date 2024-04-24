@@ -6,7 +6,7 @@ RSpec.describe 'Set source id for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
     let(:druid) { 'druid:cc243mg0841' }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
     let(:cocina_model) { build(:dro_with_metadata, id: druid) }
     let(:version_service) { instance_double(VersionService, open?: true) }
 
@@ -22,7 +22,6 @@ RSpec.describe 'Set source id for an object' do
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       allow(VersionService).to receive(:new).and_return(version_service)
       sign_in user, groups: ['sdr:administrator-role']
     end
@@ -32,7 +31,7 @@ RSpec.describe 'Set source id for an object' do
 
       expect(object_client).to have_received(:update)
         .with(params: updated_model)
-      expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+      expect(object_client).to have_received(:reindex)
     end
   end
 end

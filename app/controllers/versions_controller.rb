@@ -25,7 +25,7 @@ class VersionsController < ApplicationController
                         opening_user_name: current_user.to_s)
     msg = "#{@cocina_object.externalIdentifier} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
-    Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
+    Dor::Services::Client.object(@cocina_object.externalIdentifier).reindex
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
 
@@ -43,7 +43,7 @@ class VersionsController < ApplicationController
     )
     msg = "Version #{@cocina_object.version} of #{@cocina_object.externalIdentifier} has been closed!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
-    Argo::Indexer.reindex_druid_remotely(@cocina_object.externalIdentifier)
+    Dor::Services::Client.object(@cocina_object.externalIdentifier).reindex
   end
 
   private

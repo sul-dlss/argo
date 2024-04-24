@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'Collection membership' do
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(VersionService).to receive(:new).and_return(version_service)
   end
 
@@ -19,7 +18,8 @@ RSpec.describe 'Collection membership' do
       instance_double(Dor::Services::Client::Object,
                       find: cocina_collection,
                       update: true,
-                      collections: [])
+                      collections: [],
+                      reindex: true)
     end
 
     context 'when they have manage access' do
@@ -76,7 +76,8 @@ RSpec.describe 'Collection membership' do
       instance_double(Dor::Services::Client::Object,
                       find: cocina,
                       update: true,
-                      collections: [])
+                      collections: [],
+                      reindex: true)
     end
 
     context 'when they have manage access' do

@@ -26,7 +26,6 @@ RSpec.describe SetCollectionJob do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   after do

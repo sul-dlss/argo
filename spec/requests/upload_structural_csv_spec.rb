@@ -12,7 +12,6 @@ RSpec.describe 'Upload the structural CSV' do
   before do
     allow(Repository).to receive(:find).and_return(cocina_model)
     allow(VersionService).to receive(:new).and_return(version_service)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do

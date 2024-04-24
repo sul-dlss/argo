@@ -7,13 +7,12 @@ RSpec.describe 'Set APO for an object' do
     let(:user) { create(:user) }
     let(:druid) { 'druid:dc243mg0841' }
     let(:new_apo_id) { 'druid:bc123cd4567' }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
     let(:cocina_model) { build(:dro_with_metadata, id: druid) }
     let(:version_service) { instance_double(VersionService, open?: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
       allow(VersionService).to receive(:new).and_return(version_service)
     end
@@ -56,7 +55,7 @@ RSpec.describe 'Set APO for an object' do
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+        expect(object_client).to have_received(:reindex)
       end
     end
 
@@ -73,7 +72,7 @@ RSpec.describe 'Set APO for an object' do
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+        expect(object_client).to have_received(:reindex)
       end
     end
   end

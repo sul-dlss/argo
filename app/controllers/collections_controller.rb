@@ -41,7 +41,7 @@ class CollectionsController < ApplicationController
     Repository.store(updated_cocina_admin_policy)
     # Close the APO version and reindex
     version_service.close
-    Argo::Indexer.reindex_druid_remotely(params[:apo_id])
+    Dor::Services::Client.object(params[:apo_id]).reindex
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_druid}"
   end
 
@@ -55,7 +55,7 @@ class CollectionsController < ApplicationController
     attributes = params.require(:collection).permit(:view_access, :copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save
-    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
+    Dor::Services::Client.object(@cocina.externalIdentifier).reindex
 
     redirect_to solr_document_path(params[:id]), status: :see_other
   end

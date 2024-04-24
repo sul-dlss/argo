@@ -29,7 +29,7 @@ RSpec.describe 'Set catalog record ID' do
 
   context 'without manage content access' do
     let(:cocina) { instance_double(Cocina::Models::DROWithMetadata) }
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, reindex: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
@@ -43,7 +43,7 @@ RSpec.describe 'Set catalog record ID' do
   end
 
   context 'when they have manage access' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
@@ -100,10 +100,6 @@ RSpec.describe 'Set catalog record ID' do
         )
       end
 
-      before do
-        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
-      end
-
       context 'with invalid catalog_record_id value on an item' do
         let(:invalid_catalog_record_id_params) do
           {
@@ -117,7 +113,6 @@ RSpec.describe 'Set catalog record ID' do
                                                     headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
           expect(response).to have_http_status :unprocessable_entity
         end
       end
@@ -134,7 +129,7 @@ RSpec.describe 'Set catalog record ID' do
                                                     headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).not_to have_received(:reindex)
           expect(response).to have_http_status :unprocessable_entity
         end
       end
@@ -151,7 +146,6 @@ RSpec.describe 'Set catalog record ID' do
                                                     headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
-          expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely).with(druid)
           expect(response).to have_http_status :unprocessable_entity
         end
       end
@@ -179,7 +173,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
 
         it 'updates multiple catalog_record_ids' do
@@ -187,7 +181,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model_multiple_catalog_record_ids)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
       end
 
@@ -224,7 +218,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model_replaced_catalog_record_id)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
 
         it 'deletes the catalog_record_id, moving it to previous, and then adds a new one' do
@@ -232,7 +226,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model_deleted_catalog_record_id)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
       end
 
@@ -265,7 +259,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model_updated_catalog_record_ids) # the updated model swaps the refresh
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
       end
 
@@ -308,7 +302,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model_with_previous_catalog_record_id)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
 
         it 'deletes a single catalog_record_id, adding it to the existing previous catalog_record_id list, and then adds a new one' do
@@ -316,7 +310,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model_with_delete_and_previous_catalog_record_id)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
       end
 
@@ -328,7 +322,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
+          expect(object_client).to have_received(:reindex)
         end
       end
     end

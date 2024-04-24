@@ -64,7 +64,6 @@ RSpec.describe SetContentTypeJob do
     allow(object_client1).to receive(:update)
     allow(object_client2).to receive(:update)
     allow(object_client3).to receive(:update)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when book object with image and page resource types' do

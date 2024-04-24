@@ -41,7 +41,8 @@ RSpec.describe 'Item catalog_record_id change' do
                       events: events_client,
                       update: true,
                       version: version_client,
-                      release_tags: release_tags_client)
+                      release_tags: release_tags_client,
+                      reindex: true)
     end
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
@@ -55,7 +56,6 @@ RSpec.describe 'Item catalog_record_id change' do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       solr_conn.add(:id => druid, :objectType_ssim => 'item',
                     CatalogRecordId.index_field => "#{CatalogRecordId.indexing_prefix}99999")
       solr_conn.commit
@@ -70,7 +70,7 @@ RSpec.describe 'Item catalog_record_id change' do
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: "#{CatalogRecordId.label}s for " \
                                                           "#{druid} have been updated!"
-      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+      expect(object_client).to have_received(:reindex)
     end
   end
 end

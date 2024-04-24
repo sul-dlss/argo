@@ -36,7 +36,6 @@ RSpec.describe 'Set governing APO' do
       find("a[aria-label='Set governing APO']").click
 
       select 'Stanford University Libraries - Special Collections', from: 'new_apo_id', match: :first
-      expect(Argo::Indexer).to receive(:reindex_druid_remotely)
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Governing APO updated!'
       updated = Dor::Services::Client.object(item_id).find

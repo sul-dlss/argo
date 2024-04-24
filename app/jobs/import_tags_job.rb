@@ -35,7 +35,7 @@ class ImportTagsJob < GenericJob
       Dor::Services::Client.object(druid).administrative_tags.replace(tags:)
     end
     # tags require immediate reindexing since they do not send messages to Solr
-    Argo::Indexer.reindex_druid_remotely(druid)
+    Dor::Services::Client.object(druid).reindex
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e
     log_buffer.puts("#{Time.current} #{self.class}: Unexpected error importing tags for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")

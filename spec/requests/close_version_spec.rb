@@ -5,11 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Close a version' do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
-  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model, reindex: true) }
   let(:cocina_model) { build(:dro_with_metadata, id: druid, version: 2) }
 
   before do
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(Dor::Services::Client).to receive(:object).and_return(object_service)
   end
 
@@ -19,12 +18,11 @@ RSpec.describe 'Close a version' do
     end
 
     let(:object_service) do
-      instance_double(Dor::Services::Client::Object, version: version_service, find: cocina_model)
+      instance_double(Dor::Services::Client::Object, version: version_service, find: cocina_model, reindex: true)
     end
     let(:version_service) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
     it 'calls dor-services to close the version' do
-      expect(Argo::Indexer).to receive(:reindex_druid_remotely)
       post "/items/#{druid}/versions/close", params: { description: 'something' }
       expect(flash[:notice]).to eq "Version 2 of #{druid} has been closed!"
       expect(version_service).to have_received(:close).with(description: 'something',

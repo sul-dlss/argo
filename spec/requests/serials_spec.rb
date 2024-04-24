@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Serials' do
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
   let(:druid) { 'druid:dc243mg0841' }
 
   let(:cocina_model) do
@@ -12,7 +12,6 @@ RSpec.describe 'Serials' do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when authorized' do
@@ -46,7 +45,7 @@ RSpec.describe 'Serials' do
       it 'updates the form' do
         put '/items/druid:kv840xx0000/serials', params: { serials: { part_number: '7', part_name: 'samurai' } }
         expect(object_client).to have_received(:update).with(params: expected)
-        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+        expect(object_client).to have_received(:reindex)
 
         expect(response).to redirect_to '/view/druid:dc243mg0841'
       end

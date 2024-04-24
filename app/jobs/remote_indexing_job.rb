@@ -19,7 +19,7 @@ class RemoteIndexingJob < GenericJob
   private
 
   def reindex_druid_safely(current_druid, log_buffer)
-    Argo::Indexer.reindex_druid_remotely(current_druid)
+    Dor::Services::Client.object(current_druid).reindex
     log_buffer.puts("#{Time.current} RemoteIndexingJob: Successfully reindexed #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e

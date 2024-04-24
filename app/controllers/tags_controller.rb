@@ -79,6 +79,6 @@ class TagsController < ApplicationController
   end
 
   def reindex
-    Argo::Indexer.reindex_druid_remotely(params[:item_id])
+    Dor::Services::Client.object(params[:item_id]).reindex
   end
 end

@@ -5,11 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Set the properties for a collection' do
   let(:user) { create(:user) }
   let(:druid) { 'druid:bc123df4567' }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true, reindex: true) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(VersionService).to receive(:open?).and_return(true)
   end
 
@@ -35,7 +34,7 @@ RSpec.describe 'Set the properties for a collection' do
 
       expect(object_client).to have_received(:update)
         .with(params: updated_model)
-      expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
+      expect(object_client).to have_received(:reindex)
       expect(response).to have_http_status(:see_other)
     end
   end

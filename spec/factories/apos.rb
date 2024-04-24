@@ -23,7 +23,7 @@ FactoryBot.define do
     to_create do |builder|
       Dor::Services::Client.objects.register(params: builder.cocina_model).tap do |apo|
         # Since we don't run the rabbitMQ service in our cluster, we have to index these manually
-        Argo::Indexer.reindex_druid_remotely(apo.externalIdentifier)
+        Dor::Services::Client.object(apo.externalIdentifier).reindex
       end
     end
 
