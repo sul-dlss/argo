@@ -574,7 +574,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (7.2.2)
+    sidekiq (7.2.4)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
@@ -717,7 +717,7 @@ DEPENDENCIES
   rubyzip
   sdr-client (~> 2.0)
   selenium-webdriver
-  sidekiq (~> 7.1)
+  sidekiq (~> 7.2)
   simplecov
   sqlite3 (~> 1.4)
   turbo-rails (~> 1.0)
