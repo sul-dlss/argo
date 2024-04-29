@@ -22,10 +22,7 @@ FactoryBot.define do
     end
 
     to_create do |builder|
-      Dor::Services::Client.objects.register(params: builder.cocina_model).tap do |item|
-        # Since we don't run the rabbitMQ service in our cluster, we have to index these manually
-        Dor::Services::Client.object(item.externalIdentifier).reindex
-      end
+      Dor::Services::Client.objects.register(params: builder.cocina_model)
     end
 
     admin_policy_id { 'druid:hv992ry2431' }

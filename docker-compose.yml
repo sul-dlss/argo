@@ -1,21 +1,4 @@
-version: '3.6'
-
-x-dor-indexing: &dor-indexing-backend
-  image: suldlss/dor-indexing-app:latest
-  environment:
-    SOLR_URL: http://solr:8983/solr/argo
-    SETTINGS__SOLR__URL: http://solr:8983/solr/argo
-    SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
-    # To generate the token: docker-compose run dor-services-app rake generate_token
-    SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-    SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
-    SETTINGS__WORKFLOW_URL: http://workflow:3000
-    SETTINGS__RABBITMQ__HOSTNAME: rabbitmq
-    WORKERS: ReindexJob,ReindexByDruidJob,DeleteByDruidJob
-  depends_on:
-    - solr
-    - workflow
-    - rabbitmq
+name: 'argo'
 
 services:
   web:
@@ -34,7 +17,6 @@ services:
       # Allow bulk action logs to be written (can't write to /tmp)
       SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
       SETTINGS__BULK_METADATA__TEMPORARY_DIRECTORY: '/app/tmp/tmp'
-      SETTINGS__DOR_INDEXING_URL: http://dor-indexing-app:3000/dor
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
@@ -46,24 +28,8 @@ services:
       SOLR_URL: http://solr:8983/solr/argo
       # Docker doesn't allow rails server to remove PID on shutdown
       PID_FILE: /dev/null
-    depends_on:
-      - dor-indexing-app
     # To allow yarn --watch from Procfile.dev to continue after stdin is closed
     tty: true
-
-  rabbitmq:
-    image: rabbitmq:3
-    ports:
-      - 5672:5672
-
-  dor-indexing-app:
-    <<: *dor-indexing-backend
-    ports:
-      - 3004:3000
-
-  dor-indexing-workers:
-    <<: *dor-indexing-backend
-    command: ['sh', '-c', 'timeout 30 docker/wait-port.sh rabbitmq 5672 ; bin/rake rabbitmq:setup sneakers:run']
   
   dor-services-app:
     image: suldlss/dor-services-app:latest
@@ -79,20 +45,18 @@ services:
       SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
       SOLR_URL: http://solr:8983/solr/argo
       SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
-      SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
       SETTINGS__SOLR__URL: http://solr:8983/solr/argo
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__WORKFLOW__LOGFILE: rails
-      SETTINGS__RABBITMQ__ENABLED: 'true'
-      SETTINGS__RABBITMQ__HOSTNAME: rabbitmq
+      SETTINGS__RABBITMQ__ENABLED: 'false'
       SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
       SETTINGS__REDIS_URL: redis://redis:6379/
     depends_on:
       - db
-      - dor-indexing-app
       - suri
       - redis
+      - solr
 
   sdr-api:
     image: suldlss/sdr-api:latest
