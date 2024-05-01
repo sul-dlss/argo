@@ -39,7 +39,7 @@ class FilesController < ApplicationController
     send_file_headers!(
       type: 'application/octet-stream',
       disposition: 'attachment',
-      filename: CGI.escape(filename)
+      filename: CGI.escape(filename.split('/').last)
     )
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
 

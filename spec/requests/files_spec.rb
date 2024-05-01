@@ -61,7 +61,7 @@ RSpec.describe 'Files' do
 
   describe 'download from preservation' do
     context 'when they have manage access' do
-      let(:mock_file_name) { 'preserved file.txt' }
+      let(:mock_file_name) { 'path/to/preserved file.txt' }
       let(:mock_version) { '2' }
       let(:mock_content) { 'preserved file content' }
 
@@ -73,7 +73,7 @@ RSpec.describe 'Files' do
 
       it 'returns a response with the preserved file content as the body and the right headers' do
         last_modified_lower_bound = Time.now.utc.rfc2822
-        get "/items/#{druid}/files/preserved%20file.txt/preserved?version=#{mock_version}"
+        get "/items/#{druid}/files/path/to/preserved%20file.txt/preserved?version=#{mock_version}"
 
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
