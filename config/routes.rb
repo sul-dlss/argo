@@ -138,12 +138,14 @@ Rails.application.routes.draw do
     end
   end
 
+  # The route globbing is needed here for the `id` parameter which can be a
+  # filename with literal slashes. This route used to live within the nested
+  # item files resources block below, but Rails doesn't make it easy to use
+  # route globbing with resourceful routes.
+  get 'items/:item_id/files/*id/preserved', to: 'files#preserved', as: :preserved_item_file
+
   resources :items, only: %i[show update] do
     resources 'files', only: %i[index], constraints: { id: /.*/ } do
-      member do
-        get 'preserved'
-      end
-
       collection do
         get 'download'
       end

@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 module ItemsHelper
-  def stacks_url_full_size(druid, file_name)
-    "#{Settings.stacks_file_url}/#{druid}/#{ERB::Util.url_encode(file_name)}"
+  def stacks_url_full_size(druid, filename)
+    # Allow literal slashes in the filename (do not encode them)
+    encoded_filename = filename.split('/').map { |filename_part| ERB::Util.url_encode(filename_part) }.join('/')
+    "#{Settings.stacks_file_url}/#{druid}/#{encoded_filename}"
   end
 
   # Overriding blacklight so we can pass @cocina to the presenter
