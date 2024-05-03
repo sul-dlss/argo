@@ -64,7 +64,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     Once everything has been successfully pulled, start up the docker services needed for testing (all but the web container)
 
     ```
-    docker compose up -d sdr-api techmd dor-indexing-workers
+    docker compose up -d sdr-api techmd workflow
     ```
 
     You should do the following to make sure all the services are up:
