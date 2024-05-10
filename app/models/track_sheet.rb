@@ -117,8 +117,6 @@ class TrackSheet
     doc = SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first
     return SolrDocument.new(doc) unless doc.nil?
 
-    # TODO: Remove this stuff if we never see the notification:
-    Honeybadger.notify('Do we ever get here?  If so, delete this notification from the code.', context: { namespaced_druid: })
     Dor::Services::Client.object(namespaced_druid).reindex
     SolrDocument.new(SearchService.query(%(id:"#{namespaced_druid}"), rows: 1)['response']['docs'].first)
   end
