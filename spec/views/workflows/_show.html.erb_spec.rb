@@ -16,6 +16,7 @@ RSpec.describe 'workflows/_show' do
                     attempts: nil,
                     lifecycle: nil,
                     error_message: 'broken',
+                    context: nil,
                     note: nil)
   end
 
@@ -24,6 +25,7 @@ RSpec.describe 'workflows/_show' do
                     druid:,
                     workflow_name:,
                     processes: [process_status],
+                    workflow_context: nil,
                     cocina_object: nil)
   end
 
