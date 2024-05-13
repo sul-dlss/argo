@@ -5,6 +5,9 @@
               data: { blacklight_modal: 'trigger' } %>
 </span>
 <%= @presenter.druid %>
+<% if @presenter.workflow_context.present? %>
+  <div>Context: <%= @presenter.workflow_context %></div>
+<% end %>
 
 <table class="detail table">
   <thead>
