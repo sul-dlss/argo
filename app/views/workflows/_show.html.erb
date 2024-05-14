@@ -29,3 +29,6 @@
     <% end %>
   </tbody>
 </table>
+<% if @presenter.workflow_context.present? %>
+  <div id="workflow-context">Context: <%= @presenter.workflow_context %></div>
+<% end %>

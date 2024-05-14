@@ -88,6 +88,13 @@ RSpec.describe 'WorkflowsController' do
     end
 
     context 'when the user wants a table view' do
+      let(:wf_response) do
+        instance_double(Dor::Workflow::Response::Workflow,
+                        pid: druid,
+                        workflow_name: 'accessionWF',
+                        empty?: false,
+                        process_for_recent_version: process)
+      end
       let(:process) do
         instance_double(Dor::Workflow::Response::Process,
                         name: 'start-accession',
@@ -96,21 +103,33 @@ RSpec.describe 'WorkflowsController' do
                         elapsed: 10,
                         attempts: 1,
                         lifecycle: nil,
+                        context:,
                         note: nil)
       end
-      let(:wf_response) do
-        instance_double(Dor::Workflow::Response::Workflow,
-                        pid: druid,
-                        workflow_name: 'accessionWF',
-                        empty?: false,
-                        process_for_recent_version: process)
+
+      context 'when there is no workflow context' do
+        let(:context) { nil }
+
+        it 'fetches the workflow on valid parameters and does not show any context' do
+          get "/items/#{druid}/workflows/accessionWF"
+
+          expect(response).to have_http_status(:ok)
+          expect(rendered.find_css('.detail > tbody > tr').size).to eq workflow_steps.count
+          expect(rendered.find_css('#workflow-context').size).to eq 0
+        end
       end
 
-      it 'fetches the workflow on valid parameters' do
-        get "/items/#{druid}/workflows/accessionWF"
+      context 'when there is workflow context' do
+        let(:context) { { 'requireOCR' => true } }
 
-        expect(response).to have_http_status(:ok)
-        expect(rendered.find_css('.detail > tbody > tr').size).to eq workflow_steps.count
+        it 'fetches the workflow on valid parameters and shows the context' do
+          get "/items/#{druid}/workflows/accessionWF"
+
+          expect(response).to have_http_status(:ok)
+          expect(rendered.find_css('.detail > tbody > tr').size).to eq workflow_steps.count
+          expect(rendered.find_css('#workflow-context').size).to eq 1
+          expect(response.body).to include 'Context: {&quot;requireOCR&quot;=&gt;true}'
+        end
       end
     end
 

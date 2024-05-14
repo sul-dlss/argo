@@ -23,6 +23,11 @@ class WorkflowStatus
     end
   end
 
+  # any workflow context that is set... context is returned with each process step, but is the same for all steps, so just return the first one
+  def workflow_context
+    process_statuses.filter_map(&:context).first
+  end
+
   private
 
   attr_reader :workflow_steps, :workflow

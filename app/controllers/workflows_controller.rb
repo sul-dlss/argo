@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class WorkflowsController < ApplicationController
-  # Called from "Add Workflow" button. This is content for a modal invoked via XHR
-  # so we don't want a layout.
+  ##
+  # Renders a view with process-level state information for a given object's workflow.
+  #
+  # @option params [String] `:item_id` The druid for the object.
+  # @option params [String] `:id` The workflow name. e.g., accessionWF.
   def show
     workflow = WorkflowClientFactory.build.workflow(pid: params[:item_id], workflow_name: params[:id])
     respond_to do |format|
@@ -14,22 +17,13 @@ class WorkflowsController < ApplicationController
     end
   end
 
-  ##
-  # Renders a view with process-level state information for a given object's workflow.
-  #
-  # @option params [String] `:item_id` The druid for the object.
-  # @option params [String] `:id` The workflow name. e.g., accessionWF.
+  # Called from "Add Workflow" button. This is content for a modal invoked via XHR
+  # so we don't want a layout.
   def new
     render 'new', layout: false
   end
 
-  ##
-  # Updates the status of a specific workflow process step to a given status.
-  #
-  # @option params [String] `:item_id` The druid for the object.
-  # @option params [String] `:id` The workflow name. e.g., accessionWF.
-  # @option params [String] `:process` The workflow step. e.g., publish.
-  # @option params [String] `:status` The status to which we want to reset the workflow.
+  # add a workflow to an object if the workflow is not present in the active table
   def create
     cocina_object = Repository.find(params[:item_id])
 
@@ -57,7 +51,13 @@ class WorkflowsController < ApplicationController
     redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg
   end
 
-  # add a workflow to an object if the workflow is not present in the active table
+  ##
+  # Updates the status of a specific workflow process step to a given status.
+  #
+  # @option params [String] `:item_id` The druid for the object.
+  # @option params [String] `:id` The workflow name. e.g., accessionWF.
+  # @option params [String] `:process` The workflow step. e.g., publish.
+  # @option params [String] `:status` The status to which we want to reset the workflow.
   def update
     params.require %i[process status]
     cocina = Repository.find(params[:item_id])
