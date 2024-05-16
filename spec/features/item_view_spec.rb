@@ -23,6 +23,7 @@ RSpec.describe 'Item view', :js do
   end
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: release_tags_list) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
@@ -79,6 +80,7 @@ RSpec.describe 'Item view', :js do
         let(:object_client) do
           instance_double(Dor::Services::Client::Object,
                           version: version_client,
+                          user_version: user_version_client,
                           events: events_client,
                           release_tags: release_tags_client)
         end
@@ -99,6 +101,7 @@ RSpec.describe 'Item view', :js do
                           find_lite: cocina_object_lite,
                           find: cocina_object,
                           version: version_client,
+                          user_version: user_version_client,
                           events: events_client,
                           release_tags: release_tags_client)
         end

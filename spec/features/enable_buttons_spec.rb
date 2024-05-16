@@ -20,6 +20,7 @@ RSpec.describe 'Enable buttons' do
   let(:version_service) { instance_double(VersionService, open?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
   let(:cocina_model) { build(:dro_lite, id: item_id) }
   let(:object_client) do
@@ -27,6 +28,7 @@ RSpec.describe 'Enable buttons' do
                     find_lite: cocina_model,
                     events: events_client,
                     version: version_client,
+                    user_version: user_version_client,
                     release_tags: release_tags_client)
   end
 

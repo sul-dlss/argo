@@ -369,7 +369,8 @@ class CatalogController < ApplicationController
     milestones = MilestoneService.milestones_for(druid: params[:id])
     object_client = Dor::Services::Client.object(params[:id])
     versions = object_client.version.inventory
-    @milestones_presenter = MilestonesPresenter.new(milestones:, versions:)
+    user_versions = object_client.user_version.inventory
+    @milestones_presenter = MilestonesPresenter.new(milestones:, versions:, user_versions:)
     @release_tags = @cocina.instance_of?(NilModel) || @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
