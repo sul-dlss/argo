@@ -33,13 +33,6 @@ module Show
               target: '_blank', rel: 'noopener', class: 'external-link-button'
     end
 
-    def dublin_core_link
-      link_to 'Dublin Core', full_dc_item_metadata_path(document.id),
-              title: 'Dublin Core (derived from MODS)',
-              class: 'external-link-button',
-              data: { blacklight_modal: 'trigger' }
-    end
-
     def mods_link
       link_to 'MODS', descriptive_item_metadata_path(document.id),
               class: 'external-link-button',
