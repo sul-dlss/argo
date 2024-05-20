@@ -4,7 +4,7 @@ class MetadataController < ApplicationController
   # Shows the modal with the MODS XML. This is triggered by the "MODS" button on
   # the item show page.
   def descriptive
-    xml = ModsService.new(cocina).to_xml
+    xml = PurlFetcher::Client::Mods.create(cocina:)
     @mods_display = ModsDisplay::Record.new(xml).mods_display_html
 
     respond_to do |format|
