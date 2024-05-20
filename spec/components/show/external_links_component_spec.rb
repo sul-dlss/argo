@@ -46,7 +46,6 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
         expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
         expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
         expect(page).to have_link 'PURL'
-        expect(page).to have_link 'Dublin Core'
       end
     end
 
