@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe MilestonesPresenter do
   subject(:presenter) do
-    described_class.new(milestones:, versions:)
+    described_class.new(milestones:, versions:, user_versions:)
   end
 
   let(:milestone2) do
@@ -34,6 +34,12 @@ RSpec.describe MilestonesPresenter do
     ]
   end
 
+  let(:user_versions) do
+    [
+      Dor::Services::Client::UserVersion::Version.new(version: 2, userVersion: 1)
+    ]
+  end
+
   describe '#each_version' do
     let(:actual_versions) do
       versions = []
@@ -58,7 +64,7 @@ RSpec.describe MilestonesPresenter do
     context 'when the version is 2' do
       let(:version) { '2' }
 
-      it { is_expected.to eq '2 Minor change' }
+      it { is_expected.to eq '2 Minor change (User version 1)' }
     end
   end
 

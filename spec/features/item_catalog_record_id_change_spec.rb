@@ -33,6 +33,7 @@ RSpec.describe 'Item catalog_record_id change' do
     let(:version_service) { instance_double(VersionService, open?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
+    let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
     let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
     let(:object_client) do
       instance_double(Dor::Services::Client::Object,
@@ -41,6 +42,7 @@ RSpec.describe 'Item catalog_record_id change' do
                       events: events_client,
                       update: true,
                       version: version_client,
+                      user_version: user_version_client,
                       release_tags: release_tags_client,
                       reindex: true)
     end

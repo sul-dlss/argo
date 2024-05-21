@@ -18,6 +18,7 @@ RSpec.describe 'Add a workflow to an item' do
   end
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
@@ -25,6 +26,7 @@ RSpec.describe 'Add a workflow to an item' do
                     find_lite: cocina_model, # NOTE: This should really be a DROLite
                     events: events_client,
                     version: version_client,
+                    user_version: user_version_client,
                     release_tags: release_tags_client,
                     reindex: true)
   end
