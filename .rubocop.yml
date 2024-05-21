@@ -31,25 +31,25 @@ Lint/DeprecatedOpenSSLConstant:
 Lint/MissingSuper:
   Enabled: true
   Exclude:
-    - 'app/components/**/*'
-    - 'config/initializers/okcomputer.rb'
+    - "app/components/**/*"
+    - "config/initializers/okcomputer.rb"
 
 Metrics/BlockLength:
   Max: 27
   AllowedMethods:
-    - 'configure_blacklight'
+    - "configure_blacklight"
   Exclude:
-    - 'config/routes.rb'
-    - 'db/schema.rb'
-    - 'spec/**/*'
-    - 'lib/**/*.rake'
-    - 'app/jobs/create_virtual_objects_job.rb'
-    - 'app/services/forms_grouper.rb'
-    - 'app/services/notes_grouper.rb'
+    - "config/routes.rb"
+    - "db/schema.rb"
+    - "spec/**/*"
+    - "lib/**/*.rake"
+    - "app/jobs/create_virtual_objects_job.rb"
+    - "app/services/forms_grouper.rb"
+    - "app/services/notes_grouper.rb"
 
 Metrics/ModuleLength:
   Exclude:
-    - 'lib/constants.rb'
+    - "lib/constants.rb"
 
 Naming/PredicateName:
   ForbiddenPrefixes:
@@ -64,15 +64,15 @@ RSpec/ContextWording:
     - for
     - if
     - as
-    - 'not as'
+    - "not as"
     - from
 
 # We exclude feature specs here because they have a lot of setup overhead, so
 # testing a bunch of things in one go is more efficient.
 RSpec/ExampleLength:
   Exclude:
-    - 'spec/features/**/*_spec.rb'
-    - 'spec/services/descriptions_grouper_spec.rb'
+    - "spec/features/**/*_spec.rb"
+    - "spec/services/descriptions_grouper_spec.rb"
   Max: 43
 
 RSpec/MultipleExpectations:
@@ -81,7 +81,7 @@ RSpec/MultipleExpectations:
 RSpec/MultipleMemoizedHelpers:
   Enabled: true
   Exclude:
-    - 'spec/jobs/set_catkeys_and_barcodes_job_spec.rb'
+    - "spec/jobs/set_catkeys_and_barcodes_job_spec.rb"
 
 Rails/ActionControllerFlashBeforeRender:
   Enabled: false
@@ -394,17 +394,17 @@ RSpec/SubjectDeclaration: # new in 2.5
   Enabled: true
 RSpec/VerifiedDoubleReference: # new in 2.10.0
   Enabled: true
-RSpec/Rails/AvoidSetupHook: # new in 2.4
+RSpecRails/AvoidSetupHook: # new in 2.4
   Enabled: true
-RSpec/Rails/HaveHttpStatus: # new in 2.12
+RSpecRails/HaveHttpStatus: # new in 2.12
   Enabled: true
-RSpec/Rails/InferredSpecType: # new in 2.14
+RSpecRails/InferredSpecType: # new in 2.14
   Enabled: true
-RSpec/Rails/MinitestAssertions: # new in 2.17
+RSpecRails/MinitestAssertions: # new in 2.17
   Enabled: true
-RSpec/Rails/NegationBeValid: # new in 2.23
+RSpecRails/NegationBeValid: # new in 2.23
   Enabled: true
-RSpec/Rails/TravelAround: # new in 2.19
+RSpecRails/TravelAround: # new in 2.19
   Enabled: true
 Rails/ActionControllerTestCase: # new in 2.14
   Enabled: true
