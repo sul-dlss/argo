@@ -3,57 +3,61 @@ source_id_regex: \A.+:.+\z
 
 # Bulk Metadata
 bulk_metadata:
-  directory: '/tmp/bulk_jobs/'
-  temporary_directory: '/tmp/bulk_jobs/tmp/'
-  log: 'log.txt'
-  csv_log: 'log.csv'
-  xml: 'MODS'
-  zip: 'desc_metadata_download.zip'
+  directory: "/tmp/bulk_jobs/"
+  temporary_directory: "/tmp/bulk_jobs/tmp/"
+  log: "log.txt"
+  csv_log: "log.csv"
+  xml: "MODS"
+  zip: "desc_metadata_download.zip"
 
 checksum_report_job:
-  csv_filename: 'checksum_report.csv'
+  csv_filename: "checksum_report.csv"
 descriptive_metadata_export_job:
-  csv_filename: 'descriptive.csv'
+  csv_filename: "descriptive.csv"
 export_tags_job:
-  csv_filename: 'tags.csv'
+  csv_filename: "tags.csv"
 export_structural_job:
-  csv_filename: 'structural_metadata.csv'
+  csv_filename: "structural_metadata.csv"
 export_cocina_json_job:
-  jsonl_filename: 'cocina.jsonl'
-  gzip_filename: 'cocina.jsonl.gz'
+  jsonl_filename: "cocina.jsonl"
+  gzip_filename: "cocina.jsonl.gz"
 register_druids_job:
-  csv_filename: 'registration_report.csv'
+  csv_filename: "registration_report.csv"
 tracking_sheet_report_job:
-  pdf_filename: 'tracking_sheet.pdf'
+  pdf_filename: "tracking_sheet.pdf"
 
 dor_services:
-  url: 'http://localhost:3003'
+  url: "http://localhost:3003"
   # To generate the token: docker-compose run dor-services-app rake generate_token
   token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
 
 preservation_catalog:
-  url: 'https://preservation-catalog-stage-01.stanford.edu'
-  token: 'mint-token-with-target-preservation-catalog-rake-generate-token'
+  url: "https://preservation-catalog-stage-01.stanford.edu"
+  token: "mint-token-with-target-preservation-catalog-rake-generate-token"
+
+purl_fetcher:
+  url: https://purl-fetcher.example.edu
+  token: fake-token
 
 # URLs
-dor_indexing_url: 'https://dor-indexing-app:3000/dor'
-modsulator_url: 'https://modsulator-app-stage.stanford.edu/v1/modsulator'
-normalizer_url: 'https://modsulator-app-stage.stanford.edu/v1/normalizer'
-purl_url: 'https://sul-purl-stage.stanford.edu'
-searchworks_url: 'http://searchworks.stanford.edu/view/%{id}'
-robot_status_url: 'https://robot-console-stage.stanford.edu'
-solrizer_url: 'http://solr:8983/solr/argo'
-spreadsheet_url: 'https://modsulator-app-stage.stanford.edu/v1/spreadsheet'
-stacks_file_url: 'https://stacks-test.stanford.edu/file'
-stacks_url: 'https://stacks-test.stanford.edu/image'
-workflow_url: 'http://localhost:3001'
+dor_indexing_url: "https://dor-indexing-app:3000/dor"
+modsulator_url: "https://modsulator-app-stage.stanford.edu/v1/modsulator"
+normalizer_url: "https://modsulator-app-stage.stanford.edu/v1/normalizer"
+purl_url: "https://sul-purl-stage.stanford.edu"
+searchworks_url: "http://searchworks.stanford.edu/view/%{id}"
+robot_status_url: "https://robot-console-stage.stanford.edu"
+solrizer_url: "http://solr:8983/solr/argo"
+spreadsheet_url: "https://modsulator-app-stage.stanford.edu/v1/spreadsheet"
+stacks_file_url: "https://stacks-test.stanford.edu/file"
+stacks_url: "https://stacks-test.stanford.edu/image"
+workflow_url: "http://localhost:3001"
 
 # Workflow
 workflow:
   timeout: 60
 
 apo:
-  default_workflow_option: 'registrationWF'
+  default_workflow_option: "registrationWF"
 
 catalog:
   folio:
@@ -69,7 +73,6 @@ sdr_api:
   password: notusedanywhere
   url: http://localhost:3006
 
-
 # These workflows are inactive, and the workflow-server doesn't know about them
 # so we don't draw them on the workflow grid
 inactive_workflows:
@@ -83,10 +86,10 @@ inactive_workflows:
   - gisDiscoveryWF
 
 tech_md_service:
-  url: 'http://localhost:3005'
+  url: "http://localhost:3005"
   # To generate the token: docker-compose run techmd rake generate_token
-  token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmdvLXRlc3QifQ.nhJQsj8V98agZxzDP2OSCVPkIb70yE9_dyLUiTzcKko'
+  token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmdvLXRlc3QifQ.nhJQsj8V98agZxzDP2OSCVPkIb70yE9_dyLUiTzcKko"
 
-redis_url: 'redis://localhost:6379/'
+redis_url: "redis://localhost:6379/"
 
 google_analytics: false

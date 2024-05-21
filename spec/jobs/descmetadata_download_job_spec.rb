@@ -20,8 +20,32 @@ RSpec.describe DescmetadataDownloadJob do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_object2) }
   let(:cocina_object1) { build(:dro, id: druid_list.first) }
   let(:cocina_object2) { build(:dro, id: druid_list.last) }
+  let(:mods_xml) do
+    <<~XML
+      <?xml version="1.0" encoding="UTF-8"?>
+      <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" version="3.7" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd">
+        <titleInfo>
+          <title>Object Label for Biryani Spice Mix Pine Nut</title>
+        </titleInfo>
+        <location>
+          <url usage="primary display">https://sul-purl-stage.stanford.edu/wp220vs6582</url>
+        </location>
+        <relatedItem type="host">
+          <titleInfo>
+            <title>David Rumsey Map Collection at Stanford University Libraries</title>
+          </titleInfo>
+          <location>
+            <url>https://sul-purl-stage.stanford.edu/bc778pm9866</url>
+          </location>
+          <typeOfResource collection="yes"/>
+        </relatedItem>
+      </mods>
+    XML
+  end
 
   before do
+    stub_request(:post, 'https://purl-fetcher.example.edu/v1/mods')
+      .to_return(status: 200, body: mods_xml, headers: {})
     allow(Dor::Services::Client).to receive(:object).with(druid_list[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid_list[1]).and_return(object_client2)
   end

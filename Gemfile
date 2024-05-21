@@ -46,6 +46,7 @@ gem 'druid-tools'
 gem 'folio_client', '~> 0.13'
 gem 'mods_display', '~> 1.0'
 gem 'preservation-client', '~> 6.2'
+gem 'purl_fetcher-client', '~> 1.3'
 gem 'rsolr'
 gem 'sdr-client', '~> 2.0'
 
