@@ -538,3 +538,11 @@ RSpec/IsExpectedSpecify: # new in 2.27
   Enabled: true
 RSpec/RepeatedSubjectCall: # new in 2.27
   Enabled: true
+Style/MapIntoArray: # new in 1.63
+  Enabled: true
+Rails/WhereRange: # new in 2.25
+  Enabled: true
+RSpec/EmptyOutput: # new in 2.29
+  Enabled: true
+RSpec/UndescriptiveLiteralsDescription: # new in 2.29
+  Enabled: true
