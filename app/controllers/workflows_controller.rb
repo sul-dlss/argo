@@ -35,10 +35,7 @@ class WorkflowsController < ApplicationController
     wf_name = params[:wf]
 
     # check the workflow is present and active (not archived)
-    if workflow_active?(wf_name, cocina_object.externalIdentifier, cocina_object.version)
-      render status: :forbidden, plain: "#{wf_name} already exists!"
-      return
-    end
+    return redirect_to solr_document_path(cocina_object.externalIdentifier), flash: { error: "#{wf_name} already exists!" } if workflow_active?(wf_name, cocina_object.externalIdentifier, cocina_object.version)
 
     WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
                                                         wf_name,

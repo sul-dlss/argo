@@ -46,6 +46,8 @@ RSpec.describe 'WorkflowsController' do
           post "/items/#{druid}/workflows", params: { wf: 'accessionWF' }
 
           expect(workflow_client).not_to have_received(:create_workflow_by_name)
+          expect(response).to redirect_to(solr_document_path(druid))
+          expect(flash[:error]).to eq 'accessionWF already exists!'
         end
       end
     end
