@@ -33,6 +33,22 @@ class TablesHaveDataCheck < OkComputer::Check
   end
 end
 
+class OcrQueueDepthCheck < OkComputer::Check
+  MAX_OCR_WAITING = 20 # alert if we have more than this number of objects waiting in ocrWF:ocr-create
+
+  def check
+    num_ocr_waiting = SearchService.query('wf_wps_ssim:ocrWF:ocr-create:waiting', fl: 'id')['response']['numFound']
+
+    msg = "ocrWF:ocr-create step has #{num_ocr_waiting} waiting"
+    if num_ocr_waiting > MAX_OCR_WAITING
+      mark_failure
+      msg += " (more than #{MAX_OCR_WAITING})"
+    end
+
+    mark_message msg
+  end
+end
+
 # REQUIRED checks, required to pass for /status/all
 #  individual checks also avail at /status/<name-of-check>
 OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
@@ -41,6 +57,9 @@ OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.ne
 
 solr_url = Blacklight.connection_config.fetch(:url)
 OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new("#{solr_url}/admin/ping")
+
+# OCR Queue Depth
+OkComputer::Registry.register 'ocr_queue_depth', OcrQueueDepthCheck.new
 
 # Bulk Metadata  services
 OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.directory)
