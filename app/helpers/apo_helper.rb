@@ -1,23 +1,6 @@
 # frozen_string_literal: true
 
 module ApoHelper
-  # @return [Array<Array<String, String>] array suitable for select_tag options
-  def workflow_options
-    # per https://github.com/sul-dlss/argo/issues/3741, this should be hardcoded
-    %w[
-      accessionWF
-      gisAssemblyWF
-      gisDeliveryWF
-      goobiWF
-      registrationWF
-      wasCrawlDisseminationWF
-      wasCrawlPreassemblyWF
-      wasSeedPreassemblyWF
-    ].map do |workflow|
-      [workflow, workflow]
-    end
-  end
-
   def agreement_options
     q = 'objectType_ssim:agreement'
     result = SearchService.query(q, rows: 99_999, fl: 'id,tag_ssim,display_title_ss')['response']['docs']
