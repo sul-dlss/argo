@@ -49,10 +49,11 @@ RSpec.describe 'Add a workflow to an item' do
 
   it 'redirect and display on show page' do
     visit new_item_workflow_path item_id
+    expect(page).to have_no_css 'option[value="registrationWF"]'
+    expect(page).to have_no_css 'option[value="accessionWF"]'
     click_button 'Add'
     within '.flash_messages' do
-      # The selected workflow defaults to Settings.apo.default_workflow_option (registrationWF)
-      expect(page).to have_css '.alert.alert-info', text: 'Added registrationWF'
+      expect(page).to have_css '.alert.alert-info', text: 'Added gisAssemblyWF'
     end
     expect(workflow_client).to have_received(:create_workflow_by_name)
   end
