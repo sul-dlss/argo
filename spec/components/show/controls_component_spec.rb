@@ -11,7 +11,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true) }
+  let(:cocina) { instance_double(Cocina::Models::DRO, type: 'https://cocina.sul.stanford.edu/models/book') }
 
   before do
     rendered
@@ -44,8 +45,9 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
         expect(page).to have_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
+        expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
 
-        expect(rendered.css('a').size).to eq(9)
+        expect(rendered.css('a').size).to eq(10)
         expect(rendered.css('a.disabled').size).to eq 2 # purge, republish are disabled
       end
 
@@ -63,8 +65,9 @@ RSpec.describe Show::ControlsComponent, type: :component do
         it 'includes the descriptive metadata refresh button and the correct count of actions' do
           expect(page).to have_link 'Refresh', href: '/items/druid:kv840xx0000/refresh_metadata'
           expect(page).to have_link 'Manage serials', href: '/items/druid:kv840xx0000/serials/edit'
+          expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
 
-          expect(rendered.css('a').size).to eq(11)
+          expect(rendered.css('a').size).to eq(12)
         end
       end
 
@@ -91,13 +94,14 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
         expect(page).to have_no_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
+        expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
 
         # these buttons are disabled since object is locked
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
 
-        expect(rendered.css('a').size).to eq(8)
-        expect(rendered.css('a.disabled').size).to eq 4 # create embargo, apply APO defaults, purge, republish are disabled
+        expect(rendered.css('a').size).to eq(9)
+        expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, purge, republish, text extraction are disabled
       end
     end
   end

@@ -190,6 +190,7 @@ Rails.application.routes.draw do
 
     resource :catalog_record_id, only: %i[edit update]
     resource :embargo, only: %i[new edit update]
+    resource :text_extraction, only: %i[new create], controller: 'text_extraction'
 
     member do
       post 'refresh_metadata'

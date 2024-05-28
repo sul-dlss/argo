@@ -1,0 +1,39 @@
+<div id='text-extraction' data-controller='text-extraction'>
+  <%= form_with url: item_text_extraction_path, class: 'col-md-4' do |f| %>
+
+    <div class='mb-3'>
+      <div class="text-extraction-language" data-text-extraction-target="text-extractionLanguageWrapper">
+        <div class="dropdown w-100 mb-3 d-inline-block" data-action="click@window->text-extraction#clickOutside">
+          <div data-text-extraction-target="textExtractionDropdown">
+            <div>Content language</div>
+            <div class="border rounded text-extraction-search-bar d-flex">
+              <button aria-label="toggle dropdown" aria-hidden="true" class="btn btn-link text-secondary" data-action="click->text-extraction#languageDropdown" aria-label="">
+                <i class="bi bi-search"></i>
+              </button>
+              <input data-action="input->text-extraction#search focus->text-extraction#languageDropdown" aria-label="Search avalaible Abbyy languages">
+              <button aria-label="toggle dropdown" aria-hidden="true" class="btn btn-link text-secondary" data-action="click->text-extraction#languageDropdown" id="caret">
+                <i class="bi bi-caret-down"></i>
+              </button>
+            </div>
+          </div>
+          <div id="text-extraction-languages" data-text-extraction-target="dropdownContent" class="dropdown-content d-none languages-group border rounded">
+              <% avaliable_ocr_languages.each do |language| %>
+                  <label class="d-block">
+                      <%= f.check_box 'text_extraction_languages', { multiple: true, data: { 'text-extraction-target': 'textExtractionLanguages', 'text-extraction-label': language[0], 'text-extraction-value': language[1], action: 'change->text-extraction#languageUpdate' } }, language[1], nil %>
+                      <%= language[0] %>
+                  </label>
+              <% end %>
+          </div>
+        </div>
+        <div data-text-extraction-target="selectedLanguages">
+        </div>
+        <div class="d-none text-cardinal mb-2" data-text-extraction-target="languageWarning">
+            <b>Warning</b>: Selecting more than eight text-extraction languages may have an adverse effect on the
+            speed and quality of recognition. Please reduce the number of languages.
+        </div>
+      </div>
+    </div>
+
+    <%= f.submit 'Submit', class: 'btn btn-primary' %>
+  <% end %>
+</div>
