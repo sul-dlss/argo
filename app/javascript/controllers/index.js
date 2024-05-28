@@ -24,6 +24,7 @@ import RegistrationItemRow from './registration_item_row_controller'
 import RegistrationTabs from './registration_tabs_controller'
 import ObjectReporter from './object_reporter'
 import CopyController from './copy_controller'
+import TextExtractionController from './text_extraction_controller'
 
 const application = Application.start()
 application.register('bulk-actions', BulkActions)
@@ -51,3 +52,4 @@ application.register('registration-item-row', RegistrationItemRow)
 application.register('registration-tabs', RegistrationTabs)
 application.register('object-reporter', ObjectReporter)
 application.register('copy', CopyController)
+application.register('text-extraction', TextExtractionController)

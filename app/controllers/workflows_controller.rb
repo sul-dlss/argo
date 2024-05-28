@@ -35,7 +35,7 @@ class WorkflowsController < ApplicationController
     wf_name = params[:wf]
 
     # check the workflow is present and active (not archived)
-    return redirect_to solr_document_path(cocina_object.externalIdentifier), flash: { error: "#{wf_name} already exists!" } if workflow_active?(wf_name, cocina_object.externalIdentifier, cocina_object.version)
+    return redirect_to solr_document_path(cocina_object.externalIdentifier), flash: { error: "#{wf_name} already exists!" } if helpers.workflow_active?(wf_name, cocina_object.externalIdentifier, cocina_object.version)
 
     WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
                                                         wf_name,
@@ -85,13 +85,6 @@ class WorkflowsController < ApplicationController
   private
 
   delegate :can_update_workflow?, to: :current_ability
-
-  # Fetches the workflow from the workflow service and checks to see if it's active
-  def workflow_active?(wf_name, druid, version)
-    client = WorkflowClientFactory.build
-    workflow = client.workflow(pid: druid, workflow_name: wf_name)
-    workflow.active_for?(version:)
-  end
 
   def build_show_presenter(workflow)
     return WorkflowXmlPresenter.new(xml: workflow.xml) if params[:raw]
