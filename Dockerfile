@@ -1,19 +1,19 @@
-FROM ruby:3.2.2-alpine
+FROM ruby:3.3.1-bookworm
 
-RUN apk add --update --no-cache \
-  build-base \
-  # speed up nokogiri gem installation
-  libxml2-dev \
-  libxslt-dev \
-  # needed for mysql2 dependency
-  mariadb-dev \
-  # needed for sqlite dependency
-  sqlite-dev \
-  # rails server cannot start without tzdata
-  tzdata \
-  yarn
+RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+        mariadb-client libmariadb-dev \
+        libxml2-dev \
+        sqlite3 \
+        # clang is required for openapi_parser and commonmarker
+        clang \
+        nodejs
 
 WORKDIR /app
+
+RUN npm install -g yarn
 
 RUN gem update --system && \
   gem install bundler
