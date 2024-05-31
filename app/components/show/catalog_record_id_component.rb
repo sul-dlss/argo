@@ -11,7 +11,7 @@ module Show
       @change_set.catalog_record_ids.presence&.join(', ') || 'None assigned'
     end
 
-    delegate :open?, to: :@version_service
+    delegate :open_and_not_assembling?, to: :@version_service
     delegate :id, to: :@change_set
     delegate :manage_label, to: CatalogRecordId
   end

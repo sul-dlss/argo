@@ -11,7 +11,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   end
   let(:rendered) { render_inline(component) }
   let(:open) { true }
-  let(:version_service) { instance_double(VersionService, open?: open) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: open, open?: open) }
   let(:edit_collection_button) { rendered.css("a[aria-label='Edit collections']") }
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }

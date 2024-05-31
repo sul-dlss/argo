@@ -12,5 +12,5 @@ class ContentsComponent < ApplicationComponent
     @cocina.respond_to?(:structural)
   end
 
-  delegate :open?, to: :@presenter
+  delegate :open_and_not_assembling?, to: :@presenter
 end

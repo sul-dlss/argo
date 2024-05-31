@@ -13,7 +13,7 @@ module Show
       helpers.links_to_collections_with_objs(document: @document, value: Array(@document.collection_ids))
     end
 
-    delegate :open?, to: :@version_service
+    delegate :open_and_not_assembling?, to: :@version_service
     delegate :id, to: :@document
   end
 end

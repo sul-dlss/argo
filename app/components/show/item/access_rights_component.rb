@@ -18,7 +18,7 @@ module Show
         val
       end
 
-      delegate :open?, to: :@version_service
+      delegate :open_and_not_assembling?, to: :@version_service
       delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :@change_set
 
       def humanize_value(val)

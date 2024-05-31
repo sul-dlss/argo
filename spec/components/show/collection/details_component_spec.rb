@@ -9,7 +9,7 @@ RSpec.describe Show::Collection::DetailsComponent, type: :component do
 
   let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id, catalog_record_ids: []) }
   let(:rendered) { render_inline(component) }
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true) }
   let(:doc) do
     SolrDocument.new('id' => 'druid:kv840xx0000',
                      SolrDocument::FIELD_REGISTERED_DATE => ['2012-04-05T01:00:04.148Z'],

@@ -7,7 +7,7 @@ module Show
       @version_service = version_service
     end
 
-    delegate :open?, to: :@version_service
+    delegate :open_and_not_assembling?, to: :@version_service
     delegate :id, :content_type, to: :@document
   end
 end

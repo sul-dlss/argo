@@ -22,7 +22,7 @@ RSpec.describe Show::Item::AccessRightsComponent, type: :component do
                             structural: {})
   end
   let(:rendered) { render_inline(component) }
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true) }
 
   context 'with view location' do
     let(:access) do

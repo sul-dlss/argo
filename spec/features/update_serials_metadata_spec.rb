@@ -12,7 +12,7 @@ RSpec.describe 'Update serials metadata', :js do
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
   end
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true, open?: true) }
 
   before do
     allow(VersionService).to receive(:new).and_return(version_service)

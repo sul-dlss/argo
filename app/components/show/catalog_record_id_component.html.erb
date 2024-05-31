@@ -1,6 +1,6 @@
 <%= catalog_record_id %>
 
-<% if open? %>
+<% if open_and_not_assembling? %>
   <%= link_to edit_item_catalog_record_id_path(item_id: id),
               aria: { label: manage_label },
               data: { controller: 'button', action: 'click->button#open' } do %>

@@ -1,6 +1,6 @@
 <%= source_id %>
 
-<% if open? && item? %>
+<% if open_and_not_assembling? && item? %>
   <%= link_to source_id_ui_item_path(id:),
               aria: { label: 'Change source id' },
               data: { controller: 'button', action: 'click->button#open' } do %>

@@ -10,7 +10,7 @@ RSpec.describe 'Edit rights' do
   let(:turbo_stream_headers) do
     { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}" }
   end
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true, open?: true) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)

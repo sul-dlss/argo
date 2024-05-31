@@ -34,7 +34,7 @@ RSpec.describe 'Add a workflow to an item' do
   let(:item_id) { 'druid:bg444xg6666' }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true) }
 
   before do
     allow(VersionService).to receive(:new).and_return(version_service)
