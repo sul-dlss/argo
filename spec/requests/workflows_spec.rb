@@ -130,7 +130,8 @@ RSpec.describe 'WorkflowsController' do
           expect(response).to have_http_status(:ok)
           expect(rendered.find_css('.detail > tbody > tr').size).to eq workflow_steps.count
           expect(rendered.find_css('#workflow-context').size).to eq 1
-          expect(response.body).to include 'Context: {&quot;requireOCR&quot;=&gt;true}'
+          expect(response.body).to include '<td>requireOCR</td>'
+          expect(response.body).to include '<td>true</td>'
         end
       end
     end
