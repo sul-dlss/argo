@@ -49,7 +49,7 @@ module ApplicationHelper
     current_page?(search_profile_path)
   end
 
-  def avaliable_ocr_languages
+  def avalaible_ocr_languages
     ABBYY_LANGUAGES.map { |lang| [lang, lang.gsub(/[ ()]/, '')] }
   end
 
