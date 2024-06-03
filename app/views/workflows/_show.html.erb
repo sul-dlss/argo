@@ -30,5 +30,22 @@
   </tbody>
 </table>
 <% if @presenter.workflow_context.present? %>
-  <div id="workflow-context">Context: <%= @presenter.workflow_context %></div>
+  <div id="workflow-context">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Workflow Variable</th>
+        <th scope="col">Workflow Setting</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @presenter.workflow_context.each do |key, value| %>
+        <tr>
+          <td><%= key %></td>
+          <td><%= value.is_a?(Array) ? value.join(', ') : value %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
 <% end %>
