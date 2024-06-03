@@ -90,7 +90,7 @@ module Show
       render ActionButton.new url: new_item_text_extraction_path(druid),
                               label: 'Text extraction',
                               open_modal: true,
-                              disabled: !open? && openable?
+                              disabled: !openable?
     end
 
     def ocrable?
