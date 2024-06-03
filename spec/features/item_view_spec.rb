@@ -44,7 +44,7 @@ RSpec.describe 'Item view', :js do
                                      release: true)
     ]
   end
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open?: true, openable?: false) }
 
   context 'when navigating to an object' do
     before do

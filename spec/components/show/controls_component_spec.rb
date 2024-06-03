@@ -101,7 +101,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
 
         expect(rendered.css('a').size).to eq(9)
-        expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, purge, republish, text extraction are disabled
+        expect(rendered.css('a.disabled').size).to eq 4 # create embargo, apply APO defaults, purge, republish
       end
     end
   end
