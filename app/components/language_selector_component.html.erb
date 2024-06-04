@@ -14,9 +14,9 @@
             </div>
           </div>
           <div id="text-extraction-languages" data-text-extraction-target="dropdownContent" class="dropdown-content d-none languages-group border rounded">
-              <% avalaible_ocr_languages.each do |language| %>
+              <% available_ocr_languages.each do |language| %>
                   <label class="d-block">
-                      <%= f.check_box 'text_extraction_languages', { multiple: true, data: { 'text-extraction-target': 'textExtractionLanguages', 'text-extraction-label': language[0], 'text-extraction-value': language[1], action: 'change->text-extraction#languageUpdate' } }, language[1], nil %>
+                      <%= form.check_box 'text_extraction_languages', { multiple: true, data: { 'text-extraction-target': 'textExtractionLanguages', 'text-extraction-label': language[0], 'text-extraction-value': language[1], action: 'change->text-extraction#languageUpdate' } }, language[1], nil %>
                       <%= language[0] %>
                   </label>
               <% end %>

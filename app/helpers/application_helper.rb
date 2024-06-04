@@ -48,8 +48,4 @@ module ApplicationHelper
   def profile_view?
     current_page?(search_profile_path)
   end
-
-  def avalaible_ocr_languages
-    ABBYY_LANGUAGES.map { |lang| [lang, lang.gsub(/[ ()]/, '')] }
-  end
 end

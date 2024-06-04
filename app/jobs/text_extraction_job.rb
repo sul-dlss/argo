@@ -20,6 +20,8 @@ class TextExtractionJob < GenericJob
 
       next failure.call('Text extraction is not possible for this object') unless text_extraction.possible?
 
+      next failure.call("#{text_extraction.wf_name} is already active") if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier, version: cocina_object.version, wf_name: text_extraction.wf_name)
+
       text_extraction.start
 
       success.call('Text extraction successfully started')

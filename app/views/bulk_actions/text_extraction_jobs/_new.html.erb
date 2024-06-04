@@ -13,7 +13,7 @@
     <span class='form-text'>
       Warning: Text extraction should only be performed on content types Image, Book, or Document/PDF.
     </span>
-    <%= render 'text_extraction/language_selector', f: %>
+    <%= render LanguageSelectorComponent.new(form: f) %>
     <%= render 'bulk_actions/druids', f: %>
     <%= render 'bulk_actions/common_fields', f: %>
   <% end %>

@@ -18,7 +18,7 @@ RSpec.describe TextExtractionJob do
   let(:document_client) { instance_double(Dor::Services::Client::Object, find: document) }
   let(:map_client) { instance_double(Dor::Services::Client::Object, find: map) }
   let(:languages) { ['English'] }
-  let(:text_extraction_document) { instance_double(TextExtraction, start: true, possible?: true) }
+  let(:text_extraction_document) { instance_double(TextExtraction, start: true, possible?: true, wf_name: 'ocrWF') }
   let(:text_extraction_map) { instance_double(TextExtraction, start: false, possible?: false) }
   let(:ability) { instance_double(Ability, can?: true) }
 

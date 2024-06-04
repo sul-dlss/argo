@@ -10,9 +10,7 @@
     <% end %>
   </div>
   <%= form_with url: item_text_extraction_path, class: 'col-md-4' do |f| %>
-
-    <%= render 'text_extraction/language_selector', f: %>
-
+    <%= render LanguageSelectorComponent.new(form: f) %>
     <%= f.submit 'Start OCR', class: 'btn btn-primary' %>
   <% end %>
 </div>
