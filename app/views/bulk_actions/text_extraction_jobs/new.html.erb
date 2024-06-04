@@ -1,3 +1,7 @@
 <turbo-frame id="bulk-action-form">
-  <%= render 'new' %>
+  <% if Settings.features.ocr_workflow %>
+    <%= render 'new' %>
+  <% else %>
+    <p>Text extraction job currently not available.</p>
+  <% end %>
 </turbo-frame>
