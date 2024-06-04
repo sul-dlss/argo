@@ -52,11 +52,4 @@ module ApplicationHelper
   def avalaible_ocr_languages
     ABBYY_LANGUAGES.map { |lang| [lang, lang.gsub(/[ ()]/, '')] }
   end
-
-  # Fetches the workflow from the workflow service and checks to see if it's active
-  def workflow_active?(wf_name, druid, version)
-    client = WorkflowClientFactory.build
-    workflow = client.workflow(pid: druid, workflow_name: wf_name)
-    workflow.active_for?(version:)
-  end
 end

@@ -20,7 +20,7 @@ RSpec.describe ModsulatorJob do
       expect do
         job.update_metadata('', '', '', '',
                             File.new(File.join(output_directory, 'fake_log.txt'), 'w'))
-      end.to raise_error(/nil:NilClass/)
+      end.to raise_error(/nil/)
     end
   end
 

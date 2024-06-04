@@ -17,25 +17,13 @@ class AddWorkflowJob < GenericJob
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       # check the workflow is present and active (not archived)
-      next failure.call("#{workflow_name} already exists") if workflow_active?(cocina_object.externalIdentifier,
-                                                                               cocina_object.version)
+      next failure.call("#{workflow_name} already exists") if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier,
+                                                                                               wf_name: workflow_name, version: cocina_object.version)
 
-      client.create_workflow_by_name(cocina_object.externalIdentifier,
-                                     workflow_name,
-                                     version: cocina_object.version)
+      WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
+                                                          workflow_name,
+                                                          version: cocina_object.version)
       success.call("started #{workflow_name}")
     end
-  end
-
-  private
-
-  # Fetches the workflow from the workflow service and checks to see if it's active
-  def workflow_active?(druid, version)
-    workflow = client.workflow(pid: druid, workflow_name:)
-    workflow.active_for?(version:)
-  end
-
-  def client
-    @client ||= WorkflowClientFactory.build
   end
 end

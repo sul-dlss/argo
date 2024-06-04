@@ -85,28 +85,12 @@ module Show
 
     def create_text_extraction
       return unless Settings.features.ocr_workflow
-      return unless ocrable? && !registered_only?
+      return unless TextExtraction.new(presenter.cocina).possible? && !registered_only?
 
       render ActionButton.new url: new_item_text_extraction_path(druid),
                               label: 'Text extraction',
                               open_modal: true,
                               disabled: !openable?
-    end
-
-    def ocrable?
-      cocina_model = presenter.cocina
-      return false if cocina_model.blank? || cocina_model.is_a?(NilModel)
-      return false unless doc.item? && resource_type_mapping.key?(cocina_model.type)
-
-      true
-    end
-
-    def resource_type_mapping
-      {
-        'https://cocina.sul.stanford.edu/models/book' => 'page',
-        'https://cocina.sul.stanford.edu/models/document' => 'document',
-        'https://cocina.sul.stanford.edu/models/image' => 'image'
-      }
     end
 
     def edit_apo

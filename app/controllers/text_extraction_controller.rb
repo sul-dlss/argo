@@ -7,22 +7,22 @@ class TextExtractionController < ApplicationController
 
   def create
     languages = params[:text_extraction_languages] || []
-    context = { runOCR: true, manuallyCorrectedOCR: false, ocrLanguages: languages }
-    wf_name = 'ocrWF'
+
+    text_extraction = TextExtraction.new(@cocina_object, languages:)
+
+    return redirect_to solr_document_path(@cocina_object.externalIdentifier), flash: { error: 'Text extraction not possible for this object' } unless text_extraction.possible?
+
+    wf_name = text_extraction.wf_name
 
     # check the workflow is present and active (not archived)
-    return redirect_to solr_document_path(@cocina_object.externalIdentifier), flash: { error: "#{wf_name} already exists!" } if helpers.workflow_active?(wf_name, @cocina_object.externalIdentifier, @cocina_object.version)
+    return redirect_to solr_document_path(@cocina_object.externalIdentifier), flash: { error: "#{wf_name} already exists!" } if WorkflowService.workflow_active?(druid: @cocina_object.externalIdentifier, version: @cocina_object.version, wf_name:)
 
-    WorkflowClientFactory.build.create_workflow_by_name(@cocina_object.externalIdentifier,
-                                                        wf_name,
-                                                        context:,
-                                                        version: @cocina_object.version)
+    text_extraction.start
 
     # Force a Solr update before redirection.
     Dor::Services::Client.object(@cocina_object.externalIdentifier).reindex
 
-    msg = "Added #{wf_name}"
-    redirect_to solr_document_path(@cocina_object.externalIdentifier), notice: msg
+    redirect_to solr_document_path(@cocina_object.externalIdentifier), notice: "Started text extraction workflow (#{wf_name})"
   end
 
   private
