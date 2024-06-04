@@ -36,7 +36,8 @@ class BulkAction < ApplicationRecord
                      SetRightsJob
                      ValidateCocinaDescriptiveJob
                      TrackingSheetReportJob
-                     ExportCocinaJsonJob]
+                     ExportCocinaJsonJob
+                     TextExtractionJob]
             }
 
   after_create :create_output_directory, :create_log_file

@@ -38,6 +38,12 @@ class WorkflowService
     false
   end
 
+  # Fetches the workflow from the workflow service and checks to see if it's active
+  # @return [Boolean] if the object has an active workflow
+  def self.workflow_active?(druid:, version:, wf_name:)
+    workflow_client.workflow(pid: druid, workflow_name: wf_name).active_for?(version:)
+  end
+
   # Get the workflow definition from the server so we know which processes should be present
   # TODO: This could be cached for better performance
   def self.definition_process_names(workflow_name)

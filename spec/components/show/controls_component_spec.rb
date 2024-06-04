@@ -12,7 +12,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true) }
-  let(:cocina) { instance_double(Cocina::Models::DRO, type: 'https://cocina.sul.stanford.edu/models/book') }
+  let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
 
   before do
     rendered
@@ -20,7 +20,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
   context 'when the object is a DRO the user can manage and no catalog record ID or embargo info' do
     let(:item_id) { 'druid:kv840xx0000' }
-
+    let(:dro) { true }
     let(:doc) do
       SolrDocument.new('id' => item_id,
                        'processing_status_text_ssi' => 'not registered',
@@ -109,6 +109,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   context 'when the object is an AdminPolicy the user can manage' do
     let(:view_apo_id) { 'druid:zt570qh4444' }
     let(:open) { true }
+    let(:dro) { false }
 
     let(:doc) do
       SolrDocument.new('id' => view_apo_id,
@@ -136,6 +137,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   context 'when the object is a Collection the user can manage' do
     let(:view_collection_id) { 'druid:kv840xx0000' }
     let(:open) { true }
+    let(:dro) { false }
 
     let(:doc) do
       SolrDocument.new('id' => view_collection_id,
@@ -176,6 +178,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     let(:open) { true }
     let(:item_id) { 'druid:kv840xx0000' }
+    let(:dro) { true }
 
     context 'when registered' do
       let(:doc) do

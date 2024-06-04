@@ -1,0 +1,20 @@
+<div data-controller='text-extraction'>
+  <%= form_with url: text_extraction_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+    <%= render 'bulk_actions/errors' %>
+
+    <span class='help-block'>
+      Start text extraction (i.e. OCR) workflow for the selected items.
+      <div class="mt-2 alert alert-warning">
+        <p>Auto-generating OCR files will not overwrite any existing OCR files that have been corrected to comply with accessibility standards. <strong>Any uncorrected OCR files will be overwritten.</strong> The originally-deposited contents will not be overwritten.</p>
+        <p>Warning: Avoid auto-generating OCR files for contents that do not contain any text, as it may have adverse effects.</p>
+      </div>
+    </span>
+
+    <span class='form-text'>
+      Warning: Text extraction should only be performed on content types Image, Book, or Document/PDF.
+    </span>
+    <%= render 'text_extraction/language_selector', f: %>
+    <%= render 'bulk_actions/druids', f: %>
+    <%= render 'bulk_actions/common_fields', f: %>
+  <% end %>
+</div>

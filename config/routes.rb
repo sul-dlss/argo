@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         resource :refresh_mods_job, only: %i[new create]
         resource :content_type_job, only: %i[new create]
         resource :collection_job, only: %i[new create]
+        resource :text_extraction_job, only: %i[new create]
 
         resource :virtual_object_job, only: %i[new create]
         resource :catalog_record_id_and_barcode_csv_job, only: %i[new create]
