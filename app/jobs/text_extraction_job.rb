@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# Job to start ocrWF for objects
+# Job to start text extraction workflow for objects
 class TextExtractionJob < GenericJob
   ##
   # A job that allows a user to specify a list of druids of objects to start the text extraction workflow for
