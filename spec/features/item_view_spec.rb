@@ -38,10 +38,10 @@ RSpec.describe 'Item view', :js do
   end
   let(:release_tags_list) do
     [
-      Cocina::Models::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed',
-                                     release: false),
-      Cocina::Models::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-13T20:00Z', who: 'pjreed',
-                                     release: true)
+      Dor::Services::Client::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed',
+                                            release: false),
+      Dor::Services::Client::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-13T20:00Z', who: 'pjreed',
+                                            release: true)
     ]
   end
   let(:version_service) { instance_double(VersionService, open?: true) }

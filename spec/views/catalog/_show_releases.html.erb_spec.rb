@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe 'catalog/_show_releases' do
   let(:release_tags) do
     [
-      Cocina::Models::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed',
-                                     release: false),
-      Cocina::Models::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-13T20:00Z', who: 'pjreed',
-                                     release: true)
+      Dor::Services::Client::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed',
+                                            release: false),
+      Dor::Services::Client::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-13T20:00Z', who: 'pjreed',
+                                            release: true)
     ]
   end
 

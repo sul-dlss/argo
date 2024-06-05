@@ -36,7 +36,7 @@ class ReleaseObjectJob < GenericJob
   private
 
   def new_tag
-    Cocina::Models::ReleaseTag.new(
+    Dor::Services::Client::ReleaseTag.new(
       to: manage_release['to'],
       who: manage_release['who'],
       what: manage_release['what'],
