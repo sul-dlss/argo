@@ -20,13 +20,13 @@ class TextExtractionJob < GenericJob
 
       next failure.call('Text extraction is not possible for this object') unless text_extraction.possible?
 
-      next failure.call("#{text_extraction.wf_name} is already active for this version") if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier, version: cocina_object.version, wf_name: text_extraction.wf_name)
+      next failure.call("#{text_extraction.wf_name} already exists for this version") if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier, version: cocina_object.version, wf_name: text_extraction.wf_name)
 
       next failure.call('Object is not currently openable') unless VersionService.openable?(druid: cocina_object.externalIdentifier)
 
       text_extraction.start
 
-      success.call('Text extraction successfully started')
+      success.call("#{text_extraction.wf_name} successfully started")
     end
   end
 end
