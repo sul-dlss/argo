@@ -16,7 +16,7 @@ RSpec.describe 'TextExtractions', :js do
     it 'shows text extraction form with languages' do
       visit "/items/#{druid}/text_extraction/new"
 
-      expect(page).to have_css 'h3', text: 'Text Extraction'
+      expect(page).to have_css 'h3', text: 'Text extraction'
       expect(page).to have_content 'Avoid auto-generating OCR files for PDF documents'
       expect(page).to have_css 'div', text: 'Content language'
 

@@ -28,7 +28,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Update governing APO', new_governing_apo_job_path(search_of_druids)],
         ['Apply APO defaults', new_apply_apo_defaults_job_path(search_of_druids)],
         ['Set object rights', new_rights_job_path(search_of_druids)],
-        ['Run Text Extraction', new_text_extraction_job_path(search_of_druids)],
+        ['Start text extraction', new_text_extraction_job_path(search_of_druids)],
         ['Edit license and rights statements', new_license_and_rights_statement_job_path(search_of_druids)],
         ["Edit #{CatalogRecordId.label}s and barcodes", new_catalog_record_id_and_barcode_job_path(search_of_druids)],
         ["Refresh MODS from #{CatalogRecordId.label}", new_refresh_mods_job_path(search_of_druids)],
