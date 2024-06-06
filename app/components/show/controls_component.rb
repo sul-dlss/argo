@@ -89,8 +89,7 @@ module Show
 
       render ActionButton.new url: new_item_text_extraction_path(druid),
                               label: 'Text extraction',
-                              open_modal: true,
-                              disabled: !openable?
+                              open_modal: true
     end
 
     def edit_apo
