@@ -71,7 +71,9 @@ end
 group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
-  gem 'cocina-models', '~> 0.69' # only need RSpec matchers here; don't need to pin to patch level
+  # gem 'cocina-models', '~> 0.69' # only need RSpec matchers here; don't need to pin to patch level
+  # This is only for testing
+  gem 'cocina-models', git: 'https://github.com/sul-dlss/cocina-models', branch: 't714-remove-releaseTags'
   gem 'rspec_junit_formatter' # needed for test coverage in CircleCI
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov'

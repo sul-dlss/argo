@@ -1,3 +1,24 @@
+GIT
+  remote: https://github.com/sul-dlss/cocina-models
+  revision: ff6e235f4360a182acd540d22ced677199b36520
+  branch: t714-remove-releaseTags
+  specs:
+    cocina-models (0.97.0)
+      activesupport
+      deprecation
+      dry-struct (~> 1.0)
+      dry-types (~> 1.1)
+      edtf
+      equivalent-xml
+      i18n
+      jsonpath
+      nokogiri
+      openapi3_parser
+      openapi_parser (~> 1.0)
+      super_diff
+      thor
+      zeitwerk (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -141,21 +162,6 @@ GEM
       capybara (>= 1.0, < 4)
       launchy
     childprocess (5.0.0)
-    cocina-models (0.97.0)
-      activesupport
-      deprecation
-      dry-struct (~> 1.0)
-      dry-types (~> 1.1)
-      edtf
-      equivalent-xml
-      i18n
-      jsonpath
-      nokogiri
-      openapi3_parser
-      openapi_parser (~> 1.0)
-      super_diff
-      thor
-      zeitwerk (~> 2.1)
     coderay (1.1.3)
     commonmarker (1.1.4)
       rb_sys (~> 0.9)
@@ -677,7 +683,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   capybara-screenshot
-  cocina-models (~> 0.69)
+  cocina-models!
   coderay
   config
   cssbundling-rails (~> 1.1)
