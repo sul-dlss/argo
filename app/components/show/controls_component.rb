@@ -89,7 +89,8 @@ module Show
 
       render ActionButton.new url: new_item_text_extraction_path(druid),
                               label: 'Text extraction',
-                              open_modal: true
+                              open_modal: true,
+                              disabled: in_accessioning?
     end
 
     def edit_apo
@@ -150,6 +151,10 @@ module Show
 
     def registered_only?
       ['Registered', 'Unknown Status'].include?(doc['processing_status_text_ssi'])
+    end
+
+    def in_accessioning?
+      ['In accessioning'].include?(doc['processing_status_text_ssi'])
     end
 
     def published?
