@@ -90,7 +90,7 @@ module Show
       render ActionButton.new url: new_item_text_extraction_path(druid),
                               label: 'Text extraction',
                               open_modal: true,
-                              disabled: in_accessioning?
+                              disabled: in_accessioning? || workflow_errors?
     end
 
     def edit_apo
@@ -154,7 +154,11 @@ module Show
     end
 
     def in_accessioning?
-      ['In accessioning'].include?(doc['processing_status_text_ssi'])
+      doc['processing_status_text_ssi']&.include?('In accessioning')
+    end
+
+    def workflow_errors?
+      doc[SolrDocument::FIELD_WORKFLOW_ERRORS].present?
     end
 
     def published?
