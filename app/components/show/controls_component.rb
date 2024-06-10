@@ -83,6 +83,16 @@ module Show
                               disabled: button_disabled?
     end
 
+    def create_text_extraction
+      return unless Settings.features.ocr_workflow
+      return unless TextExtraction.new(presenter.cocina).possible? && !registered_only?
+
+      render ActionButton.new url: new_item_text_extraction_path(druid),
+                              label: 'Text extraction',
+                              open_modal: true,
+                              disabled: in_accessioning? || workflow_errors?
+    end
+
     def edit_apo
       render ActionButton.new(
         url: edit_apo_path(druid),
@@ -141,6 +151,14 @@ module Show
 
     def registered_only?
       ['Registered', 'Unknown Status'].include?(doc['processing_status_text_ssi'])
+    end
+
+    def in_accessioning?
+      doc['processing_status_text_ssi']&.include?('In accessioning')
+    end
+
+    def workflow_errors?
+      doc[SolrDocument::FIELD_WORKFLOW_ERRORS].present?
     end
 
     def published?

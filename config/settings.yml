@@ -93,3 +93,6 @@ tech_md_service:
 redis_url: "redis://localhost:6379/"
 
 google_analytics: false
+
+features:
+  ocr_workflow: true

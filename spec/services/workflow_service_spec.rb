@@ -119,4 +119,31 @@ RSpec.describe WorkflowService do
       end
     end
   end
+
+  describe '#active_workflow?' do
+    let(:version) { 2 }
+    let(:wf_name) { 'assemblyWF' }
+
+    let(:workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: active_for) }
+
+    before do
+      allow(workflow_client).to receive(:workflow).with(pid: druid, workflow_name: wf_name).and_return(workflow)
+    end
+
+    context 'when not active' do
+      let(:active_for) { false }
+
+      it 'returns false' do
+        expect(described_class.workflow_active?(druid:, version:, wf_name:)).to be false
+      end
+    end
+
+    context 'when active' do
+      let(:active_for) { true }
+
+      it 'returns true' do
+        expect(described_class.workflow_active?(druid:, version:, wf_name:)).to be true
+      end
+    end
+  end
 end
