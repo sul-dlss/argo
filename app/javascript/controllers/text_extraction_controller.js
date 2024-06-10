@@ -7,18 +7,21 @@ export default class extends Controller {
   static values = { languages: Array }
 
   connect () {
+    // Clear the form if the page is refreshed.
+    // When the form has been filled out
+    // and the page is refreshed, without this line the form stays filled out.
     this.element.querySelector('form').reset()
   }
 
   languageDropdown (event) {
-    const ishidden = Array.from(this.dropdownContentTarget.classList).includes('d-none')
+    const ishidden = this.dropdownContentTarget.classList.contains('d-none')
     this.dropdownContentTarget.classList.toggle('d-none')
     this.textExtractionDropdownTarget.querySelector('#caret').innerHTML = `<i class="bi bi-caret-${ishidden ? 'up' : 'down'}">`
     event.preventDefault()
   }
 
   clickOutside (event) {
-    const isshown = !Array.from(this.dropdownContentTarget.classList).includes('d-none')
+    const isshown = !this.dropdownContentTarget.classList.contains('d-none')
     const inselectedlangs = event.target.classList.contains('pill-close')
     const incontainer = this.element.querySelector('form').contains(event.target)
 
@@ -53,7 +56,6 @@ export default class extends Controller {
   }
 
   search (event) {
-    console.log('dalfkjdaljfldskj')
     const searchterm = event.target.value.replace(/[^\w\s]/gi, '').toLowerCase()
     this.dropdownContentTarget.classList.remove('d-none')
     this.textExtractionLanguagesTargets.forEach(target => {
