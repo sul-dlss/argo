@@ -1,6 +1,6 @@
 <turbo-frame id="use_statement">
   <%= use_statement %>
-  <% if open? %>
+  <% if open_and_not_assembling? %>
     <%= link_to edit_use_statement_item_path(id:), aria: { label: 'Edit use and reproduction' } do %>
       <span class="bi-pencil"></span>
     <% end %>

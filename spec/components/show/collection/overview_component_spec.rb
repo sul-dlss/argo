@@ -27,7 +27,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
                                    })
   end
   let(:rendered) { render_inline(component) }
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true, open?: true) }
 
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }

@@ -1,6 +1,6 @@
 <%= collection %>
 
-<% if open? %>
+<% if open_and_not_assembling? %>
   <%= link_to collection_ui_item_path(id:),
               aria: { label: 'Edit collections' },
               data: { controller: 'button', action: 'click->button#open' } do %>

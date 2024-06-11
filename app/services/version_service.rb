@@ -20,6 +20,10 @@ class VersionService
       new(...).open?
     end
 
+    def open_and_not_assembling?(...)
+      new(...).open_and_not_assembling?
+    end
+
     def assembling?(...)
       new(...).assembling?
     end
@@ -48,6 +52,10 @@ class VersionService
 
   def initialize(druid:)
     @druid = druid
+  end
+
+  def open_and_not_assembling?
+    open? && !assembling?
   end
 
   private

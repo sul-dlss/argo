@@ -8,7 +8,7 @@
     <div class="accordion-body" data-controller="structural">
       <div class="mb-3">
         <%= render DownloadAllButtonComponent.new(cocina: @cocina, document: @document) %>
-        <% if open? %>
+        <% if open_and_not_assembling? %>
           <%= button_tag class: 'btn btn-link float-end', data: { action: 'click->structural#open' } do %>
             <span class="bi-upload"></span> Upload CSV
           <% end %>

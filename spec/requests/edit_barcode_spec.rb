@@ -13,7 +13,7 @@ RSpec.describe 'Edit barcode' do
     { 'Accept' => "#{Mime[:turbo_stream]},#{Mime[:html]}",
       'Turbo-Frame' => 'edit_copyright' }
   end
-  let(:version_service) { instance_double(VersionService, open?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true) }
 
   before do
     allow(VersionService).to receive(:new).and_return(version_service)

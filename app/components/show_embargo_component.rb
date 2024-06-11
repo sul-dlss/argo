@@ -7,14 +7,14 @@ class ShowEmbargoComponent < ApplicationComponent
   end
 
   delegate :id, :embargoed?, :embargo_release_date, to: :@solr_document
-  delegate :open?, to: :@presenter
+  delegate :open_and_not_assembling?, to: :@presenter
 
   def render?
     embargoed? && embargo_release_date.present?
   end
 
   def edit_embargo
-    return unless open?
+    return unless open_and_not_assembling?
 
     link_to edit_item_embargo_path(id),
             class: 'text-white',
