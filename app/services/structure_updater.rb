@@ -76,6 +76,8 @@ class StructureUpdater
       hasMimeType: row['mimetype'],
       use: row['role'],
       languageTag: row['file_language'],
+      sdrGeneratedText: ActiveModel::Type::Boolean.new.cast(row['sdr_generated_text']) || false,
+      correctedForAccessibility: ActiveModel::Type::Boolean.new.cast(row['corrected_for_accessibility']) || false,
       administrative: existing_file.administrative.new(
         publish: row['publish'] == 'yes',
         shelve: row['shelve'] == 'yes',

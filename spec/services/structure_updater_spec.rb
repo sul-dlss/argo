@@ -208,11 +208,11 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that has file properties changed' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/one,,en-US
         #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/two,transcription,
         #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/three,,
-        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,,yes,yes,no,location-based,location-based,music,image/four,,
+        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,,yes,yes,no,location-based,location-based,music,image/four,,,true,true
       CSV
     end
 
@@ -244,6 +244,8 @@ RSpec.describe StructureUpdater do
       expect(new_files.map(&:filename)).to eq(['bb045jk9908_0001.tiff', 'bb045jk9908_0001.jp2',
                                                'bb045jk9908_0002.tiff', 'CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx'])
       expect(new_files.map(&:label)).to eq(['bb045jk9908_0001.tiff', 'bb045jk9908_0001.jp2', 'bb045jk9908_0002.tiff', ''])
+      expect(new_files.map(&:sdrGeneratedText)).to eq [false, false, false, true]
+      expect(new_files.map(&:correctedForAccessibility)).to eq [false, false, false, true]
     end
 
     it 'produces valid cocina' do
@@ -254,7 +256,7 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that has fileset properties changed' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
@@ -283,7 +285,7 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that adds filesets' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 2,object,2,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 3,page,3,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
@@ -309,7 +311,7 @@ RSpec.describe StructureUpdater do
   context 'with valid csv that combines filesets' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 1,page,1,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,stanford,,image/tiff,
@@ -330,7 +332,7 @@ RSpec.describe StructureUpdater do
   context 'with invalid csv' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Image 1,image,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,,image/tiff,
         #{bare_druid},Image 1,image,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,,image/jp2,
         #{bare_druid},Image 2,image,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,,image/tiff,
@@ -352,7 +354,7 @@ RSpec.describe StructureUpdater do
   context 'with switching preservation from no to yes for a file in the csv' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
@@ -370,7 +372,7 @@ RSpec.describe StructureUpdater do
   context 'with specify location-based rights and no location' do
     let(:csv) do
       <<~CSV
-        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,,image/tiff,
         #{bare_druid},Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
         #{bare_druid},Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,,image/tiff,
