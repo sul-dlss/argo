@@ -11,8 +11,9 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, open_and_not_processing?: open) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, open_and_not_processing?: open, text_extracting?: text_extracting) }
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
+  let(:text_extracting) { false }
 
   before do
     rendered
@@ -111,6 +112,16 @@ RSpec.describe Show::ControlsComponent, type: :component do
     context 'when the object is in accessioning' do
       let(:open) { false }
       let(:processing_status) { 'V2 In accessioning' }
+
+      it 'the text extraction button exists but is disabled' do
+        expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
+        expect(page).to have_css 'a.disabled', text: 'Text extraction'
+      end
+    end
+
+    context 'when the object is text extracting' do
+      let(:open) { false }
+      let(:text_extracting) { true }
 
       it 'the text extraction button exists but is disabled' do
         expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
