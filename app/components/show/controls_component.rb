@@ -43,7 +43,7 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :open?, :openable?, :open_and_not_processing?, to: :presenter
+    delegate :open?, :openable?, :open_and_not_processing?, :text_extracting?, to: :presenter
 
     def button_disabled?
       !open_and_not_processing?
@@ -90,7 +90,7 @@ module Show
       render ActionButton.new url: new_item_text_extraction_path(druid),
                               label: 'Text extraction',
                               open_modal: true,
-                              disabled: in_accessioning? || workflow_errors?
+                              disabled: in_accessioning? || workflow_errors? || text_extracting?
     end
 
     def edit_apo
