@@ -43,10 +43,10 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :open?, :openable?, :open_and_not_assembling?, to: :presenter
+    delegate :open?, :openable?, :open_and_not_processing?, to: :presenter
 
     def button_disabled?
-      !open_and_not_assembling?
+      !open_and_not_processing?
     end
 
     def collection_button_disabled?

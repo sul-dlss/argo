@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ShowEmbargoComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document:, open_and_not_assembling?: open) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document:, open_and_not_processing?: open) }
 
   describe 'embargo with release date' do
     let(:document) do

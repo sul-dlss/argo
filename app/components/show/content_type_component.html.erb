@@ -1,6 +1,6 @@
 <%= content_type %>
 
-<% if open_and_not_assembling? %>
+<% if open_and_not_processing? %>
   <%= link_to edit_item_content_type_path(item_id: id),
               aria: { label: 'Set content type' },
               data: { controller: 'button', action: 'click->button#open' } do %>

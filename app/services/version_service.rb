@@ -20,12 +20,16 @@ class VersionService
       new(...).open?
     end
 
-    def open_and_not_assembling?(...)
-      new(...).open_and_not_assembling?
+    def open_and_not_processing?(...)
+      new(...).open_and_not_processing?
     end
 
     def assembling?(...)
       new(...).assembling?
+    end
+
+    def text_extracting?(...)
+      new(...).text_extracting?
     end
 
     def accessioning?(...)
@@ -48,14 +52,14 @@ class VersionService
   attr_reader :druid
 
   delegate :close, :open, to: :version_client
-  delegate :open?, :openable?, :assembling?, :accessioning?, :closed?, :closeable?, :version, to: :status
+  delegate :open?, :openable?, :assembling?, :text_extracting?, :accessioning?, :closed?, :closeable?, :version, to: :status
 
   def initialize(druid:)
     @druid = druid
   end
 
-  def open_and_not_assembling?
-    open? && !assembling?
+  def open_and_not_processing?
+    open? && !assembling? && !text_extracting?
   end
 
   private

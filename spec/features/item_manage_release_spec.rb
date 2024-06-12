@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
-  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_processing?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }

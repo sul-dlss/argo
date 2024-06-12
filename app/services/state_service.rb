@@ -23,8 +23,8 @@ class StateService
     # This item is being accessioned, so is locked but cannot currently be unlocked or edited
     return STATES[:lock_inactive] if closed? && !openable?
 
-    # This item is being assembled, so is locked but cannot currently be unlocked or edited
-    return STATES[:lock_assembling] if assembling?
+    # This item is being assembled or text extracted, so is locked but cannot currently be unlocked or edited
+    return STATES[:lock_assembling] if assembling? || text_extracting?
 
     # This item is registered, so it can be edited, but cannot currently be moved to a locked state
     STATES[:unlock_inactive] # if open? && !closeable?
@@ -38,5 +38,5 @@ class StateService
     @version_service ||= VersionService.new(druid:)
   end
 
-  delegate :open?, :openable?, :closed?, :closeable?, :assembling?, :version, to: :version_service
+  delegate :open?, :openable?, :closed?, :closeable?, :assembling?, :text_extracting?, :version, to: :version_service
 end

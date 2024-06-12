@@ -58,7 +58,7 @@ RSpec.describe VersionService do
 
   describe 'status methods' do
     it 'delegates to the version client' do
-      %i[open? openable? assembling? accessioning? closed? closeable? version].each do |method|
+      %i[open? openable? assembling? text_extracting? accessioning? closed? closeable? version].each do |method|
         allow(status).to receive(method)
         service.send(method)
         expect(status).to have_received(method).once

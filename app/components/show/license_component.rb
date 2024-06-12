@@ -15,7 +15,7 @@ module Show
       value.fetch(:label)
     end
 
-    delegate :open_and_not_assembling?, to: :@version_service
+    delegate :open_and_not_processing?, to: :@version_service
     delegate :id, to: :@change_set
   end
 end

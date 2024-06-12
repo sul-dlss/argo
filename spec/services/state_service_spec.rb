@@ -15,9 +15,9 @@ RSpec.describe StateService do
   end
 
   describe '#object_state' do
-    context 'when object is open, not assembling, but not closeable' do
+    context 'when object is open, not assembling, not text extracting, but not closeable' do
       before do
-        allow(version_service).to receive_messages(open?: true, closeable?: false, closed?: false, assembling?: false)
+        allow(version_service).to receive_messages(open?: true, closeable?: false, closed?: false, assembling?: false, text_extracting?: false)
       end
 
       it 'returns unlock_inactive' do
@@ -27,7 +27,17 @@ RSpec.describe StateService do
 
     context 'when object is open and assembling' do
       before do
-        allow(version_service).to receive_messages(open?: true, closeable?: false, closed?: false, assembling?: true)
+        allow(version_service).to receive_messages(open?: true, closeable?: false, closed?: false, assembling?: true, text_extracting?: false)
+      end
+
+      it 'returns unlock_inactive' do
+        expect(service.object_state).to eq :lock_assembling
+      end
+    end
+
+    context 'when object is open and text extracting' do
+      before do
+        allow(version_service).to receive_messages(open?: true, closeable?: false, closed?: false, assembling?: false, text_extracting?: true)
       end
 
       it 'returns unlock_inactive' do

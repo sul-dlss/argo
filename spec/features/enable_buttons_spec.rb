@@ -17,7 +17,7 @@ RSpec.describe 'Enable buttons' do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:item_id) { 'druid:hj185xx2222' }
   let(:state_service) { instance_double(StateService, object_state: :unlock) }
-  let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true) }
+  let(:version_service) { instance_double(VersionService, open_and_not_processing?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
