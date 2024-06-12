@@ -1,4 +1,4 @@
-FROM solr:8.11.2
+FROM solr:9.6.1
 
 COPY solr_conf/conf/* /myconfig/
 
