@@ -36,8 +36,10 @@ RSpec.describe 'TextExtractions', :js do
     let(:object_client) { instance_double(Dor::Services::Client::Object, reindex: true) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow:, create_workflow_by_name: nil, lifecycle: Time.zone.now) }
     let(:workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
+    let(:version_service) { instance_double(VersionService, open?: true) }
 
     before do
+      allow(VersionService).to receive(:new).and_return(version_service)
       allow(WorkflowClientFactory).to receive(:build).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
