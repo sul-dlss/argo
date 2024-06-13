@@ -11,10 +11,10 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, assembling?: assembling, open_and_not_assembling?: open) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, open_and_not_assembling?: open_and_not_assembling) }
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
-  let(:assembling) { false }
   let(:open) { false }
+  let(:open_and_not_assembling) { false }
 
   before do
     rendered
@@ -39,6 +39,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     context 'when the object is unlocked' do
       let(:open) { true }
+      let(:open_and_not_assembling) { true }
 
       it 'draws the buttons' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
@@ -119,7 +120,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when the object is assembling' do
-      let(:assembling) { true }
+      let(:open_and_not_assembling) { false }
+      let(:open) { true }
 
       it 'the text extraction button exists but is disabled' do
         expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
@@ -159,6 +161,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   context 'when the object is a Collection the user can manage' do
     let(:view_collection_id) { 'druid:kv840xx0000' }
     let(:open) { true }
+    let(:open_and_not_assembling) { true }
     let(:dro) { false }
 
     let(:doc) do
