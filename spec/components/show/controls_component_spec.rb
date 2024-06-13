@@ -11,8 +11,10 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, open_and_not_assembling?: open) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, assembling?: assembling, open_and_not_assembling?: open) }
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
+  let(:assembling) { false }
+  let(:open) { false }
 
   before do
     rendered
@@ -87,8 +89,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when the object is locked' do
-      let(:open) { false }
-
       it 'the embargo and apply APO buttons are disabled' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
         expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
@@ -109,7 +109,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when the object is in accessioning' do
-      let(:open) { false }
       let(:processing_status) { 'V2 In accessioning' }
 
       it 'the text extraction button exists but is disabled' do
@@ -118,8 +117,16 @@ RSpec.describe Show::ControlsComponent, type: :component do
       end
     end
 
+    context 'when the object is assembling' do
+      let(:assembling) { true }
+
+      it 'the text extraction button exists but is disabled' do
+        expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
+        expect(page).to have_css 'a.disabled', text: 'Text extraction'
+      end
+    end
+
     context 'when the object has workflow errors' do
-      let(:open) { false }
       let(:workflow_errors) { 'ocrWF:ocr-create:bad stuff' }
 
       it 'the text extraction button exists but is disabled' do
@@ -244,7 +251,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when accessioned' do
-      let(:open) { false }
       let(:doc) do
         SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'V1 Accessioned')
       end
@@ -276,7 +282,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     let(:item_id) { 'druid:kv840xx0000' }
     let(:dro) { true }
-    let(:open) { false }
 
     context 'when published date' do
       let(:doc) do
@@ -300,7 +305,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     let(:item_id) { 'druid:kv840xx0000' }
     let(:dro) { true }
-    let(:open) { false }
 
     context 'when workflow errors exist' do
       let(:doc) do
