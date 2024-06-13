@@ -6,6 +6,8 @@ class TextExtractionController < ApplicationController
   def new; end
 
   def create
+    return redirect_to solr_document_path(@cocina_object.externalIdentifier), flash: { error: 'Object is not open' } unless VersionService.open?(druid: @cocina_object.externalIdentifier)
+
     languages = params[:text_extraction_languages] || []
 
     text_extraction = TextExtraction.new(@cocina_object, languages:)

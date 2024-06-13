@@ -102,9 +102,10 @@ RSpec.describe Show::ControlsComponent, type: :component do
         # these buttons are disabled since object is locked
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
+        expect(page).to have_css 'a.disabled', text: 'Text extraction'
 
         expect(rendered.css('a').size).to eq(9)
-        expect(rendered.css('a.disabled').size).to eq 4 # create embargo, apply APO defaults, purge, republish
+        expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, text extraction, purge, republish
       end
     end
 
@@ -119,15 +120,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     context 'when the object is assembling' do
       let(:assembling) { true }
-
-      it 'the text extraction button exists but is disabled' do
-        expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
-        expect(page).to have_css 'a.disabled', text: 'Text extraction'
-      end
-    end
-
-    context 'when the object has workflow errors' do
-      let(:workflow_errors) { 'ocrWF:ocr-create:bad stuff' }
 
       it 'the text extraction button exists but is disabled' do
         expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
@@ -292,29 +284,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when not published date' do
-      let(:doc) do
-        SolrDocument.new(id: item_id)
-      end
-
-      it { is_expected.to be false }
-    end
-  end
-
-  describe '#workflow_errors?' do
-    subject { component.send(:workflow_errors?) }
-
-    let(:item_id) { 'druid:kv840xx0000' }
-    let(:dro) { true }
-
-    context 'when workflow errors exist' do
-      let(:doc) do
-        SolrDocument.new(:id => item_id, SolrDocument::FIELD_WORKFLOW_ERRORS => 'ocrWF:ocr-create:bad stuff')
-      end
-
-      it { is_expected.to be true }
-    end
-
-    context 'when workflow errors do not exist' do
       let(:doc) do
         SolrDocument.new(id: item_id)
       end
