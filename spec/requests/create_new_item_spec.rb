@@ -129,7 +129,7 @@ RSpec.describe 'Create a new item' do
         '"label":"test parameters for registration","version":1,' \
         '"access":{"view":"world","download":"world","controlledDigitalLending":false},' \
         '"administrative":' \
-        '{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
+        '{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
         '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
         '"isMemberOf":["druid:hv992ry7777"]}}'
     end
@@ -193,7 +193,7 @@ RSpec.describe 'Create a new item' do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
         '"label":"test parameters for registration","version":1,' \
         '"access":{"view":"stanford","download":"stanford","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
+        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
         '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
         '"isMemberOf":["druid:hv992ry7777"]}}'
     end
@@ -267,7 +267,7 @@ RSpec.describe 'Create a new item' do
         '"label":"test parameters for registration","version":1,' \
         '"access":{"view":"location-based","download":"location-based","location":' \
         '"music","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},' \
+        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
         '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
         '"structural":{"contains":[],"hasMemberOrders":[{"members":[],' \
         '"viewingDirection":"left-to-right"}],"isMemberOf":["druid:hv992ry7777"]}}'
@@ -338,7 +338,7 @@ RSpec.describe 'Create a new item' do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
         '"label":"test parameters for registration","version":1,' \
         '"access":{"view":"world","download":"none","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
+        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
         '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[{"members":[],' \
         '"viewingDirection":"right-to-left"}],"isMemberOf":["druid:hv992ry7777"]}}'
     end
@@ -402,7 +402,7 @@ RSpec.describe 'Create a new item' do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
         '"label":"test parameters for registration","version":1,' \
         '"access":{"view":"dark","download":"none","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},' \
+        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
         '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],' \
         '"hasMemberOrders":[],"isMemberOf":["druid:hv992ry7777"]}}'
     end
@@ -509,7 +509,7 @@ RSpec.describe 'Create a new item' do
       "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.book}\"," \
         '"label":"test parameters for registration","version":1,"access":' \
         '{"view":"stanford","download":"none","controlledDigitalLending":true},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
+        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
         '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
         '"isMemberOf":["druid:hv992ry7777"]}}'
     end
