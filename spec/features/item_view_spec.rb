@@ -122,16 +122,7 @@ RSpec.describe 'Item view', :js do
               download: 'world'
             },
             administrative: {
-              hasAdminPolicy: 'druid:qc410yz8746',
-              releaseTags: [
-                {
-                  release: true,
-                  what: 'self',
-                  to: 'Searchworks',
-                  who: 'pjreed',
-                  date: '2017-10-20T15:42:15Z'
-                }
-              ]
+              hasAdminPolicy: 'druid:qc410yz8746'
             },
             description: {
               title: [

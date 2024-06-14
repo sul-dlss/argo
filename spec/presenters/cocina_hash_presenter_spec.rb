@@ -38,8 +38,7 @@ RSpec.describe CocinaHashPresenter do
                                  view: 'dark'
                                },
                                administrative: {
-                                 hasAdminPolicy: 'druid:hv992ry2431',
-                                 releaseTags: []
+                                 hasAdminPolicy: 'druid:hv992ry2431'
                                },
                                identification: {
                                  catalogLinks: []
