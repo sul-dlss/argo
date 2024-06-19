@@ -95,4 +95,4 @@ redis_url: "redis://localhost:6379/"
 google_analytics: false
 
 features:
-  ocr_workflow: true
+  ocr_workflow: false
