@@ -171,6 +171,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.0)
       railties (>= 6.0.0)
+    csv (3.2.8)
     date (3.3.4)
     debug (1.9.2)
       irb (~> 1.10)
@@ -679,6 +680,7 @@ DEPENDENCIES
   coderay
   config
   cssbundling-rails (~> 1.1)
+  csv
   debug
   devise
   devise-remote-user (~> 1.0)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'csv'
-
 # Runs a query against solr and returns the results.
 # Does exactly what blacklight does, paginates the solr requests until all results
 # have been received
