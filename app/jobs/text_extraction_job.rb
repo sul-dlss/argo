@@ -16,11 +16,13 @@ class TextExtractionJob < GenericJob
     with_items(params[:druids], name: 'Start Text Extraction') do |cocina_object, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      text_extraction = TextExtraction.new(cocina_object, languages: params[:text_extraction_languages])
+      version_service = VersionService.new(druid: cocina_object.externalIdentifier)
+
+      text_extraction = TextExtraction.new(cocina_object, languages: params[:text_extraction_languages], already_opened: version_service.open?)
 
       next failure.call('Text extraction is not possible for this object') unless text_extraction.possible?
 
-      next failure.call("#{text_extraction.wf_name} already exists for this version") if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier, version: cocina_object.version, wf_name: text_extraction.wf_name)
+      next failure.call('Object is currently assembling') if version_service.assembling?
 
       text_extraction.start
 
