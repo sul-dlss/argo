@@ -118,7 +118,10 @@ module Show
 
     def add_workflow_button
       render ActionButton.new(
-        url: new_item_workflow_path(item_id: druid), label: 'Add workflow', open_modal: true
+        url: new_item_workflow_path(item_id: druid),
+        label: 'Add workflow',
+        open_modal: true,
+        disabled: button_disabled?
       )
     end
 
