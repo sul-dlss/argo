@@ -90,7 +90,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     context 'when the object is locked' do
-      it 'the embargo and apply APO buttons are disabled' do
+      it 'various buttons are disabled' do
         expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
         expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
         expect(page).to have_link 'Republish', href: '/items/druid:kv840xx0000/publish'
@@ -104,9 +104,10 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_css 'a.disabled', text: 'Create embargo'
         expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
         expect(page).to have_css 'a.disabled', text: 'Text extraction'
+        expect(page).to have_css 'a.disabled', text: 'Add workflow'
 
         expect(rendered.css('a').size).to eq(9)
-        expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, text extraction, purge, republish
+        expect(rendered.css('a.disabled').size).to eq 6 # create embargo, apply APO defaults, text extraction, purge, republish, add workflow
       end
     end
 
