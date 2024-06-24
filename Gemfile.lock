@@ -66,8 +66,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     airbrussh (1.5.2)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
@@ -171,7 +171,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.0)
       railties (>= 6.0.0)
-    csv (3.2.8)
+    csv (3.3.0)
     date (3.3.4)
     debug (1.9.2)
       irb (~> 1.10)
@@ -208,7 +208,7 @@ GEM
       faraday (~> 2.0)
       faraday-retry
       zeitwerk (~> 2.1)
-    dor-workflow-client (7.4.1)
+    dor-workflow-client (7.5.0)
       activesupport (>= 3.2.1, < 8)
       deprecation (>= 0.99.0)
       faraday (~> 2.0)
@@ -258,7 +258,7 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    faraday (2.9.1)
+    faraday (2.9.2)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-cookie_jar (0.0.7)
       faraday (>= 0.8.0)
@@ -282,7 +282,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
-    honeybadger (5.11.2)
+    honeybadger (5.13.0)
     http-cookie (1.0.6)
       domain_name (~> 0.5)
     http_logger (0.7.0)
@@ -321,6 +321,7 @@ GEM
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    logger (1.6.0)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -343,7 +344,7 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.23.1)
+    minitest (5.24.0)
     moab-versioning (6.1.0)
       druid-tools (>= 1.0.0)
       json
@@ -362,11 +363,10 @@ GEM
     msgpack (1.7.2)
     multi_json (1.15.0)
     multipart-post (2.4.1)
-    mutex_m (0.2.0)
     mysql2 (0.5.6)
     net-http (0.4.1)
       uri
-    net-imap (0.4.13)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -431,7 +431,7 @@ GEM
       slop (~> 3.0)
     psych (5.1.2)
       stringio
-    public_suffix (5.1.1)
+    public_suffix (6.0.0)
     puma (5.6.8)
       nio4r (~> 2.0)
     purl_fetcher-client (1.4.1)
@@ -576,8 +576,9 @@ GEM
       faraday (>= 0.16)
       launchy
       zeitwerk
-    selenium-webdriver (4.21.1)
+    selenium-webdriver (4.22.0)
       base64 (~> 0.2)
+      logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -601,9 +602,8 @@ GEM
       mini_portile2 (~> 2.8.0)
     sqlite3 (1.7.3-x86_64-darwin)
     sqlite3 (1.7.3-x86_64-linux)
-    sshkit (1.22.2)
+    sshkit (1.23.0)
       base64
-      mutex_m
       net-scp (>= 1.1.2)
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
@@ -741,4 +741,4 @@ DEPENDENCIES
   zip_tricks
 
 BUNDLED WITH
-   2.4.14
+   2.5.14
