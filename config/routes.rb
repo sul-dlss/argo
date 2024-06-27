@@ -215,6 +215,8 @@ Rails.application.routes.draw do
       post :apply_apo_defaults
       post 'source_id'
     end
+
+    resources :user_versions, controller: 'catalog', only: %i[show]
   end
 
   resources :agreements, only: %i[show new create]

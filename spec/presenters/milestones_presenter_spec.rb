@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe MilestonesPresenter do
   subject(:presenter) do
-    described_class.new(milestones:, versions:, user_versions:)
+    described_class.new(milestones:, versions:, user_versions:, druid: 'druid:mk420bs7601')
   end
 
   let(:milestone2) do
@@ -64,7 +64,7 @@ RSpec.describe MilestonesPresenter do
     context 'when the version is 2' do
       let(:version) { '2' }
 
-      it { is_expected.to eq '2 Minor change (User version 1)' }
+      it { is_expected.to eq '2 Minor change' }
     end
   end
 
@@ -72,5 +72,11 @@ RSpec.describe MilestonesPresenter do
     subject { presenter.steps_for('2') }
 
     it { is_expected.to eq milestone2 }
+  end
+
+  describe '#user_version_for' do
+    subject { presenter.user_version_for('2') }
+
+    it { is_expected.to eq 1 }
   end
 end

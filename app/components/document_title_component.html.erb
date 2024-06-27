@@ -1,11 +1,18 @@
-<header class="document-header row mb-5 pb-3">
-  <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) %>
+<header class="document-header mb-5 pb-3">
+  <div class="row">
+    <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) %>
 
-  <%= content_tag @as, class: @classes do %>
-    <%= title -%>
-  <% end %>
+    <%= content_tag @as, class: @classes do %>
+      <%= title -%>
+    <% end %>
 
-  <div class="object-type object-type-<%= object_type_class %> fw-bold text-center text-uppercase rounded-pill fs-4 mt-2 float-end">
-    <%= object_type_label %>
+    <div class="object-type object-type-<%= object_type_class %> fw-bold text-center text-uppercase rounded-pill fs-4 mt-2 float-end">
+      <%= object_type_label %>
+    </div>
   </div>
+  <% if @presenter.user_version %>
+    <p>
+        This is public version <%= @presenter.user_version %>. <%= link_to('Back to latest', solr_document_path(@document.id)) %>
+    </p>
+  <% end %>
 </header>
