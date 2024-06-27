@@ -353,8 +353,6 @@ class CatalogController < ApplicationController
     render partial: 'lazy_wps_workflow_facet'
   end
 
-  # rubocop:disable Metrics/PerceivedComplexity
-  # rubocop:disable Metrics/CyclomaticComplexity
   def show
     # If showing a user version, druid will be :item_id and user_version will be :id.
     @druid = Druid.new(params[:item_id] || params[:id]).with_namespace
@@ -370,22 +368,15 @@ class CatalogController < ApplicationController
     authorize! :read, @cocina
 
     @workflows = WorkflowService.workflows_for(druid: @druid)
-    milestones = MilestoneService.milestones_for(druid: @druid)
-    object_client = Dor::Services::Client.object(@druid)
-    versions = object_client.version.inventory
 
-    user_versions = object_client.user_version.inventory
-    raise ActionController::RoutingError, 'Not Found' if @user_version && user_versions.none? { |version| version.userVersion.to_s == @user_version }
+    @milestones_presenter = MilestonesPresenter.new(druid: @druid)
+    raise ActionController::RoutingError, 'Not Found' unless @milestones_presenter.valid_user_version?(@user_version)
 
-    @milestones_presenter = MilestonesPresenter.new(milestones:, versions:, user_versions:, druid: @druid)
+    @milestones_presenter = MilestonesPresenter.new(druid: @druid)
     @release_tags = @cocina.instance_of?(NilModel) || @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
-    @verified_token_with_expiration = Argo.verifier.generate(
-      { key: @druid },
-      expires_in: 1.hour,
-      purpose: :view_token
-    )
+    @verified_token_with_expiration = generate_token
 
     respond_to do |format|
       format.html { @search_context = setup_next_and_previous_documents }
@@ -393,8 +384,6 @@ class CatalogController < ApplicationController
       additional_export_formats(@document, format)
     end
   end
-  # rubocop:enable Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/CyclomaticComplexity
 
   private
 
@@ -427,5 +416,17 @@ class CatalogController < ApplicationController
   # @return [Hash] a hash of context information to pass through to the search service
   def search_service_context
     { current_user: }
+  end
+
+  def generate_token
+    Argo.verifier.generate(
+      { key: @druid },
+      expires_in: 1.hour,
+      purpose: :view_token
+    )
+  end
+
+  def object_client
+    @object_client ||= Dor::Services::Client.object(@druid)
   end
 end
