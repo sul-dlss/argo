@@ -4,9 +4,7 @@
   </thead>
   <tbody>
     <% @milestones_presenter.each_version do |version| %>
-      <%= render VersionMilestonesComponent.new(version:,
-                                                title: @milestones_presenter.version_title(version),
-                                                steps: @milestones_presenter.steps_for(version)) %>
+      <%= render VersionMilestonesComponent.new(version:, milestones_presenter: @milestones_presenter) %>
     <% end %>
   </tbody>
 </table>

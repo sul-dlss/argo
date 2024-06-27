@@ -15,7 +15,8 @@ RSpec.describe DocumentTitleComponent, type: :component do
       object_type:
     )
   end
-  let(:presenter) { instance_double(ArgoShowPresenter, document:, cocina: nil) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document:, cocina: nil, user_version:) }
+  let(:user_version) { nil }
   let(:rendered) { render_inline(component) }
 
   before do
@@ -75,6 +76,14 @@ RSpec.describe DocumentTitleComponent, type: :component do
 
     it 'renders the expected object type class' do
       expect(rendered.css('div.object-type').first.classes).to include('object-type-item')
+    end
+
+    context 'with a user version' do
+      let(:user_version) { '2' }
+
+      it 'renders the expected user version label' do
+        expect(rendered.content).to include('public version 2')
+      end
     end
   end
 
