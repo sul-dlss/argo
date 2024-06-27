@@ -2,14 +2,8 @@
 
 # Displays milestones for each of the versions for an object
 class MilestonesPresenter
-  # @param [Hash<String,Hash>] milestones the milestone data
-  # @param [Array<Dor::Services::Client::ObjectVersion::Version>] versions the version tag data
-  # @param [Array<Dor::Services::Client::UserVersion::UserVersion>] user_versions the user versions data
   # @param [String] druid the druid of the object
-  def initialize(milestones:, versions:, user_versions:, druid:)
-    @milestones = milestones
-    @versions = versions
-    @user_versions = user_versions
+  def initialize(druid:)
     @druid = druid
   end
 
@@ -18,7 +12,7 @@ class MilestonesPresenter
   end
 
   def steps_for(version)
-    @milestones[version]
+    milestones[version]
   end
 
   def version_title(version)
@@ -32,9 +26,27 @@ class MilestonesPresenter
     user_versions.find { |user_version| user_version.version == version.to_i }&.userVersion
   end
 
+  def valid_user_version?(user_version)
+    user_version.nil? || user_versions.any? { |version| version.userVersion.to_s == user_version }
+  end
+
   attr_reader :druid
 
   private
 
-  attr_reader :milestones, :versions, :user_versions
+  def milestones
+    @milestones ||= MilestoneService.milestones_for(druid:)
+  end
+
+  def versions
+    @versions ||= object_client.version.inventory
+  end
+
+  def user_versions
+    @user_versions ||= object_client.user_version.inventory
+  end
+
+  def object_client
+    @object_client ||= Dor::Services::Client.object(druid)
+  end
 end

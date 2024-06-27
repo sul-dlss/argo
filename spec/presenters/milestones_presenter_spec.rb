@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe MilestonesPresenter do
   subject(:presenter) do
-    described_class.new(milestones:, versions:, user_versions:, druid: 'druid:mk420bs7601')
+    described_class.new(druid: 'druid:mk420bs7601')
   end
 
   let(:milestone2) do
@@ -38,6 +38,12 @@ RSpec.describe MilestonesPresenter do
     [
       Dor::Services::Client::UserVersion::Version.new(version: 2, userVersion: 1)
     ]
+  end
+
+  before do
+    allow(MilestoneService).to receive(:milestones_for).and_return(milestones)
+    allow(Dor::Services::Client).to receive_message_chain(:object, :version, :inventory).and_return(versions) # rubocop:disable RSpec/MessageChain
+    allow(Dor::Services::Client).to receive_message_chain(:object, :user_version, :inventory).and_return(user_versions) # rubocop:disable RSpec/MessageChain
   end
 
   describe '#each_version' do
