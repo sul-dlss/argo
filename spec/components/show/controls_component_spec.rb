@@ -11,10 +11,18 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, open?: open, cocina:, openable?: true, open_and_not_assembling?: open_and_not_assembling) }
+  let(:presenter) do
+    instance_double(ArgoShowPresenter,
+                    document: doc,
+                    open?: open,
+                    cocina:, openable?: true,
+                    open_and_not_assembling?: open_and_not_assembling,
+                    user_version_view?: user_version_view)
+  end
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
   let(:open) { false }
   let(:open_and_not_assembling) { false }
+  let(:user_version_view) { false }
 
   before do
     rendered
@@ -293,6 +301,32 @@ RSpec.describe Show::ControlsComponent, type: :component do
       end
 
       it { is_expected.to be false }
+    end
+  end
+
+  context 'when a user version view' do
+    let(:item_id) { 'druid:kv840xx0000' }
+    let(:dro) { true }
+    let(:doc) do
+      SolrDocument.new('id' => item_id,
+                       'processing_status_text_ssi' => processing_status,
+                       SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                       CatalogRecordId.index_field => catalog_record_id,
+                       SolrDocument::FIELD_APO_ID => [governing_apo_id],
+                       SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published,
+                       SolrDocument::FIELD_WORKFLOW_ERRORS => workflow_errors)
+    end
+    let(:catalog_record_id) { nil }
+    let(:last_published) { nil }
+    let(:workflow_errors) { nil }
+    let(:processing_status) { 'not registered' }
+    let(:open) { true }
+    let(:open_and_not_assembling) { true }
+    let(:user_version_view) { true }
+
+    it 'draws the buttons' do
+      expect(rendered.css('a').size).to eq(9)
+      expect(rendered.css('a.disabled').size).to eq 8 # except Download Cocina spreadsheet
     end
   end
 end

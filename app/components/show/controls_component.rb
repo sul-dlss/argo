@@ -43,10 +43,10 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :open?, :openable?, :open_and_not_assembling?, to: :presenter
+    delegate :open?, :openable?, :open_and_not_assembling?, :user_version_view?, to: :presenter
 
     def button_disabled?
-      !open_and_not_assembling?
+      !open_and_not_assembling? || user_version_view?
     end
 
     def collection_button_disabled?
@@ -60,7 +60,12 @@ module Show
     private
 
     def manage_release
-      render ActionButton.new(url: item_manage_release_path(druid), label: 'Manage release', open_modal: true)
+      render ActionButton.new(
+        url: item_manage_release_path(druid),
+        label: 'Manage release',
+        open_modal: true,
+        disabled: user_version_view?
+      )
     end
 
     def apply_apo_defaults
@@ -112,7 +117,8 @@ module Show
     def reindex_button
       render ActionButton.new(
         url: dor_reindex_path(druid:),
-        label: 'Reindex'
+        label: 'Reindex',
+        disabled: user_version_view?
       )
     end
 
@@ -131,7 +137,7 @@ module Show
         label: 'Purge',
         method: 'delete',
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        disabled: !registered_only?
+        disabled: !registered_only? || user_version_view?
       )
     end
 
@@ -140,7 +146,7 @@ module Show
         url: item_publish_path(doc),
         label: 'Republish',
         method: 'post',
-        disabled: !published?
+        disabled: !published? || user_version_view?
       )
     end
 
