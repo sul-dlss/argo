@@ -19,6 +19,7 @@ module Argo
 
     # Configure action_dispatch to handle not found errors
     config.action_dispatch.rescue_responses['Blacklight::Exceptions::RecordNotFound'] = :not_found
+    config.action_dispatch.rescue_responses['Dor::Services::Client::NotFoundResponse'] = :not_found
 
     config.after_initialize do |app|
       Argo.verifier = app.message_verifier('Argo')

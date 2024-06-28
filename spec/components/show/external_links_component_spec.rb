@@ -4,8 +4,12 @@ require 'rails_helper'
 
 RSpec.describe Show::ExternalLinksComponent, type: :component do
   before do
-    render_inline(described_class.new(document:))
+    render_inline(described_class.new(document:, presenter:))
   end
+
+  let(:presenter) { instance_double(ArgoShowPresenter, user_version_view?: user_version_view, user_version: 2) }
+
+  let(:user_version_view) { false }
 
   context 'for a non-publishable item (adminPolicy)' do
     let(:document) do
@@ -69,6 +73,14 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
 
         it 'links to searchworks using a druid' do
           expect(page).to have_link 'SearchWorks', href: 'http://searchworks.stanford.edu/view/ab123cd3445'
+        end
+      end
+
+      context 'when a user version view' do
+        let(:user_version_view) { true }
+
+        it 'links to user version' do
+          expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/user_versions/2.json'
         end
       end
     end

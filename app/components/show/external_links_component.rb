@@ -4,11 +4,14 @@ module Show
   # This draws links to external services for this object. Used on the sidebar of the item show page.
   class ExternalLinksComponent < ViewComponent::Base
     # @param [SolrDocument] document
-    def initialize(document:)
+    # @param [ArgoShowPresenter] presenter
+    def initialize(document:, presenter:)
       @document = document
+      @presenter = presenter
     end
 
     delegate :publishable?, to: :@document
+    delegate :user_version_view?, :user_version, to: :@presenter
 
     def purl_link
       link_to 'PURL', File.join(Settings.purl_url, document.druid),
@@ -29,8 +32,12 @@ module Show
     end
 
     def cocina_link
-      link_to 'Cocina model', item_path(document, format: :json),
-              target: '_blank', rel: 'noopener', class: 'external-link-button'
+      path = user_version_view? ? item_user_version_path(document.id, user_version, format: :json) : item_path(document, format: :json)
+      link_to 'Cocina model',
+              path,
+              target: '_blank',
+              rel: 'noopener',
+              class: 'external-link-button'
     end
 
     def mods_link
