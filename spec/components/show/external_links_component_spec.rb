@@ -18,10 +18,13 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
                                     druid: 'ab123cd3445',
                                     publishable?: false)
     end
+    let(:presenter) { instance_double(ArgoShowPresenter, user_version_view?: user_version_view, user_version:) }
+    let(:user_version_view) { false }
+    let(:user_version) { nil }
 
     it 'links to Solr and Cocina' do
       expect(page).to have_no_link 'SearchWorks'
-      expect(page).to have_no_link 'MODS'
+      expect(page).to have_no_link 'Description'
       expect(page).to have_no_link 'PURL'
       expect(page).to have_no_link 'Dublin Core'
 
@@ -38,6 +41,9 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
                                     publishable?: true,
                                     catalog_record_id:, released_to:)
     end
+    let(:presenter) { instance_double(ArgoShowPresenter, user_version_view?: user_version_view, user_version:) }
+    let(:user_version_view) { false }
+    let(:user_version) { 2 }
     let(:catalog_record_id) { nil }
     let(:released_to) do
       []
@@ -46,10 +52,10 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
     context 'when not released' do
       it 'links to purl and the Solr document' do
         expect(page).to have_no_link 'SearchWorks'
+        expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/metadata/descriptive'
         expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
         expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
         expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
-        expect(page).to have_link 'PURL'
       end
     end
 
@@ -82,6 +88,15 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
         it 'links to user version' do
           expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/user_versions/2.json'
         end
+      end
+    end
+
+    context 'when a user version' do
+      let(:user_version_view) { true }
+      let(:user_version) { 2 }
+
+      it 'links to user version descriptive metadata' do
+        expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/user_versions/2/metadata/descriptive'
       end
     end
   end

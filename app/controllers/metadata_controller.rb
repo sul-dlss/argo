@@ -15,6 +15,10 @@ class MetadataController < ApplicationController
   private
 
   def cocina
-    Repository.find(params[:item_id])
+    if params.key?(:user_version_id)
+      Repository.find_user_version(params[:item_id], params[:user_version_id])
+    else
+      Repository.find(params[:item_id])
+    end
   end
 end
