@@ -2,9 +2,9 @@
 
 class DownloadAllButtonComponent < ViewComponent::Base
   # @param [SolrDocument] document
-  def initialize(cocina:, document:)
+  def initialize(presenter:, document:)
     @document = document
-    @cocina = cocina
+    @presenter = presenter
   end
 
   def link_options
@@ -16,8 +16,14 @@ class DownloadAllButtonComponent < ViewComponent::Base
   end
 
   def render?
-    WorkflowService.accessioned?(druid: @cocina.externalIdentifier)
+    WorkflowService.accessioned?(druid: cocina.externalIdentifier)
   end
 
-  attr_reader :document
+  def path
+    user_version_view? ? download_item_user_version_files_path(document.id, user_version) : download_item_files_path(document)
+  end
+
+  attr_reader :document, :presenter
+
+  delegate :cocina, :user_version_view?, :user_version, to: :presenter
 end

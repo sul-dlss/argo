@@ -3,7 +3,7 @@
 class FilesController < ApplicationController
   include ActionController::Live # required for streaming
 
-  before_action :load_resource
+  before_action :load_resource, except: [:download]
 
   ##
   # Brings up a modal dialog that lists all locations of the file
@@ -65,6 +65,14 @@ class FilesController < ApplicationController
   end
 
   def download
+    if params.key?(:user_version_id)
+      @cocina_model = Repository.find_user_version(params[:item_id], params[:user_version_id])
+      version = @cocina_model.version
+    else
+      load_resource
+      version = last_accessioned_version(@cocina_model.externalIdentifier)
+    end
+
     authorize! :view_content, @cocina_model
 
     send_file_headers!(
@@ -76,7 +84,7 @@ class FilesController < ApplicationController
     response.headers['X-Accel-Buffering'] = 'no'
 
     PresStreamer.stream(druid: @cocina_model.externalIdentifier,
-                        version: last_accessioned_version(@cocina_model.externalIdentifier), filenames: preserved_files(@cocina_model)) do |chunk|
+                        version:, filenames: preserved_files(@cocina_model)) do |chunk|
       response.stream.write(chunk)
     end
   ensure

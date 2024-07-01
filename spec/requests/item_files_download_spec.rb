@@ -15,7 +15,7 @@ RSpec.describe 'Download item files' do
       type: Cocina::Models::ObjectType.image,
       externalIdentifier: 'druid:rn653dy9317',
       label: 'M1090_S15_B01_F07_0106',
-      version: 4,
+      version:,
       description: {
         title: [{ value: 'M1090_S15_B01_F07_0106' }],
         purl: 'https://purl.stanford.edu/rn653dy9317'
@@ -115,6 +115,7 @@ RSpec.describe 'Download item files' do
       }
     }
   end
+  let(:version) { 4 }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:bare_druid) { druid.delete_prefix('druid:') }
   let(:user) { create(:user) }
@@ -144,32 +145,60 @@ RSpec.describe 'Download item files' do
       allow(Time).to receive(:now).and_return(Time.parse('2023-09-08 11:39:45 -0000'))
     end
 
-    it 'sets content-disposition header' do
-      get download_item_files_path(druid)
-      expect(response.headers.to_h).to include(
-        'Content-Disposition' => "attachment; filename=\"#{bare_druid}.zip\"; filename*=UTF-8''#{bare_druid}.zip",
-        'Content-Type' => 'application/zip',
-        'X-Accel-Buffering' => 'no',
-        'Last-Modified' => 'Fri, 08 Sep 2023 11:39:45 GMT'
-      )
+    context 'when cocina head version' do
+      it 'sets content-disposition header' do
+        get download_item_files_path(druid)
+        expect(response.headers.to_h).to include(
+          'Content-Disposition' => "attachment; filename=\"#{bare_druid}.zip\"; filename*=UTF-8''#{bare_druid}.zip",
+          'Content-Type' => 'application/zip',
+          'X-Accel-Buffering' => 'no',
+          'Last-Modified' => 'Fri, 08 Sep 2023 11:39:45 GMT'
+        )
+      end
+
+      it 'zips files set for preservation' do
+        get download_item_files_path(druid)
+        expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.jp2').once
+        expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.tif').once
+        expect(Preservation::Client.objects).to have_received(:content).with(
+          druid:,
+          filepath: 'M1090_S15_B01_F07_0106.jp2',
+          version:,
+          on_data: Proc
+        )
+        expect(Preservation::Client.objects).to have_received(:content).with(
+          druid:,
+          filepath: 'M1090_S15_B01_F07_0106.tif',
+          version:,
+          on_data: Proc
+        )
+      end
     end
 
-    it 'zips files set for preservation' do
-      get download_item_files_path(druid)
-      expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.jp2').once
-      expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.tif').once
-      expect(Preservation::Client.objects).to have_received(:content).with(
-        druid:,
-        filepath: 'M1090_S15_B01_F07_0106.jp2',
-        version: 4,
-        on_data: Proc
-      )
-      expect(Preservation::Client.objects).to have_received(:content).with(
-        druid:,
-        filepath: 'M1090_S15_B01_F07_0106.tif',
-        version: 4,
-        on_data: Proc
-      )
+    context 'when cocina user version' do
+      let(:user_version) { 2 }
+      let(:version) { 3 }
+
+      let(:object_client) { instance_double(Dor::Services::Client::Object, user_version: user_version_client) }
+      let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, find: cocina_model) }
+
+      it 'zips files set for preservation' do
+        get download_item_user_version_files_path(druid, user_version)
+        expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.jp2').once
+        expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.tif').once
+        expect(Preservation::Client.objects).to have_received(:content).with(
+          druid:,
+          filepath: 'M1090_S15_B01_F07_0106.jp2',
+          version:,
+          on_data: Proc
+        )
+        expect(Preservation::Client.objects).to have_received(:content).with(
+          druid:,
+          filepath: 'M1090_S15_B01_F07_0106.tif',
+          version:,
+          on_data: Proc
+        )
+      end
     end
 
     context 'when Faraday raises a client error' do
