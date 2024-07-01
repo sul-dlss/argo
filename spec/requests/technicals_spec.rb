@@ -6,7 +6,7 @@ RSpec.describe 'Technicals' do
   include Dry::Monads[:result]
 
   before do
-    allow(Argo.verifier).to receive(:verified).and_return({ key: 'druid:kv840xx0000' })
+    allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000' })
     allow(TechmdService).to receive(:techmd_for).and_return(result)
     sign_in build(:user), groups: []
   end

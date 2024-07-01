@@ -2,7 +2,7 @@
 
 class TechnicalsController < ApplicationController
   def show
-    @techmd = TechmdService.techmd_for(druid: decrypted_token.fetch(:key))
+    @techmd = TechmdService.techmd_for(druid: decrypted_token.fetch(:druid))
   end
 
   private

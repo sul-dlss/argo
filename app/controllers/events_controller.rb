@@ -2,7 +2,7 @@
 
 class EventsController < ApplicationController
   def show
-    object_client = Dor::Services::Client.object(decrypted_token.fetch(:key))
+    object_client = Dor::Services::Client.object(decrypted_token.fetch(:druid))
     @events = object_client.events.list
   end
 

@@ -420,7 +420,7 @@ class CatalogController < ApplicationController
 
   def generate_token
     Argo.verifier.generate(
-      { key: @druid },
+      { druid: @druid, user_version: @user_version },
       expires_in: 1.hour,
       purpose: :view_token
     )

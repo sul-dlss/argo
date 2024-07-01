@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Cocina objects' do
   before do
-    allow(Argo.verifier).to receive(:verified).and_return({ key: 'druid:kv840xx0000' })
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     sign_in build(:user), groups: []
   end
@@ -13,12 +12,36 @@ RSpec.describe 'Cocina objects' do
     Capybara::Node::Simple.new(response.body)
   end
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_object) }
   let(:cocina_object) { build(:dro) }
 
-  it 'renders a turbo-frame' do
-    get '/items/skret-t0k3n/cocina_object'
-    expect(response).to have_http_status(:ok)
-    expect(rendered.find_css('turbo-frame#cocina_object')).to be_present
+  context 'when the head cocina object' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_object) }
+
+    before do
+      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000' })
+    end
+
+    it 'renders a turbo-frame' do
+      get '/items/skret-t0k3n/cocina_object'
+      expect(response).to have_http_status(:ok)
+      expect(rendered.find_css('turbo-frame#cocina_object')).to be_present
+    end
+  end
+
+  context 'when a user version' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, user_version: user_version_client) }
+
+    let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, find: cocina_object) }
+
+    before do
+      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000', user_version: 2 })
+    end
+
+    it 'renders a turbo-frame' do
+      get '/items/skret-t0k3n/cocina_object'
+      expect(response).to have_http_status(:ok)
+      expect(rendered.find_css('turbo-frame#cocina_object')).to be_present
+      expect(user_version_client).to have_received(:find).with(2)
+    end
   end
 end
