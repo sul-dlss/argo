@@ -7,8 +7,10 @@ RSpec.describe ContentsComponent, type: :component do
     instance_double(ArgoShowPresenter,
                     document: solr_doc, cocina:,
                     view_token: 'skret-t0k3n',
-                    open_and_not_assembling?: open)
+                    open_and_not_assembling?: open,
+                    user_version_view?: user_version_view)
   end
+  let(:user_version_view) { false }
   let(:component) { described_class.new(presenter:) }
 
   let(:rendered) { render_inline(component) }
@@ -33,6 +35,10 @@ RSpec.describe ContentsComponent, type: :component do
       it 'shows Upload CSV button' do
         expect(rendered.css('.bi-upload')).to be_present
       end
+
+      it 'shows Download CSV button' do
+        expect(rendered.css('.bi-download')).to be_present
+      end
     end
 
     context 'with locked object' do
@@ -40,6 +46,19 @@ RSpec.describe ContentsComponent, type: :component do
 
       it 'hides Upload CSV button' do
         expect(rendered.css('.bi-upload')).not_to be_present
+      end
+    end
+
+    context 'when a user version' do
+      let(:open) { true }
+      let(:user_version_view) { true }
+
+      it 'hides Upload CSV button' do
+        expect(rendered.css('.bi-upload')).not_to be_present
+      end
+
+      it 'hides Download CSV button' do
+        expect(rendered.css('.bi-download')).not_to be_present
       end
     end
   end
