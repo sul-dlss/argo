@@ -7,8 +7,12 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
   subject { page }
 
   let(:cocina) { build(:dro) }
-  let(:document) { instance_double(SolrDocument, preservation_size: 0) }
-  let(:component) { described_class.new(document:, cocina:) }
+  let(:document) { instance_double(SolrDocument, preservation_size: 0, id: druid) }
+  let(:presenter) { instance_double(ArgoShowPresenter, user_version_view?: user_version_view, user_version:, cocina:) }
+  let(:druid) { 'druid:tx739ch3649' }
+  let(:user_version_view) { false }
+  let(:user_version) { 2 }
+  let(:component) { described_class.new(document:, presenter:) }
 
   context 'when accessioned' do
     before do
@@ -33,5 +37,16 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
     end
 
     it { is_expected.to have_no_link 'Download all files', href: download_item_files_path(document) }
+  end
+
+  context 'when a user version' do
+    let(:user_version_view) { true }
+
+    before do
+      allow(WorkflowService).to receive(:accessioned?).and_return(true)
+      render_inline(component)
+    end
+
+    it { is_expected.to have_link 'Download all files', href: download_item_user_version_files_path(druid, user_version) }
   end
 end

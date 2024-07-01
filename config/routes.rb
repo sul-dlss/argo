@@ -216,7 +216,13 @@ Rails.application.routes.draw do
       post 'source_id'
     end
 
-    resources :user_versions, controller: 'catalog', only: %i[show]
+    resources :user_versions, controller: 'catalog', only: %i[show] do
+      resources 'files', only: %i[index], constraints: { item_id: /.*/ } do
+        collection do
+          get 'download'
+        end
+      end
+    end
   end
 
   resources :agreements, only: %i[show new create]
