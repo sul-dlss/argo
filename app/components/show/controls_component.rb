@@ -18,6 +18,7 @@ module Show
     # to just permanantly disable the button without calling out to a `check_url`.  Note that
     # you should not need to use both fields, since use of `check_url` disables the button at
     # first anyway.
+    #
     # @param [Boolean] manager
     # @param [ArgoShowPresenter] presenter
     def initialize(manager:, presenter:)
@@ -43,7 +44,7 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :open?, :openable?, :open_and_not_assembling?, :user_version_view?, to: :presenter
+    delegate :open?, :openable?, :open_and_not_assembling?, :user_version, :user_version_view?, to: :presenter
 
     def button_disabled?
       !open_and_not_assembling? || user_version_view?
@@ -152,6 +153,12 @@ module Show
 
     def upload_mods
       link_to 'Upload MODS', apo_bulk_jobs_path(doc), class: 'btn btn-primary'
+    end
+
+    def download_cocina_path
+      return item_descriptive_path(doc, format: :csv) unless user_version_view?
+
+      item_user_version_descriptive_path(doc, user_version, format: :csv)
     end
 
     def druid

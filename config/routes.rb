@@ -217,6 +217,7 @@ Rails.application.routes.draw do
     end
 
     resources :user_versions, controller: 'catalog', only: %i[show] do
+      get 'descriptive', to: 'descriptives#show'
       resources 'files', only: %i[index], constraints: { item_id: /.*/ } do
         collection do
           get 'download'

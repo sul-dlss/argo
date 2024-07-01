@@ -24,7 +24,9 @@
                           class: "dropdown-item #{'disabled' if button_disabled?}",
                           data: { turbo_method: 'post' } %></li>
         <% end %>
-        <li><%= link_to 'Download Cocina spreadsheet', item_descriptive_path(doc, format: :csv), class: 'dropdown-item' %></li>
+        <li>
+          <%= link_to 'Download Cocina spreadsheet', download_cocina_path, class: 'dropdown-item' %>
+        </li>
         <% unless button_disabled? %>
           <li><%= link_to 'Upload Cocina spreadsheet', edit_item_descriptive_path(doc),
                           class: 'dropdown-item',
