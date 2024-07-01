@@ -4,10 +4,22 @@
 class CocinaObjectsController < ApplicationController
   # Lazy-load the cocina object part of the show page
   def show
-    @cocina_object = Repository.find(decrypted_token.fetch(:key))
+    @cocina_object = if user_version
+                       Repository.find_user_version(druid, user_version)
+                     else
+                       Repository.find(druid)
+                     end
   end
 
   private
+
+  def druid
+    decrypted_token.fetch(:druid)
+  end
+
+  def user_version
+    decrypted_token[:user_version]
+  end
 
   # Decode the token that grants view access
   def decrypted_token

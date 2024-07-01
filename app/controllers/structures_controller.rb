@@ -16,7 +16,7 @@ class StructuresController < ApplicationController
       end
       format.html do
         # Lazy loading of the structural part of the show page
-        @cocina_item = Repository.find(decrypted_token.fetch(:key))
+        @cocina_item = Repository.find(decrypted_token.fetch(:druid))
       end
     end
   end
@@ -32,7 +32,7 @@ class StructuresController < ApplicationController
   end
 
   def hierarchy
-    @cocina_item = Repository.find(decrypted_token.fetch(:key))
+    @cocina_item = Repository.find(decrypted_token.fetch(:druid))
     @root_directory = FileHierarchyService.to_hierarchy(cocina_object: @cocina_item)
   end
 
