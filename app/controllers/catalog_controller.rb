@@ -360,10 +360,6 @@ class CatalogController < ApplicationController
     _deprecated_response, @document = search_service.fetch(@druid)
 
     @cocina = Repository.find_lite(@druid, structural: false)
-    if @cocina.instance_of?(NilModel)
-      flash[:alert] =
-        'Warning: this object cannot currently be represented in the Cocina model.'
-    end
 
     authorize! :read, @cocina
 
@@ -373,7 +369,7 @@ class CatalogController < ApplicationController
     raise ActionController::RoutingError, 'Not Found' unless @milestones_presenter.valid_user_version?(@user_version)
 
     @milestones_presenter = MilestonesPresenter.new(druid: @druid)
-    @release_tags = @cocina.instance_of?(NilModel) || @cocina.admin_policy? ? [] : object_client.release_tags.list
+    @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
     @verified_token_with_expiration = generate_token

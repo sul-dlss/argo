@@ -37,11 +37,6 @@ class ApplicationController < ActionController::Base
   protected
 
   def enforce_versioning
-    if @cocina.is_a? NilModel
-      return redirect_to solr_document_path(@cocina.externalIdentifier),
-                         flash: { error: 'Unable to retrieve the cocina model' }
-    end
-
     # if this object has been submitted and doesn't have an open version, they cannot change it.
     return true if open?(@cocina)
 

@@ -14,7 +14,7 @@ class ItemChangeSetPersister
     @change_set = change_set
   end
 
-  # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
+  # @raises [Dor::Services::Client::UnexpectedResponse] when an error occurs updating the object
   def update
     updated_model = update_identification(model)
                     .then { |updated| updated_administrative(updated) }

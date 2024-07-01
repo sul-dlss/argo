@@ -36,8 +36,7 @@ class RepublishJob < GenericJob
   end
 
   def publishable?(maybe_cocina_object)
-    return false if maybe_cocina_object.is_a?(NilModel) ||
-                    maybe_cocina_object.admin_policy? ||
+    return false if maybe_cocina_object.admin_policy? ||
                     maybe_cocina_object.type == Cocina::Models::ObjectType.agreement
 
     true

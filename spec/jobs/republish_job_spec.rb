@@ -64,12 +64,4 @@ RSpec.describe RepublishJob do
       expect(object_client).not_to have_received(:publish)
     end
   end
-
-  context 'with a NilModel instance' do
-    let(:object) { NilModel.new(druid) }
-
-    it 'does not publish the object' do
-      expect(object_client).not_to have_received(:publish)
-    end
-  end
 end

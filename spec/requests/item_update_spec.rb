@@ -544,32 +544,5 @@ RSpec.describe 'Set the properties for an item' do
         expect(response.body).to include '<turbo-frame id="barcode">&quot;invalid&quot; is not a valid barcode</turbo-frame>'
       end
     end
-
-    context 'when there is an error saving the Cocina' do
-      let(:json_response) do
-        <<~JSON
-          {"errors":
-            [{
-              "status":"422",
-              "title":"problem",
-              "detail":"broken"
-            }]
-          }
-        JSON
-      end
-
-      before do
-        stub_request(:patch, "#{Settings.dor_services.url}/v1/objects/druid:bc234fg5678")
-          .to_return(status: 422, body: json_response, headers: { 'content-type' => 'application/vnd.api+json' })
-      end
-
-      it 'draws the error' do
-        patch "/items/#{druid}", params: { item: { barcode: '36105010362304' } },
-                                 headers: { 'Turbo-Frame' => 'barcode' }
-
-        expect(response).to have_http_status(:ok)
-        expect(response.body).to include '<turbo-frame id="barcode">Unable to retrieve the cocina model: broken</turbo-frame>'
-      end
-    end
   end
 end
