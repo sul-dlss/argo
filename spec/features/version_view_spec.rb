@@ -199,6 +199,7 @@ RSpec.describe 'Version view', :js do
         expect(page).to have_content(title)
         expect(page).to have_content('public version 2')
         expect(page).to have_link('Back to latest', href: "/view/#{druid}")
+        expect(page).to have_no_content('Technical metadata')
       end
     end
 

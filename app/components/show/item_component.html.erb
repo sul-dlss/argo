@@ -28,5 +28,5 @@
   <%= render 'history_default', document: %>
   <%= render ContentsComponent.new(presenter:) %>
   <%= render Show::Item::Structure::FileHierarchyComponent.new(view_token:) %>
-  <%= render TechmdComponent.new(view_token:) %>
+  <%= render TechmdComponent.new(view_token:, presenter:) %>
 </div>
