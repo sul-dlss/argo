@@ -19,6 +19,41 @@ RSpec.describe DescriptionValidator do
         end
       end
 
+      context 'with mismatched structured title1.structuredValue columns' do
+        let(:csv) { 'druid,title1.structuredValue1.type,title1.structuredValue1.value,title1.structuredValue12type,title1.structuredValue2.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Unexpected or missing title structuredValue columns: found title1.structuredValue2.value but not title1.structuredValue2.type'
+          ]
+        end
+      end
+
+      context 'with mismatched structured title2.structuredValue columns' do
+        let(:csv) { 'druid,title1.structuredValue1.type,title1.structuredValue1.value,title2.structuredValue1.type,title2.structuredValue2.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Unexpected or missing title structuredValue columns: found title2.structuredValue1.type but not title2.structuredValue1.value',
+            'Unexpected or missing title structuredValue columns: found title2.structuredValue2.value but not title2.structuredValue2.type'
+          ]
+        end
+      end
+
+      context 'with another form of mismatched structured title2.structuredValue columns' do
+        let(:csv) { 'druid,title1.structuredValue1.type,title1.structuredValue1.value,title2.structuredValue2.type,title3.structuredValue2.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Unexpected or missing title structuredValue columns: found title2.structuredValue2.type but not title2.structuredValue2.value',
+            'Unexpected or missing title structuredValue columns: found title3.structuredValue2.value but not title3.structuredValue2.type'
+          ]
+        end
+      end
+
       context 'with missing title1.value column' do
         let(:csv) { 'druid,event1.note1.source.value' }
 
@@ -33,7 +68,8 @@ RSpec.describe DescriptionValidator do
 
         it 'finds errors' do
           expect(instance.valid?).to be false
-          expect(instance.errors).to eq ['Title column not found.']
+          expect(instance.errors).to eq ['Title column not found.',
+                                         'Unexpected or missing title structuredValue columns: found title1.structuredValue1.type but not title1.structuredValue1.value']
         end
       end
 
@@ -42,12 +78,29 @@ RSpec.describe DescriptionValidator do
 
         it 'finds errors' do
           expect(instance.valid?).to be false
-          expect(instance.errors).to eq ['Title column not found.']
+          expect(instance.errors).to eq ['Title column not found.',
+                                         'Unexpected or missing title structuredValue columns: found title1.structuredValue1.value but not title1.structuredValue1.type']
         end
       end
 
       context 'with a title1.structuredValue1.value and a title1.structuredValue1.type column' do
         let(:csv) { 'druid,title1.structuredValue1.type,title1.structuredValue1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with a title1.value,title2.structuredValue1.value and a title2.structuredValue1.type column' do
+        let(:csv) { 'druid,title1.value,title2.structuredValue1.type,title2.structuredValue1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with the bulk_upload_descriptive fixture file' do
+        let(:csv) { File.read('spec/fixtures/files/bulk_upload_descriptive.csv') }
 
         it 'validates' do
           expect(instance.valid?).to be true

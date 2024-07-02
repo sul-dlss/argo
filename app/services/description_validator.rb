@@ -14,6 +14,7 @@ class DescriptionValidator
   def valid?
     validate_duplicate_headers
     validate_title_headers
+    validate_matching_structured_title_headers
     validate_header_paths
     validate_cell_values
     if @bulk_job
@@ -45,6 +46,20 @@ class DescriptionValidator
     return if title_value_header? || title_structured_value_header? || title_parallel_value_header?
 
     errors << 'Title column not found.'
+  end
+
+  # verify that each titleX.structuredValueY.type has a corresponding titleX.structuredValueY.value (where X and Y are any integer).
+  def validate_matching_structured_title_headers
+    @headers.each do |header|
+      next if header.blank?
+
+      next unless header.match?(/\Atitle\d+.structuredValue\d+\.(type|value)\z/)
+
+      expected_corresponding_header = header.ends_with?('type') ? header.sub('type', 'value') : header.sub('value', 'type')
+      next if @headers.include?(expected_corresponding_header)
+
+      errors << "Unexpected or missing title structuredValue columns: found #{header} but not #{expected_corresponding_header}"
+    end
   end
 
   def validate_header_paths
