@@ -107,7 +107,7 @@ GEM
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
     cancancan (3.6.1)
-    capistrano (3.18.1)
+    capistrano (3.19.0)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -141,7 +141,7 @@ GEM
       capybara (>= 1.0, < 4)
       launchy
     childprocess (5.0.0)
-    cocina-models (0.98.0)
+    cocina-models (0.98.1)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -344,7 +344,7 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.24.0)
+    minitest (5.24.1)
     moab-versioning (6.1.0)
       druid-tools (>= 1.0.0)
       json
@@ -434,7 +434,7 @@ GEM
     public_suffix (6.0.0)
     puma (5.6.8)
       nio4r (~> 2.0)
-    purl_fetcher-client (1.4.1)
+    purl_fetcher-client (1.5.1)
       activesupport
       faraday (~> 2.1)
     racc (1.8.0)
@@ -503,7 +503,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     retries (0.0.5)
-    rexml (3.3.0)
+    rexml (3.3.1)
       strscan
     roo (2.9.0)
       nokogiri (~> 1)
@@ -554,7 +554,7 @@ GEM
     rubocop-performance (1.21.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails (2.25.0)
+    rubocop-rails (2.25.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
