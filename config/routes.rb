@@ -224,6 +224,11 @@ Rails.application.routes.draw do
           get 'download'
         end
       end
+      resources :metadata, only: %i[show] do
+        collection do
+          get 'descriptive'
+        end
+      end
     end
   end
 
