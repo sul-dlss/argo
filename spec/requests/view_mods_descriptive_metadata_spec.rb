@@ -2,13 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe 'View MODS descriptive metadata' do
+RSpec.describe 'View descriptive metadata' do
   let(:user) { create(:user) }
 
   let(:cocina_object) do
     build(:dro, id: druid)
   end
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_object) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_object, user_version: user_version_client) }
+  let(:user_version_client) { nil }
   let(:druid) { 'druid:bc123df4567' }
 
   let(:mods_xml) do
@@ -86,5 +87,19 @@ RSpec.describe 'View MODS descriptive metadata' do
     get "/items/#{druid}/metadata/descriptive"
     expect(response).to be_successful
     expect(response.body).to include 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.'
+  end
+
+  context 'when a user version' do
+    let(:cocina_object) do
+      build(:dro_with_metadata, id: druid, title: 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.', version: user_version)
+    end
+    let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, find: cocina_object) }
+    let(:user_version) { 2 }
+
+    it 'displays the user version descriptive metadata' do
+      get "/items/#{druid}/user_versions/2/metadata/descriptive"
+      expect(response).to be_successful
+      expect(response.body).to include 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.'
+    end
   end
 end
