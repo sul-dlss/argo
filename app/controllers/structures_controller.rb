@@ -9,14 +9,14 @@ class StructuresController < ApplicationController
     respond_to do |format|
       format.csv do
         # Download the structural spreadsheet
-        cocina = Repository.find(params[:item_id])
+        cocina = fetch_cocina
         authorize! :update, cocina
         filename = "structure-#{Druid.new(cocina).without_namespace}.csv"
         send_data StructureSerializer.as_csv(cocina.externalIdentifier, cocina.structural), filename:
       end
       format.html do
         # Lazy loading of the structural part of the show page
-        @cocina_item = Repository.find(decrypted_token.fetch(:druid))
+        @cocina_item = fetch_cocina
       end
     end
   end
@@ -32,11 +32,19 @@ class StructuresController < ApplicationController
   end
 
   def hierarchy
-    @cocina_item = Repository.find(decrypted_token.fetch(:druid))
+    @cocina_item = fetch_cocina
     @root_directory = FileHierarchyService.to_hierarchy(cocina_object: @cocina_item)
   end
 
   private
+
+  def item_id
+    decrypted_token&.fetch(:druid, nil) || params[:item_id]
+  end
+
+  def user_version_id
+    decrypted_token&.fetch(:user_version_id, nil) || params[:user_version_id]
+  end
 
   def display_success(message)
     redirect_to solr_document_path(@cocina.externalIdentifier), status: :see_other, notice: message
@@ -50,5 +58,11 @@ class StructuresController < ApplicationController
   # decode the token that grants view access
   def decrypted_token
     Argo.verifier.verified(params[:item_id], purpose: :view_token)
+  end
+
+  def fetch_cocina
+    return Repository.find(item_id) unless user_version_id
+
+    Repository.find_user_version(item_id, user_version_id)
   end
 end
