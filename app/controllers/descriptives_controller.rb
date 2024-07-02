@@ -2,15 +2,13 @@
 
 # Download the CSV descriptive metadata
 class DescriptivesController < ApplicationController
+  before_action :maybe_find_user_version, only: :show
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
   # Display the form for uploading the descriptive metadata spreadsheet
   def show
     respond_to do |format|
-      format.csv do
-        filename = "descriptive-#{Druid.new(@cocina).without_namespace}.csv"
-        send_data create_csv, filename:
-      end
+      format.csv { send_data(create_csv, filename:) }
     end
   end
 
@@ -38,6 +36,18 @@ class DescriptivesController < ApplicationController
   end
 
   private
+
+  def filename
+    return "descriptive-#{Druid.new(@cocina).without_namespace}.csv" unless params.key?(:user_version_id)
+
+    "descriptive-#{Druid.new(@cocina).without_namespace}-v#{params[:user_version_id]}.csv"
+  end
+
+  def maybe_find_user_version
+    return unless params.key?(:user_version_id)
+
+    @cocina = Repository.find_user_version(params[:item_id], params[:user_version_id])
+  end
 
   def display_success
     # The title as shown to the user comes from Solr (`display_title_ss`), so we re-index to ensure any change is immediately shown

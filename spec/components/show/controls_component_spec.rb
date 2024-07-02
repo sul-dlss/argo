@@ -17,12 +17,14 @@ RSpec.describe Show::ControlsComponent, type: :component do
                     open?: open,
                     cocina:, openable?: true,
                     open_and_not_assembling?: open_and_not_assembling,
+                    user_version:,
                     user_version_view?: user_version_view)
   end
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
   let(:open) { false }
   let(:open_and_not_assembling) { false }
   let(:user_version_view) { false }
+  let(:user_version) { nil }
 
   before do
     rendered
@@ -323,10 +325,15 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:open) { true }
     let(:open_and_not_assembling) { true }
     let(:user_version_view) { true }
+    let(:user_version) { 2 }
 
     it 'draws the buttons' do
       expect(rendered.css('a').size).to eq(9)
       expect(rendered.css('a.disabled').size).to eq 8 # except Download Cocina spreadsheet
+    end
+
+    it 'renders the descriptive download button pointing at the user version-aware path' do
+      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/user_versions/#{user_version}/descriptive.csv"
     end
   end
 end
