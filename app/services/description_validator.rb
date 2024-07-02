@@ -50,14 +50,15 @@ class DescriptionValidator
 
   # verify that each titleX.structuredValueY.type has a corresponding titleX.structuredValueY.value (where X and Y are any integer).
   def validate_matching_structured_title_headers
-    # first find all the values of X as array: the structured title numbers (e.g. title1.XXX title2.XXX, etc.)
-    structured_title_numbers = @headers.filter_map { |header| header&.match(/title(\d+).structuredValue\d+\.(type|value)/) }.pluck(1).uniq
+    @headers.each do |header|
+      next if header.blank?
 
-    # for each structured title number, find the values for Y (e.g. the value/type number) and ensure they are same for each title
-    structured_title_numbers.each do |title_number|
-      num_structured_title_types = @headers.filter_map { |header| header&.match(/title#{Regexp.quote(title_number)}.structuredValue(\d+)\.type/) }.pluck(1).sort
-      num_structured_title_values = @headers.filter_map { |header| header&.match(/title#{Regexp.quote(title_number)}.structuredValue(\d+)\.value/) }.pluck(1).sort
-      errors << "Mismatched title#{title_number}.structuredValue column: ensure each structured title has a matching type and value column." unless num_structured_title_types == num_structured_title_values
+      next unless header.match?(/\Atitle\d+.structuredValue\d+\.(type|value)\z/)
+
+      expected_corresponding_header = header.ends_with?('type') ? header.sub('type', 'value') : header.sub('value', 'type')
+      next if @headers.include?(expected_corresponding_header)
+
+      errors << "Unexpected or missing title structuredValue columns: found #{header} but not #{expected_corresponding_header}"
     end
   end
 

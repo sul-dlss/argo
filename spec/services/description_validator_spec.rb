@@ -25,7 +25,7 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq [
-            'Mismatched title1.structuredValue column: ensure each structured title has a matching type and value column.'
+            'Unexpected or missing title structuredValue columns: found title1.structuredValue2.value but not title1.structuredValue2.type'
           ]
         end
       end
@@ -36,7 +36,8 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq [
-            'Mismatched title2.structuredValue column: ensure each structured title has a matching type and value column.'
+            'Unexpected or missing title structuredValue columns: found title2.structuredValue1.type but not title2.structuredValue1.value',
+            'Unexpected or missing title structuredValue columns: found title2.structuredValue2.value but not title2.structuredValue2.type'
           ]
         end
       end
@@ -47,8 +48,8 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq [
-            'Mismatched title2.structuredValue column: ensure each structured title has a matching type and value column.',
-            'Mismatched title3.structuredValue column: ensure each structured title has a matching type and value column.'
+            'Unexpected or missing title structuredValue columns: found title2.structuredValue2.type but not title2.structuredValue2.value',
+            'Unexpected or missing title structuredValue columns: found title3.structuredValue2.value but not title3.structuredValue2.type'
           ]
         end
       end
@@ -68,7 +69,7 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq ['Title column not found.',
-                                         'Mismatched title1.structuredValue column: ensure each structured title has a matching type and value column.']
+                                         'Unexpected or missing title structuredValue columns: found title1.structuredValue1.type but not title1.structuredValue1.value']
         end
       end
 
@@ -78,7 +79,7 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq ['Title column not found.',
-                                         'Mismatched title1.structuredValue column: ensure each structured title has a matching type and value column.']
+                                         'Unexpected or missing title structuredValue columns: found title1.structuredValue1.value but not title1.structuredValue1.type']
         end
       end
 
@@ -90,8 +91,8 @@ RSpec.describe DescriptionValidator do
         end
       end
 
-      context 'with a title1.value, title2.structuredValue1.value and a title2.structuredValue1.type column' do
-        let(:csv) { 'druid,title1.value, title2.structuredValue1.type,title2.structuredValue1.value' }
+      context 'with a title1.value,title2.structuredValue1.value and a title2.structuredValue1.type column' do
+        let(:csv) { 'druid,title1.value,title2.structuredValue1.type,title2.structuredValue1.value' }
 
         it 'validates' do
           expect(instance.valid?).to be true
