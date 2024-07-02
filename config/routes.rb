@@ -216,6 +216,7 @@ Rails.application.routes.draw do
       post 'source_id'
     end
 
+    resources :user_versions, only: %i[show], constraints: ->(req) { req.format == :json }, as: 'item_user_version_json'
     resources :user_versions, controller: 'catalog', only: %i[show] do
       get 'descriptive', to: 'descriptives#show'
       resources 'files', only: %i[index], constraints: { item_id: /.*/ } do
