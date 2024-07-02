@@ -40,10 +40,14 @@ module Show
               class: 'external-link-button'
     end
 
-    def mods_link
-      link_to 'MODS', descriptive_item_metadata_path(document.id),
+    def description_link
+      link_to 'Description', description_link_path,
               class: 'external-link-button',
               data: { blacklight_modal: 'trigger' }
+    end
+
+    def description_link_path
+      user_version_view? ? descriptive_item_user_version_metadata_path(document.id, user_version) : descriptive_item_metadata_path(document.id)
     end
 
     def released_to_searchworks?
@@ -52,6 +56,6 @@ module Show
 
     private
 
-    attr_reader :document
+    attr_reader :document, :presenter
   end
 end

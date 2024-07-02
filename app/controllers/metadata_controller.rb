@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MetadataController < ApplicationController
-  # Shows the modal with the MODS XML. This is triggered by the "MODS" button on
+  # Shows the modal with the descriptive metadata from MODS. This is triggered by the "Description" button on
   # the item show page.
   def descriptive
     xml = PurlFetcher::Client::Mods.create(cocina:)
@@ -15,6 +15,10 @@ class MetadataController < ApplicationController
   private
 
   def cocina
-    Repository.find(params[:item_id])
+    if params.key?(:user_version_id)
+      Repository.find_user_version(params[:item_id], params[:user_version_id])
+    else
+      Repository.find(params[:item_id])
+    end
   end
 end
