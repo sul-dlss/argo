@@ -75,26 +75,6 @@ RSpec.describe 'Item view', :js do
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      context 'when there is an error retrieving the cocina_model' do
-        let(:solr_doc) { { :id => item_id, SolrDocument::FIELD_OBJECT_TYPE => 'item' } }
-        let(:object_client) do
-          instance_double(Dor::Services::Client::Object,
-                          version: version_client,
-                          user_version: user_version_client,
-                          events: events_client,
-                          release_tags: release_tags_client)
-        end
-
-        before do
-          allow(object_client).to receive(:find_lite).and_raise(Dor::Services::Client::UnexpectedResponse.new(response: ''))
-        end
-
-        it 'shows the page' do
-          visit solr_document_path item_id
-          expect(page).to have_content 'Warning: this object cannot currently be represented in the Cocina model.'
-        end
-      end
-
       context 'when the cocina_model exists' do
         let(:object_client) do
           instance_double(Dor::Services::Client::Object,

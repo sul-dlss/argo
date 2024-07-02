@@ -9,10 +9,6 @@ module Show
         @solr_document = presenter.document
       end
 
-      def render?
-        !@presenter.cocina.is_a? NilModel
-      end
-
       delegate :id, :status, to: :@solr_document
       delegate :state_service, to: :@presenter
     end

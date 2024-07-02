@@ -29,7 +29,7 @@ class TextExtraction
   end
 
   def possible?
-    return false if cocina_object.blank? || cocina_object.is_a?(NilModel)
+    return false if cocina_object.blank?
     return false unless cocina_object.dro? && resource_type_mapping.key?(cocina_object.type)
 
     true

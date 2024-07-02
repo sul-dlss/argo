@@ -22,31 +22,6 @@ class ItemsController < ApplicationController
     update
   ]
 
-  rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
-    detail = exception.errors.first['detail']&.truncate(1024) # Truncate to avoid cookie overflow. Cookies can hold 4k.
-    message = "Unable to retrieve the cocina model: #{detail}"
-    Honeybadger.notify(exception)
-    logger.error "Error connecting to DSA: #{detail}"
-    if turbo_frame_request?
-      render 'error', locals: { message: }
-    else
-      redirect_to solr_document_path(params[:id]),
-                  flash: { error: message }
-    end
-  end
-
-  rescue_from Cocina::Models::ValidationError do |exception|
-    message = "Error building Cocina: #{exception.message.truncate(200)}"
-    Honeybadger.notify(exception)
-    logger.error(message)
-    if turbo_frame_request?
-      render 'error', locals: { message: }
-    else
-      redirect_to solr_document_path(params[:id]),
-                  flash: { error: message }
-    end
-  end
-
   def add_collection
     response_message = if params[:collection].present?
                          new_collections = Array(@cocina.structural&.isMemberOf) + [params[:collection]]
@@ -134,11 +109,6 @@ class ItemsController < ApplicationController
   end
 
   def set_governing_apo
-    if @cocina.is_a? NilModel
-      return redirect_to solr_document_path(params[:id]),
-                         flash: { error: "Can't set governing APO on an invalid model" }
-    end
-
     authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
     change_set = build_change_set
@@ -205,7 +175,7 @@ class ItemsController < ApplicationController
   def update
     change_set = ItemChangeSet.new(@cocina)
     if change_set.validate(**item_params)
-      change_set.save # may raise Dor::Services::Client::BadRequestError
+      change_set.save # may raise Dor::Services::Client::UnexpectedResponse
       reindex
       redirect_to solr_document_path(params[:id]), status: :see_other
     else

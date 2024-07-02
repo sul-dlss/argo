@@ -68,7 +68,7 @@ class ItemChangeSet < ApplicationChangeSet
     (changed?(:view_access) || changed?(:download_access)) && view_access != 'location-based' && download_access != 'location-based'
   end
 
-  # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
+  # @raises [Dor::Services::Client::UnexpectedResponse] when an error occurs updating the object
   # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
   def save_model
     updated = model

@@ -10,14 +10,14 @@ RSpec.describe DescriptiveMetadataExportJob do
   let(:log_buffer) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
-  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
+  let(:response) { instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong') }
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
     allow(job).to receive(:with_bulk_action_log).and_yield(log_buffer)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(Dor::Services::Client).to receive(:object).with(druid3).and_return(object_client3)
+    allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::UnexpectedResponse.new(response:))
   end
 
   after do
@@ -36,9 +36,6 @@ RSpec.describe DescriptiveMetadataExportJob do
     end
     let(:item2) do
       build(:dro_with_metadata, id: 'druid:bd123fg5678', title: 'Test DRO #2')
-    end
-    let(:item3) do
-      NilModel.new(druid3)
     end
 
     context 'when happy path' do

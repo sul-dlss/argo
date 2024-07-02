@@ -34,7 +34,7 @@ class Ability
 
     if current_user.manager?
       can %i[update manage_governing_apo view_content read],
-          [NilModel] + DRO_MODELS + COLLECTION_MODELS
+          DRO_MODELS + COLLECTION_MODELS
       can :create, ADMIN_POLICY_MODELS
     end
 
