@@ -16,7 +16,7 @@ class StructuresController < ApplicationController
       end
       format.html do
         # Lazy loading of the structural part of the show page
-        @cocina_item = fetch_cocina
+        @cocina_item = fetch_cocina if decrypted_token
       end
     end
   end
@@ -32,6 +32,8 @@ class StructuresController < ApplicationController
   end
 
   def hierarchy
+    return unless decrypted_token
+
     @cocina_item = fetch_cocina
     @root_directory = FileHierarchyService.to_hierarchy(cocina_object: @cocina_item)
   end
