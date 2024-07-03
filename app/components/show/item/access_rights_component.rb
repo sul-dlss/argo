@@ -3,9 +3,8 @@
 module Show
   module Item
     class AccessRightsComponent < ApplicationComponent
-      def initialize(change_set:, version_service:)
-        @change_set = change_set
-        @version_service = version_service
+      def initialize(presenter:)
+        @presenter = presenter
       end
 
       def access_rights
@@ -18,8 +17,13 @@ module Show
         val
       end
 
-      delegate :open_and_not_assembling?, to: :@version_service
-      delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :@change_set
+      def edit?
+        !user_version_view? && open_and_not_assembling?
+      end
+
+      delegate :version_service, :user_version_view?, :change_set, to: :@presenter
+      delegate :open_and_not_assembling?, to: :version_service
+      delegate :id, :view_access, :download_access, :access_location, :controlled_digital_lending, to: :change_set
 
       def humanize_value(val)
         val == 'location-based' ? 'Location' : val.capitalize

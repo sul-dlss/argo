@@ -1,6 +1,6 @@
 <turbo-frame id="barcode">
   <%= barcode %>
-  <% if open_and_not_assembling? %>
+  <% if edit? %>
     <%= link_to edit_barcode_item_path(id:), aria: { label: 'Edit barcode' } do %>
       <span class="bi-pencil"></span>
     <% end %>

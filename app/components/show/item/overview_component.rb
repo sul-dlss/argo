@@ -10,7 +10,7 @@ module Show
       end
 
       delegate :id, :status, to: :@solr_document
-      delegate :state_service, to: :@presenter
+      delegate :state_service, :user_version_view?, to: :@presenter
     end
   end
 end

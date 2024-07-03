@@ -7,7 +7,7 @@ RSpec.describe 'Version view', :js do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:druid) { 'druid:hj185xx2222' }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
-  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1]) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1], find: cocina_object, solr: solr_doc) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: release_tags_list) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
   let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2) }
@@ -34,9 +34,6 @@ RSpec.describe 'Version view', :js do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
 
-    solr_conn.add(solr_doc)
-    solr_conn.commit
-
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
@@ -47,7 +44,6 @@ RSpec.describe 'Version view', :js do
     let(:object_client) do
       instance_double(Dor::Services::Client::Object,
                       find_lite: cocina_object_lite,
-                      find: cocina_object,
                       version: version_client,
                       user_version: user_version_client,
                       release_tags: release_tags_client)
@@ -200,6 +196,12 @@ RSpec.describe 'Version view', :js do
         expect(page).to have_content('You are viewing the latest version.')
         expect(page).to have_link('Back to current', href: "/view/#{druid}")
         expect(page).to have_no_content('Technical metadata')
+        # And nothing should be editable
+        expect(page).to have_no_css('.bi-pencil')
+        expect(page).to have_content('Older versions are not released')
+
+        expect(user_version_client).to have_received(:find).with('2')
+        expect(user_version_client).to have_received(:solr).with('2')
       end
     end
 

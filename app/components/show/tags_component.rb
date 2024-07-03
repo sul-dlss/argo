@@ -2,8 +2,9 @@
 
 module Show
   class TagsComponent < ApplicationComponent
-    def initialize(document:)
+    def initialize(document:, presenter:)
       @document = document
+      @presenter = presenter
     end
 
     def tags
@@ -11,6 +12,8 @@ module Show
     end
 
     def edit_tags
+      return if user_version_view?
+
       link_to edit_item_tags_path(item_id: id),
               aria: { label: 'Edit tags' },
               data: { controller: 'button', action: 'click->button#open' } do
@@ -21,6 +24,7 @@ module Show
     private
 
     delegate :id, to: :@document
+    delegate :user_version_view?, to: :@presenter
     delegate :blacklight_config, :search_state, :search_action_path, to: :helpers
 
     def render_field(field_name)

@@ -133,9 +133,7 @@ class ItemsController < ApplicationController
   end
 
   def show_barcode
-    change_set = ItemChangeSet.new(@cocina)
-    version_service = VersionService.new(druid: @cocina.externalIdentifier)
-    render Show::BarcodeComponent.new(change_set:, version_service:)
+    render Show::BarcodeComponent.new(presenter: build_argo_show_presenter)
   end
 
   # Draw form for copyright
@@ -144,9 +142,7 @@ class ItemsController < ApplicationController
   end
 
   def show_copyright
-    change_set = build_change_set
-    version_service = VersionService.new(druid: @cocina.externalIdentifier)
-    render Show::CopyrightComponent.new(change_set:, version_service:)
+    render Show::CopyrightComponent.new(presenter: build_argo_show_presenter)
   end
 
   # Draw form for use and reproduction statement
@@ -155,9 +151,7 @@ class ItemsController < ApplicationController
   end
 
   def show_use_statement
-    change_set = build_change_set
-    version_service = VersionService.new(druid: @cocina.externalIdentifier)
-    render Show::UseStatementComponent.new(change_set:, version_service:)
+    render Show::UseStatementComponent.new(presenter: build_argo_show_presenter)
   end
 
   # Draw form for setting license
@@ -166,9 +160,7 @@ class ItemsController < ApplicationController
   end
 
   def show_license
-    change_set = build_change_set
-    version_service = VersionService.new(druid: @cocina.externalIdentifier)
-    render Show::LicenseComponent.new(change_set:, version_service:)
+    render Show::LicenseComponent.new(presenter: build_argo_show_presenter)
   end
 
   # save the form
@@ -193,14 +185,12 @@ class ItemsController < ApplicationController
   end
 
   def show_rights
-    @change_set = build_change_set
-    version_service = VersionService.new(druid: @cocina.externalIdentifier)
     if @cocina.collection?
+      version_service = VersionService.new(druid: @cocina.externalIdentifier)
       change_set = CollectionChangeSet.new(@cocina)
       render Show::Collection::AccessRightsComponent.new(change_set:, version_service:)
     else
-      change_set = ItemChangeSet.new(@cocina)
-      render Show::Item::AccessRightsComponent.new(change_set:, version_service:)
+      render Show::Item::AccessRightsComponent.new(presenter: build_argo_show_presenter)
     end
   end
 
@@ -241,6 +231,13 @@ class ItemsController < ApplicationController
 
   def authorize_manage!
     authorize! :update, @cocina
+  end
+
+  def build_argo_show_presenter
+    ArgoShowPresenter.new(nil, nil, nil).tap do |presenter|
+      presenter.cocina = @cocina
+      presenter.version_service = VersionService.new(druid: @cocina.externalIdentifier)
+    end
   end
 
   def build_change_set

@@ -2,12 +2,17 @@
 
 module Show
   class SourceIdComponent < ApplicationComponent
-    def initialize(document:, version_service:)
+    def initialize(document:, presenter:)
       @document = document
-      @version_service = version_service
+      @presenter = presenter
     end
 
-    delegate :open_and_not_assembling?, to: :@version_service
+    def edit?
+      item? && !user_version_view? && open_and_not_assembling?
+    end
+
+    delegate :version_service, :user_version_view?, to: :@presenter
+    delegate :open_and_not_assembling?, to: :version_service
     delegate :id, :source_id, :item?, to: :@document
   end
 end

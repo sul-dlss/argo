@@ -1,6 +1,6 @@
 <turbo-frame id="license">
   <%= license %>
-  <% if open_and_not_assembling? %>
+  <% if edit? %>
     <%= link_to edit_license_item_path(id:), aria: { label: 'Edit license' } do %>
       <span class="bi-pencil"></span>
     <% end %>

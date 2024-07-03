@@ -11,7 +11,7 @@
       <tr>
         <th class="col-3" scope="row">Content type</th>
         <td>
-          <%= render Show::ContentTypeComponent.new(document: @solr_document, version_service: @presenter.version_service) %>
+          <%= render Show::ContentTypeComponent.new(document: @solr_document, presenter: @presenter) %>
         </td>
       </tr>
 
@@ -25,7 +25,7 @@
       <tr>
         <th class="col-3" scope="row">Source IDs</th>
         <td>
-          <%= render Show::SourceIdComponent.new(document: @solr_document, version_service: @presenter.version_service) %>
+          <%= render Show::SourceIdComponent.new(document: @solr_document, presenter: @presenter) %>
         </td>
       </tr>
 
@@ -39,7 +39,7 @@
       <tr>
         <th class="col-3" scope="row">Released to</th>
         <td>
-            <%= released_to %>
+            <%= user_version_view? ? 'Older versions are not released' : released_to %>
         </td>
       </tr>
 
@@ -53,14 +53,14 @@
       <tr>
         <th class="col-3" scope="row"><%= catalog_record_id_label %></th>
         <td>
-          <%= render Show::CatalogRecordIdComponent.new(change_set: @presenter.change_set, version_service: @presenter.version_service) %>
+          <%= render Show::CatalogRecordIdComponent.new(presenter: @presenter) %>
         </td>
       </tr>
 
       <tr>
         <th class="col-3" scope="row">Barcode</th>
         <td>
-          <%= render Show::BarcodeComponent.new(change_set: @presenter.change_set, version_service: @presenter.version_service) %>
+          <%= render Show::BarcodeComponent.new(presenter: @presenter) %>
         </td>
       </tr>
 
@@ -85,7 +85,7 @@
       <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>
-          <%= render Show::TagsComponent.new(document: @presenter.document) %>
+          <%= render Show::TagsComponent.new(document: @presenter.document, presenter: @presenter) %>
         </td>
       </tr>
     </tbody>

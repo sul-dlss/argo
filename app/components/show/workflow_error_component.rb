@@ -16,7 +16,7 @@ module Show
     end
 
     def render?
-      document[SolrDocument::FIELD_WORKFLOW_ERRORS]
+      document[SolrDocument::FIELD_WORKFLOW_ERRORS].present?
     end
   end
 end

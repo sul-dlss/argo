@@ -2,20 +2,24 @@
 
 module Show
   class LicenseComponent < ApplicationComponent
-    def initialize(change_set:, version_service:)
-      @change_set = change_set
-      @version_service = version_service
+    def initialize(presenter:)
+      @presenter = presenter
     end
 
     def license
-      uri = @change_set.license
+      uri = change_set.license
       return 'No license' unless uri
 
       value = Constants::LICENSE_OPTIONS.find { |attribute| attribute.fetch(:uri) == uri }
       value.fetch(:label)
     end
 
-    delegate :open_and_not_assembling?, to: :@version_service
-    delegate :id, to: :@change_set
+    def edit?
+      !user_version_view? && open_and_not_assembling?
+    end
+
+    delegate :version_service, :user_version_view?, :change_set, to: :@presenter
+    delegate :open_and_not_assembling?, to: :version_service
+    delegate :id, to: :change_set
   end
 end

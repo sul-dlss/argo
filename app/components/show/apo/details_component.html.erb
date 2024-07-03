@@ -34,7 +34,7 @@
       <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>
-          <%= render Show::TagsComponent.new(document: @presenter.document) %>
+          <%= render Show::TagsComponent.new(document: @presenter.document, presenter: @presenter) %>
         </td>
       </tr>
     </tbody>

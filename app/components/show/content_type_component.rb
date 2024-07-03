@@ -2,12 +2,17 @@
 
 module Show
   class ContentTypeComponent < ApplicationComponent
-    def initialize(document:, version_service:)
+    def initialize(document:, presenter:)
       @document = document
-      @version_service = version_service
+      @presenter = presenter
     end
 
-    delegate :open_and_not_assembling?, to: :@version_service
+    def edit?
+      !user_version_view? && open_and_not_assembling?
+    end
+
+    delegate :version_service, :user_version_view?, :change_set, to: :@presenter
+    delegate :open_and_not_assembling?, to: :version_service
     delegate :id, :content_type, to: :@document
   end
 end
