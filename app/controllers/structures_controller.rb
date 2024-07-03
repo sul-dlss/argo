@@ -9,14 +9,14 @@ class StructuresController < ApplicationController
     respond_to do |format|
       format.csv do
         # Download the structural spreadsheet
-        cocina = fetch_cocina(item_id: params[:item_id])
+        cocina = fetch_cocina(item_id: params[:item_id], user_version_id: params[:user_version_id])
         authorize! :update, cocina
         filename = "structure-#{Druid.new(cocina).without_namespace}.csv"
         send_data StructureSerializer.as_csv(cocina.externalIdentifier, cocina.structural), filename:
       end
       format.html do
         # Lazy loading of the structural part of the show page
-        @cocina_item = fetch_cocina(item_id: decrypted_token.fetch(:druid), user_version_id: decrypted_token&.fetch(:user_version_id, nil))
+        @cocina_item = fetch_cocina(item_id: decrypted_token.fetch(:druid), user_version_id: decrypted_token.fetch(:user_version_id, nil))
       end
     end
   end
@@ -32,7 +32,7 @@ class StructuresController < ApplicationController
   end
 
   def hierarchy
-    @cocina_item = fetch_cocina(item_id: decrypted_token.fetch(:druid), user_version_id: decrypted_token&.fetch(:user_version_id, nil))
+    @cocina_item = fetch_cocina(item_id: decrypted_token.fetch(:druid), user_version_id: decrypted_token.fetch(:user_version_id, nil))
     @root_directory = FileHierarchyService.to_hierarchy(cocina_object: @cocina_item)
   end
 

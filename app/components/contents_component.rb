@@ -23,6 +23,6 @@ class ContentsComponent < ApplicationComponent
   end
 
   def structural_link_path
-    user_version_view? ? item_user_version_structure_path(@document.id, user_version) : item_structure_path(@view_token)
+    user_version_view? ? item_user_version_structure_path(@view_token, user_version) : item_structure_path(@view_token)
   end
 end
