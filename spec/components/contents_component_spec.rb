@@ -5,11 +5,14 @@ require 'rails_helper'
 RSpec.describe ContentsComponent, type: :component do
   let(:presenter) do
     instance_double(ArgoShowPresenter,
-                    document: solr_doc, cocina:,
+                    document: solr_doc,
+                    cocina:,
                     view_token: 'skret-t0k3n',
                     open_and_not_assembling?: open,
+                    user_version:,
                     user_version_view?: user_version_view)
   end
+  let(:user_version) { nil }
   let(:user_version_view) { false }
   let(:component) { described_class.new(presenter:) }
 
@@ -51,6 +54,7 @@ RSpec.describe ContentsComponent, type: :component do
 
     context 'when a user version' do
       let(:open) { true }
+      let(:user_version) { 2 }
       let(:user_version_view) { true }
 
       it 'hides Upload CSV button' do
