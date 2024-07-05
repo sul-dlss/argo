@@ -1,4 +1,9 @@
 <header class="document-header mb-5 pb-3">
+  <% if version_banner %>
+    <div class="alert alert-warning" role="alert">
+      <%= version_banner %>
+    </div>
+  <% end %>
   <div class="row">
     <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) %>
 
@@ -10,9 +15,9 @@
       <%= object_type_label %>
     </div>
   </div>
-  <% if @presenter.user_version %>
+  <% if @presenter.user_version_view? %>
     <p>
-        This is public version <%= @presenter.user_version %>. <%= link_to('Back to latest', solr_document_path(@document.id)) %>
+      <%= link_to('Back to current', solr_document_path(@document.id)) %>
     </p>
   <% end %>
 </header>

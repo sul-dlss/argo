@@ -11,4 +11,10 @@ class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   def object_type_class
     object_type_label.tr(' ', '-')
   end
+
+  def version_banner
+    return 'You are viewing the latest version.' if @presenter.head_user_version_view?
+
+    'You are viewing an older version.' if @presenter.user_version_view?
+  end
 end

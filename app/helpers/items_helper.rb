@@ -16,6 +16,7 @@ module ItemsHelper
         presenter.state_service = StateService.new(@cocina)
         presenter.version_service = VersionService.new(druid: @cocina.externalIdentifier)
         presenter.user_version = @user_version
+        presenter.head_user_version = @head_user_version
       end
     end
   end

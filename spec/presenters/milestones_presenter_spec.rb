@@ -85,4 +85,10 @@ RSpec.describe MilestonesPresenter do
 
     it { is_expected.to eq 1 }
   end
+
+  describe '#head_user_version' do
+    subject { presenter.head_user_version }
+
+    it { is_expected.to eq '1' }
+  end
 end

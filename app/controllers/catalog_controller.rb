@@ -368,7 +368,7 @@ class CatalogController < ApplicationController
     @milestones_presenter = MilestonesPresenter.new(druid: @druid)
     raise ActionController::RoutingError, 'Not Found' unless @milestones_presenter.valid_user_version?(@user_version)
 
-    @milestones_presenter = MilestonesPresenter.new(druid: @druid)
+    @head_user_version = @milestones_presenter.head_user_version
     @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object

@@ -15,8 +15,14 @@ RSpec.describe DocumentTitleComponent, type: :component do
       object_type:
     )
   end
-  let(:presenter) { instance_double(ArgoShowPresenter, document:, cocina: nil, user_version:) }
+  let(:presenter) do
+    instance_double(ArgoShowPresenter, document:, cocina: nil,
+                                       user_version:, user_version_view?: user_version.present?,
+                                       head_user_version:,
+                                       head_user_version_view?: user_version.present? && user_version == head_user_version)
+  end
   let(:user_version) { nil }
+  let(:head_user_version) { nil }
   let(:rendered) { render_inline(component) }
 
   before do
@@ -80,9 +86,19 @@ RSpec.describe DocumentTitleComponent, type: :component do
 
     context 'with a user version' do
       let(:user_version) { '2' }
+      let(:head_user_version) { '3' }
 
       it 'renders the expected user version label' do
-        expect(rendered.content).to include('public version 2')
+        expect(rendered.content).to include('You are viewing an older version.')
+      end
+    end
+
+    context 'with a head user version' do
+      let(:user_version) { '2' }
+      let(:head_user_version) { '2' }
+
+      it 'renders the expected user version label' do
+        expect(rendered.content).to include('You are viewing the latest version.')
       end
     end
   end
