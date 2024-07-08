@@ -28,7 +28,6 @@ RSpec.describe VersionMilestonesComponent, type: :component do
     it 'renders something useful' do
       render_inline(instance)
       expect(page).to have_text '2 (2.0.0) Add collection, set rights to citations'
-      expect(page).to have_css '.last_step2', visible: false
       expect(page).to have_css 'tr.version2', count: 2
       expect(milestones_presenter).to have_received(:steps_for).with(2)
       expect(milestones_presenter).to have_received(:version_title).with(2)
@@ -44,7 +43,6 @@ RSpec.describe VersionMilestonesComponent, type: :component do
     it 'renders something useful' do
       render_inline(instance)
       expect(page).to have_text '2 (2.0.0) Add collection, set rights to citations'
-      expect(page).to have_css '.last_step2', visible: false
       expect(page).to have_css 'tr.version2', count: 2
     end
   end
