@@ -174,6 +174,13 @@ docker compose run --rm web yarn install
 docker compose run --rm web bin/rails assets:precompile
 ```
 
+### Feature tests
+To run a headed browser, set the NO_HEADLESS env variable. For example:
+
+```
+NO_HEADLESS=1 bundle exec rspec spec/features/item_view_spec.rb
+```
+
 ## Creating fixture data
 
 To begin registering items in the Argo UI, there will need to be at least one agreement object and one APO object in the index. To create and index one of each of these objects, run the following command:

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, change_set:, version_service:) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, change_set:, version_service:, user_version_view?: false) }
   let(:change_set) { CollectionChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::Collection.new(externalIdentifier: 'druid:bc234fg5678',

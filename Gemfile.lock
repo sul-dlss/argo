@@ -687,7 +687,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client (~> 14.14)
+  dor-services-client (~> 14.15)
   dor-workflow-client (~> 7.0)
   druid-tools
   dry-monads

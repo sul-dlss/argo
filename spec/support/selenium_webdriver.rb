@@ -4,7 +4,7 @@ require 'capybara/rails'
 
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
-    opts.add_argument('--headless')
+    opts.add_argument('--headless') unless ENV.key?('NO_HEADLESS')
     opts.add_argument('--disable-gpu')
     # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
     opts.add_argument('--disable-site-isolation-trials')

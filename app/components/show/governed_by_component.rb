@@ -2,9 +2,9 @@
 
 module Show
   class GovernedByComponent < ApplicationComponent
-    def initialize(document:, version_service:)
+    def initialize(document:, presenter:)
       @document = document
-      @version_service = version_service
+      @presenter = presenter
     end
 
     def admin_policy
@@ -13,7 +13,12 @@ module Show
       helpers.link_to_admin_policy_with_objs(document: @document, value: @document.apo_id)
     end
 
-    delegate :open_and_not_assembling?, to: :@version_service
+    def edit?
+      !user_version_view? && open_and_not_assembling?
+    end
+
+    delegate :version_service, :user_version_view?, to: :@presenter
+    delegate :open_and_not_assembling?, to: :version_service
     delegate :id, to: :@document
   end
 end
