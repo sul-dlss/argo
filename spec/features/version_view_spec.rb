@@ -197,8 +197,8 @@ RSpec.describe 'Version view', :js do
         visit item_user_version_path(item_id: druid, id: 2)
 
         expect(page).to have_content(title)
-        expect(page).to have_content('public version 2')
-        expect(page).to have_link('Back to latest', href: "/view/#{druid}")
+        expect(page).to have_content('You are viewing the latest version.')
+        expect(page).to have_link('Back to current', href: "/view/#{druid}")
         expect(page).to have_no_content('Technical metadata')
       end
     end

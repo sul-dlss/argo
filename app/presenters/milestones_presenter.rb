@@ -30,6 +30,10 @@ class MilestonesPresenter
     user_version.nil? || user_versions.any? { |version| version.userVersion.to_s == user_version }
   end
 
+  def head_user_version
+    user_versions.max { |user_version1, user_version2| user_version1.userVersion.to_i <=> user_version2.userVersion.to_i }&.userVersion.to_s
+  end
+
   attr_reader :druid
 
   private
