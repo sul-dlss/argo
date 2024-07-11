@@ -31,7 +31,11 @@ class MilestonesPresenter
   end
 
   def head_user_version
-    user_versions.max { |user_version1, user_version2| user_version1.userVersion.to_i <=> user_version2.userVersion.to_i }&.userVersion.to_s
+    @head_user_version ||= user_versions.max { |user_version1, user_version2| user_version1.userVersion.to_i <=> user_version2.userVersion.to_i }&.userVersion.to_s
+  end
+
+  def current_version
+    @current_version ||= versions.max_by(&:versionId)&.versionId
   end
 
   attr_reader :druid
