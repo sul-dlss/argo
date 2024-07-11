@@ -3,6 +3,36 @@
   background-color: $floral-white;
 }
 
+.btn-primary {
+  @include button-variant($background: $digital-blue-base, $border: $digital-blue-base, $hover-background: $digital-blue-dark, $hover-border: $digital-blue-dark);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.btn-outline-primary {
+  @include button-outline-variant($color: $digital-blue-base, $color-hover: $digital-blue-dark, $active-background: white, $active-border: $digital-blue-dark, $active-color: $digital-blue-dark);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Document action items that are disabled
+.btn-primary.disabled {
+  color: $black80;
+  background-color: $black10;
+  border-color: $black20;
+  opacity: 1;
+}
+
+// Style disabled outline-primary buttons as greyed out using the `disabled` pseudo-class
+.btn-outline-primary:disabled {
+  border-color: $btn-link-disabled-color;
+  color: $btn-link-disabled-color;
+  opacity: $btn-disabled-opacity;
+}
+
+
 .btn-secondary {
   @include button-variant($white, $blue);
   color: $blue;
@@ -24,18 +54,4 @@
 // Set the background color of the active dropdown button
 .btn-outline-secondary {
   @include button-outline-variant($body-color, $body-color, $tea, $body-color);
-}
-
-// Document action items that are disabled
-.btn-primary.disabled {
-  background-color: $silver;
-  color: $body-color;
-  opacity: 1.0;
-}
-
-// Style disabled outline-primary buttons as greyed out using the `disabled` pseudo-class
-.btn-outline-primary:disabled {
-  border-color: $btn-link-disabled-color;
-  color: $btn-link-disabled-color;
-  opacity: $btn-disabled-opacity;
 }

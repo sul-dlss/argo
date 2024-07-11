@@ -69,9 +69,9 @@
     @extend .btn-outline-primary;
 
     &.disabled {
-      color: $btn-link-disabled-color;
-      border-color: $btn-link-disabled-color;
-      opacity: $btn-disabled-opacity;
+      color: $black60;
+      border-color: $black50;
+      opacity: 1;
     }
   }
 
