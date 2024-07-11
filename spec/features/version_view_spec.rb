@@ -199,6 +199,7 @@ RSpec.describe 'Version view', :js do
         # And nothing should be editable
         expect(page).to have_no_css('.bi-pencil')
         expect(page).to have_content('Older versions are not released')
+        expect(page).to have_no_css('.open-close') # Lock icon
 
         expect(user_version_client).to have_received(:find).with('2')
         expect(user_version_client).to have_received(:solr).with('2')
