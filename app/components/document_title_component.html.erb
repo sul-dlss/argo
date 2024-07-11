@@ -5,7 +5,7 @@
     </div>
   <% end %>
   <div class="row">
-    <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) %>
+    <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) && !@presenter.user_version_view? %>
 
     <%= content_tag @as, class: @classes do %>
       <%= title -%>

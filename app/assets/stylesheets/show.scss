@@ -82,15 +82,12 @@
   .open-close {
     width: 2rem;
     float: left;
+    margin-right: 2rem;
 
     .btn {
       font-size: x-large;
       color: $color-cardinal-red;
     }
-  }
-
-  .document-title-heading {
-    margin-left: 2rem;
   }
 
   /* content metadata section */
