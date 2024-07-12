@@ -1,0 +1,52 @@
+footer a {
+  --bs-link-color-rgb: 255, 255, 255;
+  --bs-link-hover-color-rgb: 255, 255, 255;
+}
+
+#pre-footer {
+  background-color: var(--stanford-black);
+}
+
+#su-footer {
+  background-color: var(--stanford-cardinal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  ul {
+    a {
+      font-size: min(calc(0.825rem + 0.3vw), 1.25rem);
+    }
+  }
+
+  .copyright {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #su-footer {
+    ul a {
+      font-weight: 600;
+    }
+
+    .copyright {
+      font-size: 0.9375rem;
+    }
+  }
+}
+
+.su-logo {
+  display: inline-block;
+  font-family: var(--font-family-serif);
+  font-variant-ligatures: discretionary-ligatures;
+  font-feature-settings: "liga";
+  font-weight: 400;
+  font-size: 2.125rem;
+  line-height: 0.75;
+  text-decoration: none;
+}
+
+.su-logo-university {
+  font-size: 1.5rem;
+  padding-left: 0.5rem;
+}

@@ -3,7 +3,7 @@
     <%= render(Blacklight::SearchContextComponent.new(search_context: @search_context, search_session:)) if search_session['document_id'] == @document.id %>
   </div>
   <div class="col-md-2">
-    <%= link_back_to_catalog label: 'Back to search', class: 'btn btn-default' %>
+    <%= link_back_to_catalog label: 'Back to search', class: 'btn btn-primary' %>
   </div>
 </div>
 

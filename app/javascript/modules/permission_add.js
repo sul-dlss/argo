@@ -1,8 +1,8 @@
 export default class {
   /**
-     * Represents the form widget for adding grants to an object
-     * @param parent - The parent to which contains this element
-     */
+   * Represents the form widget for adding grants to an object
+   * @param parent - The parent to which contains this element
+   */
   constructor (parent) {
     this.parent = parent
   }
@@ -24,14 +24,18 @@ export default class {
             <select id="permissionRole" class="form-select"><option value="manage">Manage</option><option value="view">View</option></select>
           </div>
           <div class="col-lg-1">
-            <button class="btn btn-secondary">Add</button>
+            <button class="btn btn-primary">Add</button>
           </div>
           `
 
     const button = div.querySelector('button')
     button.addEventListener('click', (event) => {
       event.preventDefault()
-      this.parent.add({ name: document.getElementById('permissionName').value, type: 'group', access: document.getElementById('permissionRole').value })
+      this.parent.add({
+        name: document.getElementById('permissionName').value,
+        type: 'group',
+        access: document.getElementById('permissionRole').value
+      })
     })
 
     newEl.appendChild(div)

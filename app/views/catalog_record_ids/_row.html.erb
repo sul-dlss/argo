@@ -6,7 +6,7 @@
     <%= form.text_field :value, class: 'form-control' %>
   </div>
   <div class="col-sm-1">
-    <%= button_tag type: 'button', class: 'btn', aria: { label: 'Remove' },
+    <%= button_tag type: 'button', class: 'btn btn-link', aria: { label: 'Remove' },
                    data: { action: 'click->nested-form#removeAssociation',
                            plain: true } do %>
       <span class="bi bi-trash"></span>

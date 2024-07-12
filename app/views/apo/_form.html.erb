@@ -134,10 +134,10 @@
   <div class="mb-3">
     <% unless @form.persisted? %>
       <%= submit_tag 'Register APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', '/', class: 'btn btn-secondary' %>
+      <%= link_to 'Cancel', '/', class: 'btn btn-outline-primary' %>
     <% else %>
       <%= submit_tag 'Update APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-secondary' %>
+      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-outline-primary' %>
     <% end %>
   </div>
 <% end %>
