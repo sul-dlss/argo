@@ -50,7 +50,7 @@ class CatalogRecordIdForm < Reform::Form
   end
 
   def setup_properties!(_options)
-    object_catalog_record_ids = model.identification.catalogLinks.filter_map do |catalog_link|
+    object_catalog_record_ids = model.identification.catalogLinks.select do |catalog_link|
       catalog_link if catalog_link.catalog == CatalogRecordId.type
     end
 
@@ -58,7 +58,7 @@ class CatalogRecordIdForm < Reform::Form
       CatalogRecordIdForm::Row.new(value: catalog_record_id.catalogRecordId, refresh: catalog_record_id.refresh)
     end
 
-    other_object_catalog_record_ids = model.identification.catalogLinks.filter_map do |catalog_link|
+    other_object_catalog_record_ids = model.identification.catalogLinks.select do |catalog_link|
       catalog_link if catalog_link.catalog.exclude?(CatalogRecordId.type)
     end
 
