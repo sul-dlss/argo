@@ -116,3 +116,23 @@ legend {
     margin-bottom: 5px;
   }
 }
+
+.palo-alto-dark {
+  --bs-dark-rgb: var(--stanford-stone-dark-rgb);
+}
+
+.su-brand-bar__logo {
+  color: var(--stanford-cardinal);
+}
+
+.masthead {
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        font-weight: normal;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+  }
+}
