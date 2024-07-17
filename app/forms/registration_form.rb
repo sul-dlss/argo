@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 # This models the values set from the registration form
+# rubocop:disable Metrics/ClassLength
 class RegistrationForm < Reform::Form
+  include Dry::Monads[:result]
+
   class VirtualModel < Hash
     def persisted?
       false
@@ -60,7 +63,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
       return true
     end
 
-    statuses.filter(&:failure?).map(&:failure).each { |error| errors.add(:save, error.message) }
+    statuses.filter(&:failure?).map(&:failure).each { |error| errors.add(:save, error) }
     false
   end
 
@@ -69,8 +72,21 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
 
     items.map do |item|
       request_model = cocina_model(item) # might raise Cocina::Models::ValidationError
-      RegistrationService.register(model: request_model, workflow: workflow_id, tags: tags_with_user)
+      result = RegistrationService.register(model: request_model, workflow: workflow_id, tags: tags_with_user)
+
+      if result.failure?
+        message = "error with #{item.source_id}: #{get_identifiers(request_model)}. #{result.failure.message}"
+        Failure(message)
+      else
+        result
+      end
     end
+  end
+
+  def get_identifiers(model)
+    links = model.identification.catalogLinks.map { |link| link.catalogRecordId if link.catalog == 'folio' }
+    links << model.identification&.barcode
+    links.compact.join(', ')
   end
 
   def registered_by_tag
@@ -132,3 +148,4 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     [{ catalog: CatalogRecordId.type, catalogRecordId: item.catalog_record_id, refresh: true }]
   end
 end
+# rubocop:enable Metrics/ClassLength

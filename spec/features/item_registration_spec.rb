@@ -205,4 +205,34 @@ RSpec.describe 'Item registration page', :js do
       expect(page).to have_no_content 'Items successfully registered.'
     end
   end
+
+  context 'when registration fails due to an error with a FOLIO record' do
+    let(:ur_apo_id) { 'druid:hv992ry2431' }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find_lite: cocina_model, find: cocina_model) }
+
+    before do
+      allow(Dor::Services::Client::Objects).to receive(:find).with(source_id:).and_return(true)
+      allow(Dor::Services::Client::Objects).to receive(:register).and_raise(Dor::Services::Client::UnexpectedResponse, 'FOLIO error')
+      allow(FolioClient).to receive(:fetch_marc_hash).and_return(true)
+    end
+
+    it 'displays an error message with the HRID' do
+      visit registration_path
+      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select 'registrationWF', from: 'Initial Workflow'
+      select 'book', from: 'Content Type'
+      select 'left-to-right', from: 'Viewing Direction'
+
+      fill_in 'Project Name', with: 'special division : project #4'
+      fill_in 'Tags', with: 'tag : test'
+
+      fill_in CatalogRecordId.label, with: 'a12345'
+      fill_in 'Source ID', with: source_id
+      fill_in 'Label', with: 'object title'
+
+      click_button 'Register'
+
+      expect(page).to have_content "Save error with #{source_id}: a12345"
+    end
+  end
 end
