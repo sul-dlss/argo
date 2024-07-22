@@ -283,7 +283,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
-    honeybadger (5.14.0)
+    honeybadger (5.15.0)
     http-cookie (1.0.6)
       domain_name (~> 0.5)
     http_logger (0.7.0)
@@ -504,7 +504,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     retries (0.0.5)
-    rexml (3.3.1)
+    rexml (3.3.2)
       strscan
     roo (2.9.0)
       nokogiri (~> 1)
@@ -577,7 +577,7 @@ GEM
       faraday (>= 0.16)
       launchy
       zeitwerk
-    selenium-webdriver (4.22.0)
+    selenium-webdriver (4.23.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
