@@ -357,12 +357,12 @@ class CatalogController < ApplicationController
     # If showing a user version, druid will be :item_id and user_version will be :id.
     if params.key?(:item_id)
       @druid = Druid.new(params[:item_id]).with_namespace
-      @user_version = params[:id]
-      @cocina = Repository.find_user_version(@druid, @user_version)
-      @document = SolrDocument.new(object_client.user_version.solr(@user_version))
+      user_version = params[:id]
+      @cocina = Repository.find_user_version(@druid, user_version)
+      @document = SolrDocument.new(object_client.user_version.solr(user_version))
     else
       @druid = Druid.new(params[:id]).with_namespace
-      @user_version = nil
+      user_version = nil
       _deprecated_response, @document = search_service.fetch(@druid)
       @cocina = Repository.find_lite(@druid, structural: false)
     end
@@ -371,14 +371,15 @@ class CatalogController < ApplicationController
 
     @workflows = WorkflowService.workflows_for(druid: @druid)
 
-    @milestones_presenter = MilestonesPresenter.new(druid: @druid)
-    raise ActionController::RoutingError, 'Not Found' unless @user_version.nil? || @milestones_presenter.valid_user_version?(@user_version)
+    @milestones_presenter = MilestonesPresenter.new(druid: @druid, version_inventory: object_client.version.inventory)
+    @user_versions_presenter = UserVersionsPresenter.new(user_version:, user_version_inventory: object_client.user_version.inventory)
+    raise ActionController::RoutingError, 'Not Found' unless user_version.nil? || @user_versions_presenter.valid_user_version?
 
-    @head_user_version = @milestones_presenter.head_user_version
+    @head_user_version = @user_versions_presenter.head_user_version
     @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
-    @verified_token_with_expiration = generate_token
+    @verified_token_with_expiration = generate_token(user_version)
 
     respond_to do |format|
       format.html { @search_context = setup_next_and_previous_documents }
@@ -420,7 +421,7 @@ class CatalogController < ApplicationController
     { current_user: }
   end
 
-  def generate_token
+  def generate_token(_user_version)
     Argo.verifier.generate(
       { druid: @druid, user_version: @user_version },
       expires_in: 1.hour,

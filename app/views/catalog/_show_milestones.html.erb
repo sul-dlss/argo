@@ -4,7 +4,7 @@
   </thead>
   <tbody>
     <% @milestones_presenter.each_version do |version| %>
-      <%= render VersionMilestonesComponent.new(version:, milestones_presenter: @milestones_presenter) %>
+      <%= render VersionMilestonesComponent.new(version:, milestones_presenter: @milestones_presenter, user_versions_presenter: @user_versions_presenter) %>
     <% end %>
   </tbody>
 </table>

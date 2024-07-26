@@ -18,13 +18,17 @@ RSpec.describe Show::ControlsComponent, type: :component do
                     cocina:, openable?: true,
                     open_and_not_assembling?: open_and_not_assembling,
                     user_version:,
-                    user_version_view?: user_version_view)
+                    user_version_view?: user_version_view,
+                    user_versions_presenter:)
   end
+  let(:user_versions_presenter) { instance_double(UserVersionsPresenter, user_version_withdrawable?: user_version_withdrawable, user_version_restorable?: user_version_restorable) }
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
   let(:open) { false }
   let(:open_and_not_assembling) { false }
   let(:user_version_view) { false }
   let(:user_version) { nil }
+  let(:user_version_withdrawable) { false }
+  let(:user_version_restorable) { false }
 
   before do
     rendered
@@ -137,6 +141,24 @@ RSpec.describe Show::ControlsComponent, type: :component do
       it 'the text extraction button exists but is disabled' do
         expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
         expect(page).to have_css 'a.disabled', text: 'Text extraction'
+      end
+    end
+
+    context 'when the user version can be withdrawn' do
+      let(:user_version) { 2 }
+      let(:user_version_withdrawable) { true }
+
+      it 'the withdraw button is displayed' do
+        expect(page).to have_link 'Withdraw', href: '/items/druid:kv840xx0000/user_versions/2/withdraw'
+      end
+    end
+
+    context 'when the user version can be restorerd' do
+      let(:user_version) { 2 }
+      let(:user_version_restorable) { true }
+
+      it 'the restore button is displayed' do
+        expect(page).to have_link 'Restore', href: '/items/druid:kv840xx0000/user_versions/2/restore'
       end
     end
   end

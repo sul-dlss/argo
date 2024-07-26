@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe VersionMilestonesComponent, type: :component do
   subject(:instance) do
     described_class.new(version: 2,
-                        milestones_presenter:)
+                        milestones_presenter:,
+                        user_versions_presenter:)
     # title: '2 (2.0.0) Add collection, set rights to citations',
     # steps:)
   end
@@ -14,10 +15,10 @@ RSpec.describe VersionMilestonesComponent, type: :component do
     instance_double(MilestonesPresenter,
                     steps_for: steps,
                     version_title: '2 (2.0.0) Add collection, set rights to citations',
-                    user_version_for: user_version,
                     current_version:,
                     druid: 'druid:mk420bs7601')
   end
+  let(:user_versions_presenter) { instance_double(UserVersionsPresenter, user_version_for: user_version) }
   let(:user_version) { nil }
   let(:current_version) { 2 }
 
@@ -33,7 +34,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
       expect(page).to have_css 'tr.version2', count: 2
       expect(milestones_presenter).to have_received(:steps_for).with(2)
       expect(milestones_presenter).to have_received(:version_title).with(2)
-      expect(milestones_presenter).to have_received(:user_version_for).with(2)
+      expect(user_versions_presenter).to have_received(:user_version_for).with(2)
     end
   end
 
