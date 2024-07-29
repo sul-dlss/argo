@@ -245,7 +245,7 @@ GEM
       activesupport (>= 3.0, < 8.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    erb_lint (0.4.0)
+    erb_lint (0.5.0)
       activesupport
       better_html (>= 2.0.1)
       parser (>= 2.7.1.4)
@@ -692,7 +692,7 @@ DEPENDENCIES
   druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
-  erb_lint (~> 0.4.0)
+  erb_lint (~> 0.5.0)
   factory_bot_rails
   faraday
   faraday-multipart
