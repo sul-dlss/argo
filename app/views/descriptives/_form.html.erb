@@ -1,6 +1,6 @@
 <turbo-frame id="descriptive-form" target="_top">
   <% if @errors.present? %>
-    <div class="alert alert-danger"><%= @errors.to_sentence %></div>
+    <%= render AlertDangerComponent.new(text: @errors.to_sentence) %>
   <% end %>
   <%= form_with url: item_descriptive_path(item_id: @cocina.externalIdentifier),
                 method: :put, local: true, multipart: true,
