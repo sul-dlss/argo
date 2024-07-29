@@ -25,9 +25,10 @@ module Show
       @manager = manager
       @presenter = presenter
       @doc = presenter.document
+      @user_versions_presenter = presenter.user_versions_presenter
     end
 
-    attr_reader :doc, :presenter
+    attr_reader :doc, :presenter, :user_versions_presenter
 
     def manager?
       @manager
@@ -149,6 +150,25 @@ module Show
         method: 'post',
         disabled: !published? || user_version_view?
       )
+    end
+
+    def withdraw_or_restore
+      return unless item?
+
+      if user_versions_presenter.user_version_withdrawable?
+        render ActionButton.new(
+          url: item_user_version_withdraw_path(doc, user_version),
+          label: 'Withdraw',
+          method: 'post',
+          confirm: 'Once you withdraw this version, the Purl will no longer display it. Are your sure? '
+        )
+      elsif user_versions_presenter.user_version_restorable?
+        render ActionButton.new(
+          url: item_user_version_restore_path(doc, user_version),
+          label: 'Restore',
+          method: 'post'
+        )
+      end
     end
 
     def upload_mods

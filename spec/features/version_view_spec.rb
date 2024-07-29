@@ -7,10 +7,12 @@ RSpec.describe 'Version view', :js do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:druid) { 'druid:hj185xx2222' }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
-  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1], find: cocina_object, solr: solr_doc) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1], find: cocina_object, solr: solr_doc, update: true) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: release_tags_list) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
-  let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2) }
+  let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2, withdrawable:, restorable:) }
+  let(:withdrawable) { false }
+  let(:restorable) { false }
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows:) }
   let(:workflow_client) do
@@ -200,9 +202,37 @@ RSpec.describe 'Version view', :js do
         expect(page).to have_no_css('.bi-pencil')
         expect(page).to have_content('Older versions are not released')
         expect(page).to have_no_css('.open-close') # Lock icon
+        expect(page).to have_no_link('Withdraw')
+        expect(page).to have_no_link('Restore')
 
         expect(user_version_client).to have_received(:find).with('2')
         expect(user_version_client).to have_received(:solr).with('2')
+      end
+    end
+
+    context 'when withdrawing a version' do
+      let(:withdrawable) { true }
+
+      it 'withdraws' do
+        visit item_user_version_path(item_id: druid, id: 2)
+        accept_confirm 'Once you withdraw this version, the Purl will no longer display it. Are your sure?' do
+          click_link('Withdraw')
+        end
+        expect(page).to have_content('Withdrawn. Purl will no longer display this version.')
+        expect(user_version_client).to have_received(:update)
+          .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: true))
+      end
+    end
+
+    context 'when restoring a version' do
+      let(:restorable) { true }
+
+      it 'restores' do
+        visit item_user_version_path(item_id: druid, id: 2)
+        click_link('Restore')
+        expect(page).to have_content('Restored. Purl will display this version.')
+        expect(user_version_client).to have_received(:update)
+          .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: false))
       end
     end
 

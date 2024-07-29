@@ -217,7 +217,10 @@ Rails.application.routes.draw do
     end
 
     resources :user_versions, only: %i[show], constraints: ->(req) { req.format == :json }, as: 'item_user_version_json'
+
     resources :user_versions, controller: 'catalog', only: %i[show] do
+      post 'withdraw', to: 'user_versions#withdraw'
+      post 'restore', to: 'user_versions#restore'
       get 'descriptive', to: 'descriptives#show'
       get 'structure', to: 'structures#show'
       resources 'files', only: %i[index], constraints: { item_id: /.*/ } do

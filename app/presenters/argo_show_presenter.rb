@@ -18,7 +18,7 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
   end
 
   def user_version_view?
-    user_version.present?
+    user_versions_presenter.present? && user_version.present?
   end
 
   def head_user_version_view?
@@ -27,5 +27,7 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
 
   delegate :open?, :openable?, :open_and_not_assembling?, to: :version_service
 
-  attr_accessor :cocina, :view_token, :state_service, :version_service, :user_version, :head_user_version
+  delegate :user_version, :head_user_version, to: :user_versions_presenter
+
+  attr_accessor :cocina, :view_token, :state_service, :version_service, :user_versions_presenter
 end

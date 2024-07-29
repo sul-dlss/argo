@@ -236,24 +236,6 @@ Rails/HelperInstanceVariable:
   Exclude:
     - 'app/helpers/items_helper.rb'
 
-# Offense count: 18
-Rails/I18nLocaleTexts:
-  Exclude:
-    - 'app/controllers/agreements_controller.rb'
-    - 'app/controllers/apo_controller.rb'
-    - 'app/controllers/bulk_actions_controller.rb'
-    - 'app/controllers/catalog_controller.rb'
-    - 'app/controllers/content_types_controller.rb'
-    - 'app/controllers/descriptives_controller.rb'
-    - 'app/controllers/embargos_controller.rb'
-    - 'app/controllers/items_controller.rb'
-    - 'app/controllers/publishes_controller.rb'
-    - 'app/controllers/registrations_controller.rb'
-    - 'app/controllers/uploads_controller.rb'
-    - 'app/forms/agreement_form.rb'
-    - 'app/forms/has_view_access.rb'
-    - 'app/forms/registration_form.rb'
-
 # Offense count: 5
 Rails/OutputSafety:
   Exclude:

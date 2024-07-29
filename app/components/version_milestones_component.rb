@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class VersionMilestonesComponent < ViewComponent::Base
-  def initialize(version:, milestones_presenter:)
+  def initialize(version:, milestones_presenter:, user_versions_presenter:)
     @version = version
     @milestones_presenter = milestones_presenter
+    @user_versions_presenter = user_versions_presenter
   end
 
   def title
@@ -19,7 +20,7 @@ class VersionMilestonesComponent < ViewComponent::Base
   end
 
   def user_version
-    @user_version ||= milestones_presenter.user_version_for(version)
+    @user_version ||= user_versions_presenter.user_version_for(version)
   end
 
   def user_version_path
@@ -30,7 +31,7 @@ class VersionMilestonesComponent < ViewComponent::Base
     "Public version #{user_version}"
   end
 
-  attr_reader :version, :milestones_presenter
+  attr_reader :version, :milestones_presenter, :user_versions_presenter
 
   delegate :druid, to: :milestones_presenter
 end
