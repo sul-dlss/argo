@@ -26,7 +26,7 @@ RSpec.describe 'Search results' do
         expect(page).to have_css '.catalog_startOverLink', text: 'Start Over'
       end
       within '.search-widgets' do
-        expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Action'
+        expect(page).to have_css 'a.btn.btn-outline-primary', text: 'Bulk Action'
         within '#sort-dropdown' do
           expect(page).to have_css 'button', text: 'Sort by Relevance'
           expect(page).to have_css '.dropdown-item', count: 2

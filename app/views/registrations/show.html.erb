@@ -61,7 +61,7 @@
   </div>
 
   <% if @registration_form.errors.full_messages.present? %>
-    <div class="alert alert-danger"><%= @registration_form.errors.full_messages.to_sentence %></div>
+    <%= render AlertDangerComponent.new(text: @registration_form.errors.full_messages.to_sentence) %>
   <% end %>
 
   <% is_form = f.object.instance_of?(RegistrationForm) %>
@@ -120,7 +120,7 @@
     </div>
   </div>
 
-  <div class="mt-3">
+  <div class="my-3">
     <%= f.submit 'Register', class: 'btn btn-primary' %>
   </div>
 <% end %>

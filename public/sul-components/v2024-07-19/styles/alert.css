@@ -1,0 +1,16 @@
+.alert {
+  --bs-link-decoration: underline;
+
+  a {
+    color: var(--bs-alert-color);
+  }
+  a .bi::before {
+    line-height: var(--bs-body-line-height);
+  }
+}
+
+.alert-warning {
+  a {
+    color: var(--bs-body-color);
+  }
+}

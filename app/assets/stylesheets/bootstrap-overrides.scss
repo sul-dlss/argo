@@ -3,39 +3,16 @@
   background-color: $floral-white;
 }
 
-.btn-secondary {
-  @include button-variant($white, $blue);
-  color: $blue;
-  &:hover {
-    color: darken($blue, 7.5%);
-  }
-}
-
 // Set text color of selected facets
 .facet-values li .selected {
   color: $body-color !important;
 }
 
 // Set border color of facets
-.facet-limit{
+.facet-limit {
   border-color: $tahuna-sands;
 }
 
-// Set the background color of the active dropdown button
-.btn-outline-secondary {
-  @include button-outline-variant($body-color, $body-color, $tea, $body-color);
-}
-
-// Document action items that are disabled
-.btn-primary.disabled {
-  background-color: $silver;
-  color: $body-color;
-  opacity: 1.0;
-}
-
-// Style disabled outline-primary buttons as greyed out using the `disabled` pseudo-class
-.btn-outline-primary:disabled {
-  border-color: $btn-link-disabled-color;
-  color: $btn-link-disabled-color;
-  opacity: $btn-disabled-opacity;
+:root {
+  --bs-primary-rgb: 140, 21, 21; /* Stanford cardinal; for the header */
 }

@@ -19,7 +19,7 @@ RSpec.describe 'auth/groups' do
       expect(rendered).to have_css 'label', text: 'Enter a group or a comma separated list of groups to impersonate'
       expect(rendered).to have_css 'input#groups[type="text"]'
       expect(rendered).to have_css 'input[type="submit"][value="Impersonate"]'
-      expect(rendered).to have_css 'a.btn.btn-secondary[href="javascript:history.back()"]', text: 'Cancel'
+      expect(rendered).to have_css 'a.btn.btn-outline-primary[href="javascript:history.back()"]', text: 'Cancel'
     end
   end
 
