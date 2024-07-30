@@ -1,62 +1,60 @@
 .icon-exclamation-sign {
   &::before {
-    content: '⚠';
+    content: "⚠";
   }
 }
 
 .icon-remove-sign {
   &::before {
-    content: '×';
+    content: "×";
   }
 }
 
 .icon-ok-sign {
   &::before {
-    content: '✔️';
+    content: "✔️";
   }
 }
 
 .icon-question-sign {
   &::before {
-    content: '❓';
+    content: "❓";
   }
 }
 
 .icon-minus {
   &::before {
-    content: '-';
+    content: "-";
   }
 }
 
 .icon-plus {
   &::before {
-    content: '+';
+    content: "+";
   }
 }
 
 .icon-refresh {
   &::before {
-    content: '↻';
+    content: "↻";
   }
 }
 
 .icon-register {
   &::before {
-    content: '⇄';
+    content: "⇄";
   }
 }
 
 .icon-tracking {
   &::before {
-    content: '🗒';
+    content: "🗒";
   }
 }
 
-
-
-
 .registration-status {
-  &.icon-exclamation-sign, &.icon-remove-sign {
-    @extend .text-danger
+  &.icon-exclamation-sign,
+  &.icon-remove-sign {
+    color: rgb(var(--bs-danger-rgb));
   }
 }
