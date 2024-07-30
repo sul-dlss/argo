@@ -61,7 +61,7 @@ class SolrDocument
   attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
   attribute :created_date, Blacklight::Types::Date, FIELD_CREATED_DATE
   attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
-  attribute :preservation_size, Blacklight::Types::String, FIELD_PRESERVATION_SIZE
+  attribute :preservation_size, Blacklight::Types::Value, FIELD_PRESERVATION_SIZE
   attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
 
   attribute :label, Blacklight::Types::String, FIELD_LABEL

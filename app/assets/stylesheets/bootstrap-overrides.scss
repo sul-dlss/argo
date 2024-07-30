@@ -1,16 +1,17 @@
 // Set color of selected facet
 .card-header {
-  background-color: $floral-white;
+  background-color: var(--argo-floral-white);
 }
 
-// Set text color of selected facets
+// Override text color of selected facets
+// https://github.com/projectblacklight/blacklight/blob/abf6f24bb8e53354dc91db8520f029bee68c4a4c/app/assets/stylesheets/blacklight/_facets.scss#L146
 .facet-values li .selected {
-  color: $body-color !important;
+  --bs-success-rgb: var(--bs-body-color);
 }
 
 // Set border color of facets
 .facet-limit {
-  border-color: $tahuna-sands;
+  border-color: var(--argo-tahuna-sands);
 }
 
 :root {

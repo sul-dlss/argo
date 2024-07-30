@@ -1,11 +1,13 @@
-.topbar.bg-dark {
-  @extend .bg-primary; // make the topbar red
+// Header color
+.stone-dark {
+  --bs-dark-rgb: var(--stanford-stone-dark-rgb);
 }
 
 // Overriding blacklight to keep the border-color
 .applied-filter {
   .constraint-value {
-    &:hover, &:active {
+    &:hover,
+    &:active {
       border-color: $body-color;
     }
   }
@@ -17,7 +19,7 @@
 
     &::before {
       color: $text-muted;
-      content: '• ';
+      content: "• ";
       left: 10px;
       position: fixed;
     }
@@ -74,37 +76,12 @@ legend {
   }
 }
 
-.ui-dialog {
-  top: 200px !important;
-}
-
 #documents + .pagination {
   border-top-width: 1px;
 }
 
 #bulk-spreadsheet-warning {
   color: var(--stanford-cardinal);
-}
-
-#xmlEditForm {
-  textarea {
-    font-family: monospace;
-    min-height: 400px;
-  }
-}
-
-#buttons {
-  margin-top: 6px;
-}
-
-
-#column_selector {
-  border: 1px solid grey;
-  margin-left: 110px;
-  padding: 10px;
-  width: 50%;
-  font-size: 12px;
-  line-height: 1.5;
 }
 
 .sharing {
