@@ -147,10 +147,6 @@
     }
   }
 
-  .table {
-    border: 1px solid $silver-sand;
-  }
-
   .header {
     font-weight: 700;
     font-size: x-large;
@@ -166,7 +162,7 @@
   .caption-header > caption {
     caption-side: top;
     @extend .header;
-    background-color: $silver-sand;
+    background-color: var(--bs-table-border-color);
     color: $body-color;
   }
 
