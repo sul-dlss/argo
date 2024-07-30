@@ -39,7 +39,7 @@ gem 'view_component'
 gem 'zip_tricks'
 
 # Stanford related gems
-gem 'blacklight', '~> 7.25', '< 7.34' # Avoid 7.34 until we have time to troubleshoot test failures
+gem 'blacklight', '~> 7.37'
 gem 'blacklight-hierarchy', '~> 6.1'
 gem 'dor-services-client', '~> 14.17'
 gem 'dor-workflow-client', '~> 7.0'

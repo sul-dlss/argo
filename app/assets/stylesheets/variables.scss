@@ -3,10 +3,6 @@
 // about available Bootstrap variables, please see:
 // https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
 
-// define a palette
-$floral-white: #f9f6ef;
-$tahuna-sands: #d2c295;
-
 :root {
   --stanford-illuminating-light: #ffe781;
   --stanford-sky-light: #67afd2;
@@ -14,6 +10,11 @@ $tahuna-sands: #d2c295;
   --stanford-fog-light: #f4f4f4;
   --stanford-bay-light: #8ab8a7;
   --stanford-60-black: #767674;
+  --stanford-stone-dark-rgb: 84, 73, 72;
+
+  // non-standard colors (not part of Stanford's palette)
+  --argo-floral-white: #f9f6ef;
+  --argo-tahuna-sands: #d2c295;
 }
 
 // Accordion

@@ -23,9 +23,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download', :js do
 
   it 'New page does not have a populate druids button if no search params provided' do
     visit root_path
-    within '.navbar-right' do
-      click_link 'Bulk Actions'
-    end
+    click_link text: 'Bulk Action'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     click_link 'New Bulk Action'
     expect(page).to have_css 'h1', text: 'New Bulk Action'

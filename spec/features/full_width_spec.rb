@@ -10,7 +10,10 @@ RSpec.describe 'Full width' do
   it 'has bootstrap full width classes' do
     visit root_path
     expect(page).to have_css '#main-container.container-fluid'
-    expect(page).to have_css '.navbar-search .container-fluid'
-    expect(page).to have_css '.topbar .container-fluid'
+
+    # but not in the top bar
+    expect(page).to have_css 'nav.navbar .container'
+    expect(page).to have_css '.masthead .container'
+    expect(page).to have_css '.navbar-search .container'
   end
 end
