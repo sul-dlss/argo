@@ -1,4 +1,9 @@
 .document-component {
+  .accordion {
+    --bs-accordion-btn-bg: var(--stanford-10-black);
+    --bs-accordion-active-bg: var(--stanford-10-black);
+  }
+
   .accordion-item {
     margin-bottom: 1rem;
     border-radius: 0.25rem;
@@ -20,7 +25,8 @@
   }
 
   #document-contents-section {
-    .resource-list, .child-list {
+    .resource-list,
+    .child-list {
       list-style-type: none;
     }
 
@@ -34,7 +40,8 @@
   }
 
   #document-techmd-section {
-    .file-list, .metadata-list {
+    .file-list,
+    .metadata-list {
       list-style-type: none;
     }
 
@@ -53,7 +60,8 @@
       border-bottom: 1px solid;
     }
 
-    th, td {
+    th,
+    td {
       font-weight: normal;
       text-align: left;
       padding: 0em 2em 0.25em 0em;
