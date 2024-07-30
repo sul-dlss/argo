@@ -25,7 +25,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
     if data[process] && data[process][status] && (item = data[process][status][:_])
       item_count = item.hits
     end
-    item_count = tag.span item_count, class: 'zero' if item_count.zero?
+    item_count = tag.span item_count, class: 'text-body-secondary' if item_count.zero?
     link_to(item_count, new_params)
   end
 
@@ -74,7 +74,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
                                reset_step: process
                              )
 
-    raw " | #{button_to('reset', report_reset_path(new_params), class: 'btn btn-link')}"
+    raw " | #{button_to('reset', report_reset_path(new_params), class: 'btn btn-link p-0 text-danger')}"
   end
 
   delegate :blacklight_config, to: :search_state

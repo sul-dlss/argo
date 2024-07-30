@@ -1,5 +1,5 @@
 .show-document {
-  $button-width: 11rem;
+  --button-width: 11rem;
   --external-link-button-width: 9rem;
 
   .document-header {
@@ -45,7 +45,7 @@
 
   .argo-show-btn-group {
     .btn {
-      min-width: $button-width;
+      min-width: var(--button-width);
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
     }

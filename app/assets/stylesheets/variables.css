@@ -1,8 +1,3 @@
-//
-// Overrides of Bootstrap variables can be added here. For more information
-// about available Bootstrap variables, please see:
-// https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
-
 :root {
   // Stanford colors that are not defined in the component library
   --stanford-illuminating-light: #ffe781;
@@ -13,7 +8,7 @@
   --stanford-poppy-light: #f9a44a;
   --stanford-palo-verde-light: #59b3a9;
 
-  // non-standard colors (not part of Stanford's palette)
+  /* non-standard colors (not part of Stanford's palette) */
   --argo-floral-white: #f9f6ef;
   --argo-tahuna-sands: #d2c295;
 }

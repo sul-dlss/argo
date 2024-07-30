@@ -1,8 +1,4 @@
 .workflow-grid-table {
-  .zero {
-    @extend .text-muted;
-  }
-
   table {
     counter-reset: rowNumber;
   }
@@ -18,14 +14,9 @@
   }
 }
 
-// reset button
+/* reset button */
 .errors {
   form {
     display: inline-block;
-  }
-
-  .btn {
-    @extend .p-0;
-    @extend .text-danger;
   }
 }

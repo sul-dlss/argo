@@ -19,7 +19,7 @@ module Show
     end
 
     def searchworks_link
-      return tag.span('SearchWorks', class: 'external-link-button disabled btn') unless released_to_searchworks?
+      return tag.span('SearchWorks', class: 'external-link-button disabled btn btn-outline-primary') unless released_to_searchworks?
 
       id = document.catalog_record_id.presence || document.druid
       url = Kernel.format(Settings.searchworks_url, id:)

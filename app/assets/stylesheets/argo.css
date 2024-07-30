@@ -1,14 +1,14 @@
-// Header color
+/* Header color */
 .stone-dark {
   --bs-dark-rgb: var(--stanford-stone-dark-rgb);
 }
 
-// Overriding blacklight to keep the border-color
+/* Overriding blacklight to keep the border-color */
 .applied-filter {
   .constraint-value {
     &:hover,
     &:active {
-      border-color: $body-color;
+      border-color: var(--bs-body-color);
     }
   }
 }
@@ -18,7 +18,7 @@
     background-color: inherit;
 
     &::before {
-      color: $text-muted;
+      color: var(--bs-secondary-color);
       content: "• ";
       left: 10px;
       position: fixed;
