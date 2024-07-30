@@ -1,13 +1,14 @@
-@import 'variables';
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-overrides';
+@import "variables";
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-overrides";
 // Override before importing Blacklight
-@import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
-@import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';
+@import "blacklight-frontend/app/assets/stylesheets/blacklight/blacklight";
+@import "blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy";
 @import "tabulator-tables/dist/css/tabulator.min";
 @import "tabulator-tables/dist/css/tabulator_bootstrap5.min";
 
 @import "argo";
+@import "layout";
 @import "bulk-actions";
 @import "errors";
 @import "document";
@@ -16,7 +17,6 @@
 @import "profile";
 @import "search_results";
 @import "show";
-@import "sulFooter";
 @import "impersonate_groups";
 @import "workflow_grid";
 @import "throbber";
