@@ -1,17 +1,13 @@
 .document-component {
   .accordion-item {
     margin-bottom: 1rem;
+    border-radius: 0.25rem;
   }
   .accordion-button {
-    font-size: 2.0rem;
+    font-size: 1.75rem;
     font-weight: 500;
     padding: 0.3rem 0.7rem;
-  }
-  .accordion-button.collapsed::after {
-    transform: rotate(-90deg);
-  }
-  .accordion-button:not(.collapsed)::after {
-    transform: rotate(0deg);
+    border-radius: 0.25rem;
   }
 
   .section-head-link {
