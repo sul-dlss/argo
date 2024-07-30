@@ -194,4 +194,13 @@
       }
     }
   }
+
+  .thumbnail {
+    max-width:240px; 
+    max-height:240px;
+    border-color: var(--stanford-30-black);
+    border-width: 1px;
+    border-radius: 4px;
+    border-style: solid;
+  }
 }

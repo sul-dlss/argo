@@ -1,11 +1,11 @@
 <% if document.thumbnail_url %>
-  <%= image_tag document.thumbnail_url, style: 'max-width:240px; max-height:240px;' %>
+  <%= image_tag document.thumbnail_url, class: 'thumbnail' %>
 <% else %>
   <svg style="text-anchor: middle" width="240" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Responsive image" focusable="false">
     <title>Placeholder</title>
-    <rect width="100%" height="100%" stroke="#000000" stroke-width="4" fill="#eeeeee"></rect>
+    <rect width="100%" height="100%" stroke="#0000004d" stroke-width="1" fill="#f4f4f4" rx="4"></rect>
     <foreignObject x="10" y="10" width="220" height="220">
-      <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; height: 100%; justify-content: center; align-items: center;">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; height: 100%; justify-content: center; align-items: start; margin-top: 20px;">
         <p xmlns="http://www.w3.org/1999/xhtml"><%= placeholder_text %></p>
       </div>
     </foreignObject>
