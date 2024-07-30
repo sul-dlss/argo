@@ -3,16 +3,23 @@
 // about available Bootstrap variables, please see:
 // https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
 
-@import "sul_variables";
-
 // define a palette
 $floral-white: #f9f6ef;
 $tahuna-sands: #d2c295;
 
+:root {
+  --stanford-illuminating-light: #ffe781;
+  --stanford-sky-light: #67afd2;
+  --stanford-fog: #dad7cb;
+  --stanford-fog-light: #f4f4f4;
+  --stanford-bay-light: #8ab8a7;
+  --stanford-60-black: #767674;
+}
+
 // Accordion
-$accordion-button-color: $white;
-$accordion-button-bg: $sonic-silver;
-$accordion-button-active-color: $white;
-$accordion-button-active-bg: $sonic-silver;
+$accordion-button-color: white;
+$accordion-button-bg: var(--stanford-60-black);
+$accordion-button-active-color: white;
+$accordion-button-active-bg: var(--stanford-60-black);
 $accordion-button-focus-box-shadow: 0 0 0.25rem 0.25rem
-  rgba($sonic-silver, 0.25);
+  rgba(var(--stanford-60-black), 0.25);

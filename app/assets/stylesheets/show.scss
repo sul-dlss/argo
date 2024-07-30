@@ -4,7 +4,6 @@
 
   .document-header {
     border-bottom: 1px solid $gray-300;
-
   }
 
   .search-links {
@@ -24,27 +23,27 @@
     height: 2.4rem;
 
     &.object-type-apo {
-      background-color: $sky-light;
+      background-color: var(--stanford-sky-light);
     }
 
     &.object-type-collection {
-      background-color: $fog;
+      background-color: var(--stanford-fog);
     }
 
     &.object-type-item {
-      background-color: $illuminating-light;
+      background-color: var(--stanford-illuminating-light);
     }
 
     &.object-type-virtual-object {
-      background-color: $bay-light;
+      background-color: var(--stanford-bay-light);
     }
   }
 
   .argo-show-btn-group {
     .btn {
       min-width: $button-width;
-      margin-right: .5rem;
-      margin-bottom: .5rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
 
       &.small {
         @extend .small;
@@ -62,8 +61,8 @@
   }
 
   .external-link-button {
-    margin-right: .5rem;
-    margin-bottom: .5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
     width: $external-link-button-width;
     @extend .btn;
     @extend .btn-outline-primary;
@@ -86,7 +85,7 @@
 
     .btn {
       font-size: x-large;
-      color: $color-cardinal-red;
+      color: var(--stanford-cardinal);
     }
   }
 
@@ -116,8 +115,7 @@
         }
 
         dd:before,
-        dd:after,
-          {
+        dd:after {
           display: table;
           content: " ";
         }
@@ -129,8 +127,8 @@
 
       .resource-files {
         background-color: $body-bg;
-        margin-left: .5rem;
-        margin-right: .5rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
 
         tr {
           td {
@@ -182,7 +180,7 @@
       }
 
       a:not(.collapsed):before {
-          background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
       }
 
       a.collapsed:before {
@@ -192,8 +190,8 @@
   }
 
   .thumbnail {
-    max-width:240px; 
-    max-height:240px;
+    max-width: 240px;
+    max-height: 240px;
     border-color: var(--stanford-30-black);
     border-width: 1px;
     border-radius: 4px;
