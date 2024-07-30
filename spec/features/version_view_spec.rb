@@ -215,7 +215,7 @@ RSpec.describe 'Version view', :js do
 
       it 'withdraws' do
         visit item_user_version_path(item_id: druid, id: 2)
-        accept_confirm 'Once you withdraw this version, the Purl will no longer display it. Are your sure?' do
+        accept_confirm 'Once you withdraw this version, the Purl will no longer display it. Are you sure?' do
           click_link('Withdraw')
         end
         expect(page).to have_content('Withdrawn. Purl will no longer display this version.')

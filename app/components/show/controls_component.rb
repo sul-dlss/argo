@@ -160,7 +160,7 @@ module Show
           url: item_user_version_withdraw_path(doc, user_version),
           label: 'Withdraw',
           method: 'post',
-          confirm: 'Once you withdraw this version, the Purl will no longer display it. Are your sure? '
+          confirm: 'Once you withdraw this version, the Purl will no longer display it. Are you sure? '
         )
       elsif user_versions_presenter.user_version_restorable?
         render ActionButton.new(
