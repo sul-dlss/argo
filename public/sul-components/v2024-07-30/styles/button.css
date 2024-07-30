@@ -14,8 +14,8 @@
   --bs-btn-border-color: var(--stanford-digital-blue);
   --bs-btn-hover-bg: var(--stanford-digital-blue-dark);
   --bs-btn-hover-border-color: var(--stanford-digital-blue-dark);
-  --bs-btn-active-bg: var(--stanford-digital-blue-dark);
-  --bs-btn-active-border-color: var(--stanford-digital-blue-dark);
+  --bs-btn-active-bg: var(--stanford-digital-blue-darker);
+  --bs-btn-active-border-color: var(--stanford-digital-blue-darker);
 }
 
 .btn-secondary {
@@ -23,8 +23,8 @@
   --bs-btn-border-color: var(--stanford-cardinal);
   --bs-btn-hover-bg: var(--stanford-digital-red-dark);
   --bs-btn-hover-border-color: var(--stanford-digital-red-dark);
-  --bs-btn-active-bg: var(--stanford-digital-red-dark);
-  --bs-btn-active-border-color: var(--stanford-digital-red-dark);
+  --bs-btn-active-bg: var(--stanford-digital-red-darker);
+  --bs-btn-active-border-color: var(--stanford-digital-red-darker);
 }
 
 .btn-outline-primary {
@@ -32,8 +32,8 @@
   --bs-btn-color: var(--stanford-digital-blue);
   --bs-btn-hover-color: var(--stanford-digital-blue-dark);
   --bs-btn-hover-border-color: var(--stanford-digital-blue-dark);
-  --bs-btn-active-color: var(--stanford-digital-blue-dark);
-  --bs-btn-active-border-color: var(--stanford-digital-blue-dark);
+  --bs-btn-active-color: var(--stanford-digital-blue-darker);
+  --bs-btn-active-border-color: var(--stanford-digital-blue-darker);
 }
 
 .btn-outline-secondary {
@@ -41,13 +41,14 @@
   --bs-btn-color: var(--stanford-cardinal);
   --bs-btn-hover-color: var(--stanford-digital-red-dark);
   --bs-btn-hover-border-color: var(--stanford-digital-red-dark);
-  --bs-btn-active-border-color: var(--stanford-digital-red-dark);
-  --bs-btn-active-color: var(--stanford-digital-red-dark);
+  --bs-btn-active-border-color: var(--stanford-digital-red-darker);
+  --bs-btn-active-color: var(--stanford-digital-red-darker);
 }
 
 .btn-outline-primary,
 .btn-outline-secondary {
-  --bs-btn-disabled-bg: transparent;
-  --bs-btn-hover-bg: transparent;
-  --bs-btn-active-bg: transparent;
+  --bs-btn-disabled-bg: white;
+  --bs-btn-hover-bg: white;
+  --bs-btn-active-bg: white;
+  --bs-btn-bg: white;
 }

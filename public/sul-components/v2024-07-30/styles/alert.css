@@ -1,0 +1,23 @@
+.alert {
+  --bs-link-decoration: underline;
+
+  a {
+    color: var(--bs-alert-color);
+  }
+  a .bi::before {
+    line-height: var(--bs-body-line-height);
+  }
+}
+
+.alert-warning,
+.alert-note {
+  a {
+    color: var(--bs-body-color);
+  }
+}
+
+.alert-note {
+  --bs-alert-bg: rgba(var(--stanford-illuminating-dark-rgb), 0.1);
+  --bs-alert-color: rgb(var(--stanford-illuminating-dark-rgb));
+  --bs-alert-border-color: rgb(var(--stanford-illuminating-dark-rgb));
+}

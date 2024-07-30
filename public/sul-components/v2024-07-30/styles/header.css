@@ -1,5 +1,6 @@
 .su-brand-bar__logo {
-  --stanford-stripe-color: var(--stanford-black);
+  --stanford-stripe-color: var(--stanford-cardinal);
+  --bs-link-hover-decoration: none;
   color: var(--stanford-stripe-color);
   display: block;
   font-size: 1rem;
@@ -7,6 +8,7 @@
   font-weight: 400;
   font-variant-ligatures: discretionary-ligatures;
   font-feature-settings: "liga";
+  height: 1.875em;
   margin-top: 0.125rem;
   white-space: nowrap;
 }
@@ -65,5 +67,8 @@
 
   .h1 {
     font-size: 2.25rem;
+    a {
+      --bs-link-hover-decoration: none;
+    }
   }
 }
