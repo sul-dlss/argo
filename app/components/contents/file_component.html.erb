@@ -1,7 +1,7 @@
 <tr class="file">
   <td>
     <% if viewable? %>
-      <%= link_to filename, item_files_path(link_attrs), data: { blacklight_modal: 'trigger' } %>
+      <%= link_to filename, files_link, data: { blacklight_modal: 'trigger' } %>
     <% else %>
       <%= filename %>
     <% end %>

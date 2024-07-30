@@ -17,6 +17,7 @@ class StructuresController < ApplicationController
       format.html do
         # Lazy loading of the structural part of the show page
         @cocina_item = find_cocina_from_token
+        @user_version = decrypted_token.fetch(:user_version_id, nil)
         @viewable = can?(:view_content, @cocina_item) && !params.key?(:version_id)
       end
     end

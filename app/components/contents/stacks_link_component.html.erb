@@ -1,0 +1,9 @@
+<% if no_download? %>
+    <p>
+        Stacks: <%= stacks_link %> <em>(not available for download)</em>
+    </p>
+<% else %>
+    <p>
+        Stacks: <%= link_to nil, stacks_link %>
+    </p>
+<% end %>
