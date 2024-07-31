@@ -10,7 +10,7 @@ export default class extends Controller {
   validate () {
     const parts = this.element.value.trim().split(/\s*:\s*/)
     this.element.value = parts.join(' : ')
-    this.element.classList.toggle('invalid', this.is_invalid(parts))
+    this.element.classList.toggle('is-invalid', this.is_invalid(parts))
   }
 
   is_invalid (parts) {

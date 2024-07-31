@@ -23,10 +23,10 @@ export default class extends Controller {
     if (currentSourceId === '') { return }
 
     if (field.validity.patternMismatch) {
-      field.classList.toggle('invalid', !field.validity.valid)
+      field.classList.toggle('is-invalid', !field.validity.valid)
     } else if (this.isDuplicateSourceId(currentSourceId)) {
       this.setValidation(field, 'Duplicate source ID on this form')
-      field.classList.add('invalid')
+      field.classList.add('is-invalid')
     } else {
       this.clearValidation(field) // all other checks passed
 
@@ -39,7 +39,7 @@ export default class extends Controller {
           } else {
             this.clearValidation(field)
           }
-          field.classList.toggle('invalid', !field.validity.valid)
+          field.classList.toggle('is-invalid', !field.validity.valid)
         })
     }
   }
@@ -47,7 +47,7 @@ export default class extends Controller {
   validateBarcode () {
     const field = this.barcodeTarget
     if (field.validity.patternMismatch) {
-      field.classList.toggle('invalid', !field.validity.valid)
+      field.classList.toggle('is-invalid', !field.validity.valid)
     } else {
       this.clearValidation(field)
     }
@@ -60,7 +60,7 @@ export default class extends Controller {
     if (currentCatalogRecordId === '') { return }
 
     if (field.validity.patternMismatch) {
-      field.classList.toggle('invalid', !field.validity.valid)
+      field.classList.toggle('is-invalid', !field.validity.valid)
     } else {
       // Only check if the format is valid
       this.clearValidation(field)
@@ -77,7 +77,7 @@ export default class extends Controller {
           if (!data) {
             this.setValidation(field, 'Not found in catalog')
           }
-          field.classList.toggle('invalid', !field.validity.valid)
+          field.classList.toggle('is-invalid', !field.validity.valid)
         })
         .catch((error) => {
           this.setValidation(field, error.message)
@@ -91,7 +91,7 @@ export default class extends Controller {
       field.required = true
     } else {
       field.required = false
-      field.classList.toggle('invalid', false)
+      field.classList.toggle('is-invalid', false)
     }
   }
 
