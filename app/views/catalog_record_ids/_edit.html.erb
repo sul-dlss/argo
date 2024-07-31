@@ -14,12 +14,16 @@
                   data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
 
         <% if @form.errors.full_messages.present? %>
-          <div id="error_explanation">
-            <ul>
-            <% @form.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-            </ul>
+          <div role="alert" class="alert alert-danger d-flex shadow-sm align-items-center">
+            <div
+              class="bi bi-exclamation-triangle-fill fs-3 me-3 align-self-center d-flex justify-content-center"></div>
+            <div class="text-body">
+              <ul>
+                <% @form.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
           </div>
         <% end %>
 

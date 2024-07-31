@@ -2,14 +2,17 @@
 <div class="row">
   <%= form_for @form, local: true, multipart: true, html: { class: 'col-lg-8 mb-5' } do |f| %>
     <% if @form.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@form.errors.count, 'error') %> prohibited this <%= @form.model_name.human %> from being saved:</h2>
-
-        <ul>
-          <% @form.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+      <div role="alert" class="alert alert-danger d-flex shadow-sm align-items-center">
+        <div
+          class="bi bi-exclamation-triangle-fill fs-3 me-3 align-self-center d-flex justify-content-center"></div>
+        <div class="text-body">
+          <div class="fw-semibold"><%= pluralize(@form.errors.count, 'error') %> prohibited this <%= @form.model_name.human %> from being saved:</div>
+          <ul>
+            <% @form.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
       </div>
     <% end %>
 
