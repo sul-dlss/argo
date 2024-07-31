@@ -25,7 +25,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --inject:app/javascript/jquery-shim.js --define:global=window --outdir=app/assets/builds",
-    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules",
+    "build:css": "sass ./app/assets/stylesheets/blacklight.scss ./app/assets/builds/blacklight.css --no-source-map --load-path=node_modules",
     "lint": "standard app/javascript/**/*.js",
     "lint_fix": "standard --fix app/javascript/**/*.js"
   }

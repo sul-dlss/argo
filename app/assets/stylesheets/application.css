@@ -1,0 +1,21 @@
+@import url("variables.css");
+@import url("bootstrap-overrides.css");
+/* Override before importing Blacklight */
+@import url("blacklight.css");
+@import url("tabulator.min.css");
+@import url("tabulator_bootstrap5.min.css");
+
+@import url("argo.css");
+@import url("bulk-actions.css");
+@import url("document.css");
+@import url("document-component.css");
+@import url("icons.css");
+@import url("profile.css");
+@import url("search_results.css");
+@import url("show.css");
+@import url("layout.css");
+@import url("impersonate_groups.css");
+@import url("workflow_grid.css");
+@import url("tags-autocomplete.css");
+@import url("registration.css");
+@import url("text-extraction.css");

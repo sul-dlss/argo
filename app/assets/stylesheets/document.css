@@ -13,10 +13,10 @@ dl.deflist {
 
 .errortext {
   color: red;
-  --bs-table-color: red; // override bootstrap table text color
+  --bs-table-color: red; /* override bootstrap table text color */
 }
 
 .notetext {
   color: green;
-  --bs-table-color: green; // override bootstrap table text color
+  --bs-table-color: green; /* override bootstrap table text color */
 }

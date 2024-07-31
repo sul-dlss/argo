@@ -1,0 +1,14 @@
+:root {
+  /* Stanford colors that are not defined in the component library */
+  --stanford-illuminating-light: #ffe781;
+  --stanford-sky-light: #67afd2;
+  --stanford-bay-light: #8ab8a7;
+  --stanford-60-black: #767674;
+  --stanford-stone-dark-rgb: 84, 73, 72;
+  --stanford-poppy-light: #f9a44a;
+  --stanford-palo-verde-light: #59b3a9;
+
+  /* non-standard colors (not part of Stanford's palette) */
+  --argo-floral-white: #f9f6ef;
+  --argo-tahuna-sands: #d2c295;
+}

@@ -43,10 +43,6 @@
   .navbar-nav {
     --bs-nav-link-font-weight: 700;
 
-    li.active a {
-      color: $navbar-dark-color;
-    }
-
     li {
       display: inline-block;
       position: relative;

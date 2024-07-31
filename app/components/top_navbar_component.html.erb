@@ -37,7 +37,7 @@
           <hr>
           <% if session[:groups].present? %>
             <li class='dropdown nav-item d-md-none'>
-              <a href='#' class='dropdown-toggle impersonating nav-link' data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+              <a href='#' class='dropdown-toggle impersonating link-warning nav-link' data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
                 Impersonating: <%= session[:groups].join(' ') %>
                 <span class='caret'></span>
               </a>
