@@ -1,0 +1,10 @@
+/* These body/main styles allow the SUL and SU footers to render at the bottom of the viewport */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
