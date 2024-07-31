@@ -2,11 +2,3 @@
   margin: 0 auto;
   width: 500px;
 }
-
-.navbar-nav > li > a.impersonating {
-  color: $warning;
-
-  &:hover {
-    color: darken($warning, 0.75);
-  }
-}
