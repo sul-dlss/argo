@@ -1,25 +1,3 @@
-.language-pill {
-  gap: 0.35rem;
-  display: inline-flex;
-  align-items: center;
-  padding-left: 0.55rem;
-  padding-right: 0.45rem;
-
-  .language-label {
-    border-inline-end: var(--bs-border-width) var(--bs-border-style)
-      var(--bs-border-color);
-    font-size: 0.875em;
-    line-height: 1.45em;
-    padding-block: 0.1rem;
-    padding-inline-end: 0.45rem;
-    text-wrap: nowrap;
-  }
-
-  .pill-close {
-    font-size: 0.6rem;
-  }
-}
-
 .dropdown-content {
   background-color: #f1f1f1;
   overflow-y: auto;

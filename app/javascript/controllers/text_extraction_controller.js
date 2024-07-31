@@ -80,11 +80,14 @@ export default class extends Controller {
     return this.languagesValue.map((language) => {
       return `
         <li class="d-inline-flex gap-2 align-items-center my-2">
-          <span class="bg-light rounded-pill border language-pill">
-            <span class="language-label">
-              ${language.textExtractionLabel}
-            </span>
-            <button data-action="${this.identifier}#deselect" id="${language.textExtractionValue}" type="button" class="btn-close py-0 pill-close" aria-label="Remove ${language.textExtractionLabel}"></button>
+          <span class="bg-light badge rounded-pill border selected-item">
+            <span class="selected-item-label">${language.textExtractionLabel}</span>
+            <button
+              type="button"
+              data-action="${this.identifier}#deselect" id="${language.textExtractionValue}"
+              class="btn-close"
+              aria-label="Remove ${language.textExtractionLabel}"
+            ></button>
           </span>
         </li>
       `
