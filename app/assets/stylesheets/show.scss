@@ -22,12 +22,16 @@
     width: 15rem;
     height: 2.4rem;
 
+    &.object-type-agreement {
+      background-color: var(--stanford-palo-verde-light);
+    }
+
     &.object-type-apo {
       background-color: var(--stanford-sky-light);
     }
 
     &.object-type-collection {
-      background-color: var(--stanford-fog);
+      background-color: var(--stanford-poppy-light);
     }
 
     &.object-type-item {
