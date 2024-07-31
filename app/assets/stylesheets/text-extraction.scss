@@ -6,7 +6,8 @@
   padding-right: 0.45rem;
 
   .language-label {
-    border-inline-end: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+    border-inline-end: var(--bs-border-width) var(--bs-border-style)
+      var(--bs-border-color);
     font-size: 0.875em;
     line-height: 1.45em;
     padding-block: 0.1rem;
@@ -15,7 +16,7 @@
   }
 
   .pill-close {
-    font-size: .6rem;
+    font-size: 0.6rem;
   }
 }
 
@@ -34,11 +35,12 @@
 }
 
 .text-cardinal {
-  color: var(--bs-primary);
+  color: var(--stanford-cardinal);
 }
 
 .text-extraction-search-bar {
-  input, input:focus {
+  input,
+  input:focus {
     border: none;
     outline: none;
   }
