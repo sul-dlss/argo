@@ -1,0 +1,12 @@
+/* Here we turn off the style for the valid fields, so it only shows invalid */
+.was-validated {
+  .form-control,
+  .form-select {
+    --bs-form-valid-border-color: var(--bs-border-color);
+    --bs-success-rgb: var(--stanford-digital-blue-rgb);
+
+    &:valid {
+      background-image: none;
+    }
+  }
+}
