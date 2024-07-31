@@ -25,10 +25,10 @@ RSpec.describe 'TextExtractions', :js do
       find('[data-text-extraction-label="Adyghe"]').click
 
       expect(page).to have_css 'div', text: 'Selected language(s)'
-      expect(page.all('.language-label').count).to eq 1
+      expect(page.all('.selected-item-label').count).to eq 1
 
       find('[data-text-extraction-label="English"]').click
-      expect(page.all('.language-label').count).to eq 2
+      expect(page.all('.selected-item-label').count).to eq 2
     end
   end
 
