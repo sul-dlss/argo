@@ -15,7 +15,7 @@ module Show
 
     def purl_link
       link_to 'PURL', File.join(Settings.purl_url, document.druid),
-              target: '_blank', rel: 'noopener', class: 'external-link-button'
+              target: '_blank', rel: 'noopener', class: 'external-link-button btn btn-outline-primary'
     end
 
     def searchworks_link
@@ -23,12 +23,12 @@ module Show
 
       id = document.catalog_record_id.presence || document.druid
       url = Kernel.format(Settings.searchworks_url, id:)
-      link_to 'SearchWorks', url, target: '_blank', rel: 'noopener', class: 'external-link-button'
+      link_to 'SearchWorks', url, target: '_blank', rel: 'noopener', class: 'external-link-button btn btn-outline-primary'
     end
 
     def solr_link
       link_to 'Solr document', solr_document_path(document, format: :json),
-              target: '_blank', rel: 'noopener', class: 'external-link-button'
+              target: '_blank', rel: 'noopener', class: 'external-link-button btn btn-outline-primary'
     end
 
     def cocina_link
@@ -37,12 +37,12 @@ module Show
               path,
               target: '_blank',
               rel: 'noopener',
-              class: 'external-link-button'
+              class: 'external-link-button btn btn-outline-primary'
     end
 
     def description_link
       link_to 'Description', description_link_path,
-              class: 'external-link-button',
+              class: 'external-link-button btn btn-outline-primary',
               data: { blacklight_modal: 'trigger' }
     end
 
