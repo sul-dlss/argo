@@ -3,6 +3,7 @@
   <%= f.label :description, 'Describe this bulk action' %>
   <%= f.text_area :description, class: 'form-control' %>
 </div>
-<div class=''>
+<div>
   <button type='submit' class='btn btn-primary'>Submit</button>
+  <%= link_to 'Back', bulk_actions_path, class: 'ms-3', target: '_top' %>
 </div>
