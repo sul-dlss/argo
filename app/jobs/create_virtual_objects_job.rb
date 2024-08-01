@@ -58,7 +58,7 @@ class CreateVirtualObjectsJob < GenericJob
       errors = VirtualObjectsCreator.create(virtual_objects:)
       # line below was added Jan 2020 because on very long running jobs, rails would drop the database connectinon and throw an exception instead of auto-reconnecting
       #   this would cause the entire job to fail (even though it may have actually completed), which would trigger another run of the job
-      ActiveRecord::Base.clear_active_connections!
+      ActiveRecord::Base.connection_handler.clear_active_connections!
       if errors.empty?
         bulk_action.increment!(:druid_count_success, virtual_objects.length)
         log.puts("#{Time.current} #{SUCCESS_MESSAGE}: #{virtual_object_ids_from(virtual_objects).to_sentence}")
