@@ -57,7 +57,7 @@ group :test, :development do
   gem 'factory_bot_rails'
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
   gem 'pry-remote' # allows you to attach remote session to pry
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 6.1'
   gem 'rubocop-capybara'
   gem 'rubocop-factory_bot'
   gem 'rubocop-performance'
