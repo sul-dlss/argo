@@ -48,7 +48,7 @@ RSpec.describe 'Bulk descriptive metadata import' do
         expect do
           post '/bulk_actions/descriptive_metadata_import_job', params:
         end.not_to have_enqueued_job(DescriptiveMetadataImportJob)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match('Column header invalid: xsource_id')
       end
     end
@@ -60,7 +60,7 @@ RSpec.describe 'Bulk descriptive metadata import' do
         expect do
           post '/bulk_actions/descriptive_metadata_import_job', params:
         end.not_to have_enqueued_job(DescriptiveMetadataImportJob)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match('Error starting bulk action: Invalid byte sequence')
       end
     end

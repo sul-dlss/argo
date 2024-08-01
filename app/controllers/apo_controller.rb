@@ -54,7 +54,7 @@ class ApoController < ApplicationController
     unless @form.validate(params.require(:apo).to_unsafe_h.merge(registered_by: current_user.login))
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: @form.errors } }
-        format.html { render 'new', status: :unprocessable_entity }
+        format.html { render 'new', status: :unprocessable_content }
       end
       return
     end
@@ -80,8 +80,8 @@ class ApoController < ApplicationController
     @form = ApoForm.new(@cocina, search_service:)
     unless @form.validate(params.require(:apo).to_unsafe_h)
       respond_to do |format|
-        format.json { render status: :unprocessable_entity, json: { errors: @form.errors } }
-        format.html { render 'edit', status: :unprocessable_entity }
+        format.json { render status: :unprocessable_content, json: { errors: @form.errors } }
+        format.html { render 'edit', status: :unprocessable_content }
       end
       return
     end

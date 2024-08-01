@@ -28,11 +28,11 @@ class DescriptivesController < ApplicationController
                        )
     else
       @errors = validator.errors
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   rescue CSV::MalformedCSVError
     @errors = ['The file you uploaded is not a valid CSV file.']
-    render :edit, status: :unprocessable_entity
+    render :edit, status: :unprocessable_content
   end
 
   private
@@ -59,7 +59,7 @@ class DescriptivesController < ApplicationController
 
   def display_error(messages)
     @errors = messages
-    render :edit, status: :unprocessable_entity
+    render :edit, status: :unprocessable_content
   end
 
   def create_csv

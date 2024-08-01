@@ -39,7 +39,7 @@ RSpec.describe 'Upload the descriptive CSV' do
       it "doesn't updates the descriptive" do
         put "/items/#{druid}/descriptive", params: { data: file }
         expect(object_client).not_to have_received(:update)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe 'Upload the descriptive CSV' do
       it "doesn't updates the descriptive" do
         put "/items/#{druid}/descriptive", params: { data: file }
         expect(object_client).not_to have_received(:update)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include('not a valid CSV file')
       end
     end

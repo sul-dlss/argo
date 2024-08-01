@@ -113,7 +113,7 @@ RSpec.describe 'Set catalog record ID' do
                                                     headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
-          expect(response).to have_http_status :unprocessable_entity
+          expect(response).to have_http_status :unprocessable_content
         end
       end
 
@@ -130,7 +130,7 @@ RSpec.describe 'Set catalog record ID' do
 
           expect(object_client).not_to have_received(:update)
           expect(object_client).not_to have_received(:reindex)
-          expect(response).to have_http_status :unprocessable_entity
+          expect(response).to have_http_status :unprocessable_content
         end
       end
 
@@ -146,7 +146,7 @@ RSpec.describe 'Set catalog record ID' do
                                                     headers: turbo_stream_headers
 
           expect(object_client).not_to have_received(:update)
-          expect(response).to have_http_status :unprocessable_entity
+          expect(response).to have_http_status :unprocessable_content
         end
       end
 
