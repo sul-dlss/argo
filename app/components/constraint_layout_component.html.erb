@@ -1,0 +1,13 @@
+<li class="d-inline-flex gap-2 align-items-center applied-filter constraint <%= classes %>">
+    <span class="bg-light badge rounded-pill border selected-item constraint-value">
+        <span class="selected-item-label">
+            <% if label.present? %>
+                <span class="filter-name"><%= label %></span>
+            <% end %>
+            <% if value.present? %>
+                <%= tag.span(value, class: 'filter-value', title: strip_tags(value)) %>
+            <% end %>
+        </span>
+        <%= link_to('', remove_path, class: 'btn btn-close remove', type: 'button', 'aria-label': remove_aria_label) if remove_path.present? %>
+    </span>
+</li>
