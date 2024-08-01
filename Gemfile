@@ -41,7 +41,7 @@ gem 'zip_tricks'
 # Stanford related gems
 gem 'blacklight', '~> 7.37'
 gem 'blacklight-hierarchy', '~> 6.1'
-gem 'dor-services-client', '~> 14.17'
+gem 'dor-services-client', '~> 14.19'
 gem 'dor-workflow-client', '~> 7.0'
 gem 'druid-tools'
 gem 'folio_client', '~> 0.13'
