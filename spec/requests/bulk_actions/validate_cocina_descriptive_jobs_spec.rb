@@ -44,7 +44,7 @@ RSpec.describe 'Bulk validate cocina descriptive' do
         expect do
           post '/bulk_actions/validate_cocina_descriptive_job', params:
         end.not_to have_enqueued_job(ValidateCocinaDescriptiveJob)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match('uplicate column headers: The header adminMetadata.contributor1.name1.code should occur only once.')
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe 'Bulk validate cocina descriptive' do
         expect do
           post '/bulk_actions/validate_cocina_descriptive_job', params:
         end.not_to have_enqueued_job(ValidateCocinaDescriptiveJob)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match('Column header invalid: xsource_id')
       end
     end
@@ -68,7 +68,7 @@ RSpec.describe 'Bulk validate cocina descriptive' do
         expect do
           post '/bulk_actions/validate_cocina_descriptive_job', params:
         end.not_to have_enqueued_job(ValidateCocinaDescriptiveJob)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match('Error starting bulk action: Invalid byte sequence')
       end
     end

@@ -149,10 +149,10 @@ RSpec.describe 'Download item files' do
       it 'sets content-disposition header' do
         get download_item_files_path(druid)
         expect(response.headers.to_h).to include(
-          'Content-Disposition' => "attachment; filename=\"#{bare_druid}.zip\"; filename*=UTF-8''#{bare_druid}.zip",
-          'Content-Type' => 'application/zip',
-          'X-Accel-Buffering' => 'no',
-          'Last-Modified' => 'Fri, 08 Sep 2023 11:39:45 GMT'
+          'content-disposition' => "attachment; filename=\"#{bare_druid}.zip\"; filename*=UTF-8''#{bare_druid}.zip",
+          'content-type' => 'application/zip',
+          'x-accel-buffering' => 'no',
+          'last-modified' => 'Fri, 08 Sep 2023 11:39:45 GMT'
         )
       end
 

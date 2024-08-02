@@ -26,7 +26,7 @@ RSpec.describe 'BulkActions::ImportStructuralJobs' do
         params = { 'csv_file' => fixture_file_upload('invalid_bulk_upload_structural.csv', 'text/csv') }
 
         expect { post '/bulk_actions/import_structural_job', params: }.not_to have_enqueued_job(ImportStructuralJob)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match('missing headers: druid')
       end
     end

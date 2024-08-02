@@ -20,7 +20,7 @@ class CatalogRecordIdsController < ApplicationController
       msg = "#{CatalogRecordId.label}s for #{@cocina.externalIdentifier} have been updated!"
       redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
     else
-      render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_entity
+      render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_content
     end
   end
 end

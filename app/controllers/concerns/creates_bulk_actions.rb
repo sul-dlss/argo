@@ -16,13 +16,13 @@ module CreatesBulkActions
     rescue StandardError => e
       # if job_params calls CsvUploadNormalizer, CSV::MalformedCSVError may be raised
       @errors = ["Error starting bulk action: #{e.message}"]
-      return render :new, status: :unprocessable_entity
+      return render :new, status: :unprocessable_content
     end
 
     result = validate_job_params(bulk_action_job_params)
     if result.failure?
       @errors = result.failure
-      return render :new, status: :unprocessable_entity
+      return render :new, status: :unprocessable_content
     end
 
     bulk_action = BulkAction.new(user: current_user, action_type:, description: params[:description])
@@ -36,7 +36,7 @@ module CreatesBulkActions
       path_params = Blacklight::Parameters.sanitize(search_state_subset)
       redirect_to bulk_actions_path(path_params), status: :see_other, notice: success_message
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

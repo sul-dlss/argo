@@ -159,7 +159,7 @@ RSpec.describe 'Files' do
       it 'renders an HTTP 422 message' do
         get "/items/#{druid}/files?id=bar.tif"
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to eq "Preservation has not yet received #{druid}"
       end
     end

@@ -66,7 +66,7 @@ class TagsController < ApplicationController
         format.html { redirect_to solr_document_path(params[:item_id], format: :html), notice: msg }
       else
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_entity
+          render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_content
         end
       end
     end

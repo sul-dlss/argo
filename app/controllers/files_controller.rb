@@ -18,7 +18,7 @@ class FilesController < ApplicationController
       begin
         @last_accessioned_version = last_accessioned_version(params[:item_id])
       rescue Preservation::Client::NotFoundError
-        return render status: :unprocessable_entity, plain: "Preservation has not yet received #{params[:item_id]}"
+        return render status: :unprocessable_content, plain: "Preservation has not yet received #{params[:item_id]}"
       rescue Preservation::Client::Error => e
         message = "Preservation client error getting current version of #{params[:item_id]}: #{e}"
         logger.error(message)

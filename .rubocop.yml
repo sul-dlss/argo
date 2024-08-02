@@ -41,6 +41,7 @@ Metrics/BlockLength:
   Max: 27
   AllowedMethods:
     - "configure_blacklight"
+    - "configure"
   Exclude:
     - "config/routes.rb"
     - "db/schema.rb"
