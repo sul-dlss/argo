@@ -504,7 +504,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     retries (0.0.5)
-    rexml (3.3.2)
+    rexml (3.3.3)
       strscan
     roo (2.9.0)
       nokogiri (~> 1)
