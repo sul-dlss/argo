@@ -1,4 +1,4 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Open for modification' } %>
-  <% component.body { render 'open_ui' } %>
+  <% component.with_header { 'Open for modification' } %>
+  <% component.with_body { render 'open_ui' } %>
 <% end %>

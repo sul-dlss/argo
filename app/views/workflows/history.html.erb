@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { 'Workflow history' } %>
-  <% component.body { render 'history' } %>
+  <% component.with_header { 'Workflow history' } %>
+  <% component.with_body { render 'history' } %>
 <% end %>

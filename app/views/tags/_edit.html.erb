@@ -1,6 +1,6 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Manage tags' } %>
-  <% component.body do %>
+  <% component.with_header { 'Manage tags' } %>
+  <% component.with_body do %>
     <%= form_with model: @form,
                   url: item_tags_path(item_id: @form),
                   method: 'patch',

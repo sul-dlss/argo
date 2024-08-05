@@ -1,6 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { 'View descriptive metadata' } %>
-  <% component.body do
+  <% component.with_header { 'View descriptive metadata' } %>
+  <% component.with_body do
        render ModsDisplay::RecordComponent.new(record: @mods_display,
                                                fields: [:title] + ModsDisplay::RecordComponent::DEFAULT_FIELDS - [:subTitle])
      end %>
