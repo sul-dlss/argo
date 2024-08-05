@@ -34,6 +34,18 @@ class Repository
     object_client.user_version.find(user_version)
   end
 
+  # @param [String] id the identifier for the item to be found
+  # @param [String] version the version to be found
+  # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] cocina model instance corresponding to the given druid
+  # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the requested user version
+  def self.find_version(id, version)
+    raise ArgumentError, 'Missing identifier' unless id
+    raise ArgumentError, 'Missing version' unless version
+
+    object_client = Dor::Services::Client.object(id)
+    object_client.version.find(version)
+  end
+
   # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] the updated cocina model instance
   # @raises [Dor::Services::Client::UnexpectedResponse] when an error occurs updating the object
   def self.store(cocina_object)

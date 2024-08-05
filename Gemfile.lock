@@ -210,7 +210,7 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (14.20.0)
+    dor-services-client (14.21.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.99.0)
       deprecation
@@ -705,7 +705,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client (~> 14.19)
+  dor-services-client (~> 14.21)
   dor-workflow-client (~> 7.0)
   druid-tools
   dry-monads

@@ -6,10 +6,10 @@ RSpec.describe TechmdComponent, type: :component do
   subject(:component) { described_class.new(view_token: 'skret-t0k3n', presenter:) }
 
   let(:rendered) { render_inline(component) }
-  let(:presenter) { instance_double(ArgoShowPresenter, user_version_view?: user_version_view) }
+  let(:presenter) { instance_double(ArgoShowPresenter, version_or_user_version_view?: version_or_user_version_view?) }
 
   context 'when head cocina' do
-    let(:user_version_view) { false }
+    let(:version_or_user_version_view?) { false }
 
     it 'renders a turbo frame' do
       expect(rendered.css('turbo-frame').first['src']).to eq '/items/skret-t0k3n/technical'
@@ -17,7 +17,7 @@ RSpec.describe TechmdComponent, type: :component do
   end
 
   context 'when user version view' do
-    let(:user_version_view) { true }
+    let(:version_or_user_version_view?) { true }
 
     it 'does not render' do
       expect(rendered.text).to be_empty

@@ -11,10 +11,10 @@ module Show
     end
 
     def edit?
-      !user_version_view? && open_and_not_assembling?
+      !version_or_user_version_view? && open_and_not_assembling?
     end
 
-    delegate :version_service, :user_version_view?, :change_set, to: :@presenter
+    delegate :version_service, :version_or_user_version_view?, :change_set, to: :@presenter
     delegate :open_and_not_assembling?, to: :version_service
     delegate :id, to: :change_set
   end

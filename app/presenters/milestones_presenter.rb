@@ -14,7 +14,7 @@ class MilestonesPresenter
   end
 
   def steps_for(version)
-    milestones[version]
+    milestones[version.to_s]
   end
 
   def version_title(version)
@@ -24,13 +24,9 @@ class MilestonesPresenter
     "#{version} #{val.message}"
   end
 
-  def current_version
-    @current_version ||= version_inventory.max_by(&:versionId)&.versionId
-  end
+  private
 
   attr_reader :druid, :version_inventory
-
-  private
 
   def milestones
     @milestones ||= MilestoneService.milestones_for(druid:)

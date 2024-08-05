@@ -2,7 +2,7 @@
 
 # Download the CSV descriptive metadata
 class DescriptivesController < ApplicationController
-  before_action :maybe_find_user_version, only: :show
+  before_action :maybe_find_cocina, only: :show
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
   # Display the form for uploading the descriptive metadata spreadsheet
@@ -43,10 +43,12 @@ class DescriptivesController < ApplicationController
     "descriptive-#{Druid.new(@cocina).without_namespace}-v#{params[:user_version_id]}.csv"
   end
 
-  def maybe_find_user_version
-    return unless params.key?(:user_version_id)
-
-    @cocina = Repository.find_user_version(params[:item_id], params[:user_version_id])
+  def maybe_find_cocina
+    @cocina = if params.key?(:user_version_id)
+                Repository.find_user_version(params[:item_id], params[:user_version_id])
+              elsif params.key?(:version_id)
+                Repository.find_version(params[:item_id], params[:version_id])
+              end
   end
 
   def display_success

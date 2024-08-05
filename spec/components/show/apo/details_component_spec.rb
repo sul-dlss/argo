@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Show::Apo::DetailsComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, user_version_view?: false) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina:, version_or_user_version_view?: false) }
   let(:cocina) { build(:admin_policy) }
   let(:rendered) { render_inline(component) }
   let(:doc) do

@@ -45,10 +45,11 @@ module Show
     end
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
-    delegate :open?, :openable?, :open_and_not_assembling?, :user_version, :user_version_view?, to: :presenter
+    delegate :open?, :openable?, :open_and_not_assembling?, :user_version_view, :version_or_user_version_view?,
+             :user_version_view?, :version_view?, :version_view, to: :presenter
 
     def button_disabled?
-      !open_and_not_assembling? || user_version_view?
+      !open_and_not_assembling? || version_or_user_version_view?
     end
 
     def collection_button_disabled?
@@ -66,7 +67,7 @@ module Show
         url: item_manage_release_path(druid),
         label: 'Manage release',
         open_modal: true,
-        disabled: user_version_view?
+        disabled: version_or_user_version_view?
       )
     end
 
@@ -120,7 +121,7 @@ module Show
       render ActionButton.new(
         url: dor_reindex_path(druid:),
         label: 'Reindex',
-        disabled: user_version_view?
+        disabled: version_or_user_version_view?
       )
     end
 
@@ -139,7 +140,7 @@ module Show
         label: 'Purge',
         method: 'delete',
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        disabled: !registered_only? || user_version_view?
+        disabled: !registered_only? || version_or_user_version_view?
       )
     end
 
@@ -148,7 +149,7 @@ module Show
         url: item_publish_path(doc),
         label: 'Republish',
         method: 'post',
-        disabled: !published? || user_version_view?
+        disabled: !published? || version_or_user_version_view?
       )
     end
 
@@ -157,14 +158,14 @@ module Show
 
       if user_versions_presenter.user_version_withdrawable?
         render ActionButton.new(
-          url: item_user_version_withdraw_path(doc, user_version),
+          url: item_user_version_withdraw_path(doc, user_version_view),
           label: 'Withdraw',
           method: 'post',
           confirm: 'Once you withdraw this version, the Purl will no longer display it. Are you sure? '
         )
       elsif user_versions_presenter.user_version_restorable?
         render ActionButton.new(
-          url: item_user_version_restore_path(doc, user_version),
+          url: item_user_version_restore_path(doc, user_version_view),
           label: 'Restore',
           method: 'post'
         )
@@ -176,9 +177,13 @@ module Show
     end
 
     def download_cocina_path
-      return item_descriptive_path(doc, format: :csv) unless user_version_view?
-
-      item_user_version_descriptive_path(doc, user_version, format: :csv)
+      if version_view?
+        descriptive_item_version_path(doc, version_view, format: :csv)
+      elsif user_version_view?
+        item_user_version_descriptive_path(doc, user_version_view, format: :csv)
+      else
+        item_descriptive_path(doc, format: :csv)
+      end
     end
 
     def druid

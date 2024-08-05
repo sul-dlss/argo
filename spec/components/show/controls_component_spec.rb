@@ -17,16 +17,19 @@ RSpec.describe Show::ControlsComponent, type: :component do
                     open?: open,
                     cocina:, openable?: true,
                     open_and_not_assembling?: open_and_not_assembling,
-                    user_version:,
-                    user_version_view?: user_version_view,
+                    user_version_view: user_version,
+                    user_version_view?: user_version.present?,
+                    version_view: version,
+                    version_view?: version.present?,
+                    version_or_user_version_view?: version.present? || user_version.present?,
                     user_versions_presenter:)
   end
   let(:user_versions_presenter) { instance_double(UserVersionsPresenter, user_version_withdrawable?: user_version_withdrawable, user_version_restorable?: user_version_restorable) }
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
   let(:open) { false }
   let(:open_and_not_assembling) { false }
-  let(:user_version_view) { false }
   let(:user_version) { nil }
+  let(:version) { nil }
   let(:user_version_withdrawable) { false }
   let(:user_version_restorable) { false }
 
@@ -153,7 +156,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       end
     end
 
-    context 'when the user version can be restorerd' do
+    context 'when the user version can be restored' do
       let(:user_version) { 2 }
       let(:user_version_restorable) { true }
 
@@ -346,7 +349,6 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:processing_status) { 'not registered' }
     let(:open) { true }
     let(:open_and_not_assembling) { true }
-    let(:user_version_view) { true }
     let(:user_version) { 2 }
 
     it 'draws the buttons' do
@@ -356,6 +358,36 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     it 'renders the descriptive download button pointing at the user version-aware path' do
       expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/user_versions/#{user_version}/descriptive.csv"
+    end
+  end
+
+  context 'when a version view' do
+    let(:item_id) { 'druid:kv840xx0000' }
+    let(:dro) { true }
+    let(:doc) do
+      SolrDocument.new('id' => item_id,
+                       'processing_status_text_ssi' => processing_status,
+                       SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                       CatalogRecordId.index_field => catalog_record_id,
+                       SolrDocument::FIELD_APO_ID => [governing_apo_id],
+                       SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published,
+                       SolrDocument::FIELD_WORKFLOW_ERRORS => workflow_errors)
+    end
+    let(:catalog_record_id) { nil }
+    let(:last_published) { nil }
+    let(:workflow_errors) { nil }
+    let(:processing_status) { 'not registered' }
+    let(:open) { true }
+    let(:open_and_not_assembling) { true }
+    let(:version) { 3 }
+
+    it 'draws the buttons' do
+      expect(rendered.css('a').size).to eq(9)
+      expect(rendered.css('a.disabled').size).to eq 8 # except Download Cocina spreadsheet
+    end
+
+    it 'renders the descriptive download button pointing at the user version-aware path' do
+      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/versions/#{version}/descriptive.csv"
     end
   end
 end

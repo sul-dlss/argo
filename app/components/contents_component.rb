@@ -12,17 +12,24 @@ class ContentsComponent < ApplicationComponent
     @cocina.respond_to?(:structural)
   end
 
-  delegate :open_and_not_assembling?, :user_version_view?, :user_version, to: :@presenter
+  delegate :open_and_not_assembling?, :version_or_user_version_view?, :user_version_view?, :version_view?,
+           :user_version_view, :version_view, to: :@presenter
 
   def upload_csv?
-    !user_version_view? && open_and_not_assembling?
+    !version_or_user_version_view? && open_and_not_assembling?
   end
 
   def download_csv?
-    !user_version_view?
+    !version_or_user_version_view?
   end
 
   def structural_link_path
-    user_version_view? ? item_user_version_structure_path(@view_token, user_version) : item_structure_path(@view_token)
+    if user_version_view?
+      item_user_version_structure_path(@view_token, user_version_view)
+    elsif version_view?
+      structure_item_version_path(@view_token, version_view)
+    else
+      item_structure_path(@view_token)
+    end
   end
 end

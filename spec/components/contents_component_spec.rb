@@ -9,11 +9,14 @@ RSpec.describe ContentsComponent, type: :component do
                     cocina:,
                     view_token: 'skret-t0k3n',
                     open_and_not_assembling?: open,
-                    user_version:,
-                    user_version_view?: user_version_view)
+                    user_version_view: user_version,
+                    user_version_view?: user_version.present?,
+                    version_view: version,
+                    version_view?: version.present?,
+                    version_or_user_version_view?: version.present? || user_version.present?)
   end
   let(:user_version) { nil }
-  let(:user_version_view) { false }
+  let(:version) { nil }
   let(:component) { described_class.new(presenter:) }
 
   let(:rendered) { render_inline(component) }
@@ -55,7 +58,19 @@ RSpec.describe ContentsComponent, type: :component do
     context 'when a user version' do
       let(:open) { true }
       let(:user_version) { 2 }
-      let(:user_version_view) { true }
+
+      it 'hides Upload CSV button' do
+        expect(rendered.css('.bi-upload')).not_to be_present
+      end
+
+      it 'hides Download CSV button' do
+        expect(rendered.css('.bi-download')).not_to be_present
+      end
+    end
+
+    context 'when a version' do
+      let(:open) { true }
+      let(:version) { 2 }
 
       it 'hides Upload CSV button' do
         expect(rendered.css('.bi-upload')).not_to be_present

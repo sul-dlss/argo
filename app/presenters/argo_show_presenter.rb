@@ -18,16 +18,30 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
   end
 
   def user_version_view?
-    user_versions_presenter.present? && user_version.present?
+    user_versions_presenter.present? && user_version_view.present?
   end
 
   def head_user_version_view?
-    user_version_view? && user_version == head_user_version
+    user_version_view? && user_version_view == head_user_version
+  end
+
+  def version_view?
+    versions_presenter.present? && version_view.present?
+  end
+
+  def current_version_view?
+    version_view? && version_view == current_version
+  end
+
+  def version_or_user_version_view?
+    version_view? || user_version_view?
   end
 
   delegate :open?, :openable?, :open_and_not_assembling?, to: :version_service
 
-  delegate :user_version, :head_user_version, to: :user_versions_presenter
+  delegate :user_version_view, :head_user_version, to: :user_versions_presenter
 
-  attr_accessor :cocina, :view_token, :state_service, :version_service, :user_versions_presenter
+  delegate :version_view, :current_version, to: :versions_presenter
+
+  attr_accessor :cocina, :view_token, :state_service, :version_service, :user_versions_presenter, :versions_presenter
 end

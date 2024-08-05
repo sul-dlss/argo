@@ -2,9 +2,11 @@
 
 class UserVersionsController < ApplicationController
   before_action :find_user_version_cocina
-  load_and_authorize_resource :cocina, parent: false
+  load_and_authorize_resource :cocina, parent: false, except: %i[show]
 
   def show
+    authorize! :read, @cocina
+
     respond_to do |format|
       format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
     end
@@ -29,7 +31,7 @@ class UserVersionsController < ApplicationController
   end
 
   def user_version_param
-    params[:id] || params[:user_version_id]
+    params[:user_version_id]
   end
 
   def find_user_version_cocina
