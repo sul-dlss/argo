@@ -36,11 +36,14 @@ RSpec.describe 'Reset failed workflow steps' do
     end
 
     it 'requires parameters' do
-      expect { post '/report/reset' }.to raise_error(ActionController::ParameterMissing)
-      expect do
-        post '/report/reset', params: { reset_workflow: workflow }
-      end.to raise_error(ActionController::ParameterMissing)
-      expect { post '/report/reset', params: { reset_step: step } }.to raise_error(ActionController::ParameterMissing)
+      post '/report/reset'
+      expect(response).to have_http_status(:bad_request)
+
+      post '/report/reset', params: { reset_workflow: workflow }
+      expect(response).to have_http_status(:bad_request)
+
+      post '/report/reset', params: { reset_step: step }
+      expect(response).to have_http_status(:bad_request)
     end
   end
 

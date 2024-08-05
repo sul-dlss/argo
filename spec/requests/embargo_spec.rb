@@ -49,7 +49,8 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'requires a date' do
-        expect { patch "/items/#{druid}/embargo", params: {} }.to raise_error(ActionController::ParameterMissing)
+        patch "/items/#{druid}/embargo", params: {}
+        expect(response).to have_http_status(:bad_request)
       end
 
       context 'when the date is malformed' do

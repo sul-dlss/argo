@@ -177,7 +177,8 @@ RSpec.describe 'WorkflowsController' do
     end
 
     it 'requires various workflow parameters' do
-      expect { put "/items/#{druid}/workflows/accessionWF" }.to raise_error(ActionController::ParameterMissing)
+      put "/items/#{druid}/workflows/accessionWF"
+      expect(response).to have_http_status(:bad_request)
     end
 
     context 'when the user is an administrator' do
