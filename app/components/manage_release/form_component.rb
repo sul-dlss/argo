@@ -10,9 +10,9 @@ module ManageRelease
     def child_form(form)
       case @document.object_type
       when 'collection'
-        render CollectionFormComponent.new(form:, current_user: helpers.current_user)
+        render CollectionFormComponent.new(form:, current_user:)
       else
-        render ItemFormComponent.new(form:, current_user: helpers.current_user)
+        render ItemFormComponent.new(form:, current_user:)
       end
     end
   end

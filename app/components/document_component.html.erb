@@ -7,7 +7,7 @@
                 itemscope: true,
                 itemtype: @document.itemtype,
                 class: 'document document-component' do %>
-  <%= title component: DocumentTitleComponent %>
+  <%= with_title(component: DocumentTitleComponent) %>
 
   <%= render child_component %>
 <% end %>

@@ -84,4 +84,10 @@ RSpec.configure do |config|
   config.include SigninHelper, type: :view
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ViewComponent::TestHelpers, type: :component
+  config.include Devise::Test::ControllerHelpers, type: :component
+  config.include ActionView::TestCase::Behavior, type: :component
+
+  config.before(:each, type: :component) do
+    @request = vc_test_controller.request
+  end
 end
