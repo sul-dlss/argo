@@ -8,9 +8,9 @@ RSpec.describe WorkflowProcessRow, type: :component do
   let(:cocina_object) { instance_double(Cocina::Models::DRO) }
 
   describe 'render' do
-    subject(:body) { render_inline(described_class.new(process:, index: 1, cocina_object:)) }
+    subject(:body) { render_inline(instance) }
 
-    let(:process) do
+    let(:process_status) do
       instance_double(Dor::Workflow::Response::Process,
                       status: 'error',
                       pid: 'druid:132',
@@ -25,7 +25,7 @@ RSpec.describe WorkflowProcessRow, type: :component do
     end
 
     before do
-      allow(controller).to receive(:can?).and_return(true)
+      allow(vc_test_controller).to receive(:can?).and_return(true)
     end
 
     it 'has a relative time' do
