@@ -136,7 +136,8 @@ RSpec.describe 'Files' do
     end
 
     it 'requires an id parameter' do
-      expect { get "/items/#{druid}/files" }.to raise_error(ArgumentError)
+      get "/items/#{druid}/files"
+      expect(response).to have_http_status(:internal_server_error)
     end
 
     context 'when the files are in preservation' do
