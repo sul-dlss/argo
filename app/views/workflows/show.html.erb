@@ -1,6 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { 'Workflow view' } %>
-  <% component.body do %>
+  <% component.with_header { 'Workflow view' } %>
+  <% component.with_body do %>
     <% if params[:raw] %>
       <%= @presenter.pretty_xml %>
     <% else %>

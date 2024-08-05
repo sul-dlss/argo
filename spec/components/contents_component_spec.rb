@@ -25,7 +25,7 @@ RSpec.describe ContentsComponent, type: :component do
     let(:cocina) { build(:dro) }
 
     before do
-      allow(controller).to receive(:can?).and_return(true)
+      allow(vc_test_controller).to receive(:can?).and_return(true)
     end
 
     context 'with unlocked object' do

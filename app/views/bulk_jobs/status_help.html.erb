@@ -1,7 +1,7 @@
 <div data-blacklight-modal="container">
   <%= render BlacklightModalComponent.new do |component| %>
-    <% component.header { 'Status Help' } %>
-    <% component.body do %>
+    <% component.with_header { 'Status Help' } %>
+    <% component.with_body do %>
       <div class="container-fluid">
           <div class="row mb-3">
               <div class="col-md-4"><strong>completed</strong></div>

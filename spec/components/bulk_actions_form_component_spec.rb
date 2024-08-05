@@ -9,7 +9,7 @@ RSpec.describe BulkActionsFormComponent, type: :component do
   let(:search_state) { Blacklight::SearchState.new(search_params, blacklight_config) }
 
   before do
-    allow(controller).to receive(:current_user).and_return(build(:user))
+    allow(vc_test_controller).to receive(:current_user).and_return(build(:user))
     allow(subject).to receive(:search_state).and_return(search_state)
   end
 

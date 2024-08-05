@@ -1,4 +1,4 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Upload Cocina' } %>
-  <% component.body { render 'form' } %>
+  <% component.with_header { 'Upload Cocina' } %>
+  <% component.with_body { render 'form' } %>
 <% end %>

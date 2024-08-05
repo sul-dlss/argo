@@ -10,9 +10,7 @@ RSpec.describe ManageRelease::FormComponent, type: :component do
   let(:rendered) { render_inline(component) }
 
   before do
-    allow(controller).to receive_messages(
-      current_user: build(:user)
-    )
+    allow(component).to receive(:current_user).and_return(build(:user))
   end
 
   it 'renders the form' do

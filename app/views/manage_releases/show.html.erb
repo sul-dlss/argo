@@ -1,6 +1,6 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Manage release' } %>
-  <% component.body do
+  <% component.with_header { 'Manage release' } %>
+  <% component.with_body do
        render ManageRelease::FormComponent.new(bulk_action: @bulk_action, document: @document)
      end %>
 <% end %>
