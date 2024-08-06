@@ -16,7 +16,7 @@ class DescriptiveMetadataExportJob < GenericJob
         description = DescriptionExport.export(source_id: item.identification.sourceId, description: item.description)
         out[druid] = description
         bulk_action.increment(:druid_count_success).save
-      rescue Dor::Services::Client::UnexpectedResponse => e
+      rescue Dor::Services::Client::UnexpectedResponse, NoMethodError => e
         bulk_action.increment(:druid_count_fail).save
         log_buffer.puts("#{Time.current} Failed #{e.class} #{e.message} for #{druid}")
       end

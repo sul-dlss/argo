@@ -17,7 +17,6 @@ RSpec.describe DescriptiveMetadataExportJob do
     allow(job).to receive(:with_bulk_action_log).and_yield(log_buffer)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::UnexpectedResponse.new(response:))
   end
 
   after do
@@ -32,25 +31,23 @@ RSpec.describe DescriptiveMetadataExportJob do
     let(:groups) { [] }
     let(:user) { instance_double(User, to_s: 'jcoyne85') }
     let(:item1) do
-      build(:dro_with_metadata, id: 'druid:bc123df4567', source_id: 'sul:4444')
+      build(:dro_with_metadata, id: druid1, source_id: 'sul:4444')
     end
     let(:item2) do
-      build(:dro_with_metadata, id: 'druid:bd123fg5678', title: 'Test DRO #2')
+      build(:dro_with_metadata, id: druid2, title: 'Test DRO #2')
     end
 
     context 'when happy path' do
       before do
-        job.perform(bulk_action.id,
-                    druids:,
-                    groups:,
-                    user:)
+        allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::UnexpectedResponse.new(response:))
+        job.perform(bulk_action.id, druids:, groups:, user:)
       end
 
       it 'writes a CSV file' do
         csv = CSV.read(csv_path, headers: true)
         expect(csv.headers).to eq ['druid', 'source_id', 'title1.value', 'purl']
-        expect(csv[0][0]).to eq 'druid:bc123df4567'
-        expect(csv[1][0]).to eq 'druid:bd123fg5678'
+        expect(csv[0][0]).to eq(druid1)
+        expect(csv[1][0]).to eq(druid2)
         expect(csv[0][1]).to eq 'sul:4444'
         expect(csv[1][1]).to eq 'sul:1234'
         expect(csv[1]['title1.value']).to eq 'Test DRO #2'
@@ -60,6 +57,27 @@ RSpec.describe DescriptiveMetadataExportJob do
         expect(bulk_action.druid_count_success).to eq 2
         expect(bulk_action.druid_count_fail).to eq 1
         expect(bulk_action.druid_count_total).to eq 3
+      end
+    end
+
+    context 'when APO included among druids' do
+      let(:item3) { build(:admin_policy_with_metadata, id: druid3) }
+      let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).with(druid3).and_return(object_client3)
+        allow(log_buffer).to receive(:puts)
+        job.perform(bulk_action.id, druids:, groups:, user:)
+      end
+
+      it 'tracks success/failure' do
+        expect(bulk_action.druid_count_success).to eq(2)
+        expect(bulk_action.druid_count_fail).to eq(1)
+        expect(bulk_action.druid_count_total).to eq(3)
+      end
+
+      it 'logs error messages' do
+        expect(log_buffer).to have_received(:puts).with(/Failed NoMethodError .+ for #{druid3}/).once
       end
     end
   end
