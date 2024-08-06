@@ -1,1 +1,4 @@
-<%= render Blacklight::ConstraintsComponent.new(search_state:, facet_constraint_component: ConstraintComponent, tag: :ul, classes: 'clearfix constraints-container list-unstyled') %>
+<%= render Blacklight::ConstraintsComponent.new(search_state:,
+                                                facet_constraint_component: ConstraintComponent,
+                                                query_constraint_component: ConstraintLayoutComponent,
+                                                tag: :ul, classes: 'clearfix constraints-container list-unstyled') %>
