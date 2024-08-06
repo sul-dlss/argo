@@ -1,6 +1,6 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Create Collection' } %>
-  <% component.body do %>
+  <% component.with_header { 'Create Collection' } %>
+  <% component.with_body do %>
     <div data-controller="collection-editor">
       <h4>APO &mdash; <%= @cocina.label %></h4>
       <%= form_tag apo_collections_path(@cocina.externalIdentifier) do %>

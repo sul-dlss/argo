@@ -1,4 +1,4 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Add workflow' } %>
-  <% component.body { render 'new' } %>
+  <% component.with_header { 'Add workflow' } %>
+  <% component.with_body { render 'new' } %>
 <% end %>

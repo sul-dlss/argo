@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ManageRelease::ItemFormComponent, type: :component do
   subject(:component) { described_class.new(form:, current_user: build(:user)) }
 
-  let(:form) { ActionView::Helpers::FormBuilder.new(nil, nil, controller.view_context, {}) }
+  let(:form) { ActionView::Helpers::FormBuilder.new(nil, nil, vc_test_controller.view_context, {}) }
   let(:rendered) { render_inline(component) }
 
   it 'renders the options' do

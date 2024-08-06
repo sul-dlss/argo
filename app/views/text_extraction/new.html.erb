@@ -1,4 +1,4 @@
 <%= render EditModalComponent.new do |component| %>
-  <% component.header { 'Text extraction' } %>
-  <% component.body { render 'form' } %>
+  <% component.with_header { 'Text extraction' } %>
+  <% component.with_body { render 'form' } %>
 <% end %>

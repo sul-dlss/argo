@@ -1,6 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.header { 'File Availability' } %>
-  <% component.body do %>
+  <% component.with_header { 'File Availability' } %>
+  <% component.with_body do %>
     <% if @file.administrative.shelve %>
       <% if @file.access.download == 'none' %>
         <p>
