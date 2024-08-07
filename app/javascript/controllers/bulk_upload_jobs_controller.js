@@ -12,7 +12,7 @@ export default class extends Controller {
     const formParent = this.element
     // Replace the button every time the modal is open ensures there are no stale listeners.
     modalElement.querySelector('.modal-footer').innerHTML = `
-          <button type="button" class="btn btn-danger" id="bulk-delete-confirm">Delete</button>
+          <button type="button" class="btn btn-primary" id="bulk-delete-confirm">Delete</button>
           <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
         `
     modalElement
