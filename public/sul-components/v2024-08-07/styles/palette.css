@@ -3,6 +3,7 @@
   --stanford-cardinal: #8c1515;
   --stanford-black: #2e2d29;
   --stanford-80-black: #585754;
+  --stanford-70-black: #6d6c69;
   --stanford-30-black: #c0c0bf;
   --stanford-10-black: #eaeaea;
 
@@ -12,6 +13,7 @@
   --stanford-palo-alto-dark-rgb: 1, 66, 64;
   --stanford-stone-dark-rgb: 84, 73, 72;
   --stanford-illuminating-dark-rgb: 254, 197, 29;
+  --stanford-fog-light: #f4f4f4;
 
   /* https://identity.stanford.edu/design-elements/color/web/ */
   --stanford-digital-blue-rgb: 0, 108, 184;
