@@ -37,7 +37,7 @@
           <td><%= link_to('Log', file_bulk_action_path(bulk_action.id, filename: Settings.bulk_metadata.log), download: true) %></td>
           <td><%= render_bulk_action_type(bulk_action) %></td>
           <td>
-            <%= link_to 'Delete', bulk_action, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            <%= link_to 'Delete', bulk_action, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
           </td>
         </tr>
       <% end %>
