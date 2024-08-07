@@ -72,12 +72,14 @@
 
   .open-close {
     width: 2rem;
-    float: left;
     margin-right: 2rem;
 
     .btn {
-      font-size: x-large;
-      color: var(--stanford-cardinal);
+      --bs-btn-color: var(--stanford-digital-blue);
+      --bs-btn-font-size: x-large;
+      --bs-btn-disabled-bg: transparent;
+      --bs-btn-disabled-color: var(--stanford-30-black);
+      --bs-btn-disabled-border-color: transparent;
     }
   }
 
