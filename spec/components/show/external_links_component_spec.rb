@@ -9,7 +9,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
 
   let(:presenter) do
     instance_double(ArgoShowPresenter, user_version_view?: user_version.present?, user_version_view: user_version,
-                                       version_view: version, version_view?: version.present?)
+                                       version_view: version, version_view?: version.present?, previous_user_version_view?: false)
   end
 
   let(:user_version) { nil }
@@ -97,11 +97,34 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
       end
     end
 
-    context 'when a user version' do
+    context 'when the head user version' do
       let(:user_version) { 2 }
+      let(:presenter) do
+        instance_double(ArgoShowPresenter, user_version_view?: user_version.present?, user_version_view: user_version,
+                                           version_view: version, version_view?: version.present?, previous_user_version_view?: false)
+      end
 
       it 'links to user version descriptive metadata' do
         expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/user_versions/2/metadata/descriptive'
+      end
+
+      it 'links to base PURL' do
+        expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
+      end
+    end
+
+    context 'when a previous user version' do
+      let(:user_version) { 1 }
+      let(:head_user_version) { 2 }
+      let(:version) { 1 }
+      let(:presenter) do
+        instance_double(ArgoShowPresenter, user_version_view?: user_version.present?, user_version_view: user_version,
+                                           version_view: version, version_view?: version.present?,
+                                           previous_user_version_view?: user_version.present? && user_version != head_user_version)
+      end
+
+      it 'links to versioned PURL' do
+        expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445/version/1'
       end
     end
 
