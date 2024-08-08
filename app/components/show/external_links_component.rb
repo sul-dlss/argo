@@ -11,12 +11,17 @@ module Show
     end
 
     delegate :publishable?, to: :@document
-    delegate :user_version_view?, :user_version_view,
+    delegate :user_version_view?, :user_version_view, :previous_user_version_view?,
              :version_view?, :version_view, to: :@presenter
 
     def purl_link
-      link_to 'PURL', File.join(Settings.purl_url, document.druid),
-              target: '_blank', rel: 'noopener', class: 'external-link-button btn btn-outline-primary'
+      link_to 'PURL', purl_url, target: '_blank', rel: 'noopener', class: 'external-link-button btn btn-outline-primary'
+    end
+
+    def purl_url
+      return File.join(Settings.purl_url, document.druid, 'version', user_version_view.to_s) if previous_user_version_view?
+
+      File.join(Settings.purl_url, document.druid)
     end
 
     def searchworks_link

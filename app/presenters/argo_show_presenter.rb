@@ -25,6 +25,10 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
     user_version_view? && user_version_view == head_user_version
   end
 
+  def previous_user_version_view?
+    user_version_view? && user_version_view != head_user_version
+  end
+
   def version_view?
     versions_presenter.present? && version_view.present?
   end
