@@ -10,7 +10,7 @@ module Show
       end
 
       delegate :object_type, :created_date, :preservation_size, :doi, :orcids, to: :@solr_document
-      delegate :state_service, :user_version_view?, to: :@presenter
+      delegate :state_service, :version_or_user_version_view?, to: :@presenter
 
       def catalog_record_id_label
         CatalogRecordId.label

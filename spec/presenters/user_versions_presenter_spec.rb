@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UserVersionsPresenter do
   subject(:presenter) do
-    described_class.new(user_version:, user_version_inventory:)
+    described_class.new(user_version_view: user_version, user_version_inventory:)
   end
 
   let(:user_version) { '1' }
@@ -88,6 +88,6 @@ RSpec.describe UserVersionsPresenter do
   describe '#head_user_version' do
     subject { presenter.head_user_version }
 
-    it { is_expected.to eq '2' }
+    it { is_expected.to eq 2 }
   end
 end

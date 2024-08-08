@@ -354,32 +354,30 @@ class CatalogController < ApplicationController
   end
 
   def show
-    # If showing a user version, druid will be :item_id and user_version will be :id.
-    if params.key?(:item_id)
-      @druid = Druid.new(params[:item_id]).with_namespace
-      user_version = params[:id]
-      @cocina = Repository.find_user_version(@druid, user_version)
-      @document = SolrDocument.new(object_client.user_version.solr(user_version))
+    if user_version_param
+      @cocina = Repository.find_user_version(druid_param, user_version_param)
+      @document = SolrDocument.new(object_client.user_version.solr(user_version_param))
+    elsif version_param
+      @cocina = Repository.find_version(druid_param, version_param)
+      @document = SolrDocument.new(object_client.version.solr(version_param))
     else
-      @druid = Druid.new(params[:id]).with_namespace
-      user_version = nil
-      _deprecated_response, @document = search_service.fetch(@druid)
-      @cocina = Repository.find_lite(@druid, structural: false)
+      _deprecated_response, @document = search_service.fetch(druid_param)
+      @cocina = Repository.find_lite(druid_param, structural: false)
     end
 
     authorize! :read, @cocina
 
-    @workflows = WorkflowService.workflows_for(druid: @druid)
+    @workflows = WorkflowService.workflows_for(druid: druid_param)
 
-    @milestones_presenter = MilestonesPresenter.new(druid: @druid, version_inventory: object_client.version.inventory)
-    @user_versions_presenter = UserVersionsPresenter.new(user_version:, user_version_inventory: object_client.user_version.inventory)
-    raise ActionController::RoutingError, 'Not Found' unless user_version.nil? || @user_versions_presenter.valid_user_version?
+    @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: object_client.user_version.inventory)
+    @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory:)
+    @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
 
     @head_user_version = @user_versions_presenter.head_user_version
     @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
-    @verified_token_with_expiration = generate_token(user_version)
+    @verified_token_with_expiration = generate_token
 
     respond_to do |format|
       format.html { @search_context = setup_next_and_previous_documents }
@@ -421,15 +419,31 @@ class CatalogController < ApplicationController
     { current_user: }
   end
 
-  def generate_token(_user_version)
+  def generate_token
     Argo.verifier.generate(
-      { druid: @druid, user_version: @user_version },
+      { druid: druid_param, user_version_id: user_version_param, version_id: version_param },
       expires_in: 1.hour,
       purpose: :view_token
     )
   end
 
   def object_client
-    @object_client ||= Dor::Services::Client.object(@druid)
+    @object_client ||= Dor::Services::Client.object(druid_param)
+  end
+
+  def version_inventory
+    @version_inventory ||= object_client.version.inventory
+  end
+
+  def user_version_param
+    @user_version_param ||= params[:user_version_id]
+  end
+
+  def version_param
+    @version_param ||= params[:version_id]
+  end
+
+  def druid_param
+    @druid_param ||= Druid.new(params[:item_id] || params[:id]).with_namespace
   end
 end

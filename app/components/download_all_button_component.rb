@@ -16,14 +16,14 @@ class DownloadAllButtonComponent < ViewComponent::Base
   end
 
   def render?
-    WorkflowService.accessioned?(druid: cocina.externalIdentifier)
+    WorkflowService.accessioned?(druid: cocina.externalIdentifier) && !version_view?
   end
 
   def path
-    user_version_view? ? download_item_user_version_files_path(document.id, user_version) : download_item_files_path(document)
+    user_version_view? ? download_item_user_version_files_path(document.id, user_version_view) : download_item_files_path(document)
   end
 
   attr_reader :document, :presenter
 
-  delegate :cocina, :user_version_view?, :user_version, to: :presenter
+  delegate :cocina, :user_version_view?, :user_version_view, :version_view?, to: :presenter
 end

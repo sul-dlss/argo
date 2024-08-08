@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Show::Item::AccessRightsComponent, type: :component do
   let(:component) { described_class.new(presenter:) }
-  let(:presenter) { instance_double(ArgoShowPresenter, version_service:, change_set:, user_version_view?: false) }
+  let(:presenter) { instance_double(ArgoShowPresenter, version_service:, change_set:, version_or_user_version_view?: false) }
   let(:change_set) { ItemChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',

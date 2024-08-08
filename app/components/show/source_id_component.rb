@@ -8,10 +8,10 @@ module Show
     end
 
     def edit?
-      item? && !user_version_view? && open_and_not_assembling?
+      item? && !version_or_user_version_view? && open_and_not_assembling?
     end
 
-    delegate :version_service, :user_version_view?, to: :@presenter
+    delegate :version_service, :version_or_user_version_view?, to: :@presenter
     delegate :open_and_not_assembling?, to: :version_service
     delegate :id, :source_id, :item?, to: :@document
   end

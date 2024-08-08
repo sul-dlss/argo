@@ -13,8 +13,12 @@ RSpec.describe 'Structure' do
     Capybara::Node::Simple.new(response.body)
   end
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_item, user_version: user_version_client) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object, find: cocina_item,
+                                                   user_version: user_version_client, version: version_client)
+  end
   let(:user_version_client) { nil }
+  let(:version_client) { nil }
   let(:cocina_item) { build(:dro_with_metadata) }
 
   context 'when a user version is not specified' do
@@ -31,6 +35,17 @@ RSpec.describe 'Structure' do
 
     it 'renders a turbo-frame' do
       get "/items/skret-t0k3n/user_versions/#{user_version}/structure"
+      expect(response).to have_http_status(:ok)
+      expect(rendered.find_css('turbo-frame#structure')).to be_present
+    end
+  end
+
+  context 'when a version is specified' do
+    let(:user_version_client) { instance_double(Dor::Services::Client::ObjectVersion, find: cocina_item) }
+    let(:version) { 2 }
+
+    it 'renders a turbo-frame' do
+      get "/items/skret-t0k3n/versions/#{version}/structure"
       expect(response).to have_http_status(:ok)
       expect(rendered.find_css('turbo-frame#structure')).to be_present
     end

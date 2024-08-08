@@ -171,7 +171,18 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :versions, only: [] do
+    resources :versions, only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
+
+    resources :versions, only: [], param: :version_id do
+      member do
+        get 'descriptive', to: 'descriptives#show'
+        resources :metadata, only: %i[] do
+          collection do
+            get 'descriptive', as: 'descriptive_version'
+          end
+        end
+        get 'structure', to: 'structures#show'
+      end
       collection do
         get 'close_ui'
         get 'open_ui'
@@ -180,12 +191,14 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :versions, controller: 'catalog', only: %i[show], param: :version_id
+
     resource :tags, only: %i[edit update]
 
     resource :manage_release, only: :show
     resources :metadata, only: [] do
       collection do
-        get 'descriptive'
+        get 'descriptive', as: 'descriptive'
       end
     end
 
@@ -216,11 +229,13 @@ Rails.application.routes.draw do
       post 'source_id'
     end
 
-    resources :user_versions, only: %i[show], constraints: ->(req) { req.format == :json }, as: 'item_user_version_json'
+    resources :user_versions, only: %i[show], constraints: ->(req) { req.format == :json }, param: :user_version_id, as: 'user_version_json'
 
-    resources :user_versions, controller: 'catalog', only: %i[show] do
-      post 'withdraw', to: 'user_versions#withdraw'
-      post 'restore', to: 'user_versions#restore'
+    resources :user_versions, controller: 'catalog', only: %i[show], param: :user_version_id
+
+    resources :user_versions, only: %i[] do
+      post 'withdraw'
+      post 'restore'
       get 'descriptive', to: 'descriptives#show'
       get 'structure', to: 'structures#show'
       resources 'files', only: %i[index], constraints: { item_id: /.*/ } do
@@ -228,7 +243,7 @@ Rails.application.routes.draw do
           get 'download'
         end
       end
-      resources :metadata, only: %i[show] do
+      resources :metadata, only: %i[] do
         collection do
           get 'descriptive'
         end

@@ -11,7 +11,8 @@ module Show
     end
 
     delegate :publishable?, to: :@document
-    delegate :user_version_view?, :user_version, to: :@presenter
+    delegate :user_version_view?, :user_version_view,
+             :version_view?, :version_view, to: :@presenter
 
     def purl_link
       link_to 'PURL', File.join(Settings.purl_url, document.druid),
@@ -32,9 +33,8 @@ module Show
     end
 
     def cocina_link
-      path = user_version_view? ? item_user_version_path(document.id, user_version, format: :json) : item_path(document, format: :json)
       link_to 'Cocina model',
-              path,
+              cocina_link_path,
               target: '_blank',
               rel: 'noopener',
               class: 'external-link-button btn btn-outline-primary'
@@ -47,7 +47,13 @@ module Show
     end
 
     def description_link_path
-      user_version_view? ? descriptive_item_user_version_metadata_path(document.id, user_version) : descriptive_item_metadata_path(document.id)
+      if user_version_view?
+        descriptive_item_user_version_metadata_path(document.id, user_version_view)
+      elsif version_view?
+        descriptive_version_item_metadata_path(document.id, version_view)
+      else
+        descriptive_item_metadata_path(document.id)
+      end
     end
 
     def released_to_searchworks?
@@ -57,5 +63,15 @@ module Show
     private
 
     attr_reader :document, :presenter
+
+    def cocina_link_path
+      if user_version_view?
+        item_user_version_path(document.id, user_version_view, format: :json)
+      elsif version_view?
+        item_version_path(document.id, version_view, format: :json)
+      else
+        item_path(document, format: :json)
+      end
+    end
   end
 end

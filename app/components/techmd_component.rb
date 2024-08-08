@@ -10,6 +10,6 @@ class TechmdComponent < ViewComponent::Base
   attr_reader :view_token
 
   def render?
-    !@presenter.user_version_view?
+    !@presenter.version_or_user_version_view?
   end
 end

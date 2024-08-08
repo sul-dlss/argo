@@ -2,21 +2,17 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Version view', :js do
+RSpec.describe 'User version view', :js do
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:druid) { 'druid:hj185xx2222' }
-  let(:version_client) do
-    instance_double(Dor::Services::Client::ObjectVersion,
-                    current: 1,
-                    inventory: [version1, version2],
-                    find: cocina_object, solr: solr_doc)
-  end
-  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1]) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1], find: cocina_object, solr: solr_doc, update: true) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: release_tags_list) }
-  let(:version1) { Dor::Services::Client::ObjectVersion::Version.new(versionId: 1, message: 'Initial version', cocina: false) }
-  let(:version2) { Dor::Services::Client::ObjectVersion::Version.new(versionId: 2, message: 'Changed version', cocina: true) }
-  let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2, withdrawable: false, restorable: false) }
+  let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
+  let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2, withdrawable:, restorable:) }
+  let(:withdrawable) { false }
+  let(:restorable) { false }
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows:) }
   let(:workflow_client) do
@@ -196,7 +192,7 @@ RSpec.describe 'Version view', :js do
 
     context 'when viewing the version' do
       it 'shows the user version' do
-        visit item_version_path(item_id: druid, version_id: 2)
+        visit item_user_version_path(item_id: druid, user_version_id: 2)
 
         expect(page).to have_content(title)
         expect(page).to have_content('You are viewing the latest version.')
@@ -208,21 +204,46 @@ RSpec.describe 'Version view', :js do
         expect(page).to have_no_css('.open-close') # Lock icon
         expect(page).to have_no_link('Withdraw')
         expect(page).to have_no_link('Restore')
-        expect(page).to have_text('image.jpg')
-        expect(page).to have_no_link('image.jpg')
+        expect(page).to have_link('image.jpg')
 
-        expect(version_client).to have_received(:find).with('2').at_least(:once)
-        expect(version_client).to have_received(:solr).with('2')
+        expect(user_version_client).to have_received(:find).with('2').at_least(:once)
+        expect(user_version_client).to have_received(:solr).with('2')
+      end
+    end
+
+    context 'when withdrawing a version' do
+      let(:withdrawable) { true }
+
+      it 'withdraws' do
+        visit item_user_version_path(item_id: druid, user_version_id: 2)
+        accept_confirm 'Once you withdraw this version, the Purl will no longer display it. Are you sure?' do
+          click_link('Withdraw')
+        end
+        expect(page).to have_content('Withdrawn. Purl will no longer display this version.')
+        expect(user_version_client).to have_received(:update)
+          .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: true))
+      end
+    end
+
+    context 'when restoring a version' do
+      let(:restorable) { true }
+
+      it 'restores' do
+        visit item_user_version_path(item_id: druid, user_version_id: 2)
+        click_link('Restore')
+        expect(page).to have_content('Restored. Purl will display this version.')
+        expect(user_version_client).to have_received(:update)
+          .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: false))
       end
     end
 
     context 'when viewing an unknown version' do
       before do
-        allow(version_client).to receive(:find).and_raise(Dor::Services::Client::NotFoundResponse)
+        allow(user_version_client).to receive(:find).and_raise(Dor::Services::Client::NotFoundResponse)
       end
 
       it 'shows a 404' do
-        visit item_version_path(item_id: druid, version_id: 4)
+        visit item_user_version_path(item_id: druid, user_version_id: 4)
 
         expect(page).to have_content('The page you were looking for doesn\'t exist.')
       end
