@@ -53,7 +53,7 @@ gem 'sdr-client', '~> 2.0'
 
 group :test, :development do
   gem 'debug'
-  gem 'erb_lint', '~> 0.5.0', require: false
+  gem 'erb_lint', require: false
   gem 'factory_bot_rails'
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
   gem 'pry-remote' # allows you to attach remote session to pry

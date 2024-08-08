@@ -255,12 +255,12 @@ GEM
       activesupport (>= 3.0, < 8.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    erb_lint (0.5.0)
+    erb_lint (0.6.0)
       activesupport
       better_html (>= 2.0.1)
       parser (>= 2.7.1.4)
       rainbow
-      rubocop
+      rubocop (>= 1)
       smart_properties
     erubi (1.13.0)
     factory_bot (6.4.6)
@@ -413,8 +413,8 @@ GEM
     optimist (3.1.0)
     orm_adapter (0.5.0)
     ostruct (0.6.0)
-    parallel (1.25.1)
-    parser (3.3.4.0)
+    parallel (1.26.1)
+    parser (3.3.4.2)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
@@ -563,7 +563,7 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.31.3)
+    rubocop-ast (1.32.0)
       parser (>= 3.3.1.0)
     rubocop-capybara (2.21.0)
       rubocop (~> 1.41)
@@ -710,7 +710,7 @@ DEPENDENCIES
   druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
-  erb_lint (~> 0.5.0)
+  erb_lint
   factory_bot_rails
   faraday
   faraday-multipart
