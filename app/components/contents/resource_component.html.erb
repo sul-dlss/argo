@@ -25,6 +25,6 @@
         <th>Download</th>
       </tr>
 
-    <%= render Contents::FileComponent.with_collection(files, object_id:, viewable: viewable?, image: image?) %>
+    <%= render Contents::FileComponent.with_collection(files, object_id:, user_version:, viewable: viewable?, image: image?) %>
   </table>
 </li>

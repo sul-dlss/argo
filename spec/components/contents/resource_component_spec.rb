@@ -8,7 +8,8 @@ RSpec.describe Contents::ResourceComponent, type: :component do
                         resource_counter: 1,
                         counter_offset: 50,
                         object_id: 'druid:kb487gt5106',
-                        viewable: true)
+                        viewable: true,
+                        user_version: nil)
   end
   let(:rendered) { render_inline(component) }
   let(:resource) do

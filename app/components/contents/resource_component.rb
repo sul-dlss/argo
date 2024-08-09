@@ -2,14 +2,15 @@
 
 module Contents
   class ResourceComponent < ViewComponent::Base
-    def initialize(resource:, resource_counter:, counter_offset:, object_id:, viewable:)
+    def initialize(resource:, resource_counter:, counter_offset:, object_id:, user_version:, viewable:) # rubocop:disable Metrics/ParameterLists
       @resource = resource
       @resource_counter = resource_counter + counter_offset
       @object_id = object_id
+      @user_version = user_version
       @viewable = viewable
     end
 
-    attr_reader :resource, :resource_counter, :object_id
+    attr_reader :resource, :resource_counter, :object_id, :user_version
 
     def viewable?
       @viewable

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FilesController < ApplicationController
+class FilesController < ApplicationController # rubocop:disable Metrics/ClassLength
   include ActionController::Live # required for streaming
 
   before_action :load_resource, except: [:download]
@@ -10,20 +10,24 @@ class FilesController < ApplicationController
   def index
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
-    @has_been_accessioned = WorkflowService.accessioned?(druid: @cocina_model.externalIdentifier)
-    files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
-    @file = files.find { |file| file.filename == params[:id] }
-
-    if @has_been_accessioned
-      begin
-        @last_accessioned_version = last_accessioned_version(params[:item_id])
-      rescue Preservation::Client::NotFoundError
-        return render status: :unprocessable_content, plain: "Preservation has not yet received #{params[:item_id]}"
-      rescue Preservation::Client::Error => e
-        message = "Preservation client error getting current version of #{params[:item_id]}: #{e}"
-        logger.error(message)
-        Honeybadger.notify(message)
-        return render status: :internal_server_error, plain: message
+    @file = find_file
+    @user_version = params[:user_version_id]
+    if @user_version
+      @has_been_accessioned = WorkflowService.accessioned?(druid: @cocina_model.externalIdentifier)
+      @version = @cocina_model.version
+    else
+      @has_been_accessioned = true
+      if @has_been_accessioned
+        begin
+          @version = last_accessioned_version(params[:item_id])
+        rescue Preservation::Client::NotFoundError
+          return render status: :unprocessable_content, plain: "Preservation has not yet received #{params[:item_id]}"
+        rescue Preservation::Client::Error => e
+          message = "Preservation client error getting current version of #{params[:item_id]}: #{e}"
+          logger.error(message)
+          Honeybadger.notify(message)
+          return render status: :internal_server_error, plain: message
+        end
       end
     end
 
@@ -111,7 +115,16 @@ class FilesController < ApplicationController
   end
 
   def load_resource
-    @cocina_model = Repository.find(params[:item_id])
+    @cocina_model = if params.key?(:user_version_id)
+                      Repository.find_user_version(params[:item_id], params[:user_version_id])
+                    else
+                      Repository.find(params[:item_id])
+                    end
+  end
+
+  def find_file
+    files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
+    files.find { |file| file.filename == filename }
   end
 
   # Zip-tricks based streaming for files from preservation.

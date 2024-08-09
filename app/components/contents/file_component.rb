@@ -2,14 +2,15 @@
 
 module Contents
   class FileComponent < ViewComponent::Base
-    def initialize(file:, object_id:, viewable:, image:)
+    def initialize(file:, object_id:, user_version:, viewable:, image:)
       @file = file
       @object_id = object_id
+      @user_version = user_version
       @viewable = viewable
       @image = image
     end
 
-    attr_reader :file, :object_id
+    attr_reader :file, :object_id, :user_version
 
     def viewable?
       @viewable
@@ -45,10 +46,6 @@ module Contents
       use.capitalize
     end
 
-    def link_attrs
-      { item_id: object_id, id: filename }
-    end
-
     def height
       return '' if presentation&.height.blank?
 
@@ -59,6 +56,11 @@ module Contents
       return '' if presentation&.width.blank?
 
       "#{presentation.width} px"
+    end
+
+    def files_link
+      attrs = { item_id: object_id, user_version_id: user_version, id: filename }.compact
+      user_version ? item_user_version_files_path(**attrs) : item_files_path(**attrs)
     end
   end
 end

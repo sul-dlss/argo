@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Contents::FileComponent, type: :component do
-  let(:component) { described_class.new(file:, object_id: 'druid:kb487gt5106', viewable: true, image: true) }
+  let(:component) { described_class.new(file:, object_id: 'druid:kb487gt5106', viewable: true, image: true, user_version:) }
   let(:rendered) { render_inline(component) }
   let(:file) do
     instance_double(Cocina::Models::File,
@@ -21,6 +21,7 @@ RSpec.describe Contents::FileComponent, type: :component do
   let(:admin) { instance_double(Cocina::Models::FileAdministrative, sdrPreserve: true, publish: true, shelve: true) }
   let(:presentation) { instance_double(Cocina::Models::Presentation, height: 11_839, width: 19_380) }
   let(:use) { 'transcription' }
+  let(:user_version) { nil }
 
   context 'with an image fileset' do
     it 'renders the component' do
@@ -30,6 +31,15 @@ RSpec.describe Contents::FileComponent, type: :component do
       expect(rendered.to_html).to include 'Stanford'
       expect(rendered.to_html).to include 'Transcription'
       expect(rendered.to_html).to include '11839 px'
+    end
+  end
+
+  context 'with a user version' do
+    let(:user_version) { 2 }
+
+    it 'renders the component' do
+      expect(rendered.css('a[href="/items/druid:kb487gt5106/user_versions/2/files?id=example.tif"]').to_html)
+        .to include('example.tif')
     end
   end
 
@@ -50,7 +60,7 @@ RSpec.describe Contents::FileComponent, type: :component do
   end
 
   context 'with a fileset that is not an image' do
-    let(:component) { described_class.new(file:, object_id: 'druid:kb487gt5106', viewable: true, image: false) }
+    let(:component) { described_class.new(file:, object_id: 'druid:kb487gt5106', viewable: true, image: false, user_version:) }
 
     it 'renders the component without height' do
       expect(rendered.to_html).to include 'World'

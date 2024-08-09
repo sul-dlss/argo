@@ -49,6 +49,7 @@ robot_status_url: "https://robot-console-stage.stanford.edu"
 solrizer_url: "http://solr:8983/solr/argo"
 spreadsheet_url: "https://modsulator-app-stage.stanford.edu/v1/spreadsheet"
 stacks_file_url: "https://stacks-test.stanford.edu/file"
+stacks_version_file_url: "https://stacks-test.stanford.edu/v2/file"
 stacks_url: "https://stacks-test.stanford.edu/image"
 workflow_url: "http://localhost:3001"
 
