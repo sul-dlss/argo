@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FilesController < ApplicationController # rubocop:disable Metrics/ClassLength
+class FilesController < ApplicationController
   include ActionController::Live # required for streaming
 
   before_action :load_resource, except: [:download]
@@ -12,28 +12,22 @@ class FilesController < ApplicationController # rubocop:disable Metrics/ClassLen
 
     @file = find_file
     @user_version = params[:user_version_id]
-    if @user_version
-      @has_been_accessioned = WorkflowService.accessioned?(druid: @cocina_model.externalIdentifier)
-      @version = @cocina_model.version
-    else
-      @has_been_accessioned = true
-      if @has_been_accessioned
-        begin
-          @version = last_accessioned_version(params[:item_id])
-        rescue Preservation::Client::NotFoundError
-          return render status: :unprocessable_content, plain: "Preservation has not yet received #{params[:item_id]}"
-        rescue Preservation::Client::Error => e
-          message = "Preservation client error getting current version of #{params[:item_id]}: #{e}"
-          logger.error(message)
-          Honeybadger.notify(message)
-          return render status: :internal_server_error, plain: message
-        end
-      end
-    end
+    @version = if @user_version
+                 @cocina_model.version
+               elsif accessioned?
+                 last_accessioned_version(params[:item_id])
+               end
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
+  rescue Preservation::Client::NotFoundError
+    render status: :unprocessable_content, plain: "Preservation has not yet received #{params[:item_id]}"
+  rescue Preservation::Client::Error => e
+    message = "Preservation client error getting current version of #{params[:item_id]}: #{e}"
+    logger.error(message)
+    Honeybadger.notify(message)
+    render status: :internal_server_error, plain: message
   end
 
   def preserved
@@ -125,6 +119,10 @@ class FilesController < ApplicationController # rubocop:disable Metrics/ClassLen
   def find_file
     files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
     files.find { |file| file.filename == filename }
+  end
+
+  def accessioned?
+    WorkflowService.accessioned?(druid: @cocina_model.externalIdentifier)
   end
 
   # Zip-tricks based streaming for files from preservation.

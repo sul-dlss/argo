@@ -2,6 +2,6 @@
   <% component.with_header { 'File Availability' } %>
   <% component.with_body do %>
     <%= render Contents::StacksLinkComponent.new(druid: params[:item_id], user_version: @user_version, cocina_file: @file) %>
-    <%= render Contents::PreservationLinkComponent.new(druid: params[:item_id], cocina_file: @file, has_been_accessioned: @has_been_accessioned, version: @version) %>
+    <%= render Contents::PreservationLinkComponent.new(druid: params[:item_id], cocina_file: @file, version: @version) %>
   <% end %>
 <% end %>

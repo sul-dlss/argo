@@ -25,7 +25,7 @@ RSpec.describe Contents::PreservationLinkComponent, type: :component do
 
   describe 'when accessioned and preserved' do
     it 'renders download link' do
-      render_inline(described_class.new(cocina_file:, druid:, has_been_accessioned: true, version: 2))
+      render_inline(described_class.new(cocina_file:, druid:, version: 2))
 
       expect(page).to have_text('Preservation')
       expect(page).to have_link('/items/druid:bc123df4567/files/example.tif/preserved?version=2', href: '/items/druid:bc123df4567/files/example.tif/preserved?version=2')
@@ -34,7 +34,7 @@ RSpec.describe Contents::PreservationLinkComponent, type: :component do
 
   describe 'when not accessioned' do
     it 'does not render' do
-      render_inline(described_class.new(cocina_file:, druid:, has_been_accessioned: false, version: 2))
+      render_inline(described_class.new(cocina_file:, druid:, version: nil))
 
       expect(page).to have_no_text('Preservation')
     end
@@ -44,7 +44,7 @@ RSpec.describe Contents::PreservationLinkComponent, type: :component do
     let(:preserved) { false }
 
     it 'does not render' do
-      render_inline(described_class.new(cocina_file:, druid:, has_been_accessioned: true, version: 2))
+      render_inline(described_class.new(cocina_file:, druid:, version: 2))
 
       expect(page).to have_no_text('Preservation')
     end
