@@ -27,7 +27,7 @@ class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   def version_type
     return 'public' if @presenter.user_version_view?
 
-    'system' if @presenter.version_view?
+    'system'
   end
 
   delegate :version_or_user_version_view?, :previous_user_version_view?, :current_version_view?, to: :@presenter
