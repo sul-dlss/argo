@@ -15,8 +15,20 @@ class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   def version_banner
     return 'You are viewing the latest version.' if @presenter.head_user_version_view? || @presenter.current_version_view?
 
-    'You are viewing an older version.' if version_or_user_version_view?
+    "You are viewing an older #{version_type} version." if version_or_user_version_view?
   end
 
-  delegate :version_or_user_version_view?, to: :@presenter
+  def show_latest_link?
+    return previous_user_version_view? if @presenter.user_version_view?
+
+    !current_version_view?
+  end
+
+  def version_type
+    return 'public' if @presenter.user_version_view?
+
+    'system' if @presenter.version_view?
+  end
+
+  delegate :version_or_user_version_view?, :previous_user_version_view?, :current_version_view?, to: :@presenter
 end

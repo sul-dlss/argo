@@ -195,12 +195,12 @@ RSpec.describe 'Version view', :js do
     end
 
     context 'when viewing the version' do
-      it 'shows the user version' do
+      it 'shows the current version' do
         visit item_version_path(item_id: druid, version_id: 2)
 
         expect(page).to have_content(title)
         expect(page).to have_content('You are viewing the latest version.')
-        expect(page).to have_link('Back to current', href: "/view/#{druid}")
+        expect(page).to have_no_content('View latest version')
         expect(page).to have_no_content('Technical metadata')
         # And nothing should be editable
         expect(page).to have_no_css('.bi-pencil')
@@ -213,6 +213,28 @@ RSpec.describe 'Version view', :js do
 
         expect(version_client).to have_received(:find).with('2').at_least(:once)
         expect(version_client).to have_received(:solr).with('2')
+      end
+    end
+
+    context 'when viewing an older version' do
+      it 'shows the older system version banner' do
+        visit item_version_path(item_id: druid, version_id: 1)
+
+        expect(page).to have_content(title)
+        expect(page).to have_content('You are viewing an older system version.')
+        expect(page).to have_link('View latest version', href: "/view/#{druid}")
+        expect(page).to have_no_content('Technical metadata')
+        # And nothing should be editable
+        expect(page).to have_no_css('.bi-pencil')
+        expect(page).to have_content('Older versions are not released')
+        expect(page).to have_no_css('.open-close') # Lock icon
+        expect(page).to have_no_link('Withdraw')
+        expect(page).to have_no_link('Restore')
+        expect(page).to have_text('image.jpg')
+        expect(page).to have_no_link('image.jpg')
+
+        expect(version_client).to have_received(:find).with('1').at_least(:once)
+        expect(version_client).to have_received(:solr).with('1')
       end
     end
 
