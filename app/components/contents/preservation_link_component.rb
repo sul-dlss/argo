@@ -2,10 +2,9 @@
 
 module Contents
   class PreservationLinkComponent < ApplicationComponent
-    def initialize(druid:, cocina_file:, has_been_accessioned:, version:)
+    def initialize(druid:, cocina_file:, version:)
       @druid = druid
       @cocina_file = cocina_file
-      @has_been_accessioned = has_been_accessioned
       @version = version
     end
 
@@ -14,7 +13,7 @@ module Contents
     delegate :filename, to: :cocina_file
 
     def render?
-      cocina_file.administrative.sdrPreserve && @has_been_accessioned
+      version.present? && cocina_file.administrative.sdrPreserve
     end
   end
 end
