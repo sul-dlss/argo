@@ -1,7 +1,15 @@
 <header class="document-header mb-5 pb-3">
   <% if version_banner %>
-    <div class="alert alert-warning" role="alert">
-      <%= version_banner %>
+    <div class="alert alert-warning d-flex shadow-sm align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+      <div class="text-body">
+        <%= version_banner %>
+        <% if show_latest_link? %>
+          <div class="text-body">
+              <%= link_to('View latest version', solr_document_path(@document.id)) %>
+          </div>
+        <% end %>
+      </div>
     </div>
   <% end %>
   <div class="row">
@@ -15,9 +23,4 @@
       <%= object_type_label %>
     </div>
   </div>
-  <% if version_or_user_version_view? %>
-    <p>
-      <%= link_to('Back to current', solr_document_path(@document.id)) %>
-    </p>
-  <% end %>
 </header>

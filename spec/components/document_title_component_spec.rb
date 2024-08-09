@@ -21,6 +21,9 @@ RSpec.describe DocumentTitleComponent, type: :component do
                                        head_user_version:,
                                        head_user_version_view?: user_version.present? && user_version == head_user_version,
                                        version_view: version,
+                                       version_view?: version.present?,
+                                       user_version_view?: user_versions_presenter.present? && user_version_view.present?,
+                                       previous_user_version_view?: user_version.present? && user_version_view != head_user_version,
                                        current_version:,
                                        current_version_view?: version.present? && version == current_version,
                                        version_or_user_version_view?: version.present? || user_version.present?)
@@ -29,6 +32,8 @@ RSpec.describe DocumentTitleComponent, type: :component do
   let(:head_user_version) { nil }
   let(:version) { nil }
   let(:current_version) { nil }
+  let(:user_versions_presenter) { nil }
+  let(:user_version_view) { nil }
   let(:rendered) { render_inline(component) }
 
   before do
@@ -90,30 +95,37 @@ RSpec.describe DocumentTitleComponent, type: :component do
       expect(rendered.css('div.object-type').first.classes).to include('object-type-item')
     end
 
-    context 'with a user version' do
+    context 'with a previous user version' do
       let(:user_version) { '2' }
       let(:head_user_version) { '3' }
+      let(:user_version_view) { '2' }
+      let(:user_versions_presenter) { instance_double(UserVersionsPresenter, present?: true) }
 
       it 'renders the expected user version label' do
-        expect(rendered.content).to include('You are viewing an older version.')
+        expect(rendered.content).to include('You are viewing an older public version.')
+        expect(rendered.content).to include('View latest version')
       end
     end
 
     context 'with a head user version' do
       let(:user_version) { '2' }
       let(:head_user_version) { '2' }
+      let(:user_version_view) { '2' }
+      let(:user_versions_presenter) { instance_double(UserVersionsPresenter, present?: true) }
 
       it 'renders the expected user version label' do
         expect(rendered.content).to include('You are viewing the latest version.')
+        expect(rendered.content).not_to include('View latest version')
       end
     end
 
-    context 'with a version' do
+    context 'with a previous version' do
       let(:version) { '2' }
       let(:current_version) { '3' }
 
       it 'renders the expected version label' do
-        expect(rendered.content).to include('You are viewing an older version.')
+        expect(rendered.content).to include('You are viewing an older system version.')
+        expect(rendered.content).to include('View latest version')
       end
     end
 
@@ -123,6 +135,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
 
       it 'renders the expected version label' do
         expect(rendered.content).to include('You are viewing the latest version.')
+        expect(rendered.content).not_to include('View latest version')
       end
     end
   end
