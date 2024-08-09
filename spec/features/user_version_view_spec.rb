@@ -7,7 +7,8 @@ RSpec.describe 'User version view', :js do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:druid) { 'druid:hj185xx2222' }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
-  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: [user_version1], find: cocina_object, solr: solr_doc, update: true) }
+  let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory:, find: cocina_object, solr: solr_doc, update: true) }
+  let(:inventory) { [user_version1] }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: release_tags_list) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
   let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2, withdrawable:, restorable:) }
@@ -234,6 +235,48 @@ RSpec.describe 'User version view', :js do
         expect(page).to have_content('Restored. Purl will display this version.')
         expect(user_version_client).to have_received(:update)
           .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: false))
+      end
+    end
+
+    context 'when moving a version and only one target' do
+      let(:inventory) do
+        [
+          Dor::Services::Client::UserVersion::Version.new(version: 1, userVersion: 1, withdrawable: true, restorable: false),
+          Dor::Services::Client::UserVersion::Version.new(version: 3, userVersion: 2, withdrawable: true, restorable: false)
+        ]
+      end
+
+      it 'moves' do
+        visit item_user_version_path(item_id: druid, user_version_id: 1)
+        click_link('Move')
+        expect(page).to have_content('Move user version')
+        expect(page).to have_content('Move user version 1 to version 2.')
+        click_button('Submit')
+        expect(page).to have_content('Moved user version.')
+
+        expect(user_version_client).to have_received(:update)
+          .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '1', version: '2'))
+      end
+    end
+
+    context 'when moving a version and multiple targets' do
+      let(:inventory) do
+        [
+          Dor::Services::Client::UserVersion::Version.new(version: 1, userVersion: 1, withdrawable: true, restorable: false),
+          Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2, withdrawable: true, restorable: false)
+        ]
+      end
+
+      it 'moves' do
+        visit item_user_version_path(item_id: druid, user_version_id: 1)
+        click_link('Move')
+        expect(page).to have_content('Move user version')
+        select('3', from: 'Move user version 1 to version:')
+        click_button('Submit')
+        expect(page).to have_content('Moved user version.')
+
+        expect(user_version_client).to have_received(:update)
+          .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '1', version: '3'))
       end
     end
 

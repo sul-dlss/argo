@@ -1,0 +1,18 @@
+<%= render EditModalComponent.new do |component| %>
+  <% component.with_header { 'Move user version' } %>
+  <% component.with_body do %>
+        <%= form_with(url: item_user_version_move_path(@druid, @user_versions_presenter.user_version_view)) do |f| %>
+            <% move_version_targets = @user_versions_presenter.move_version_targets %>
+            <% if move_version_targets.one? %>
+                <div>Move user version <%= @user_versions_presenter.user_version_view %> to version <%= move_version_targets.first %>.</div>
+                <%= f.hidden_field('version', value: move_version_targets.first) %>
+            <% else %>
+                <%= f.label :version, "Move user version #{@user_versions_presenter.user_version_view} to version:", class: 'form-label' %>
+                <%= f.select :version, move_version_targets, {}, { class: 'form-select', style: 'width: 100px;' } %>
+            <% end %>
+            <div class='my-3'>
+                <button type='submit' class='btn btn-primary'>Submit</button>
+            </div>
+        <% end %>
+    <% end %>
+<% end %>

@@ -172,6 +172,16 @@ module Show
       end
     end
 
+    def move_user_version
+      return unless item? && user_versions_presenter.move_version_targets.present?
+
+      render ActionButton.new(
+        url: item_user_version_edit_move_path(doc, user_version_view),
+        label: 'Move',
+        open_modal: true
+      )
+    end
+
     def upload_mods
       link_to 'Upload MODS', apo_bulk_jobs_path(doc), class: 'btn btn-primary'
     end

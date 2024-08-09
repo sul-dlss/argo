@@ -13,15 +13,27 @@ class UserVersionsController < ApplicationController
   end
 
   def withdraw
-    update_user_version(withdrawn: true)
+    update_withdrawn(withdrawn: true)
     redirect_to item_user_version_path(druid_param, user_version_param),
                 notice: 'Withdrawn. Purl will no longer display this version.'
   end
 
   def restore
-    update_user_version(withdrawn: false)
+    update_withdrawn(withdrawn: false)
     redirect_to item_user_version_path(druid_param, user_version_param),
                 notice: 'Restored. Purl will display this version.'
+  end
+
+  def edit_move
+    @druid = druid_param
+    @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: client.inventory)
+  end
+
+  def move
+    client.update(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: user_version_param, version: params[:version]))
+
+    redirect_to item_user_version_path(druid_param, user_version_param),
+                notice: 'Moved user version.'
   end
 
   private
@@ -38,8 +50,11 @@ class UserVersionsController < ApplicationController
     @cocina = Repository.find_user_version(druid_param, user_version_param)
   end
 
-  def update_user_version(withdrawn:)
-    client = Dor::Services::Client.object(druid_param).user_version
+  def update_withdrawn(withdrawn:)
     client.update(user_version: Dor::Services::Client::UserVersion::Version.new(withdrawn:, userVersion: user_version_param))
+  end
+
+  def client
+    Dor::Services::Client.object(druid_param).user_version
   end
 end

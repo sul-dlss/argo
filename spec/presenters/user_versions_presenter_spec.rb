@@ -90,4 +90,47 @@ RSpec.describe UserVersionsPresenter do
 
     it { is_expected.to eq 2 }
   end
+
+  describe '#move_version_targets' do
+    subject { presenter.move_version_targets }
+
+    context 'when no versions are movable' do
+      it { is_expected.to eq [] }
+    end
+
+    context 'when versions are movable' do
+      let(:user_version_inventory) do
+        [
+          Dor::Services::Client::UserVersion::Version.new(userVersion: '1', version: '3', withdrawable: true, restorable: false),
+          Dor::Services::Client::UserVersion::Version.new(userVersion: '2', version: '6', withdrawable: true, restorable: false)
+        ]
+      end
+
+      it { is_expected.to eq [4, 5] }
+    end
+
+    context 'when the user version is withdrawn' do
+      let(:user_version_inventory) do
+        [
+          Dor::Services::Client::UserVersion::Version.new(userVersion: '1', version: '3', withdrawable: false, restorable: true),
+          Dor::Services::Client::UserVersion::Version.new(userVersion: '2', version: '6', withdrawable: true, restorable: false)
+        ]
+      end
+
+      it { is_expected.to eq [] }
+    end
+
+    context 'when the user version is the last user version' do
+      let(:user_version_inventory) do
+        [
+          Dor::Services::Client::UserVersion::Version.new(userVersion: '1', version: '3', withdrawable: false, restorable: true),
+          Dor::Services::Client::UserVersion::Version.new(userVersion: '2', version: '6', withdrawable: true, restorable: false)
+        ]
+      end
+
+      let(:user_version) { '2' }
+
+      it { is_expected.to eq [] }
+    end
+  end
 end

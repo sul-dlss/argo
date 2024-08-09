@@ -43,6 +43,18 @@ class UserVersionsPresenter
     user_version_data_for(user_version_view)&.version&.to_i
   end
 
+  # @return [Array<Integer>] the versions that this user version can be moved to
+  def move_version_targets
+    return [] unless user_version_data
+    return [] if user_version_data.restorable? # Can't move it if withdrawn.
+
+    next_user_version = user_version_view + 1
+    version_for_next_user_version = user_version_data_for(next_user_version)&.version&.to_i
+    return [] unless version_for_next_user_version
+
+    (version_view + 1..version_for_next_user_version - 1).to_a
+  end
+
   attr_reader :user_version_view, :user_version_inventory
 
   private

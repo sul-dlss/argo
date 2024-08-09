@@ -24,7 +24,12 @@ RSpec.describe Show::ControlsComponent, type: :component do
                     version_or_user_version_view?: version.present? || user_version.present?,
                     user_versions_presenter:)
   end
-  let(:user_versions_presenter) { instance_double(UserVersionsPresenter, user_version_withdrawable?: user_version_withdrawable, user_version_restorable?: user_version_restorable) }
+  let(:user_versions_presenter) do
+    instance_double(UserVersionsPresenter,
+                    user_version_withdrawable?: user_version_withdrawable,
+                    user_version_restorable?: user_version_restorable,
+                    move_version_targets:)
+  end
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
   let(:open) { false }
   let(:open_and_not_assembling) { false }
@@ -32,6 +37,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:version) { nil }
   let(:user_version_withdrawable) { false }
   let(:user_version_restorable) { false }
+  let(:move_version_targets) { [] }
 
   before do
     rendered
@@ -162,6 +168,15 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
       it 'the restore button is displayed' do
         expect(page).to have_link 'Restore', href: '/items/druid:kv840xx0000/user_versions/2/restore'
+      end
+    end
+
+    context 'when the user version can be moved' do
+      let(:user_version) { 2 }
+      let(:move_version_targets) { [3, 4] }
+
+      it 'the move button is displayed' do
+        expect(page).to have_link 'Move', href: '/items/druid:kv840xx0000/user_versions/2/move'
       end
     end
   end
