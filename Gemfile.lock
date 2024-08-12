@@ -109,7 +109,7 @@ GEM
       blacklight (>= 7.18, < 9)
       deprecation
       rails (>= 6.1, < 7.2)
-    bootsnap (1.18.3)
+    bootsnap (1.18.4)
       msgpack (~> 1.2)
     builder (3.3.0)
     bundler-audit (0.9.1)
@@ -125,7 +125,7 @@ GEM
       bundler-audit (~> 0.5)
       capistrano (~> 3.0)
       capistrano-bundler (>= 1.4)
-    capistrano-bundler (2.1.0)
+    capistrano-bundler (2.1.1)
       capistrano (~> 3.1)
     capistrano-maintenance (1.2.1)
       capistrano (>= 3.0)
@@ -149,7 +149,8 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    childprocess (5.0.0)
+    childprocess (5.1.0)
+      logger (~> 1.5)
     cocina-models (0.99.0)
       activesupport
       deprecation
@@ -170,7 +171,7 @@ GEM
       rb_sys (~> 0.9)
     commonmarker (1.1.5-x86_64-darwin)
     commonmarker (1.1.5-x86_64-linux)
-    concurrent-ruby (1.3.3)
+    concurrent-ruby (1.3.4)
     config (5.5.1)
       deep_merge (~> 1.2, >= 1.2.1)
     connection_pool (2.4.1)
@@ -293,7 +294,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.1)
-    honeybadger (5.15.4)
+    honeybadger (5.15.5)
     http-cookie (1.0.6)
       domain_name (~> 0.5)
     http_logger (0.7.0)
@@ -413,7 +414,7 @@ GEM
     optimist (3.1.0)
     orm_adapter (0.5.0)
     ostruct (0.6.0)
-    parallel (1.26.1)
+    parallel (1.26.2)
     parser (3.3.4.2)
       ast (~> 2.4.1)
       racc
@@ -521,7 +522,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     retries (0.0.5)
-    rexml (3.3.4)
+    rexml (3.3.5)
       strscan
     roo (2.9.0)
       nokogiri (~> 1)
@@ -577,7 +578,7 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rspec (3.0.3)
+    rubocop-rspec (3.0.4)
       rubocop (~> 1.61)
     rubocop-rspec_rails (2.30.0)
       rubocop (~> 1.61)
