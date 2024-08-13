@@ -288,9 +288,9 @@ binary-extensions@^2.0.0:
     bootstrap ">=4.3.1 <6.0.0"
 
 blacklight-frontend@^7.20.2:
-  version "7.37.0"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.37.0.tgz#cbc2e744ebf1728546e3f6a6b0033fe36227d4e0"
-  integrity sha512-WaZs10y8BFKrz6yWNqhszNujgkqrQggJDOzoFhPAhF/1/vs+mZ1TkEd+vktnCdxaustRZqEeNa5KQWIuvjgIaA==
+  version "7.38.0"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.38.0.tgz#0dce6531602c7bb3a0e3c5f99cea788158d19401"
+  integrity sha512-zsX+cMgeuUuKxwx1FydE4H1XzkTJoywmwGOznllyVYCatIlG2xCVM8IFbuv+VB9Qwoss9z0MjH87l2nMnSPKIA==
   dependencies:
     bootstrap ">=4.3.1 <6.0.0"
     jquery "^3.5.1"
