@@ -105,10 +105,10 @@ GEM
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7.3)
       view_component (>= 2.66, < 4)
-    blacklight-hierarchy (6.3.0)
+    blacklight-hierarchy (6.4.0)
       blacklight (>= 7.18, < 9)
       deprecation
-      rails (>= 6.1, < 7.2)
+      rails (>= 6.1, < 7.3)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
     builder (3.3.0)
