@@ -6,7 +6,7 @@ RSpec.describe DescriptiveMetadataImportJob do
   let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
   let(:item1) { build(:dro_with_metadata, id: druids[0]) }
-  let(:item2) { build(:dro_with_metadata, id: druids[1]) }
+  let(:item2) { build(:dro_with_metadata, id: druids[1], version: 2) }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
   let(:filename) { 'test.csv' }
@@ -58,7 +58,7 @@ RSpec.describe DescriptiveMetadataImportJob do
         expect(Repository).to have_received(:store).with(expected1)
         expect(Repository).to have_received(:store).with(expected2)
         expect(VersionService).to have_received(:open?).twice
-        expect(VersionService).to have_received(:close).twice
+        expect(VersionService).to have_received(:close).once
       end
     end
 
