@@ -63,7 +63,8 @@ class DescriptiveMetadataImportJob < GenericJob
   end
 
   def close_version(cocina_object)
-    VersionService.close(druid: cocina_object.externalIdentifier)
+    # Do not close the initial version of an object on a metadata update
+    VersionService.close(druid: cocina_object.externalIdentifier) unless cocina_object.version == 1
     Success()
   rescue RuntimeError => e
     Failure([e.message])
