@@ -48,7 +48,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
       expect(page).to have_css 'tr.version2', count: 2
       expect(milestones_presenter).to have_received(:steps_for).with(2)
       expect(milestones_presenter).to have_received(:version_title).with(2)
-      expect(user_versions_presenter).to have_received(:user_version_for).with(2)
+      expect(user_versions_presenter).to have_received(:user_version_for).with(2).twice
     end
   end
 
@@ -70,6 +70,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
 
     it 'renders link to user version' do
       render_inline(instance)
+      expect(page).to have_link '2 (2.0.0) Add collection, set rights to citations', href: '/items/druid:mk420bs7601/public_version/2'
       expect(page).to have_link 'Public version 2', href: '/items/druid:mk420bs7601/public_version/2'
     end
   end
