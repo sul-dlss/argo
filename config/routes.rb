@@ -236,6 +236,8 @@ Rails.application.routes.draw do
     resources :user_versions, only: %i[] do
       post 'withdraw'
       post 'restore'
+      get 'move', to: 'user_versions#edit_move', as: 'edit_move'
+      post 'move'
       get 'descriptive', to: 'descriptives#show'
       get 'structure', to: 'structures#show'
       resources 'files', only: %i[index], constraints: { item_id: /.*/ } do
