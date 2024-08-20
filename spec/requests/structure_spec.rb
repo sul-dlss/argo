@@ -45,7 +45,7 @@ RSpec.describe 'Structure' do
     let(:version) { 2 }
 
     it 'renders a turbo-frame' do
-      get "/items/skret-t0k3n/versions/#{version}/structure"
+      get "/items/skret-t0k3n/version/#{version}/structure"
       expect(response).to have_http_status(:ok)
       expect(rendered.find_css('turbo-frame#structure')).to be_present
     end

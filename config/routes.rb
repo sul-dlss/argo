@@ -145,6 +145,8 @@ Rails.application.routes.draw do
   # route globbing with resourceful routes.
   get 'items/:item_id/files/*id/preserved', to: 'files#preserved', as: :preserved_item_file
 
+  # resolve('Version') { [:version] }
+
   resources :items, only: %i[show update] do
     resources 'files', only: %i[index], constraints: { id: /.*/ } do
       collection do
@@ -171,9 +173,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :versions, only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
+    resources :version, only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
 
-    resources :versions, only: [], param: :version_id do
+    resources :version, only: [], param: :version_id, controller: 'versions' do
       member do
         get 'descriptive', to: 'descriptives#show'
         resources :metadata, only: %i[] do
@@ -191,7 +193,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :versions, controller: 'catalog', only: %i[show], param: :version_id
+    resources :version, controller: 'catalog', only: %i[show], param: :version_id
 
     resource :tags, only: %i[edit update]
 

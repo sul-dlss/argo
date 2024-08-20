@@ -31,14 +31,14 @@ RSpec.describe 'Viewing an Admin policy' do
   describe 'item dialogs' do
     context 'for open version ui' do
       it 'renders the open version ui' do
-        visit "/items/#{apo_druid}/versions/open_ui"
+        visit "/items/#{apo_druid}/version/open_ui"
         expect(page).to have_content('description')
       end
     end
 
     context 'for close version ui' do
       it 'renders the close version ui' do
-        visit "/items/#{apo_druid}/versions/close_ui"
+        visit "/items/#{apo_druid}/version/close_ui"
         expect(page).to have_content('description')
       end
     end

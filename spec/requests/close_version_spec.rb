@@ -23,7 +23,7 @@ RSpec.describe 'Close a version' do
     let(:version_service) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
     it 'calls dor-services to close the version' do
-      post "/items/#{druid}/versions/close", params: { description: 'something' }
+      post "/items/#{druid}/version/close", params: { description: 'something' }
       expect(flash[:notice]).to eq "Version 2 of #{druid} has been closed!"
       expect(version_service).to have_received(:close).with(description: 'something',
                                                             user_name: user.to_s)
@@ -38,7 +38,7 @@ RSpec.describe 'Close a version' do
     let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
     it 'returns a 403' do
-      post "/items/#{druid}/versions/close"
+      post "/items/#{druid}/version/close"
       expect(response).to have_http_status(:forbidden)
     end
   end

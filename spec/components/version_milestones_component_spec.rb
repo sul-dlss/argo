@@ -110,7 +110,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
 
     it 'renders link to version' do
       render_inline(instance)
-      expect(page).to have_link '2 (2.0.0) Add collection, set rights to citations', href: '/items/druid:mk420bs7601/versions/2'
+      expect(page).to have_link '2 (2.0.0) Add collection, set rights to citations', href: '/items/druid:mk420bs7601/version/2'
     end
   end
 

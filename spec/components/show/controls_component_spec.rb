@@ -387,7 +387,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     it 'renders the descriptive download button pointing at the user version-aware path' do
-      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/versions/#{version}/descriptive.csv"
+      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/version/#{version}/descriptive.csv"
     end
   end
 end
