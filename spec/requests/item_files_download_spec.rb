@@ -183,7 +183,7 @@ RSpec.describe 'Download item files' do
       let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, find: cocina_model) }
 
       it 'zips files set for preservation' do
-        get download_item_user_version_files_path(druid, user_version)
+        get download_item_public_version_files_path(druid, user_version)
         expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.jp2').once
         expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.tif').once
         expect(Preservation::Client.objects).to have_received(:content).with(

@@ -60,7 +60,7 @@ module Contents
 
     def files_link
       attrs = { item_id: object_id, user_version_id: user_version, id: filename }.compact
-      user_version ? item_user_version_files_path(**attrs) : item_files_path(**attrs)
+      user_version ? item_public_version_files_path(**attrs) : item_files_path(**attrs)
     end
   end
 end

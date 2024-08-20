@@ -70,7 +70,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
 
     it 'renders link to user version' do
       render_inline(instance)
-      expect(page).to have_link 'Public version 2', href: '/items/druid:mk420bs7601/user_versions/2'
+      expect(page).to have_link 'Public version 2', href: '/items/druid:mk420bs7601/public_version/2'
     end
   end
 
@@ -81,7 +81,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
     it 'renders the user version but not as a link' do
       render_inline(instance)
       expect(page).to have_text 'Public version 1'
-      expect(page).to have_no_link 'Public version 1', href: '/items/druid:mk420bs7601/user_versions/1'
+      expect(page).to have_no_link 'Public version 1', href: '/items/druid:mk420bs7601/public_version/1'
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe VersionMilestonesComponent, type: :component do
     it 'renders the user version but not as a link' do
       render_inline(instance)
       expect(page).to have_text 'Public version 2'
-      expect(page).to have_no_link 'Public version 2', href: '/items/druid:mk420bs7601/user_versions/2'
+      expect(page).to have_no_link 'Public version 2', href: '/items/druid:mk420bs7601/public_version/2'
     end
   end
 

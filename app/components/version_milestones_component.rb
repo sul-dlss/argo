@@ -67,7 +67,7 @@ class VersionMilestonesComponent < ViewComponent::Base
   end
 
   def user_version_path
-    item_user_version_path(item_id: druid, user_version_id: user_version)
+    item_public_version_path(item_id: druid, user_version_id: user_version)
   end
 
   def version_path

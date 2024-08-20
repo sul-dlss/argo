@@ -98,7 +98,7 @@ RSpec.describe 'View descriptive metadata' do
     let(:user_version) { '2' }
 
     it 'displays the user version descriptive metadata' do
-      get "/items/#{druid}/user_versions/2/metadata/descriptive"
+      get "/items/#{druid}/public_version/2/metadata/descriptive"
       expect(response).to be_successful
       expect(response.body).to include 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.'
       expect(user_version_client).to have_received(:find).with(user_version)

@@ -53,7 +53,7 @@ module Show
 
     def description_link_path
       if user_version_view?
-        descriptive_item_user_version_metadata_path(document.id, user_version_view)
+        descriptive_item_public_version_metadata_path(document.id, user_version_view)
       elsif version_view?
         descriptive_version_item_metadata_path(document.id, version_view)
       else
@@ -71,7 +71,7 @@ module Show
 
     def cocina_link_path
       if user_version_view?
-        item_user_version_path(document.id, user_version_view, format: :json)
+        item_public_version_path(document.id, user_version_view, format: :json)
       elsif version_view?
         item_version_path(document.id, version_view, format: :json)
       else

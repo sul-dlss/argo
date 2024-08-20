@@ -158,14 +158,14 @@ module Show
 
       if user_versions_presenter.user_version_withdrawable?
         render ActionButton.new(
-          url: item_user_version_withdraw_path(doc, user_version_view),
+          url: withdraw_item_public_version_path(doc, user_version_view),
           label: 'Withdraw',
           method: 'post',
           confirm: 'Once you withdraw this version, the Purl will no longer display it. Are you sure? '
         )
       elsif user_versions_presenter.user_version_restorable?
         render ActionButton.new(
-          url: item_user_version_restore_path(doc, user_version_view),
+          url: restore_item_public_version_path(doc, user_version_view),
           label: 'Restore',
           method: 'post'
         )
@@ -180,7 +180,7 @@ module Show
       if version_view?
         descriptive_item_version_path(doc, version_view, format: :csv)
       elsif user_version_view?
-        item_user_version_descriptive_path(doc, user_version_view, format: :csv)
+        descriptive_item_public_version_path(doc, user_version_view, format: :csv)
       else
         item_descriptive_path(doc, format: :csv)
       end

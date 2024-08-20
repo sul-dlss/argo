@@ -38,7 +38,7 @@ RSpec.describe Contents::FileComponent, type: :component do
     let(:user_version) { 2 }
 
     it 'renders the component' do
-      expect(rendered.css('a[href="/items/druid:kb487gt5106/user_versions/2/files?id=example.tif"]').to_html)
+      expect(rendered.css('a[href="/items/druid:kb487gt5106/public_version/2/files?id=example.tif"]').to_html)
         .to include('example.tif')
     end
   end
