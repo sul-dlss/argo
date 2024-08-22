@@ -29,7 +29,7 @@ RSpec.describe RepublishJob do
 
   context 'with already published item' do
     it 'publishes the object' do
-      expect(object_client).to have_received(:publish)
+      expect(object_client).to have_received(:publish).with(lane_id: 'low')
     end
   end
 
