@@ -23,7 +23,7 @@ class RepublishJob < GenericJob
       log_buffer.puts("#{Time.current} #{self.class}: Did not republish #{current_druid} because only items and collections may be published (bulk_action.id=#{bulk_action.id})")
       bulk_action.increment(:druid_count_fail).save
     elsif WorkflowService.published?(druid: current_druid)
-      Dor::Services::Client.object(current_druid).publish
+      Dor::Services::Client.object(current_druid).publish(lane_id: 'low')
       log_buffer.puts("#{Time.current} #{self.class}: Successfully published #{current_druid} (bulk_action.id=#{bulk_action.id})")
       bulk_action.increment(:druid_count_success).save
     else
