@@ -15,7 +15,10 @@ module Argo
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    require 'constants'
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Configure action_dispatch to handle not found errors
     config.action_dispatch.rescue_responses['Blacklight::Exceptions::RecordNotFound'] = :not_found
