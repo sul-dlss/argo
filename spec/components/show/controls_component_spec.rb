@@ -152,7 +152,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       let(:user_version_withdrawable) { true }
 
       it 'the withdraw button is displayed' do
-        expect(page).to have_link 'Withdraw', href: '/items/druid:kv840xx0000/user_versions/2/withdraw'
+        expect(page).to have_link 'Withdraw', href: '/items/druid:kv840xx0000/public_version/2/withdraw'
       end
     end
 
@@ -161,7 +161,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       let(:user_version_restorable) { true }
 
       it 'the restore button is displayed' do
-        expect(page).to have_link 'Restore', href: '/items/druid:kv840xx0000/user_versions/2/restore'
+        expect(page).to have_link 'Restore', href: '/items/druid:kv840xx0000/public_version/2/restore'
       end
     end
   end
@@ -357,7 +357,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     it 'renders the descriptive download button pointing at the user version-aware path' do
-      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/user_versions/#{user_version}/descriptive.csv"
+      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/public_version/#{user_version}/descriptive.csv"
     end
   end
 
@@ -387,7 +387,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
 
     it 'renders the descriptive download button pointing at the user version-aware path' do
-      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/versions/#{version}/descriptive.csv"
+      expect(page).to have_link 'Download Cocina spreadsheet', href: "/items/#{item_id}/version/#{version}/descriptive.csv"
     end
   end
 end

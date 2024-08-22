@@ -21,7 +21,7 @@ RSpec.describe 'View Cocina model for user version' do
     end
 
     it 'return json' do
-      get "/items/#{item.externalIdentifier}/user_versions/2.json"
+      get "/items/#{item.externalIdentifier}/public_version/2.json"
       expect(response).to be_successful
       expect(response.body).to include "\"type\":\"#{Cocina::Models::ObjectType.object}\","
       expect(user_version_client).to have_received(:find).with('2')
@@ -34,7 +34,7 @@ RSpec.describe 'View Cocina model for user version' do
     end
 
     it 'return unauthorized' do
-      get "/items/#{item.externalIdentifier}/user_versions/2.json"
+      get "/items/#{item.externalIdentifier}/public_version/2.json"
       expect(response).to be_forbidden
     end
   end

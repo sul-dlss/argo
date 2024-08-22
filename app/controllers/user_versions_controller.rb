@@ -14,13 +14,13 @@ class UserVersionsController < ApplicationController
 
   def withdraw
     update_user_version(withdrawn: true)
-    redirect_to item_user_version_path(druid_param, user_version_param),
+    redirect_to item_public_version_path(druid_param, user_version_param),
                 notice: 'Withdrawn. Purl will no longer display this version.'
   end
 
   def restore
     update_user_version(withdrawn: false)
-    redirect_to item_user_version_path(druid_param, user_version_param),
+    redirect_to item_public_version_path(druid_param, user_version_param),
                 notice: 'Restored. Purl will display this version.'
   end
 

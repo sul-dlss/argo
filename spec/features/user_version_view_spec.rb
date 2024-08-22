@@ -192,7 +192,7 @@ RSpec.describe 'User version view', :js do
 
     context 'when viewing the head user version' do
       it 'shows the user version' do
-        visit item_user_version_path(item_id: druid, user_version_id: 2)
+        visit item_public_version_path(item_id: druid, user_version_id: 2)
 
         expect(page).to have_content(title)
         expect(page).to have_content('You are viewing the latest version.')
@@ -213,7 +213,7 @@ RSpec.describe 'User version view', :js do
 
     context 'when viewing an older user version' do
       it 'shows the older version' do
-        visit item_user_version_path(item_id: druid, user_version_id: 1)
+        visit item_public_version_path(item_id: druid, user_version_id: 1)
 
         expect(page).to have_content(title)
         expect(page).to have_content('You are viewing an older public version.')
@@ -236,7 +236,7 @@ RSpec.describe 'User version view', :js do
       let(:withdrawable) { true }
 
       it 'withdraws' do
-        visit item_user_version_path(item_id: druid, user_version_id: 2)
+        visit item_public_version_path(item_id: druid, user_version_id: 2)
         accept_confirm 'Once you withdraw this version, the Purl will no longer display it. Are you sure?' do
           click_link('Withdraw')
         end
@@ -250,7 +250,7 @@ RSpec.describe 'User version view', :js do
       let(:restorable) { true }
 
       it 'restores' do
-        visit item_user_version_path(item_id: druid, user_version_id: 2)
+        visit item_public_version_path(item_id: druid, user_version_id: 2)
         click_link('Restore')
         expect(page).to have_content('Restored. Purl will display this version.')
         expect(user_version_client).to have_received(:update)
@@ -264,7 +264,7 @@ RSpec.describe 'User version view', :js do
       end
 
       it 'shows a 404' do
-        visit item_user_version_path(item_id: druid, user_version_id: 4)
+        visit item_public_version_path(item_id: druid, user_version_id: 4)
 
         expect(page).to have_content('The page you were looking for doesn\'t exist.')
       end

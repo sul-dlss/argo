@@ -84,7 +84,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
         let(:user_version) { 2 }
 
         it 'links to user version' do
-          expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/user_versions/2.json'
+          expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/public_version/2.json'
         end
       end
 
@@ -92,7 +92,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
         let(:version) { 3 }
 
         it 'links to user version' do
-          expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/versions/3.json'
+          expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/version/3.json'
         end
       end
     end
@@ -105,7 +105,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
       end
 
       it 'links to user version descriptive metadata' do
-        expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/user_versions/2/metadata/descriptive'
+        expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/public_version/2/metadata/descriptive'
       end
 
       it 'links to base PURL' do
@@ -132,7 +132,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
       let(:version) { 3 }
 
       it 'links to version descriptive metadata' do
-        expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/versions/3/metadata/descriptive'
+        expect(page).to have_link 'Description', href: '/items/druid:ab123cd3445/version/3/metadata/descriptive'
       end
     end
   end

@@ -145,6 +145,8 @@ Rails.application.routes.draw do
   # route globbing with resourceful routes.
   get 'items/:item_id/files/*id/preserved', to: 'files#preserved', as: :preserved_item_file
 
+  # resolve('Version') { [:version] }
+
   resources :items, only: %i[show update] do
     resources 'files', only: %i[index], constraints: { id: /.*/ } do
       collection do
@@ -171,9 +173,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :versions, only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
+    resources :version, only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
 
-    resources :versions, only: [], param: :version_id do
+    resources :version, only: [], param: :version_id, controller: 'versions' do
       member do
         get 'descriptive', to: 'descriptives#show'
         resources :metadata, only: %i[] do
@@ -191,7 +193,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :versions, controller: 'catalog', only: %i[show], param: :version_id
+    resources :version, controller: 'catalog', only: %i[show], param: :version_id
 
     resource :tags, only: %i[edit update]
 
@@ -229,23 +231,26 @@ Rails.application.routes.draw do
       post 'source_id'
     end
 
-    resources :user_versions, only: %i[show], constraints: ->(req) { req.format == :json }, param: :user_version_id, as: 'user_version_json'
+    resources :public_version, only: %i[show], constraints: ->(req) { req.format == :json },
+                               param: :user_version_id, as: 'public_version_json', controller: 'user_versions'
 
-    resources :user_versions, controller: 'catalog', only: %i[show], param: :user_version_id
+    resources :public_version, controller: 'catalog', only: %i[show], param: :user_version_id
 
-    resources :user_versions, only: %i[] do
-      post 'withdraw'
-      post 'restore'
-      get 'descriptive', to: 'descriptives#show'
-      get 'structure', to: 'structures#show'
-      resources 'files', only: %i[index], constraints: { item_id: /.*/ } do
-        collection do
-          get 'download'
+    resources :public_version, only: %i[], controller: 'user_versions', param: :user_version_id do
+      member do
+        post 'withdraw'
+        post 'restore'
+        get 'descriptive', to: 'descriptives#show'
+        get 'structure', to: 'structures#show'
+        resources 'files', only: %i[index], constraints: { item_id: /.*/ }, as: 'public_version_files' do
+          collection do
+            get 'download'
+          end
         end
-      end
-      resources :metadata, only: %i[] do
-        collection do
-          get 'descriptive'
+        resources :metadata, only: %i[], as: 'public_version_metadata' do
+          collection do
+            get 'descriptive'
+          end
         end
       end
     end

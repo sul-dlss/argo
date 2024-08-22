@@ -21,7 +21,7 @@ RSpec.describe 'Open a version' do
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
 
     it 'calls dor-services to open a new version' do
-      post "/items/#{druid}/versions/open", params: { description: 'something' }
+      post "/items/#{druid}/version/open", params: { description: 'something' }
 
       expect(version_client).to have_received(:open).with(description: 'something',
                                                           opening_user_name: user.to_s)
@@ -35,7 +35,7 @@ RSpec.describe 'Open a version' do
     end
 
     it 'returns a 403' do
-      post "/items/#{druid}/versions/open", params: { description: 'something' }
+      post "/items/#{druid}/version/open", params: { description: 'something' }
 
       expect(response).to have_http_status(:forbidden)
     end

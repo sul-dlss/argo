@@ -20,7 +20,7 @@ class DownloadAllButtonComponent < ViewComponent::Base
   end
 
   def path
-    user_version_view? ? download_item_user_version_files_path(document.id, user_version_view) : download_item_files_path(document)
+    user_version_view? ? download_item_public_version_files_path(document.id, user_version_view) : download_item_files_path(document)
   end
 
   attr_reader :document, :presenter

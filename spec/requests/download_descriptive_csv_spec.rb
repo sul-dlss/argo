@@ -35,7 +35,7 @@ RSpec.describe 'Download the descriptive CSV' do
     let(:user_version) { '2' }
 
     it 'returns descriptive csv' do
-      get "/items/#{druid}/user_versions/#{user_version}/descriptive.csv"
+      get "/items/#{druid}/public_version/#{user_version}/descriptive.csv"
       expect(response).to have_http_status(:ok)
       csv = CSV.parse(response.body, headers: true)
       expect(csv.headers).to eq ['druid', 'source_id', 'title1.value', 'purl']
@@ -54,7 +54,7 @@ RSpec.describe 'Download the descriptive CSV' do
     let(:version) { '2' }
 
     it 'returns descriptive csv' do
-      get "/items/#{druid}/versions/#{version}/descriptive.csv"
+      get "/items/#{druid}/version/#{version}/descriptive.csv"
       expect(response).to have_http_status(:ok)
       csv = CSV.parse(response.body, headers: true)
       expect(csv.headers).to eq ['druid', 'source_id', 'title1.value', 'purl']

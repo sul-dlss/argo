@@ -25,7 +25,7 @@ class ContentsComponent < ApplicationComponent
 
   def structural_link_path
     if user_version_view?
-      item_user_version_structure_path(@view_token, user_version_view)
+      structure_item_public_version_path(@view_token, user_version_view)
     elsif version_view?
       structure_item_version_path(@view_token, version_view)
     else

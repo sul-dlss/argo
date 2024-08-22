@@ -47,7 +47,7 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
       render_inline(component)
     end
 
-    it { is_expected.to have_link 'Download all files', href: download_item_user_version_files_path(druid, user_version) }
+    it { is_expected.to have_link 'Download all files', href: download_item_public_version_files_path(druid, user_version) }
   end
 
   context 'when a version' do
