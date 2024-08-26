@@ -3,6 +3,11 @@
   --bs-dark-rgb: var(--stanford-stone-dark-rgb);
 }
 
+/* until we use https://github.com/sul-dlss/component-library/pull/32 this prevents the header from being black */
+.masthead {
+  --bs-nav-link-color: white;
+}
+
 /* Overriding blacklight to keep the border-color */
 .applied-filter {
   .constraint-value {
