@@ -32,6 +32,7 @@ class VersionMilestonesComponent < ViewComponent::Base
   end
 
   def version_link_or_label
+    return link_to(title, user_version_path) if user_version && link_user_version?
     return link_to(title, version_path) if link_version?
     return link_to(title, solr_document_path(druid)) if version_link_to_document?
 
