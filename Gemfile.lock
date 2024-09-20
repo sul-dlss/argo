@@ -446,7 +446,7 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (6.0.1)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     purl_fetcher-client (1.5.4)
       activesupport
@@ -728,7 +728,7 @@ DEPENDENCIES
   preservation-client (~> 6.2)
   propshaft
   pry-remote
-  puma (~> 6.0)
+  puma (~> 6.4)
   purl_fetcher-client (~> 1.3)
   rails (~> 7.1.3)
   rake

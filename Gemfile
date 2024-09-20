@@ -25,7 +25,7 @@ gem 'okcomputer' # monitors application and its dependencies
 gem 'prawn', '~> 1' # Prawn is used to create "tracksheets"
 gem 'prawn-table'
 gem 'propshaft'
-gem 'puma', '~> 6.0' # Use Puma as the app server
+gem 'puma', '~> 6.4' # Use Puma as the app server
 gem 'rails', '~> 7.1.3'
 gem 'rake'
 gem 'reform-rails'
