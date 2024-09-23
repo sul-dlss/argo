@@ -269,8 +269,9 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    faraday (2.11.0)
+    faraday (2.12.0)
       faraday-net_http (>= 2.0, < 3.4)
+      json
       logger
     faraday-cookie_jar (0.0.7)
       faraday (>= 0.8.0)
@@ -294,7 +295,8 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.1)
-    honeybadger (5.15.6)
+    honeybadger (5.16.0)
+      logger
     http-cookie (1.0.7)
       domain_name (~> 0.5)
     http_logger (0.7.0)
@@ -569,10 +571,10 @@ GEM
       rubocop (~> 1.41)
     rubocop-factory_bot (2.26.1)
       rubocop (~> 1.61)
-    rubocop-performance (1.22.0)
+    rubocop-performance (1.22.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails (2.26.1)
+    rubocop-rails (2.26.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.52.0, < 2.0)
@@ -594,7 +596,7 @@ GEM
       faraday (>= 0.16)
       launchy
       zeitwerk
-    selenium-webdriver (4.24.0)
+    selenium-webdriver (4.25.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -631,7 +633,7 @@ GEM
       activesupport
       mods (~> 3.0, >= 3.0.4)
     stringio (3.1.1)
-    super_diff (0.12.1)
+    super_diff (0.13.0)
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
