@@ -309,7 +309,8 @@ GEM
     irb (1.14.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    iso-639 (0.3.6)
+    iso-639 (0.3.8)
+      csv
     jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -384,7 +385,7 @@ GEM
     mysql2 (0.5.6)
     net-http (0.4.1)
       uri
-    net-imap (0.4.16)
+    net-imap (0.4.17)
       date
       net-protocol
     net-pop (0.1.2)
@@ -456,7 +457,7 @@ GEM
       activesupport
       faraday (~> 2.1)
     racc (1.8.1)
-    rack (3.1.7)
+    rack (3.1.8)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -653,7 +654,7 @@ GEM
     unf (0.2.0)
     unicode-display_width (2.6.0)
     uri (0.13.1)
-    view_component (3.16.0)
+    view_component (3.17.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -678,7 +679,7 @@ GEM
       rubyzip (>= 1.0.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.18)
+    zeitwerk (2.7.0)
     zip_tricks (5.6.0)
 
 PLATFORMS
