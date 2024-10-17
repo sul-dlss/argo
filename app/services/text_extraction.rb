@@ -53,6 +53,6 @@ class TextExtraction
 
   # the workflow context to set
   def context
-    { runOCR: true, manuallyCorrectedOCR: false, ocrLanguages: languages }
+    { manuallyCorrectedOCR: false, ocrLanguages: languages }
   end
 end

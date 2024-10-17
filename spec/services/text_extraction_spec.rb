@@ -96,7 +96,7 @@ RSpec.describe TextExtraction do
 
   describe '#start' do
     let(:client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: true, lifecycle: Time.zone.now) }
-    let(:context) { { manuallyCorrectedOCR: false, ocrLanguages: languages, runOCR: true } }
+    let(:context) { { manuallyCorrectedOCR: false, ocrLanguages: languages } }
 
     before do
       allow(WorkflowClientFactory).to receive(:build).and_return(client)
