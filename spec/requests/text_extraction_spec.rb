@@ -46,7 +46,7 @@ RSpec.describe 'TextExtractions', :js do
 
     it 'adds ocrWF' do
       post "/items/#{druid}/text_extraction", params: { text_extraction_languages: ['English'] }
-      expect(workflow_client).to have_received(:create_workflow_by_name).with(druid, 'ocrWF', context: { runOCR: true, manuallyCorrectedOCR: false, ocrLanguages: ['English'] }, version: 2)
+      expect(workflow_client).to have_received(:create_workflow_by_name).with(druid, 'ocrWF', context: { manuallyCorrectedOCR: false, ocrLanguages: ['English'] }, version: 2)
       expect(object_client).to have_received(:reindex)
       expect(response).to redirect_to(solr_document_path(druid))
     end
