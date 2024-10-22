@@ -7,12 +7,8 @@ export default class extends Controller {
   }
 
   connect () {
-    // These validations need to be run after values are pasted in, unless the form was loaded in CSV mode
     if (!this.csvValue) {
-      this.validateCatalogRecordId()
-      this.validateSourceId()
-      this.validateBarcode()
-      this.validateLabel()
+      this.setLabelRequired()
     }
   }
 
@@ -23,10 +19,9 @@ export default class extends Controller {
     if (currentSourceId === '') { return }
 
     if (field.validity.patternMismatch) {
-      field.classList.toggle('is-invalid', !field.validity.valid)
+      field.reportValidity()
     } else if (this.isDuplicateSourceId(currentSourceId)) {
       this.setValidation(field, 'Duplicate source ID on this form')
-      field.classList.add('is-invalid')
     } else {
       this.clearValidation(field) // all other checks passed
 
@@ -39,7 +34,6 @@ export default class extends Controller {
           } else {
             this.clearValidation(field)
           }
-          field.classList.toggle('is-invalid', !field.validity.valid)
         })
     }
   }
@@ -47,7 +41,7 @@ export default class extends Controller {
   validateBarcode () {
     const field = this.barcodeTarget
     if (field.validity.patternMismatch) {
-      field.classList.toggle('is-invalid', !field.validity.valid)
+      field.reportValidity()
     } else {
       this.clearValidation(field)
     }
@@ -55,12 +49,13 @@ export default class extends Controller {
 
   // Check that catalog record ID exists.
   validateCatalogRecordId () {
+    this.setLabelRequired()
     const field = this.catalogRecordIdTarget
     const currentCatalogRecordId = field.value
     if (currentCatalogRecordId === '') { return }
 
     if (field.validity.patternMismatch) {
-      field.classList.toggle('is-invalid', !field.validity.valid)
+      this.setValidation(field, 'Incorrect format for HRID')
     } else {
       // Only check if the format is valid
       this.clearValidation(field)
@@ -76,8 +71,9 @@ export default class extends Controller {
         .then((data) => {
           if (!data) {
             this.setValidation(field, 'Not found in catalog')
+          } else {
+            this.clearValidation(field)
           }
-          field.classList.toggle('is-invalid', !field.validity.valid)
         })
         .catch((error) => {
           this.setValidation(field, error.message)
@@ -86,12 +82,15 @@ export default class extends Controller {
   }
 
   validateLabel () {
+    this.labelTarget.reportValidity()
+  }
+
+  setLabelRequired () {
     const field = this.labelTarget
     if (this.catalogRecordIdTarget.value === '') {
       field.required = true
     } else {
       field.required = false
-      field.classList.toggle('is-invalid', false)
     }
   }
 

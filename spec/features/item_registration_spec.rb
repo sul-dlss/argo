@@ -177,7 +177,7 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_css('.is-invalid')
+      expect(page).to have_css('.was-validated :invalid')
       expect(page).to have_no_content 'Items successfully registered.'
     end
   end
@@ -201,7 +201,7 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_css('.is-invalid')
+      expect(page).to have_css('.was-validated :invalid')
       expect(page).to have_no_content 'Items successfully registered.'
     end
   end

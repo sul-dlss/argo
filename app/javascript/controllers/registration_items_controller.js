@@ -12,7 +12,13 @@ export default class extends Controller {
     event.preventDefault()
     const content = this.templateTarget.innerHTML.replace(/TEMPLATE_RECORD/g, crypto.randomUUID())
     this.add_itemTarget.insertAdjacentHTML('beforebegin', content)
+    this.resetValidations()
     this.count++
+  }
+
+  // Prevent the new fields from showing up marked as invalid
+  resetValidations () {
+    this.add_itemTarget.closest('form').classList.remove('was-validated')
   }
 
   removeAssociation (event) {
