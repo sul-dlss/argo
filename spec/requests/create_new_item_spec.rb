@@ -56,6 +56,34 @@ RSpec.describe 'Create a new item' do
     end
   end
 
+  context 'when workflow_id is missing' do
+    before do
+      allow(AdminPolicyOptions).to receive(:for).and_return(['APO 1', 'APO 2', 'APO 3'])
+    end
+
+    it 'shows an error' do
+      post '/registration', params: {
+        registration: {
+          admin_policy: 'druid:hv992ry2431',
+          view_access: 'world',
+          download_access: 'world',
+          controlled_digital_lending: 'false',
+          workflow_id: nil,
+          content_type: 'https://cocina.sul.stanford.edu/models/book',
+          items: [
+            {
+              source_id: 'foo:bar',
+              label: 'This things'
+            }
+          ],
+          tag: ['Registered By : jcoyne85']
+        }
+      }
+      expect(response).to have_http_status :bad_request
+      expect(response.body).to include 'Workflow can&#39;t be blank'
+    end
+  end
+
   context 'when barcode_id is provided' do
     let(:source_id) { "sul:#{SecureRandom.uuid}" }
     let(:submitted) do
@@ -447,6 +475,7 @@ RSpec.describe 'Create a new item' do
           view_access: 'world',
           download_access: 'world',
           controlled_digital_lending: 'false',
+          workflow_id: 'registrationWF',
           content_type: 'https://cocina.sul.stanford.edu/models/book',
           items: [
             {
