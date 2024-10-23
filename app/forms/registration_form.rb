@@ -24,6 +24,7 @@ class RegistrationForm < Reform::Form
   property :content_type, virtual: true
   property :viewing_direction, virtual: true
   property :project, virtual: true
+  validates :workflow_id, presence: true
 
   collection :tags, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
                     prepopulator: ->(*) { (6 - tags.count).times { tags << VirtualModel.new } } do
