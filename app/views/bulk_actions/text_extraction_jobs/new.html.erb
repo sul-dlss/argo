@@ -1,5 +1,5 @@
 <turbo-frame id="bulk-action-form">
-  <% if Settings.features.ocr_workflow %>
+  <% if Settings.features.ocr_workflow || Settings.speech_to_text_workflow %>
     <%= render 'new' %>
   <% else %>
     <p>Text extraction job currently not available.</p>
