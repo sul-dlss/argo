@@ -20,6 +20,8 @@ RSpec.describe 'TextExtractions', :js do
   end
 
   context 'when item is a document' do
+    before { allow(Settings.features).to receive(:ocr_workflow).and_return(true) }
+
     let(:object_type) { 'https://cocina.sul.stanford.edu/models/document' }
 
     describe '#new' do
@@ -54,6 +56,8 @@ RSpec.describe 'TextExtractions', :js do
 
   context 'when item is media' do
     let(:object_type) { 'https://cocina.sul.stanford.edu/models/media' }
+
+    before { allow(Settings.features).to receive(:speech_to_text_workflow).and_return(true) }
 
     describe '#new' do
       it 'shows text extraction form' do
