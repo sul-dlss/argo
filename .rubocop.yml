@@ -14,6 +14,12 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - bin/**/*
+    - config/application.rb
+    - config/boot.rb
+    - config/environment.rb
+    - config/environments/*
+    - config/initializers/*
+    - config/puma.rb
     - coverage/**/*
     - db/**/*
     - log/**/*
@@ -555,4 +561,14 @@ Gemspec/AddRuntimeDependency: # new in 1.65
 Style/SendWithLiteralMethodName: # new in 1.64
   Enabled: true
 Style/SuperArguments: # new in 1.64
+  Enabled: true
+Lint/DuplicateSetElement: # new in 1.67
+  Enabled: true
+Lint/UselessNumericOperation: # new in 1.66
+  Enabled: true
+Style/RedundantInterpolationUnfreeze: # new in 1.66
+  Enabled: true
+Rails/EnumSyntax: # new in 2.26
+  Enabled: true
+RSpec/StringAsInstanceDoubleConstant: # new in 3.1
   Enabled: true
