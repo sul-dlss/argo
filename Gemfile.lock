@@ -639,8 +639,9 @@ GEM
     timeout (0.4.1)
     trailblazer-option (0.1.2)
     ttfunk (1.4.0)
-    turbo-rails (2.0.11)
+    turbo-rails (1.5.0)
       actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -751,7 +752,7 @@ DEPENDENCIES
   sidekiq (~> 7.1)
   simplecov
   sqlite3 (~> 1.4)
-  turbo-rails (~> 2.0)
+  turbo-rails (~> 1.0)
   view_component
   web-console
   webmock
