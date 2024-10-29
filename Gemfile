@@ -34,7 +34,7 @@ gem 'roo', '~> 2.9.0' # work with newer Excel files and other types (xlsx, ods, 
 gem 'roo-xls' # needed to work with legacy Excel files (xls)
 gem 'rubyzip'
 gem 'sidekiq', '~> 7.1'
-gem 'turbo-rails', '~> 1.0'
+gem 'turbo-rails', '~> 2.0'
 gem 'view_component'
 gem 'zip_tricks'
 
