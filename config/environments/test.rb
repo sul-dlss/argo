@@ -39,6 +39,13 @@ Rails.application.configure do
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
+  # Set the ActiveJob queue adapter for tests
+  # NOTE: the test adapter does *not* automatically perform jobs. To perform jobs,
+  #       call `perform_enqueued_jobs` from the ActiveJob TestHelper at the point
+  #       you want them run. See `spec/rails_helper.rb` for an example of how to
+  #       enable this helper for a class of tests (e.g., feature specs).
+  # config.active_job.queue_adapter = :test
+
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.

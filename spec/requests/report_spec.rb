@@ -44,18 +44,16 @@ RSpec.describe 'Reports from a search' do
 
       it 'returns data for custom date searches' do
         params = { f: { modified_latest_dttsi: ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] },
-                   per_page: 5 }
+                   per_page: 5,
+                   controller: 'report',
+                   action: 'data',
+                   format: 'json',
+                   page: '1' }
         get('/report/data.json', params:)
 
         expect(response).to have_http_status(:ok)
         data = response.parsed_body
-        expect(Report).to have_received(:new)
-          .with(
-            hash_including(f: { 'modified_latest_dttsi' => ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] },
-                           per_page: 5),
-            anything
-          )
-
+        expect(Report).to have_received(:new).with(ActionController::Parameters.new(params), anything)
         expect(data['data'].length).to eq(5)
       end
     end

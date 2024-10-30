@@ -3,13 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'BulkActionsController' do
-  let(:current_user) do
-    create(:user)
-  end
-
-  let(:rendered) do
-    Capybara::Node::Simple.new(response.body)
-  end
+  let(:current_user) { create(:user) }
+  let(:other_user) { create(:user) }
+  let(:rendered) { Capybara::Node::Simple.new(response.body) }
 
   before do
     sign_in current_user
@@ -17,7 +13,7 @@ RSpec.describe 'BulkActionsController' do
 
   describe 'GET index' do
     before do
-      create(:bulk_action, user_id: current_user.id + 1, description: 'not mine') # Not current_user's
+      create(:bulk_action, user: other_user, description: 'not mine') # Not current_user's
       create(:bulk_action, user: current_user, description: 'Belongs to me')
     end
 
@@ -52,7 +48,7 @@ RSpec.describe 'BulkActionsController' do
     end
 
     it 'does not delete other users bulk actions' do
-      b_action = create(:bulk_action, user_id: current_user.id + 1)
+      b_action = create(:bulk_action, user: other_user)
       expect do
         delete "/bulk_actions/#{b_action.id}"
       end.not_to change(BulkAction, :count)
@@ -81,7 +77,7 @@ RSpec.describe 'BulkActionsController' do
     end
 
     context 'for other users files' do
-      let(:user_id) { current_user.id + 1 }
+      let(:user_id) { other_user.id }
 
       it 'does not send file for other users files' do
         get "/bulk_actions/#{bulk_action.id}/file?filename=not_my_log.log"

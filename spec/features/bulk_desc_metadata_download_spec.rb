@@ -37,6 +37,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download', :js do
     fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
+    perform_enqueued_jobs
     reload_page_until_timeout do
       page.has_css?('td', text: 'DescmetadataDownloadJob') &&
         page.has_css?('td', text: 'Completed')

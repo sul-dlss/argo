@@ -47,6 +47,7 @@ RSpec.describe 'Collection manage release' do
     choose 'Release it'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
+    perform_enqueued_jobs
     reload_page_until_timeout do
       page.has_css?('td', text: 'ReleaseObjectJob') &&
         page.has_css?('td', text: 'Completed')

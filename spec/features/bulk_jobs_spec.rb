@@ -73,7 +73,11 @@ RSpec.describe 'Bulk jobs view', :js do
       choose('convert_only')
       expect(find('button#spreadsheet_submit')).not_to be_disabled
       click_button('Submit')
-      expect(page).to have_button('Delete')
+      expect(page).to have_content('Bulk processing started')
+      perform_enqueued_jobs
+      reload_page_until_timeout do
+        page.has_button?('Delete')
+      end
       click_button('Delete', match: :first)
       expect(page).to have_content('Are you sure you want to delete the job directory and the files it contains?')
       within '.modal-dialog' do
