@@ -30,7 +30,7 @@ services:
       PID_FILE: /dev/null
     # To allow yarn --watch from Procfile.dev to continue after stdin is closed
     tty: true
-  
+
   dor-services-app:
     image: suldlss/dor-services-app:latest
     ports:
@@ -47,7 +47,7 @@ services:
       SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
       SETTINGS__SOLR__URL: http://solr:8983/solr/argo
       SETTINGS__SURI__URL: http://suri:3000
-      SETTINGS__WORKFLOW_URL: http://workflow:3000
+      SETTINGS__WORKFLOW__URL: http://workflow:3000
       SETTINGS__WORKFLOW__LOGFILE: rails
       SETTINGS__RABBITMQ__ENABLED: 'false'
       SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
