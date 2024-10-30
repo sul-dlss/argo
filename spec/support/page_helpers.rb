@@ -5,19 +5,22 @@ module PageHelpers
   def reload_page_until_timeout(timeout: 10)
     browser = page.driver.browser
     content = nil
-    Timeout.timeout(timeout) do
-      loop do
-        break if yield
 
-        content = page.body
+    (timeout - 1).times do
+      return if yield
 
-        # Deal with Selenium::WebDriver::Chrome::Driver or Capybara::RackTest::Browser
-        browser.respond_to?(:refresh) ? browser.refresh : browser.navigate.refresh
-      end
+      sleep(0.1)
+
+      # Deal with Selenium::WebDriver::Chrome::Driver or Capybara::RackTest::Browser
+      browser.respond_to?(:refresh) ? browser.refresh : browser.navigate.refresh
+
+      content = page.body
     end
-  rescue Timeout::Error
+
+    return if yield
+
     puts content
-    raise
+    raise Timeout::Error
   end
 end
 
