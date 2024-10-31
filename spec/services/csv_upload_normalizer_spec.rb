@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CsvUploadNormalizer do
   describe '#read' do
-    let(:csv) { described_class.read(filepath) }
+    let(:csv) { described_class.read(filepath, remove_columns_without_headers: true, remove_preamble_rows: true) }
 
     let(:expected_csv) { "Druid,Catkey,Barcode\ndruid:bb396kf5077,13157971,\ndruid:bb631ry3167,13965062,\n" }
 
@@ -61,6 +61,22 @@ RSpec.describe CsvUploadNormalizer do
 
       it 'raises an exception' do
         expect { csv }.to raise_error(CSV::MalformedCSVError)
+      end
+    end
+
+    context 'with columns without headers' do
+      let(:filepath) { file_fixture('catalog_record_id_and_barcode_extra_columns.csv').to_s }
+
+      it 'removes the columns' do
+        expect(csv).to eq(expected_csv)
+      end
+    end
+
+    context 'with preamble' do
+      let(:filepath) { file_fixture('catalog_record_id_and_barcode_preamble.csv').to_s }
+
+      it 'removes the columns' do
+        expect(csv).to eq(expected_csv)
       end
     end
   end
