@@ -84,4 +84,6 @@ RSpec.configure do |config|
   config.include SigninHelper, type: :view
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ViewComponent::TestHelpers, type: :component
+  # Provides `perform_enqueued_jobs`. Currently only needed within a handful of feature specs.
+  config.include ActiveJob::TestHelper, type: :feature
 end
