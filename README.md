@@ -89,7 +89,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     bin/rake
     ```
 
-To run just the linters, run `bin/rake lint`. To run the linters individually, run `bundle exec erblint --lint-all`, `bundle exec rubocop`, and `yarn run lint`
+To run just the linters, run `bin/rake lint`. To run the linters individually, run `bundle exec erb_lint --lint-all`, `bundle exec rubocop`, and `bundle exec rake jslint`
 
 ## Docker
 
