@@ -7,3 +7,4 @@ dor_indexing_url: http://localhost:3004/dor
 
 features:
   ocr_workflow: true
+  speech_to_text_workflow: true

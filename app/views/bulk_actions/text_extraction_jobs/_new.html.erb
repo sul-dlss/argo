@@ -6,13 +6,22 @@
     <div class="mt-2 alert alert-warning d-flex shadow-sm align-items-center">
       <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
       <div class="text-body">
-        <p>Auto-generating OCR files will not overwrite any existing OCR files that have been corrected to comply with accessibility standards. <strong>Any uncorrected OCR files will be overwritten.</strong> The originally-deposited contents will not be overwritten.</p>
-        <p>Warning: Avoid auto-generating OCR files for contents that do not contain any text, as it may have adverse effects.</p>
+        <% content_types = [] %>
+        <% if Settings.features.ocr_workflow %>
+          <% content_types << %w[Image Book Document/PDF] %>
+          <p>Auto-generating OCR files will not overwrite any existing OCR files that have been corrected to comply with accessibility standards. <strong>Any uncorrected OCR files will be overwritten.</strong> The originally-deposited contents will not be overwritten.</p>
+          <p>Warning: Avoid auto-generating OCR files for contents that do not contain any text, as it may have adverse effects.</p>
+        <% end %>
+        <% if Settings.features.speech_to_text_workflow %>
+          <% content_types << %w[Media] %>
+          <p>Auto-generating caption/transcript files will not overwrite any existing caption/transcript files that have been corrected to comply with accessibility standards. <strong>Any uncorrected caption/transcript files will be overwritten.</strong> The originally-deposited media will not be overwritten.</p>
+          <p>Avoid auto-generating caption/transcript files for media that do not contain any speech or lyrics, as it may have adverse effects.</p>
+        <% end %>
       </div>
     </div>
 
     <span class='form-text'>
-      Warning: Text extraction should only be performed on content types Image, Book, or Document/PDF.
+      Warning: Text extraction should only be performed on content types <%= content_types.join(', ') %>.
     </span>
     <%= render LanguageSelectorComponent.new(form: f) %>
     <%= render 'bulk_actions/druids', f: %>

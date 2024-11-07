@@ -92,7 +92,7 @@ module Show
     end
 
     def create_text_extraction
-      return unless Settings.features.ocr_workflow
+      return unless Settings.features.ocr_workflow || Settings.features.speech_to_text_workflow
       return unless TextExtraction.new(presenter.cocina).possible? && !registered_only?
 
       render ActionButton.new url: new_item_text_extraction_path(druid),

@@ -97,3 +97,4 @@ google_analytics: false
 
 features:
   ocr_workflow: false
+  speech_to_text_workflow: false

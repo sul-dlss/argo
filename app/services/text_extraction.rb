@@ -44,15 +44,23 @@ class TextExtraction
 
   # mapping of cocina resource types to workflow names
   def resource_type_mapping
-    {
-      'https://cocina.sul.stanford.edu/models/book' => 'ocrWF',
-      'https://cocina.sul.stanford.edu/models/document' => 'ocrWF',
-      'https://cocina.sul.stanford.edu/models/image' => 'ocrWF'
-    }
+    {}.tap do |mapping|
+      if Settings.features.ocr_workflow
+        mapping['https://cocina.sul.stanford.edu/models/book'] = 'ocrWF'
+        mapping['https://cocina.sul.stanford.edu/models/document'] = 'ocrWF'
+        mapping['https://cocina.sul.stanford.edu/models/image'] = 'ocrWF'
+      end
+      mapping['https://cocina.sul.stanford.edu/models/media'] = 'speechToTextWF' if Settings.features.speech_to_text_workflow
+    end
   end
 
   # the workflow context to set
   def context
-    { manuallyCorrectedOCR: false, ocrLanguages: languages }
+    case wf_name
+    when 'ocrWF'
+      { manuallyCorrectedOCR: false, ocrLanguages: languages }
+    when 'speechToTextWF'
+      {}
+    end
   end
 end
