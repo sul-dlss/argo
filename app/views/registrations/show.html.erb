@@ -46,7 +46,9 @@
         <div class="col-sm-9">
           <span id="tags" style="width: auto">
             <%= f.fields_for :tags do |tags_form| %>
-              <%= tags_form.text_field :name, class: 'form-control mb-2', data: { controller: 'tag-validation', action: 'change->tag-validation#validate', tag_autocomplete: true } %>
+              <%= tags_form.text_field :name, class: 'form-control mb-2',
+                                              pattern: '^\w+\s*:\s*\w+(\s*:\s*\w+)*$',
+                                              data: { controller: 'tag-validation', action: 'change->tag-validation#validate invalid->registration#displayValidation', tag_autocomplete: true } %>
             <% end %>
           </span>
         </div>
