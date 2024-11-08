@@ -11,13 +11,13 @@
 # SupportedStyles: link_or_button, strict
 Capybara/ClickLinkOrButtonStyle:
   Exclude:
-    - 'spec/features/apo_spec.rb'
+    - 'spec/system/apo_spec.rb'
 
 # Offense count: 5
 Capybara/VisibilityMatcher:
   Exclude:
     - 'spec/components/version_milestones_component_spec.rb'
-    - 'spec/features/bulk_jobs_spec.rb'
+    - 'spec/system/bulk_jobs_spec.rb'
     - 'spec/views/collections/new.html.erb_spec.rb'
 
 # Offense count: 1
@@ -133,7 +133,7 @@ Performance/MapMethodChain:
 # Offense count: 4
 RSpec/AnyInstance:
   Exclude:
-    - 'spec/features/item_registration_spec.rb'
+    - 'spec/system/item_registration_spec.rb'
     - 'spec/requests/item_files_download_spec.rb'
     - 'spec/requests/manage_release_spec.rb'
     - 'spec/requests/show_list_bulk_actions_spec.rb'
