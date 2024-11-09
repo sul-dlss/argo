@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'TextExtractions', :js do
+RSpec.describe 'Text Extractions', :js do
   let(:current_user) { create(:user) }
   let(:druid) { 'druid:bc123df4567' }
   let(:cocina_model) { build(:dro_with_metadata, id: druid, version: 2, type: object_type) }
@@ -20,16 +20,27 @@ RSpec.describe 'TextExtractions', :js do
   end
 
   context 'when item is a document' do
-    let(:object_type) { 'https://cocina.sul.stanford.edu/models/document' }
-
     before { allow(Settings.features).to receive(:ocr_workflow).and_return(true) }
 
-    describe '#create' do
-      it 'adds ocrWF' do
-        post "/items/#{druid}/text_extraction", params: { text_extraction_languages: ['English'] }
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(druid, 'ocrWF', context: { manuallyCorrectedOCR: false, ocrLanguages: ['English'] }, version: 2)
-        expect(object_client).to have_received(:reindex)
-        expect(response).to redirect_to(solr_document_path(druid))
+    let(:object_type) { 'https://cocina.sul.stanford.edu/models/document' }
+
+    describe '#new' do
+      it 'shows text extraction form with languages' do
+        visit "/items/#{druid}/text_extraction/new"
+
+        expect(page).to have_css 'h3', text: 'Text extraction'
+        expect(page).to have_content 'Avoid auto-generating OCR files for PDF documents'
+        expect(page).to have_css 'div', text: 'Content language'
+
+        first('button[aria-label="toggle dropdown"]').click
+
+        find('[data-text-extraction-label="Adyghe"]').click
+
+        expect(page).to have_css 'div', text: 'Selected language(s)'
+        expect(page.all('.selected-item-label').count).to eq 1
+
+        find('[data-text-extraction-label="English"]').click
+        expect(page.all('.selected-item-label').count).to eq 2
       end
     end
   end
@@ -39,12 +50,12 @@ RSpec.describe 'TextExtractions', :js do
 
     before { allow(Settings.features).to receive(:speech_to_text_workflow).and_return(true) }
 
-    describe '#create' do
-      it 'adds speechToTextWF' do
-        post "/items/#{druid}/text_extraction", params: {}
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(druid, 'speechToTextWF', context: {}, version: 2)
-        expect(object_client).to have_received(:reindex)
-        expect(response).to redirect_to(solr_document_path(druid))
+    describe '#new' do
+      it 'shows text extraction form' do
+        visit "/items/#{druid}/text_extraction/new"
+
+        expect(page).to have_css 'h3', text: 'Text extraction'
+        expect(page).to have_content 'Avoid auto-generating caption/transcript files for media that do not contain any speech or lyrics'
       end
     end
   end
