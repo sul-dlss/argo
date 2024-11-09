@@ -26,5 +26,5 @@ module PageHelpers
 end
 
 RSpec.configure do |config|
-  config.include PageHelpers, type: :feature
+  config.include PageHelpers, type: :system
 end

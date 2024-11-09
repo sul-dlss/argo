@@ -10,6 +10,6 @@ module Features
 end
 
 RSpec.configure do |config|
-  config.include Features::SessionHelpers, type: :feature
+  config.include Features::SessionHelpers, type: :system
   config.include Features::SessionHelpers, type: :request
 end

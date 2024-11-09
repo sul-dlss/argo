@@ -174,11 +174,12 @@ docker compose run --rm web yarn install
 docker compose run --rm web bin/rails assets:precompile
 ```
 
-### Feature tests
-To run a headed browser, set the NO_HEADLESS env variable. For example:
+### System tests
+
+To run a headed browser, set the `NO_HEADLESS` env variable. For example:
 
 ```
-NO_HEADLESS=1 bundle exec rspec spec/features/item_view_spec.rb
+NO_HEADLESS=1 bundle exec rspec spec/system/item_view_spec.rb
 ```
 
 ## Creating fixture data

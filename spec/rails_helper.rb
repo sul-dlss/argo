@@ -9,11 +9,10 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'support/factory_bot'
 require 'cocina/rspec'
-require 'capybara/rspec'
-require 'capybara-screenshot/rspec'
 require 'equivalent-xml/rspec_matchers'
 require 'view_component/test_helpers'
 require 'webmock/rspec'
+
 WebMock.disable_net_connect!(allow_localhost: true,
                              allow: [
                                'https://chromedriver.storage.googleapis.com',
@@ -24,8 +23,6 @@ WebMock.disable_net_connect!(allow_localhost: true,
                                'techmd',
                                'sdr-api'
                              ])
-
-Capybara.enable_aria_label = true
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -50,6 +47,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec/fixtures')
@@ -79,11 +77,10 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.include Capybara::DSL
   config.include TestViewHelpers, type: :view
   config.include SigninHelper, type: :view
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ViewComponent::TestHelpers, type: :component
-  # Provides `perform_enqueued_jobs`. Currently only needed within a handful of feature specs.
-  config.include ActiveJob::TestHelper, type: :feature
+  # Provides `perform_enqueued_jobs`. Currently only needed within a handful of system specs.
+  config.include ActiveJob::TestHelper, type: :system
 end

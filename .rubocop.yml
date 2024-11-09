@@ -77,11 +77,11 @@ RSpec/ContextWording:
     - "not as"
     - from
 
-# We exclude feature specs here because they have a lot of setup overhead, so
+# We exclude system specs here because they have a lot of setup overhead, so
 # testing a bunch of things in one go is more efficient.
 RSpec/ExampleLength:
   Exclude:
-    - "spec/features/**/*_spec.rb"
+    - "spec/system/**/*_spec.rb"
     - "spec/services/descriptions_grouper_spec.rb"
   Max: 43
 
