@@ -6,9 +6,9 @@ RSpec.describe 'Open and close a version' do
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
   end
-  let(:accession_step_count) { workflow_client.workflow_template('accessionWF').fetch('processes').size }
 
   let(:workflow_client) { WorkflowClientFactory.build }
+  let(:accession_processes) { workflow_client.workflow_template('accessionWF').fetch('processes').pluck('name') }
 
   before do
     VersionService.close(druid: item.externalIdentifier)
@@ -20,11 +20,12 @@ RSpec.describe 'Open and close a version' do
   it 'opens an object', :js do
     # Manually complete the accessionWF steps to allow the object to be openable.
     visit solr_document_path item.externalIdentifier
-    accession_step_count.times do
-      # Ensure every step of accessionWF is completed, this will allow us to open a new version.
-      click_link 'accessionWF'
-      click_button 'Set to completed', match: :first
+    # Ensure every step of accessionWF is completed, this will allow us to open a new version.
+    accession_processes.each do |process|
+      workflow_client.update_status(druid: item.externalIdentifier, workflow: 'accessionWF', process:, status: 'completed')
     end
+    click_link 'Reindex'
+
     sleep 0.5 until VersionService.openable?(druid: item.externalIdentifier)
 
     visit solr_document_path item.externalIdentifier

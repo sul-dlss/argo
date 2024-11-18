@@ -13,7 +13,8 @@ RSpec.describe 'Create an apo', :js do
                                      admin_policy_id: agreement.administrative.hasAdminPolicy)
   end
 
-  let(:accession_step_count) { WorkflowClientFactory.build.workflow_template('accessionWF').fetch('processes').size }
+  let(:workflow_client) { WorkflowClientFactory.build }
+  let(:accession_processes) { workflow_client.workflow_template('accessionWF').fetch('processes').pluck('name') }
 
   before do
     sign_in user, groups: ['sdr:administrator-role']
@@ -50,12 +51,12 @@ RSpec.describe 'Create an apo', :js do
     expect(page).to have_css('.disabled', text: 'Edit APO')
     expect(page).to have_css('.disabled', text: 'Create Collection')
 
-    # Manually complete the accessionWF steps to allow the object to be openable.
-    accession_step_count.times do
-      # Ensure every step of accessionWF is completed, this will allow us to open a new version.
-      click_link 'accessionWF'
-      click_button 'Set to completed', match: :first
+    # Ensure every step of accessionWF is completed, this will allow us to open a new version.
+    druid = page.current_url.split('/').last
+    accession_processes.each do |process|
+      workflow_client.update_status(druid:, workflow: 'accessionWF', process:, status: 'completed')
     end
+    click_link 'Reindex'
 
     click_link 'Unlock to make changes to this object'
     fill_in 'Version description', with: 'Test a change'
