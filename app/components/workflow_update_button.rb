@@ -9,6 +9,10 @@ class WorkflowUpdateButton < ApplicationComponent
 
   delegate :workflow_name, :name, to: :process
 
+  def render?
+    !completed? && allow_skip_or_complete?(name)
+  end
+
   def label
     "Set to #{next_status}"
   end

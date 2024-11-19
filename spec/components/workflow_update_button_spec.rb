@@ -10,8 +10,10 @@ RSpec.describe WorkflowUpdateButton, type: :component do
                     status:,
                     pid: 'druid:132',
                     workflow_name: 'accessionWF',
-                    name: 'technical-metadata')
+                    name:)
   end
+
+  let(:name) { 'technical-metadata' }
 
   context 'when the state is error' do
     let(:status) { 'error' }
@@ -20,6 +22,22 @@ RSpec.describe WorkflowUpdateButton, type: :component do
       expect(body.css('input[name="process"]').first['value']).to eq 'technical-metadata'
       expect(body.css('button').to_html).to eq \
         '<button name="button" type="submit" id="workflow-status-set-technical-metadata-waiting" class="btn btn-primary">Set to waiting</button>'
+    end
+
+    context 'when the step is sdr-ingest-received' do
+      let(:name) { 'sdr-ingest-received' }
+
+      it 'renders nothing' do
+        expect(body.css('*').to_html).to eq ''
+      end
+    end
+
+    context 'when the step is sdr-ingest-transfer' do
+      let(:name) { 'sdr-ingest-transfer' }
+
+      it 'renders nothing' do
+        expect(body.css('*').to_html).to eq ''
+      end
     end
   end
 

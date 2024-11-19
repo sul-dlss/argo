@@ -5,7 +5,7 @@
   <%= hidden_field_tag('process', name) %>
   <div class="input-group">
     <%= select_tag('status',
-                   options_for_select([%w[Rerun waiting], %w[Skip skipped], %w[Complete completed]]),
+                   options_for_select(workflow_step_status_options),
                    prompt: 'Select',
                    class: 'form-select') %>
     <span class="input-group-append">

@@ -17,6 +17,12 @@ class WorkflowStepStatusSelector < ApplicationComponent
     CONFIRM_MESSAGE
   end
 
+  def workflow_step_status_options
+    options = [%w[Rerun waiting]]
+    options.push(%w[Skip skipped], %w[Complete completed]) if allow_skip_or_complete?(name)
+    options
+  end
+
   private
 
   def druid
