@@ -41,7 +41,8 @@ RSpec.describe CocinaHashPresenter do
                                  hasAdminPolicy: 'druid:hv992ry2431'
                                },
                                identification: {
-                                 catalogLinks: []
+                                 catalogLinks: [],
+                                 sourceId: 'sulcollection:1234'
                                },
                                description: {
                                  title: [
