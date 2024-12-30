@@ -147,8 +147,9 @@ GEM
       xpath (~> 3.2)
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.99.1)
+    cocina-models (0.99.2)
       activesupport
+      commonmarker (= 2.0.1)
       deprecation
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -163,10 +164,10 @@ GEM
       thor
       zeitwerk (~> 2.1)
     coderay (1.1.3)
-    commonmarker (2.0.2)
+    commonmarker (2.0.1)
       rb_sys (~> 0.9)
-    commonmarker (2.0.2-x86_64-darwin)
-    commonmarker (2.0.2-x86_64-linux)
+    commonmarker (2.0.1-x86_64-darwin)
+    commonmarker (2.0.1-x86_64-linux)
     concurrent-ruby (1.3.4)
     config (5.5.2)
       deep_merge (~> 1.2, >= 1.2.1)
