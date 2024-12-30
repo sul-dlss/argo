@@ -15,7 +15,7 @@ class CocinaValidator
     validate(model, **).bind do |updated|
       Try[Dor::Services::Client::UnexpectedResponse] { Repository.store(updated) }
         .to_result
-        .or { |e| Failure(e.errors.map { |err| err['detail'] }) } # rubocop:disable Rails/Pluck
+        .or { |e| Failure(e.errors.map { |err| err['detail'] }) }
     end
   end
 end
