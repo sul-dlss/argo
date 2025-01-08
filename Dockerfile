@@ -1,4 +1,4 @@
-FROM ruby:3.3.1-bookworm
+FROM ruby:3.4.1-bookworm
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 
