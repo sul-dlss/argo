@@ -250,7 +250,7 @@ GEM
       activesupport (>= 3.0, < 9.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
-    erb_lint (0.7.0)
+    erb_lint (0.8.0)
       activesupport
       better_html (>= 2.0.1)
       parser (>= 2.7.1.4)
@@ -289,8 +289,9 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.2)
-    honeybadger (5.26.1)
+    honeybadger (5.26.2)
       logger
+      ostruct
     http-cookie (1.0.8)
       domain_name (~> 0.5)
     http_logger (0.7.0)
@@ -330,7 +331,7 @@ GEM
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    logger (1.6.4)
+    logger (1.6.5)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -344,10 +345,9 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marc (1.2.0)
+    marc (1.3.0)
+      nokogiri (~> 1.0)
       rexml
-      scrub_rb (>= 1.0.1, < 2)
-      unf
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
@@ -404,7 +404,7 @@ GEM
     nom-xml (1.2.0)
       i18n
       nokogiri
-    okcomputer (1.18.5)
+    okcomputer (1.18.6)
     openapi_parser (1.0.0)
     optimist (3.2.0)
     orm_adapter (0.5.0)
@@ -495,7 +495,7 @@ GEM
       ffi (~> 1.0)
     rdoc (6.10.0)
       psych (>= 4.0.0)
-    redis-client (0.23.0)
+    redis-client (0.23.1)
       connection_pool
     reform (2.6.2)
       disposable (>= 0.5.0, < 1.0.0)
@@ -547,7 +547,7 @@ GEM
     rspec-support (3.13.2)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.69.2)
+    rubocop (1.70.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -579,7 +579,6 @@ GEM
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    scrub_rb (1.0.1)
     sdr-client (2.18.0)
       activesupport
       cocina-models (~> 0.99.0)
@@ -640,7 +639,6 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
-    unf (0.2.0)
     unicode-display_width (3.1.3)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
