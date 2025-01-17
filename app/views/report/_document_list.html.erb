@@ -1,7 +1,7 @@
 <div class="mt-3"
      data-controller="object-reporter"
      data-object-reporter-data-url-value='<%= report_data_url %>'
-     data-object-reporter-data-url-params-value='<%= params.to_unsafe_h.except(:controller, :action).merge(format: 'json', sort: 'id asc').to_json.html_safe %>'
+     data-object-reporter-data-url-params-value='<%= json_escape(params.to_unsafe_h.except(:controller, :action).merge(format: 'json', sort: 'id asc').to_json) %>'
      data-object-reporter-download-url-value='<%= report_download_url %>'
      data-object-reporter-column-model-value='<%= Report::COLUMN_MODEL.to_json.html_safe %>'>
 
