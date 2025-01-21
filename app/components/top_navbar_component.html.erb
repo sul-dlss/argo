@@ -3,7 +3,7 @@
     <a class="su-brand-bar__logo" href="https://www.stanford.edu">Stanford University</a>
   </div>
   <nav
-    class="navbar navbar-expand-md bg-dark stone-dark"
+    class="navbar navbar-dark navbar-expand-md bg-dark stone-dark"
     role="navigation">
     <div class="container">
       <a
@@ -43,12 +43,12 @@
         <div
           class="col-md-8 d-flex justify-content-center justify-content-md-start">
           <div class="h1 my-3">
-            <%= link_to 'Argo', root_path, class: 'nav-link' %>
+            <%= link_to 'Argo', root_path %>
           </div>
         </div>
         <div class="col-md-4">
           <nav
-            class="navbar collapse navbar-collapse justify-content-md-end navbar-expand-md d-md-flex"
+            class="navbar collapse navbar-dark navbar-collapse justify-content-md-end navbar-expand-md d-md-flex"
             aria-label="browse" id="user-util-collapse">
             <ul class="navbar-nav">
               <% if session[:groups].present? %>
@@ -59,7 +59,7 @@
                   </a>
                   <ul class='dropdown-menu'>
                     <li>
-                      <%= link_to 'Stop Impersonating', auth_forget_impersonated_groups_path %>
+                      <%= link_to 'Stop Impersonating', auth_forget_impersonated_groups_path, class: 'dropdown-item' %>
                     </li>
                   </ul>
                 </li>
