@@ -596,5 +596,3 @@ Performance/StringBytesize: # new in 1.23
   Enabled: true
 Rails/EnumSyntax: # new in 2.26
   Enabled: true
-RSpec/StringAsInstanceDoubleConstant: # new in 3.1
-  Enabled: true
