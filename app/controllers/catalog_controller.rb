@@ -227,7 +227,7 @@ class CatalogController < ApplicationController
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
     config.add_search_field 'text', label: 'All Fields'
-    config.add_sort_field 'score desc', label: 'Relevance', default: true
+    config.add_sort_field 'score desc, id asc', label: 'Relevance', default: true
     config.add_sort_field 'id asc', label: 'Druid'
 
     config.spell_max = 5
