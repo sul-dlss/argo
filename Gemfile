@@ -75,7 +75,7 @@ end
 group :test do
   gem 'capybara'
   gem 'cocina-models', '~> 0.69' # only need RSpec matchers here; don't need to pin to patch level
-  gem 'rspec_junit_formatter' # needed for test coverage in CircleCI
+  gem 'rspec_junit_formatter' # used by CircleCI to format test results
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov'
   gem 'webmock', require: false
