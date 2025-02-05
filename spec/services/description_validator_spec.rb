@@ -99,6 +99,18 @@ RSpec.describe DescriptionValidator do
         end
       end
 
+      context 'with invalid title headers in druid,title1.value.type,title2.value,title3.value' do
+        let(:csv) { 'druid,title1.value.type,title2.value,title3.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Title column not found.',
+            'Column header invalid: title1.value.type'
+          ]
+        end
+      end
+
       context 'with the bulk_upload_descriptive fixture file' do
         let(:csv) { File.read('spec/fixtures/files/bulk_upload_descriptive.csv') }
 
