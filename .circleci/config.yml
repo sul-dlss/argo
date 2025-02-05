@@ -178,11 +178,8 @@ jobs:
           command: dockerize -wait tcp://db:5432 -timeout 10s
       # Setup database
       - run:
-          name: Database setup
-          command: bin/rails db:test:prepare
-      - run:
-          name: Build assets
-          command: bin/rails assets:precompile
+          name: Prepare database and test environment
+          command: bin/rake db:test:prepare test:prepare
       # Run rspec in parallel
       - ruby/rspec-test:
           rerun-fail: true

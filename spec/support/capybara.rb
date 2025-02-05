@@ -2,6 +2,7 @@
 
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 Capybara.default_max_wait_time = 7
 Capybara.disable_animation = true
