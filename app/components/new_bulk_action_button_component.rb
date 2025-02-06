@@ -2,6 +2,8 @@
 
 class NewBulkActionButtonComponent < ApplicationComponent
   def link_path
+    # Since reset_search does not remove all the bulk action form params from the search state,
+    # remove them as specified
     new_bulk_action_path(search_state.reset_search.to_h.except(*bulk_action_params))
   end
 
