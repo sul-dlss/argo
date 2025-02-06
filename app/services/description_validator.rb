@@ -133,6 +133,9 @@ class DescriptionValidator
 
     return true if rest.empty?
 
+    # error if not a Cocina model class
+    return false if type.is_a?(Dry::Types::AnyClass)
+
     resolve_address(type, rest)
   end
 
