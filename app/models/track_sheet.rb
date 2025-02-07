@@ -25,7 +25,7 @@ class TrackSheet
     pdf
   end
 
-  protected
+  private
 
   # Adds one DRUID page to the PDF document
   # @param [String] druid unqualified DRUID identifier

@@ -37,7 +37,7 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
     end
   end
 
-  protected
+  private
 
   def params_from(params)
     catalog_record_ids = catalog_record_ids_from_params(params)
@@ -45,8 +45,6 @@ class SetCatalogRecordIdsAndBarcodesJob < GenericJob
     barcodes = barcodes_from_params(params)
     [druids, catalog_record_ids, barcodes, refresh]
   end
-
-  private
 
   def update_catalog_record_id_and_barcode(change_set, args, log)
     cocina_object = change_set.model

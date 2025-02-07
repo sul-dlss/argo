@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     stylesheet_links << ['argo']
   end
 
-  protected
+  private
 
   def enforce_versioning
     # if this object has been submitted and doesn't have an open version, they cannot change it.

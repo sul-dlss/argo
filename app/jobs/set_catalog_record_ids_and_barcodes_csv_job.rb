@@ -9,7 +9,7 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < SetCatalogRecordIdsAndBarcodesJob
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [String] :csv_file CSV string
 
-  protected
+  private
 
   def params_from(params)
     update_druids = []

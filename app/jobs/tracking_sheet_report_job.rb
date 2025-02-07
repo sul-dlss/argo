@@ -30,7 +30,7 @@ class TrackingSheetReportJob < GenericJob
     end
   end
 
-  protected
+  private
 
   def generate_report_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
