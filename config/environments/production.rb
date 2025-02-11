@@ -56,7 +56,10 @@ Rails.application.configure do
   end
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [
+    ->(_request) { Time.now.iso8601 },
+    :request_id
+  ]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
