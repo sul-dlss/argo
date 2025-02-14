@@ -92,6 +92,7 @@ class WorkflowsController < ApplicationController
     status = WorkflowStatus.new(workflow:,
                                 workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context,
+                          workflow_name: params[:id],
                           workflow_status: status,
                           cocina_object: Repository.find(params[:item_id]))
   end
