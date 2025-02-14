@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe WorkflowPresenter do
   subject(:presenter) do
-    described_class.new(view: stub_view, workflow_status:, cocina_object: item)
+    described_class.new(view: stub_view, workflow_status:, cocina_object: item, workflow_name:)
   end
 
   let(:stub_view) { double('view') }
