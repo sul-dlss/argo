@@ -1,5 +1,5 @@
 <span class="section-head-link">
-  <h4><%= @presenter.workflow_name %> - <%= @presenter.druid %></h4>
+  <div class="h4"><%= @presenter.workflow_name %> - <%= @presenter.druid %></div>
   View:
   <%= link_to 'XML', item_workflow_path(item_id: @presenter.druid, id: @presenter.workflow_name, raw: 'true'),
               title: @presenter.workflow_name,
