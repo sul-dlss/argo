@@ -398,12 +398,12 @@ GEM
     net-ssh (7.3.0)
     nio4r (2.7.4)
     nkf (0.2.0)
-    nokogiri (1.18.2)
+    nokogiri (1.18.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.18.2-x86_64-darwin)
+    nokogiri (1.18.3-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.2-x86_64-linux-gnu)
+    nokogiri (1.18.3-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri-happymapper (0.10.0)
       nokogiri (~> 1.5)
@@ -731,7 +731,7 @@ DEPENDENCIES
   lograge
   mods_display (~> 1.0)
   mysql2 (~> 0.5)
-  nokogiri (~> 1.14)
+  nokogiri (~> 1.18)
   okcomputer
   prawn (~> 1)
   prawn-table
