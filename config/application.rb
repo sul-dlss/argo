@@ -24,6 +24,11 @@ module Argo
       Cocina::Models::Mapping::Purl.base_url = Settings.purl_url
     end
 
+    # Add timestamps to all loggers (both Rack-based ones and e.g. Sidekiq's)
+    config.log_formatter = proc do |severity, datetime, _progname, msg|
+      "[#{datetime.to_fs(:iso8601)}] [#{severity}] #{msg}\n"
+    end
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
