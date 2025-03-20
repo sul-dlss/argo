@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ['titleWarning', 'catalogRecordIdWarning', 'createCollectionFields', 'catalogRecordIdFields']
+  static targets = ['titleWarning', 'catalogRecordId', 'catalogRecordIdWarning', 'catalogRecordIdFormatError', 'createCollectionFields', 'catalogRecordIdFields']
 
   revealCreateCollection () {
     this.createCollectionFieldsTarget.hidden = false
@@ -22,6 +22,7 @@ export default class extends Controller {
   }
 
   checkCatalogRecordId (event) {
+    this.catalogRecordIdFormatErrorTarget.hidden = !this.catalogRecordIdTarget.validity.patternMismatch
     fetch(`/collections/exists?catalog_record_id=${event.target.value}`)
       .then(resp => resp.json())
       .then(data => {

@@ -29,6 +29,20 @@ RSpec.describe 'Add collection' do
     end
   end
 
+  describe 'when invalid FOLIO Collection HRID is provided', :js do
+    let(:result) { { 'response' => { 'numFound' => 0 } } }
+
+    it 'warns that catalog id is not formatted correctly' do
+      visit new_apo_collection_path apo_id
+      choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
+      expect(page).to have_text("Collection #{CatalogRecordId.label}")
+      fill_in 'collection_catalog_record_id', with: '123'
+      expect(page).to have_text('Collection Folio Instance HRID must be in an allowed format.')
+      fill_in 'collection_catalog_record_id', with: 'a123'
+      expect(page).to have_no_text('Collection Folio Instance HRID must be in an allowed format.')
+    end
+  end
+
   describe 'when collection title is provided', :js do
     it 'warns if title exists' do
       visit new_apo_collection_path apo_id

@@ -51,8 +51,11 @@
             <label for="collection_catalog_record_id">
               Collection <%= CatalogRecordId.label %>
             </label>
-            <%= text_field_tag 'collection_catalog_record_id', nil, class: 'form-control', data: { action: 'collection-editor#checkCatalogRecordId' }, autocomplete: 'off' %>
-            <span data-collection-editor-target="catalogRecordIdWarning" class="mt-2 alert alert-warning" hidden>Collection with this <%= CatalogRecordId.label %> already exists.</span>
+            <%= text_field_tag 'collection_catalog_record_id', nil, class: 'form-control',
+                                                                    pattern: CatalogRecordId.html_pattern_string,
+                                                                    data: { action: 'collection-editor#checkCatalogRecordId', collection_editor_target: 'catalogRecordId' }, autocomplete: 'off' %>
+            <div data-collection-editor-target="catalogRecordIdFormatError" class="mt-2 alert alert-danger" role="alert" hidden>Collection Folio Instance HRID must be in an allowed format.</div>
+            <div data-collection-editor-target="catalogRecordIdWarning" class="mt-2 alert alert-warning" role="alert" hidden>Collection with this <%= CatalogRecordId.label %> already exists.</div>
           </div>
           <div class="mb-3">
             <label for="collection_rights_catalog_record_id">
