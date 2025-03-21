@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     admin_policy_id { 'druid:hv992ry2431' }
-    agreement_id { 'druid:hp308wm0436' }
+    agreement_id { FactoryBot.create_for_repository(:agreement).externalIdentifier }
     label { 'test apo' }
     type { Cocina::Models::ObjectType.admin_policy }
   end

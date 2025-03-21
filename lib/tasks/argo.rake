@@ -45,12 +45,7 @@ namespace :argo do
     $stdout.puts 'This will clear the Solr repo. Are you sure? [y/n]:'
     if $stdin.gets.chomp == 'y'
       ResetSolr.reset_solr
-      FactoryBot.create_for_repository(:agreement)
       FactoryBot.create_for_repository(:persisted_item)
-      FactoryBot.create_for_repository(:persisted_apo,
-                                       roles: [{ name: 'dor-apo-manager',
-                                                 members: [{ identifier: 'sdr:administrator-role',
-                                                             type: 'workgroup' }] }])
     else
       $stdout.puts 'stopping'
     end
