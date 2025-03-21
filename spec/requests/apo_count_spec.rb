@@ -40,22 +40,20 @@ RSpec.describe 'Count the members of an apo' do
   end
 
   describe 'counting the item members' do
-    before do
-      FactoryBot.create_for_repository(:persisted_item)
-      FactoryBot.create_for_repository(:persisted_item)
-    end
+    let(:item) { FactoryBot.create_for_repository(:persisted_item) }
+    let(:admin_policy_id) { item.administrative.hasAdminPolicy }
 
     it 'returns the count' do
-      get "/apo/#{ur_apo_id}/count_items"
+      get "/apo/#{admin_policy_id}/count_items"
 
       expect(rendered.find_css('turbo-frame#apo-item-count')).to be_present
-      expect(rendered).to have_link '2', href: search_catalog_path(
+      expect(rendered).to have_link '1', href: search_catalog_path(
         f: {
-          is_governed_by_ssim: ["info:fedora/#{ur_apo_id}"],
+          is_governed_by_ssim: ["info:fedora/#{admin_policy_id}"],
           objectType_ssim: ['item']
         }
       )
-      expect(rendered.find_link('2')[:target]).to eq '_top'
+      expect(rendered.find_link('1')[:target]).to eq '_top'
     end
   end
 end
