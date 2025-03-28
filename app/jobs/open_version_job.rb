@@ -17,7 +17,7 @@ class OpenVersionJob < GenericJob
     description = params['version_description']
 
     with_items(params[:druids], name: 'Open version') do |cocina_object, success, failure|
-      next failure.call("State isn't openable") unless openable?(cocina_object)
+      next failure.call("State isn't openable") unless VersionService.openable?(druid: cocina_object.externalIdentifier)
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
       VersionService.open(druid: cocina_object.externalIdentifier,
@@ -25,11 +25,5 @@ class OpenVersionJob < GenericJob
                           opening_user_name: @current_user.to_s)
       success.call('Version successfully opened')
     end
-  end
-
-  private
-
-  def openable?(cocina)
-    DorObjectWorkflowStatus.new(cocina.externalIdentifier, version: cocina.version).can_open_version?
   end
 end
