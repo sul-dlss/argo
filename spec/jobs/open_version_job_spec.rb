@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe OpenVersionJob do
   let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
-  let(:workflow_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
   let(:bulk_action) { create(:bulk_action) }
   let(:user) { bulk_action.user }
 
@@ -30,7 +29,7 @@ RSpec.describe OpenVersionJob do
   before do
     allow(Ability).to receive(:new).and_return(ability)
     allow(VersionService).to receive(:open)
-    allow(DorObjectWorkflowStatus).to receive(:new).and_return(workflow_status)
+    allow(VersionService).to receive(:openable?).and_return(true)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
   end
