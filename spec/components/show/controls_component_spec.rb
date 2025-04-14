@@ -126,6 +126,15 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(rendered.css('a').size).to eq(9)
         expect(rendered.css('a.disabled').size).to eq 6 # create embargo, apply APO defaults, text extraction, purge, republish, add workflow
       end
+
+      context 'when the item has a catalog record ID' do
+        let(:catalog_record_id) { "#{CatalogRecordId.indexing_prefix}:1234567" }
+
+        it 'various buttons are disabled' do
+          expect(page).to have_css 'a.disabled', text: 'Refresh'
+          expect(page).to have_css 'a.disabled', text: 'Manage serials'
+        end
+      end
     end
 
     context 'when the object is in accessioning' do
