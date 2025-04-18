@@ -10,8 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_01_155124) do
-  create_table "bookmarks", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2024_08_01_155124) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "bookmarks", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "document_id"
     t.string "title"
@@ -22,7 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_155124) do
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
 
-  create_table "bulk_actions", force: :cascade do |t|
+  create_table "bulk_actions", id: :serial, force: :cascade do |t|
     t.string "action_type"
     t.string "status"
     t.string "log_name"
@@ -36,7 +39,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_155124) do
     t.index ["user_id"], name: "index_bulk_actions_on_user_id"
   end
 
-  create_table "indexing_exceptions", force: :cascade do |t|
+  create_table "indexing_exceptions", id: :serial, force: :cascade do |t|
     t.string "pid"
     t.text "solr_document"
     t.string "dor_services_version"
@@ -46,7 +49,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_155124) do
     t.index ["pid"], name: "index_indexing_exceptions_on_pid"
   end
 
-  create_table "searches", force: :cascade do |t|
+  create_table "searches", id: :serial, force: :cascade do |t|
     t.text "query_params"
     t.integer "user_id"
     t.datetime "created_at", precision: nil
@@ -55,10 +58,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_155124) do
     t.index ["user_id"], name: "index_searches_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "sunetid"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
-
 end
