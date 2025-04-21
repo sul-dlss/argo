@@ -128,9 +128,9 @@
   integrity sha512-kM3HKb16VIXZyIeVrM1ygYmZBKybX8N4p754bw390wGO3Tf2j4L2/WYL+4suWujpgf6GBYs3jv7TyUivdd05JA==
 
 "@eslint-community/eslint-utils@^4.1.2", "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.6.0.tgz#bfe67b3d334a8579a35e48fe240dc0638d1bcd91"
-  integrity sha512-WhCn7Z7TauhBtmzhvKpoQs0Wwb/kBcy4CwpuI0/eEIr2Lx2auxmulAzLr91wVZJaz47iUZdkXOK7WlAfxGKCnA==
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.6.1.tgz#e4c58fdcf0696e7a5f19c30201ed43123ab15abc"
+  integrity sha512-KTsJMmobmbrFLe3LDh0PC2FXpcSYJt/MLjlkh/9LEnmKYLSYmT/0EW9JWANjeoemiuZrmogti0tW5Ch+qNUYDw==
   dependencies:
     eslint-visitor-keys "^3.4.3"
 
@@ -492,9 +492,9 @@ balanced-match@^1.0.0:
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
 "blacklight-frontend@>=7.1 || 8.0":
-  version "8.8.4"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-8.8.4.tgz#fada31f73a0efd285ffd2970aac62522c2a87f90"
-  integrity sha512-igPMusj64zTMhT3lz5Ckmue5C9zdB+/Um5A+2d19G7hRGXk3DNIcKGnywMpTfSIxwJiYNIywENhQXci2A0xYzQ==
+  version "8.9.0"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-8.9.0.tgz#fb8561b4ff252c01574e202e9a303a3bfff7a82b"
+  integrity sha512-AIug8HllEHUinqgN5lpJMjqNWAxNY5avD9ig0E1WvgP0JOyWIzvMRjueObKKXl4EVm/885XlhiIN1vkTpmGSvQ==
   dependencies:
     bootstrap ">=4.3.1 <6.0.0"
 
