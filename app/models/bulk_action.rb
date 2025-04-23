@@ -15,7 +15,6 @@ class BulkAction < ApplicationRecord
                      RemoteIndexingJob
                      PurgeJob
                      SetGoverningApoJob
-                     SetCatalogRecordIdsAndBarcodesJob
                      SetCatalogRecordIdsAndBarcodesCsvJob
                      OpenVersionJob
                      RefreshModsJob
