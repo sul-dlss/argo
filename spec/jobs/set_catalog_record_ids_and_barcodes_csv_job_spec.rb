@@ -8,7 +8,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
   end
 
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:catalog_record_ids) { ["#{catalog_record_id_prefix}12345", '', "#{catalog_record_id_prefix}44444"] }
+  let(:catalog_record_ids) { ["#{catalog_record_id_prefix}12345", '', "#{catalog_record_id_prefix}44444"] } # 'a12345,a66233'
   let(:refresh) { ['true', '', 'false'] }
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
@@ -60,33 +60,156 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
     it 'attempts to update the catalog_record_id/barcode for each druid with correct corresponding catalog_record_id/barcode' do
       expect(bulk_action.druid_count_total).to eq druids.length
       expect(bulk_action.druid_count_fail).to eq 0
-      expect(subject).to have_received(:update_catalog_record_id_and_barcode).with(ItemChangeSet, Hash,
-                                                                                   buffer).exactly(druids.length).times
+      expect(subject).to have_received(:update_catalog_record_id_and_barcode)
+        .with(ItemChangeSet, Hash, buffer).exactly(druids.length).times
+    end
+
+    context 'with invalid barcode and catalog_record_ids' do
+      let(:csv_file) do
+        [
+          "Druid,Barcode,#{catalog_record_id_column},#{catalog_record_id_column},Refresh",
+          [druids[0], 'superbad', catalog_record_ids[0], "#{catalog_record_id_prefix}55555", refresh[0]].join(','),
+          [druids[1], barcodes[1], 'trash', '', refresh[1]].join(','),
+          [druids[2], barcodes[2], catalog_record_ids[2], '', refresh[2]].join(',')
+        ].join("\n")
+      end
+
+      it 'only attempts to update the catalog_record_id/barcode for the one druid with valid barcode/catalog_record_id' do
+        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.druid_count_fail).to eq 2
+        expect(subject).to have_received(:update_catalog_record_id_and_barcode)
+          .with(ItemChangeSet, Hash, buffer).exactly(druids.length - 2).times
+      end
     end
   end
 
-  context 'with invalid barcode and catalog_record_ids' do
-    let(:csv_file) do
-      [
-        "Druid,Barcode,#{catalog_record_id_column},#{catalog_record_id_column},Refresh",
-        [druids[0], 'superbad', catalog_record_ids[0], "#{catalog_record_id_prefix}55555", refresh[0]].join(','),
-        [druids[1], barcodes[1], 'trash', '', refresh[1]].join(','),
-        [druids[2], barcodes[2], catalog_record_ids[2], '', refresh[2]].join(',')
-      ].join("\n")
+  describe '#update_catalog_record_id_and_barcode' do
+    let(:druid) { druids[0] }
+    let(:catalog_record_id_prefix) { 'a' }
+    let(:catalog_record_ids) { ["#{catalog_record_id_prefix}12345,#{catalog_record_id_prefix}66233", '', "#{catalog_record_id_prefix}44444"] } # ''
+    let(:catalog_record_ids_arg) { catalog_record_ids[0].split(',') }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, update: true) }
+
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
+      allow(subject.ability).to receive(:can?).and_return(true)
     end
 
-    describe '#perform' do
-      before do
-        allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-        allow(subject).to receive(:update_catalog_record_id_and_barcode)
-        subject.perform(bulk_action.id, { csv_file: })
+    context 'when a DRO' do
+      let(:barcode) { barcodes[0] }
+      let(:previous_version) do
+        build(:dro_with_metadata, id: druids[0], version: 3).new(identification: {
+                                                                   barcode: '36105014757519',
+                                                                   catalogLinks: [{ catalog: 'folio',
+                                                                                    catalogRecordId: 'a12346', refresh: true }],
+                                                                   sourceId: 'sul:1234'
+                                                                 })
       end
 
-      it 'only attempts to update the catalog_record_id/barcode for the one druids with valid barcode/catalog_record_id' do
-        expect(bulk_action.druid_count_total).to eq druids.length
-        expect(bulk_action.druid_count_fail).to eq 2
-        expect(subject).to have_received(:update_catalog_record_id_and_barcode).with(ItemChangeSet, Hash,
-                                                                                     buffer).exactly(druids.length - 2).times
+      let(:updated_model) do
+        previous_version.new(
+          {
+            identification: {
+              barcode:,
+              catalogLinks: [
+                { catalog: 'previous folio', catalogRecordId: 'a12346', refresh: false },
+                { catalog: 'folio', catalogRecordId: 'a12345', refresh: true },
+                { catalog: 'folio', catalogRecordId: 'a66233', refresh: false }
+              ],
+              sourceId: 'sul:1234'
+            }
+          }
+        )
+      end
+
+      let(:change_set) do
+        ItemChangeSet.new(previous_version).tap do |change_set|
+          change_set.validate(catalog_record_ids: catalog_record_ids_arg, barcode:)
+        end
+      end
+
+      context 'when not authorized' do
+        before do
+          allow(subject.ability).to receive(:can?).and_return(false)
+          allow(VersionService).to receive(:open?).and_return(false)
+        end
+
+        it 'logs and returns' do
+          subject.send(:update_catalog_record_id_and_barcode, change_set,
+                       { catalog_record_ids: catalog_record_ids_arg, barcode: }, buffer)
+          expect(object_client).not_to have_received(:update)
+          expect(buffer.string).to include('Not authorized')
+        end
+      end
+
+      context 'when error' do
+        before do
+          allow(VersionService).to receive(:open?).and_raise('oops')
+        end
+
+        it 'logs' do
+          subject.send(:update_catalog_record_id_and_barcode, change_set,
+                       { catalog_record_ids: catalog_record_ids_arg, barcode: }, buffer)
+          expect(object_client).not_to have_received(:update)
+          expect(buffer.string).to include("#{CatalogRecordId.label}/barcode failed")
+        end
+      end
+
+      context 'when not open' do
+        before do
+          allow(VersionService).to receive(:open?).and_return(false)
+          allow(subject).to receive(:open_new_version).with(previous_version, anything).and_return(previous_version)
+        end
+
+        it 'updates catalog_record_id and barcode and versions objects' do
+          subject.send(:update_catalog_record_id_and_barcode, change_set,
+                       { catalog_record_ids: catalog_record_ids_arg, barcode:, refresh: true }, buffer)
+          expect(subject).to have_received(:open_new_version).with(previous_version, "#{CatalogRecordId.label} updated to a12345, a66233. Barcode updated to #{barcode}.").once
+          expect(object_client).to have_received(:update).with(params: updated_model)
+        end
+      end
+
+      context 'when open' do
+        before do
+          allow(VersionService).to receive(:open?).and_return(true)
+        end
+
+        it 'updates catalog_record_id and barcode and does not version objects if not needed' do
+          expect(subject).not_to receive(:open_new_version).with(previous_version,
+                                                                 "#{CatalogRecordId.label} updated to #{catalog_record_ids[0]}. Barcode updated to #{barcode}.")
+          subject.send(:update_catalog_record_id_and_barcode, change_set,
+                       { catalog_record_ids: catalog_record_ids_arg, barcode:, refresh: true }, buffer)
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+        end
+      end
+
+      context 'when catalog_record_ids are empty and barcode is nil' do
+        let(:catalog_record_ids_arg) { [] }
+        let(:barcode) { nil }
+        let(:updated_model) do
+          previous_version.new(
+            {
+              identification: {
+                barcode: nil,
+                catalogLinks: [{ catalog: 'previous folio', catalogRecordId: 'a12346', refresh: false }],
+                sourceId: 'sul:1234'
+              }
+            }
+          )
+        end
+
+        before do
+          allow(VersionService).to receive(:open?).and_return(false)
+          allow(subject).to receive(:open_new_version).with(previous_version, anything).and_return(previous_version)
+        end
+
+        it 'removes catalog_record_id and barcode' do
+          subject.send(:update_catalog_record_id_and_barcode, change_set,
+                       { catalog_record_ids: catalog_record_ids_arg, barcode: }, buffer)
+          expect(subject).to have_received(:open_new_version).with(previous_version, "#{CatalogRecordId.label} removed. Barcode removed.").once
+          expect(object_client).to have_received(:update).with(params: updated_model)
+        end
       end
     end
   end

@@ -50,7 +50,7 @@ Metrics/ClassLength:
     - 'app/controllers/items_controller.rb'
     - 'app/controllers/registrations_controller.rb'
     - 'app/forms/apo_form.rb'
-    - 'app/jobs/set_catalog_record_ids_and_barcodes_job.rb'
+    - 'app/jobs/set_catalog_record_ids_and_barcodes_csv_job.rb'
     - 'app/models/solr_document.rb'
     - 'app/models/user_log.rb'
     - 'app/services/admin_policy_persister.rb'
@@ -62,7 +62,7 @@ Metrics/ClassLength:
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/CyclomaticComplexity:
   Exclude:
-    - 'app/jobs/set_catalog_record_ids_and_barcodes_job.rb'
+    - 'app/jobs/set_catalog_record_ids_and_barcodes_csv_job.rb'
     - 'app/models/ability.rb'
     - 'app/models/report.rb'
     - 'app/models/track_sheet.rb'
@@ -90,7 +90,7 @@ Metrics/ParameterLists:
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/PerceivedComplexity:
   Exclude:
-    - 'app/jobs/set_catalog_record_ids_and_barcodes_job.rb'
+    - 'app/jobs/set_catalog_record_ids_and_barcodes_csv_job.rb'
     - 'app/models/report.rb'
     - 'app/models/track_sheet.rb'
     - 'app/models/user.rb'
@@ -128,7 +128,7 @@ Performance/CollectionLiteralInLoop:
 # Offense count: 1
 Performance/MapMethodChain:
   Exclude:
-    - 'app/jobs/set_catalog_record_ids_and_barcodes_job.rb'
+    - 'app/jobs/set_catalog_record_ids_and_barcodes_csv_job.rb'
 
 # Offense count: 4
 RSpec/AnyInstance:
