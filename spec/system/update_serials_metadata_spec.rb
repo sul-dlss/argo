@@ -32,9 +32,8 @@ RSpec.describe 'Update serials metadata', :js do
     click_button 'Manage description'
     click_link 'Manage serials'
 
-    fill_in 'Part number', with: 'part 17'
-    fill_in 'Part name', with: 'supplement'
-    fill_in 'Sort field', with: '17'
+    fill_in 'Part label', with: 'part 17, supplement'
+    fill_in 'Sort key', with: '17'
     click_button 'Update'
 
     expect(page).to have_content 'test object. part 17, supplement'
