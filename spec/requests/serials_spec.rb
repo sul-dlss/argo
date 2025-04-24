@@ -29,12 +29,11 @@ RSpec.describe 'Serials' do
     describe 'update the form' do
       let(:expected) do
         cocina_model.new(description: {
-                           :title => [
+                           title: [
                              {
                                structuredValue: [
                                  { value: 'My Serial', type: 'main title' },
-                                 { value: '7', type: 'part number' },
-                                 { value: 'samurai', type: 'part name' }
+                                 { value: '7 samurai', type: 'part name' }
                                ]
                              }
                            ],
@@ -43,7 +42,7 @@ RSpec.describe 'Serials' do
       end
 
       it 'updates the form' do
-        put '/items/druid:kv840xx0000/serials', params: { serials: { part_number: '7', part_name: 'samurai' } }
+        put '/items/druid:kv840xx0000/serials', params: { serials: { part_label: '7 samurai' } }
         expect(object_client).to have_received(:update).with(params: expected)
         expect(object_client).to have_received(:reindex)
 
