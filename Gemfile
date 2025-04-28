@@ -89,7 +89,3 @@ group :deployment do
   gem 'capistrano-rails'
   gem 'dlss-capistrano', require: false
 end
-
-group :production do
-  gem 'mysql2', '~> 0.5'
-end

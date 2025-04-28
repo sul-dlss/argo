@@ -110,7 +110,7 @@ services:
       RAILS_LOG_TO_STDOUT: 'true'
 
   db:
-    image: postgres:11 # aligns the pg version with what is supported by dor-services-app
+    image: postgres:15 # use the highest version that works with all the services herein
     ports:
       - 5432:5432
     environment:
