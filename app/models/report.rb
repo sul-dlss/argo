@@ -248,7 +248,7 @@ class Report
     until @response.documents.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
-          druids << ("#{rec[:druid]}\t#{rec[:source_id_ssi]}")
+          druids << ("#{rec[:druid]}\t#{rec[:source_id_ssi]}") # rubocop:disable Style/RedundantParentheses
         elsif opts[:tags].present?
           tags = ''
           rec[:tag_ssim]&.split(';')&.each do |tag|
