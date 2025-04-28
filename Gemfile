@@ -22,6 +22,7 @@ gem 'jsbundling-rails', '~> 1.0'
 gem 'lograge'
 gem 'nokogiri', '~> 1.18'
 gem 'okcomputer' # monitors application and its dependencies
+gem 'pg'
 gem 'prawn', '~> 1' # Prawn is used to create "tracksheets"
 gem 'prawn-table'
 gem 'propshaft'
@@ -64,7 +65,6 @@ group :test, :development do
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
   gem 'rubocop-rspec_rails'
-  gem 'sqlite3', '~> 2.0'
 end
 
 group :development do

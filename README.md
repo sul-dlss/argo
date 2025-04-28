@@ -26,14 +26,6 @@ cd argo
 bundle install
 ```
 
-Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
-
-Install foreman for local development (foreman is not supposed to be in the Gemfile, See this [wiki article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman)):
-
-```bash
-gem install foreman
-```
-
 ## Local Development TL;DR
 
 Brings up app at localhost:3000 with some test data:
@@ -43,6 +35,7 @@ gem install foreman
 yarn install
 docker compose up -d
 docker compose stop web
+bin/rails db:prepare
 bin/dev
 bin/rake argo:seed_data # run in separate terminal window
 rdbg -A # run in separate terminal window
@@ -79,7 +72,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 4. **Prepare rails for testing**
 
     ```
-    bin/rails test:prepare
+    bin/rails db:prepare test:prepare
     ```
 
 5. **Run the linters and the tests**
@@ -124,6 +117,12 @@ Be sure all of the docker containers for dependent services are running in the b
 ```
 docker compose up -d
 docker compose stop web
+```
+
+Create/prepare the dev/test databases:
+
+```
+bin/rails db:prepare
 ```
 
 Start the development server - this should give you the Argo app on port 3000 mocking an admin login:

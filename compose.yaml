@@ -10,6 +10,11 @@ services:
     ports:
       - 3000:3000
     environment:
+      DATABASE_NAME: argo
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
       NODE_ENV: development
       RAILS_LOG_TO_STDOUT: 'true'
       REMOTE_USER: blalbrit@stanford.edu
@@ -30,6 +35,8 @@ services:
       PID_FILE: /dev/null
     # To allow yarn --watch from Procfile.dev to continue after stdin is closed
     tty: true
+    depends_on:
+      - db
 
   dor-services-app:
     image: suldlss/dor-services-app:latest
@@ -104,6 +111,8 @@ services:
 
   db:
     image: postgres:11 # aligns the pg version with what is supported by dor-services-app
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_PASSWORD=sekret
     volumes:
