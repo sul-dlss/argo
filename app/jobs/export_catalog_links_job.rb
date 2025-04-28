@@ -13,11 +13,11 @@ class ExportCatalogLinksJob < GenericJob
       headers = %w[druid folio_instance_hrid refresh part_label sort_key barcode]
       CSV.open(csv_download_path, 'w', write_headers: true, headers: headers) do |csv|
         druids.each do |druid|
-          log_buffer.puts("#{Time.current} #{self.class}: Exporting catalogLinks for #{druid} (bulk_action.id=#{bulk_action_id})")
+          log_buffer.puts("#{Time.current} #{self.class}: Exporting FOLIO instance HRIDs and barcodes for #{druid} (bulk_action.id=#{bulk_action_id})")
           csv << [druid, *export_catalog_links(druid)]
           bulk_action.increment(:druid_count_success).save
         rescue StandardError => e
-          log_buffer.puts("#{Time.current} #{self.class}: Unexpected error exporting catalogLinks for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")
+          log_buffer.puts("#{Time.current} #{self.class}: Unexpected error exporting FOLIO instance HRIDs and barcodes for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")
           bulk_action.increment(:druid_count_fail).save
         end
       end

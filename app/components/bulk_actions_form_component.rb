@@ -52,7 +52,8 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Download descriptive metadata (as MODS)', new_download_mods_job_path(search_of_druids)],
         ['Validate Cocina descriptive metadata spreadsheet', new_validate_cocina_descriptive_job_path],
         ['Download tracking sheet', new_tracking_sheet_report_job_path(search_of_druids)],
-        ['Download full Cocina JSON', new_export_cocina_json_job_path(search_of_druids)]
+        ['Download full Cocina JSON', new_export_cocina_json_job_path(search_of_druids)],
+        ['Download Folio Instance HRIDs and barcodes', new_export_catalog_links_job_path(search_of_druids)]
       ]]
     ]
   end

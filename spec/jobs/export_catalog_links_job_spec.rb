@@ -65,9 +65,9 @@ RSpec.describe ExportCatalogLinksJob do
       end
 
       it 'logs messages for each druid in the list' do
-        expect(log_buffer.string).to include "Exporting catalogLinks for #{druid1} (bulk_action.id=#{bulk_action.id})"
-        expect(log_buffer.string).to include "Exporting catalogLinks for #{druid2} (bulk_action.id=#{bulk_action.id})"
-        expect(log_buffer.string).to include "Exporting catalogLinks for #{druid3} (bulk_action.id=#{bulk_action.id})"
+        expect(log_buffer.string).to include "Exporting FOLIO instance HRIDs and barcodes for #{druid1} (bulk_action.id=#{bulk_action.id})"
+        expect(log_buffer.string).to include "Exporting FOLIO instance HRIDs and barcodes for #{druid2} (bulk_action.id=#{bulk_action.id})"
+        expect(log_buffer.string).to include "Exporting FOLIO instance HRIDs and barcodes for #{druid3} (bulk_action.id=#{bulk_action.id})"
         expect(log_buffer.string).not_to include 'Unexpected error'
       end
 
@@ -98,7 +98,7 @@ RSpec.describe ExportCatalogLinksJob do
       end
 
       it 'logs messages for each druid in the list' do
-        expect(log_buffer.string).to include "Unexpected error exporting catalogLinks for #{druid1} (bulk_action.id=#{bulk_action.id}): ruh roh"
+        expect(log_buffer.string).to include "Unexpected error exporting FOLIO instance HRIDs and barcodes for #{druid1} (bulk_action.id=#{bulk_action.id}): ruh roh"
       end
 
       it 'writes a CSV file' do
