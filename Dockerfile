@@ -4,9 +4,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
-        mariadb-client libmariadb-dev \
+        postgresql-client postgresql-contrib libpq-dev \
         libxml2-dev \
-        sqlite3 \
         # clang is required for openapi_parser and commonmarker
         clang \
         nodejs
