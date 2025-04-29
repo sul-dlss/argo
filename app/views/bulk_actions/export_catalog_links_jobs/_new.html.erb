@@ -1,0 +1,9 @@
+<%= form_with url: export_catalog_links_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+
+  <span class='help-block'>
+    Download FOLIO Instance HRIDs and barcodes as CSV (comma-separated values) for druids specified below.
+
+  <%= render 'bulk_actions/druids', f: %>
+  <%= render 'bulk_actions/common_fields', f: %>
+<% end %>
