@@ -1,0 +1,2 @@
+druid,source_id,title1.structuredValue1.type,title1.structuredValue1.value,title1.structuredValue2.type,title1.structuredValue2.value,purl,relatedResource1.type
+druid:bc123df4567,desc:no-title-type,,title1.structuredValue1.value without a corresponding type,subtitle,subtitle,https://sul-purl-stage.stanford.edu/bc123df4567,has other format

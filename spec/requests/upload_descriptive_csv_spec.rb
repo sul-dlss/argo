@@ -43,6 +43,16 @@ RSpec.describe 'Upload the descriptive CSV' do
       end
     end
 
+    context 'when import has title1.structuredValue1.type but it is empty' do
+      let(:file) { fixture_file_upload('descriptive-upload-bad.csv') }
+
+      it "doesn't updates the descriptive" do
+        put "/items/#{druid}/descriptive", params: { data: file }
+        expect(object_client).not_to have_received(:update)
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+    end
+
     context 'when import raises CSV::MalformedCSVError' do
       before do
         allow(CsvUploadNormalizer).to receive(:read).and_raise(CSV::MalformedCSVError.new('Ooops', 3))
