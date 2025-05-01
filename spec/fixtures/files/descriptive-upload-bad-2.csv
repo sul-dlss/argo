@@ -1,0 +1,2 @@
+druid,source_id,title1.type,title1.value
+druid:bc123df4567,desc:no-title-type,,title1.value without a corresponding type
