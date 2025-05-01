@@ -15,6 +15,7 @@ class DescriptionValidator
     validate_duplicate_headers
     validate_title_headers
     validate_matching_structured_title_headers
+    validate_structured_title_types
     validate_header_paths
     validate_cell_values
     if @bulk_job
@@ -62,6 +63,17 @@ class DescriptionValidator
     end
   end
 
+  # verify that each titleX.structuredValueY.type is a valid cocina title type
+  def validate_structured_title_types
+    @headers.grep(/\Atitle\d+.structuredValue\d+\.type\z/).each do |header|
+      @csv.values_at(header).flatten.each do |title_type|
+        next if valid_title_type?(title_type)
+
+        errors << "Invalid title type: #{header} = #{title_type}"
+      end
+    end
+  end
+
   def validate_header_paths
     invalid_headers.each do |invalid_header|
       errors << "Column header invalid: #{invalid_header}"
@@ -93,6 +105,10 @@ class DescriptionValidator
 
   def title_parallel_value_header?
     @headers.include?('title1.parallelValue1.value') || @headers.include?('title1.parallelValue1.structuredValue1.value')
+  end
+
+  def valid_title_type?(type)
+    Cocina::Models::Mapping::FromMods::Title::TYPES.value?(type)
   end
 
   def duplicate_headers
