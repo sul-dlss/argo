@@ -8,10 +8,12 @@
     <%= f.label :csv_file, 'Upload a CSV file' %>
     <p><small><em>Please note that each row should have headers for:
     <ul>
-      <li>Druid (required)</li>
-      <li><%= CatalogRecordId.label %> (optional). May be repeated if an item is associated with multiple catalog record IDs.</li>
-      <li>Refresh (optional). Set to "true" to indicate descriptive metadata is refreshable from first catalog record ID; set to "false" to indicate descriptive metadata is not refreshable.</li>
-      <li>Barcode (optional)</li>
+      <li><strong>druid</strong> (required, non-repeatable)</li>
+      <li><strong><%= CatalogRecordId.csv_header %></strong> (optional if barcode set, repeatable) - May be repeated if an item is associated with multiple catalog record IDs.</li>
+      <li><strong>refresh</strong> (optional, non-repeatable, associated with <em>first</em> <%= CatalogRecordId.csv_header %> value in the row) - Set to "true" to indicate descriptive metadata is refreshable or "false" to indicate descriptive metadata is not refreshable.</li>
+      <li><strong>part_label</strong> (optional, non-repeatable, associated with <em>first</em> <%= CatalogRecordId.csv_header %> value in the row) - Label for use in display of serials via catalog record.</li>
+      <li><strong>sort_key</strong> (optional, non-repeatable, associated with <em>first</em> <%= CatalogRecordId.csv_header %> value in the row) - Sorting information for use in display of serials via catalog record.</li>
+      <li><strong>barcode</strong> (optional if <%= CatalogRecordId.csv_header %> set, non-repeatable)</li>
     </ul>
     </em></small></p>
     <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>

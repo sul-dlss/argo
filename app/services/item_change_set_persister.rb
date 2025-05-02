@@ -39,7 +39,7 @@ class ItemChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :barcode, :catalog_record_ids, :refresh, :source_id, :collection_ids,
+  delegate :admin_policy_id, :barcode, :catalog_record_ids, :refresh, :source_id, :collection_ids, :part_label, :sort_key,
            *ACCESS_FIELDS.keys, :rights_changed?,
            :changed?, to: :change_set
 
@@ -109,7 +109,7 @@ class ItemChangeSetPersister
   end
 
   def identification_changed?
-    changed?(:source_id) || changed?(:catalog_record_ids) || changed?(:barcode) || changed?(:refresh)
+    changed?(:source_id) || changed?(:catalog_record_ids) || changed?(:barcode) || changed?(:refresh) || changed?(:part_label) || changed?(:sort_key)
   end
 
   def updated_object_access(updated)
@@ -125,15 +125,14 @@ class ItemChangeSetPersister
     end
   end
 
-  def update_identification(updated)
+  def update_identification(updated) # rubocop:disable Metrics/CyclomaticComplexity
     return updated unless identification_changed?
 
     identification_props = updated.identification.to_h
     identification_props[:sourceId] = source_id if changed?(:source_id)
-    if changed?(:catalog_record_ids) || changed?(:refresh)
+    if changed?(:catalog_record_ids) || changed?(:refresh) || changed?(:part_label) || changed?(:sort_key)
       identification_props[:catalogLinks] =
-        CatalogRecordId.serialize(model, catalog_record_ids,
-                                  refresh:)
+        CatalogRecordId.serialize(model, catalog_record_ids, refresh:, part_label:, sort_key:)
     end
     identification_props[:barcode] = barcode.presence if changed?(:barcode)
 
