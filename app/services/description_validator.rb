@@ -71,13 +71,8 @@ class DescriptionValidator
       @csv.each do |row|
         next if row[title_value_header].blank? && row[title_type_header].blank?
 
-        if row[title_value_header].blank?
-          errors << "Missing title value for #{title_type_header}."
-        elsif valid_title_type?(row[title_type_header])
-          next
-        end
-
-        errors << "Invalid title type: #{title_type_header} = #{row[title_type_header]}"
+        errors << "Missing title value for #{title_type_header}." if row[title_value_header].blank?
+        errors << "Missing title type for #{title_value_header}." if row[title_type_header].blank?
       end
     end
   end
