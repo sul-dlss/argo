@@ -119,6 +119,22 @@ RSpec.describe DescriptionValidator do
         end
       end
 
+      context 'when the csv file has a missing title2.structuredValue2.value' do
+        let(:csv) { File.read('spec/fixtures/files/bulk_upload_descriptive_bad.csv') }
+
+        it 'validates' do
+          expect(instance.valid?).to be false
+        end
+      end
+
+      context 'when the csv file has a missing title1.type' do
+        let(:csv) { File.read('spec/fixtures/files/descriptive-upload-bad-2.csv') }
+
+        it 'validates' do
+          expect(instance.valid?).to be false
+        end
+      end
+
       context 'with a title1.value column' do
         let(:csv) { 'druid,title1.value' }
 

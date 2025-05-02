@@ -63,13 +63,16 @@ class DescriptionValidator
     end
   end
 
-  # verify that each titleX.structuredValueY.type is a valid cocina title type
+  # verify that each titleX.type and titleX.structuredValueY.type is a valid cocina title type with a corresponding *.value
   def validate_structured_title_types
-    @headers.grep(/\Atitle\d+.structuredValue\d+\.type\z/).each do |header|
-      @csv.values_at(header).flatten.each do |title_type|
-        next if valid_title_type?(title_type)
+    @headers.grep(/\Atitle\d+.type\z|\Atitle\d+.structuredValue\d+\.type\z/).each do |title_type_header|
+      title_value_header = title_type_header.sub('type', 'value')
 
-        errors << "Invalid title type: #{header} = #{title_type}"
+      @csv.each do |row|
+        next if row[title_value_header].blank? && row[title_type_header].blank?
+
+        errors << "Missing title value for #{title_type_header}." if row[title_value_header].blank?
+        errors << "Missing title type for #{title_value_header}." if row[title_type_header].blank?
       end
     end
   end
