@@ -9,12 +9,14 @@ class SerialsController < ApplicationController
   end
 
   def update
-    form = SerialsForm.new(@cocina)
-    form.validate(params[:serials])
-    form.save
-    Dor::Services::Client.object(@cocina.externalIdentifier).reindex
+    @form = SerialsForm.new(@cocina)
 
-    msg = 'Serials metadata has been updated!'
-    redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
+    if @form.validate(params[:serials]) && @form.save
+      Dor::Services::Client.object(@cocina.externalIdentifier).reindex
+
+      redirect_to solr_document_path(@cocina.externalIdentifier), notice: 'Serials metadata has been updated!'
+    else
+      render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_content
+    end
   end
 end

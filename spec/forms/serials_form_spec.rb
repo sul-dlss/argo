@@ -196,6 +196,16 @@ RSpec.describe SerialsForm do
         end
       end
 
+      context 'when sort_key is set and part_label is not' do
+        let(:cocina_item) do
+          build(:dro_with_metadata, id: druid).new(description:, identification:)
+        end
+
+        it 'does not validate' do
+          expect(instance.validate({ part_label: '', sort_key: 'something' })).to be false
+        end
+      end
+
       context 'when part_number2 is set' do
         let(:expected) do
           build(:dro_with_metadata, id: druid).new(description: {
