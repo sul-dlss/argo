@@ -1,4 +1,13 @@
-<%= form_with model: @form, url: item_serials_path(@form.to_param), target: '_top' do |f| %>
+<%= form_with model: @form, url: item_serials_path(item_id: @form), target: '_top' do |f| %>
+  <% if @form.errors.full_messages.present? %>
+    <div role="alert" class="alert alert-danger d-flex shadow-sm align-items-center">
+      <div class="bi bi-exclamation-triangle-fill fs-3 me-3 align-self-center d-flex justify-content-center"></div>
+      <div class="text-body">
+        <%= @form.errors.full_messages.to_sentence %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="row">
     <div class="col">
       <%= f.label :part_label, class: 'form-label' %>

@@ -1,0 +1,4 @@
+<%= render EditModalComponent.new do |component| %>
+  <% component.with_header { 'Manage Serials' } %>
+  <% component.with_body { render 'form' } %>
+<% end %>

@@ -4,6 +4,8 @@ class SerialsForm < ApplicationChangeSet
   property :part_label, virtual: true
   property :sort_key, virtual: true
 
+  validates :part_label, presence: true, if: -> { sort_key.present? }
+
   PART_NAME = 'part name'
   PART_NUMBER = 'part number'
   MAIN_TITLE = 'main title'

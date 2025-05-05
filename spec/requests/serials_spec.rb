@@ -19,14 +19,14 @@ RSpec.describe 'Serials' do
       sign_in build(:user), groups: ['sdr:administrator-role']
     end
 
-    describe 'show the form' do
+    describe 'GET /items/<item_id>/serials/edit' do
       it 'shows the form' do
         get '/items/druid:kv840xx0000/serials/edit'
         expect(response).to have_http_status(:ok)
       end
     end
 
-    describe 'update the form' do
+    describe 'PUT /items/<item_id>/serials' do
       let(:expected) do
         cocina_model.new(description: {
                            title: [
@@ -47,6 +47,14 @@ RSpec.describe 'Serials' do
         expect(object_client).to have_received(:reindex)
 
         expect(response).to redirect_to '/view/druid:dc243mg0841'
+      end
+
+      context 'when params do not validate' do
+        it 'shows the validation errors in the form' do
+          put '/items/druid:kv840xx0000/serials', params: { serials: { sort_key: '7 samurai' } }
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).to include('Part label can&#39;t be blank')
+        end
       end
     end
   end
