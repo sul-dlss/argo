@@ -13,7 +13,7 @@ RSpec.describe 'Bulk set content type', :js do
 
   it 'Creates a new jobs' do
     visit new_bulk_action_path
-    select 'Set content type'
+    select 'Update content type'
     select 'file', from: 'Current resource type'
     select 'book', from: 'New content type'
     select 'right-to-left', from: 'Viewing direction'
