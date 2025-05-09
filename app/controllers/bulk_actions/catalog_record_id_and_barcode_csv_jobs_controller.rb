@@ -10,7 +10,7 @@ module BulkActions
     end
 
     def validate_job_params(job_params)
-      validate_csv_headers(job_params.fetch(:csv_file), ['Druid'])
+      validate_csv_headers(job_params.fetch(:csv_file), ['druid'])
     end
   end
 end

@@ -16,77 +16,47 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < GenericJob
   def perform(bulk_action_id, params)
     super
 
-    # Catalog record IDs, barcodes are nil if not selected for use.
-    update_druids, catalog_record_ids, barcodes, refresh = params_from(params)
+    with_csv_items(
+      CSV.parse(params[:csv_file], headers: true),
+      name: 'Set Catalog Record IDs and Barcodes'
+    ) do |cocina_object, row, success, failure, _row_number, log| # rubocop:disable Metrics/ParameterLists
+      change_set = change_set_for(cocina_object)
+      change_set_params = change_set_params_from(row, cocina_object)
 
-    with_bulk_action_log do |log|
-      update_druid_count(count: update_druids.count)
-      update_druids.each_with_index do |current_druid, i|
-        cocina_object = Repository.find(current_druid)
-        args = {}
-        args[:catalog_record_ids] = Array(catalog_record_ids[i]) if catalog_record_ids
-        args[:refresh] = refresh[i] if refresh
-        args[:barcode] = barcodes[i] if barcodes && cocina_object.dro?
-        change_set = change_set_for(cocina_object)
-        if change_set.validate(args)
-          update_catalog_record_id_and_barcode(change_set, args, log) if change_set.changed?
-        else
-          log.puts("#{Time.current} Invalid #{CatalogRecordId.label}/barcode for #{cocina_object.externalIdentifier}")
-          bulk_action.increment(:druid_count_fail).save
-        end
+      if change_set.validate(change_set_params)
+        next success.call('No changes specified for object') unless change_set.changed?
+        next failure.call('Not authorized to update this object') unless ability.can?(:update, cocina_object)
+
+        log_update(change_set, log)
+
+        new_cocina_model = open_new_version_if_needed(cocina_object, version_message(change_set))
+        new_change_set = change_set_for(new_cocina_model)
+        new_change_set.validate(change_set_params)
+        new_change_set.save
+
+        success.call("#{CatalogRecordId.label}/barcode added/updated/removed successfully")
+      else
+        failure.call("Invalid #{CatalogRecordId.label}/barcode for the object: #{change_set.errors.full_messages.to_sentence}")
       end
     end
   end
 
   private
 
-  def params_from(params)
-    update_druids = []
-    catalog_record_ids = nil
-    barcodes = nil
-    refresh = nil
-    CSV.parse(params[:csv_file], headers: true).each do |row|
-      update_druids << row['Druid']
-      if row.header?(CatalogRecordId.label)
-        catalog_record_ids ||= []
-        refresh ||= []
-        catalog_record_ids << catalog_record_id_cols(row)
-        refresh << refresh?(row)
+  def change_set_params_from(row, cocina_object)
+    {}.tap do |change_set_params|
+      change_set_params[:barcode] = row['barcode'] if row.header?('barcode') && cocina_object.dro?
+
+      if row.header?(CatalogRecordId.csv_header)
+        change_set_params[:catalog_record_ids] = begin
+          catalog_record_id_column_indices = row.headers.each_index.select { |index| row.headers[index] == CatalogRecordId.csv_header }
+          row.fields(*catalog_record_id_column_indices).compact
+        end
+
+        change_set_params[:refresh] = row['refresh']&.downcase != 'false'
+        change_set_params[:part_label] = row['part_label']
+        change_set_params[:sort_key] = row['sort_key']
       end
-      if row.header?('Barcode')
-        barcodes ||= []
-        barcodes << row['Barcode'].presence
-      end
-    end
-    [update_druids, catalog_record_ids, barcodes, refresh]
-  end
-
-  def update_catalog_record_id_and_barcode(change_set, args, log)
-    cocina_object = change_set.model
-    log.puts("#{Time.current} Beginning SetCatalogRecordIdsAndBarcodesJob for #{cocina_object.externalIdentifier}")
-
-    unless ability.can?(:update, cocina_object)
-      log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
-      bulk_action.increment(:druid_count_fail).save
-      return
-    end
-
-    log_update(change_set, log)
-
-    begin
-      new_cocina_model = open_new_version_if_needed(cocina_object, version_message(change_set))
-      new_change_set = change_set_for(new_cocina_model)
-      new_change_set.validate(args)
-      new_change_set.save
-
-      bulk_action.increment(:druid_count_success).save
-      log.puts("#{Time.current} #{CatalogRecordId.label}/barcode added/updated/removed successfully")
-    rescue StandardError => e
-      log.puts("#{Time.current} #{CatalogRecordId.label}/barcode failed #{e.class} #{e.message}")
-      Honeybadger.context(args:, druid: cocina_object.externalIdentifier)
-      Honeybadger.notify(e)
-      bulk_action.increment(:druid_count_fail).save
-      nil
     end
   end
 
@@ -113,32 +83,21 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < GenericJob
   end
 
   def version_message(change_set)
-    msgs = []
-    if change_set.changed?(:catalog_record_ids)
-      msgs << if change_set.catalog_record_ids.present?
-                "#{CatalogRecordId.label} updated to #{change_set.catalog_record_ids.join(', ')}."
-              else
-                "#{CatalogRecordId.label} removed."
-              end
-    end
-    if change_set.changed?(:barcode)
-      msgs << if change_set.barcode
-                "Barcode updated to #{change_set.barcode}."
-              else
-                'Barcode removed.'
-              end
-    end
-    msgs.join(' ')
-  end
+    # Yes, this is a private API, but it seems this is what the gem maintainers want folks to use:
+    #   https://github.com/apotonick/disposable/issues/57#issuecomment-268738396
+    changed_properties = change_set.instance_variable_get(:@_changes).select { |_property, changed| changed == true }.keys
 
-  def refresh?(row)
-    (row['Refresh']&.downcase != 'false')
-  end
+    return [] if changed_properties.blank?
 
-  def catalog_record_id_cols(row)
-    catalog_record_id_cols = row.headers.flat_map.with_index do |header, index|
-      index if header == CatalogRecordId.label
-    end.compact
-    row.values_at(*catalog_record_id_cols).compact
+    changed_properties.map do |property|
+      change = change_set.public_send(property)
+      if change.present?
+        "#{property.humanize} updated to #{Array(change).join(', ')}."
+      else
+        "#{property.humanize} removed."
+      end
+    end
+
+    changed_properties.join(' ')
   end
 end

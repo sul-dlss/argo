@@ -14,6 +14,8 @@ class ItemChangeSet < ApplicationChangeSet
   property :source_id, virtual: true
   property :use_statement, virtual: true
   property :barcode, virtual: true
+  property :part_label, virtual: true
+  property :sort_key, virtual: true
 
   include HasViewAccessWithCdl
 
@@ -22,6 +24,7 @@ class ItemChangeSet < ApplicationChangeSet
     with: /\A(2050[0-9]{7}|245[0-9]{8}|36105[0-9]{9}|[0-9]+-[0-9]+)\z/,
     allow_blank: true
   }
+  validates :part_label, presence: true, if: -> { sort_key.present? }
   validate :format_of_catalog_record_ids
 
   def self.model_name
@@ -40,6 +43,8 @@ class ItemChangeSet < ApplicationChangeSet
       self.refresh = CatalogRecordId.link_refresh(model)
       self.barcode = model.identification.barcode
       self.source_id = model.identification.sourceId
+      self.part_label = CatalogRecordId.part_label(model)
+      self.sort_key = CatalogRecordId.sort_key(model)
     end
 
     self.copyright = model.access.copyright

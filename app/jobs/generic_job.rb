@@ -15,7 +15,7 @@ class GenericJob < ApplicationJob
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
-  attr_reader :druids, :groups
+  attr_reader :params
 
   before_perform do |_job|
     bulk_action.reset_druid_counts
@@ -31,10 +31,12 @@ class GenericJob < ApplicationJob
   # @param [Integer] _bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   def perform(_bulk_action_id, params)
-    @groups = params[:groups]
-    @druids = params[:druids]
+    @params = params
     @current_user = bulk_action.user
   end
+
+  def groups = params&.[](:groups)
+  def druids = params&.[](:druids)
 
   def bulk_action
     @bulk_action ||= BulkAction.find(arguments[0])
@@ -110,7 +112,8 @@ class GenericJob < ApplicationJob
   # @yieldparam [Proc] call this proc with a message if the operation was unsuccessful
   # @yieldparam [Integer] the row number being processed
   # @example
-  #   with_csv_items(csv, name: 'my operation') do |cocina_object, csv_row, success, failure|
+  #   with_csv_items(csv, name: 'my operation') do |cocina_object, csv_row, success, failure, row_number, log|
+  #     log.puts("My custom message for row number #{row_number}")
   #     if operate_on(cocina_object)
   #       success.call("Looks good")
   #     else
@@ -136,7 +139,7 @@ class GenericJob < ApplicationJob
         }
 
         cocina_object = Repository.find(druid)
-        yield(cocina_object, csv_row, success, failure, row_num)
+        yield(cocina_object, csv_row, success, failure, row_num, log)
       rescue StandardError => e
         failure.call("#{name} failed #{e.class} #{e.message}")
         Honeybadger.notify(e, context: { druid: })
