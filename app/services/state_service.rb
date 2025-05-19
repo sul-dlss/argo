@@ -10,7 +10,6 @@ class StateService
 
   def initialize(cocina)
     @druid = cocina.externalIdentifier
-    @version = cocina.version
   end
 
   def object_state
@@ -32,7 +31,7 @@ class StateService
 
   private
 
-  attr_reader :druid, :version
+  attr_reader :druid
 
   def version_service
     @version_service ||= VersionService.new(druid:)

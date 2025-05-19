@@ -292,8 +292,6 @@ class Report
 
   private
 
-  delegate :search_results, to: :search_service
-
   def search_results(params)
     search_service(params).search_results
   end
