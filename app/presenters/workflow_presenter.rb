@@ -11,7 +11,7 @@ class WorkflowPresenter
     @workflow_name = workflow_name
   end
 
-  delegate :druid, :workflow_name, :workflow_context, to: :workflow_status
+  delegate :druid, :workflow_context, to: :workflow_status
 
   # @return [Array] all the steps in the workflow definition
   def processes
