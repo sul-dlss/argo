@@ -17,8 +17,8 @@ RSpec.describe SerialsForm do
             {
               structuredValue: [
                 { value: 'My Serial', type: 'main title' },
-                { value: '7', type: 'part number' },
-                { value: 'samurai', type: 'part name' }
+                { value: 'Non-serial part', type: 'part number' },
+                { value: 'Non-serial number', type: 'part name' }
               ]
             }
           ],
@@ -171,6 +171,41 @@ RSpec.describe SerialsForm do
       end
 
       it 'retains the existing refresh and removes the labels' do
+        expect(Repository).to have_received(:store).with(expected)
+      end
+    end
+
+    context 'with more than one catalogLink' do
+      let(:cocina_item) do
+        build(:dro_with_metadata, id: druid).new(description:, identification:)
+      end
+      let(:identification) do
+        {
+          catalogLinks: [
+            { catalog: 'folio', refresh: true, catalogRecordId: 'a6671606', partLabel: '7 samurai', sortKey: '1' },
+            { catalog: 'symphony', refresh: false, catalogRecordId: '6671606' }
+          ],
+          sourceId: 'sul:1234'
+        }
+      end
+      let(:expected) do
+        build(:dro_with_metadata, id: druid).new(
+          description:,
+          identification: {
+            catalogLinks: [
+              { catalog: 'folio', partLabel: '11 ninjas', sortKey: '2', refresh: true, catalogRecordId: 'a6671606' },
+              { catalog: 'symphony', refresh: false, catalogRecordId: '6671606' }
+            ],
+            sourceId: 'sul:1234'
+          }
+        )
+      end
+
+      it 'validates and saves the folio link' do
+        expect(instance.part_label).to eq '7 samurai'
+        expect(instance.sort_key).to eq '1'
+        instance.validate({ part_label: '11 ninjas', sort_key: '2' })
+        instance.save
         expect(Repository).to have_received(:store).with(expected)
       end
     end
