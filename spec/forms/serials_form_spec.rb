@@ -101,7 +101,7 @@ RSpec.describe SerialsForm do
       end
 
       it 'does validate' do
-        expect(instance.validate({ part_label: '7 samurai', sort_key: '2' }))
+        expect(instance.validate({ part_label: '7 samurai', sort_key: '2' })).to be true
       end
     end
 
