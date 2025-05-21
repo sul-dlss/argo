@@ -36,6 +36,6 @@ RSpec.describe 'Update serials metadata', :js do
     fill_in 'Sort key', with: '17'
     click_button 'Update'
 
-    expect(page).to have_content 'test object. part 17, supplement'
+    expect(page).to have_content 'test object, part 17, supplement'
   end
 end
