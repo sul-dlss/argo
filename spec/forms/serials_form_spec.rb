@@ -149,6 +149,38 @@ RSpec.describe SerialsForm do
       end
     end
 
+    context 'when trailing whitespace entered' do
+      let(:cocina_item) do
+        build(:dro_with_metadata, id: druid).new(identification:, description:)
+      end
+      let(:identification) do
+        {
+          catalogLinks: [
+            { catalog: 'folio', catalogRecordId: 'a6671606', refresh: true, partLabel: 'a space ', sortKey: '' }
+          ],
+          sourceId: 'sul:1234'
+        }
+      end
+      let(:expected) do
+        build(:dro_with_metadata, id: druid).new(
+          description: description,
+          identification: {
+            catalogLinks: [
+              { catalog: 'folio', refresh: true, catalogRecordId: 'a6671606', partLabel: 'a space', sortKey: '' }
+            ],
+            sourceId: 'sul:1234'
+          }
+        )
+      end
+
+      it 'saves without whitespace' do
+        expect(instance.part_label).to eq 'a space '
+        instance.validate({ part_label: 'a space ', sort_key: '' })
+        instance.save
+        expect(Repository).to have_received(:store).with(expected)
+      end
+    end
+
     context 'when blank form submitted' do
       let(:cocina_item) do
         build(:dro_with_metadata, id: druid, folio_instance_hrids: ['a6671606']).new(description: description)

@@ -25,7 +25,7 @@ class SerialsForm < ApplicationChangeSet
     model.identification.catalogLinks.map do |catalog_link|
       catalog_link_hash = catalog_link.to_h
 
-      next catalog_link_hash.merge(partLabel: part_label, sortKey: sort_key) if catalog_link.catalog == 'folio'
+      next catalog_link_hash.merge(partLabel: part_label&.strip, sortKey: sort_key&.strip) if catalog_link.catalog == 'folio'
 
       catalog_link_hash
     end
