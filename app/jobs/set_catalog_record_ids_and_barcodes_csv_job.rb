@@ -54,8 +54,8 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < GenericJob
         end
 
         change_set_params[:refresh] = row['refresh']&.downcase != 'false'
-        change_set_params[:part_label] = row['part_label']
-        change_set_params[:sort_key] = row['sort_key']
+        change_set_params[:part_label] = row['part_label']&.strip
+        change_set_params[:sort_key] = row['sort_key']&.strip
       end
     end
   end
