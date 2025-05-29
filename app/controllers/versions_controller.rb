@@ -2,6 +2,13 @@
 
 class VersionsController < ApplicationController
   before_action :load_and_authorize_resource
+  before_action :find_version_cocina, only: [:show]
+
+  def show
+    respond_to do |format|
+      format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
+    end
+  end
 
   def open_ui
     respond_to do |format|
@@ -52,4 +59,8 @@ class VersionsController < ApplicationController
     @cocina_object = Repository.find(params[:item_id])
     authorize! :update, @cocina_object
   end
+end
+
+def find_version_cocina
+  @cocina = Repository.find_version(params[:item_id], params[:version_id])
 end
