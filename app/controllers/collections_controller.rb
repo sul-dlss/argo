@@ -52,7 +52,7 @@ class CollectionsController < ApplicationController
     return unless enforce_versioning
 
     change_set = CollectionChangeSet.new(@cocina)
-    attributes = params.require(:collection).permit(:view_access, :copyright, :use_statement, :license)
+    attributes = params.expect(collection: %i[view_access copyright use_statement license])
     change_set.validate(**attributes)
     change_set.save
     Dor::Services::Client.object(@cocina.externalIdentifier).reindex

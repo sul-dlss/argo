@@ -40,7 +40,7 @@ gem 'view_component'
 gem 'zip_tricks'
 
 # Stanford related gems
-gem 'blacklight', '~> 7.37', github: 'projectblacklight/blacklight', branch: 'release-7.x-bump-rails-8.0'
+gem 'blacklight', '~> 7.41'
 gem 'blacklight-hierarchy', '~> 6.1'
 gem 'dor-services-client', '~> 15.1'
 gem 'dor-workflow-client', '~> 7.0'

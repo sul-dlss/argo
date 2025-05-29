@@ -1,20 +1,3 @@
-GIT
-  remote: https://github.com/projectblacklight/blacklight.git
-  revision: 78c26efd00742a4d1d02088bb5d9922d1ec51e3d
-  branch: release-7.x-bump-rails-8.0
-  specs:
-    blacklight (7.40.0)
-      deprecation
-      globalid
-      hashdiff
-      i18n (>= 1.7.0)
-      jbuilder (~> 2.7)
-      kaminari (>= 0.15)
-      ostruct (>= 0.3.2)
-      rails (>= 6.1, < 8.1)
-      view_component (>= 2.74, < 4)
-      zeitwerk
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -110,6 +93,17 @@ GEM
       smart_properties
     bigdecimal (3.2.0)
     bindex (0.8.1)
+    blacklight (7.41.0)
+      deprecation
+      globalid
+      hashdiff
+      i18n (>= 1.7.0)
+      jbuilder (~> 2.7)
+      kaminari (>= 0.15)
+      ostruct (>= 0.3.2)
+      rails (>= 6.1, < 8.1)
+      view_component (>= 2.74, < 4)
+      zeitwerk
     blacklight-hierarchy (6.5.0)
       blacklight (>= 7.18, < 9)
       deprecation
@@ -704,7 +698,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.37)!
+  blacklight (~> 7.41)
   blacklight-hierarchy (~> 6.1)
   bootsnap (>= 1.4.2)
   cancancan
