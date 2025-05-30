@@ -6,6 +6,8 @@ class CocinaObjectsController < ApplicationController
   def show
     @cocina_object = if user_version
                        Repository.find_user_version(druid, user_version)
+                     elsif version
+                       Repository.find_version(druid, version)
                      else
                        Repository.find(druid)
                      end
@@ -18,7 +20,11 @@ class CocinaObjectsController < ApplicationController
   end
 
   def user_version
-    decrypted_token[:user_version]
+    decrypted_token[:user_version_id]
+  end
+
+  def version
+    decrypted_token[:version_id]
   end
 
   # Decode the token that grants view access

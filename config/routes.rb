@@ -174,7 +174,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :version, only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
+    resources :version, controller: 'versions', only: %i[show], constraints: ->(req) { req.format == :json }, param: :version_id, as: 'version_json'
 
     resources :version, only: [], param: :version_id, controller: 'versions' do
       member do

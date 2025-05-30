@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 class VersionsController < ApplicationController
-  before_action :load_and_authorize_resource
+  before_action :load_and_authorize_resource, except: [:show]
+
+  def show
+    load_and_authorize_view_resource
+    find_version_cocina
+    respond_to do |format|
+      format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
+    end
+  end
 
   def open_ui
     respond_to do |format|
@@ -51,5 +59,14 @@ class VersionsController < ApplicationController
   def load_and_authorize_resource
     @cocina_object = Repository.find(params[:item_id])
     authorize! :update, @cocina_object
+  end
+
+  def load_and_authorize_view_resource
+    @cocina_object = Repository.find(params[:item_id])
+    authorize! :read, @cocina_object
+  end
+
+  def find_version_cocina
+    @cocina = Repository.find_version(params[:item_id], params[:version_id])
   end
 end

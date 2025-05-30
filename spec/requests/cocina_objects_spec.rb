@@ -34,7 +34,7 @@ RSpec.describe 'Cocina objects' do
     let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, find: cocina_object) }
 
     before do
-      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000', user_version: 2 })
+      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000', user_version_id: 2 })
     end
 
     it 'renders a turbo-frame' do
@@ -42,6 +42,23 @@ RSpec.describe 'Cocina objects' do
       expect(response).to have_http_status(:ok)
       expect(rendered.find_css('turbo-frame#cocina_object')).to be_present
       expect(user_version_client).to have_received(:find).with(2)
+    end
+  end
+
+  context 'when a system version' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, find: cocina_object) }
+
+    before do
+      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000', version_id: 2 })
+    end
+
+    it 'renders a turbo-frame' do
+      get '/items/skret-t0k3n/cocina_object'
+      expect(response).to have_http_status(:ok)
+      expect(rendered.find_css('turbo-frame#cocina_object')).to be_present
+      expect(version_client).to have_received(:find).with(2)
     end
   end
 end
