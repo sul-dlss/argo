@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class VersionsController < ApplicationController
-  before_action :load_and_authorize_resource
+  before_action :load_and_authorize_resource, except: [:show]
+  before_action :load_and_authorize_view_resource, only: [:show]
   before_action :find_version_cocina, only: [:show]
 
   def show
@@ -59,8 +60,13 @@ class VersionsController < ApplicationController
     @cocina_object = Repository.find(params[:item_id])
     authorize! :update, @cocina_object
   end
-end
 
-def find_version_cocina
-  @cocina = Repository.find_version(params[:item_id], params[:version_id])
+  def load_and_authorize_view_resource
+    @cocina_object = Repository.find(params[:item_id])
+    authorize! :read, @cocina_object
+  end
+
+  def find_version_cocina
+    @cocina = Repository.find_version(params[:item_id], params[:version_id])
+  end
 end
