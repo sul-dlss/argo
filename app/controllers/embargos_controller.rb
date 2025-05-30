@@ -44,7 +44,7 @@ class EmbargosController < ApplicationController
   private
 
   def update_params
-    params.require(EmbargoForm.model_name.param_key).permit(:release_date, :view_access, :download_access,
-                                                            :access_location)
+    params.expect(EmbargoForm.model_name.param_key => %i[release_date view_access download_access
+                                                         access_location])
   end
 end

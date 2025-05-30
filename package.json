@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@github/time-elements": "^3.0.7",
-    "@hotwired/turbo-rails": "^7.0.1",
+    "@hotwired/turbo-rails": "^8.0.1",
     "@popperjs/core": "^2.10.2",
     "autocomplete.js": "^0.37.1",
     "blacklight-frontend": "^7.20.2",

@@ -211,9 +211,9 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:item)
-          .permit(:barcode, :copyright, :use_statement, :license,
-                  :view_access, :download_access, :access_location, :controlled_digital_lending)
+    params
+      .expect(item: %i[barcode copyright use_statement license
+                       view_access download_access access_location controlled_digital_lending])
   end
 
   def load_cocina

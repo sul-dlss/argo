@@ -58,11 +58,11 @@ Rails.application.routes.draw do
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
-  resource :profile, controller: 'profile', only: [:index] do
+  resource :profile, controller: 'profile', only: [] do
     concerns :searchable
   end
 
-  resource :catalog, only: [:index], controller: 'catalog', path: '/catalog' do
+  resource :catalog, only: [], controller: 'catalog', path: '/catalog' do
     concerns :searchable
     member do
       get 'lazy_nonproject_tag_facet'

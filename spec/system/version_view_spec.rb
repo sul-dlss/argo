@@ -246,7 +246,7 @@ RSpec.describe 'Version view', :js do
       it 'shows a 404' do
         visit item_version_path(item_id: druid, version_id: 4)
 
-        expect(page).to have_content('The page you were looking for doesn\'t exist.')
+        expect(page).to have_content('The page you were looking for doesn’t exist.')
       end
     end
   end

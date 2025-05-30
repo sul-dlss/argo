@@ -26,8 +26,8 @@ gem 'pg'
 gem 'prawn', '~> 1' # Prawn is used to create "tracksheets"
 gem 'prawn-table'
 gem 'propshaft'
-gem 'puma', '~> 6.4' # Use Puma as the app server
-gem 'rails', '~> 7.2.0'
+gem 'puma' # Use Puma as the app server
+gem 'rails', '~> 8.0.0'
 gem 'rake'
 gem 'reform-rails'
 gem 'retries'
@@ -35,12 +35,12 @@ gem 'roo', '~> 2.9.0' # work with newer Excel files and other types (xlsx, ods, 
 gem 'roo-xls' # needed to work with legacy Excel files (xls)
 gem 'rubyzip'
 gem 'sidekiq', '~> 7.1'
-gem 'turbo-rails', '~> 1.0'
+gem 'turbo-rails', '~> 2.0'
 gem 'view_component'
 gem 'zip_tricks'
 
 # Stanford related gems
-gem 'blacklight', '~> 7.37'
+gem 'blacklight', '~> 7.41'
 gem 'blacklight-hierarchy', '~> 6.1'
 gem 'dor-services-client', '~> 15.1'
 gem 'dor-workflow-client', '~> 7.0'
