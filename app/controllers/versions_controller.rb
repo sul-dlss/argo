@@ -2,10 +2,10 @@
 
 class VersionsController < ApplicationController
   before_action :load_and_authorize_resource, except: [:show]
-  before_action :load_and_authorize_view_resource, only: [:show]
-  before_action :find_version_cocina, only: [:show]
 
   def show
+    load_and_authorize_view_resource
+    find_version_cocina
     respond_to do |format|
       format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
     end
