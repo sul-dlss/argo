@@ -25,7 +25,7 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq [
-            'Unexpected or missing title structuredValue columns: found title1.structuredValue2.value but not title1.structuredValue2.type'
+            'Missing title type for title1.structuredValue2.value. Expected title1.structuredValue2.type.'
           ]
         end
       end
@@ -36,8 +36,8 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq [
-            'Unexpected or missing title structuredValue columns: found title2.structuredValue1.type but not title2.structuredValue1.value',
-            'Unexpected or missing title structuredValue columns: found title2.structuredValue2.value but not title2.structuredValue2.type'
+            'Missing title structured value for title2.structuredValue1.type. Expected title2.structuredValue1.value.',
+            'Missing title type for title2.structuredValue2.value. Expected title2.structuredValue2.type.'
           ]
         end
       end
@@ -48,8 +48,8 @@ RSpec.describe DescriptionValidator do
         it 'finds errors' do
           expect(instance.valid?).to be false
           expect(instance.errors).to eq [
-            'Unexpected or missing title structuredValue columns: found title2.structuredValue2.type but not title2.structuredValue2.value',
-            'Unexpected or missing title structuredValue columns: found title3.structuredValue2.value but not title3.structuredValue2.type'
+            'Missing title structured value for title2.structuredValue2.type. Expected title2.structuredValue2.value.',
+            'Missing title type for title3.structuredValue2.value. Expected title3.structuredValue2.type.'
           ]
         end
       end
@@ -68,8 +68,10 @@ RSpec.describe DescriptionValidator do
 
         it 'finds errors' do
           expect(instance.valid?).to be false
-          expect(instance.errors).to eq ['Title column not found.',
-                                         'Unexpected or missing title structuredValue columns: found title1.structuredValue1.type but not title1.structuredValue1.value']
+          expect(instance.errors).to eq [
+            'Title column not found.',
+            'Missing title structured value for title1.structuredValue1.type. Expected title1.structuredValue1.value.'
+          ]
         end
       end
 
@@ -78,8 +80,9 @@ RSpec.describe DescriptionValidator do
 
         it 'finds errors' do
           expect(instance.valid?).to be false
-          expect(instance.errors).to eq ['Title column not found.',
-                                         'Unexpected or missing title structuredValue columns: found title1.structuredValue1.value but not title1.structuredValue1.type']
+          expect(instance.errors).to eq [
+            'Missing title type for title1.structuredValue1.value. Expected title1.structuredValue1.type.'
+          ]
         end
       end
 
@@ -91,8 +94,27 @@ RSpec.describe DescriptionValidator do
         end
       end
 
+      context 'with a title1.structuredValue1.value and a title1.type column' do
+        let(:csv) { 'druid,title1.type,title1.structuredValue1.value' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Missing title type for title1.structuredValue1.value. Expected title1.structuredValue1.type.'
+          ]
+        end
+      end
+
       context 'with a title1.value,title2.structuredValue1.value and a title2.structuredValue1.type column' do
         let(:csv) { 'druid,title1.value,title2.structuredValue1.type,title2.structuredValue1.value' }
+
+        it 'validates' do
+          expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with a title1.type,title1.structuredValue1.value and a title1.structuredValue1.type column' do
+        let(:csv) { 'druid,title1.value,title2.structuredValue1.type,title2.structuredValue1.value,title2.type' }
 
         it 'validates' do
           expect(instance.valid?).to be true
@@ -124,14 +146,36 @@ RSpec.describe DescriptionValidator do
 
         it 'validates' do
           expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Missing title value for title2.structuredValue2.type.'
+          ]
         end
       end
 
-      context 'when the csv file has a missing title1.type' do
-        let(:csv) { File.read('spec/fixtures/files/descriptive-upload-bad-2.csv') }
+      context 'with title1.value and title2 structured value with type' do
+        let(:csv) do
+          <<~CSV
+            druid,title1.value,title2.type,title2.structuredValue1.value,title2.structuredValue1.type
+            druid:ab123cd4567,title1,title2_type,title2_value1,title2_type1
+          CSV
+        end
 
         it 'validates' do
-          expect(instance.valid?).to be false
+          expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with title1.value and title1.type' do
+        let(:csv) do
+          <<~CSV
+            druid,title1.value,title1.type
+            druid:ab123cd4567,title with type,type
+            druid:cd456de5678,title without type,
+          CSV
+        end
+
+        it 'validates' do
+          expect(instance.valid?).to be true
         end
       end
 
@@ -140,6 +184,17 @@ RSpec.describe DescriptionValidator do
 
         it 'validates' do
           expect(instance.valid?).to be true
+        end
+      end
+
+      context 'with a title2.type column but no value column' do
+        let(:csv) { 'druid,title1.value,title2.type' }
+
+        it 'finds errors' do
+          expect(instance.valid?).to be false
+          expect(instance.errors).to eq [
+            'Missing title value for title2.type. Expected either title2.value or title2.structuredValue1.value.'
+          ]
         end
       end
 
@@ -161,7 +216,7 @@ RSpec.describe DescriptionValidator do
 
       context 'with headers that do not map to cocina model' do
         let(:csv) do
-          'druid,title1.value,title2.value,title3.value,bogus,event.contributor,event1.contributor,event1.note1.source.value'
+          'druid,title1.value,title1.type,title2.value,title2.type,title3.value,title3.type,bogus,event.contributor,event1.contributor,event1.note1.source.value'
         end
 
         it 'finds errors' do
@@ -174,7 +229,7 @@ RSpec.describe DescriptionValidator do
       end
 
       context 'with missing header for column' do
-        let(:csv) { 'druid,title1.value,,title2.value' }
+        let(:csv) { 'druid,title1.value,title1.type,,title2.value,title2.type' }
 
         it 'finds errors' do
           expect(instance.valid?).to be false
