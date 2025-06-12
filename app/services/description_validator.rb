@@ -14,9 +14,9 @@ class DescriptionValidator
     validate_title_headers
     validate_title_value_for_type
     validate_title_value_for_structured_type
-    validate_title_type_for_value
     validate_title_type_for_structured_value
-    validate_structured_title_types
+    validate_title_types_and_values
+    validate_structured_title_types_and_values
     validate_header_paths
     validate_cell_values
     if @bulk_job
@@ -81,43 +81,49 @@ class DescriptionValidator
     end
   end
 
-  # verify that each titleX.value has a corresponding titleX.type
-  def validate_title_type_for_value
-    @headers.each do |header|
-      next unless (match = header&.match(/\Atitle(\d+)\.value\z/))
-
-      expected_header = "title#{match[1]}.type"
-
-      next if @headers.include?(expected_header)
-
-      @errors << "Missing title value for #{header}. Expected #{expected_header}."
-    end
-  end
-
-  # verify that each titleX.structuredValueY.value has a corresponding titleX.type or titleX.structuredValueY.type
+  # verify that each titleX.structuredValueY.value has a corresponding titleX.structuredValueY.type
   def validate_title_type_for_structured_value
     @headers.each do |header|
       next unless (match = header&.match(/\Atitle(\d+)\.structuredValue(\d+)\.value\z/))
 
-      expected_header1 = "title#{match[1]}.type"
-      expected_header2 = "title#{match[1]}.structuredValue#{match[2]}.type"
+      expected_header = "title#{match[1]}.structuredValue#{match[2]}.type"
 
-      next if @headers.include?(expected_header1) || @headers.include?(expected_header2)
+      next if @headers.include?(expected_header)
 
-      @errors << "Missing title type for #{header}. Expected either #{expected_header1} or #{expected_header2}."
+      @errors << "Missing title type for #{header}. Expected #{expected_header}."
     end
   end
 
-  # verify that each titleX.type and titleX.structuredValueY.type is a valid cocina title type with a corresponding *.value
-  def validate_structured_title_types
-    @headers.grep(/\Atitle\d+.type\z|\Atitle\d+.structuredValue\d+\.type\z/).each do |title_type_header|
-      title_value_header = title_type_header.sub('type', 'value')
+  # verify that each titleX.type there is a corresponding titleX.value or titleX.structuredValue1.value
+  def validate_title_types_and_values # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    @headers.filter_map { |header| header&.match(/\Atitle(\d+)\.type\z/) }.each do |matcher|
+      title_value_header = "title#{matcher[1]}.value"
+      title_structured_value_header = "title#{matcher[1]}.structuredValue1.value"
+      title_type_header = "title#{matcher[1]}.type"
+
+      next unless @headers.include?(title_value_header) || @headers.include?(title_structured_value_header)
 
       @csv.each do |row|
-        next if row[title_value_header].blank? && row[title_type_header].blank?
+        next if row[title_type_header].blank? && row[title_structured_value_header].blank? && row[title_value_header].blank?
 
-        @errors << "Missing title value for #{title_type_header}." if row[title_value_header].blank?
-        @errors << "Missing title type for #{title_value_header}." if row[title_type_header].blank?
+        @errors << "Missing title value for #{title_type_header}." if row[title_value_header].blank? && row[title_structured_value_header].blank?
+      end
+    end
+  end
+
+  # verify that for each titleX.structuredValueY.type there is a corresponding titleX.structuredValueY.value
+  def validate_structured_title_types_and_values # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    @headers.filter_map { |header| header&.match(/\Atitle(\d+)\.structuredValue(\d+)\.type\z/) }.each do |matcher|
+      title_structured_value_header = "title#{matcher[1]}.structuredValue#{matcher[2]}.value"
+      title_structured_type_header = "title#{matcher[1]}.structuredValue#{matcher[2]}.type"
+
+      next unless @headers.include?(title_structured_value_header)
+
+      @csv.each do |row|
+        next if row[title_structured_value_header].blank? && row[title_structured_type_header].blank?
+
+        @errors << "Missing title value for #{title_structured_type_header}." if row[title_structured_value_header].blank?
+        @errors << "Missing title type for #{title_structured_value_header}." if row[title_structured_type_header].blank?
       end
     end
   end
