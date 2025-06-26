@@ -150,7 +150,7 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.104.0)
+    cocina-models (0.104.1)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -206,12 +206,13 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.12.0)
+    dor-services-client (15.13.0)
       activesupport (>= 7.0.0)
-      cocina-models (~> 0.104.0)
+      cocina-models (~> 0.104.1)
       deprecation
       faraday (~> 2.0)
       faraday-retry
+      nokogiri
       zeitwerk (~> 2.1)
     dor-workflow-client (7.7.0)
       activesupport (>= 7.0.0)
@@ -232,7 +233,7 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.1)
       zeitwerk (~> 2.6)
-    dry-monads (1.8.3)
+    dry-monads (1.9.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.1)
       zeitwerk (~> 2.6)
@@ -599,9 +600,9 @@ GEM
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    sdr-client (2.22.0)
+    sdr-client (2.23.0)
       activesupport
-      cocina-models (~> 0.104.0)
+      cocina-models (~> 0.104.1)
       config
       dry-monads
       faraday (>= 0.16)
