@@ -633,6 +633,37 @@ RSpec.describe DescriptionImport do
           end
         end
       end
+
+      context 'when form.structuredValue present' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,purl,title1.value,form1.source.value,form1.structuredValue1.type,form1.structuredValue1.value,form1.structuredValue2.type,form1.structuredValue2.value,form1.type
+            jr825qh8124,form:values,https://purl/jr825qh8124,#{title},Stanford self-deposit resource types,type,Text,subtype,Article,resource type
+          CSV
+        end
+        let(:expected_form) do
+          {
+            structuredValue: [
+              {
+                value: 'Text',
+                type: 'type'
+              },
+              {
+                value: 'Article',
+                type: 'subtype'
+              }
+            ],
+            type: 'resource type',
+            source: {
+              value: 'Stanford self-deposit resource types'
+            }
+          }
+        end
+
+        it 'has the expected value' do
+          expect(updated.value!.to_h).to eq expected.to_h
+        end
+      end
     end
 
     context 'when at nested level' do

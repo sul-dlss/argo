@@ -104,11 +104,11 @@ class DescriptionImport
     end
   end
 
-  def remove_form_if_source_without_value(compacted_params_hash)
+  def remove_form_if_source_without_value(compacted_params_hash) # rubocop:disable Metrics/CyclomaticComplexity
     return unless compacted_params_hash && compacted_params_hash[:form]
 
     compacted_params_hash[:form].delete_if do |form|
-      form && form[:value].nil? && (form[:source].present? || form[:type].present?)
+      form && form[:value].nil? && form[:structuredValue].nil? && (form[:source].present? || form[:type].present?)
     end
   end
 
