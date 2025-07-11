@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Create a new item' do
   let(:druid) { 'druid:abc' }
-  let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags:) }
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: nil) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags:, workflow: workflow_client) }
   let(:administrative_tags) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:dor_registration) { instance_double(Cocina::Models::DRO, externalIdentifier: druid) }
   let(:headers) do
@@ -20,7 +20,6 @@ RSpec.describe 'Create a new item' do
   before do
     sign_in(create(:user))
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_service)
   end
 
   context 'when source_id is not provided' do
@@ -52,7 +51,7 @@ RSpec.describe 'Create a new item' do
       post '/registration', params: submitted
       expect(response.body).to include 'Source ID is invalid'
 
-      expect(workflow_service).not_to have_received(:create_workflow_by_name)
+      expect(workflow_client).not_to have_received(:create)
     end
   end
 
@@ -109,6 +108,7 @@ RSpec.describe 'Create a new item' do
 
     it 'registers the object' do
       post '/registration', params: submitted
+
       expect(response).to have_http_status(:ok)
     end
   end
@@ -171,8 +171,7 @@ RSpec.describe 'Create a new item' do
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      expect(workflow_client).to have_received(:create).with(version: '1')
     end
   end
 
@@ -235,8 +234,8 @@ RSpec.describe 'Create a new item' do
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      expect(workflow_client).to have_received(:create)
+        .with(version: '1')
     end
   end
 
@@ -310,8 +309,8 @@ RSpec.describe 'Create a new item' do
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      expect(workflow_client).to have_received(:create)
+        .with(version: '1')
     end
   end
 
@@ -380,8 +379,8 @@ RSpec.describe 'Create a new item' do
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      expect(workflow_client).to have_received(:create)
+        .with(version: '1')
     end
   end
 
@@ -444,8 +443,8 @@ RSpec.describe 'Create a new item' do
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      expect(workflow_client).to have_received(:create)
+        .with(version: '1')
     end
   end
 
@@ -552,8 +551,8 @@ RSpec.describe 'Create a new item' do
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_service).to have_received(:create_workflow_by_name)
-        .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      expect(workflow_client).to have_received(:create)
+        .with(version: '1')
     end
   end
 end

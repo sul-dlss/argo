@@ -55,14 +55,8 @@ class ReportController < CatalogController
 
       next unless current_ability.can_update_workflow?('waiting', cocina)
 
-      WorkflowClientFactory.build.update_status(
-        druid:,
-        workflow:,
-        process: step,
-        current_status: 'error',
-        status: 'waiting'
-      )
-    rescue Dor::WorkflowException => e
+      Dor::Services::Client.object(druid).workflow(workflow).process(step).update(status: 'waiting', current_status: 'error')
+    rescue Dor::Services::Client::ConflictResponse => e
       # NOTE: this may be triggered if the step being set to waiting is no longer in error
       # which should not normally happen, because the list of druids fetched by `Report` should all be in error
       Honeybadger.notify(e, context: { druid: })

@@ -20,9 +20,7 @@ class AddWorkflowJob < GenericJob
       next failure.call("#{workflow_name} already exists") if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier,
                                                                                                wf_name: workflow_name, version: cocina_object.version)
 
-      WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
-                                                          workflow_name,
-                                                          version: cocina_object.version)
+      Dor::Services::Client.object(cocina_object.externalIdentifier).workflow(workflow_name).create(version: cocina_object.version)
       success.call("started #{workflow_name}")
     end
   end

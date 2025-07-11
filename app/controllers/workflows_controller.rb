@@ -7,7 +7,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:item_id` The druid for the object.
   # @option params [String] `:id` The workflow name. e.g., accessionWF.
   def show
-    workflow = WorkflowClientFactory.build.workflow(pid: params[:item_id], workflow_name: params[:id])
+    workflow = Dor::Services::Client.object(params[:item_id]).workflow(params[:id]).find
     respond_to do |format|
       format.html do
         @presenter = build_show_presenter(workflow)
@@ -37,9 +37,7 @@ class WorkflowsController < ApplicationController
     # check the workflow is present and active (not archived)
     return redirect_to solr_document_path(cocina_object.externalIdentifier), flash: { error: "#{wf_name} already exists!" } if WorkflowService.workflow_active?(druid: cocina_object.externalIdentifier, version: cocina_object.version, wf_name:)
 
-    WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
-                                                        wf_name,
-                                                        version: cocina_object.version)
+    Dor::Services::Client.object(cocina_object.externalIdentifier).workflow(wf_name).create(version: cocina_object.version)
 
     # Force a Solr update before redirection.
     Dor::Services::Client.object(cocina_object.externalIdentifier).reindex
@@ -62,20 +60,17 @@ class WorkflowsController < ApplicationController
     return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], cocina)
 
     # this will raise an exception if the item doesn't have that workflow step
-    WorkflowClientFactory.build.workflow_status(druid: params[:item_id],
-                                                workflow: params[:id],
-                                                process: params[:process])
+    raise 'undefined workflow step' if Dor::Services::Client.object(params[:item_id]).workflow(params[:id]).process(params[:process]).status.nil?
+
     # update the status for the step and redirect to the workflow view page
-    WorkflowClientFactory.build.update_status(druid: params[:item_id],
-                                              workflow: params[:id],
-                                              process: params[:process],
-                                              status: params[:status])
+    Dor::Services::Client.object(params[:item_id]).workflow(params[:id]).process(params[:process]).update(status: params[:status])
+
     msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:item_id]}"
     redirect_to solr_document_path(params[:item_id]), notice: msg
   end
 
   def history
-    @history_xml = WorkflowClientFactory.build.workflow_routes.all_workflows(pid: params[:item_id]).xml
+    @history_xml = Dor::Services::Client.object(params[:item_id]).workflows.xml.to_xml
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -98,8 +93,6 @@ class WorkflowsController < ApplicationController
   end
 
   def workflow_processes(workflow_name)
-    client = WorkflowClientFactory.build
-    workflow_definition = client.workflow_template(workflow_name)
-    workflow_definition['processes'].map { |process| process['name'] } # rubocop:disable Rails/Pluck
+    Dor::Services::Client.workflows.template(workflow_name)['processes'].map { |process| process['name'] } # rubocop:disable Rails/Pluck
   end
 end

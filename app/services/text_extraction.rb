@@ -22,11 +22,7 @@ class TextExtraction
     # this is to ensure the new workflow is started with the same version as the existing object
     # if the object is already open, they are the same; if not, ocrWF/speechToTextWF will open the object version, incrementing it
     version += 1 unless @already_opened
-    WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
-                                                        wf_name,
-                                                        lane_id: 'low',
-                                                        context:,
-                                                        version:)
+    Dor::Services::Client.object(cocina_object.externalIdentifier).workflow(wf_name).create(version:, lane_id: 'low', context:)
   end
 
   def possible?

@@ -14,10 +14,10 @@ class WorkflowTableComponent < ApplicationComponent
   end
 
   def workflow_process_names
-    client = WorkflowClientFactory.build
-    workflow_definition = client.workflow_template(name)
-    workflow_definition['processes'].collect { |process| [process['name'], process['label']] }
-  rescue Dor::WorkflowException
+    Dor::Services::Client.workflows
+                         .template(name)['processes']
+                         .map { |process| [process['name'], process['label']] }
+  rescue Dor::Services::Client::NotFoundResponse
     Honeybadger.notify("no workflow template found for '#{name}'")
     []
   end
