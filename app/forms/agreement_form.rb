@@ -28,7 +28,7 @@ class AgreementForm < Reform::Form
     @model = Result.new(RegisterAgreement.register(model:, uploaded_files: agreement_files))
   end
 
-  Result = Struct.new(:externalIdentifier)
+  Result = Struct.new(:externalIdentifier) # rubocop:disable Naming/MethodName
 
   def new_resource(title:, source_id:)
     Cocina::Models.build_request({

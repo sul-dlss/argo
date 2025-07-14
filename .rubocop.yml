@@ -61,7 +61,7 @@ Metrics/ModuleLength:
   Exclude:
     - "lib/constants.rb"
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   ForbiddenPrefixes:
     - is_
 
