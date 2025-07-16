@@ -154,7 +154,7 @@ RSpec.describe TextExtraction do
 
         it 'starts ocrWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, version:, context: ocr_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version:, context: ocr_context)
         end
       end
 
@@ -163,7 +163,7 @@ RSpec.describe TextExtraction do
 
         it 'starts ocrWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, version:, context: ocr_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version:, context: ocr_context)
         end
       end
 
@@ -172,7 +172,7 @@ RSpec.describe TextExtraction do
 
         it 'starts ocrWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, version:, context: ocr_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version:, context: ocr_context)
         end
       end
 
@@ -181,7 +181,7 @@ RSpec.describe TextExtraction do
 
         it 'starts speechToTextWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, speech_to_text_wf, version:, context: speech_to_text_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, speech_to_text_wf, lane_id: 'low', version:, context: speech_to_text_context)
         end
       end
     end
@@ -194,7 +194,7 @@ RSpec.describe TextExtraction do
 
         it 'starts ocrWF for the next version and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, version: version + 1, context: ocr_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version: version + 1, context: ocr_context)
         end
       end
 
@@ -203,7 +203,7 @@ RSpec.describe TextExtraction do
 
         it 'starts ocrWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, version: version + 1, context: ocr_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version: version + 1, context: ocr_context)
         end
       end
 
@@ -212,7 +212,7 @@ RSpec.describe TextExtraction do
 
         it 'starts ocrWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, version: version + 1, context: ocr_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version: version + 1, context: ocr_context)
         end
       end
 
@@ -221,7 +221,7 @@ RSpec.describe TextExtraction do
 
         it 'starts speechToTextWF and returns true' do
           expect(text_extraction.start).to be true
-          expect(client).to have_received(:create_workflow_by_name).with(druid, speech_to_text_wf, version: version + 1, context: speech_to_text_context)
+          expect(client).to have_received(:create_workflow_by_name).with(druid, speech_to_text_wf, lane_id: 'low', version: version + 1, context: speech_to_text_context)
         end
       end
     end
@@ -231,7 +231,7 @@ RSpec.describe TextExtraction do
 
       it 'returns false and does nothing' do
         expect(text_extraction.start).to be false
-        expect(client).not_to have_received(:create_workflow_by_name).with(druid, ocr_wf, version:, context: ocr_context)
+        expect(client).not_to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version:, context: ocr_context)
       end
     end
 
@@ -240,7 +240,7 @@ RSpec.describe TextExtraction do
 
       it 'returns false and does nothing' do
         expect(text_extraction.start).to be false
-        expect(client).not_to have_received(:create_workflow_by_name).with(druid, ocr_wf, version:, context: ocr_context)
+        expect(client).not_to have_received(:create_workflow_by_name).with(druid, ocr_wf, lane_id: 'low', version:, context: ocr_context)
       end
     end
   end
