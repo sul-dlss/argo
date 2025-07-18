@@ -10,7 +10,6 @@ RSpec.describe DescriptiveMetadataExportJob do
   let(:log_buffer) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
-  let(:response) { instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong') }
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
@@ -38,6 +37,8 @@ RSpec.describe DescriptiveMetadataExportJob do
     end
 
     context 'when happy path' do
+      let(:response) { instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong') }
+
       before do
         allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::UnexpectedResponse.new(response:))
         job.perform(bulk_action.id, druids:, groups:, user:)
@@ -78,6 +79,46 @@ RSpec.describe DescriptiveMetadataExportJob do
 
       it 'logs error messages' do
         expect(log_buffer).to have_received(:puts).with(/Failed NoMethodError .+ for #{druid3}/).once
+      end
+    end
+
+    context 'when missing druid is included' do
+      let(:response) { instance_double(Faraday::Response, status: 404, body: nil, reason_phrase: "Couldn't find object with 'external_identifier'=#{druid3}") }
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::NotFoundResponse.new(response:))
+        allow(log_buffer).to receive(:puts)
+        job.perform(bulk_action.id, druids:, groups:, user:)
+      end
+
+      it 'tracks success/failure' do
+        expect(bulk_action.druid_count_success).to eq(2)
+        expect(bulk_action.druid_count_fail).to eq(1)
+        expect(bulk_action.druid_count_total).to eq(3)
+      end
+
+      it 'logs error messages' do
+        expect(log_buffer).to have_received(:puts).with(/Could not find object identified by druid '#{druid3}'/).once
+      end
+    end
+
+    context 'when malformed druid is included' do
+      let(:response) { instance_double(Faraday::Response, status: 400, body: nil, reason_phrase: "#/components/schemas/Druid pattern ^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$ does not match value: \"#{druid3}\", example: druid:bc123df4567") }
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::BadRequestError.new(response:))
+        allow(log_buffer).to receive(:puts)
+        job.perform(bulk_action.id, druids:, groups:, user:)
+      end
+
+      it 'tracks success/failure' do
+        expect(bulk_action.druid_count_success).to eq(2)
+        expect(bulk_action.druid_count_fail).to eq(1)
+        expect(bulk_action.druid_count_total).to eq(3)
+      end
+
+      it 'logs error messages' do
+        expect(log_buffer).to have_received(:puts).with(/Could not request object identified by druid '#{druid3}'. Possibly malformed druid?/).once
       end
     end
   end
