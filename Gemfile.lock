@@ -206,7 +206,7 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.19.0)
+    dor-services-client (15.19.2)
       activesupport (>= 7.0.0)
       cocina-models (~> 0.105.0)
       deprecation
@@ -268,7 +268,7 @@ GEM
     factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faraday (2.13.2)
+    faraday (2.13.3)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
