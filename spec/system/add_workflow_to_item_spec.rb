@@ -3,19 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Add a workflow to an item' do
-  let(:stub_workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
-  let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
-  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
-  let(:workflow_client) do
-    instance_double(Dor::Workflow::Client,
-                    workflow: stub_workflow,
-                    create_workflow_by_name: true,
-                    workflow_routes:,
-                    milestones: [],
-                    lifecycle: [],
-                    workflow_templates: %w[assemblyWF registrationWF],
-                    active_lifecycle: [])
-  end
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
@@ -28,8 +15,9 @@ RSpec.describe 'Add a workflow to an item' do
                     version: version_client,
                     user_version: user_version_client,
                     release_tags: release_tags_client,
-                    reindex: true)
+                    workflow: workflow_client)
   end
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true) }
   let(:cocina_model) { build(:dro_with_metadata, id: item_id) }
   let(:item_id) { 'druid:bg444xg6666' }
   let(:blacklight_config) { CatalogController.blacklight_config }
@@ -41,10 +29,11 @@ RSpec.describe 'Add a workflow to an item' do
     solr_conn.add(id: item_id, objectType_ssim: 'item')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(workflow_client).to receive(:workflow_status).with(druid: 'druid:bg444xg6666',
-                                                             process: 'accessioning-initiate', workflow: 'assemblyWF').and_return(true)
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(WorkflowService).to receive(:workflow_active?).with(druid: item_id, version: 1, wf_name: 'gisAssemblyWF').and_return(false)
+    allow(WorkflowService).to receive(:workflows_for).with(druid: item_id).and_return([])
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
+    allow(WorkflowService).to receive(:accessioned?).and_return(true)
   end
 
   it 'redirect and display on show page' do
@@ -55,6 +44,7 @@ RSpec.describe 'Add a workflow to an item' do
     within '.flash_messages' do
       expect(page).to have_css '.alert.alert-info', text: 'Added gisAssemblyWF'
     end
-    expect(workflow_client).to have_received(:create_workflow_by_name)
+    expect(object_client).to have_received(:workflow).with('gisAssemblyWF')
+    expect(workflow_client).to have_received(:create)
   end
 end

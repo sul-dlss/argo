@@ -30,23 +30,23 @@ RSpec.describe MilestoneService do
 
       it 'returns a formatted list of milestones by version' do
         expect(milestones).to eq({
-          '1' => {
-            'registered' => {},
-            'submitted' => { time: '2020-03-30 20:23:35 +0000' },
-            'described' => { time: '2020-03-30 20:57:36 +0000' },
-            'published' => { time: '2020-03-30 21:01:20 +0000' },
-            'deposited' => { time: '2020-03-30 21:01:51 +0000' },
-            'accessioned' => { time: '2020-03-30 21:02:03 +0000' }
-          },
-          '2' => {
-            'submitted' => { time: '2020-03-31 20:23:35 +0000' },
-            'described' => { time: '2020-03-31 20:57:36 +0000' },
-            'opened' => {},
-            'published' => { time: '2020-03-31 21:01:20 +0000' },
-            'deposited' => { time: '2020-03-31 21:01:51 +0000' },
-            'accessioned' => { time: '2020-03-31 21:02:03 +0000' }
-          }
-        })
+                                   '1' => {
+                                     'registered' => {},
+                                     'submitted' => { time: '2020-03-30 20:23:35 +0000' },
+                                     'described' => { time: '2020-03-30 20:57:36 +0000' },
+                                     'published' => { time: '2020-03-30 21:01:20 +0000' },
+                                     'deposited' => { time: '2020-03-30 21:01:51 +0000' },
+                                     'accessioned' => { time: '2020-03-30 21:02:03 +0000' }
+                                   },
+                                   '2' => {
+                                     'submitted' => { time: '2020-03-31 20:23:35 +0000' },
+                                     'described' => { time: '2020-03-31 20:57:36 +0000' },
+                                     'opened' => {},
+                                     'published' => { time: '2020-03-31 21:01:20 +0000' },
+                                     'deposited' => { time: '2020-03-31 21:01:51 +0000' },
+                                     'accessioned' => { time: '2020-03-31 21:02:03 +0000' }
+                                   }
+                                 })
         expect(fake_object_client).to have_received(:milestones).once
         expect(fake_milestones_client).to have_received(:list).once
       end

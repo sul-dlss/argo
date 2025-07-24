@@ -39,9 +39,6 @@ class WorkflowsController < ApplicationController
 
     Dor::Services::Client.object(cocina_object.externalIdentifier).workflow(wf_name).create(version: cocina_object.version)
 
-    # Force a Solr update before redirection.
-    Dor::Services::Client.object(cocina_object.externalIdentifier).reindex
-
     msg = "Added #{wf_name}"
     redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg
   end

@@ -7,15 +7,12 @@ RSpec.describe 'Text Extractions', :js do
   let(:druid) { 'druid:bc123df4567' }
   let(:cocina_model) { build(:dro_with_metadata, id: druid, version: 2, type: object_type) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, reindex: true) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow:, create_workflow_by_name: nil, lifecycle: Time.zone.now) }
-  let(:workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
   let(:version_service) { instance_double(VersionService, open?: true) }
 
   before do
     allow(Repository).to receive(:find).with(druid).and_return(cocina_model)
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(VersionService).to receive(:new).and_return(version_service)
-    allow(WorkflowClientFactory).to receive(:build).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 

@@ -10,13 +10,13 @@ RSpec.describe 'Reset failed workflow steps' do
 
   let(:workflow) { 'accessionWF' }
   let(:step) { 'descriptive-metadata' }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, update_status: true) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:process_client) { instance_double(Dor::Services::Client::Process, update: true) }
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, process: process_client) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, workflow: workflow_client) }
   let(:druid) { 'druid:xb482bw3979' }
   let(:cocina_model) { build(:dro_with_metadata) }
 
   before do
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
@@ -31,8 +31,9 @@ RSpec.describe 'Reset failed workflow steps' do
     it 'calls update workflow service' do
       post '/report/reset', params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
       expect(response).to redirect_to(report_workflow_grid_path)
-      expect(workflow_client).to have_received(:update_status)
-        .with(druid: 'druid:xb482ww9999', workflow:, process: step, status: 'waiting', current_status: 'error')
+      expect(object_client).to have_received(:workflow).with(workflow)
+      expect(workflow_client).to have_received(:process).with(step)
+      expect(process_client).to have_received(:update).with(status: 'waiting', current_status: 'error')
     end
 
     it 'requires parameters' do
@@ -59,8 +60,7 @@ RSpec.describe 'Reset failed workflow steps' do
       post '/report/reset', params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
 
       expect(response).to redirect_to(report_workflow_grid_path)
-      expect(workflow_client).to have_received(:update_status)
-        .with(druid: 'druid:xb482ww9999', workflow:, process: step, status: 'waiting', current_status: 'error')
+      expect(process_client).to have_received(:update).with(status: 'waiting', current_status: 'error')
     end
   end
 
@@ -77,7 +77,7 @@ RSpec.describe 'Reset failed workflow steps' do
       post '/report/reset', params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
 
       expect(response).to redirect_to(report_workflow_grid_path)
-      expect(workflow_client).not_to have_received(:update_status)
+      expect(process_client).not_to have_received(:update)
     end
   end
 end

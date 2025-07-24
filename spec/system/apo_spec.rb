@@ -13,8 +13,8 @@ RSpec.describe 'Create an apo', :js do
                                      admin_policy_id: agreement.administrative.hasAdminPolicy)
   end
 
-  let(:workflow_client) { WorkflowClientFactory.build }
-  let(:accession_processes) { workflow_client.workflow_template('accessionWF').fetch('processes').pluck('name') }
+  # let(:workflow_client) { WorkflowClientFactory.build }
+  let(:accession_processes) { Dor::Services::Client.workflows.template('accessionWF').fetch('processes').pluck('name') }
 
   before do
     sign_in user, groups: ['sdr:administrator-role']
@@ -54,7 +54,7 @@ RSpec.describe 'Create an apo', :js do
     # Ensure every step of accessionWF is completed, this will allow us to open a new version.
     druid = page.current_url.split('/').last
     accession_processes.each do |process|
-      workflow_client.update_status(druid:, workflow: 'accessionWF', process:, status: 'completed')
+      Dor::Services::Client.object(druid).workflow('accessionWF').process(process).update(status: 'completed')
     end
     click_link 'Reindex'
 

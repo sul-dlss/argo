@@ -17,16 +17,7 @@ RSpec.describe 'Version view', :js do
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new(versionId: 1, message: 'Initial version', cocina: false) }
   let(:version2) { Dor::Services::Client::ObjectVersion::Version.new(versionId: 2, message: 'Changed version', cocina: true) }
   let(:user_version1) { Dor::Services::Client::UserVersion::Version.new(version: 4, userVersion: 2, withdrawable: false, restorable: false) }
-  let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
-  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows:) }
-  let(:workflow_client) do
-    instance_double(Dor::Workflow::Client,
-                    active_lifecycle: [],
-                    lifecycle: [],
-                    milestones: {},
-                    workflow_routes:,
-                    workflow_status: nil)
-  end
+
   let(:release_tags_list) do
     [
       Dor::Services::Client::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed',
@@ -40,10 +31,11 @@ RSpec.describe 'Version view', :js do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
 
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     allow(VersionService).to receive(:new).and_return(version_service)
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
+    allow(WorkflowService).to receive_messages(workflows_for: [], accessioned?: true)
   end
 
   context 'when viewing the object' do

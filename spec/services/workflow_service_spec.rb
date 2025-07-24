@@ -87,6 +87,56 @@ RSpec.describe WorkflowService do
     end
   end
 
+  describe '#submitted' do
+    let(:milestones_client) { instance_double(Dor::Services::Client::Milestones) }
+
+    before do
+      allow(object_client).to receive(:milestones).and_return(milestones_client)
+      allow(milestones_client).to receive(:date).with(milestone_name: 'submitted').and_return(submitted_date)
+    end
+
+    context 'if the submitted lifecycle exists' do
+      let(:submitted_date) { '2022-04-20 21:55:25 +0000' }
+
+      it 'returns true' do
+        expect(described_class.submitted?(druid:)).to be true
+      end
+    end
+
+    context 'if the submitted lifecycle does not exist' do
+      let(:submitted_date) { nil }
+
+      it 'returns false' do
+        expect(described_class.submitted?(druid:)).to be false
+      end
+    end
+  end
+
+  describe '#published' do
+    let(:milestones_client) { instance_double(Dor::Services::Client::Milestones) }
+
+    before do
+      allow(object_client).to receive(:milestones).and_return(milestones_client)
+      allow(milestones_client).to receive(:date).with(milestone_name: 'published').and_return(published_date)
+    end
+
+    context 'if the published lifecycle exists' do
+      let(:published_date) { '2022-04-20 21:55:25 +0000' }
+
+      it 'returns true' do
+        expect(described_class.published?(druid:)).to be true
+      end
+    end
+
+    context 'if the published lifecycle does not exist' do
+      let(:published_date) { nil }
+
+      it 'returns false' do
+        expect(described_class.published?(druid:)).to be false
+      end
+    end
+  end
+
   describe '#workflow_active?' do
     let(:version) { 2 }
     let(:wf_name) { 'assemblyWF' }
