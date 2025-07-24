@@ -26,7 +26,8 @@ RSpec.describe 'Item manage release' do
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(VersionService).to receive(:new).and_return(version_service)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(WorkflowService).to receive(:accessioned?).and_return(true)
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
+    allow(WorkflowService).to receive_messages(accessioned?: true, workflows_for: [], published?: false)
   end
 
   it 'has a manage release button' do

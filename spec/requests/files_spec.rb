@@ -56,6 +56,8 @@ RSpec.describe 'Files' do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(WorkflowService).to receive_messages(accessioned?: true)
+
     sign_in user
   end
 

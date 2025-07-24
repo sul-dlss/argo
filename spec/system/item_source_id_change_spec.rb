@@ -4,18 +4,17 @@ require 'rails_helper'
 
 RSpec.describe 'Item source id change' do
   before do
-    sign_in create(:user), groups: ['sdr:administrator-role']
+    allow(WorkflowService).to receive_messages(accessioned?: false, workflows_for: [])
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
     allow(VersionService).to receive(:new).and_return(version_service)
+
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   describe 'when modification is not allowed' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:druid) { item.externalIdentifier }
     let(:version_service) { instance_double(VersionService, open_and_not_assembling?: false, closed?: true, open?: false) }
-
-    before do
-      allow(WorkflowService).to receive(:accessioned?).and_return(false)
-    end
 
     it 'cannot change the source id' do
       visit source_id_ui_item_path druid

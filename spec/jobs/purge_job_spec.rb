@@ -6,23 +6,20 @@ RSpec.describe PurgeJob do
   let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:user) { create(:user) }
-  let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted) }
   let(:submitted) { false }
   let(:bulk_action) { create(:bulk_action, user:) }
-
   let(:cocina1) do
     build(:dro_with_metadata, id: druids[0])
   end
   let(:cocina2) do
     build(:dro_with_metadata, id: druids[1])
   end
-
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
 
   before do
-    allow(WorkflowClientFactory).to receive(:build).and_return(client)
     allow(Ability).to receive(:new).and_return(ability)
+    allow(WorkflowService).to receive(:submitted?).and_return(submitted)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(PurgeService).to receive(:purge)

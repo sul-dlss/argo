@@ -5,47 +5,45 @@ require 'rails_helper'
 RSpec.describe 'WorkflowsController' do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
 
   let(:cocina) { build(:dro_with_metadata, id: druid, version: 2) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina, reindex: true) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina, workflow: workflow_client) }
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true, find: wf_response) }
+  let(:wf_response) { instance_double(Dor::Services::Response::Workflow) }
 
   before do
     sign_in user
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
   describe '#create' do
     context 'when they have manage access' do
-      let(:workflow_client) do
-        instance_double(Dor::Workflow::Client,
-                        create_workflow_by_name: true,
-                        workflow: wf_response)
-      end
-
       context 'when the workflow is not active' do
-        let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
+        before do
+          allow(WorkflowService).to receive(:workflow_active?).and_return(false)
+        end
 
         it 'initializes the new workflow' do
           post "/items/#{druid}/workflows", params: { wf: 'accessionWF' }
 
-          expect(workflow_client).to have_received(:create_workflow_by_name)
-            .with(druid, 'accessionWF', version: 2)
+          expect(workflow_client).to have_received(:create).with(version: 2)
+          expect(object_client).to have_received(:workflow).with('accessionWF')
         end
       end
 
       context 'when the workflow is already active' do
-        let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: true) }
+        before do
+          allow(WorkflowService).to receive(:workflow_active?).and_return(true)
+        end
 
         it 'does not initialize the workflow' do
           post "/items/#{druid}/workflows", params: { wf: 'accessionWF' }
 
-          expect(workflow_client).not_to have_received(:create_workflow_by_name)
+          expect(workflow_client).not_to have_received(:create)
           expect(response).to redirect_to(solr_document_path(druid))
           expect(flash[:error]).to eq 'accessionWF already exists!'
         end
@@ -54,8 +52,6 @@ RSpec.describe 'WorkflowsController' do
   end
 
   describe '#new' do
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: ['accessionWF']) }
-
     it 'renders the template with no layout' do
       get "/items/#{druid}/workflows/new"
       expect(response.body).to start_with('<turbo-frame')
@@ -82,23 +78,23 @@ RSpec.describe 'WorkflowsController' do
         { 'name' => 'end-accession' }
       ]
     end
+    let(:workflows_client) { instance_double(Dor::Services::Client::Workflows) }
 
-    let(:workflow_client) do
-      instance_double(Dor::Workflow::Client,
-                      workflow: wf_response,
-                      workflow_template: template_response)
+    before do
+      allow(Dor::Services::Client).to receive(:workflows).and_return(workflows_client)
+      allow(workflows_client).to receive(:template).with('accessionWF').and_return(template_response)
     end
 
     context 'when the user wants a table view' do
       let(:wf_response) do
-        instance_double(Dor::Workflow::Response::Workflow,
+        instance_double(Dor::Services::Response::Workflow,
                         pid: druid,
                         workflow_name: 'accessionWF',
                         empty?: false,
                         process_for_recent_version: process)
       end
       let(:process) do
-        instance_double(Dor::Workflow::Response::Process,
+        instance_double(Dor::Services::Response::Process,
                         name: 'start-accession',
                         status: 'waiting',
                         datetime: Time.zone.now,
@@ -155,11 +151,11 @@ RSpec.describe 'WorkflowsController' do
   end
 
   describe '#history' do
-    let(:xml) { '<xml/>' }
-    let(:workflows) { instance_double(Dor::Workflow::Response::Workflows, xml:) }
-    let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows) }
-    let(:workflow_client) do
-      instance_double(Dor::Workflow::Client, workflow_routes:)
+    let(:xml) { Nokogiri::XML('<xml/>') }
+    let(:workflows) { instance_double(Dor::Services::Response::Workflows, xml:) }
+
+    before do
+      allow(object_client).to receive(:workflows).and_return(workflows)
     end
 
     it 'fetches the workflow history' do
@@ -170,10 +166,10 @@ RSpec.describe 'WorkflowsController' do
   end
 
   describe '#update' do
-    let(:workflow_client) do
-      instance_double(Dor::Workflow::Client,
-                      workflow_status: nil,
-                      update_status: nil)
+    let(:process_client) { instance_double(Dor::Services::Client::Process, update: true, status: 'waiting') }
+
+    before do
+      allow(workflow_client).to receive(:process).with('publish').and_return(process_client)
     end
 
     it 'requires various workflow parameters' do
@@ -189,10 +185,7 @@ RSpec.describe 'WorkflowsController' do
       it 'changes the status' do
         put "/items/#{druid}/workflows/accessionWF", params: { process: 'publish', status: 'completed' }
         expect(subject).to redirect_to(solr_document_path(druid))
-        expect(workflow_client).to have_received(:workflow_status).with(druid:, workflow: 'accessionWF',
-                                                                        process: 'publish')
-        expect(workflow_client).to have_received(:update_status).with(druid:, workflow: 'accessionWF',
-                                                                      process: 'publish', status: 'completed')
+        expect(process_client).to have_received(:update).with(status: 'completed')
       end
     end
 
@@ -206,7 +199,7 @@ RSpec.describe 'WorkflowsController' do
           put "/items/#{druid}/workflows/accessionWF", params: { process: 'publish', status: 'waiting' }
 
           expect(response).to have_http_status :forbidden
-          expect(workflow_client).not_to have_received(:update_status)
+          expect(process_client).not_to have_received(:update)
         end
       end
     end

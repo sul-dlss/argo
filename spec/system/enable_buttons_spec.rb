@@ -9,8 +9,9 @@ RSpec.describe 'Enable buttons' do
     solr_conn.commit
     allow(StateService).to receive(:new).and_return(state_service)
     allow(VersionService).to receive(:new).and_return(version_service)
-    allow(WorkflowService).to receive_messages(accessioned?: true, published?: true)
+    allow(WorkflowService).to receive_messages(accessioned?: true, published?: true, workflows_for: [])
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
   end
 
   let(:blacklight_config) { CatalogController.blacklight_config }

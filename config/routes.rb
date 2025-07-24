@@ -273,6 +273,7 @@ Rails.application.routes.draw do
     get 'groups'
     post 'remember_impersonated_groups'
     get 'forget_impersonated_groups'
+    get 'test_login' if Rails.env.test?
   end
 
   scope path: '/settings' do

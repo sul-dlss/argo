@@ -3,11 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Item view', :js do
-  before do
-    allow(VersionService).to receive(:new).and_return(version_service)
-    sign_in create(:user), groups: ['sdr:administrator-role']
-  end
-
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:item_id) { 'druid:hj185xx2222' }
@@ -26,16 +21,7 @@ RSpec.describe 'Item view', :js do
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: release_tags_list) }
   let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
-  let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
-  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows:) }
-  let(:workflow_client) do
-    instance_double(Dor::Workflow::Client,
-                    active_lifecycle: [],
-                    lifecycle: [],
-                    milestones: {},
-                    workflow_routes:,
-                    workflow_status: nil)
-  end
+
   let(:release_tags_list) do
     [
       Dor::Services::Client::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed',
@@ -45,6 +31,14 @@ RSpec.describe 'Item view', :js do
     ]
   end
   let(:version_service) { instance_double(VersionService, open?: true, openable?: false, closeable?: true, open_and_not_assembling?: true) }
+
+  before do
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
+    allow(WorkflowService).to receive_messages(workflows_for: [], accessioned?: true)
+    allow(VersionService).to receive(:new).and_return(version_service)
+
+    sign_in create(:user), groups: ['sdr:administrator-role']
+  end
 
   context 'when navigating to an object' do
     before do
@@ -70,7 +64,6 @@ RSpec.describe 'Item view', :js do
 
     context 'when viewing the object' do
       before do
-        allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
         allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end

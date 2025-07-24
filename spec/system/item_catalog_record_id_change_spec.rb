@@ -6,7 +6,8 @@ RSpec.describe 'Item catalog_record_id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(VersionService).to receive(:new).and_return(version_service)
-    allow(WorkflowService).to receive(:accessioned?).and_return(false)
+    allow(WorkflowService).to receive_messages(accessioned?: false, workflows_for: [])
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
   end
 
   describe 'when modification is not allowed' do

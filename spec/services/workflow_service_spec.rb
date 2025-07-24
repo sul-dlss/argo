@@ -3,12 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe WorkflowService do
-  let(:druid) { 'ab123cd4567' }
-
-  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
+  let(:druid) { 'druid:bc123cd4567' }
+  let(:object_client) { instance_double(Dor::Services::Client::Object) }
 
   before do
-    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   describe '#workflows_for' do
@@ -16,8 +15,8 @@ RSpec.describe WorkflowService do
 
     let(:xml) do
       <<~XML
-        <workflows objectId="druid:ab123cd4567">
-          <workflow objectId="druid:ab123cd4567" id="accessionWF">
+        <workflows objectId="druid:bc123cd4567">
+          <workflow objectId="druid:bc123cd4567" id="accessionWF">
             <process version="1" priority="0" note="" lifecycle="submitted" laneId="default" elapsed="" attempts="0" datetime="2019-01-28T20:41:12+00:00" status="completed" name="start-accession"/>
             <process version="1" priority="0" note="common-accessioning-stage-a.stanford.edu" lifecycle="described" laneId="default" elapsed="0.258" attempts="0" datetime="2019-01-28T20:41:12+00:00" status="completed" name="descriptive-metadata"/>
             <process version="1" priority="0" note="common-accessioning-stage-b.stanford.edu" lifecycle="" laneId="default" elapsed="0.188" attempts="0" datetime="2019-01-28T20:41:12+00:00" status="completed" name="rights-metadata"/>
@@ -32,7 +31,7 @@ RSpec.describe WorkflowService do
             <process version="1" priority="0" note="common-accessioning-stage-b.stanford.edu" lifecycle="" laneId="default" elapsed="0.246" attempts="0" datetime="2019-01-28T20:41:12+00:00" status="completed" name="reset-workspace"/>
             <process version="1" priority="0" note="common-accessioning-stage-a.stanford.edu" lifecycle="accessioned" laneId="default" elapsed="1.196" attempts="0" datetime="2019-01-28T20:41:12+00:00" status="completed" name="end-accession"/>
           </workflow>
-          <workflow objectId="druid:ab123cd4567" id="assemblyWF">
+          <workflow objectId="druid:bc123cd4567" id="assemblyWF">
             <process version="1" priority="0" note="" lifecycle="pipelined" laneId="default" elapsed="" attempts="0" datetime="2019-01-28T20:40:18+00:00" status="completed" name="start-assembly"/>
             <process version="1" priority="0" note="" lifecycle="" laneId="default" elapsed="" attempts="0" datetime="2019-01-28T20:40:18+00:00" status="skipped" name="jp2-create"/>
             <process version="1" priority="0" note="sul-robots1-test.stanford.edu" lifecycle="" laneId="default" elapsed="0.25" attempts="0" datetime="2019-01-28T20:40:18+00:00" status="completed" name="checksum-compute"/>
@@ -49,60 +48,30 @@ RSpec.describe WorkflowService do
       XML
     end
 
-    let(:accession_json) do
-      { 'processes' => [
-        { 'name' => 'start-accession' },
-        { 'name' => 'descriptive-metadata' },
-        { 'name' => 'rights-metadata' },
-        { 'name' => 'content-metadata' },
-        { 'name' => 'technical-metadata' },
-        { 'name' => 'remediate-object' },
-        { 'name' => 'shelve' },
-        { 'name' => 'publish' },
-        { 'name' => 'provenance-metadata' },
-        { 'name' => 'sdr-ingest-transfer' },
-        { 'name' => 'sdr-ingest-received' },
-        { 'name' => 'reset-workspace' },
-        { 'name' => 'end-accession' }
-      ] }
-    end
-
-    let(:assembly_json) do
-      { 'processes' => [
-        { 'name' => 'start-assembly' },
-        { 'name' => 'content-metadata-create' },
-        { 'name' => 'jp2-create' },
-        { 'name' => 'checksum-compute' },
-        { 'name' => 'exif-collect' },
-        { 'name' => 'accessioning-initiate' }
-      ] }
-    end
-
-    let(:workflow_routes) do
-      instance_double(Dor::Workflow::Client::WorkflowRoutes,
-                      all_workflows: Dor::Workflow::Response::Workflows.new(xml:))
-    end
-
     before do
-      allow(workflow_client).to receive(:workflow_routes).and_return(workflow_routes)
-      allow(workflow_client).to receive(:workflow_template).with('accessionWF').and_return(accession_json)
-      allow(workflow_client).to receive(:workflow_template).with('assemblyWF').and_return(assembly_json)
+      allow(object_client).to receive(:workflows).and_return(Dor::Services::Response::Workflows.new(xml: Nokogiri::XML(xml)))
     end
 
-    it {
-      expect(subject).to eq [
-        WorkflowService::Workflow.new(name: 'accessionWF', complete: true, error_count: 0),
-        WorkflowService::Workflow.new(name: 'assemblyWF', complete: false, error_count: 1)
-      ]
-    }
+    it 'returns two workflow response objects' do
+      expect(subject.first.workflow_name).to eq('accessionWF')
+      expect(subject.first).to be_complete
+      expect(subject.first.error_count).to be_zero
+      expect(subject.second.workflow_name).to eq('assemblyWF')
+      expect(subject.second).not_to be_complete
+      expect(subject.second.error_count).to eq(1)
+    end
   end
 
   describe '#accessioned?' do
+    let(:milestones_client) { instance_double(Dor::Services::Client::Milestones) }
+
+    before do
+      allow(object_client).to receive(:milestones).and_return(milestones_client)
+      allow(milestones_client).to receive(:date).with(milestone_name: 'accessioned').and_return(accessioned_date)
+    end
+
     context 'if the accessioned lifecycle exists' do
-      before do
-        allow(workflow_client).to receive(:lifecycle).with(druid:,
-                                                           milestone_name: 'accessioned').and_return('2022-04-20 21:55:25 +0000')
-      end
+      let(:accessioned_date) { '2022-04-20 21:55:25 +0000' }
 
       it 'returns true' do
         expect(described_class.accessioned?(druid:)).to be true
@@ -110,9 +79,7 @@ RSpec.describe WorkflowService do
     end
 
     context 'if the accessioned lifecycle does not exist' do
-      before do
-        allow(workflow_client).to receive(:lifecycle).with(druid:, milestone_name: 'accessioned').and_return(nil)
-      end
+      let(:accessioned_date) { nil }
 
       it 'returns false' do
         expect(described_class.accessioned?(druid:)).to be false
@@ -120,14 +87,64 @@ RSpec.describe WorkflowService do
     end
   end
 
-  describe '#active_workflow?' do
-    let(:version) { 2 }
-    let(:wf_name) { 'assemblyWF' }
-
-    let(:workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: active_for) }
+  describe '#submitted' do
+    let(:milestones_client) { instance_double(Dor::Services::Client::Milestones) }
 
     before do
-      allow(workflow_client).to receive(:workflow).with(pid: druid, workflow_name: wf_name).and_return(workflow)
+      allow(object_client).to receive(:milestones).and_return(milestones_client)
+      allow(milestones_client).to receive(:date).with(milestone_name: 'submitted').and_return(submitted_date)
+    end
+
+    context 'if the submitted lifecycle exists' do
+      let(:submitted_date) { '2022-04-20 21:55:25 +0000' }
+
+      it 'returns true' do
+        expect(described_class.submitted?(druid:)).to be true
+      end
+    end
+
+    context 'if the submitted lifecycle does not exist' do
+      let(:submitted_date) { nil }
+
+      it 'returns false' do
+        expect(described_class.submitted?(druid:)).to be false
+      end
+    end
+  end
+
+  describe '#published' do
+    let(:milestones_client) { instance_double(Dor::Services::Client::Milestones) }
+
+    before do
+      allow(object_client).to receive(:milestones).and_return(milestones_client)
+      allow(milestones_client).to receive(:date).with(milestone_name: 'published').and_return(published_date)
+    end
+
+    context 'if the published lifecycle exists' do
+      let(:published_date) { '2022-04-20 21:55:25 +0000' }
+
+      it 'returns true' do
+        expect(described_class.published?(druid:)).to be true
+      end
+    end
+
+    context 'if the published lifecycle does not exist' do
+      let(:published_date) { nil }
+
+      it 'returns false' do
+        expect(described_class.published?(druid:)).to be false
+      end
+    end
+  end
+
+  describe '#workflow_active?' do
+    let(:version) { 2 }
+    let(:wf_name) { 'assemblyWF' }
+    let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, find: fake_workflow) }
+    let(:fake_workflow) { instance_double(Dor::Services::Response::Workflow, active_for?: active_for) }
+
+    before do
+      allow(object_client).to receive(:workflow).with(wf_name).and_return(workflow_client)
     end
 
     context 'when not active' do

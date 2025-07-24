@@ -10,7 +10,7 @@ RSpec.describe 'Collection manage release' do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: [], create: true) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find_lite: cocina_model, # NOTE: This should really be a DROLite
@@ -18,8 +18,10 @@ RSpec.describe 'Collection manage release' do
                     events: events_client,
                     version: version_client,
                     user_version: user_version_client,
-                    release_tags: release_tags_client)
+                    release_tags: release_tags_client,
+                    workflow: workflow_client)
   end
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true) }
   let(:cocina_model) do
     build(:collection_with_metadata, id: collection_id)
   end
@@ -28,11 +30,14 @@ RSpec.describe 'Collection manage release' do
 
   before do
     allow(VersionService).to receive(:new).and_return(version_service)
-    sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(MilestoneService).to receive(:milestones_for).and_return({})
+    allow(WorkflowService).to receive_messages(workflows_for: [], published?: true)
     solr_conn.add(id: 'druid:gg232vv1111',
                   objectType_ssim: 'collection')
     solr_conn.commit
+
+    sign_in current_user, groups: ['sdr:administrator-role']
   end
 
   it 'Has a manage release button' do

@@ -26,9 +26,8 @@ class ReleaseObjectJob < GenericJob
 
       object_client = Dor::Services::Client.object(cocina_object.externalIdentifier)
       object_client.release_tags.create(tag: new_tag)
+      object_client.workflow('releaseWF').create(version: cocina_object.version)
 
-      WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier, 'releaseWF',
-                                                          version: cocina_object.version)
       success.call('Workflow creation successful')
     end
   end

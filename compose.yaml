@@ -27,7 +27,6 @@ services:
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
       SETTINGS__REDIS_URL: redis://redis:6379/
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
-      SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
       SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: false
       SOLR_URL: http://solr:8983/solr/argo
