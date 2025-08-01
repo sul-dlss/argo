@@ -61,12 +61,11 @@ executors:
           SOLR_URL: http://solr:8983/solr/argo
           SETTINGS__SOLR__URL: http://solr:8983/solr/argo
           SETTINGS__SURI__URL: http://suri:3000
-          SETTINGS__WORKFLOW__URL: http://workflow:3000
-          SETTINGS__WORKFLOW__LOGFILE: 'rails'
           SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
           SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
           SETTINGS__RABBITMQ__ENABLED: 'false'
           SETTINGS__REDIS_URL: redis://redis:6379/
+          SETTINGS__ROBOTS_REDIS_URL: redis://redis:6379/
           RAILS_LOG_TO_STDOUT: 'true'
       - image: suldlss/sdr-api:latest
         name: sdr-api
@@ -80,7 +79,6 @@ executors:
           USER_EMAIL: argo@dlss.sul.stanford.edu
           USER_PASSWORD: notusedanywhere
           RAILS_LOG_TO_STDOUT: 'true'
-          SETTINGS__WORKFLOW__URL: http://workflow:3000
           SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
           # To generate the token: docker-compose run dor-services-app rake generate_token
           SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
@@ -102,19 +100,6 @@ executors:
           DATABASE_PORT: 5432
           RAILS_LOG_TO_STDOUT: 'true'
           REDIS_URL: redis://redis:6379/
-      - image: suldlss/workflow-server:latest
-        name: workflow
-        environment:
-          RAILS_LOG_TO_STDOUT: true
-          DATABASE_NAME: workflow-server
-          DATABASE_USERNAME: postgres
-          DATABASE_PASSWORD: sekret
-          DATABASE_HOSTNAME: db
-          DATABASE_PORT: 5432
-          SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
-          SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-          SETTINGS__ENABLE_STOMP: false
-          SETTINGS__REDIS__HOSTNAME: redis
       - image: cimg/redis:6.2
         name: redis
 
@@ -166,7 +151,6 @@ jobs:
       SETTINGS__SDR_API__URL: http://sdr-api:3000
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
-      SETTINGS__WORKFLOW_URL: http://workflow:3000
       TT: 1 # track templates
     executor: ruby_with_all_deps
     steps:
