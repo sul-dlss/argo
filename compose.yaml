@@ -58,11 +58,10 @@ services:
       SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
       SETTINGS__SOLR__URL: http://solr:8983/solr/argo
       SETTINGS__SURI__URL: http://suri:3000
-      SETTINGS__WORKFLOW__URL: http://workflow:3000
-      SETTINGS__WORKFLOW__LOGFILE: rails
       SETTINGS__RABBITMQ__ENABLED: 'false'
       SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
       SETTINGS__REDIS_URL: redis://redis:6379/
+      SETTINGS__ROBOTS_REDIS_URL: redis://redis:6379/
     depends_on:
       - db
       - suri
@@ -83,7 +82,6 @@ services:
       USER_EMAIL: argo@dlss.sul.stanford.edu
       USER_PASSWORD: notusedanywhere
       SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
-      SETTINGS__WORKFLOW__URL: http://workflow:3000
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
@@ -121,26 +119,6 @@ services:
       - POSTGRES_PASSWORD=sekret
     volumes:
       - postgres-data:/var/lib/postgresql/data
-
-  workflow:
-    image: suldlss/workflow-server:latest
-    environment:
-      - RAILS_LOG_TO_STDOUT=true
-      - DATABASE_NAME=workflow-server
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=sekret
-      - DATABASE_HOSTNAME=db
-      - DATABASE_PORT=5432
-      - SETTINGS__DOR_SERVICES__URL=http://dor-services-app:3000
-      - SETTINGS__DOR_SERVICES__TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-      - SETTINGS__ENABLE_STOMP=false
-      - SETTINGS__REDIS__HOSTNAME=redis
-      - PAGER='more'
-    depends_on:
-      - db
-      - redis
-    ports:
-      - 3001:3000
 
   techmd:
     image: suldlss/technical-metadata-service:latest
