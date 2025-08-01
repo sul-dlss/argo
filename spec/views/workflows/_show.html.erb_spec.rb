@@ -6,7 +6,7 @@ RSpec.describe 'workflows/_show' do
   let(:druid) { 'druid:aa111bb2222' }
   let(:workflow_name) { 'accessionWF' }
   let(:process_status) do
-    instance_double(Dor::Workflow::Response::Process,
+    instance_double(Dor::Services::Response::Process,
                     name: 'descriptive-metadata',
                     status: 'error',
                     pid: druid,

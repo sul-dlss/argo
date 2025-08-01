@@ -44,12 +44,6 @@ RSpec.describe 'Viewing an Admin policy' do
     end
 
     context 'for add workflow' do
-      let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
-
-      before do
-        allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-      end
-
       it 'renders the add workflow ui' do
         visit new_item_workflow_path(apo_druid)
         expect(page).to have_content('Add workflow')

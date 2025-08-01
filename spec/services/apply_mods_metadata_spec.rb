@@ -42,7 +42,6 @@ RSpec.describe ApplyModsMetadata do
                         log:)
   end
 
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object, version: cocina)
   end

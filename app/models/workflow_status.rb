@@ -2,7 +2,7 @@
 
 # Represents the status of an item in the workflow
 class WorkflowStatus
-  # @param [Dor::Workflow::Response::Workflow] workflow the response from the workflow service for this object/workflow_name
+  # @param [Dor::Services::Response::Workflow] workflow the response from the workflow service for this object/workflow_name
   # @param [Array<String>] workflow_steps a list of steps in the workflow
   def initialize(workflow:, workflow_steps:)
     @workflow = workflow

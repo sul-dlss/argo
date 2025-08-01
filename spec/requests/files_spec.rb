@@ -131,12 +131,6 @@ RSpec.describe 'Files' do
   end
 
   describe 'show locations of files' do
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: true) }
-
-    before do
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-    end
-
     it 'requires an id parameter' do
       get "/items/#{druid}/files"
       expect(response).to have_http_status(:internal_server_error)

@@ -2,7 +2,7 @@
 
 # Draws a reset button if the workflow step is errored or a complete button otherwise
 class WorkflowUpdateButton < ApplicationComponent
-  # @param [Dor::Workflow::Response::Process] process_status the model for the WorkflowProcess
+  # @param [Dor::Services::Response::Process] process_status the model for the WorkflowProcess
   def initialize(process:)
     @process = process
   end

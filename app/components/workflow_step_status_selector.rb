@@ -5,7 +5,7 @@ class WorkflowStepStatusSelector < ApplicationComponent
   CONFIRM_MESSAGE = 'You have selected to manually change the status. ' \
                     'This could result in processing errors. Are you sure you want to proceed?'
 
-  # @param [Dor::Workflow::Response::Process] process_status the model for the WorkflowProcess
+  # @param [Dor::Services::Response::Process] process_status the model for the WorkflowProcess
   def initialize(process:)
     @process = process
   end
