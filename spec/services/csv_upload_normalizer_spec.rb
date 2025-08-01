@@ -79,5 +79,13 @@ RSpec.describe CsvUploadNormalizer do
         expect(csv).to eq(expected_csv)
       end
     end
+
+    context 'with whitespace around the druid' do
+      let(:filepath) { file_fixture('catalog_record_id_and_barcode_with_whitespace.csv').to_s }
+
+      it 'reads the CSV' do
+        expect(csv).to eq(expected_csv)
+      end
+    end
   end
 end
