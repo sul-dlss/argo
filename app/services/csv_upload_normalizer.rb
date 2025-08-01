@@ -55,7 +55,7 @@ class CsvUploadNormalizer
 
   def normalize_druids!(table)
     table.each do |row|
-      druid_headers.each { |header| row[header] = Druid.new(row[header]).with_namespace if row[header].present? }
+      druid_headers.each { |header| row[header] = Druid.new(row[header].strip).with_namespace if row[header].present? }
     end
   end
 end
