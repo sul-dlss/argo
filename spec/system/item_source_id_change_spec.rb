@@ -48,16 +48,11 @@ RSpec.describe 'Item source id change' do
                       update: true,
                       reindex: true)
     end
-    let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
-    let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes:) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(WorkflowService).to receive(:accessioned?).and_return(true)
 
-      # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       solr_conn.add(:id => druid, :objectType_ssim => 'item',
                     CatalogRecordId.index_field => "#{CatalogRecordId.indexing_prefix}99999")

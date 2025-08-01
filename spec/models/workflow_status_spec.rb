@@ -8,7 +8,7 @@ RSpec.describe WorkflowStatus do
                         workflow_steps:)
   end
 
-  let(:workflow) { Dor::Workflow::Response::Workflow.new(xml:) }
+  let(:workflow) { Dor::Services::Response::Workflow.new(xml:) }
   let(:workflow_name) { 'accessionWF' }
 
   let(:workflow_steps) do
@@ -87,7 +87,7 @@ RSpec.describe WorkflowStatus do
 
       it 'has one for each xml process' do
         expect(subject.size).to eq 13
-        expect(subject).to all(be_a Dor::Workflow::Response::Process)
+        expect(subject).to all(be_a Dor::Services::Response::Process)
       end
     end
 

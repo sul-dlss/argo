@@ -11,7 +11,7 @@ RSpec.describe WorkflowProcessRow, type: :component do
     subject(:body) { render_inline(instance) }
 
     let(:process_status) do
-      instance_double(Dor::Workflow::Response::Process,
+      instance_double(Dor::Services::Response::Process,
                       status: 'error',
                       pid: 'druid:132',
                       workflow_name: 'accessionWF',
@@ -37,19 +37,19 @@ RSpec.describe WorkflowProcessRow, type: :component do
     subject { instance.elapsed }
 
     context 'for nil' do
-      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: nil) }
+      let(:process_status) { instance_double(Dor::Services::Response::Process, elapsed: nil) }
 
       it { is_expected.to be_nil }
     end
 
     context 'for empty string' do
-      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: '') }
+      let(:process_status) { instance_double(Dor::Services::Response::Process, elapsed: '') }
 
       it { is_expected.to eq '0.000' }
     end
 
     context 'for a float' do
-      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: '2.25743') }
+      let(:process_status) { instance_double(Dor::Services::Response::Process, elapsed: '2.25743') }
 
       it { is_expected.to eq '2.257' }
     end
@@ -58,7 +58,7 @@ RSpec.describe WorkflowProcessRow, type: :component do
   describe '#note' do
     subject { instance.note }
 
-    let(:process_status) { instance_double(Dor::Workflow::Response::Process, note: 'hi') }
+    let(:process_status) { instance_double(Dor::Services::Response::Process, note: 'hi') }
 
     it { is_expected.to eq 'hi' }
   end
@@ -66,7 +66,7 @@ RSpec.describe WorkflowProcessRow, type: :component do
   describe '#error_message' do
     subject { instance.error_message }
 
-    let(:process_status) { instance_double(Dor::Workflow::Response::Process, error_message: "it's a bad day") }
+    let(:process_status) { instance_double(Dor::Services::Response::Process, error_message: "it's a bad day") }
 
     it { is_expected.to eq "it's a bad day" }
   end

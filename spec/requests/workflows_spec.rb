@@ -134,7 +134,7 @@ RSpec.describe 'WorkflowsController' do
 
     context 'when the user wants to see the xml' do
       let(:presenter) { instance_double(WorkflowXmlPresenter, pretty_xml: '<xml/>') }
-      let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, xml: 'xml') }
+      let(:wf_response) { instance_double(Dor::Services::Response::Workflow, xml: 'xml') }
 
       before do
         allow(WorkflowXmlPresenter).to receive(:new).and_return(presenter)

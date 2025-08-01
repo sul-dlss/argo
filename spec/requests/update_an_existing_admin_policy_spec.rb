@@ -16,8 +16,6 @@ RSpec.describe 'Update an existing Admin Policy' do
   end
 
   context 'when the parameters are invalid' do
-    let(:workflow_service) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
-
     it 'redraws the form' do
       patch "/apo/#{druid}", params: { apo: { title: '' } }
       expect(response).to have_http_status(:unprocessable_content)
@@ -31,7 +29,6 @@ RSpec.describe 'Update an existing Admin Policy' do
     end
 
     let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: nil) }
-    let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
 
     let(:params) do
       {
@@ -50,7 +47,6 @@ RSpec.describe 'Update an existing Admin Policy' do
 
     before do
       allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_service)
     end
 
     context 'with controlledDigitalLending' do
@@ -63,7 +59,6 @@ RSpec.describe 'Update an existing Admin Policy' do
         patch("/apo/#{druid}", params:)
         expect(object_client).to have_received(:update)
         expect(objects_client).not_to have_received(:register)
-        expect(workflow_service).not_to have_received(:create_workflow_by_name)
 
         expect(response).to redirect_to solr_document_path(druid)
       end
@@ -80,7 +75,6 @@ RSpec.describe 'Update an existing Admin Policy' do
         patch("/apo/#{druid}", params:)
         expect(object_client).to have_received(:update)
         expect(objects_client).not_to have_received(:register)
-        expect(workflow_service).not_to have_received(:create_workflow_by_name)
 
         expect(response).to redirect_to solr_document_path(druid)
       end

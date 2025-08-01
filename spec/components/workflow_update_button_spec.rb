@@ -6,7 +6,7 @@ RSpec.describe WorkflowUpdateButton, type: :component do
   subject(:body) { render_inline(described_class.new(process:)) }
 
   let(:process) do
-    instance_double(Dor::Workflow::Response::Process,
+    instance_double(Dor::Services::Response::Process,
                     status:,
                     pid: 'druid:132',
                     workflow_name: 'accessionWF',

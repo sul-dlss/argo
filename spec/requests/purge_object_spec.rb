@@ -23,14 +23,7 @@ RSpec.describe 'Purge object' do
   end
 
   context 'when they have manage access' do
-    let(:client) do
-      instance_double(Dor::Workflow::Client,
-                      delete_all_workflows: nil,
-                      lifecycle: false)
-    end
-
     before do
-      allow(Dor::Workflow::Client).to receive(:new).and_return(client)
       sign_in create(:user), groups: ['sdr:administrator-role']
     end
 

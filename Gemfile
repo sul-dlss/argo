@@ -44,7 +44,6 @@ gem 'blacklight', '~> 7.41'
 # pinned because 6.7.0 is effectively coupled to BL >= 8.3.0 and Argo hasn't been updated to BL8 yet
 gem 'blacklight-hierarchy', '~> 6.6.0'
 gem 'dor-services-client', '~> 15.1'
-gem 'dor-workflow-client', '~> 7.0'
 gem 'druid-tools'
 gem 'folio_client', '~> 0.13'
 gem 'mods_display', '~> 1.0'
