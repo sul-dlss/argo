@@ -1,4 +1,4 @@
-<% if document.thumbnail_url %>
+<% if show_thumbnail? %>
   <%= image_tag document.thumbnail_url, class: 'thumbnail' %>
 <% else %>
   <svg style="text-anchor: middle" width="240" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Responsive image" focusable="false">
