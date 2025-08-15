@@ -10,7 +10,7 @@ module Show
       attr_reader :document
 
       def show_thumbnail?
-        document.object_type != 'file' && document.thumbnail_url
+        document.content_type != 'file' && document.thumbnail_url
       end
 
       def placeholder_text
