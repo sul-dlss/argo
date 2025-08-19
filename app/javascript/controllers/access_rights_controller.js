@@ -107,7 +107,8 @@ export default class extends Controller {
     }
   }
 
-  // **
+  // **    console.log(this.locationTarget.value)
+
   // * @param {bool} state If true, then the Stanford option can be selected
   activateStanfordDownload (state) {
     const option = this.stanfordDownloadOption()
@@ -128,6 +129,8 @@ export default class extends Controller {
   }
 
   disableLocation () {
+    const locationDropDown = document.getElementById('item_access_location')
+    locationDropDown.value = ''
     this.locationRowTarget.hidden = true
     this.locationTarget.disabled = true
   }
