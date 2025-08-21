@@ -72,7 +72,23 @@ export default class extends Controller {
     }
   }
 
+  downloadDropDown () {
+    const downloadDropDown = document.getElementById('item_download_access')
+    if (downloadDropDown === null) {
+      return document.getElementById('embargo_download_access')
+    }
+
+    return downloadDropDown
+  }
+
   disableDownload () {
+    // ** Reset the download dropdown
+    // * - This forces the download to change to blank when selecting disabled
+    const downloadDropDown = this.downloadDropDown()
+    const selectedDownloadIndex = downloadDropDown.options.selectedIndex
+    downloadDropDown.options[selectedDownloadIndex].removeAttribute('selected')
+    downloadDropDown.options[3].setAttribute('selected', 'selected')
+    this.downloadTarget.value = 'none'
     this.downloadRowTarget.hidden = true
     this.downloadTarget.disabled = true
   }
