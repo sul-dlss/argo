@@ -67,7 +67,6 @@ RSpec.describe 'Item registration page', :js do
         'workflow_id' => 'goobiWF',
         'view_access' => 'world',
         'download_access' => 'world',
-        'controlled_digital_lending' => 'false',
         'content_type' => 'https://cocina.sul.stanford.edu/models/book',
         'viewing_direction' => 'left-to-right',
         'project' => 'special division : project #4',

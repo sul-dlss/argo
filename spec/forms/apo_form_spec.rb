@@ -194,12 +194,6 @@ RSpec.describe ApoForm do
 
         it { is_expected.to be false }
       end
-
-      describe 'controlled digital lending' do
-        let(:default_access) { { view: 'stanford', download: 'none', controlledDigitalLending: true } }
-
-        it { is_expected.to be true }
-      end
     end
 
     describe '#use_statement' do
