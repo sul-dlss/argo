@@ -95,8 +95,6 @@ export default class extends Controller {
     }
   }
 
-  // **    console.log(this.locationTarget.value)
-
   // * @param {bool} state If true, then the Stanford option can be selected
   activateStanfordDownload (state) {
     const option = this.stanfordDownloadOption()
@@ -117,6 +115,8 @@ export default class extends Controller {
   }
 
   disableLocation () {
+    // ** Reset the location dropdown
+    // * - This forces the location to change to blank when selecting non location-based rights
     const locationDropDown = this.locationDropDown()
     const selectedLocationIndex = locationDropDown.options.selectedIndex
     locationDropDown.options[selectedLocationIndex].removeAttribute('selected')

@@ -13,6 +13,6 @@ module HasViewAccessWithCdl
 
   def setup_view_access_with_cdl_properties(access_model)
     setup_view_access_properties(access_model)
-    self.controlled_digital_lending = access_model.controlledDigitalLending
+    self.controlled_digital_lending = false
   end
 end
