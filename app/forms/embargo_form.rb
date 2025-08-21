@@ -43,8 +43,18 @@ class EmbargoForm < ApplicationChangeSet
       view: view_access,
       controlledDigitalLending: false
     }.tap do |params|
-      params[:location] = download_access == 'location-based' ? access_location : nil
-      params[:download] = %w[citation-only dark].include?(view_access) ? 'none' : download_access
+      params[:download] = download_access_valid? ? download_access : 'none'
+      params[:location] = location_access_valid? ? access_location : nil
     end
+  end
+
+  private
+
+  def download_access_valid?
+    %w[citation-only dark].exclude?(view_access)
+  end
+
+  def location_access_valid?
+    download_access_valid? && download_access == 'location-based'
   end
 end
