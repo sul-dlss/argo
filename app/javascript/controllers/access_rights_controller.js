@@ -54,6 +54,7 @@ export default class extends Controller {
 
   setLocationBasedView () {
     this.enableDownload(true)
+    this.enableLocation()
   }
 
   setStanfordView () {
@@ -73,12 +74,11 @@ export default class extends Controller {
   }
 
   downloadDropDown () {
-    const downloadDropDown = document.getElementById('item_download_access')
-    if (downloadDropDown === null) {
-      return document.getElementById('embargo_download_access')
-    }
+    const locationDropDown = document.getElementById('item_download_access') ||
+                             document.getElementById('embargo_download_access') ||
+                             document.getElementById('registration_download_access')
 
-    return downloadDropDown
+    return locationDropDown
   }
 
   disableDownload () {
@@ -86,7 +86,9 @@ export default class extends Controller {
     // * - This forces the download to change to blank when selecting disabled
     const downloadDropDown = this.downloadDropDown()
     const selectedDownloadIndex = downloadDropDown.options.selectedIndex
-    downloadDropDown.options[selectedDownloadIndex].removeAttribute('selected')
+    if (selectedDownloadIndex >= 0) {
+      downloadDropDown.options[selectedDownloadIndex].removeAttribute('selected')
+    }
     downloadDropDown.options[3].setAttribute('selected', 'selected')
     this.downloadTarget.value = 'none'
     this.downloadRowTarget.hidden = true
@@ -135,7 +137,9 @@ export default class extends Controller {
     // * - This forces the location to change to blank when selecting non location-based rights
     const locationDropDown = this.locationDropDown()
     const selectedLocationIndex = locationDropDown.options.selectedIndex
-    locationDropDown.options[selectedLocationIndex].removeAttribute('selected')
+    if (selectedLocationIndex >= 0) {
+      locationDropDown.options[selectedLocationIndex].removeAttribute('selected')
+    }
     locationDropDown.options[0].setAttribute('selected', 'selected')
     this.locationTarget.value = null
     this.locationRowTarget.hidden = true
@@ -143,10 +147,9 @@ export default class extends Controller {
   }
 
   locationDropDown () {
-    const locationDropDown = document.getElementById('item_access_location')
-    if (locationDropDown === null) {
-      return document.getElementById('embargo_access_location')
-    }
+    const locationDropDown = document.getElementById('item_access_location') ||
+                             document.getElementById('embargo_access_location') ||
+                             document.getElementById('registration_access_location')
 
     return locationDropDown
   }
