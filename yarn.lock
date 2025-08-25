@@ -499,9 +499,9 @@ balanced-match@^1.0.0:
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
 "blacklight-frontend@>=7.1 <10.0.0":
-  version "8.12.1"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-8.12.1.tgz#efecdf4e7b965c8c79001edd5c910734d7544050"
-  integrity sha512-neS9rQXJEJ2v7n6y81h5OgdXY5apqq2A+1iVl7IAjRlmw+trbJrYrCZbSuHzWJeqNaloL7sQAigpJzlTbC0Prg==
+  version "8.12.2"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-8.12.2.tgz#4abc0769af2c804e21b376ece0fd22fc34cd9a89"
+  integrity sha512-9bTZMc/52KBFttUAddgx7xnL2C9zOFiVpctcXb4rWaKSCV87FMym+mkfB4iP0UGKn3B2z8XXs0iLDNflQnOpsQ==
   dependencies:
     bootstrap ">=4.3.1 <6.0.0"
 

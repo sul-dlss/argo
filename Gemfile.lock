@@ -554,7 +554,7 @@ GEM
     rspec-support (3.13.5)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.79.2)
+    rubocop (1.80.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -634,7 +634,7 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    stanford-mods (3.3.10)
+    stanford-mods (3.3.11)
       activesupport
       mods (~> 3.0, >= 3.0.4)
     stringio (3.1.7)
