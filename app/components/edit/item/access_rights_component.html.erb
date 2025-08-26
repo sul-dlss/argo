@@ -16,11 +16,3 @@
   <%= f.select :access_location, location_labels,
                { include_blank: true }, class: 'form-select', data: { access_rights_target: 'location' } %>
 </div>
-
-<% if include_cdl? %>
-  <div class="mb-3" data-access-rights-target="cdlRow">
-    <%= f.label :controlled_digital_lending, class: 'form-label' %>
-    <%= f.select :controlled_digital_lending, cdl_labels,
-                 {}, class: 'form-select', data: { access_rights_target: 'cdl' } %>
-  </div>
-<% end %>

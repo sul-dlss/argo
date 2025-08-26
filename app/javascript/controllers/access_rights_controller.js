@@ -6,10 +6,8 @@ export default class extends Controller {
     'view',
     'download',
     'location',
-    'cdl',
     'downloadRow',
-    'locationRow',
-    'cdlRow'
+    'locationRow'
   ]
 
   connect () {
@@ -47,30 +45,20 @@ export default class extends Controller {
   setCitationOrDark () {
     this.disableDownload()
     this.disableLocation()
-    this.disableCdl()
   }
 
   setWorldView () {
     this.enableDownload(false)
     this.maybeEnableLocation()
-    this.disableCdl()
   }
 
   setLocationBasedView () {
     this.enableDownload(true)
-    this.enableLocation()
-    this.disableCdl()
   }
 
   setStanfordView () {
     this.enableDownload(false)
     this.maybeEnableLocation()
-
-    if (this.currentDownload() === 'none') {
-      return this.enableCdl()
-    }
-
-    this.disableCdl()
 
     // This has to come after enableDownload
     this.activateWorldDownload(false)
@@ -84,7 +72,23 @@ export default class extends Controller {
     }
   }
 
+  downloadDropDown () {
+    const downloadDropDown = document.getElementById('item_download_access')
+    if (downloadDropDown === null) {
+      return document.getElementById('embargo_download_access')
+    }
+
+    return downloadDropDown
+  }
+
   disableDownload () {
+    // ** Reset the download dropdown
+    // * - This forces the download to change to blank when selecting disabled
+    const downloadDropDown = this.downloadDropDown()
+    const selectedDownloadIndex = downloadDropDown.options.selectedIndex
+    downloadDropDown.options[selectedDownloadIndex].removeAttribute('selected')
+    downloadDropDown.options[3].setAttribute('selected', 'selected')
+    this.downloadTarget.value = 'none'
     this.downloadRowTarget.hidden = true
     this.downloadTarget.disabled = true
   }
@@ -107,7 +111,6 @@ export default class extends Controller {
     }
   }
 
-  // **
   // * @param {bool} state If true, then the Stanford option can be selected
   activateStanfordDownload (state) {
     const option = this.stanfordDownloadOption()
@@ -128,25 +131,29 @@ export default class extends Controller {
   }
 
   disableLocation () {
+    // ** Reset the location dropdown
+    // * - This forces the location to change to blank when selecting non location-based rights
+    const locationDropDown = this.locationDropDown()
+    const selectedLocationIndex = locationDropDown.options.selectedIndex
+    locationDropDown.options[selectedLocationIndex].removeAttribute('selected')
+    locationDropDown.options[0].setAttribute('selected', 'selected')
+    this.locationTarget.value = null
     this.locationRowTarget.hidden = true
     this.locationTarget.disabled = true
+  }
+
+  locationDropDown () {
+    const locationDropDown = document.getElementById('item_access_location')
+    if (locationDropDown === null) {
+      return document.getElementById('embargo_access_location')
+    }
+
+    return locationDropDown
   }
 
   enableLocation () {
     this.locationRowTarget.hidden = false
     this.locationTarget.disabled = false
-  }
-
-  disableCdl () {
-    this.cdlRowTarget.hidden = true
-    // Set this to false, so that it gets updated when we merge the params
-    // from the form with those in the cocina-model
-    this.cdlTarget.value = false
-  }
-
-  enableCdl () {
-    this.cdlRowTarget.hidden = false
-    this.cdlTarget.disabled = false
   }
 
   currentView () {

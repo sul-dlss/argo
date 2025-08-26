@@ -30,12 +30,6 @@ module Create
         label
       end
 
-      def cdl_label(value)
-        label = super
-        label += ' (APO default)' if access_template.default_controlled_digital_lending?(value)
-        label
-      end
-
       private
 
       def access_template
