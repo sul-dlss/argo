@@ -87,7 +87,7 @@ class ItemsController < ApplicationController
       return
     end
 
-    Dor::Services::Client.object(@cocina.externalIdentifier).refresh_metadata
+    Dor::Services::Client.object(@cocina.externalIdentifier).refresh_descriptive_metadata_from_ils
 
     redirect_to solr_document_path(params[:id]),
                 notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from #{CatalogRecordId.label}: #{catalog_record_id}"
