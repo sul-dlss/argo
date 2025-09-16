@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'Refresh metadata' do
   let(:druid) { 'druid:bc123df4567' }
-  let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true, find: cocina_model) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, refresh_descriptive_metadata_from_ils: true, find: cocina_model) }
   let(:cocina_model) do
     build(:dro_with_metadata, id: druid, folio_instance_hrids: ['a12345'])
   end
 
   before do
-    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
     allow(VersionService).to receive(:open?).and_return(true)
   end
 
@@ -33,7 +33,7 @@ RSpec.describe 'Refresh metadata' do
     context 'when a catalog_record_id is present' do
       it 'redirects with a notice if there is a catalog_record_id' do
         post "/items/#{druid}/refresh_metadata"
-        expect(object_service).to have_received(:refresh_metadata)
+        expect(object_client).to have_received(:refresh_descriptive_metadata_from_ils)
 
         expect(response).to redirect_to solr_document_path(druid)
         expect(flash[:notice]).to eq "Metadata for #{druid} successfully refreshed from #{CatalogRecordId.label}: a12345"
