@@ -81,6 +81,7 @@ inactive_workflows:
   - googleScannedBookWF
   - eemsAccessionWF
   - gisDiscoveryWF
+  - etdSubmitWF
 
 tech_md_service:
   url: "http://localhost:3005"
