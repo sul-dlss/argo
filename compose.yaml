@@ -1,42 +1,6 @@
 name: 'argo'
 
 services:
-  web:
-    build: .
-    volumes:
-      - ./:/app
-      - node_modules:/app/node_modules
-    working_dir: /app
-    ports:
-      - 3000:3000
-    environment:
-      DATABASE_NAME: argo
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: sekret
-      DATABASE_HOSTNAME: db
-      DATABASE_PORT: 5432
-      NODE_ENV: development
-      RAILS_LOG_TO_STDOUT: 'true'
-      REMOTE_USER: blalbrit@stanford.edu
-      ROLES: sdr:administrator-role;sdr:service-manager
-      # Allow bulk action logs to be written (can't write to /tmp)
-      SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
-      SETTINGS__BULK_METADATA__TEMPORARY_DIRECTORY: '/app/tmp/tmp'
-      # To generate the token: docker-compose run dor-services-app rake generate_token
-      SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
-      SETTINGS__REDIS_URL: redis://redis:6379/
-      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
-      SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
-      SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: false
-      SOLR_URL: http://solr:8983/solr/argo
-      # Docker doesn't allow rails server to remove PID on shutdown
-      PID_FILE: /dev/null
-    # To allow yarn --watch from Procfile.dev to continue after stdin is closed
-    tty: true
-    depends_on:
-      - db
-
   dor-services-app:
     image: suldlss/dor-services-app:latest
     ports:
@@ -142,5 +106,4 @@ services:
      - 6379:6379
 
 volumes:
-  node_modules:
   postgres-data:
