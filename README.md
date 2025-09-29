@@ -33,7 +33,6 @@ Brings up app at localhost:3000 with some test data:
 ```
 yarn install
 docker compose up -d
-docker compose stop web
 bin/rails db:prepare
 bin/dev
 bin/rake argo:seed_data # run in separate terminal window
@@ -55,13 +54,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     Once everything has been successfully pulled, start up the docker services needed for testing (all but the web container)
 
     ```
-    docker compose up -d sdr-api techmd
-    ```
-
-    You should do the following to make sure all the services are up:
-
-    ```
-    docker compose ps
+    docker compose up -d
     ```
 
 3. **Install Chrome**
@@ -82,32 +75,6 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
 To run just the linters, run `bin/rake lint`. To run the linters individually, run `bundle exec erb_lint --lint-all`, `bundle exec rubocop`, and `bundle exec rake jslint`
 
-## Docker
-
-This will spin up all of the docker containers in the background.  Note that docker compose will spin up an Argo web container and apply the administrator role to you.  You will need to stop this web container if you use a local rails server instead.  See the "Recommended Local Development" section below.
-
-```
-docker compose up -d
-```
-
-If you want to run the web container in interactive mode, stop it first and then run it so it will show interactive live output:
-
-```
-docker compose stop web
-docker compose run --service-ports web
-```
-
-If you want to use the rails console from the web container use:
-
-```
-docker compose run --rm web bin/rails console
-```
-
-If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing to run:
-
-```
-docker compose run web sidekiq start
-```
 
 ## Recommended Local Development
 
@@ -115,7 +82,6 @@ Be sure all of the docker containers for dependent services are running in the b
 
 ```
 docker compose up -d
-docker compose stop web
 ```
 
 Create/prepare the dev/test databases:
@@ -142,33 +108,6 @@ The webserver process is configured to run a remote debug session. You may attac
 
 ```
 rdbg -A
-```
-
-## Local Development Troubleshooting
-
-If you get an error starting the local server (e.g. with `bin/dev`) first be sure you have all the dependent docker containers running, and the web container stopped.
-
-If you update the Gemfile and you are using the `web` container, you will need to rebuild it:
-
-```
-docker compose build web
-```
-
-If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
-
-You may also need to rebuild your web container without using Docker's cache (which may have the older version of bundler in it).  This will ensure the web container has the latest version of the bundler gem installed.  You may then also need to update the bundler version in the Gemfile.lock to match.
-
-```
-gem update --system && gem install bundler # get the latest version of bundler locally
-bundle update --bundler  # update the Gemfile.lock to match this while not updating any gems
-docker compose build --no-cache web # rebuild the docker container to match the latest bundler
-```
-
-If you run into asset related issues, you may need to manually install yarn and compile assets in your Docker container (or local laptop by leaving off the `docker compose run --rm`):
-
-```
-docker compose run --rm web yarn install
-docker compose run --rm web bin/rails assets:precompile
 ```
 
 ### System tests
@@ -243,10 +182,6 @@ Argo uses systemd to manage and monitor its Sidekiq-based background job workers
 2. Clear the bulk directory: `rm -fr /workspace/bulk/*`
 
 ## Further reading
-
-### Indexing (including bulk reindexing)
-
-For further reading on how indexing from Cocina works in Argo, see dor_indexing_app.  [INDEXING.md](INDEXING.md) is likely outdated, but explains how single object reindexing works, how the bulk reindexing mechanism works, and how to build custom reindexing runs.
 
 ### Profiling
 
