@@ -57,7 +57,11 @@ export default class extends Controller {
   validateCatalogRecordId () {
     const field = this.catalogRecordIdTarget
     const currentCatalogRecordId = field.value
-    if (currentCatalogRecordId === '') { return }
+
+    if (currentCatalogRecordId === '') {
+      field.classList.toggle('is-invalid', false)
+      return
+    }
 
     if (field.validity.patternMismatch) {
       field.classList.toggle('is-invalid', !field.validity.valid)

@@ -179,6 +179,10 @@ RSpec.describe 'Item registration page', :js do
 
       expect(page).to have_css('.is-invalid')
       expect(page).to have_no_content 'Items successfully registered.'
+
+      # clear the validation error
+      fill_in CatalogRecordId.label, with: ''
+      expect(page).to have_no_css('.is-invalid')
     end
   end
 
