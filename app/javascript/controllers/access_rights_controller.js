@@ -73,24 +73,10 @@ export default class extends Controller {
     }
   }
 
-  downloadDropDown () {
-    const locationDropDown = document.getElementById('item_download_access') ||
-                             document.getElementById('embargo_download_access') ||
-                             document.getElementById('registration_download_access')
-
-    return locationDropDown
-  }
-
   disableDownload () {
     // ** Reset the download dropdown
     // * - This forces the download to change to blank when selecting disabled
-    const downloadDropDown = this.downloadDropDown()
-    const selectedDownloadIndex = downloadDropDown.options.selectedIndex
-    if (selectedDownloadIndex >= 0) {
-      downloadDropDown.options[selectedDownloadIndex].removeAttribute('selected')
-    }
-    downloadDropDown.options[3].setAttribute('selected', 'selected')
-    this.downloadTarget.value = 'none'
+    this.downloadTarget.selectedIndex = -1
     this.downloadRowTarget.hidden = true
     this.downloadTarget.disabled = true
   }
@@ -134,24 +120,10 @@ export default class extends Controller {
 
   disableLocation () {
     // ** Reset the location dropdown
-    // * - This forces the location to change to blank when selecting non location-based rights
-    const locationDropDown = this.locationDropDown()
-    const selectedLocationIndex = locationDropDown.options.selectedIndex
-    if (selectedLocationIndex >= 0) {
-      locationDropDown.options[selectedLocationIndex].removeAttribute('selected')
-    }
-    locationDropDown.options[0].setAttribute('selected', 'selected')
+    this.locationTarget.selectedIndex = -1
     this.locationTarget.value = null
     this.locationRowTarget.hidden = true
     this.locationTarget.disabled = true
-  }
-
-  locationDropDown () {
-    const locationDropDown = document.getElementById('item_access_location') ||
-                             document.getElementById('embargo_access_location') ||
-                             document.getElementById('registration_access_location')
-
-    return locationDropDown
   }
 
   enableLocation () {
@@ -164,6 +136,8 @@ export default class extends Controller {
   }
 
   currentDownload () {
-    return this.downloadTarget.selectedOptions[0].value
+    if (this.downloadTarget.selectedOptions.length > 0) {
+      return this.downloadTarget.selectedOptions[0].value
+    }
   }
 }
