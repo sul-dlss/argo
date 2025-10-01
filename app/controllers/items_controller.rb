@@ -63,6 +63,9 @@ class ItemsController < ApplicationController
     change_set.save
     reindex
     redirect_to solr_document_path(params[:id]), notice: "Source Id for #{params[:id]} has been updated!"
+  rescue Dor::Services::Client::ConflictResponse => e
+    error_message = "Source ID could not be updated: #{e.message}"
+    redirect_to solr_document_path(params[:id]), flash: { error: error_message }
   end
 
   def purge_object

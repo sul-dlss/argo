@@ -26,12 +26,31 @@ RSpec.describe 'Set source id for an object' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    it 'updates the source id' do
-      post "/items/#{druid}/source_id", params: { new_id: 'new:source_id' }
+    context 'when the source id is valid' do
+      it 'updates the source id' do
+        post "/items/#{druid}/source_id", params: { new_id: 'new:source_id' }
 
-      expect(object_client).to have_received(:update)
-        .with(params: updated_model)
-      expect(object_client).to have_received(:reindex)
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(object_client).to have_received(:reindex)
+      end
+    end
+
+    context 'when the source id is a duplicate' do
+      let(:response) { instance_double(Faraday::Response, status: 409, body: nil, reason_phrase: 'Conflict') }
+      let(:conflict_response) { Dor::Services::Client::ConflictResponse.new(response:) }
+
+      before do
+        allow(object_client).to receive(:update).and_raise(conflict_response)
+      end
+
+      it 'updates the source id' do
+        post "/items/#{druid}/source_id", params: { new_id: 'new:source_id' }
+
+        expect { object_client.update }.to raise_error(Dor::Services::Client::ConflictResponse)
+        expect(response).to redirect_to solr_document_path(druid)
+        expect(flash[:error]).to match 'Source ID could not be updated: Conflict: 409'
+      end
     end
   end
 end
