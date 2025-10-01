@@ -7,7 +7,7 @@
 
     <div class='mb-3' data-controller="access-rights">
       <p>Once embargo ends, these rights are applied:</p>
-      <%= render Edit::Item::AccessRightsComponent.new(form_builder: f, include_cdl: false) %>
+      <%= render Edit::Item::AccessRightsComponent.new(form_builder: f) %>
     </div>
 
     <%= f.submit 'Save', class: 'btn btn-primary' %>
