@@ -191,9 +191,6 @@ class CatalogController < ApplicationController
                                                                has_constituents: { label: 'Virtual Objects', fq: "#{SolrDocument::FIELD_CONSTITUENTS}:*" }
                                                              }
 
-    # This will help us find records that need to be fixed before we can move to cocina.
-    config.add_facet_field 'data_quality_ssim', label: 'Data Quality', component: true
-
     config.add_facet_field 'identifiers', label: 'Identifiers',
                                           component: true,
                                           query: {
