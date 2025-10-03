@@ -3,8 +3,8 @@
 module CollectionConcern
   extend Blacklight::Solr::Document
 
-  FIELD_COLLECTION_ID = :is_member_of_collection_ssim
-  FIELD_COLLECTION_TITLE = :collection_title_ssim
+  FIELD_COLLECTION_ID = 'is_member_of_collection_ssim'
+  FIELD_COLLECTION_TITLE = 'collection_title_ssim'
 
   ##
   # Access a SolrDocument's *first* Collection druid

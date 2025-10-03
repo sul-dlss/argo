@@ -5,45 +5,44 @@ class SolrDocument
   include ApoConcern
   include CollectionConcern
 
-  FIELD_OBJECT_TYPE = :objectType_ssim
-  FIELD_CONTENT_TYPE = :content_type_ssim
-  FIELD_EMBARGO_STATUS = :embargo_status_ssim
-  FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
-  FIELD_FOLIO_INSTANCE_HRID = :folio_instance_hrid_ssim
-  FIELD_DOI = :doi_ssim
-  FIELD_ORCIDS = :contributor_orcids_ssim
-  FIELD_CREATED_DATE = :created_at_dttsi
-  FIELD_REGISTERED_DATE = :registered_dttsim
-  FIELD_LAST_ACCESSIONED_DATE = :accessioned_latest_dttsi
-  FIELD_EARLIEST_ACCESSIONED_DATE = :accessioned_earliest_dttsi
-  FIELD_LAST_PUBLISHED_DATE = :published_latest_dttsi
-  FIELD_LAST_MODIFIED_DATE = :modified_latest_dttsi
-  FIELD_LAST_OPENED_DATE = :opened_latest_dttsi
-  FIELD_PRESERVATION_SIZE = :preserved_size_dbtsi
-  FIELD_RELEASED_TO_EARTHWORKS = :released_to_earthworks_dttsi
-  FIELD_RELEASED_TO_PURL_SITEMAP = :released_to_purl_sitemap_dttsi
-  FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
-  FIELD_RELEASED_TO = :released_to_ssim
-
-  FIELD_TITLE = 'display_title_ss'
-  FIELD_AUTHOR = 'author_display_ss'
-  FIELD_LABEL = 'obj_label_tesim'
-  FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
-  FIELD_PUBLISHER = 'originInfo_publisher_tesim'
-  FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
-  FIELD_CURRENT_VERSION = 'current_version_isi'
-  FIELD_STATUS = 'status_ssi'
   FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssimdv'
-  FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
-  FIELD_COPYRIGHT = 'copyright_ssim'
-  FIELD_USE_STATEMENT = 'use_statement_ssim'
-  FIELD_LICENSE = 'use_license_machine_ssi'
-  FIELD_PROJECT_TAG = 'project_tag_ssim'
-  FIELD_TAGS = 'tag_ssim'
-  FIELD_SOURCE_ID = 'source_id_ssi'
+  FIELD_AUTHOR = 'author_display_ss'
   FIELD_BARCODE_ID = 'barcode_id_ssim'
-  FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
   FIELD_CONSTITUENTS = 'has_constituents_ssim'
+  FIELD_CONTENT_TYPE = 'content_type_ssim'
+  FIELD_COPYRIGHT = 'copyright_ssim'
+  FIELD_CREATED_DATE = 'created_at_dttsi'
+  FIELD_CURRENT_VERSION = 'current_version_isi'
+  FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
+  FIELD_DOI = 'doi_ssim'
+  FIELD_EARLIEST_ACCESSIONED_DATE = 'accessioned_earliest_dttsi'
+  FIELD_EMBARGO_RELEASE_DATE = 'embargo_release_dtsim'
+  FIELD_EMBARGO_STATUS = 'embargo_status_ssim'
+  FIELD_FOLIO_INSTANCE_HRID = 'folio_instance_hrid_ssim'
+  FIELD_LABEL = 'obj_label_tesim'
+  FIELD_LAST_ACCESSIONED_DATE = 'accessioned_latest_dttsi'
+  FIELD_LAST_MODIFIED_DATE = 'modified_latest_dttsi'
+  FIELD_LAST_OPENED_DATE = 'opened_latest_dttsi'
+  FIELD_LAST_PUBLISHED_DATE = 'published_latest_dttsi'
+  FIELD_LICENSE = 'use_license_machine_ssi'
+  FIELD_OBJECT_TYPE = 'objectType_ssim'
+  FIELD_ORCIDS = 'contributor_orcids_ssim'
+  FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
+  FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
+  FIELD_PRESERVATION_SIZE = 'preserved_size_dbtsi'
+  FIELD_PROJECT_TAG = 'project_tag_ssim'
+  FIELD_PUBLISHER = 'originInfo_publisher_tesim'
+  FIELD_REGISTERED_DATE = 'registered_dttsim'
+  FIELD_RELEASED_TO = 'released_to_ssim'
+  FIELD_RELEASED_TO_EARTHWORKS = 'released_to_earthworks_dttsi'
+  FIELD_RELEASED_TO_PURL_SITEMAP = 'released_to_purl_sitemap_dttsi'
+  FIELD_RELEASED_TO_SEARCHWORKS = 'released_to_searchworks_dttsi'
+  FIELD_SOURCE_ID = 'source_id_ssi'
+  FIELD_STATUS = 'status_ssi'
+  FIELD_TAGS = 'tag_ssim'
+  FIELD_TITLE = 'display_title_ss'
+  FIELD_USE_STATEMENT = 'use_statement_ssim'
+  FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
