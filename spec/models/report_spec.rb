@@ -105,7 +105,7 @@ RSpec.describe Report do
         :objectType_ssim,
         :content_type_ssim,
         CatalogRecordId.index_field,
-        :barcode_id_ssim,
+        SolrDocument::FIELD_BARCODE_ID,
         :accessioned_earliest_dttsi,
         SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym
       ].each do |k|

@@ -46,7 +46,7 @@ module BlacklightConfigHelper
         obj_label_tesim
         identifier_ssim
         identifier_tesim
-        barcode_id_ssim
+        barcode_id_ssimdv
         folio_instance_hrid_ssim
         source_id_text_nostem_i^3
         source_id_ssi
