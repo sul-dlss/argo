@@ -113,22 +113,18 @@ RSpec.describe 'Registration' do
     end
 
     context 'when the collections are in solr' do
-      let(:collections) { ['druid:pb873ty1662'] }
-      let(:solr_response) do
-        { 'response' => { 'docs' => [solr_doc] } }
-      end
-      let(:solr_doc) do
-        {
-          'display_title_ss' => [
-            'Annual report of the State Corporation Commission showing the condition ' \
-            'of the incorporated state banks and other institutions operating in ' \
-            'Virginia at the close of business'
-          ]
-        }
+      let(:collections) { [collection_druid] }
+      let(:collection) { build(:collection, id: collection_druid, admin_policy_id: apo_id, label:) }
+      let(:collection_druid) { 'druid:pb873ty1662' }
+      let(:apo_id) { 'druid:hv992yv2222' }
+      let(:label) do
+        'Annual report of the State Corporation Commission showing the condition ' \
+          'of the incorporated state banks and other institutions operating in ' \
+          'Virginia at the close of business'
       end
 
       before do
-        allow(SearchService).to receive(:query).and_return(solr_response)
+        allow(Dor::Services::Client.objects).to receive(:find_all).with(druids: collections).and_return([collection])
       end
 
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
