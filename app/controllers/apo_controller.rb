@@ -34,7 +34,7 @@ class ApoController < ApplicationController
     }.compact)
     @access_template = AccessTemplate.new(access_template:, apo_defaults_template: administrative.accessTemplate)
 
-    @collections = Dor::Services::Client.objects.find_all(druids: administrative.collectionsForRegistration).filter_map do |collection|
+    @collections = Dor::Services::Client.objects.find_all(druids: administrative.collectionsForRegistration).map do |collection|
       ["#{collection.label.truncate(60, separator: /\s/)} (#{collection.externalIdentifier.delete_prefix('druid:')})", collection.externalIdentifier]
     end
 
