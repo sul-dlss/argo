@@ -47,7 +47,7 @@ class ProfilePresenter
   end
 
   def sw_date
-    stats_field['sw_pub_date_facet_ssi']
+    stats_field[SolrDocument::FIELD_SW_PUB_DATE]
   end
 
   def sw_language
