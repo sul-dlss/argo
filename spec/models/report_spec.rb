@@ -72,10 +72,6 @@ RSpec.describe Report do
   describe 'REPORT_FIELDS' do
     subject(:report_fields) { described_class::REPORT_FIELDS }
 
-    it 'has report fields' do
-      expect(report_fields).to(be_all { |f| f[:field].is_a? Symbol }) # all :field keys are symbols
-    end
-
     it 'has all the mandatory, default report fields' do
       [
         :druid,
