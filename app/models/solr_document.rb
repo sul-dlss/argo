@@ -14,7 +14,7 @@ class SolrDocument
   FIELD_CONTENT_TYPE = 'content_type_ssimdv'
   FIELD_COPYRIGHT = 'copyright_ssim'
   FIELD_CREATED_DATE = 'created_at_dttsi'
-  FIELD_CURRENT_VERSION = 'current_version_isi'
+  FIELD_CURRENT_VERSION = 'current_version_ipsidv'
   FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
   FIELD_DOI = 'doi_ssimdv'
   FIELD_EARLIEST_ACCESSIONED_DATE = 'accessioned_earliest_dtpsidv'

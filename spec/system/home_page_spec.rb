@@ -11,7 +11,7 @@ RSpec.describe 'Home page' do
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   main_title_tenim: 'Report about stuff',
                   SolrDocument::FIELD_COLLECTION_TITLE => '123',
-                  current_version_isi: '1')
+                  SolrDocument::FIELD_CURRENT_VERSION => '1')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
