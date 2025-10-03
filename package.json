@@ -12,7 +12,8 @@
     "renderjson": "^1.4.0",
     "sass": "^1.41.1",
     "stimulus": "^3.0.0",
-    "tabulator-tables": "^5.5.2"
+    "tabulator-tables": "^5.5.2",
+    "nodemon": "^3.1.10"
   },
   "devDependencies": {
     "eslint": "^8.0.1",
@@ -27,6 +28,7 @@
     "build": "esbuild app/javascript/*.* --bundle --inject:app/javascript/jquery-shim.js --define:global=window --outdir=app/assets/builds",
     "build:css": "sass ./app/assets/stylesheets/blacklight.scss ./app/assets/builds/blacklight.css --no-source-map --load-path=node_modules",
     "lint": "standard app/javascript/**/*.js",
-    "lint_fix": "standard --fix app/javascript/**/*.js"
+    "lint_fix": "standard --fix app/javascript/**/*.js",
+    "watch:css": "nodemon --watch ./app/assets/stylesheets/ --ext scss,css --exec \"yarn build:css\""
   }
 }
