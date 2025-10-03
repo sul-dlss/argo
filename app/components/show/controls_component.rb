@@ -191,11 +191,11 @@ module Show
     end
 
     def registered_only?
-      ['Registered', 'Unknown Status'].include?(doc['processing_status_text_ssi'])
+      ['Registered', 'Unknown Status'].include?(doc[SolrDocument::FIELD_PROCESSING_STATUS])
     end
 
     def in_accessioning?
-      doc['processing_status_text_ssi']&.include?('In accessioning')
+      doc[SolrDocument::FIELD_PROCESSING_STATUS]&.include?('In accessioning')
     end
 
     def published?

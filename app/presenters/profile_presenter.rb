@@ -71,7 +71,7 @@ class ProfilePresenter
   end
 
   def type_status_pivot
-    pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+    pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},#{SolrDocument::FIELD_PROCESSING_STATUS}"]
   end
 
   def content_file_count

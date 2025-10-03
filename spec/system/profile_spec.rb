@@ -25,7 +25,7 @@ RSpec.describe 'Profile' do
                   copyright_ssim: 'Copyright © Stanford University. All Rights Reserved.',
                   SolrDocument::FIELD_SW_FORMAT => 'Image',
                   SolrDocument::FIELD_SW_LANGUAGE => 'English',
-                  processing_status_text_ssi: 'Unknown Status')
+                  SolrDocument::FIELD_PROCESSING_STATUS => 'Unknown Status')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end

@@ -33,6 +33,7 @@ class SolrDocument
   FIELD_MODS_TYPE_OF_RESOURCE = 'mods_typeOfResource_ssimdv'
   FIELD_OBJECT_TYPE = 'objectType_ssimdv'
   FIELD_ORCIDS = 'contributor_orcids_ssimdv'
+  FIELD_PROCESSING_STATUS = 'processing_status_text_ssidv'
   FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
   FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
   FIELD_PRESERVATION_SIZE = 'preserved_size_dbtsi'
