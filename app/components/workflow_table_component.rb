@@ -9,7 +9,7 @@ class WorkflowTableComponent < ApplicationComponent
   attr_reader :name, :data
 
   def workflow_name
-    new_params = search_state.filter('wf_wps_ssim').add(name).params.merge(controller: 'catalog', action: 'index')
+    new_params = search_state.filter(SolrDocument::FIELD_WORKFLOW_WPS).add(name).params.merge(controller: 'catalog', action: 'index')
     link_to(name, new_params)
   end
 
