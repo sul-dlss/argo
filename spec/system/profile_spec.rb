@@ -24,7 +24,7 @@ RSpec.describe 'Profile' do
                   use_statement_ssim: 'contact govinfolib@lists.stanford.edu',
                   copyright_ssim: 'Copyright © Stanford University. All Rights Reserved.',
                   SolrDocument::FIELD_SW_FORMAT => 'Image',
-                  sw_language_ssim: 'English',
+                  SolrDocument::FIELD_SW_LANGUAGE => 'English',
                   processing_status_text_ssi: 'Unknown Status')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']

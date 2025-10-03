@@ -47,6 +47,7 @@ class SolrDocument
   FIELD_STATUS = 'status_ssi'
   FIELD_SW_FORMAT = 'sw_format_ssimdv'
   FIELD_SW_GENRE = 'sw_genre_ssimdv'
+  FIELD_SW_LANGUAGE = 'sw_language_ssimdv'
   FIELD_SW_SUBJECT_GEOGRAPHIC = 'sw_subject_geographic_ssimdv'
   FIELD_TAGS = 'tag_ssim'
   FIELD_TITLE = 'display_title_ss'
@@ -110,7 +111,7 @@ class SolrDocument
   field_semantics.merge!(
     title: FIELD_TITLE,
     author: 'dc_creator_ssi',
-    language: 'sw_language_ssim',
+    language: SolrDocument::FIELD_SW_LANGUAGE,
     format: SolrDocument::FIELD_SW_FORMAT
   )
 

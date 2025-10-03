@@ -51,7 +51,7 @@ class ProfilePresenter
   end
 
   def sw_language
-    aggregations['sw_language_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_LANGUAGE].items
   end
 
   def sw_topic
