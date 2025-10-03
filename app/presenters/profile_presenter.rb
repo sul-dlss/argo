@@ -23,7 +23,7 @@ class ProfilePresenter
   end
 
   def rights_descriptions
-    aggregations['rights_descriptions_ssim'].items
+    aggregations[SolrDocument::FIELD_ACCESS_RIGHTS].items
   end
 
   def content_type

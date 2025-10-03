@@ -72,7 +72,7 @@ class CatalogController < ApplicationController
 
     config.add_index_field 'status_ssi', label: 'Status'
     config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
-    config.add_index_field 'rights_descriptions_ssim', label: 'Access Rights'
+    config.add_index_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights'
 
     config.add_show_field 'project_tag_ssim', label: 'Project', link_to_facet: true
     config.add_show_field 'tag_ssim', label: 'Tags', link_to_facet: true
@@ -92,8 +92,8 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10
     config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10
-    config.add_facet_field 'rights_descriptions_ssim', label: 'Access Rights', component: true, limit: 1000,
-                                                       sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights', component: true, limit: 1000,
+                                                              sort: 'index'
     config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
                                                                  more_limit: 9999, sort: 'index'

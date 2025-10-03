@@ -33,7 +33,7 @@ class SolrDocument
   FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
   FIELD_CURRENT_VERSION = 'current_version_isi'
   FIELD_STATUS = 'status_ssi'
-  FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssim'
+  FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssimdv'
   FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
   FIELD_COPYRIGHT = 'copyright_ssim'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
