@@ -55,7 +55,7 @@ RSpec.describe 'Item catalog_record_id change' do
 
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      solr_conn.add(:id => druid, :objectType_ssim => 'item',
+      solr_conn.add(:id => druid, SolrDocument::FIELD_OBJECT_TYPE => 'item',
                     CatalogRecordId.index_field => "#{CatalogRecordId.indexing_prefix}99999")
       solr_conn.commit
     end

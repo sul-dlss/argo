@@ -2,7 +2,7 @@
 
 module ApoHelper
   def agreement_options
-    q = 'objectType_ssim:agreement'
+    q = "#{SolrDocument::FIELD_OBJECT_TYPE}:agreement"
     result = SearchService.query(q, rows: 99_999, fl: 'id,tag_ssim,display_title_ss')['response']['docs']
     result.sort! do |a, b|
       a['display_title_ss'].to_s <=> b['display_title_ss'].to_s

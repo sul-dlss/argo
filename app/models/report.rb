@@ -96,7 +96,7 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :objectType_ssim, label: 'Object Type',
+      field: SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type',
       sort: true, default: false, width: 100
     },
     {

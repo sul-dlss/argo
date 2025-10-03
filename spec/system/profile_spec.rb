@@ -10,13 +10,13 @@ RSpec.describe 'Profile' do
     solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
     solr_conn.add(id: 'druid:xb482ww9999',
-                  objectType_ssim: 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   topic_ssim: 'Cephalopoda',
                   sw_subject_geographic_ssim: 'Bermuda Islands',
                   tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
 
     solr_conn.add(id: 'druid:xb482bw3988',
-                  objectType_ssim: 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   SolrDocument::FIELD_CONTENT_TYPE => 'image',
                   SolrDocument::FIELD_COLLECTION_TITLE => 'Annual report of the State Corporation Commission',
                   apo_title_ssim: 'Stanford University Libraries - Special Collections',
@@ -31,7 +31,7 @@ RSpec.describe 'Profile' do
   end
 
   it 'displays a profile of the result set' do
-    visit search_profile_path f: { objectType_ssim: ['item'] }
+    visit search_profile_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
     within '#admin-policies' do
       expect(page).to have_css 'h4', text: 'Admin Policies'
       expect(page).to have_css 'td:nth-child(1)', text: 'Stanford University Libraries - Special Collections'

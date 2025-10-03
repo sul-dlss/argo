@@ -50,14 +50,14 @@ RSpec.describe 'Item view', :js do
       let(:solr_doc) do
         {
           id: 'druid:hj185xx2222',
-          objectType_ssim: 'item',
+          SolrDocument::FIELD_OBJECT_TYPE => 'item',
           display_title_ss: title
         }
       end
       let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
 
       it 'shows the catalog index view' do
-        visit search_catalog_path f: { objectType_ssim: ['item'] }
+        visit search_catalog_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
         expect(page).to have_css '.index_title a', text: title
       end
     end

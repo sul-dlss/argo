@@ -62,7 +62,7 @@ RSpec.describe 'Search results' do
     end
 
     it 'contains appropriate metadata fields' do
-      visit search_catalog_path f: { objectType_ssim: ['item'] }
+      visit search_catalog_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       within('.document:nth-child(1)') do
         within '.document-metadata' do
           expect(page).to have_css 'dt', text: 'DRUID:'
@@ -96,7 +96,7 @@ RSpec.describe 'Search results' do
     end
 
     it 'contains document image thumbnail' do
-      visit search_catalog_path f: { objectType_ssim: ['item'] }
+      visit search_catalog_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       expect(page).to have_css '.document-thumbnail a img'
     end
   end
