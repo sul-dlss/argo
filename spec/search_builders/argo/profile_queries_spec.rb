@@ -14,7 +14,7 @@ RSpec.describe Argo::ProfileQueries do
     [
       SolrDocument::FIELD_APO_TITLE.to_s,
       SolrDocument::FIELD_COLLECTION_TITLE.to_s,
-      'rights_descriptions_ssim',
+      SolrDocument::FIELD_ACCESS_RIGHTS,
       'content_type_ssim',
       'use_statement_ssim',
       'copyright_ssim',

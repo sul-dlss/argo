@@ -20,7 +20,7 @@ RSpec.describe 'Profile' do
                   content_type_ssim: 'image',
                   collection_title_ssim: 'Annual report of the State Corporation Commission',
                   apo_title_ssim: 'Stanford University Libraries - Special Collections',
-                  rights_descriptions_ssim: 'dark',
+                  SolrDocument::FIELD_ACCESS_RIGHTS => 'dark',
                   use_statement_ssim: 'contact govinfolib@lists.stanford.edu',
                   copyright_ssim: 'Copyright © Stanford University. All Rights Reserved.',
                   sw_format_ssim: 'Image',
