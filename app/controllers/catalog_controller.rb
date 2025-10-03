@@ -205,10 +205,10 @@ class CatalogController < ApplicationController
                                       query: {
                                         no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
                                                                        fq: "-#{SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE}:*" },
-                                        no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' }
+                                        no_sw_format: { label: 'No SW Resource Type', fq: "-#{SolrDocument::FIELD_SW_FORMAT}:*" }
                                       }
 
-    config.add_facet_field 'sw_format_ssim', label: 'SW Resource Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Resource Type', component: true, limit: 10
     config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10
     config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10
     config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', component: true, limit: 10
@@ -292,7 +292,7 @@ class CatalogController < ApplicationController
           originInfo_publisher_tesim
 
           content_type_ssimdv
-          sw_format_ssim
+          sw_format_ssimdv
           object_type_ssim
 
           descriptive_text_nostem_i
