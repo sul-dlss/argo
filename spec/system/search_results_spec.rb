@@ -16,12 +16,12 @@ RSpec.describe 'Search results' do
 
       solr_conn.add(:id => 'druid:hj185xx2222',
                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                    :content_type_ssim => 'book')
+                    SolrDocument::FIELD_CONTENT_TYPE => 'book')
       solr_conn.commit
     end
 
     it 'contains Blacklight default index page tools' do
-      visit search_catalog_path f: { content_type_ssim: ['book'] }
+      visit search_catalog_path f: { SolrDocument::FIELD_CONTENT_TYPE => ['book'] }
       within '.constraints-container' do
         expect(page).to have_css '.catalog_startOverLink', text: 'Start Over'
       end
@@ -49,7 +49,7 @@ RSpec.describe 'Search results' do
 
       solr_conn.add(:id => 'druid:hj185xx2222',
                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                    :content_type_ssim => 'image',
+                    SolrDocument::FIELD_CONTENT_TYPE => 'image',
                     :status_ssi => 'v1 Unknown Status',
                     SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
                     SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',

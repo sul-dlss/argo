@@ -204,7 +204,7 @@ RSpec.describe 'Item view', :js do
             {
               :id => item_id,
               SolrDocument::FIELD_OBJECT_TYPE => 'item',
-              :content_type_ssim => 'image',
+              SolrDocument::FIELD_CONTENT_TYPE => 'image',
               :status_ssi => 'v1 Unknown Status',
               SolrDocument::FIELD_ACCESS_RIGHTS => %w[world dark],
               SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',

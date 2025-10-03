@@ -174,7 +174,7 @@ RSpec.describe 'Version view', :js do
         :id => druid,
         SolrDocument::FIELD_TITLE => title,
         SolrDocument::FIELD_OBJECT_TYPE => 'item',
-        :content_type_ssim => 'image',
+        SolrDocument::FIELD_CONTENT_TYPE => 'image',
         :status_ssi => 'v1 Unknown Status',
         SolrDocument::FIELD_ACCESS_RIGHTS => %w[world dark],
         SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',

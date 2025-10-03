@@ -17,7 +17,7 @@ RSpec.describe 'Profile' do
 
     solr_conn.add(id: 'druid:xb482bw3988',
                   objectType_ssim: 'item',
-                  content_type_ssim: 'image',
+                  SolrDocument::FIELD_CONTENT_TYPE => 'image',
                   SolrDocument::FIELD_COLLECTION_TITLE => 'Annual report of the State Corporation Commission',
                   apo_title_ssim: 'Stanford University Libraries - Special Collections',
                   SolrDocument::FIELD_ACCESS_RIGHTS => 'dark',
