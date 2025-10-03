@@ -30,7 +30,7 @@ module BlacklightConfigHelper
         originInfo_place_placeTerm_tesim
         originInfo_publisher_tesim
 
-        content_type_ssim
+        content_type_ssimdv
         sw_format_ssim
         object_type_ssim
 

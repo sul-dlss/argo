@@ -12,10 +12,10 @@ RSpec.describe Argo::ProfileQueries do
   let(:blacklight_params) { { controller: 'profile' } }
   let(:required_facet_fields) do
     [
-      SolrDocument::FIELD_APO_TITLE.to_s,
-      SolrDocument::FIELD_COLLECTION_TITLE.to_s,
+      SolrDocument::FIELD_APO_TITLE,
+      SolrDocument::FIELD_COLLECTION_TITLE,
       SolrDocument::FIELD_ACCESS_RIGHTS,
-      'content_type_ssim',
+      SolrDocument::FIELD_CONTENT_TYPE,
       'use_statement_ssim',
       'copyright_ssim',
       'use_license_machine_ssi',

@@ -100,7 +100,7 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :content_type_ssim, label: 'Content Type',
+      field: SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type',
       sort: true, default: false, width: 100
     },
     {

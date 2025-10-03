@@ -15,11 +15,11 @@ class ProfilePresenter
   end
 
   def apo_titles
-    aggregations[SolrDocument::FIELD_APO_TITLE.to_s].items
+    aggregations[SolrDocument::FIELD_APO_TITLE].items
   end
 
   def collection_titles
-    aggregations[SolrDocument::FIELD_COLLECTION_TITLE.to_s].items
+    aggregations[SolrDocument::FIELD_COLLECTION_TITLE].items
   end
 
   def rights_descriptions
@@ -27,7 +27,7 @@ class ProfilePresenter
   end
 
   def content_type
-    aggregations['content_type_ssim'].items
+    aggregations[SolrDocument::FIELD_CONTENT_TYPE].items
   end
 
   def use_statement
