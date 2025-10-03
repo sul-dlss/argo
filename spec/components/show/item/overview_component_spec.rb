@@ -53,7 +53,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
     let(:doc) do
       SolrDocument.new('id' => 'druid:kv840xx0000',
                        SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                       'use_license_machine_ssi' => 'CC-BY-NC-SA-4.0')
+                       SolrDocument::FIELD_LICENSE => 'CC-BY-NC-SA-4.0')
     end
 
     it 'shows the full license text' do

@@ -18,7 +18,7 @@ RSpec.describe Argo::ProfileQueries do
       SolrDocument::FIELD_CONTENT_TYPE,
       'use_statement_ssim',
       'copyright_ssim',
-      'use_license_machine_ssi',
+      SolrDocument::FIELD_LICENSE,
       SolrDocument::FIELD_SW_FORMAT,
       SolrDocument::FIELD_SW_LANGUAGE,
       SolrDocument::FIELD_TOPIC,
