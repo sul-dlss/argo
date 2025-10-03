@@ -8,7 +8,7 @@ class SolrDocument
   FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssimdv'
   FIELD_AUTHOR = 'author_display_ss'
   FIELD_BARCODE_ID = 'barcode_id_ssimdv'
-  FIELD_CONSTITUENTS = 'has_constituents_ssim'
+  FIELD_CONSTITUENTS = 'has_constituents_ssimdv'
   FIELD_CONTENT_TYPE = 'content_type_ssim'
   FIELD_COPYRIGHT = 'copyright_ssim'
   FIELD_CREATED_DATE = 'created_at_dttsi'
