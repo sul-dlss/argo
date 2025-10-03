@@ -134,8 +134,8 @@ class Report
       sort: false, default: false, width: 100
     },
     {
-      field: :accessioned_earliest_dttsi, label: 'Accession. Datetime',
-      proc: ->(doc) { DatePresenter.render(doc[:accessioned_earliest_dttsi]) },
+      field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: 'Accession. Datetime',
+      proc: ->(doc) { DatePresenter.render(doc[SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE]) },
       sort: true, default: false, width: 100
     },
     {
