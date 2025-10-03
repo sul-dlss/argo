@@ -10,7 +10,7 @@ RSpec.describe 'Home page' do
     solr_conn.add(id: 'druid:xb482bw3983',
                   objectType_ssim: 'item',
                   main_title_tenim: 'Report about stuff',
-                  collection_title_ssim: '123',
+                  SolrDocument::FIELD_COLLECTION_TITLE => '123',
                   current_version_isi: '1')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
