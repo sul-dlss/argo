@@ -55,7 +55,7 @@ class ProfilePresenter
   end
 
   def sw_topic
-    aggregations['topic_ssim'].items
+    aggregations[SolrDocument::FIELD_TOPIC].items
   end
 
   def sw_region

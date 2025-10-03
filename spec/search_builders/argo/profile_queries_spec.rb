@@ -21,7 +21,7 @@ RSpec.describe Argo::ProfileQueries do
       'use_license_machine_ssi',
       SolrDocument::FIELD_SW_FORMAT,
       SolrDocument::FIELD_SW_LANGUAGE,
-      'topic_ssim',
+      SolrDocument::FIELD_TOPIC,
       SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC,
       SolrDocument::FIELD_SW_SUBJECT_TEMPORAL,
       SolrDocument::FIELD_SW_GENRE
