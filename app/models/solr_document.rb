@@ -28,7 +28,7 @@ class SolrDocument
   FIELD_LAST_MODIFIED_DATE = 'modified_latest_dttsi'
   FIELD_LAST_OPENED_DATE = 'opened_latest_dttsi'
   FIELD_LAST_PUBLISHED_DATE = 'published_latest_dttsi'
-  FIELD_LICENSE = 'use_license_machine_ssi'
+  FIELD_LICENSE = 'use_license_machine_ssidv'
   FIELD_METADATA_SOURCE = 'metadata_source_ssimdv'
   FIELD_MODS_TYPE_OF_RESOURCE = 'mods_typeOfResource_ssimdv'
   FIELD_OBJECT_TYPE = 'objectType_ssimdv'

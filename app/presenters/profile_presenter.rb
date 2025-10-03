@@ -39,7 +39,7 @@ class ProfilePresenter
   end
 
   def use_license_machine
-    aggregations['use_license_machine_ssi'].items
+    aggregations[SolrDocument::FIELD_LICENSE].items
   end
 
   def sw_resource_type
