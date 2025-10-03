@@ -79,7 +79,7 @@ RSpec.describe Report do
         :citation,
         :source_id_ssi,
         SolrDocument::FIELD_APO_TITLE,
-        :processing_status_text_ssi,
+        SolrDocument::FIELD_PROCESSING_STATUS,
         :published_earliest_dttsi,
         :file_count,
         :shelved_file_count,

@@ -25,7 +25,7 @@ module Argo
       solr_parameters['stats.field'] << 'preserved_size_dbtsi'
       # Use this paradigm to add pivot facets
       solr_parameters['facet.pivot'] ||= []
-      solr_parameters['facet.pivot'] << "#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"
+      solr_parameters['facet.pivot'] << "#{SolrDocument::FIELD_OBJECT_TYPE},#{SolrDocument::FIELD_PROCESSING_STATUS}"
       # Use this paradigm to add facet queries
       solr_parameters['facet.query'] ||= []
       solr_parameters['facet.query'] << '-rights_primary_ssi:"dark" AND published_dttsim:*'

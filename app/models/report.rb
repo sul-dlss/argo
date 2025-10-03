@@ -121,7 +121,7 @@ class Report
       sort: false, default: true, width: 100
     },
     {
-      field: :processing_status_text_ssi, label: 'Status',
+      field: SolrDocument::FIELD_PROCESSING_STATUS, label: 'Status',
       sort: false, default: true, width: 100
     },
     {

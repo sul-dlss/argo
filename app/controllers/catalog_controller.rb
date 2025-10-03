@@ -100,7 +100,7 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_NONHYDRUS_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
                                                                     more_limit: 9999, sort: 'index'
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
-    config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_PROCESSING_STATUS, label: 'Processing Status', component: true, limit: 10
     config.add_facet_field 'released_to_earthworks',
                            component: true,
                            query: {

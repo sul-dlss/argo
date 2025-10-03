@@ -69,7 +69,7 @@ RSpec.describe Argo::ProfileQueries do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       pivot_fields = solr_parameters['facet.pivot']
-      required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+      required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},#{SolrDocument::FIELD_PROCESSING_STATUS}"]
       expect(pivot_fields).to include(*required_fields)
     end
 

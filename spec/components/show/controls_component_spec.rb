@@ -42,7 +42,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:dro) { true }
     let(:doc) do
       SolrDocument.new('id' => item_id,
-                       'processing_status_text_ssi' => processing_status,
+                       SolrDocument::FIELD_PROCESSING_STATUS => processing_status,
                        SolrDocument::FIELD_OBJECT_TYPE => 'item',
                        CatalogRecordId.index_field => catalog_record_id,
                        SolrDocument::FIELD_APO_ID => [governing_apo_id],
@@ -182,7 +182,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     let(:doc) do
       SolrDocument.new('id' => view_apo_id,
-                       'processing_status_text_ssi' => 'not registered',
+                       SolrDocument::FIELD_PROCESSING_STATUS => 'not registered',
                        SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',
                        SolrDocument::FIELD_APO_ID => [governing_apo_id])
     end
@@ -211,7 +211,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     let(:doc) do
       SolrDocument.new('id' => view_collection_id,
-                       'processing_status_text_ssi' => 'not registered',
+                       SolrDocument::FIELD_PROCESSING_STATUS => 'not registered',
                        SolrDocument::FIELD_OBJECT_TYPE => 'collection',
                        CatalogRecordId.index_field => catalog_record_id,
                        SolrDocument::FIELD_APO_ID => [governing_apo_id])
@@ -252,7 +252,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     context 'when registered' do
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'Registered')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'Registered')
       end
 
       it { is_expected.to be true }
@@ -260,7 +260,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     context 'when unknown' do
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'Unknown Status')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'Unknown Status')
       end
 
       it { is_expected.to be true }
@@ -268,7 +268,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     context 'when beyond registered only' do
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'In accessioning')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'In accessioning')
       end
 
       it { is_expected.to be false }
@@ -284,7 +284,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     context 'when registered' do
       let(:open) { true }
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'Registered')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'Registered')
       end
 
       it { is_expected.to be false }
@@ -292,7 +292,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     context 'when accessioned' do
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'V1 Accessioned')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'V1 Accessioned')
       end
 
       it { is_expected.to be false }
@@ -301,7 +301,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     context 'when unknown' do
       let(:open) { true }
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'Unknown Status')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'Unknown Status')
       end
 
       it { is_expected.to be false }
@@ -310,7 +310,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     context 'when in accessioning' do
       let(:open) { true }
       let(:doc) do
-        SolrDocument.new(:id => item_id, 'processing_status_text_ssi' => 'V2 In accessioning')
+        SolrDocument.new(:id => item_id, SolrDocument::FIELD_PROCESSING_STATUS => 'V2 In accessioning')
       end
 
       it { is_expected.to be true }
@@ -345,7 +345,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:dro) { true }
     let(:doc) do
       SolrDocument.new('id' => item_id,
-                       'processing_status_text_ssi' => processing_status,
+                       SolrDocument::FIELD_PROCESSING_STATUS => processing_status,
                        SolrDocument::FIELD_OBJECT_TYPE => 'item',
                        CatalogRecordId.index_field => catalog_record_id,
                        SolrDocument::FIELD_APO_ID => [governing_apo_id],
@@ -375,7 +375,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:dro) { true }
     let(:doc) do
       SolrDocument.new('id' => item_id,
-                       'processing_status_text_ssi' => processing_status,
+                       SolrDocument::FIELD_PROCESSING_STATUS => processing_status,
                        SolrDocument::FIELD_OBJECT_TYPE => 'item',
                        CatalogRecordId.index_field => catalog_record_id,
                        SolrDocument::FIELD_APO_ID => [governing_apo_id],
