@@ -182,7 +182,7 @@ class CatalogController < ApplicationController
                                           component: Blacklight::Hierarchy::FacetFieldListComponent,
                                           limit: 9999
 
-    config.add_facet_field 'metadata_source_ssim', label: 'Metadata Source', component: true
+    config.add_facet_field SolrDocument::FIELD_METADATA_SOURCE, label: 'Metadata Source', component: true
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
