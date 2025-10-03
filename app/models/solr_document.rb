@@ -47,6 +47,7 @@ class SolrDocument
   FIELD_STATUS = 'status_ssi'
   FIELD_SW_FORMAT = 'sw_format_ssimdv'
   FIELD_SW_GENRE = 'sw_genre_ssimdv'
+  FIELD_SW_SUBJECT_GEOGRAPHIC = 'sw_subject_geographic_ssimdv'
   FIELD_TAGS = 'tag_ssim'
   FIELD_TITLE = 'display_title_ss'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
