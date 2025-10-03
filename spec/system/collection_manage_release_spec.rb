@@ -34,7 +34,7 @@ RSpec.describe 'Collection manage release' do
     allow(MilestoneService).to receive(:milestones_for).and_return({})
     allow(WorkflowService).to receive_messages(workflows_for: [], published?: true)
     solr_conn.add(id: 'druid:gg232vv1111',
-                  objectType_ssim: 'collection')
+                  SolrDocument::FIELD_OBJECT_TYPE => 'collection')
     solr_conn.commit
 
     sign_in current_user, groups: ['sdr:administrator-role']

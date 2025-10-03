@@ -32,7 +32,7 @@ RSpec.describe 'Count the members of an apo' do
       expect(rendered).to have_link '2', href: search_catalog_path(
         f: {
           is_governed_by_ssim: ["info:fedora/#{ur_apo_id}"],
-          objectType_ssim: ['collection']
+          SolrDocument::FIELD_OBJECT_TYPE => ['collection']
         }
       )
       expect(rendered.find_link('2')[:target]).to eq '_top'
@@ -50,7 +50,7 @@ RSpec.describe 'Count the members of an apo' do
       expect(rendered).to have_link '1', href: search_catalog_path(
         f: {
           is_governed_by_ssim: ["info:fedora/#{admin_policy_id}"],
-          objectType_ssim: ['item']
+          SolrDocument::FIELD_OBJECT_TYPE => ['item']
         }
       )
       expect(rendered.find_link('1')[:target]).to eq '_top'

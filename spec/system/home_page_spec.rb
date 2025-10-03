@@ -8,7 +8,7 @@ RSpec.describe 'Home page' do
 
   before do
     solr_conn.add(id: 'druid:xb482bw3983',
-                  objectType_ssim: 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   main_title_tenim: 'Report about stuff',
                   SolrDocument::FIELD_COLLECTION_TITLE => '123',
                   current_version_isi: '1')

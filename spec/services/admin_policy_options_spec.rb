@@ -29,7 +29,7 @@ RSpec.describe AdminPolicyOptions do
           defType: 'lucene',
           rows: 99_999,
           fl: 'id,tag_ssim,display_title_ss',
-          fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
+          fq: ["#{SolrDocument::FIELD_OBJECT_TYPE}:adminPolicy", '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
         )
       end
 

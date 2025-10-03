@@ -54,7 +54,7 @@ RSpec.describe 'Item source id change' do
       allow(WorkflowService).to receive(:accessioned?).and_return(true)
 
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      solr_conn.add(:id => druid, :objectType_ssim => 'item',
+      solr_conn.add(:id => druid, SolrDocument::FIELD_OBJECT_TYPE => 'item',
                     CatalogRecordId.index_field => "#{CatalogRecordId.indexing_prefix}99999")
       solr_conn.commit
     end

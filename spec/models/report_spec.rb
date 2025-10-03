@@ -102,7 +102,7 @@ RSpec.describe Report do
         :registered_by_tag_ssim,
         :registered_earliest_dttsi,
         :tag_ssim,
-        :objectType_ssim,
+        SolrDocument::FIELD_OBJECT_TYPE,
         SolrDocument::FIELD_CONTENT_TYPE,
         CatalogRecordId.index_field,
         SolrDocument::FIELD_BARCODE_ID,

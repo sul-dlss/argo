@@ -26,7 +26,7 @@ RSpec.describe 'Add a workflow to an item' do
 
   before do
     allow(VersionService).to receive(:new).and_return(version_service)
-    solr_conn.add(id: item_id, objectType_ssim: 'item')
+    solr_conn.add(id: item_id, SolrDocument::FIELD_OBJECT_TYPE => 'item')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)

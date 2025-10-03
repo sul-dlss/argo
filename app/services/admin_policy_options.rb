@@ -13,7 +13,7 @@ class AdminPolicyOptions
     SearchService
       .query(
         q, defType: 'lucene', rows: 99_999, fl: "id,tag_ssim,#{SolrDocument::FIELD_TITLE}",
-           fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
+           fq: ["#{SolrDocument::FIELD_OBJECT_TYPE}:adminPolicy", '!tag_ssim:"Project : Hydrus"', '!tag_ssim:"APO status : inactive"']
       )
       .dig('response', 'docs')
       .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).downcase.delete('[]') }

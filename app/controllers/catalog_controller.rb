@@ -14,7 +14,7 @@ class CatalogController < ApplicationController
   HOME_FACETS = [
     'exploded_project_tag_ssim',
     'exploded_nonproject_tag_ssim',
-    'objectType_ssim',
+    SolrDocument::FIELD_OBJECT_TYPE,
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
     SolrDocument::FIELD_NONHYDRUS_APO_TITLE,
@@ -55,7 +55,7 @@ class CatalogController < ApplicationController
 
     config.index.display_type_field = SolrDocument::FIELD_CONTENT_TYPE
 
-    config.show.display_type_field = 'objectType_ssim'
+    config.show.display_type_field = SolrDocument::FIELD_OBJECT_TYPE
     config.show.html_title_field = SolrDocument::FIELD_TITLE
 
     config.index.thumbnail_method = :render_thumbnail_helper
@@ -88,7 +88,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'exploded_nonproject_tag_ssim', label: 'Tag', limit: 100_000,
                                                            component: LazyNonprojectTagFacetComponent,
                                                            unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_ROLES, label: 'File Role', component: true, limit: 10

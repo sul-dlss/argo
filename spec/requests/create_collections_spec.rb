@@ -72,7 +72,7 @@ RSpec.describe 'Create collections' do
         get "/collections/exists?title=#{title}"
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
-          q: '_query_:"{!raw f=objectType_ssim}collection" AND obj_label_tesim:"foo"'
+          q: "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\" AND obj_label_tesim:\"foo\""
         ))
       end
     end
@@ -93,7 +93,7 @@ RSpec.describe 'Create collections' do
         get "/collections/exists?catalog_record_id=#{catalog_record_id}"
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
-          q: "_query_:\"{!raw f=objectType_ssim}collection\" AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:123\""
+          q: "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\" AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:123\""
         ))
       end
     end
@@ -114,7 +114,7 @@ RSpec.describe 'Create collections' do
         get "/collections/exists?catalog_record_id=#{catalog_record_id}&title=#{title}"
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
-          q: "_query_:\"{!raw f=objectType_ssim}collection\" AND obj_label_tesim:\"foo\" AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:123\""
+          q: "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\" AND obj_label_tesim:\"foo\" AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:123\""
         ))
       end
     end
