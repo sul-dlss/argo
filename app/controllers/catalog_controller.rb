@@ -213,7 +213,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10
     config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', component: true, limit: 10
     config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10
-    config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_GENRE, label: 'SW Genre', component: true, limit: 10
     config.add_facet_field 'sw_language_ssim', label: 'SW Language', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)

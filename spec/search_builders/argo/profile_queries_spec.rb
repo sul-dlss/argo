@@ -24,7 +24,7 @@ RSpec.describe Argo::ProfileQueries do
       'topic_ssim',
       'sw_subject_geographic_ssim',
       'sw_subject_temporal_ssim',
-      'sw_genre_ssim'
+      SolrDocument::FIELD_SW_GENRE
     ]
   end
 

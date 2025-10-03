@@ -67,7 +67,7 @@ class ProfilePresenter
   end
 
   def sw_genre
-    aggregations['sw_genre_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_GENRE].items
   end
 
   def type_status_pivot
