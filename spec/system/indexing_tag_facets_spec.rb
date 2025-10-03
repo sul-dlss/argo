@@ -48,7 +48,7 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
 
   it 'project tags are hierarchical' do
     click_link_or_button('Project', wait: 20) # ensure facet has been expanded by javascript
-    expect(page).to have_css('#facet-exploded_project_tag_ssim', wait: 20)
+    expect(page).to have_css('#facet-exploded_project_tag_ssimdv', wait: 20)
     # Note that "Project" is not indexed as part of facet
     click_link_or_button 'ARS 78s'
     click_link_or_button 'broken'
@@ -60,10 +60,9 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
     fill_in 'q', with: solr_id
     click_button 'search'
     click_link_or_button('Tag', wait: 20) # ensure facet has been expanded by javascript
-    # expect(page).to have_css('#facet-exploded_nonproject_tag_ssim', wait: 10)
     click_link_or_button 'willet'
     skip 'FIXME: failure perhaps associated with the toggle for the willet link being closed and unopenable'
-    within('#facet-exploded_nonproject_tag_ssim') do
+    within('#facet-exploded_nonproject_tag_ssimdv') do
       click_link_or_button 'whimbrel'
       click_link_or_button 'curlew'
     end
