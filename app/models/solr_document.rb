@@ -45,6 +45,7 @@ class SolrDocument
   FIELD_RELEASED_TO_SEARCHWORKS = 'released_to_searchworks_dttsi'
   FIELD_SOURCE_ID = 'source_id_ssi'
   FIELD_STATUS = 'status_ssi'
+  FIELD_SW_FORMAT = 'sw_format_ssimdv'
   FIELD_TAGS = 'tag_ssim'
   FIELD_TITLE = 'display_title_ss'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
@@ -108,7 +109,7 @@ class SolrDocument
     title: FIELD_TITLE,
     author: 'dc_creator_ssi',
     language: 'sw_language_ssim',
-    format: 'sw_format_ssim'
+    format: SolrDocument::FIELD_SW_FORMAT
   )
 
   def embargoed?
