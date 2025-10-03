@@ -1,2 +1,2 @@
-web: bin/rails server
+web: unset PORT && bin/rails server
 css: yarn install && yarn watch:css
