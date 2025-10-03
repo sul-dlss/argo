@@ -51,7 +51,7 @@ module BlacklightConfigHelper
         source_id_text_nostem_i^3
         source_id_ssi
         previous_ils_ids_ssim
-        doi_ssim
+        doi_ssimdv
         contributor_orcids_ssim
       ),
       facet: true,
