@@ -20,7 +20,7 @@ RSpec.describe Argo::ProfileQueries do
       'copyright_ssim',
       'use_license_machine_ssi',
       SolrDocument::FIELD_SW_FORMAT,
-      'sw_language_ssim',
+      SolrDocument::FIELD_SW_LANGUAGE,
       'topic_ssim',
       SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC,
       'sw_subject_temporal_ssim',
