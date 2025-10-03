@@ -197,7 +197,7 @@ class CatalogController < ApplicationController
                                           query: {
                                             has_orcids: { label: 'Has contributor ORCIDs',
                                                           fq: '+contributor_orcids_ssim:*' },
-                                            has_doi: { label: 'Has DOI', fq: '+doi_ssim:*' },
+                                            has_doi: { label: 'Has DOI', fq: "+#{SolrDocument::FIELD_DOI}:*" },
                                             has_barcode: { label: 'Has barcode', fq: "+#{SolrDocument::FIELD_BARCODE_ID}:*" }
                                           }
 
@@ -312,7 +312,7 @@ class CatalogController < ApplicationController
           source_id_text_nostem_i^3
           source_id_ssi
           previous_ils_ids_ssim
-          doi_ssim
+          doi_ssimdv
           contributor_orcids_ssim
         )
       }
