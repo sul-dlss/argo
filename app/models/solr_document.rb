@@ -30,7 +30,7 @@ class SolrDocument
   FIELD_METADATA_SOURCE = 'metadata_source_ssimdv'
   FIELD_MODS_TYPE_OF_RESOURCE = 'mods_typeOfResource_ssimdv'
   FIELD_OBJECT_TYPE = 'objectType_ssimdv'
-  FIELD_ORCIDS = 'contributor_orcids_ssim'
+  FIELD_ORCIDS = 'contributor_orcids_ssimdv'
   FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
   FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
   FIELD_PRESERVATION_SIZE = 'preserved_size_dbtsi'
@@ -47,6 +47,9 @@ class SolrDocument
   FIELD_TITLE = 'display_title_ss'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
   FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
+  FIELD_WORKFLOW_SWP = 'wf_swp_ssimdv'
+  FIELD_WORKFLOW_WPS = 'wf_wps_ssimdv'
+  FIELD_WORKFLOW_WSP = 'wf_wsp_ssimdv'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE

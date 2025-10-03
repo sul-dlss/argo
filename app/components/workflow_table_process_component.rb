@@ -10,14 +10,14 @@ class WorkflowTableProcessComponent < ApplicationComponent
   attr_reader :name, :data, :process, :description
 
   def workflow_process_name
-    new_params = search_state.filter('wf_wps_ssim').add([name, process].compact.join(':')).params.merge(
+    new_params = search_state.filter(SolrDocument::FIELD_WORKFLOW_WPS).add([name, process].compact.join(':')).params.merge(
       controller: 'catalog', action: 'index'
     )
     link_to(process, new_params)
   end
 
   def workflow_item_count(status)
-    new_params = search_state.filter('wf_wps_ssim').add([name, process, status].compact.join(':')).params.merge(
+    new_params = search_state.filter(SolrDocument::FIELD_WORKFLOW_WPS).add([name, process, status].compact.join(':')).params.merge(
       controller: 'catalog', action: 'index'
     )
     rotate_facet_params('wf_wps', 'wps', facet_order('wf_wps'), new_params)
@@ -66,7 +66,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
   def workflow_reset_link(status = 'error')
     return unless data[process] && data[process][status] && data[process][status][:_]
 
-    new_params = search_state.filter('wf_wps_ssim')
+    new_params = search_state.filter(SolrDocument::FIELD_WORKFLOW_WPS)
                              .add([name, process, status].compact.join(':'))
                              .params
                              .merge(

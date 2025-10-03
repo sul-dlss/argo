@@ -20,15 +20,15 @@ class CatalogController < ApplicationController
     SolrDocument::FIELD_NONHYDRUS_APO_TITLE,
     'released_to_earthworks',
     'released_to_searchworks',
-    'wf_wps_ssim',
+    SolrDocument::FIELD_WORKFLOW_WPS,
     'identifier_tesim'
   ].map(&:to_s).freeze
 
   # Facets that are configured for lazy loading.
-  LAZY_FACETS = %w[
-    exploded_project_tag_ssim
-    exploded_nonproject_tag_ssim
-    wf_wps_ssim
+  LAZY_FACETS = [
+    'exploded_project_tag_ssim',
+    'exploded_nonproject_tag_ssim',
+    SolrDocument::FIELD_WORKFLOW_WPS
   ].map(&:to_s).freeze
 
   # NOTE: any Solr parameters configured here will override parameters in the Solr configuration files.
@@ -173,14 +173,14 @@ class CatalogController < ApplicationController
                                fq: "-#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[* TO *]"
                              }
                            }
-    config.add_facet_field 'wf_wps_ssim', label: 'Workflows (WPS)', limit: 9999,
-                                          component: LazyWpsWorkflowFacetComponent
-    config.add_facet_field 'wf_wsp_ssim', label: 'Workflows (WSP)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999
-    config.add_facet_field 'wf_swp_ssim', label: 'Workflows (SWP)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999
+    config.add_facet_field SolrDocument::FIELD_WORKFLOW_WPS, label: 'Workflows (WPS)', limit: 9999,
+                                                             component: LazyWpsWorkflowFacetComponent
+    config.add_facet_field SolrDocument::FIELD_WORKFLOW_WSP, label: 'Workflows (WSP)',
+                                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                                             limit: 9999
+    config.add_facet_field SolrDocument::FIELD_WORKFLOW_SWP, label: 'Workflows (SWP)',
+                                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                                             limit: 9999
 
     config.add_facet_field SolrDocument::FIELD_METADATA_SOURCE, label: 'Metadata Source', component: true
 
@@ -232,9 +232,9 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       hierarchy: {
-        'wf_wps' => [['ssim'], ':'],
-        'wf_wsp' => [['ssim'], ':'],
-        'wf_swp' => [['ssim'], ':'],
+        'wf_wps' => [['ssimdv'], ':'],
+        'wf_wsp' => [['ssimdv'], ':'],
+        'wf_swp' => [['ssimdv'], ':'],
         'exploded_nonproject_tag' => [['ssim'], ':'],
         'exploded_project_tag' => [['ssim'], ':']
       }
@@ -342,10 +342,10 @@ class CatalogController < ApplicationController
   end
 
   def lazy_wps_workflow_facet
-    limit_facets_to(['wf_wps_ssim'])
+    limit_facets_to([SolrDocument::FIELD_WORKFLOW_WPS])
 
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('wf_wps_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_WORKFLOW_WPS)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_wps_workflow_facet'
