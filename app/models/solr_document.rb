@@ -52,6 +52,7 @@ class SolrDocument
   FIELD_SW_SUBJECT_TEMPORAL = 'sw_subject_temporal_ssimdv'
   FIELD_TAGS = 'tag_ssim'
   FIELD_TITLE = 'display_title_ss'
+  FIELD_TOPIC = 'topic_ssimdv'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
   FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
   FIELD_WORKFLOW_SWP = 'wf_swp_ssimdv'
