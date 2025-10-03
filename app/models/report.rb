@@ -22,12 +22,12 @@ class Report
 
   REPORT_FIELDS = [
     {
-      field: :druid, label: 'Druid',
+      field: 'druid', label: 'Druid',
       proc: ->(doc) { doc.druid },
       sort: true, default: true, width: 100, formatter: 'linkToArgo'
     },
     {
-      field: :purl, label: 'Purl',
+      field: 'purl', label: 'Purl',
       proc: ->(doc) { "#{Settings.purl_url}/#{doc.druid}" },
       solr_fields: %w[id],
       sort: false, default: false, width: 100, formatter: 'linkToPurl'
@@ -38,14 +38,14 @@ class Report
       sort: false, default: false, width: 100
     },
     {
-      field: :title, label: 'Title',
+      field: 'title', label: 'Title',
       proc: ->(doc) { doc.title_display },
       solr_fields: [SolrDocument::FIELD_TITLE,
                     SolrDocument::FIELD_LABEL],
       sort: false, default: true, width: 100
     },
     {
-      field: :citation, label: 'Citation',
+      field: 'citation', label: 'Citation',
       proc: ->(doc) { CitationPresenter.new(doc).render },
       solr_fields: [SolrDocument::FIELD_AUTHOR,
                     SolrDocument::FIELD_TITLE,
@@ -56,7 +56,7 @@ class Report
       sort: false, default: false, width: 100
     },
     {
-      field: :source_id_ssi, label: 'Source ID',
+      field: 'source_id_ssi', label: 'Source ID',
       sort: false, default: true, width: 100
     },
     {
@@ -79,20 +79,20 @@ class Report
       sort: false, default: true, width: 100
     },
     {
-      field: :project_tag_ssim, label: 'Project',
+      field: 'project_tag_ssim', label: 'Project',
       sort: true, default: false, width: 100
     },
     {
-      field: :registered_by_tag_ssim, label: 'Registered By',
+      field: 'registered_by_tag_ssim', label: 'Registered By',
       sort: true, default: false, width: 100
     },
     {
-      field: :registered_earliest_dttsi, label: 'Registered',
+      field: 'registered_earliest_dttsi', label: 'Registered',
       proc: ->(doc) { DatePresenter.render(doc[:registered_earliest_dttsi]) },
       sort: true, default: false, width: 100
     },
     {
-      field: :tag_ssim, label: 'Tags',
+      field: 'tag_ssim', label: 'Tags',
       sort: true, default: false, width: 100
     },
     {
@@ -104,7 +104,7 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: SolrDocument::FIELD_CONSTITUENTS.to_sym, label: 'Constituents',
+      field: SolrDocument::FIELD_CONSTITUENTS, label: 'Constituents',
       proc: ->(doc) { doc[SolrDocument::FIELD_CONSTITUENTS]&.size || 'Not a virtual object' },
       sort: true, default: false, width: 100
     },
@@ -117,7 +117,7 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: SolrDocument::FIELD_CURRENT_VERSION.to_sym, label: 'Version',
+      field: SolrDocument::FIELD_CURRENT_VERSION, label: 'Version',
       sort: false, default: true, width: 100
     },
     {
@@ -125,7 +125,7 @@ class Report
       sort: false, default: true, width: 100
     },
     {
-      field: SolrDocument::FIELD_ACCESS_RIGHTS.to_sym, label: 'Access Rights',
+      field: SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights',
       sort: false, default: true, width: 100
     },
     {
@@ -139,47 +139,47 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :published_earliest_dttsi, label: 'Pub. Date',
+      field: 'published_earliest_dttsi', label: 'Pub. Date',
       proc: ->(doc) { DatePresenter.render(doc[:published_earliest_dttsi]) },
       sort: true, default: false, width: 100
     },
     {
-      field: SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym, label: 'Errors',
+      field: SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Errors',
       proc: ->(doc) { doc[SolrDocument::FIELD_WORKFLOW_ERRORS] },
       sort: false, default: false, width: 100
     },
     {
-      field: :file_count, label: 'Files',
+      field: 'file_count', label: 'Files',
       proc: ->(doc) { doc[:content_file_count_itsi] },
       solr_fields: %w[content_file_count_itsi],
       sort: false, default: true, width: 50
     },
     {
-      field: :shelved_file_count, label: 'Shelved Files',
+      field: 'shelved_file_count', label: 'Shelved Files',
       proc: ->(doc) { doc[:shelved_content_file_count_itsi] },
       solr_fields: %w[shelved_content_file_count_itsi],
       sort: false, default: true, width: 50
     },
     {
-      field: :resource_count, label: 'Resources',
+      field: 'resource_count', label: 'Resources',
       proc: ->(doc) { doc[:resource_count_itsi] },
       solr_fields: %w[resource_count_itsi],
       sort: false, default: false, width: 50
     },
     {
-      field: :preserved_size_human, label: 'Preservation Size',
+      field: 'preserved_size_human', label: 'Preservation Size',
       proc: ->(doc) { number_to_human_size(doc.preservation_size) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50
     },
     {
-      field: :preserved_size, label: 'Preservation Size (bytes)',
+      field: 'preserved_size', label: 'Preservation Size (bytes)',
       proc: ->(doc) { number_with_precision(doc.preservation_size, precision: 0) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50
     },
     {
-      field: :dissertation_id, label: 'Dissertation ID',
+      field: 'dissertation_id', label: 'Dissertation ID',
       proc: lambda { |doc|
               doc[:identifier_ssim].filter do |id|
                 id.include?('dissertationid')
@@ -230,7 +230,7 @@ class Report
                   .delete(:fields)
                   .split(/\s*,\s*/)
                   .map do |field_name|
-                    REPORT_FIELDS.find { |field_entry| field_entry[:field] == field_name.to_sym }
+                    REPORT_FIELDS.find { |field_entry| field_entry[:field] == field_name }
                   end
               else
                 REPORT_FIELDS
@@ -282,7 +282,7 @@ class Report
       (@response,) = search_results(params)
       until @response.documents.empty?
         report_data.each do |record|
-          yielder << CSV.generate_line(@fields.map { |field| record[field.fetch(:field)].to_s }, force_quotes: true)
+          yielder << CSV.generate_line(@fields.map { |field| record[field.fetch(:field).to_sym].to_s }, force_quotes: true)
         end
         @params[:page] += 1
         (@response,) = search_results(@params)
