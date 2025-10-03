@@ -209,7 +209,7 @@ class CatalogController < ApplicationController
                                       }
 
     config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Resource Type', component: true, limit: 10
-    config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_PUB_DATE, label: 'SW Date', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'SW Topic', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC, label: 'SW Region', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_TEMPORAL, label: 'SW Era', component: true, limit: 10
