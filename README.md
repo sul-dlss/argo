@@ -36,7 +36,6 @@ docker compose up -d
 bin/rails db:prepare
 bin/dev
 bin/rake argo:seed_data # run in separate terminal window
-rdbg -A # run in separate terminal window
 ```
 
 ## Run the tests locally
@@ -104,10 +103,10 @@ bin/rake argo:seed_data
 
 For creating additional test data, see the section below "Creating fixture data".
 
-The webserver process is configured to run a remote debug session. You may attach (`-A`) the debugger in another terminal window:
+When debugging locally, add a `debugger` statement in the code and connect to the overmind process.
 
 ```
-rdbg -A
+bin/overmind connect web
 ```
 
 ### System tests

@@ -57,7 +57,6 @@ group :test, :development do
   gem 'erb_lint', require: false
   gem 'factory_bot_rails'
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
-  gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rspec-rails', '~> 6.1'
   gem 'rubocop-capybara'
   gem 'rubocop-factory_bot'
@@ -69,6 +68,7 @@ end
 
 group :development do
   gem 'listen', '~> 3.2' # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
+  gem 'overmind'
   gem 'web-console'
 end
 
