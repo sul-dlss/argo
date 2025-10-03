@@ -59,7 +59,7 @@ class ProfilePresenter
   end
 
   def sw_region
-    aggregations['sw_subject_geographic_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC].items
   end
 
   def sw_era

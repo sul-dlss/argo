@@ -12,7 +12,7 @@ RSpec.describe 'Profile' do
     solr_conn.add(id: 'druid:xb482ww9999',
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   topic_ssim: 'Cephalopoda',
-                  sw_subject_geographic_ssim: 'Bermuda Islands',
+                  SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC => 'Bermuda Islands',
                   tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
 
     solr_conn.add(id: 'druid:xb482bw3988',
