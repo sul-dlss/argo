@@ -96,11 +96,11 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :objectType_ssim, label: 'Object Type',
+      field: SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type',
       sort: true, default: false, width: 100
     },
     {
-      field: :content_type_ssim, label: 'Content Type',
+      field: SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type',
       sort: true, default: false, width: 100
     },
     {
@@ -113,7 +113,7 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :barcode_id_ssim, label: 'Barcode',
+      field: SolrDocument::FIELD_BARCODE_ID, label: 'Barcode',
       sort: true, default: false, width: 100
     },
     {
@@ -121,7 +121,7 @@ class Report
       sort: false, default: true, width: 100
     },
     {
-      field: :processing_status_text_ssi, label: 'Status',
+      field: SolrDocument::FIELD_PROCESSING_STATUS, label: 'Status',
       sort: false, default: true, width: 100
     },
     {
@@ -134,8 +134,8 @@ class Report
       sort: false, default: false, width: 100
     },
     {
-      field: :accessioned_earliest_dttsi, label: 'Accession. Datetime',
-      proc: ->(doc) { DatePresenter.render(doc[:accessioned_earliest_dttsi]) },
+      field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: 'Accession. Datetime',
+      proc: ->(doc) { DatePresenter.render(doc[SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE]) },
       sort: true, default: false, width: 100
     },
     {

@@ -72,10 +72,6 @@ RSpec.describe Report do
   describe 'REPORT_FIELDS' do
     subject(:report_fields) { described_class::REPORT_FIELDS }
 
-    it 'has report fields' do
-      expect(report_fields).to(be_all { |f| f[:field].is_a? Symbol }) # all :field keys are symbols
-    end
-
     it 'has all the mandatory, default report fields' do
       [
         :druid,
@@ -83,7 +79,7 @@ RSpec.describe Report do
         :citation,
         :source_id_ssi,
         SolrDocument::FIELD_APO_TITLE,
-        :processing_status_text_ssi,
+        SolrDocument::FIELD_PROCESSING_STATUS,
         :published_earliest_dttsi,
         :file_count,
         :shelved_file_count,
@@ -106,11 +102,11 @@ RSpec.describe Report do
         :registered_by_tag_ssim,
         :registered_earliest_dttsi,
         :tag_ssim,
-        :objectType_ssim,
-        :content_type_ssim,
+        SolrDocument::FIELD_OBJECT_TYPE,
+        SolrDocument::FIELD_CONTENT_TYPE,
         CatalogRecordId.index_field,
-        :barcode_id_ssim,
-        :accessioned_earliest_dttsi,
+        SolrDocument::FIELD_BARCODE_ID,
+        SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE,
         SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym
       ].each do |k|
         expect(report_fields).to(be_any { |f| f[:field] == k })

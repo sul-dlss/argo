@@ -50,14 +50,14 @@ RSpec.describe 'Item view', :js do
       let(:solr_doc) do
         {
           id: 'druid:hj185xx2222',
-          objectType_ssim: 'item',
+          SolrDocument::FIELD_OBJECT_TYPE => 'item',
           display_title_ss: title
         }
       end
       let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
 
       it 'shows the catalog index view' do
-        visit search_catalog_path f: { objectType_ssim: ['item'] }
+        visit search_catalog_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
         expect(page).to have_css '.index_title a', text: title
       end
     end
@@ -204,9 +204,9 @@ RSpec.describe 'Item view', :js do
             {
               :id => item_id,
               SolrDocument::FIELD_OBJECT_TYPE => 'item',
-              :content_type_ssim => 'image',
+              SolrDocument::FIELD_CONTENT_TYPE => 'image',
               :status_ssi => 'v1 Unknown Status',
-              :rights_descriptions_ssim => %w[world dark],
+              SolrDocument::FIELD_ACCESS_RIGHTS => %w[world dark],
               SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
               SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
               :project_tag_ssim => 'Fuller Slides',

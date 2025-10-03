@@ -11,23 +11,23 @@ RSpec.describe 'Date range form', :js do
   before do
     solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
     solr_conn.add(:id => 'druid:xb482ww9999',
-                  :objectType_ssim => 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   :obj_label_tesim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
     solr_conn.add(:id => 'druid:xb482bw3980',
-                  :objectType_ssim => 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   :obj_label_tesim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
     solr_conn.add(:id => 'druid:xb482bw3981',
-                  :objectType_ssim => 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   :obj_label_tesim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
     solr_conn.add(:id => 'druid:xb482bw3982',
-                  :objectType_ssim => 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   :obj_label_tesim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
     solr_conn.add(:id => 'druid:xb482bw3983',
-                  :objectType_ssim => 'item',
+                  SolrDocument::FIELD_OBJECT_TYPE => 'item',
                   :obj_label_tesim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
     solr_conn.commit
@@ -97,7 +97,7 @@ RSpec.describe 'Date range form', :js do
   end
 
   context 'with selected facets and search queries' do
-    let(:query_params) { { q: 'Reports', f: { objectType_ssim: ['item'] } } }
+    let(:query_params) { { q: 'Reports', f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] } } }
 
     before do
       visit root_path(query_params.merge(all: true))

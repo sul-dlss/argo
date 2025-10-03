@@ -13,7 +13,7 @@ RSpec.describe 'BulkActions::RightsJobs' do
     it 'creates a job' do
       params = { 'view_access' => 'world', 'download_access' => 'stanford',
                  'controlled_digital_lending' => '0',
-                 'f' => { 'objectType_ssim' => ['agreement'] },
+                 'f' => { SolrDocument::FIELD_OBJECT_TYPE => ['agreement'] },
                  'q' => '', 'search_field' => 'text', 'druids' => 'druid:cf540ct6282', 'description' => '' }
 
       expect { post '/bulk_actions/rights_job', params: }.to have_enqueued_job(SetRightsJob)

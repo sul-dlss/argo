@@ -5,7 +5,7 @@ require 'rails_helper'
 # Feature tests for the spreadsheet bulk uploads view.
 RSpec.describe 'Bulk jobs view', :js do
   before do
-    solr_conn.add(id: apo_id, objectType_ssim: 'adminPolicy',
+    solr_conn.add(id: apo_id, SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',
                   'apo_role_dor-apo-manager_ssim': ['workgroup:sdr:map-staff'])
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:map-staff']

@@ -30,8 +30,8 @@ module BlacklightConfigHelper
         originInfo_place_placeTerm_tesim
         originInfo_publisher_tesim
 
-        content_type_ssim
-        sw_format_ssim
+        content_type_ssimdv
+        sw_format_ssimdv
         object_type_ssim
 
         descriptive_text_nostem_i
@@ -46,23 +46,23 @@ module BlacklightConfigHelper
         obj_label_tesim
         identifier_ssim
         identifier_tesim
-        barcode_id_ssim
+        barcode_id_ssimdv
         folio_instance_hrid_ssim
         source_id_text_nostem_i^3
         source_id_ssi
         previous_ils_ids_ssim
-        doi_ssim
-        contributor_orcids_ssim
+        doi_ssimdv
+        contributor_orcids_ssimdv
       ),
       facet: true,
       'facet.mincount': 1,
-      'f.wf_wps_ssim.facet.limit': -1,
-      'f.wf_wsp_ssim.facet.limit': -1,
-      'f.wf_swp_ssim.facet.limit': -1,
-      'f.exploded_project_tag_ssim.facet.limit': -1,
-      'f.exploded_project_tag_ssim.facet.sort': 'index',
-      'f.exploded_nonproject_tag_ssim.facet.limit': -1,
-      'f.exploded_nonproject_tag_ssim.facet.sort': 'index'
+      'f.wf_wps_ssimdv.facet.limit': -1,
+      'f.wf_wsp_ssimdv.facet.limit': -1,
+      'f.wf_swp_ssimdv.facet.limit': -1,
+      'f.exploded_project_tag_ssimdv.facet.limit': -1,
+      'f.exploded_project_tag_ssimdv.facet.sort': 'index',
+      'f.exploded_nonproject_tag_ssimdv.facet.limit': -1,
+      'f.exploded_nonproject_tag_ssimdv.facet.sort': 'index'
     }
   end
 end

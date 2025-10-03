@@ -25,16 +25,16 @@ RSpec.describe 'BulkActionsController' do
     end
 
     it 'shows a button to create a new one' do
-      get '/bulk_actions?action=index&controller=catalog&f[current_version_isi][]=3&f[is_governed_by_ssim][]=info%3Afedora%2Fdruid%3Azw306xn5593&f[objectType_ssim][]=item&page=3'
+      get "/bulk_actions?action=index&controller=catalog&f[#{SolrDocument::FIELD_CURRENT_VERSION}][]=3&f[is_governed_by_ssim][]=info%3Afedora%2Fdruid%3Azw306xn5593&f[#{SolrDocument::FIELD_OBJECT_TYPE}][]=item&page=3"
       # this tests that page, action and controller are stripped out of the parameters
-      url = '/bulk_actions/new?f%5Bcurrent_version_isi%5D%5B%5D=3&f%5Bis_governed_by_ssim%5D%5B%5D=info%3Afedora%2Fdruid%3Azw306xn5593&f%5BobjectType_ssim%5D%5B%5D=item'
+      url = "/bulk_actions/new?f%5B#{SolrDocument::FIELD_CURRENT_VERSION}%5D%5B%5D=3&f%5Bis_governed_by_ssim%5D%5B%5D=info%3Afedora%2Fdruid%3Azw306xn5593&f%5B#{SolrDocument::FIELD_OBJECT_TYPE}%5D%5B%5D=item"
       expect(rendered).to have_link 'New Bulk Action', href: url
     end
 
     it 'shows a button without bulk action form params' do
-      get '/bulk_actions?action=index&controller=catalog&f[current_version_isi][]=3&f[is_governed_by_ssim][]=info%3Afedora%2Fdruid%3Azw306xn5593&f[objectType_ssim][]=item&page=3&download_access=world&view_access=stanford'
+      get "/bulk_actions?action=index&controller=catalog&f[#{SolrDocument::FIELD_CURRENT_VERSION}][]=3&f[is_governed_by_ssim][]=info%3Afedora%2Fdruid%3Azw306xn5593&f[#{SolrDocument::FIELD_OBJECT_TYPE}][]=item&page=3&download_access=world&view_access=stanford"
       # this tests that form params for download_access and view_access, in addition to page, action and controller are stripped out of the parameters
-      url = '/bulk_actions/new?f%5Bcurrent_version_isi%5D%5B%5D=3&f%5Bis_governed_by_ssim%5D%5B%5D=info%3Afedora%2Fdruid%3Azw306xn5593&f%5BobjectType_ssim%5D%5B%5D=item'
+      url = "/bulk_actions/new?f%5B#{SolrDocument::FIELD_CURRENT_VERSION}%5D%5B%5D=3&f%5Bis_governed_by_ssim%5D%5B%5D=info%3Afedora%2Fdruid%3Azw306xn5593&f%5B#{SolrDocument::FIELD_OBJECT_TYPE}%5D%5B%5D=item"
       expect(rendered).to have_link 'New Bulk Action', href: url
     end
   end

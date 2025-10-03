@@ -12,19 +12,19 @@ RSpec.describe Argo::ProfileQueries do
   let(:blacklight_params) { { controller: 'profile' } }
   let(:required_facet_fields) do
     [
-      SolrDocument::FIELD_APO_TITLE.to_s,
-      SolrDocument::FIELD_COLLECTION_TITLE.to_s,
-      'rights_descriptions_ssim',
-      'content_type_ssim',
+      SolrDocument::FIELD_APO_TITLE,
+      SolrDocument::FIELD_COLLECTION_TITLE,
+      SolrDocument::FIELD_ACCESS_RIGHTS,
+      SolrDocument::FIELD_CONTENT_TYPE,
       'use_statement_ssim',
       'copyright_ssim',
-      'use_license_machine_ssi',
-      'sw_format_ssim',
-      'sw_language_ssim',
-      'topic_ssim',
-      'sw_subject_geographic_ssim',
-      'sw_subject_temporal_ssim',
-      'sw_genre_ssim'
+      SolrDocument::FIELD_LICENSE,
+      SolrDocument::FIELD_SW_FORMAT,
+      SolrDocument::FIELD_SW_LANGUAGE,
+      SolrDocument::FIELD_TOPIC,
+      SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC,
+      SolrDocument::FIELD_SW_SUBJECT_TEMPORAL,
+      SolrDocument::FIELD_SW_GENRE
     ]
   end
 
@@ -44,22 +44,22 @@ RSpec.describe Argo::ProfileQueries do
 
     it 'handles an existing string facet field' do
       catalog_config = CatalogController.blacklight_config.deep_copy
-      catalog_config['facet.field'] = 'nonhydrus_apo_title_ssim'
+      catalog_config['facet.field'] = SolrDocument::FIELD_NONHYDRUS_APO_TITLE
       solr_parameters = subject.add_profile_queries(catalog_config)
       facet_fields = solr_parameters.facet_fields.pluck(0) + solr_parameters['facet.field']
       expect(facet_fields).to include(*required_facet_fields)
-      expect(facet_fields).to include('nonhydrus_apo_title_ssim')
+      expect(facet_fields).to include(SolrDocument::FIELD_NONHYDRUS_APO_TITLE)
     end
 
     it 'adds in required stats fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       stats_fields = solr_parameters['stats.field']
-      required_fields = %w[
-        sw_pub_date_facet_ssi
-        content_file_count_itsi
-        shelved_content_file_count_itsi
-        preserved_size_dbtsi
+      required_fields = [
+        SolrDocument::FIELD_SW_PUB_DATE,
+        'content_file_count_itsi',
+        'shelved_content_file_count_itsi',
+        'preserved_size_dbtsi'
       ]
       expect(solr_parameters['stats']).to be true
       expect(stats_fields).to include(*required_fields)
@@ -69,7 +69,7 @@ RSpec.describe Argo::ProfileQueries do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       pivot_fields = solr_parameters['facet.pivot']
-      required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+      required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},#{SolrDocument::FIELD_PROCESSING_STATUS}"]
       expect(pivot_fields).to include(*required_fields)
     end
 

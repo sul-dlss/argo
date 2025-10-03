@@ -13,19 +13,19 @@ RSpec.describe 'Report view' do
 
     before do
       solr_conn.add(id: 'druid:hj185xx2222',
-                    objectType_ssim: 'item',
+                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
                     display_title_ss: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
       solr_conn.commit
     end
 
     it 'shows table without error' do
-      visit report_path f: { objectType_ssim: ['item'] }
+      visit report_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       expect(page).to have_css 'div#objectsTable'
       expect(page).to have_content('hj185xx2222')
     end
 
     it 'shows the column selector when clicked' do
-      visit report_path f: { objectType_ssim: ['item'] }
+      visit report_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       click_button('Columns')
       expect(page).to have_content('Select Columns to Display and Download')
       # count the # of total fields

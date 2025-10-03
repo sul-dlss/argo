@@ -9,21 +9,21 @@ RSpec.describe 'View switcher' do
 
   describe 'is present' do
     it 'catalog results' do
-      visit search_catalog_path f: { objectType_ssim: ['item'] }
+      visit search_catalog_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       within '.report-toggle' do
         expect(page).to have_css '.dropdown-item.active a', text: 'Results View'
       end
     end
 
     it 'report view' do
-      visit report_path f: { objectType_ssim: ['item'] }
+      visit report_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       within '.report-toggle' do
         expect(page).to have_css '.dropdown-item.active a', text: 'Report View'
       end
     end
 
     it 'workflow grid' do
-      visit report_workflow_grid_url f: { objectType_ssim: ['item'] }
+      visit report_workflow_grid_url f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       within '.report-toggle' do
         expect(page).to have_css '.dropdown-item.active a', text: 'Workflow Grid View'
       end
