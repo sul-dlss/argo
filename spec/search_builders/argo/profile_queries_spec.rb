@@ -23,7 +23,7 @@ RSpec.describe Argo::ProfileQueries do
       SolrDocument::FIELD_SW_LANGUAGE,
       'topic_ssim',
       SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC,
-      'sw_subject_temporal_ssim',
+      SolrDocument::FIELD_SW_SUBJECT_TEMPORAL,
       SolrDocument::FIELD_SW_GENRE
     ]
   end
