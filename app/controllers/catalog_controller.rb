@@ -17,7 +17,7 @@ class CatalogController < ApplicationController
     'objectType_ssim',
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
-    'nonhydrus_apo_title_ssim',
+    SolrDocument::FIELD_NONHYDRUS_APO_TITLE,
     'released_to_earthworks',
     'released_to_searchworks',
     'wf_wps_ssim',
@@ -97,8 +97,8 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
                                                                  more_limit: 9999, sort: 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim', label: 'Admin Policy', component: true, limit: 10,
-                                                       more_limit: 9999, sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_NONHYDRUS_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
+                                                                    more_limit: 9999, sort: 'index'
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
     config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10
     config.add_facet_field 'released_to_earthworks',
