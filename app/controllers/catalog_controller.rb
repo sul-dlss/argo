@@ -212,7 +212,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10
     config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC, label: 'SW Region', component: true, limit: 10
-    config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_TEMPORAL, label: 'SW Era', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_GENRE, label: 'SW Genre', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'SW Language', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10

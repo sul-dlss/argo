@@ -63,7 +63,7 @@ class ProfilePresenter
   end
 
   def sw_era
-    aggregations['sw_subject_temporal_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_SUBJECT_TEMPORAL].items
   end
 
   def sw_genre
