@@ -106,7 +106,7 @@ RSpec.describe Report do
         SolrDocument::FIELD_CONTENT_TYPE,
         CatalogRecordId.index_field,
         SolrDocument::FIELD_BARCODE_ID,
-        :accessioned_earliest_dttsi,
+        SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE,
         SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym
       ].each do |k|
         expect(report_fields).to(be_any { |f| f[:field] == k })

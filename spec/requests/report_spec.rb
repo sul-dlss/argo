@@ -43,7 +43,7 @@ RSpec.describe 'Reports from a search' do
       let(:report_data) { Array.new(5, double) }
 
       it 'returns data for custom date searches' do
-        params = { f: { modified_latest_dttsi: ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] },
+        params = { f: { SolrDocument::FIELD_LAST_MODIFIED_DATE => ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] },
                    per_page: 5,
                    controller: 'report',
                    action: 'data',
