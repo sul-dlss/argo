@@ -91,7 +91,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
-    config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_ROLES, label: 'File Role', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights', component: true, limit: 1000,
                                                               sort: 'index'
     config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
