@@ -59,10 +59,10 @@ module BlacklightConfigHelper
       'f.wf_wps_ssimdv.facet.limit': -1,
       'f.wf_wsp_ssimdv.facet.limit': -1,
       'f.wf_swp_ssimdv.facet.limit': -1,
-      'f.exploded_project_tag_ssim.facet.limit': -1,
-      'f.exploded_project_tag_ssim.facet.sort': 'index',
-      'f.exploded_nonproject_tag_ssim.facet.limit': -1,
-      'f.exploded_nonproject_tag_ssim.facet.sort': 'index'
+      'f.exploded_project_tag_ssimdv.facet.limit': -1,
+      'f.exploded_project_tag_ssimdv.facet.sort': 'index',
+      'f.exploded_nonproject_tag_ssimdv.facet.limit': -1,
+      'f.exploded_nonproject_tag_ssimdv.facet.sort': 'index'
     }
   end
 end

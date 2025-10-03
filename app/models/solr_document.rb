@@ -20,6 +20,8 @@ class SolrDocument
   FIELD_EARLIEST_ACCESSIONED_DATE = 'accessioned_earliest_dttsi'
   FIELD_EMBARGO_RELEASE_DATE = 'embargo_release_dtsim'
   FIELD_EMBARGO_STATUS = 'embargo_status_ssim'
+  FIELD_EXPLODED_NONPROJECT_TAG = 'exploded_nonproject_tag_ssimdv'
+  FIELD_EXPLODED_PROJECT_TAG = 'exploded_project_tag_ssimdv'
   FIELD_FOLIO_INSTANCE_HRID = 'folio_instance_hrid_ssim'
   FIELD_LABEL = 'obj_label_tesim'
   FIELD_LAST_ACCESSIONED_DATE = 'accessioned_latest_dttsi'

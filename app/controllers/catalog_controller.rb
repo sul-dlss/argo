@@ -12,8 +12,8 @@ class CatalogController < ApplicationController
   # The subset of facets that are displayed on the home page.
   # (Before a user clicks "Show more facets")
   HOME_FACETS = [
-    'exploded_project_tag_ssim',
-    'exploded_nonproject_tag_ssim',
+    SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
+    SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
     SolrDocument::FIELD_OBJECT_TYPE,
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
@@ -26,8 +26,8 @@ class CatalogController < ApplicationController
 
   # Facets that are configured for lazy loading.
   LAZY_FACETS = [
-    'exploded_project_tag_ssim',
-    'exploded_nonproject_tag_ssim',
+    SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
+    SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
     SolrDocument::FIELD_WORKFLOW_WPS
   ].map(&:to_s).freeze
 
@@ -78,16 +78,16 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_ssim', label: 'Tags', link_to_facet: true
     config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
-    # exploded_project_tag_ssim indexes all project tag prefixes for hierarchical facet display, whereas
+    # exploded_project_tag_ssimdv indexes all project tag prefixes for hierarchical facet display, whereas
     #   project tag_ssim only indexes whole tags
-    config.add_facet_field 'exploded_project_tag_ssim', label: 'Project', limit: 100_000,
-                                                        component: LazyProjectTagFacetComponent,
-                                                        unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    # exploded_nonproject_tag_ssim indexes all tag prefixes, except project tags, for hierarchical facet display,
+    config.add_facet_field SolrDocument::FIELD_EXPLODED_PROJECT_TAG, label: 'Project', limit: 100_000,
+                                                                     component: LazyProjectTagFacetComponent,
+                                                                     unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    # exploded_nonproject_tag_ssimdv indexes all tag prefixes, except project tags, for hierarchical facet display,
     #   whereas tag_ssim only indexes whole tags.
-    config.add_facet_field 'exploded_nonproject_tag_ssim', label: 'Tag', limit: 100_000,
-                                                           component: LazyNonprojectTagFacetComponent,
-                                                           unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
+                                                                        component: LazyNonprojectTagFacetComponent,
+                                                                        unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
@@ -235,8 +235,8 @@ class CatalogController < ApplicationController
         'wf_wps' => [['ssimdv'], ':'],
         'wf_wsp' => [['ssimdv'], ':'],
         'wf_swp' => [['ssimdv'], ':'],
-        'exploded_nonproject_tag' => [['ssim'], ':'],
-        'exploded_project_tag' => [['ssim'], ':']
+        'exploded_nonproject_tag' => [['ssimdv'], ':'],
+        'exploded_project_tag' => [['ssimdv'], ':']
       }
     }
 
@@ -323,19 +323,18 @@ class CatalogController < ApplicationController
   end
 
   def lazy_nonproject_tag_facet
-    limit_facets_to(['exploded_nonproject_tag_ssim'])
+    limit_facets_to([SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG])
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('exploded_nonproject_tag_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_nonproject_tag_facet'
   end
 
   def lazy_project_tag_facet
-    limit_facets_to(['exploded_project_tag_ssim'])
-
+    limit_facets_to([SolrDocument::FIELD_EXPLODED_PROJECT_TAG])
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('exploded_project_tag_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_PROJECT_TAG)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_project_tag_facet'
