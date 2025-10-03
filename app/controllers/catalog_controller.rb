@@ -198,7 +198,7 @@ class CatalogController < ApplicationController
                                             has_orcids: { label: 'Has contributor ORCIDs',
                                                           fq: '+contributor_orcids_ssim:*' },
                                             has_doi: { label: 'Has DOI', fq: '+doi_ssim:*' },
-                                            has_barcode: { label: 'Has barcode', fq: '+barcode_id_ssim:*' }
+                                            has_barcode: { label: 'Has barcode', fq: "+#{SolrDocument::FIELD_BARCODE_ID}:*" }
                                           }
 
     config.add_facet_field 'empties', label: 'Empty Fields', component: true,
@@ -307,7 +307,7 @@ class CatalogController < ApplicationController
           obj_label_tesim
           identifier_ssim
           identifier_tesim
-          barcode_id_ssim
+          barcode_id_ssimdv
           folio_instance_hrid_ssim
           source_id_text_nostem_i^3
           source_id_ssi

@@ -113,7 +113,7 @@ class Report
       sort: true, default: false, width: 100
     },
     {
-      field: :barcode_id_ssim, label: 'Barcode',
+      field: SolrDocument::FIELD_BARCODE_ID, label: 'Barcode',
       sort: true, default: false, width: 100
     },
     {
