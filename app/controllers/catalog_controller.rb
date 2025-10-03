@@ -196,7 +196,7 @@ class CatalogController < ApplicationController
                                           component: true,
                                           query: {
                                             has_orcids: { label: 'Has contributor ORCIDs',
-                                                          fq: '+contributor_orcids_ssim:*' },
+                                                          fq: "+#{SolrDocument::FIELD_ORCIDS}:*" },
                                             has_doi: { label: 'Has DOI', fq: "+#{SolrDocument::FIELD_DOI}:*" },
                                             has_barcode: { label: 'Has barcode', fq: "+#{SolrDocument::FIELD_BARCODE_ID}:*" }
                                           }
@@ -313,7 +313,7 @@ class CatalogController < ApplicationController
           source_id_ssi
           previous_ils_ids_ssim
           doi_ssimdv
-          contributor_orcids_ssim
+          contributor_orcids_ssimdv
         )
       }
       # NOTE: if you want to use the qf in solrconfig.xml, you can delete the qf param here:

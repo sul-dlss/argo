@@ -52,7 +52,7 @@ module BlacklightConfigHelper
         source_id_ssi
         previous_ils_ids_ssim
         doi_ssimdv
-        contributor_orcids_ssim
+        contributor_orcids_ssimdv
       ),
       facet: true,
       'facet.mincount': 1,
