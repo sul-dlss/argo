@@ -204,7 +204,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'empties', label: 'Empty Fields', component: true,
                                       query: {
                                         no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
-                                                                       fq: '-mods_typeOfResource_ssim:*' },
+                                                                       fq: "-#{SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE}:*" },
                                         no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' }
                                       }
 
@@ -215,7 +215,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10
     config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', component: true, limit: 10
     config.add_facet_field 'sw_language_ssim', label: 'SW Language', component: true, limit: 10
-    config.add_facet_field 'mods_typeOfResource_ssim', label: 'MODS Resource Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field 'is_governed_by_ssim', if: false
     config.add_facet_field 'is_member_of_collection_ssim', if: false
