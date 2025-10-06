@@ -114,14 +114,9 @@ RSpec.describe 'Registration' do
 
     context 'when the collections are in solr' do
       let(:collections) { [collection_druid] }
-      let(:collection) { build(:collection, id: collection_druid, admin_policy_id: apo_id, label:) }
+      let(:collection) { build(:collection, id: collection_druid, admin_policy_id: apo_id) }
       let(:collection_druid) { 'druid:pb873ty1662' }
       let(:apo_id) { 'druid:hv992yv2222' }
-      let(:label) do
-        'Annual report of the State Corporation Commission showing the condition ' \
-          'of the incorporated state banks and other institutions operating in ' \
-          'Virginia at the close of business'
-      end
 
       before do
         allow(Dor::Services::Client.objects).to receive(:find_all).with(druids: collections).and_return([collection])
@@ -132,7 +127,7 @@ RSpec.describe 'Registration' do
         options = rendered.find_css('#registration_collection option')
         expect(options.map { |node| [node.attr('value'), node.text] }).to eq [
           ['', 'None'],
-          ['druid:pb873ty1662', 'Annual report of the State Corporation Commission showing... (pb873ty1662)']
+          ['druid:pb873ty1662', 'factory collection title (pb873ty1662)']
         ]
       end
     end

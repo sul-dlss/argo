@@ -35,7 +35,7 @@ class ApoController < ApplicationController
     @access_template = AccessTemplate.new(access_template:, apo_defaults_template: administrative.accessTemplate)
 
     @collections = Dor::Services::Client.objects.find_all(druids: administrative.collectionsForRegistration).map do |collection|
-      ["#{collection.label.truncate(60, separator: /\s/)} (#{collection.externalIdentifier.delete_prefix('druid:')})", collection.externalIdentifier]
+      [collection_title_display(collection), collection.externalIdentifier]
     end
 
     # before returning the list, sort by collection title (case insensitive, dropping brackets)
@@ -130,6 +130,11 @@ class ApoController < ApplicationController
   end
 
   private
+
+  def collection_title_display(cocina_object)
+    title = Cocina::Models::Builders::TitleBuilder.build(cocina_object.description.title, catalog_links: cocina_object.identification.catalogLinks)
+    "#{title.truncate(60, separator: /\s/)} (#{cocina_object.externalIdentifier.delete_prefix('druid:')})"
+  end
 
   def search_service
     @search_service ||= Blacklight::SearchService.new(config: CatalogController.blacklight_config,
