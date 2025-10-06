@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'File hierarchy' do
   before do
-    allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000' })
+    allow(Argo.verifier).to receive(:verify).and_return({ druid: 'druid:kv840xx0000' })
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     sign_in build(:user), groups: []
   end

@@ -18,7 +18,7 @@ RSpec.describe 'Cocina objects' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_object) }
 
     before do
-      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000' })
+      allow(Argo.verifier).to receive(:verify).and_return({ druid: 'druid:kv840xx0000' })
     end
 
     it 'renders a turbo-frame' do
@@ -34,7 +34,7 @@ RSpec.describe 'Cocina objects' do
     let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, find: cocina_object) }
 
     before do
-      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000', user_version_id: 2 })
+      allow(Argo.verifier).to receive(:verify).and_return({ druid: 'druid:kv840xx0000', user_version_id: 2 })
     end
 
     it 'renders a turbo-frame' do
@@ -51,7 +51,7 @@ RSpec.describe 'Cocina objects' do
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, find: cocina_object) }
 
     before do
-      allow(Argo.verifier).to receive(:verified).and_return({ druid: 'druid:kv840xx0000', version_id: 2 })
+      allow(Argo.verifier).to receive(:verify).and_return({ druid: 'druid:kv840xx0000', version_id: 2 })
     end
 
     it 'renders a turbo-frame' do
