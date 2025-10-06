@@ -12,6 +12,6 @@ RSpec.describe Contents::ExternalFileComponent, type: :component do
       .to include 'druid:bf746ns6287'
 
     expect(rendered.css('li a').to_html)
-      .to eq '<a href="/view/druid:bf746ns6287">druid:bf746ns6287</a>'
+      .to eq '<a target="_top" href="/view/druid:bf746ns6287">druid:bf746ns6287</a>'
   end
 end
