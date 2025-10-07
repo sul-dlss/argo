@@ -3,6 +3,7 @@
 module BulkActions
   class RegisterDruidJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'RegisterDruidsJob'
 
     REQUIRED_HEADERS = %w[

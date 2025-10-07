@@ -82,14 +82,14 @@ class Ability
   VIEW_ROLES = (MANAGE_ITEM_ROLES + %w[dor-viewer sdr-viewer]).freeze
 
   def can_manage_items?(user_roles)
-    intersect user_roles, MANAGE_ITEM_ROLES
+    intersect? user_roles, MANAGE_ITEM_ROLES
   end
 
   def can_view?(user_roles)
-    intersect user_roles, VIEW_ROLES
+    intersect? user_roles, VIEW_ROLES
   end
 
-  def intersect(arr1, arr2)
+  def intersect?(arr1, arr2)
     !(arr1 & arr2).empty?
   end
 

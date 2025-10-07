@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
     update
   ]
 
-  before_action :enforce_versioning, only: %i[
+  before_action :enforce_versioning?, only: %i[
     add_collection remove_collection
     edit_copyright edit_license edit_use_statement
     edit_rights

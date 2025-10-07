@@ -3,6 +3,7 @@
 module BulkActions
   class CatalogRecordIdAndBarcodeCsvJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'SetCatalogRecordIdsAndBarcodesCsvJob'
 
     def job_params

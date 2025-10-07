@@ -3,6 +3,7 @@
 module BulkActions
   class ImportStructuralJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'ImportStructuralJob'
 
     def job_params

@@ -2,6 +2,7 @@
 
 class ApoForm < ApplicationChangeSet
   include HasViewAccessWithCdl
+
   property :title, virtual: true
   property :agreement_object_id, virtual: true
 

@@ -38,7 +38,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
 
   attr_reader :created
 
-  def save_model
+  def save_model # rubocop:disable Naming/PredicateMethod
     bulk_action = BulkAction.new(user: current_user, action_type: 'RegisterDruidsJob')
 
     if bulk_action.save

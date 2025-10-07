@@ -3,6 +3,7 @@
 module BulkActions
   class ExportStructuralJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'ExportStructuralJob'
   end
 end

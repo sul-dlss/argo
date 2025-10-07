@@ -3,6 +3,7 @@
 module BulkActions
   class OpenVersionJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'OpenVersionJob'
 
     def job_params

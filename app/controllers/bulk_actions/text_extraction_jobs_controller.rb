@@ -3,6 +3,7 @@
 module BulkActions
   class TextExtractionJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'TextExtractionJob'
 
     def job_params

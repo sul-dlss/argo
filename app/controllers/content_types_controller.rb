@@ -13,7 +13,7 @@ class ContentTypesController < ApplicationController
   # set the content type in the content metadata
   def update
     # if this object has been submitted and doesnt have an open version, they cannot change it.
-    return unless enforce_versioning
+    return unless enforce_versioning?
 
     form = ContentTypeForm.new(@cocina)
     if form.validate(params[:content_type])

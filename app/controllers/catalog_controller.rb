@@ -2,6 +2,7 @@
 
 class CatalogController < ApplicationController
   include Blacklight::Catalog
+
   helper ArgoHelper
   include DateFacetConfigurations
 

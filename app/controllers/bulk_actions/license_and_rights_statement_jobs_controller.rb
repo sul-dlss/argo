@@ -3,6 +3,7 @@
 module BulkActions
   class LicenseAndRightsStatementJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'SetLicenseAndRightsStatementsJob'
 
     def new

@@ -160,7 +160,7 @@ class GenericJob < ApplicationJob
     bulk_action.update(druid_count_total: count)
   end
 
-  def check_druid_column(csv:, druid_column:, log:, bulk_action:)
+  def check_druid_column(csv:, druid_column:, log:, bulk_action:) # rubocop:disable Naming/PredicateMethod
     return true if csv.headers.include?(druid_column)
 
     log.puts("Column \"#{druid_column}\" not found")

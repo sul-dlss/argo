@@ -3,6 +3,7 @@
 module BulkActions
   class ChecksumReportJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'ChecksumReportJob'
   end
 end

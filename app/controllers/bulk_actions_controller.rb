@@ -7,7 +7,7 @@ class BulkActionsController < ApplicationController
 
   # GET /bulk_actions
   def index
-    @bulk_actions = BulkAction.where(user: current_user).order('created_at DESC')
+    @bulk_actions = BulkAction.where(user: current_user).order(created_at: :desc)
   end
 
   # GET /bulk_actions/new

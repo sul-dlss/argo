@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
   def update
     @cocina = Repository.find(params[:id])
     authorize! :update, @cocina
-    return unless enforce_versioning
+    return unless enforce_versioning?
 
     change_set = CollectionChangeSet.new(@cocina)
     attributes = params.expect(collection: %i[view_access copyright use_statement license])

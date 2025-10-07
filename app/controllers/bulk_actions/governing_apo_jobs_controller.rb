@@ -3,6 +3,7 @@
 module BulkActions
   class GoverningApoJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'SetGoverningApoJob'
 
     def new
