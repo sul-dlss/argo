@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_08_01_155124) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_125342) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,7 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_08_01_155124) do
     t.string "action_type"
     t.string "status"
     t.string "log_name"
-    t.string "description"
+    t.text "description"
     t.integer "druid_count_total", default: 0
     t.integer "druid_count_success", default: 0
     t.integer "druid_count_fail", default: 0
