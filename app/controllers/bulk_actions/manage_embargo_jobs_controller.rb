@@ -3,6 +3,7 @@
 module BulkActions
   class ManageEmbargoJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'ManageEmbargoesJob'
 
     def job_params

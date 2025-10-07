@@ -2,6 +2,7 @@
 
 class AccessTemplate
   include ActiveModel::API
+
   def initialize(access_template:, apo_defaults_template:)
     @cocina_access_template = access_template
     @apo_defaults = apo_defaults_template

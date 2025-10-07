@@ -7,6 +7,7 @@ module HasViewAccessWithCdl
 
   included do
     include HasViewAccess
+
     feature Reform::Form::Coercion # Casts properties to a specific type
     property :controlled_digital_lending, virtual: true, type: Dry::Types['params.nil'] | Dry::Types['params.bool']
   end

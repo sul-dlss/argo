@@ -3,6 +3,7 @@
 module BulkActions
   class VirtualObjectJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'CreateVirtualObjectsJob'
 
     def job_params

@@ -52,9 +52,9 @@ class FormsGrouper
         type_for_form_number = description.slice(*description.keys.grep(/^old_form#{form_number[1]}\.type/)).values.first
 
         # Look up the form number of the type value
-        new_form_number = if description.slice(*description.keys.grep(/form.+type/)).count do |_key, value|
+        new_form_number = if description.slice(*description.keys.grep(/form.+type/)).one? do |_key, value|
                                value == type_for_form_number
-                             end == 1
+                             end
                             # If there is only one matching form number in the mapping, use it and move on.
                             ordered_mapping.key(type_for_form_number)
                           else

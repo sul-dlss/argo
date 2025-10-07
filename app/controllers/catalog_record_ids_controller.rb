@@ -12,7 +12,7 @@ class CatalogRecordIdsController < ApplicationController
   end
 
   def update
-    return unless enforce_versioning
+    return unless enforce_versioning?
 
     @form = CatalogRecordIdForm.new(@cocina)
     if @form.validate(params[:catalog_record_id]) && @form.save

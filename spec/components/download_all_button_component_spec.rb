@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe DownloadAllButtonComponent, type: :component do
   include Rails.application.routes.url_helpers
+
   subject { page }
 
   let(:cocina) { build(:dro) }

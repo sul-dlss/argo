@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   # Connects this user object to Blacklights Bookmarks and Folders.
   include Blacklight::User
+
   has_many :bulk_actions
 
   # The code base requires Arrays for these constants, for intersection ops.

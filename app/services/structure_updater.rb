@@ -21,7 +21,7 @@ class StructureUpdater
   attr_reader :model, :csv, :errors
 
   # @return [Bool] true if there are no problems
-  def validate
+  def validate # rubocop:disable Naming/PredicateMethod
     @errors = []
     csv.each.with_index(2) do |row, index|
       if invalid_resource_type?(row)

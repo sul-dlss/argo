@@ -3,7 +3,7 @@
 # dispatches to the dor-services-app to (re/un)publish
 class StructuresController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id', only: :update
-  before_action :enforce_versioning, only: :update
+  before_action :enforce_versioning?, only: :update
 
   def show
     respond_to do |format|

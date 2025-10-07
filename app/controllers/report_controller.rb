@@ -2,6 +2,7 @@
 
 class ReportController < CatalogController
   include Blacklight::Catalog
+
   helper ArgoHelper
   copy_blacklight_config_from CatalogController
 

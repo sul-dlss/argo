@@ -2,6 +2,7 @@
 
 class DescriptiveMetadataImportJob < GenericJob
   include Dry::Monads[:result]
+
   queue_as :default
 
   ##

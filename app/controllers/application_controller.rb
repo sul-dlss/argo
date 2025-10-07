@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def enforce_versioning
+  def enforce_versioning?
     # if this object has been submitted and doesn't have an open version, they cannot change it.
     return true if open?(@cocina)
 

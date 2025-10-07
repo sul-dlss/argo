@@ -3,6 +3,7 @@
 module BulkActions
   class CollectionJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'SetCollectionJob'
 
     def job_params

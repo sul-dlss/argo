@@ -3,6 +3,7 @@
 module BulkActions
   class AddWorkflowJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'AddWorkflowJob'
 
     def job_params

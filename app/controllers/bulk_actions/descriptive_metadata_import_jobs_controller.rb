@@ -3,6 +3,7 @@
 module BulkActions
   class DescriptiveMetadataImportJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'DescriptiveMetadataImportJob'
 
     def job_params

@@ -166,11 +166,11 @@ class DescriptionValidator
   end
 
   def duplicate_headers
-    @headers.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
+    @headers.group_by { |e| e }.filter { |_k, v| v.many? }.keys
   end
 
   def duplicate_druids
-    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.count > 1 }.keys
+    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.many? }.keys
   end
 
   def invalid_headers

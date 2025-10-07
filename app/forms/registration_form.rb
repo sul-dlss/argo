@@ -57,7 +57,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
 
   attr_reader :created
 
-  def save_model
+  def save_model # rubocop:disable Naming/PredicateMethod
     statuses = save_items
     if statuses.all?(&:success?)
       @created = statuses.map(&:value!)

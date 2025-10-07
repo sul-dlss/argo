@@ -3,6 +3,7 @@
 module BulkActions
   class ContentTypeJobsController < ApplicationController
     include CreatesBulkActions
+
     self.action_type = 'SetContentTypeJob'
 
     def job_params

@@ -19,7 +19,7 @@ class CollectionForm
 
   # @param [HashWithIndifferentAccess] params the parameters from the form
   # @return [Boolean] true if the parameters are valid
-  def validate(params)
+  def validate(params) # rubocop:disable Naming/PredicateMethod
     @params = params
     unless params[:collection_title].present? || params[:collection_catalog_record_id].present?
       @errors.add(:base, :title_or_catalog_record_id_blank,
