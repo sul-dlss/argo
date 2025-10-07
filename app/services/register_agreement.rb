@@ -21,6 +21,7 @@ class RegisterAgreement
     )
   end
 
+  # @return [String] the druid of the registered agreement
   def register
     file_metadata = uploaded_files.compact.each_with_object({}) do |file, hash|
       hash[file.original_filename] = metadata_for(file)
@@ -43,10 +44,7 @@ class RegisterAgreement
                                                     logger: Rails.logger,
                                                     connection:)
 
-    poll_for_job_complete(job_id:).tap do |druid|
-      # Index imediately, so that we have a page to send the user to. DSA indexes asynchronously.
-      Dor::Services::Client.object(druid).reindex
-    end
+    poll_for_job_complete(job_id:)
   end
 
   private
@@ -55,11 +53,11 @@ class RegisterAgreement
 
   def poll_for_job_complete(job_id:)
     result = nil
-    1.upto(5) do |_n|
+    1.upto(15) do |_n|
       result = SdrClient::BackgroundJobResults.show(url: Settings.sdr_api.url, job_id:)
       break unless %w[pending processing].include? result['status']
 
-      sleep 5
+      sleep 2
     end
     if result['status'] == 'complete'
       result.dig('output', 'druid')

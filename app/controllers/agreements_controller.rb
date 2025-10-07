@@ -10,15 +10,22 @@ class AgreementsController < ApplicationController
   end
 
   def new
-    @form = AgreementForm.new(nil)
+    @form = AgreementForm.new
   end
 
   def create
-    @form = AgreementForm.new(nil)
-    if @form.validate(params[:agreement]) && @form.save
-      redirect_to solr_document_path(@form.model.externalIdentifier), notice: 'Agreement created.'
+    @form = AgreementForm.new(agreement_params)
+    if @form.validate
+      @form.save
+      redirect_to solr_document_path(@form.id), notice: 'Agreement created.'
     else
       render :new, status: :unprocessable_content
     end
+  end
+
+  private
+
+  def agreement_params
+    params.expect(agreement: %i[title source_id agreement_file1 agreement_file2])
   end
 end
