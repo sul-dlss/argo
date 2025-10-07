@@ -40,22 +40,29 @@ RSpec.describe 'Collection manage release' do
     sign_in current_user, groups: ['sdr:administrator-role']
   end
 
-  it 'Has a manage release button' do
+  it 'has a manage release button' do
     visit solr_document_path(collection_id)
     expect(page).to have_css 'a', text: 'Manage release'
   end
 
-  it 'Creates a new bulk action' do
-    visit item_manage_release_path(collection_id)
+  it 'sets a tag and starts releaseWF' do
+    visit edit_item_manage_release_path(collection_id)
+
     expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{collection_id}"
     choose 'This collection and all its members*'
     choose 'Release it'
     click_button 'Submit'
-    expect(page).to have_css 'h1', text: 'Bulk Actions'
-    perform_enqueued_jobs
-    reload_page_until_timeout do
-      page.has_css?('td', text: 'ReleaseObjectJob') &&
-        page.has_css?('td', text: 'Completed')
+
+    expect(page).to have_css '.alert', text: "Updated release for #{collection_id}"
+    expect(release_tags_client).to have_received(:create) do |args|
+      tag = args[:tag]
+      expect(tag.to).to eq 'Searchworks'
+      expect(tag.who).to eq 'esnowden'
+      expect(tag.what).to eq 'self'
+      expect(tag.release).to be true
+      expect(tag.date).to be_a DateTime
     end
+    expect(object_client).to have_received(:workflow).with('releaseWF')
+    expect(workflow_client).to have_received(:create).with(version: cocina_model.version)
   end
 end
