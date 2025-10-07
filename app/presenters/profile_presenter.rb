@@ -15,19 +15,19 @@ class ProfilePresenter
   end
 
   def apo_titles
-    aggregations[SolrDocument::FIELD_APO_TITLE.to_s].items
+    aggregations[SolrDocument::FIELD_APO_TITLE].items
   end
 
   def collection_titles
-    aggregations[SolrDocument::FIELD_COLLECTION_TITLE.to_s].items
+    aggregations[SolrDocument::FIELD_COLLECTION_TITLE].items
   end
 
   def rights_descriptions
-    aggregations['rights_descriptions_ssim'].items
+    aggregations[SolrDocument::FIELD_ACCESS_RIGHTS].items
   end
 
   def content_type
-    aggregations['content_type_ssim'].items
+    aggregations[SolrDocument::FIELD_CONTENT_TYPE].items
   end
 
   def use_statement
@@ -39,39 +39,39 @@ class ProfilePresenter
   end
 
   def use_license_machine
-    aggregations['use_license_machine_ssi'].items
+    aggregations[SolrDocument::FIELD_LICENSE].items
   end
 
   def sw_resource_type
-    aggregations['sw_format_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_FORMAT].items
   end
 
   def sw_date
-    stats_field['sw_pub_date_facet_ssi']
+    stats_field[SolrDocument::FIELD_SW_PUB_DATE]
   end
 
   def sw_language
-    aggregations['sw_language_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_LANGUAGE].items
   end
 
   def sw_topic
-    aggregations['topic_ssim'].items
+    aggregations[SolrDocument::FIELD_TOPIC].items
   end
 
   def sw_region
-    aggregations['sw_subject_geographic_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC].items
   end
 
   def sw_era
-    aggregations['sw_subject_temporal_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_SUBJECT_TEMPORAL].items
   end
 
   def sw_genre
-    aggregations['sw_genre_ssim'].items
+    aggregations[SolrDocument::FIELD_SW_GENRE].items
   end
 
   def type_status_pivot
-    pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+    pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},#{SolrDocument::FIELD_PROCESSING_STATUS}"]
   end
 
   def content_file_count

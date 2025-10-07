@@ -5,45 +5,61 @@ class SolrDocument
   include ApoConcern
   include CollectionConcern
 
-  FIELD_OBJECT_TYPE = :objectType_ssim
-  FIELD_CONTENT_TYPE = :content_type_ssim
-  FIELD_EMBARGO_STATUS = :embargo_status_ssim
-  FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
-  FIELD_FOLIO_INSTANCE_HRID = :folio_instance_hrid_ssim
-  FIELD_DOI = :doi_ssim
-  FIELD_ORCIDS = :contributor_orcids_ssim
-  FIELD_CREATED_DATE = :created_at_dttsi
-  FIELD_REGISTERED_DATE = :registered_dttsim
-  FIELD_LAST_ACCESSIONED_DATE = :accessioned_latest_dttsi
-  FIELD_EARLIEST_ACCESSIONED_DATE = :accessioned_earliest_dttsi
-  FIELD_LAST_PUBLISHED_DATE = :published_latest_dttsi
-  FIELD_LAST_MODIFIED_DATE = :modified_latest_dttsi
-  FIELD_LAST_OPENED_DATE = :opened_latest_dttsi
-  FIELD_PRESERVATION_SIZE = :preserved_size_dbtsi
-  FIELD_RELEASED_TO_EARTHWORKS = :released_to_earthworks_dttsi
-  FIELD_RELEASED_TO_PURL_SITEMAP = :released_to_purl_sitemap_dttsi
-  FIELD_RELEASED_TO_SEARCHWORKS = :released_to_searchworks_dttsi
-  FIELD_RELEASED_TO = :released_to_ssim
-
-  FIELD_TITLE = 'display_title_ss'
+  FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssimdv'
   FIELD_AUTHOR = 'author_display_ss'
-  FIELD_LABEL = 'obj_label_tesim'
-  FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
-  FIELD_PUBLISHER = 'originInfo_publisher_tesim'
-  FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
-  FIELD_CURRENT_VERSION = 'current_version_isi'
-  FIELD_STATUS = 'status_ssi'
-  FIELD_ACCESS_RIGHTS = 'rights_descriptions_ssim'
-  FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
+  FIELD_BARCODE_ID = 'barcode_id_ssimdv'
+  FIELD_CONSTITUENTS = 'has_constituents_ssimdv'
+  FIELD_CONTENT_FILE_MIMETYPES = 'content_file_mimetypes_ssimdv'
+  FIELD_CONTENT_FILE_ROLES = 'content_file_roles_ssimdv'
+  FIELD_CONTENT_TYPE = 'content_type_ssimdv'
   FIELD_COPYRIGHT = 'copyright_ssim'
-  FIELD_USE_STATEMENT = 'use_statement_ssim'
-  FIELD_LICENSE = 'use_license_machine_ssi'
+  FIELD_CREATED_DATE = 'created_at_dttsi'
+  FIELD_CURRENT_VERSION = 'current_version_ipsidv'
+  FIELD_DEFAULT_ACCESS_RIGHTS = 'default_rights_descriptions_ssim'
+  FIELD_DOI = 'doi_ssimdv'
+  FIELD_EARLIEST_ACCESSIONED_DATE = 'accessioned_earliest_dtpsidv'
+  FIELD_EMBARGO_RELEASE_DATE = 'embargo_release_dtpsimdv'
+  FIELD_EMBARGO_STATUS = 'embargo_status_ssim'
+  FIELD_EXPLODED_NONPROJECT_TAG = 'exploded_nonproject_tag_ssimdv'
+  FIELD_EXPLODED_PROJECT_TAG = 'exploded_project_tag_ssimdv'
+  FIELD_FOLIO_INSTANCE_HRID = 'folio_instance_hrid_ssim'
+  FIELD_LABEL = 'obj_label_tesim'
+  FIELD_LAST_ACCESSIONED_DATE = 'accessioned_latest_dtpsidv'
+  FIELD_LAST_MODIFIED_DATE = 'modified_latest_dtpsidv'
+  FIELD_LAST_OPENED_DATE = 'opened_latest_dtpsidv'
+  FIELD_LAST_PUBLISHED_DATE = 'published_latest_dtpsidv'
+  FIELD_LICENSE = 'use_license_machine_ssidv'
+  FIELD_METADATA_SOURCE = 'metadata_source_ssimdv'
+  FIELD_MODS_TYPE_OF_RESOURCE = 'mods_typeOfResource_ssimdv'
+  FIELD_OBJECT_TYPE = 'objectType_ssimdv'
+  FIELD_ORCIDS = 'contributor_orcids_ssimdv'
+  FIELD_PROCESSING_STATUS = 'processing_status_text_ssidv'
+  FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
+  FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
+  FIELD_PRESERVATION_SIZE = 'preserved_size_dbtsi'
   FIELD_PROJECT_TAG = 'project_tag_ssim'
-  FIELD_TAGS = 'tag_ssim'
+  FIELD_PUBLISHER = 'originInfo_publisher_tesim'
+  FIELD_REGISTERED_DATE = 'registered_dtpsimdv'
+  FIELD_RELEASED_TO = 'released_to_ssim'
+  FIELD_RELEASED_TO_EARTHWORKS = 'released_to_earthworks_dtpsidv'
+  FIELD_RELEASED_TO_PURL_SITEMAP = 'released_to_purl_sitemap_dtpsidv'
+  FIELD_RELEASED_TO_SEARCHWORKS = 'released_to_searchworks_dtpsidv'
   FIELD_SOURCE_ID = 'source_id_ssi'
-  FIELD_BARCODE_ID = 'barcode_id_ssim'
+  FIELD_STATUS = 'status_ssi'
+  FIELD_SW_FORMAT = 'sw_format_ssimdv'
+  FIELD_SW_GENRE = 'sw_genre_ssimdv'
+  FIELD_SW_LANGUAGE = 'sw_language_ssimdv'
+  FIELD_SW_PUB_DATE = 'sw_pub_date_facet_ssidv'
+  FIELD_SW_SUBJECT_GEOGRAPHIC = 'sw_subject_geographic_ssimdv'
+  FIELD_SW_SUBJECT_TEMPORAL = 'sw_subject_temporal_ssimdv'
+  FIELD_TAGS = 'tag_ssim'
+  FIELD_TITLE = 'display_title_ss'
+  FIELD_TOPIC = 'topic_ssimdv'
+  FIELD_USE_STATEMENT = 'use_statement_ssim'
   FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
-  FIELD_CONSTITUENTS = 'has_constituents_ssim'
+  FIELD_WORKFLOW_SWP = 'wf_swp_ssimdv'
+  FIELD_WORKFLOW_WPS = 'wf_wps_ssimdv'
+  FIELD_WORKFLOW_WSP = 'wf_wsp_ssimdv'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
@@ -99,8 +115,8 @@ class SolrDocument
   field_semantics.merge!(
     title: FIELD_TITLE,
     author: 'dc_creator_ssi',
-    language: 'sw_language_ssim',
-    format: 'sw_format_ssim'
+    language: SolrDocument::FIELD_SW_LANGUAGE,
+    format: SolrDocument::FIELD_SW_FORMAT
   )
 
   def embargoed?

@@ -6,7 +6,7 @@ RSpec.describe Report do
   # A helper method so this test does not couple to implementation details such
   # as knowing what order the report fields are in.
   def report_field_index(field_name)
-    described_class::REPORT_FIELDS.index { |field| field[:field] == field_name }
+    described_class::REPORT_FIELDS.index { |field| field[:field] == field_name.to_s }
   end
 
   let(:user) { instance_double(User, admin?: true) }
@@ -72,25 +72,21 @@ RSpec.describe Report do
   describe 'REPORT_FIELDS' do
     subject(:report_fields) { described_class::REPORT_FIELDS }
 
-    it 'has report fields' do
-      expect(report_fields).to(be_all { |f| f[:field].is_a? Symbol }) # all :field keys are symbols
-    end
-
     it 'has all the mandatory, default report fields' do
       [
-        :druid,
-        :purl,
-        :citation,
-        :source_id_ssi,
+        'druid',
+        'purl',
+        'citation',
+        'source_id_ssi',
         SolrDocument::FIELD_APO_TITLE,
-        :processing_status_text_ssi,
-        :published_earliest_dttsi,
-        :file_count,
-        :shelved_file_count,
-        :resource_count,
-        :preserved_size,
-        :preserved_size_human,
-        :dissertation_id
+        SolrDocument::FIELD_PROCESSING_STATUS,
+        'published_earliest_dttsi',
+        'file_count',
+        'shelved_file_count',
+        'resource_count',
+        'preserved_size',
+        'preserved_size_human',
+        'dissertation_id'
       ].each do |k|
         expect(report_fields).to(be_any { |f| f[:field] == k })
       end
@@ -98,20 +94,20 @@ RSpec.describe Report do
 
     it 'has all the mandatory, non-default report fields' do
       [
-        :title,
+        'title',
         SolrDocument::FIELD_APO_ID,
         SolrDocument::FIELD_COLLECTION_ID,
         SolrDocument::FIELD_COLLECTION_TITLE,
-        :project_tag_ssim,
-        :registered_by_tag_ssim,
-        :registered_earliest_dttsi,
-        :tag_ssim,
-        :objectType_ssim,
-        :content_type_ssim,
+        'project_tag_ssim',
+        'registered_by_tag_ssim',
+        'registered_earliest_dttsi',
+        'tag_ssim',
+        SolrDocument::FIELD_OBJECT_TYPE,
+        SolrDocument::FIELD_CONTENT_TYPE,
         CatalogRecordId.index_field,
-        :barcode_id_ssim,
-        :accessioned_earliest_dttsi,
-        SolrDocument::FIELD_WORKFLOW_ERRORS.to_sym
+        SolrDocument::FIELD_BARCODE_ID,
+        SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE,
+        SolrDocument::FIELD_WORKFLOW_ERRORS
       ].each do |k|
         expect(report_fields).to(be_any { |f| f[:field] == k })
       end

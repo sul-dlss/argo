@@ -8,13 +8,13 @@ RSpec.describe 'More facet view', :js do
 
   before do
     solr_conn.add(id: 'druid:xb482bw3983',
-                  collection_title_ssim: 'Annual report of the State Corporation Commission')
+                  SolrDocument::FIELD_COLLECTION_TITLE => 'Annual report of the State Corporation Commission')
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   it 'filter works correctly' do
-    visit '/catalog/facet/collection_title_ssim'
+    visit "/catalog/facet/#{SolrDocument::FIELD_COLLECTION_TITLE}"
 
     filter_field = find_field(id: 'filterInput')
     expect(filter_field).not_to be_nil

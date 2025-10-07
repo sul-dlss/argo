@@ -12,23 +12,23 @@ class CatalogController < ApplicationController
   # The subset of facets that are displayed on the home page.
   # (Before a user clicks "Show more facets")
   HOME_FACETS = [
-    'exploded_project_tag_ssim',
-    'exploded_nonproject_tag_ssim',
-    'objectType_ssim',
+    SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
+    SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
+    SolrDocument::FIELD_OBJECT_TYPE,
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
-    'nonhydrus_apo_title_ssim',
+    SolrDocument::FIELD_NONHYDRUS_APO_TITLE,
     'released_to_earthworks',
     'released_to_searchworks',
-    'wf_wps_ssim',
+    SolrDocument::FIELD_WORKFLOW_WPS,
     'identifier_tesim'
   ].map(&:to_s).freeze
 
   # Facets that are configured for lazy loading.
-  LAZY_FACETS = %w[
-    exploded_project_tag_ssim
-    exploded_nonproject_tag_ssim
-    wf_wps_ssim
+  LAZY_FACETS = [
+    SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
+    SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
+    SolrDocument::FIELD_WORKFLOW_WPS
   ].map(&:to_s).freeze
 
   # NOTE: any Solr parameters configured here will override parameters in the Solr configuration files.
@@ -55,7 +55,7 @@ class CatalogController < ApplicationController
 
     config.index.display_type_field = SolrDocument::FIELD_CONTENT_TYPE
 
-    config.show.display_type_field = 'objectType_ssim'
+    config.show.display_type_field = SolrDocument::FIELD_OBJECT_TYPE
     config.show.html_title_field = SolrDocument::FIELD_TITLE
 
     config.index.thumbnail_method = :render_thumbnail_helper
@@ -72,35 +72,35 @@ class CatalogController < ApplicationController
 
     config.add_index_field 'status_ssi', label: 'Status'
     config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
-    config.add_index_field 'rights_descriptions_ssim', label: 'Access Rights'
+    config.add_index_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights'
 
     config.add_show_field 'project_tag_ssim', label: 'Project', link_to_facet: true
     config.add_show_field 'tag_ssim', label: 'Tags', link_to_facet: true
     config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
-    # exploded_project_tag_ssim indexes all project tag prefixes for hierarchical facet display, whereas
+    # exploded_project_tag_ssimdv indexes all project tag prefixes for hierarchical facet display, whereas
     #   project tag_ssim only indexes whole tags
-    config.add_facet_field 'exploded_project_tag_ssim', label: 'Project', limit: 100_000,
-                                                        component: LazyProjectTagFacetComponent,
-                                                        unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    # exploded_nonproject_tag_ssim indexes all tag prefixes, except project tags, for hierarchical facet display,
+    config.add_facet_field SolrDocument::FIELD_EXPLODED_PROJECT_TAG, label: 'Project', limit: 100_000,
+                                                                     component: LazyProjectTagFacetComponent,
+                                                                     unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    # exploded_nonproject_tag_ssimdv indexes all tag prefixes, except project tags, for hierarchical facet display,
     #   whereas tag_ssim only indexes whole tags.
-    config.add_facet_field 'exploded_nonproject_tag_ssim', label: 'Tag', limit: 100_000,
-                                                           component: LazyNonprojectTagFacetComponent,
-                                                           unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field 'objectType_ssim', label: 'Object Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
+                                                                        component: LazyNonprojectTagFacetComponent,
+                                                                        unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
-    config.add_facet_field 'content_file_mimetypes_ssim', label: 'MIME Types', component: true, limit: 10
-    config.add_facet_field 'content_file_roles_ssim', label: 'File Role', component: true, limit: 10
-    config.add_facet_field 'rights_descriptions_ssim', label: 'Access Rights', component: true, limit: 1000,
-                                                       sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_ROLES, label: 'File Role', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights', component: true, limit: 1000,
+                                                              sort: 'index'
     config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
                                                                  more_limit: 9999, sort: 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim', label: 'Admin Policy', component: true, limit: 10,
-                                                       more_limit: 9999, sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_NONHYDRUS_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
+                                                                    more_limit: 9999, sort: 'index'
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
-    config.add_facet_field 'processing_status_text_ssi', label: 'Processing Status', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_PROCESSING_STATUS, label: 'Processing Status', component: true, limit: 10
     config.add_facet_field 'released_to_earthworks',
                            component: true,
                            query: {
@@ -173,16 +173,16 @@ class CatalogController < ApplicationController
                                fq: "-#{SolrDocument::FIELD_RELEASED_TO_SEARCHWORKS}:[* TO *]"
                              }
                            }
-    config.add_facet_field 'wf_wps_ssim', label: 'Workflows (WPS)', limit: 9999,
-                                          component: LazyWpsWorkflowFacetComponent
-    config.add_facet_field 'wf_wsp_ssim', label: 'Workflows (WSP)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999
-    config.add_facet_field 'wf_swp_ssim', label: 'Workflows (SWP)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999
+    config.add_facet_field SolrDocument::FIELD_WORKFLOW_WPS, label: 'Workflows (WPS)', limit: 9999,
+                                                             component: LazyWpsWorkflowFacetComponent
+    config.add_facet_field SolrDocument::FIELD_WORKFLOW_WSP, label: 'Workflows (WSP)',
+                                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                                             limit: 9999
+    config.add_facet_field SolrDocument::FIELD_WORKFLOW_SWP, label: 'Workflows (SWP)',
+                                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                                             limit: 9999
 
-    config.add_facet_field 'metadata_source_ssim', label: 'Metadata Source', component: true
+    config.add_facet_field SolrDocument::FIELD_METADATA_SOURCE, label: 'Metadata Source', component: true
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
@@ -196,26 +196,26 @@ class CatalogController < ApplicationController
                                           component: true,
                                           query: {
                                             has_orcids: { label: 'Has contributor ORCIDs',
-                                                          fq: '+contributor_orcids_ssim:*' },
-                                            has_doi: { label: 'Has DOI', fq: '+doi_ssim:*' },
-                                            has_barcode: { label: 'Has barcode', fq: '+barcode_id_ssim:*' }
+                                                          fq: "+#{SolrDocument::FIELD_ORCIDS}:*" },
+                                            has_doi: { label: 'Has DOI', fq: "+#{SolrDocument::FIELD_DOI}:*" },
+                                            has_barcode: { label: 'Has barcode', fq: "+#{SolrDocument::FIELD_BARCODE_ID}:*" }
                                           }
 
     config.add_facet_field 'empties', label: 'Empty Fields', component: true,
                                       query: {
                                         no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
-                                                                       fq: '-mods_typeOfResource_ssim:*' },
-                                        no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' }
+                                                                       fq: "-#{SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE}:*" },
+                                        no_sw_format: { label: 'No SW Resource Type', fq: "-#{SolrDocument::FIELD_SW_FORMAT}:*" }
                                       }
 
-    config.add_facet_field 'sw_format_ssim', label: 'SW Resource Type', component: true, limit: 10
-    config.add_facet_field 'sw_pub_date_facet_ssi', label: 'SW Date', component: true, limit: 10
-    config.add_facet_field 'topic_ssim', label: 'SW Topic', component: true, limit: 10
-    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region', component: true, limit: 10
-    config.add_facet_field 'sw_subject_temporal_ssim', label: 'SW Era', component: true, limit: 10
-    config.add_facet_field 'sw_genre_ssim', label: 'SW Genre', component: true, limit: 10
-    config.add_facet_field 'sw_language_ssim', label: 'SW Language', component: true, limit: 10
-    config.add_facet_field 'mods_typeOfResource_ssim', label: 'MODS Resource Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Resource Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_PUB_DATE, label: 'SW Date', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'SW Topic', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC, label: 'SW Region', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_TEMPORAL, label: 'SW Era', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_GENRE, label: 'SW Genre', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'SW Language', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field 'is_governed_by_ssim', if: false
     config.add_facet_field 'is_member_of_collection_ssim', if: false
@@ -232,11 +232,11 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       hierarchy: {
-        'wf_wps' => [['ssim'], ':'],
-        'wf_wsp' => [['ssim'], ':'],
-        'wf_swp' => [['ssim'], ':'],
-        'exploded_nonproject_tag' => [['ssim'], ':'],
-        'exploded_project_tag' => [['ssim'], ':']
+        'wf_wps' => [['ssimdv'], ':'],
+        'wf_wsp' => [['ssimdv'], ':'],
+        'wf_swp' => [['ssimdv'], ':'],
+        'exploded_nonproject_tag' => [['ssimdv'], ':'],
+        'exploded_project_tag' => [['ssimdv'], ':']
       }
     }
 
@@ -291,8 +291,8 @@ class CatalogController < ApplicationController
           originInfo_place_placeTerm_tesim
           originInfo_publisher_tesim
 
-          content_type_ssim
-          sw_format_ssim
+          content_type_ssimdv
+          sw_format_ssimdv
           object_type_ssim
 
           descriptive_text_nostem_i
@@ -307,13 +307,13 @@ class CatalogController < ApplicationController
           obj_label_tesim
           identifier_ssim
           identifier_tesim
-          barcode_id_ssim
+          barcode_id_ssimdv
           folio_instance_hrid_ssim
           source_id_text_nostem_i^3
           source_id_ssi
           previous_ils_ids_ssim
-          doi_ssim
-          contributor_orcids_ssim
+          doi_ssimdv
+          contributor_orcids_ssimdv
         )
       }
       # NOTE: if you want to use the qf in solrconfig.xml, you can delete the qf param here:
@@ -323,29 +323,28 @@ class CatalogController < ApplicationController
   end
 
   def lazy_nonproject_tag_facet
-    limit_facets_to(['exploded_nonproject_tag_ssim'])
+    limit_facets_to([SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG])
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('exploded_nonproject_tag_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_nonproject_tag_facet'
   end
 
   def lazy_project_tag_facet
-    limit_facets_to(['exploded_project_tag_ssim'])
-
+    limit_facets_to([SolrDocument::FIELD_EXPLODED_PROJECT_TAG])
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('exploded_project_tag_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_PROJECT_TAG)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_project_tag_facet'
   end
 
   def lazy_wps_workflow_facet
-    limit_facets_to(['wf_wps_ssim'])
+    limit_facets_to([SolrDocument::FIELD_WORKFLOW_WPS])
 
     (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field('wf_wps_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_WORKFLOW_WPS)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_wps_workflow_facet'

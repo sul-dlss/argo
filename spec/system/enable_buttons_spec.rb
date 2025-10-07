@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Enable buttons' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    solr_conn.add(id: item_id, objectType_ssim: 'item')
+    solr_conn.add(id: item_id, SolrDocument::FIELD_OBJECT_TYPE => 'item')
     solr_conn.commit
     allow(StateService).to receive(:new).and_return(state_service)
     allow(VersionService).to receive(:new).and_return(version_service)

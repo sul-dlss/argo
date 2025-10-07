@@ -72,7 +72,7 @@ class ReportController < CatalogController
     return unless request.headers['X-Requester'] == 'frontend'
 
     # This is triggered by javascript that refreshes the data every 10s
-    facet_id = 'wf_wps_ssim'
+    facet_id = SolrDocument::FIELD_WORKFLOW_WPS
     facet = blacklight_config.facet_fields[facet_id]
     display_facet = @response.aggregations[facet.field]
     presenter = facet.presenter.new(facet, display_facet, self, search_state)

@@ -37,7 +37,7 @@ class PermittedQueries
     repository
       .search(
         q:, defType: 'lucene', rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
-        fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:Hydrus']
+        fq: ["#{SolrDocument::FIELD_OBJECT_TYPE}:adminPolicy", '!project_tag_ssim:Hydrus']
       )
       .dig('response', 'docs')
       .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).downcase.delete('[]') }
@@ -61,7 +61,7 @@ class PermittedQueries
     result = repository
              .search(
                q:, defType: 'lucene', rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
-               fq: ['objectType_ssim:collection', "!tag_ssim:\"#{INACTIVE_TAG}\""]
+               fq: ["#{SolrDocument::FIELD_OBJECT_TYPE}:collection", "!tag_ssim:\"#{INACTIVE_TAG}\""]
              )
              .dig('response', 'docs')
              .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc['id']).downcase.delete('[]') }

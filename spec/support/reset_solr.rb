@@ -9,7 +9,7 @@ module ResetSolr
     # Solves an odd bootstrapping problem, where the dor-indexing-app can only index cocina-models,
     # but cocina-model can't be built unless the AdminPolicy is found in Solr
     solr_conn.add(id: 'druid:hv992ry2431',
-                  objectType_ssim: ['adminPolicy'],
+                  SolrDocument::FIELD_OBJECT_TYPE => ['adminPolicy'],
                   apo_register_permissions_ssim: ['workgroup:dlss:developers'],
                   display_title_ss: ['[Internal System Objects]'])
     solr_conn.commit
