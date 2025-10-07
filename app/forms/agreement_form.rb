@@ -1,36 +1,29 @@
 # frozen_string_literal: true
 
-class AgreementForm < Reform::Form
-  property :title, virtual: true
-  property :source_id, virtual: true
-  property :agreement_file1, virtual: true
-  property :agreement_file2, virtual: true
-
+class AgreementForm < ApplicationForm
+  attribute :title, :string
   validates :title, presence: true
+
+  attribute :source_id, :string
   validates :source_id, format: { with: Regexp.new(Settings.source_id_regex),
                                   message: 'must have a single colon in the middle' },
                         presence: true
+
+  attribute :agreement_file1
   validates :agreement_file1, presence: true
 
-  def persisted?
-    false
+  attribute :agreement_file2
+
+  # druid is set when the form is saved.
+  attribute :id
+
+  def save
+    self.id = RegisterAgreement.register(model:, uploaded_files: agreement_files)
   end
 
-  def to_key
-    []
-  end
+  private
 
-  def sync!(_props)
-    @model = new_resource(title:, source_id:)
-  end
-
-  def save_model
-    @model = Result.new(RegisterAgreement.register(model:, uploaded_files: agreement_files))
-  end
-
-  Result = Struct.new(:externalIdentifier) # rubocop:disable Naming/MethodName
-
-  def new_resource(title:, source_id:)
+  def model
     Cocina::Models.build_request({
                                    'type' => Cocina::Models::ObjectType.agreement,
                                    'label' => title,
