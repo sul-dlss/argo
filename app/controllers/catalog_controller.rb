@@ -17,7 +17,7 @@ class CatalogController < ApplicationController
     SolrDocument::FIELD_OBJECT_TYPE,
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
-    SolrDocument::FIELD_NONHYDRUS_APO_TITLE,
+    SolrDocument::FIELD_APO_TITLE,
     'released_to_earthworks',
     'released_to_searchworks',
     SolrDocument::FIELD_WORKFLOW_WPS,
@@ -97,8 +97,8 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
                                                                  more_limit: 9999, sort: 'index'
-    config.add_facet_field SolrDocument::FIELD_NONHYDRUS_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
-                                                                    more_limit: 9999, sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
+                                                          more_limit: 9999, sort: 'index'
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_PROCESSING_STATUS, label: 'Processing Status', component: true, limit: 10
     config.add_facet_field 'released_to_earthworks',

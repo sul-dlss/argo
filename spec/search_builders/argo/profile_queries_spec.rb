@@ -44,11 +44,11 @@ RSpec.describe Argo::ProfileQueries do
 
     it 'handles an existing string facet field' do
       catalog_config = CatalogController.blacklight_config.deep_copy
-      catalog_config['facet.field'] = SolrDocument::FIELD_NONHYDRUS_APO_TITLE
+      catalog_config['facet.field'] = SolrDocument::FIELD_APO_TITLE
       solr_parameters = subject.add_profile_queries(catalog_config)
       facet_fields = solr_parameters.facet_fields.pluck(0) + solr_parameters['facet.field']
       expect(facet_fields).to include(*required_facet_fields)
-      expect(facet_fields).to include(SolrDocument::FIELD_NONHYDRUS_APO_TITLE)
+      expect(facet_fields).to include(SolrDocument::FIELD_APO_TITLE)
     end
 
     it 'adds in required stats fields' do

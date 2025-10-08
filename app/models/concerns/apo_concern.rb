@@ -4,8 +4,7 @@ module ApoConcern
   extend Blacklight::Solr::Document
 
   FIELD_APO_ID = 'governed_by_ssim'
-  FIELD_APO_TITLE = 'apo_title_ssim'
-  FIELD_NONHYDRUS_APO_TITLE = 'nonhydrus_apo_title_ssimdv'
+  FIELD_APO_TITLE = 'apo_title_ssimdv'
 
   UBER_APO_ID = 'druid:hv992ry2431' # TODO: Uber-APO is hardcoded
   HYDRUS_UBER_APO_ID = 'druid:zw306xn5593' # TODO: Hydrus Uber-APO is hardcoded
