@@ -3,7 +3,7 @@
 module ApoConcern
   extend Blacklight::Solr::Document
 
-  FIELD_APO_ID = 'is_governed_by_ssim'
+  FIELD_APO_ID = 'governed_by_ssim'
   FIELD_APO_TITLE = 'apo_title_ssim'
   FIELD_NONHYDRUS_APO_TITLE = 'nonhydrus_apo_title_ssimdv'
 

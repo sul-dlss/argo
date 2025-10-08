@@ -29,9 +29,9 @@ module ValueHelper
   # @return [String]
   def link_to_admin_policy_with_objs(args)
     policy_link = link_to_admin_policy(args)
-    facet_config = facet_configuration_for_field('is_governed_by_ssim')
-    path_for_facet = facet_item_presenter(facet_config, "info:fedora/#{args[:document].apo_druid}",
-                                          'is_governed_by_ssim').href
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_APO_ID)
+    path_for_facet = facet_item_presenter(facet_config, args[:document].apo_druid,
+                                          SolrDocument::FIELD_APO_ID).href
     objs_link = link_to 'All objects with this APO', path_for_facet
     "#{policy_link} (#{objs_link})".html_safe
   end
@@ -53,14 +53,14 @@ module ValueHelper
   # @return [String]
   def links_to_collections_with_objs(**args)
     with_objs = args.fetch(:with_objs, true)
-    facet_config = facet_configuration_for_field('is_member_of_collection_ssim')
+    facet_config = facet_configuration_for_field(SolrDocument::FIELD_COLLECTION_ID)
 
     args[:value].map.with_index do |val, i|
       collection_link = link_to(
         args[:document].collection_titles[i],
-        solr_document_path(val.gsub('info:fedora/', ''))
+        solr_document_path(val)
       )
-      path_for_facet = facet_item_presenter(facet_config, val, 'is_member_of_collection_ssim').href
+      path_for_facet = facet_item_presenter(facet_config, val, SolrDocument::FIELD_COLLECTION_ID).href
 
       objs_link = link_to 'All objects in this collection', path_for_facet
       with_objs ? "#{collection_link} (#{objs_link})" : collection_link

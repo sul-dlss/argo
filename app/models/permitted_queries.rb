@@ -53,7 +53,7 @@ class PermittedQueries
         elsif permitted_apos.empty?
           '-id:*'
         else
-          permitted_apos.map { |druid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{druid}\"" }.join(' OR ')
+          permitted_apos.map { |druid| "#{SolrDocument::FIELD_APO_ID}:\"#{druid}\"" }.join(' OR ')
         end
 
     # Note that if there are more than PERMITTED_QUERIES_LIMIT collections, not all collections may be returned,

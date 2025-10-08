@@ -27,15 +27,15 @@ RSpec.describe Argo::AccessControlsEnforcement, type: :model do
       allow(user).to receive(:permitted_apos).and_return(['druid:cb081vd1895'])
       solr_params = {}
       @obj.add_access_controls_to_solr_params(solr_params)
-      expect(solr_params).to eq(fq: ["#{SolrDocument::FIELD_APO_ID}:(\"info:fedora/druid:cb081vd1895\")"])
+      expect(solr_params).to eq(fq: ["#{SolrDocument::FIELD_APO_ID}:(\"druid:cb081vd1895\")"])
     end
 
     it 'adds to an existing fq' do
       allow(user).to receive(:permitted_apos).and_return(['druid:cb081vd1895'])
-      solr_params = { fq: ["#{SolrDocument::FIELD_APO_ID}:(info\\:fedora/druid\\:ab123cd4567)"] }
+      solr_params = { fq: ["#{SolrDocument::FIELD_APO_ID}:(druid\\:ab123cd4567)"] }
       @obj.add_access_controls_to_solr_params(solr_params)
-      expect(solr_params).to eq(fq: ["#{SolrDocument::FIELD_APO_ID}:(info\\:fedora/druid\\:ab123cd4567)",
-                                     "#{SolrDocument::FIELD_APO_ID}:(\"info:fedora/druid:cb081vd1895\")"])
+      expect(solr_params).to eq(fq: ["#{SolrDocument::FIELD_APO_ID}:(druid\\:ab123cd4567)",
+                                     "#{SolrDocument::FIELD_APO_ID}:(\"druid:cb081vd1895\")"])
     end
 
     it 'builds a valid query if there arent any apos' do

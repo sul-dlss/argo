@@ -105,7 +105,7 @@ class ApoController < ApplicationController
 
   # Displays the turbo-frame that has a link to collections governed by this APO
   def count_collections
-    query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}info:fedora/#{params[:id]}\" AND " \
+    query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}#{params[:id]}\" AND " \
             "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
     result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
 
@@ -116,7 +116,7 @@ class ApoController < ApplicationController
 
   # Displays the turbo-frame that has a link to items governed by this APO
   def count_items
-    query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}info:fedora/#{params[:id]}\" AND " \
+    query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}#{params[:id]}\" AND " \
             "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}item\""
     result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
 
@@ -144,7 +144,7 @@ class ApoController < ApplicationController
   def link_to_members_with_type(type)
     facet_config = facet_configuration_for_field(ApoConcern::FIELD_APO_ID)
     search_state = Blacklight::SearchState.new({ f: { SolrDocument::FIELD_OBJECT_TYPE => [type] } }, blacklight_config)
-    Blacklight::FacetItemPresenter.new("info:fedora/#{params[:id]}",
+    Blacklight::FacetItemPresenter.new(params[:id],
                                        facet_config,
                                        self,
                                        ApoConcern::FIELD_APO_ID, search_state).href

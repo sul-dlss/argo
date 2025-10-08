@@ -172,7 +172,7 @@ RSpec.describe 'User version view', :js do
         SolrDocument::FIELD_CONTENT_TYPE => 'image',
         :status_ssi => 'v1 Unknown Status',
         SolrDocument::FIELD_ACCESS_RIGHTS => %w[world dark],
-        SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
+        SolrDocument::FIELD_APO_ID => 'druid:ww057qx5555',
         SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
         :project_tag_ssim => 'Fuller Slides',
         :source_id_ssi => 'fuller:M1090_S15_B02_F01_0126',

@@ -8,11 +8,11 @@ RSpec.describe ApoConcern do
   describe '#apo' do
     context 'with data' do
       let(:document_attributes) do
-        { SolrDocument::FIELD_APO_ID => ['info:fedora/druid:abc'], SolrDocument::FIELD_APO_TITLE => ['My title'] }
+        { SolrDocument::FIELD_APO_ID => ['druid:abc'], SolrDocument::FIELD_APO_TITLE => ['My title'] }
       end
 
       it 'has an APO' do
-        expect(document.apo_id).to eq('info:fedora/druid:abc')
+        expect(document.apo_id).to eq('druid:abc')
         expect(document.apo_druid).to eq('druid:abc')
         expect(document.apo_title).to eq('My title')
       end
