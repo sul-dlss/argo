@@ -93,7 +93,7 @@ class ItemsController < ApplicationController
                 notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from #{CatalogRecordId.label}: #{catalog_record_id}"
   rescue Dor::Services::Client::UnexpectedResponse => e
     user_begin = 'An error occurred while attempting to refresh metadata'
-    user_end = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
+    user_end = 'Please try again or contact the #dlss-aaas Slack channel for assistance.'
     logger.error "#{user_begin}: #{e.message}"
     redirect_to solr_document_path(params[:id]), flash: { error: "#{user_begin}: #{e.message}. #{user_end}" }
   end
