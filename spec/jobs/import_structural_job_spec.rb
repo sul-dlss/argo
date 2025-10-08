@@ -16,7 +16,10 @@ RSpec.describe ImportStructuralJob do
     allow(Ability).to receive(:new).and_return(ability)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(VersionService).to receive(:open?).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druid1).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druid2).and_return(false)
+    allow(VersionService).to receive(:openable?).with(druid: druid2).and_return(true)
+    allow(VersionService).to receive(:open).and_return(cocina2)
   end
 
   describe '#perform' do
@@ -140,6 +143,9 @@ RSpec.describe ImportStructuralJob do
         expect(bulk_action.druid_count_total).to eq 2
         expect(bulk_action.druid_count_success).to eq 2
         expect(bulk_action.druid_count_fail).to eq 0
+        expect(VersionService).to have_received(:open).with(druid: druid2,
+                                                            description: 'Updating content',
+                                                            opening_user_name: bulk_action.user.to_s)
       end
     end
 

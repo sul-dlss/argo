@@ -24,6 +24,10 @@ RSpec.describe AddWorkflowJob do
     allow(Ability).to receive(:new).and_return(ability)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
+    allow(VersionService).to receive(:open?).with(druid: druids[0]).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druids[1]).and_return(false)
+    allow(VersionService).to receive(:openable?).with(druid: druids[1]).and_return(true)
+    allow(VersionService).to receive(:open).and_return(cocina2)
     allow(BulkJobLog).to receive(:open).and_yield(logger)
 
     described_class.perform_now(bulk_action.id,
@@ -55,6 +59,8 @@ RSpec.describe AddWorkflowJob do
         expect(logger).to have_received(:puts).with(/started accessionWF for druid:bb111cc2222/)
 
         expect(wf_client).to have_received(:create).twice
+        expect(VersionService).to have_received(:open)
+          .with(druid: druids[1], description: 'Running accessionWF', opening_user_name: bulk_action.user.to_s)
       end
     end
   end

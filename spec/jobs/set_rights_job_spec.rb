@@ -158,7 +158,10 @@ RSpec.describe SetRightsJob do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject.ability).to receive(:can?).and_return(true)
-    allow(VersionService).to receive(:open?).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druids[0]).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druids[1]).and_return(false)
+    allow(VersionService).to receive(:openable?).with(druid: druids[1]).and_return(true)
+    allow(VersionService).to receive(:open).and_return(cocina2)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(object_client1).to receive(:update)
@@ -188,6 +191,7 @@ RSpec.describe SetRightsJob do
         )
       expect(object_client2).not_to have_received(:update)
       expect(buffer.string).to include "Successfully updated rights for #{druids[0]}"
+      expect(VersionService).not_to have_received(:open)
     end
   end
 
@@ -226,6 +230,13 @@ RSpec.describe SetRightsJob do
 
       expect(buffer.string).to include "Successfully updated rights for #{druids[0]}"
       expect(buffer.string).to include "Successfully updated rights for #{druids[1]}"
+
+      expect(VersionService).to have_received(:open).with(druid: druids[1],
+                                                          description: 'Updating rights',
+                                                          opening_user_name: bulk_action.user.to_s)
+      # VersionService.open(druid: cocina_object.externalIdentifier,
+      # description:,
+      # opening_user_name: bulk_action.user.to_s)
     end
   end
 end
