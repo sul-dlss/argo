@@ -23,13 +23,6 @@ module ApoConcern
   end
 
   ##
-  # Access a SolrDocument's APO druid without the `info:fedora/` prefix
-  # @return [String, nil]
-  def apo_druid
-    apo_id&.gsub('info:fedora/', '')
-  end
-
-  ##
   # Access a SolrDocument's APO title
   # @return [String, nil]
   def apo_title

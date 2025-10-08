@@ -13,7 +13,6 @@ RSpec.describe ApoConcern do
 
       it 'has an APO' do
         expect(document.apo_id).to eq('druid:abc')
-        expect(document.apo_druid).to eq('druid:abc')
         expect(document.apo_title).to eq('My title')
       end
     end
@@ -23,7 +22,6 @@ RSpec.describe ApoConcern do
 
       it 'handles an Uber-APO' do
         expect(document.apo_id).to eq(SolrDocument::UBER_APO_ID)
-        expect(document.apo_druid).to eq(SolrDocument::UBER_APO_ID)
         expect(document.apo_title).to eq('My title')
       end
     end
@@ -33,7 +31,6 @@ RSpec.describe ApoConcern do
 
       it 'handles an Uber-APO' do
         expect(document.apo_id).to eq(SolrDocument::HYDRUS_UBER_APO_ID)
-        expect(document.apo_druid).to eq(SolrDocument::HYDRUS_UBER_APO_ID)
         expect(document.apo_title).to eq('My title')
       end
     end
@@ -43,7 +40,6 @@ RSpec.describe ApoConcern do
 
       it 'handles missing APO' do
         expect(document.apo_id).to be_nil
-        expect(document.apo_druid).to be_nil
         expect(document.apo_title).to be_nil
       end
     end
