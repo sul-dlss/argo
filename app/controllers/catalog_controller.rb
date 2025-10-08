@@ -26,8 +26,6 @@ class CatalogController < ApplicationController
 
   # Facets that are configured for lazy loading.
   LAZY_FACETS = [
-    SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
-    SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
     SolrDocument::FIELD_WORKFLOW_WPS
   ].map(&:to_s).freeze
 
@@ -80,13 +78,15 @@ class CatalogController < ApplicationController
 
     # exploded_project_tag_ssimdv indexes all project tag prefixes for hierarchical facet display, whereas
     #   project tag_ssim only indexes whole tags
-    config.add_facet_field SolrDocument::FIELD_EXPLODED_PROJECT_TAG, label: 'Project', limit: 100_000,
-                                                                     component: LazyProjectTagFacetComponent,
+    config.add_facet_field SolrDocument::FIELD_EXPLODED_PROJECT_TAG, label: 'Project', limit: 50, more_limit: 100_000,
+                                                                     sort: 'count',
+                                                                     component: Blacklight::Hierarchy::FacetFieldListComponent,
                                                                      unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     # exploded_nonproject_tag_ssimdv indexes all tag prefixes, except project tags, for hierarchical facet display,
     #   whereas tag_ssim only indexes whole tags.
-    config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
-                                                                        component: LazyNonprojectTagFacetComponent,
+    config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 50, more_limit: 100_000,
+                                                                        sort: 'count',
+                                                                        component: Blacklight::Hierarchy::FacetFieldListComponent,
                                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
@@ -225,6 +225,13 @@ class CatalogController < ApplicationController
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
     config.add_search_field 'text', label: 'All Fields'
+
+    config.add_search_field('All Tags') do |field|
+      field.solr_parameters = {
+        qf: 'tag_text_unstemmed_im'
+      }
+    end
+
     config.add_sort_field 'score desc, id asc', label: 'Relevance', default: true
     config.add_sort_field 'id asc', label: 'Druid'
 
