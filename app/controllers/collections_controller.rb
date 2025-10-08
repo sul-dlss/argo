@@ -67,7 +67,7 @@ class CollectionsController < ApplicationController
 
   # render the count of collections
   def count
-    query = "_query_:\"{!raw f=#{CollectionConcern::FIELD_COLLECTION_ID}}info:fedora/#{params[:id]}\""
+    query = "_query_:\"{!raw f=#{CollectionConcern::FIELD_COLLECTION_ID}}#{params[:id]}\""
     result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
 
     path_for_facet = link_to_collection
@@ -84,7 +84,7 @@ class CollectionsController < ApplicationController
   def link_to_collection
     facet_config = facet_configuration_for_field(CollectionConcern::FIELD_COLLECTION_ID)
     search_state = Blacklight::SearchState.new({}, blacklight_config)
-    Blacklight::FacetItemPresenter.new("info:fedora/#{params[:id]}",
+    Blacklight::FacetItemPresenter.new(params[:id],
                                        facet_config,
                                        self,
                                        CollectionConcern::FIELD_COLLECTION_ID, search_state).href

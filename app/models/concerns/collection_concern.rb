@@ -3,7 +3,7 @@
 module CollectionConcern
   extend Blacklight::Solr::Document
 
-  FIELD_COLLECTION_ID = 'is_member_of_collection_ssim'
+  FIELD_COLLECTION_ID = 'member_of_collection_ssim'
   FIELD_COLLECTION_TITLE = 'collection_title_ssimdv'
 
   ##

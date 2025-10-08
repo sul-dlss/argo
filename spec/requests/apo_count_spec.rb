@@ -31,7 +31,7 @@ RSpec.describe 'Count the members of an apo' do
       expect(rendered.find_css('turbo-frame#apo-collection-count')).to be_present
       expect(rendered).to have_link '2', href: search_catalog_path(
         f: {
-          is_governed_by_ssim: ["info:fedora/#{ur_apo_id}"],
+          SolrDocument::FIELD_APO_ID => [ur_apo_id],
           SolrDocument::FIELD_OBJECT_TYPE => ['collection']
         }
       )
@@ -49,7 +49,7 @@ RSpec.describe 'Count the members of an apo' do
       expect(rendered.find_css('turbo-frame#apo-item-count')).to be_present
       expect(rendered).to have_link '1', href: search_catalog_path(
         f: {
-          is_governed_by_ssim: ["info:fedora/#{admin_policy_id}"],
+          SolrDocument::FIELD_APO_ID => [admin_policy_id],
           SolrDocument::FIELD_OBJECT_TYPE => ['item']
         }
       )

@@ -217,8 +217,8 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'SW Language', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
-    config.add_facet_field 'is_governed_by_ssim', if: false
-    config.add_facet_field 'is_member_of_collection_ssim', if: false
+    config.add_facet_field SolrDocument::FIELD_APO_ID, if: false
+    config.add_facet_field SolrDocument::FIELD_COLLECTION_ID, if: false
     config.add_facet_field 'tag_ssim', if: false
     config.add_facet_field 'project_tag_ssim', if: false
 

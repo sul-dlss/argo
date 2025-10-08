@@ -22,7 +22,7 @@ RSpec.describe 'Count the members of a collection' do
     expect(rendered.find_css('turbo-frame#collection-member-count')).to be_present
     expect(rendered).to have_link '2', href: search_catalog_path(
       f: {
-        is_member_of_collection_ssim: ["info:fedora/#{collection.externalIdentifier}"]
+        SolrDocument::FIELD_COLLECTION_ID => [collection.externalIdentifier]
       }
     )
     expect(rendered.find_link('2')[:target]).to eq '_top'

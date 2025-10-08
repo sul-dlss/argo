@@ -3,7 +3,7 @@
 module ApoConcern
   extend Blacklight::Solr::Document
 
-  FIELD_APO_ID = 'is_governed_by_ssim'
+  FIELD_APO_ID = 'governed_by_ssim'
   FIELD_APO_TITLE = 'apo_title_ssim'
   FIELD_NONHYDRUS_APO_TITLE = 'nonhydrus_apo_title_ssimdv'
 
@@ -20,13 +20,6 @@ module ApoConcern
     elsif UBER_APO_IDS.include?(id)
       id
     end
-  end
-
-  ##
-  # Access a SolrDocument's APO druid without the `info:fedora/` prefix
-  # @return [String, nil]
-  def apo_druid
-    apo_id&.gsub('info:fedora/', '')
   end
 
   ##
