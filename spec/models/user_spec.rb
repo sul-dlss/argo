@@ -6,6 +6,51 @@ require 'rails_helper'
 # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
 
 RSpec.describe User do
+  let(:admin_policy) do
+    Cocina::Models::AdminPolicy.new(
+      administrative: {
+        accessTemplate: {
+          view: 'world',
+          controlledDigitalLending: false,
+          download: 'world',
+          location: nil,
+          copyright: 'My copyright statement',
+          license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
+          useAndReproductionStatement: 'My use and reproduction statement'
+        },
+        hasAdminPolicy: 'druid:xx666zz7777',
+        hasAgreement: 'druid:dd327rv8888',
+        roles:
+      },
+      description: {
+        title: [{ value: 'My title' }],
+        purl: 'https://purl.stanford.edu/zt570qh4444'
+      },
+      externalIdentifier: 'druid:zt570qh4444',
+      label: 'My Admin Policy',
+      type: Cocina::Models::ObjectType.admin_policy,
+      version: 1
+    )
+  end
+  let(:roles) do
+    [
+      {
+        members: [
+          { identifier: 'dlss:groupA', type: 'workgroup' },
+          { identifier: 'dlss:groupB', type: 'workgroup' }
+        ],
+        name: 'dor-apo-depositor'
+      },
+      {
+        members: [
+          { identifier: 'dlss:groupA', type: 'workgroup' },
+          { identifier: 'dlss:groupC', type: 'workgroup' }
+        ],
+        name: 'dor-apo-manager'
+      }
+    ]
+  end
+
   describe '#admin?' do
     subject { user.admin? }
 
@@ -16,7 +61,7 @@ RSpec.describe User do
     end
 
     context 'when the group is a deprecated admin group' do
-      let(:groups) { ['workgroup:dlss:dor-admin'] }
+      let(:groups) { ['dlss:dor-admin'] }
 
       it { is_expected.to be false }
     end
@@ -28,7 +73,7 @@ RSpec.describe User do
     end
 
     context 'with an inadequate group membership' do
-      let(:groups) { ['workgroup:dlss:not-admin'] }
+      let(:groups) { ['dlss:not-admin'] }
 
       it { is_expected.to be false }
     end
@@ -94,7 +139,7 @@ RSpec.describe User do
     end
 
     context 'when the group is a deprecated manager group' do
-      let(:groups) { ['workgroup:dlss:dor-manager'] }
+      let(:groups) { ['dlss:dor-manager'] }
 
       it { is_expected.to be false }
     end
@@ -106,7 +151,7 @@ RSpec.describe User do
     end
 
     context 'with an inadequate group membership' do
-      let(:groups) { ['workgroup:dlss:not-manager'] }
+      let(:groups) { ['dlss:not-manager'] }
 
       it { is_expected.to be false }
     end
@@ -140,7 +185,7 @@ RSpec.describe User do
     end
 
     context 'when the group is a deprecated viewer group' do
-      let(:groups) { ['workgroup:dlss:dor-viewer'] }
+      let(:groups) { ['dlss:dor-viewer'] }
 
       it { is_expected.to be false }
     end
@@ -152,7 +197,7 @@ RSpec.describe User do
     end
 
     context 'with an inadequate group membership' do
-      let(:groups) { ['workgroup:dlss:not-viewer'] }
+      let(:groups) { ['dlss:not-viewer'] }
 
       it { is_expected.to be false }
     end
@@ -176,61 +221,46 @@ RSpec.describe User do
     end
   end
 
-  describe 'solr_role_allowed' do
-    let(:solr_doc) do
-      {
-        'roleA' => ['dlss:groupA', 'dlss:groupB'],
-        'roleB' => ['dlss:groupA', 'dlss:groupC']
-      }
-    end
-
+  describe 'role_allowed' do
     before do
       allow(subject).to receive(:groups).and_return(['dlss:groupA'])
     end
 
-    it 'returns true when DOR solr document has a role with values that include a user group' do
-      expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be true
+    context 'when roles are defined in the APO' do
+      it 'returns true when DOR solr document has a role with values that include a user group' do
+        expect(subject.role_allowed?(admin_policy.administrative, 'dor-apo-depositor')).to be true
+      end
+
+      it 'returns false when the APO has a role with values that do not include a user group' do
+        allow(subject).to receive(:groups).and_return(['dlss:groupX'])
+        expect(subject.role_allowed?(admin_policy.administrative, 'dor-apo-depositor')).to be false
+      end
+
+      it 'returns false when the APO has no matching roles' do
+        expect(subject.role_allowed?(admin_policy.administrative, 'sdr-administrator')).to be false
+      end
+
+      it 'returns false when user belongs to no groups' do
+        allow(subject).to receive(:groups).and_return([])
+        expect(subject.role_allowed?(admin_policy.administrative, 'dor-apo-depositor')).to be false
+      end
     end
 
-    it 'returns false when DOR solr document has a role with values that do not include a user group' do
-      allow(subject).to receive(:groups).and_return(['dlss:groupX'])
-      expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be false
-    end
+    context 'when there are no roles in the APO' do
+      let(:roles) { [] }
 
-    it 'returns false when DOR solr document has no matching roles' do
-      expect(subject.solr_role_allowed?(solr_doc, 'roleX')).to be false
-    end
-
-    it 'returns false when DOR solr document is empty' do
-      expect(subject.solr_role_allowed?({}, 'roleA')).to be false
-    end
-
-    it 'returns false when user belongs to no groups' do
-      allow(subject).to receive(:groups).and_return([])
-      expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be false
+      it 'returns false when the APO is empty' do
+        expect(subject.role_allowed?(admin_policy.administrative, 'dor-apo-depositor')).to be false
+      end
     end
   end
 
   describe 'roles' do
-    # The exact DRUID is not important in these specs, because
-    # the SearchService is mocked to return solr_doc.
-    let(:druid) { 'druid:ab123cd4567' }
-    let(:answer) do
-      {
-        'response' => { 'docs' => [solr_doc] }
-      }
-    end
-    let(:solr_doc) do
-      {
-        'apo_role_sdr-administrator_ssim' => %w[workgroup:dlss:groupA workgroup:dlss:groupB],
-        'apo_role_sdr-viewer_ssim' => %w[workgroup:dlss:groupE workgroup:dlss:groupF],
-        'apo_role_dor-apo-manager_ssim' => %w[workgroup:dlss:groupC workgroup:dlss:groupD],
-        'apo_role_person_sdr-viewer_ssim' => %w[sunetid:tcramer]
-      }
-    end
+    let(:druid) { 'druid:zt570qh4444' }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: admin_policy) }
 
     before do
-      allow(SearchService).to receive(:query).and_return(answer)
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
     it 'accepts any object identifier' do
@@ -238,7 +268,7 @@ RSpec.describe User do
       expect { subject.roles('anyStringOK') }.not_to raise_error
     end
 
-    it 'returns an empty array for any blank object identifer' do
+    it 'returns an empty array for any blank object identifier' do
       ['', nil].each do |pid|
         expect { subject.roles(pid) }.not_to raise_error
         expect(subject.roles(pid)).to be_empty
@@ -246,29 +276,44 @@ RSpec.describe User do
     end
 
     it 'builds a set of roles from groups' do
-      user_groups = %w[workgroup:dlss:groupF workgroup:dlss:groupA]
-      user_roles = %w[sdr-administrator sdr-viewer]
+      user_groups = %w[dlss:groupF dlss:groupA]
+      user_roles = %w[dor-apo-depositor dor-apo-manager]
       expect(subject).to receive(:groups).and_return(user_groups).at_least(:once)
       expect(subject.roles(druid)).to eq(user_roles)
     end
 
-    it 'returns an empty set of roles if the DRUID solr search fails' do
-      empty_doc = { 'response' => { 'docs' => [] } }
-      allow(SearchService).to receive(:query).and_return(empty_doc)
-      # check that the code will return immediately if solr doc is empty
-      expect(subject).not_to receive(:groups)
-      expect(subject).not_to receive(:solr_role_allowed?)
-      expect(subject.roles(druid)).to be_empty
+    context 'when the admin policy is not found' do
+      let(:admin_policy) { nil }
+
+      it 'returns an empty set of roles if the APO is not found' do
+        # check that the code will return immediately if solr doc is empty
+        expect(subject).not_to receive(:groups)
+        expect(subject).not_to receive(:role_allowed?)
+        expect(subject.roles(druid)).to be_empty
+      end
     end
 
-    it 'works correctly if the individual is named in the apo, but is not in any groups that matter' do
-      expect(subject).to receive(:groups).and_return(['sunetid:tcramer']).at_least(:once)
-      expect(subject.roles(druid)).to eq(['sdr-viewer'])
+    context 'when a user is named in a role' do
+      let(:roles) do
+        [
+          {
+            members: [
+              { identifier: 'sunetid:tcramer', type: 'sunetid' }
+            ],
+            name: 'sdr-viewer'
+          }
+        ]
+      end
+
+      it 'works correctly if the individual is named in the apo, but is not in any groups that matter' do
+        expect(subject).to receive(:groups).and_return(['sunetid:tcramer']).at_least(:once)
+        expect(subject.roles(druid)).to eq(['sdr-viewer'])
+      end
     end
 
-    it 'hangs onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
+    it 'hangs onto results through the life of the user object, avoiding multiple DSA queries to find the roles for the same pid multiple times' do
       expect(subject).to receive(:groups).and_return(['testdoesnotcarewhatishere']).at_least(:once)
-      expect(SearchService).to receive(:query).once
+      expect(object_client).to receive(:find).once
       subject.roles(druid)
       subject.roles(druid)
     end
@@ -283,13 +328,13 @@ RSpec.describe User do
       let(:webauth_groups) { %w[dlss:testgroup1 dlss:testgroup2 dlss:testgroup3] }
 
       it 'returns the groups by webauth' do
-        expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
+        expected_groups = ['sunetid:asdf'] + webauth_groups.map(&:to_s)
         expect(subject).to eq(expected_groups)
       end
     end
 
     describe 'impersonating' do
-      let(:groups) { %w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2] }
+      let(:groups) { %w[dlss:impersonatedgroup1 dlss:impersonatedgroup2] }
 
       before do
         user.set_groups_to_impersonate(groups)
@@ -297,7 +342,7 @@ RSpec.describe User do
 
       context 'when the groups include SDR_API_AUTHORIZED_GROUPS' do
         let(:groups) do
-          %w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2] + User::SDR_API_AUTHORIZED_GROUPS
+          %w[dlss:impersonatedgroup1 dlss:impersonatedgroup2] + User::SDR_API_AUTHORIZED_GROUPS
         end
         let(:webauth_groups) { User::ADMIN_GROUPS }
 
@@ -347,7 +392,7 @@ RSpec.describe User do
       let(:webauth_groups) { %w[dlss:testgroup1 dlss:testgroup2 dlss:testgroup3] }
 
       it 'returns the groups by webauth' do
-        expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
+        expected_groups = ['sunetid:asdf'] + webauth_groups.map(&:to_s)
         expect(subject).to eq(expected_groups)
       end
     end
