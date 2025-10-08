@@ -8,7 +8,8 @@ RSpec.describe 'Item manage release' do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: [], create: nil) }
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: nil) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: item,
@@ -16,7 +17,8 @@ RSpec.describe 'Item manage release' do
                     events: events_client,
                     version: version_client,
                     user_version: user_version_client,
-                    release_tags: release_tags_client)
+                    release_tags: release_tags_client,
+                    workflow: workflow_client)
   end
   let(:item) do
     FactoryBot.create_for_repository(:persisted_item)
@@ -35,16 +37,22 @@ RSpec.describe 'Item manage release' do
     expect(page).to have_css 'a', text: 'Manage release'
   end
 
-  it 'creates a new bulk action' do
-    visit item_manage_release_path(item.externalIdentifier)
+  it 'sets a tag and starts releaseWF' do
+    visit edit_item_manage_release_path(item.externalIdentifier)
     expect(page).to have_css 'label',
                              text: "Manage release to discovery applications for item #{item.externalIdentifier}"
     click_button 'Submit'
-    expect(page).to have_css 'h1', text: 'Bulk Actions'
-    perform_enqueued_jobs
-    reload_page_until_timeout do
-      page.has_css?('td', text: 'ReleaseObjectJob') &&
-        page.has_css?('td', text: 'Completed')
+
+    expect(page).to have_css '.alert', text: "Updated release for #{item.externalIdentifier}"
+    expect(release_tags_client).to have_received(:create) do |args|
+      tag = args[:tag]
+      expect(tag.to).to eq 'Searchworks'
+      expect(tag.who).to eq 'esnowden'
+      expect(tag.what).to eq 'self'
+      expect(tag.release).to be true
+      expect(tag.date).to be_a DateTime
     end
+    expect(object_client).to have_received(:workflow).with('releaseWF')
+    expect(workflow_client).to have_received(:create).with(version: item.version)
   end
 end

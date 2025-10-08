@@ -29,7 +29,7 @@ RSpec.describe 'Draw the manage release form' do
     end
 
     it 'authorizes the view' do
-      get '/items/druid:bc123df4567/manage_release'
+      get '/items/druid:bc123df4567/manage_release/edit'
       expect(response).to have_http_status(:success)
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe 'Draw the manage release form' do
     end
 
     it 'returns forbidden' do
-      get '/items/druid:bc123df4567/manage_release'
+      get '/items/druid:bc123df4567/manage_release/edit'
       expect(response).to have_http_status(:forbidden)
     end
   end

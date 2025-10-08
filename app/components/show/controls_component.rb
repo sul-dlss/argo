@@ -64,7 +64,7 @@ module Show
 
     def manage_release
       render ActionButton.new(
-        url: item_manage_release_path(druid),
+        url: edit_item_manage_release_path(druid),
         label: 'Manage release',
         open_modal: true,
         disabled: version_or_user_version_view?

@@ -63,7 +63,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
         expect(page).to have_link 'Republish', href: '/items/druid:kv840xx0000/publish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
-        expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+        expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release/edit'
         expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
         expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
@@ -112,7 +112,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
         expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
         expect(page).to have_link 'Republish', href: '/items/druid:kv840xx0000/publish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
-        expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+        expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release/edit'
         expect(page).to have_link 'Download Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive.csv'
         expect(page).to have_no_link 'Upload Cocina spreadsheet', href: '/items/druid:kv840xx0000/descriptive/edit'
         expect(page).to have_link 'Text extraction', href: '/items/druid:kv840xx0000/text_extraction/new'
@@ -220,7 +220,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     it 'renders the appropriate buttons' do
       expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
-      expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+      expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release/edit'
       expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
       expect(page).to have_link 'Republish'
       expect(page).to have_text 'Manage description'

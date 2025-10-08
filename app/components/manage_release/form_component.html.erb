@@ -1,5 +1,4 @@
-<%= form_with(url: manage_release_job_path) do |f| %>
-  <%= f.hidden_field('druids', value: @document.id) %>
+<%= form_with(url: item_manage_release_path(@document.id), method: :patch) do |f| %>
   <div class='mb-3'>
     <label>Manage release to discovery applications for <%= @document.object_type %> <%= @document.id %></label>
   </div>

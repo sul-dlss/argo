@@ -4,14 +4,32 @@
 class ManageReleasesController < ApplicationController
   include Blacklight::Searchable
 
-  def show
-    cocina = Repository.find(params[:item_id])
-    authorize! :update, cocina
-    _, @document = search_service.fetch params[:item_id]
-    @bulk_action = BulkAction.new
+  load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id'
 
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
+  def edit
+    authorize! :update, @cocina
+    _, @document = search_service.fetch params[:item_id]
+
+    render layout: false
+  end
+
+  def update
+    authorize! :update, @cocina
+
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    object_client.release_tags.create(tag: new_tag)
+    object_client.workflow('releaseWF').create(version: @cocina.version)
+
+    redirect_to solr_document_path(@cocina.externalIdentifier), notice: "Updated release for #{@cocina.externalIdentifier}"
+  end
+
+  def new_tag
+    Dor::Services::Client::ReleaseTag.new(
+      to: params[:to],
+      who: current_user.sunetid,
+      what: 'self',
+      release: params[:tag] == 'true',
+      date: DateTime.now.utc.iso8601
+    )
   end
 end

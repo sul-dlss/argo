@@ -198,7 +198,7 @@ Rails.application.routes.draw do
 
     resource :tags, only: %i[edit update]
 
-    resource :manage_release, only: :show
+    resource :manage_release, only: %i[edit update]
     resources :metadata, only: [] do
       collection do
         get 'descriptive', as: 'descriptive'
