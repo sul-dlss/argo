@@ -1,38 +1,48 @@
 # frozen_string_literal: true
 
-class ImportStructuralJob < GenericJob
-  def perform(_batch_id, params)
-    super
-
-    csv = CSV.parse(params[:csv_file], headers: true)
-    # Group the rows by druid
-    grouped = csv.group_by { |row| row['druid'] }
-    with_items(grouped.keys, name: 'Import structural') do |cocina_item, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:update, cocina_item)
-
-      next failure.call('Object cannot be modified in its current state.') unless VersionService.open?(druid: cocina_item.externalIdentifier)
-
-      druid = cocina_item.externalIdentifier
-      result = StructureUpdater.from_csv(cocina_item, item_csv(csv.headers, grouped.fetch(druid)))
-
-      if result.success?
-        Repository.store(cocina_item.new(structural: result.value!))
-        success.call("Updated #{druid}")
-      else
-        failure.call("Unable to update #{druid}")
-      end
-    end
+class ImportStructuralJob < BulkActionJob
+  def csv
+    @csv ||= CSV.parse(params[:csv_file], headers: true)
   end
 
-  private
+  def grouped_rows
+    @grouped_rows ||= csv.group_by { |row| row['druid'] }
+  end
 
-  # Create a CSV with the given rows and without the druid column
-  def item_csv(headers, rows)
-    CSV.generate do |table|
-      table.add_row(headers - ['druid'])
-      rows.map { |row| row.delete_if { |header, _| header == 'druid' } }.each do |row|
-        table.add_row(row)
+  # druids are not passed in as a param, but derived from the CSV
+  def druids
+    @druids ||= grouped_rows.keys
+  end
+
+  class ImportStructuralJobItem < BulkActionJobItem
+    delegate :csv, :grouped_rows, to: :job
+
+    def perform
+      return unless check_update_ability?
+
+      open_new_version_if_needed!(description: 'Updating content')
+
+      result = StructureUpdater.from_csv(cocina_object, item_csv)
+      if result.success?
+        Repository.store(cocina_object.new(structural: result.value!))
+        success!(message: "Updated #{druid}")
+      else
+        failure!(message: "Unable to update #{druid}")
       end
+    end
+
+    # Create a CSV with the given rows and without the druid column
+    def item_csv
+      CSV.generate do |table|
+        table.add_row(csv.headers - ['druid'])
+        rows.map { |row| row.delete_if { |header, _| header == 'druid' } }.each do |row|
+          table.add_row(row)
+        end
+      end
+    end
+
+    def rows
+      grouped_rows.fetch(druid)
     end
   end
 end

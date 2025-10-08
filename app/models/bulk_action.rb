@@ -74,6 +74,10 @@ class BulkAction < ApplicationRecord
     update(log_name: log_filename)
   end
 
+  def open_log_file
+    File.open(log_name, 'a')
+  end
+
   def create_output_directory
     FileUtils.mkdir_p(output_directory) unless File.directory?(output_directory)
   end

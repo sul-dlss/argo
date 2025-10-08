@@ -52,7 +52,7 @@ RSpec.describe SetCollectionJob do
       before do
         allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-        allow(subject.ability).to receive(:can?).and_return true
+        allow(Ability).to receive(:new).and_return(instance_double(Ability, can?: true))
       end
 
       context 'when no collections are selected' do
@@ -78,8 +78,9 @@ RSpec.describe SetCollectionJob do
 
         context 'when the version is closed' do
           before do
-            allow(VersionService).to receive(:open?).and_return(false)
-            allow(job).to receive(:open_new_version).and_return(cocina1.new(version: 2))
+            allow(VersionService).to receive_messages(open?: false, openable?: true)
+            allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[0])).and_return(cocina1.new(version: 2))
+            allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[1])).and_return(cocina2.new(version: 2))
           end
 
           it 'opens a new version sets the new collection on an object' do
@@ -92,10 +93,10 @@ RSpec.describe SetCollectionJob do
       end
 
       context 'when the objects is not found' do
-        let(:buffer) { StringIO.new }
+        let(:log) { StringIO.new }
 
         before do
-          allow(BulkJobLog).to receive(:open).and_yield(buffer)
+          allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
           allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_raise(Dor::Services::Client::NotFoundResponse)
           allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
         end
@@ -104,15 +105,15 @@ RSpec.describe SetCollectionJob do
           subject.perform(bulk_action.id, params)
           expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(druids.length)
-          expect(buffer.string).to include "Set collection failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[0]}"
-          expect(buffer.string).to include "Set collection failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
+          expect(log.string).to include "Failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[0]}"
+          expect(log.string).to include "Failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
         end
       end
     end
 
     context 'without authorization' do
       before do
-        allow(subject.ability).to receive(:can?).and_return false
+        allow(Ability).to receive(:new).and_return(instance_double(Ability, can?: false))
       end
 
       it 'does not set the new collection on an object and increments failure count' do

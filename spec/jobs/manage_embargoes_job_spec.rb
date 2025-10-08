@@ -8,7 +8,7 @@ RSpec.describe ManageEmbargoesJob do
   let(:release_dates) { %w[2040-04-04 2030-03-03 2035-07-27] }
   let(:rights) { [%w[world world], %w[world world], %w[stanford stanford]] }
 
-  let(:buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:item1) do
     build(:dro_with_metadata, id: druids[0])
   end
@@ -29,31 +29,29 @@ RSpec.describe ManageEmbargoesJob do
   end
 
   let(:params) { { csv_file: } }
+  let(:ability) { instance_double(Ability, can?: true) }
 
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
     allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
     allow(Repository).to receive(:find).with(druids[2]).and_return(item3)
     allow(Repository).to receive(:store)
 
     allow(VersionService).to receive_messages(open?: true, openable?: true)
-    allow(subject.ability).to receive(:can?).and_return(true)
-    allow(BulkJobLog).to receive(:open).and_yield(buffer)
+    allow(Ability).to receive(:new).and_return(ability)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(VersionService).to receive(:open).and_return(item1.new(version: 2), item2.new(version: 2),
                                                        item3.new(version: 2))
   end
 
   describe '#perform' do
     context 'when not authorized' do
-      before do
-        allow(subject.ability).to receive(:can?).and_return(false)
-      end
+      let(:ability) { instance_double(Ability, can?: false) }
 
       it 'logs and returns' do
         subject.perform(bulk_action.id, params)
-        expect(buffer.string).to include('Not authorized')
-        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(log.string).to include('Not authorized')
+        expect(bulk_action.reload.druid_count_total).to eq druids.length
       end
     end
 
@@ -61,7 +59,7 @@ RSpec.describe ManageEmbargoesJob do
       it 'updates the embargo' do
         subject.perform(bulk_action.id, params)
         expect(Repository).to have_received(:store).exactly(3).times
-        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.reload.druid_count_total).to eq druids.length
         expect(VersionService).not_to have_received(:open)
       end
     end
@@ -73,7 +71,7 @@ RSpec.describe ManageEmbargoesJob do
 
       it 'opens new version and updates the embargo' do
         subject.perform(bulk_action.id, params)
-        expect(bulk_action.druid_count_total).to eq 3
+        expect(bulk_action.reload.druid_count_total).to eq 3
         expect(bulk_action.druid_count_success).to eq 3
         expect(Repository).to have_received(:store).exactly(3).times
         expect(VersionService).to have_received(:open).exactly(3).times
@@ -87,7 +85,7 @@ RSpec.describe ManageEmbargoesJob do
 
       it 'logs' do
         subject.perform(bulk_action.id, params)
-        expect(buffer.string).to include('Embargo failed')
+        expect(log.string).to include('Failed')
       end
     end
 
@@ -96,12 +94,12 @@ RSpec.describe ManageEmbargoesJob do
 
       it 'updates the embargo and logs the bad date' do
         subject.perform(bulk_action.id, params)
-        expect(bulk_action.druid_count_total).to eq 3
+        expect(bulk_action.reload.druid_count_total).to eq 3
         expect(bulk_action.druid_count_fail).to eq 2
         expect(bulk_action.druid_count_success).to eq 1
         expect(Repository).to have_received(:store).once
-        expect(buffer.string).to include('foo is not a valid date')
-        expect(buffer.string).to include('Missing required value for "release_date"')
+        expect(log.string).to include('foo is not a valid date')
+        expect(log.string).to include('Missing required value for "release_date"')
       end
     end
 
@@ -112,11 +110,11 @@ RSpec.describe ManageEmbargoesJob do
       it 'logs the invalid items' do
         subject.perform(bulk_action.id, params)
 
-        expect(bulk_action.druid_count_total).to eq 3
+        expect(bulk_action.reload.druid_count_total).to eq 3
         expect(bulk_action.druid_count_success).to eq 2
         expect(bulk_action.druid_count_fail).to eq 1
         expect(Repository).to have_received(:store).exactly(2).times
-        expect(buffer.string).to include('Download access "nobody" is not a valid option')
+        expect(log.string).to include('Download access "nobody" is not a valid option')
       end
     end
   end

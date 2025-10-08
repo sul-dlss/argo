@@ -9,7 +9,7 @@ RSpec.describe RegisterDruidsJob do
 
   let(:bulk_action) { create(:bulk_action) }
   let(:response) { Success(model) }
-  let(:fake_log) { double('logger', puts: nil) }
+  let(:log) { instance_double(File, puts: nil, close: true) }
   let(:catalog_link) do
     Cocina::Models::FolioCatalogLink.new(catalog: 'folio', catalogRecordId: 'in12345', refresh: true)
   end
@@ -37,7 +37,8 @@ RSpec.describe RegisterDruidsJob do
   before do
     allow(BulkAction).to receive(:find).and_return(bulk_action)
     allow(RegistrationService).to receive(:register).and_return(response)
-    allow(BulkJobLog).to receive(:open).and_yield(fake_log)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
+
     job.perform(bulk_action.id, **params)
   end
 
@@ -52,7 +53,7 @@ RSpec.describe RegisterDruidsJob do
 
       it 'does not register the object' do
         expect(RegistrationService).not_to have_received(:register)
-        expect(fake_log).to have_received(:puts).with(/does not match value: "druid:123", example: druid:bc123df4567/)
+        expect(log).to have_received(:puts).with(/does not match value: "druid:123", example: druid:bc123df4567/)
         expect(bulk_action.druid_count_success).to eq 0
         expect(bulk_action.druid_count_fail).to eq 1
       end
@@ -68,18 +69,16 @@ RSpec.describe RegisterDruidsJob do
       end
 
       it 'logs the error' do
-        expect(fake_log).to have_received(:puts).with(/connection problem/)
+        expect(log).to have_received(:puts).with(/connection problem/)
         expect(bulk_action.druid_count_success).to eq 0
         expect(bulk_action.druid_count_fail).to eq 1
       end
     end
 
     context 'when registration is successful' do
-      let(:csv_filepath) { "#{Settings.bulk_metadata.directory}RemoteIndexingJob_1/registration_report.csv" }
+      let(:csv_filepath) { "#{bulk_action.output_directory}/registration_report.csv" }
 
-      # This test continuoisly fails on CI, but passes locally.
-      # Marking as pending for now until it can be investigated.
-      xit 'registers the object' do # rubocop:disable RSpec/PendingWithoutReason
+      it 'registers the object' do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
                                                                      tags: [
                                                                        'csv : test', 'Project : two'
@@ -88,7 +87,7 @@ RSpec.describe RegisterDruidsJob do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
                                                                      tags: [],
                                                                      workflow: 'accessionWF')
-        expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
+        expect(log).to have_received(:puts).with(/Registration successful for druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
         expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Label\n123,36105010101010,in12345,foo:bar1,My object\n123,36105010101010,in12345,foo:bar1,My object\n")
       end
@@ -123,7 +122,7 @@ RSpec.describe RegisterDruidsJob do
                                                                        'csv : test', 'Project : two'
                                                                      ],
                                                                      workflow: 'accessionWF').twice
-        expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
+        expect(log).to have_received(:puts).with(/Registration successful for druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
       end
     end
@@ -146,7 +145,7 @@ RSpec.describe RegisterDruidsJob do
         expect(RegistrationService).to have_received(:register).with(model: Cocina::Models::RequestDRO,
                                                                      tags: [],
                                                                      workflow: 'accessionWF')
-        expect(fake_log).to have_received(:puts).with(/Successfully registered druid:123/).twice
+        expect(log).to have_received(:puts).with(/Registration successful for druid:123/).twice
         expect(bulk_action.druid_count_success).to eq 2
       end
     end
@@ -161,7 +160,7 @@ RSpec.describe RegisterDruidsJob do
       end
 
       it 'does not register the objects' do
-        expect(fake_log).to have_received(:puts).with(%r{isn't one of in \#/components/schemas/Access}).twice
+        expect(log).to have_received(:puts).with(%r{isn't one of in \#/components/schemas/Access}).twice
         expect(bulk_action.druid_count_success).to eq 0
         expect(bulk_action.druid_count_fail).to eq 2
       end

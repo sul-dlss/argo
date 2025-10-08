@@ -3,12 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe ReleaseObjectJob do
-  let(:buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:item1) { build(:dro_with_metadata, id: druids[0], version: 2) }
   let(:item2) { build(:dro_with_metadata, id: druids[1], version: 3) }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, update: true, workflow: workflow_client) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, update: true, workflow: workflow_client) }
-  let(:release_tags) { instance_double(Dor::Services::Client::ReleaseTags) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, workflow: workflow_client) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, workflow: workflow_client) }
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags) }
+  let(:ability) { instance_double(Ability, can?: true) }
+
+  let(:unexpected_response) do
+    Dor::Services::Client::UnexpectedResponse
+      .new(response: instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong'))
+  end
 
   before do
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
@@ -16,11 +22,10 @@ RSpec.describe ReleaseObjectJob do
     allow(WorkflowService).to receive(:published?).and_return(published)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(object_client1).to receive(:release_tags).and_return(release_tags)
-    allow(object_client2).to receive(:release_tags).and_return(release_tags)
-
-    # Stub out the file, and send it to a string buffer instead
-    allow(BulkJobLog).to receive(:open).and_yield(buffer)
+    allow(object_client1).to receive(:release_tags).and_return(release_tags_client)
+    allow(object_client2).to receive(:release_tags).and_return(release_tags_client)
+    allow(Ability).to receive(:new).and_return(ability)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
   end
 
   describe '#perform' do
@@ -47,9 +52,8 @@ RSpec.describe ReleaseObjectJob do
 
       context 'when happy path' do
         before do
-          allow(release_tags).to receive(:create).and_return(true)
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          expect(subject.ability).to receive(:can?).and_return(true).exactly(druids.length).times
+          allow(release_tags_client).to receive(:create).and_return(true)
         end
 
         it 'updates the total druid count' do
@@ -67,17 +71,18 @@ RSpec.describe ReleaseObjectJob do
 
         it 'logs information to the logfile' do
           subject.perform(bulk_action.id, params)
-          expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
-          expect(buffer.string).to include 'Workflow creation successful'
-          expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
+          expect(log.string).to include 'Starting ReleaseObjectJob for BulkAction'
+          expect(log.string).to include 'Workflow creation successful'
+          expect(log.string).to include 'Finished ReleaseObjectJob for BulkAction'
         end
       end
 
       context 'when a release tag fails' do
+        let(:response) { instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong') }
+
         before do
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          expect(subject.ability).to receive(:can?).and_return(true).exactly(druids.length).times
-          allow(release_tags).to receive(:create).and_raise(Dor::Services::Client::UnexpectedResponse)
+          allow(release_tags_client).to receive(:create).and_raise(unexpected_response)
         end
 
         it 'updates the total druid count' do
@@ -92,20 +97,16 @@ RSpec.describe ReleaseObjectJob do
         end
 
         it 'logs information to the logfile' do
-          # Stub out the file, and send it to a string buffer instead
-          buffer = StringIO.new
-          expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
-          expect(buffer.string).to include 'Release tag failed'
+          expect(log.string).to include 'Failed Dor::Services::Client::UnexpectedResponse'
         end
       end
 
       context 'when a release wf fails' do
         before do
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          expect(subject.ability).to receive(:can?).and_return(true).exactly(druids.length).times
-          allow(workflow_client).to receive(:create).and_raise(Dor::Services::Client::UnexpectedResponse)
-          allow(release_tags).to receive(:create).and_raise(Dor::Services::Client::UnexpectedResponse)
+          allow(workflow_client).to receive(:create).and_raise(unexpected_response)
+          allow(release_tags_client).to receive(:create).and_raise(unexpected_response)
         end
 
         it 'updates the total druid count' do
@@ -120,18 +121,16 @@ RSpec.describe ReleaseObjectJob do
         end
 
         it 'logs information to the logfile' do
-          # Stub out the file, and send it to a string buffer instead
-          buffer = StringIO.new
-          expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
-          expect(buffer.string).to include 'Release tag failed'
+          expect(log.string).to include 'Failed Dor::Services::Client::UnexpectedResponse'
         end
       end
 
       context 'when not authorized' do
+        let(:ability) { instance_double(Ability, can?: false) }
+
         before do
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          expect(subject.ability).to receive(:can?).and_return(false).exactly(druids.length).times
         end
 
         it 'updates the total druid count' do
@@ -140,14 +139,12 @@ RSpec.describe ReleaseObjectJob do
         end
 
         it 'logs druid info to logfile' do
-          buffer = StringIO.new
-          expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
-          expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
+          expect(log.string).to include 'Starting ReleaseObjectJob for BulkAction'
           druids.each do |druid|
-            expect(buffer.string).to include "Not authorized for #{druid}"
+            expect(log.string).to include "Not authorized to update for #{druid}"
           end
-          expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
+          expect(log.string).to include 'Finished ReleaseObjectJob for BulkAction'
         end
       end
     end
@@ -158,7 +155,6 @@ RSpec.describe ReleaseObjectJob do
 
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-        expect(subject.ability).not_to receive(:can?)
       end
 
       it 'does not create workflows' do

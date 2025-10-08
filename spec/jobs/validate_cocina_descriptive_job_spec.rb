@@ -7,10 +7,10 @@ RSpec.describe ValidateCocinaDescriptiveJob do
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
   let(:item1) { build(:dro, id: druids[0]) }
   let(:item2) { build(:dro, id: druids[1]) }
-  let(:logger) { instance_double(File, puts: nil) }
+  let(:log) { instance_double(File, puts: nil, close: true) }
 
   before do
-    allow(BulkJobLog).to receive(:open).and_yield(logger)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
     allow(Repository).to receive(:find).with(druids[1]).and_return(item2)

@@ -9,7 +9,7 @@ RSpec.describe ExportCocinaJsonJob do
   let(:jsonl_path) { File.join(bulk_action.output_directory, Settings.export_cocina_json_job.jsonl_filename) }
   let(:gzip_path) { File.join(bulk_action.output_directory, Settings.export_cocina_json_job.gzip_filename) }
   let(:unzipped_path) { File.join(bulk_action.output_directory, 'unzipped_file.jsonl') }
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:druids) { [druid1, druid2, druid3] }
@@ -25,7 +25,7 @@ RSpec.describe ExportCocinaJsonJob do
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
     allow(Dor::Services::Client).to receive(:object).with(druid3).and_return(object_client3)
@@ -95,7 +95,7 @@ RSpec.describe ExportCocinaJsonJob do
     end
 
     it 'logs error for druid not found' do
-      expect(log_buffer.string).to include 'Some unexpected problem occurred.'
+      expect(log.string).to include 'Some unexpected problem occurred.'
     end
   end
 end

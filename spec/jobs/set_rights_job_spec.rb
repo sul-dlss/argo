@@ -152,13 +152,16 @@ RSpec.describe SetRightsJob do
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
 
-  let(:buffer) { StringIO.new }
+  let(:log) { StringIO.new }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(buffer)
-    allow(subject.ability).to receive(:can?).and_return(true)
-    allow(VersionService).to receive(:open?).and_return(true)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
+    allow(Ability).to receive(:new).and_return(instance_double(Ability, can?: true))
+    allow(VersionService).to receive(:open?).with(druid: druids[0]).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druids[1]).and_return(false)
+    allow(VersionService).to receive(:openable?).with(druid: druids[1]).and_return(true)
+    allow(VersionService).to receive(:open).and_return(cocina2)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(object_client1).to receive(:update)
@@ -187,7 +190,8 @@ RSpec.describe SetRightsJob do
           )
         )
       expect(object_client2).not_to have_received(:update)
-      expect(buffer.string).to include "Successfully updated rights for #{druids[0]}"
+      expect(log.string).to include "Successfully updated rights for #{druids[0]}"
+      expect(VersionService).not_to have_received(:open)
     end
   end
 
@@ -224,8 +228,12 @@ RSpec.describe SetRightsJob do
           )
         )
 
-      expect(buffer.string).to include "Successfully updated rights for #{druids[0]}"
-      expect(buffer.string).to include "Successfully updated rights for #{druids[1]}"
+      expect(log.string).to include "Successfully updated rights for #{druids[0]}"
+      expect(log.string).to include "Successfully updated rights for #{druids[1]}"
+
+      expect(VersionService).to have_received(:open).with(druid: druids[1],
+                                                          description: 'Updating rights',
+                                                          opening_user_name: bulk_action.user.to_s)
     end
   end
 end

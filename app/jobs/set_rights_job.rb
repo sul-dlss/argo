@@ -2,35 +2,43 @@
 
 ##
 # Job to update rights for objects
-class SetRightsJob < GenericJob
-  ##
-  # A job that allows a user to update the rights for a list of druids
-  # @param [Integer] bulk_action_id GlobalID for a BulkAction object
-  # @param [Hash] params additional parameters that an Argo job may need
-  def perform(bulk_action_id, params)
-    super
+class SetRightsJob < BulkActionJob
+  def access_params
+    @access_params ||= params.slice(:view_access, :download_access, :controlled_digital_lending, :access_location)
+  end
 
-    access_params = params.slice(:view_access, :download_access, :controlled_digital_lending, :access_location)
+  def perform_bulk_action
     raise 'Must provide rights' if access_params.blank?
 
-    with_items(params[:druids], name: 'Set rights') do |cocina_object, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+    super
+  end
 
-      next failure.call('Object cannot be modified in its current state.') unless VersionService.open?(druid: cocina_object.externalIdentifier)
+  class SetRightsJobItem < BulkActionJobItem
+    delegate :access_params, to: :job
 
-      change_set = if cocina_object.collection?
-                     # Collection only allows setting view access to dark or world
-                     view_access = access_params[:view_access] == 'dark' ? 'dark' : 'world'
-                     access_params = { view_access: }
-                     CollectionChangeSet.new(cocina_object)
-                   else
-                     ItemChangeSet.new(cocina_object)
-                   end
+    def perform
+      return unless check_update_ability?
 
-      change_set.validate(**access_params)
+      open_new_version_if_needed!(description: 'Updating rights')
+
+      change_set.validate(**new_access_params)
       change_set.save
 
-      success.call('Successfully updated rights')
+      success!(message: 'Successfully updated rights')
+    end
+
+    def new_access_params
+      return access_params unless cocina_object.collection?
+
+      # Collection only allows setting view access to dark or world
+      view_access = access_params[:view_access] == 'dark' ? 'dark' : 'world'
+      { view_access: }
+    end
+
+    private
+
+    def change_set
+      @change_set ||= (cocina_object.collection? ? CollectionChangeSet : ItemChangeSet).new(cocina_object)
     end
   end
 end
