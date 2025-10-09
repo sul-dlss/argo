@@ -91,7 +91,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.2.3)
+    bigdecimal (3.3.1)
     bindex (0.8.1)
     blacklight (7.41.0)
       deprecation
@@ -150,7 +150,7 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.106.0)
+    cocina-models (0.107.0)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -206,9 +206,9 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.22.0)
+    dor-services-client (15.23.0)
       activesupport (>= 7.0.0)
-      cocina-models (~> 0.106.0)
+      cocina-models (~> 0.107.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -309,7 +309,7 @@ GEM
       activesupport (>= 7.0.0)
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
-    json (2.15.0)
+    json (2.15.1)
     jsonpath (1.1.5)
       multi_json
     kaminari (1.2.2)
@@ -355,7 +355,7 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.25.5)
+    minitest (5.26.0)
     moab-versioning (6.1.2)
       druid-tools (>= 1.0.0)
       json
@@ -597,9 +597,9 @@ GEM
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    sdr-client (2.25.0)
+    sdr-client (2.26.0)
       activesupport
-      cocina-models (~> 0.106.0)
+      cocina-models (~> 0.107.0)
       config
       dry-monads
       faraday (>= 0.16)
@@ -658,7 +658,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
-    uri (1.0.3)
+    uri (1.0.4)
     useragent (0.16.11)
     view_component (3.23.2)
       activesupport (>= 5.2.0, < 8.1)
