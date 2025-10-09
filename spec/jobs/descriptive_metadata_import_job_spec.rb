@@ -101,6 +101,33 @@ RSpec.describe DescriptiveMetadataImportJob do
       end
     end
 
+    context 'when index validation fails' do
+      let(:csv_file) do
+        [
+          'druid,source_id,title1:value,contributor1.name1.paralleleValue1.standardValue,purl',
+          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'Name PV StandardValue 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(','),
+          [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'Name PV StandardValue 2', "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"].join(',')
+        ].join("\n")
+      end
+      let(:ability) { instance_double(Ability, can?: true) }
+
+      before do
+        allow(Ability).to receive(:new).and_return(ability)
+        allow(Honeybadger).to receive(:notify)
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
+      end
+
+      it 'updates the error count without opening, alerting honeybadger, updating or closing' do
+        expect(bulk_action.druid_count_total).to eq 2
+        expect(bulk_action.druid_count_fail).to eq 2
+        expect(bulk_action.druid_count_success).to eq 0
+        expect(VersionService).not_to have_received(:open)
+        expect(Repository).not_to have_received(:store)
+        expect(Honeybadger).to have_received(:notify).twice
+        expect(VersionService).not_to have_received(:close)
+      end
+    end
+
     context 'when missing druid column' do
       let(:csv_file) do
         [
