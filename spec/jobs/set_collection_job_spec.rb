@@ -7,6 +7,7 @@ RSpec.describe SetCollectionJob do
 
   let(:druids) { ['druid:cc111dd2222', 'druid:dd111ff2222'] }
   let(:new_collection_id) { 'druid:bc111bb2222' }
+  let(:new_collection_ids) { [new_collection_id] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'amcollie') }
   let(:output_directory) { bulk_action.output_directory }
@@ -38,7 +39,7 @@ RSpec.describe SetCollectionJob do
         druids:,
         groups:,
         user:,
-        new_collection_id:
+        new_collection_ids:
       }.with_indifferent_access
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
@@ -56,7 +57,7 @@ RSpec.describe SetCollectionJob do
       end
 
       context 'when no collections are selected' do
-        let(:new_collection_id) { '' }
+        let(:new_collection_ids) { [] }
 
         it 'removes the collection successfully' do
           subject.perform(bulk_action.id, params)
