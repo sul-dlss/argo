@@ -28,7 +28,9 @@ RSpec.describe 'Open and close a version' do
 
     sleep 0.5 until VersionService.openable?(druid: item.externalIdentifier)
 
-    visit solr_document_path item.externalIdentifier
+    accept_alert do # For an unknown reason, sometimes a network error occurs here which triggers the refresh alert.
+      visit solr_document_path item.externalIdentifier
+    end
     click_link 'Unlock to make changes to this object'
     fill_in 'Version description', with: 'Test a change'
 

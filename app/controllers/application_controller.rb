@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
   rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: 'forbidden' }
+  rescue_from ActiveSupport::MessageVerifier::InvalidSignature, with: -> { render status: :unauthorized, plain: 'authentication expired' }
 
   layout :determine_layout
 
