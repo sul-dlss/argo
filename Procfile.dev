@@ -1,3 +1,4 @@
 web: unset PORT && bin/rails server
 css: yarn install && yarn watch:css
 js: yarn build --watch
+workers: bin/sidekiq
