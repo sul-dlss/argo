@@ -34,6 +34,12 @@ RSpec.describe 'Report view' do
       # count the # of fields displayed by default
       expect(page).to have_css('input.form-check-input:checked',
                                count: Report::REPORT_FIELDS.count { |field| field[:default] })
+      click_link('Select All')
+      expect(page).to have_css('input.form-check-input:checked',
+                               count: Report::REPORT_FIELDS.count)
+      click_link('Deselect All')
+      expect(page).to have_css('input.form-check-input:checked',
+                               count: 0)
     end
   end
 end
