@@ -8,11 +8,11 @@ class SetCollectionJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :druids required list of druids
-  # @option params [String] :new_collection_id
+  # @option params [Array<String>] :new_collection_ids
   def perform(bulk_action_id, params)
     super
 
-    @new_collection_ids = Array(params['new_collection_id'].presence)
+    @new_collection_ids = Array(params['new_collection_ids'])
 
     with_items(params[:druids], name: 'Set collection') do |cocina_object, success, _failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
