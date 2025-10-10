@@ -4,29 +4,32 @@ require 'rails_helper'
 
 RSpec.describe DescriptiveMetadataImportJob do
   let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
-  let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
-  let(:item1) { build(:dro_with_metadata, id: druids[0]) }
-  let(:item2) { build(:dro_with_metadata, id: druids[1], version: 2) }
+  let(:item1) { build(:dro_with_metadata, id: 'druid:bc123df4567') }
+  let(:item2) { build(:dro_with_metadata, id: 'druid:df321cb7654', version: 2) }
+  let(:item3) { build(:dro_with_metadata, id: 'druid:fd123bc4567') }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
+  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
   let(:filename) { 'test.csv' }
   let(:log_buffer) { StringIO.new }
-
   let(:csv_file) do
     [
       'druid,source_id,title1:value,purl',
       [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(','),
-      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"].join(',')
+      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"].join(','),
+      [item3.externalIdentifier, item2.identification.sourceId, "  \t\t   ", "https://purl.stanford.edu/#{item3.externalIdentifier.delete_prefix('druid:')}"].join(',')
     ].join("\n")
   end
 
   before do
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
-    allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
+    allow(Repository).to receive(:find).with(item1.externalIdentifier).and_return(item1)
+    allow(Repository).to receive(:find).with(item2.externalIdentifier).and_return(item2)
+    allow(Repository).to receive(:find).with(item3.externalIdentifier).and_return(item3)
+    allow(Dor::Services::Client).to receive(:object).with(item1.externalIdentifier).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(item2.externalIdentifier).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(item3.externalIdentifier).and_return(object_client3)
     allow(VersionService).to receive(:open?).and_return(true)
   end
 
@@ -54,11 +57,14 @@ RSpec.describe DescriptiveMetadataImportJob do
       end
 
       it 'updates the descriptive metadata for each item and closes each item' do
-        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.druid_count_total).to eq(3)
+        expect(bulk_action.druid_count_fail).to eq(1)
+        expect(bulk_action.druid_count_success).to eq(2)
         expect(Repository).to have_received(:store).with(expected1)
         expect(Repository).to have_received(:store).with(expected2)
         expect(VersionService).to have_received(:open?).twice
         expect(VersionService).to have_received(:close).once
+        expect(log_buffer.string).to include('RequestDescription missing required parameters: title for druid:fd123bc4567')
       end
     end
 
@@ -68,7 +74,7 @@ RSpec.describe DescriptiveMetadataImportJob do
       end
 
       it 'does not update or close items' do
-        expect(bulk_action.druid_count_total).to eq druids.length
+        expect(bulk_action.druid_count_total).to eq(3)
         expect(Repository).not_to have_received(:store)
         expect(VersionService).not_to have_received(:close)
       end

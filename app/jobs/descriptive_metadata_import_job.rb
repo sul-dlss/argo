@@ -13,7 +13,7 @@ class DescriptiveMetadataImportJob < GenericJob
   # @option params [String] :csv_filename the name of the file
   def perform(bulk_action_id, params)
     super
-    csv = CSV.parse(params[:csv_file], headers: true)
+    csv = CSV.parse(params[:csv_file], headers: true, converters: whitespace_only_field_nullifier)
     with_csv_items(csv, name: 'Import descriptive metadata',
                         filename: params[:csv_filename]) do |cocina_object, csv_row, success, failure|
       next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
@@ -32,6 +32,10 @@ class DescriptiveMetadataImportJob < GenericJob
   end
 
   private
+
+  def whitespace_only_field_nullifier
+    ->(field) { field.strip.presence }
+  end
 
   # this validates input data from spreadsheet before any updates are applied to provide error messages to the user
   def validate_input(cocina_object, description)
