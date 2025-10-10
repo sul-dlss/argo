@@ -20,14 +20,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="container">
+          <div class="container" data-controller="checkbox-select">
+            <div class="mb-2">
+              <a href="#" class="fw-bold" data-action="click->checkbox-select#checkAll">Select All</a> |
+              <a href="#" class="fw-bold" data-action="click->checkbox-select#checkNone">Deselect All</a>
+            </div>
             <div class="row">
               <% Report::REPORT_FIELDS.each_slice((Report::REPORT_FIELDS.size / Report::COLUMN_SELECTOR_COLUMN_SIZE.to_f).ceil) do |field_group| %>
                 <div class="col">
                   <% field_group.each do |field| %>
                     <div class="form-check">
                       <label for="<%= field[:field] %>" class="form-check-label"><%= field[:label] %>
-                        <%= check_box_tag field[:field], field[:label], field[:default], { class: 'form-check-input', data: { action: 'change->object-reporter#toggleColumn' } } %>
+                        <%= check_box_tag field[:field], field[:label], field[:default], { class: 'form-check-input', data: { action: 'change->object-reporter#toggleColumn', checkbox_select_target: 'checkbox' } } %>
                       </label>
                     </div>
                   <% end %>
