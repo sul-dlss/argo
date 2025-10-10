@@ -7,7 +7,7 @@ module BulkActions
     self.action_type = 'SetCollectionJob'
 
     def job_params
-      super.merge(new_collection_id: params[:new_collection_id], close_version: params[:close_version])
+      super.merge(new_collection_id: params[:new_collection_id].compact_blank, close_version: params[:close_version])
     end
   end
 end
