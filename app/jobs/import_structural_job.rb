@@ -7,16 +7,16 @@ class ImportStructuralJob < GenericJob
     csv = CSV.parse(params[:csv_file], headers: true)
     # Group the rows by druid
     grouped = csv.group_by { |row| row['druid'] }
-    with_items(grouped.keys, name: 'Import structural') do |cocina_item, success, failure|
-      next failure.call('Not authorized') unless ability.can?(:update, cocina_item)
+    with_items(grouped.keys, name: 'Import structural') do |cocina_object, success, failure|
+      next failure.call('Not authorized') unless ability.can?(:update, cocina_object)
 
-      next failure.call('Object cannot be modified in its current state.') unless VersionService.open?(druid: cocina_item.externalIdentifier)
+      new_cocina_object = open_new_version_if_needed(cocina_object, 'Updating content')
 
-      druid = cocina_item.externalIdentifier
-      result = StructureUpdater.from_csv(cocina_item, item_csv(csv.headers, grouped.fetch(druid)))
+      druid = cocina_object.externalIdentifier
+      result = StructureUpdater.from_csv(new_cocina_object, item_csv(csv.headers, grouped.fetch(druid)))
 
       if result.success?
-        Repository.store(cocina_item.new(structural: result.value!))
+        Repository.store(new_cocina_object.new(structural: result.value!))
         success.call("Updated #{druid}")
       else
         failure.call("Unable to update #{druid}")
