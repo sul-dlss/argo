@@ -27,9 +27,9 @@ RSpec.describe 'BulkActions::CollectionJobs' do
 
       expect(rendered).to have_css 'textarea[name="druids"]'
       expect(rendered).to have_css 'textarea[name="description"]'
-      expect(rendered).to have_css 'select[name="new_collection_id"]'
-      expect(rendered).to have_css 'select[name="new_collection_id"] option[value="druid:123"]'
-      expect(rendered).to have_css 'select[name="new_collection_id"] option[value="druid:456"]'
+      expect(rendered).to have_css 'select[name="new_collection_id[]"]'
+      expect(rendered).to have_css 'select[name="new_collection_id[]"] option[value="druid:123"]'
+      expect(rendered).to have_css 'select[name="new_collection_id[]"] option[value="druid:456"]'
     end
   end
 end
