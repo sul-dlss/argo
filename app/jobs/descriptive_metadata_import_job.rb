@@ -20,6 +20,7 @@ class DescriptiveMetadataImportJob < GenericJob
 
       DescriptionImport.import(csv_row:)
                        .bind { |description| validate_input(cocina_object, description) }
+                       .bind { |description| validate_indexable(cocina_object, description) }
                        .bind { |description| validate_changed(cocina_object, description) }
                        .bind { |description| open_version(cocina_object, description) }
                        .bind { |description, new_cocina_object| save(new_cocina_object, description) }
@@ -39,6 +40,13 @@ class DescriptiveMetadataImportJob < GenericJob
     return Success(description) if result.success?
 
     Failure(["validation failed for #{cocina_object.externalIdentifier}: #{result.failure}"])
+  end
+
+  def validate_indexable(cocina_object, description)
+    Cocina::Models::Mapping::ToMods::Description.transform(description, cocina_object.externalIdentifier)
+    Success(description)
+  rescue StandardError => e
+    Failure(["indexing failed for #{cocina_object.externalIdentifier}: #{e.message}"])
   end
 
   def validate_changed(cocina_object, description)
