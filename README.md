@@ -185,3 +185,7 @@ Argo uses systemd to manage and monitor its Sidekiq-based background job workers
 ### Profiling
 
 For information on how to profile the app in the event of performance issues, see [PROFILING.md](PROFILING.md).  This explains how to collect profiling info, how to analyze it, how to approach the issue generally, and alternatives/complements to Argo's main built-in profiling tool.
+
+## Deployment
+
+NOTE: The application is deployed continuously by our on-prem Jenkins service (`sul-ci-prod`) to the staging environment on every merge to `main`. See `Jenkinsfile` for how that is wired up.
