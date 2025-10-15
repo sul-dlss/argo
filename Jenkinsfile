@@ -22,7 +22,7 @@ pipeline {
           sh '''#!/bin/bash -l
           export DEPLOY=1
           # Load RVM
-          rvm use 3.4.1@hargo --create
+          rvm use 3.4.1@argo --create
           gem install bundler
           bundle install --without production
           # Deploy it
