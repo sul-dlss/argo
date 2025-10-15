@@ -11,8 +11,6 @@ module WorkflowHelper
       gisDeliveryWF
       goobiWF
       registrationWF
-      wasCrawlDisseminationWF
-      wasCrawlPreassemblyWF
       wasSeedPreassemblyWF
     ].reject { |workflow| except.include?(workflow) }.map do |workflow|
       [workflow, workflow]
