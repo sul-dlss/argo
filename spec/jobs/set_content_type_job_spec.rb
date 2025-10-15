@@ -57,7 +57,10 @@ RSpec.describe SetContentTypeJob do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject.ability).to receive(:can?).and_return(true)
-    allow(VersionService).to receive(:open?).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druids[0]).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druids[1]).and_return(false)
+    allow(VersionService).to receive(:openable?).with(druid: druids[1]).and_return(true)
+    allow(VersionService).to receive(:open).and_return(cocina2)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
@@ -76,6 +79,7 @@ RSpec.describe SetContentTypeJob do
           )
         )
       expect(buffer.string).to include "Successfully updated content type for #{druids[0]}"
+      expect(VersionService).not_to have_received(:open)
     end
   end
 
@@ -98,6 +102,24 @@ RSpec.describe SetContentTypeJob do
             resource_types: [Cocina::Models::FileSetType.page, Cocina::Models::FileSetType.image]
           )
         )
+    end
+  end
+
+  context 'when not open' do
+    let(:params) do
+      {
+        druids: [druids[1]],
+        current_resource_type: 'https://cocina.sul.stanford.edu/models/resources/file',
+        new_content_type: 'https://cocina.sul.stanford.edu/models/map',
+        new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/image'
+      }
+    end
+
+    it 'opens a version' do
+      subject.perform(bulk_action.id, params)
+      expect(VersionService).to have_received(:open).with(druid: druids[1],
+                                                          description: 'Updating content type',
+                                                          opening_user_name: bulk_action.user.to_s)
     end
   end
 
@@ -218,18 +240,6 @@ RSpec.describe SetContentTypeJob do
       subject.perform(bulk_action.id, params)
       expect(object_client1).to have_received(:update)
         .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.map))
-    end
-  end
-
-  context 'when modification is not allowed' do
-    before do
-      allow(VersionService).to receive(:open?).and_return(false)
-    end
-
-    it 'does not update and logs an error' do
-      subject.perform(bulk_action.id, params)
-      expect(object_client2).not_to have_received(:update)
-      expect(buffer.string).to include 'Object cannot be modified in its current state.'
     end
   end
 
