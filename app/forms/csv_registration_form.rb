@@ -83,17 +83,23 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     @job_csv ||= CsvUploadNormalizer.read(csv_file.path)
   end
 
-  def header_validators
-    [
-      CsvUploadValidator::RequiredHeaderValidator.new(headers: ['source_id']),
-      CsvUploadValidator::OrRequiredDataValidator.new(headers: ['label', CatalogRecordId.csv_header])
-    ]
-  end
-
-  def csv_file_validation
-    validator = CsvUploadValidator.new(csv: job_csv, header_validators:)
-    errors.add(:csv_file, validator.errors.join(' ')) unless validator.valid?
+  def csv_file_validation # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    validator = CsvUploadValidator.new(csv: job_csv, required_headers: 'source_id')
+    errors.add(:csv_file, validator.errors.join(' ')) unless validator.valid? do |csv|
+      # Validates that data is present for one of the required columns.
+      if one_of_data_headers.none? { |header| csv.headers.include?(header) }
+        ["missing header. One of these must be provided: #{one_of_data_headers.join(', ')}"]
+      elsif csv.any? { |row| one_of_data_headers.none? { |header| row[header].present? } }
+        ["missing data. For each row, one of these must be provided: #{one_of_data_headers.join(', ')}"]
+      else
+        []
+      end
+    end
   rescue CSV::MalformedCSVError => e
     errors.add :csv_file, "is invalid: #{e.message}"
+  end
+
+  def one_of_data_headers
+    @one_of_data_headers ||= ['label', CatalogRecordId.csv_header]
   end
 end

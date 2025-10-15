@@ -61,7 +61,7 @@ RSpec.describe 'Bulk descriptive metadata import' do
           post '/bulk_actions/descriptive_metadata_import_job', params:
         end.not_to have_enqueued_job(DescriptiveMetadataImportJob)
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to match('Error starting bulk action: Invalid byte sequence')
+        expect(response.body).to match(/Error starting bulk action: invalid byte sequence in UTF-8/i)
       end
     end
   end

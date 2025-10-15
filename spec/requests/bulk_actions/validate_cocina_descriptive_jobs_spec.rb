@@ -69,7 +69,7 @@ RSpec.describe 'Bulk validate cocina descriptive' do
           post '/bulk_actions/validate_cocina_descriptive_job', params:
         end.not_to have_enqueued_job(ValidateCocinaDescriptiveJob)
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to match('Error starting bulk action: Invalid byte sequence')
+        expect(response.body).to match(/Error starting bulk action: invalid byte sequence in UTF-8/i)
       end
     end
   end

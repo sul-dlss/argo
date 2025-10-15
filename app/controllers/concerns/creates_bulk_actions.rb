@@ -63,9 +63,10 @@ module CreatesBulkActions
     Success()
   end
 
-  def validate_csv_headers(csv, headers)
-    header_validators = headers.present? ? CsvUploadValidator::RequiredHeaderValidator.new(headers:) : []
-    validator = CsvUploadValidator.new(csv:, header_validators:)
-    validator.valid? ? Success() : Failure(validator.errors)
+  def validate_csv_headers(csv, required_headers)
+    validator = CsvUploadValidator.new(csv:, required_headers:)
+    return Success() if validator.valid?
+
+    Failure(validator.errors)
   end
 end
