@@ -13,7 +13,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
   let(:catalog_record_ids) { ["#{catalog_record_id_prefix}12345", '', "#{catalog_record_id_prefix}44444"] } # 'a12345,a66233'
   let(:refresh) { ['true', '', 'false'] }
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
-  let(:buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:catalog_record_id_column) { CatalogRecordId.csv_header }
   let(:catalog_record_id_prefix) { 'in' }
 
@@ -45,14 +45,16 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
   let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
 
+  let(:ability) { instance_double(Ability, can?: authorized_to_update) }
+
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
     allow(VersionService).to receive(:open?).and_return(open_version)
-    allow(subject.ability).to receive(:can?).and_return(authorized_to_update)
+    allow(Ability).to receive(:new).and_return(ability)
     allow_any_instance_of(ItemChangeSet).to receive(:save) # rubocop:disable RSpec/AnyInstance
   end
 
@@ -86,7 +88,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
       subject.perform(bulk_action.id, { csv_file: StringIO.new(csv) })
       expect(bulk_action.druid_count_total).to eq druids.length
       expect(bulk_action.druid_count_fail).to eq 3
-      expect(buffer.string).to include('Not authorized')
+      expect(log.string).to include('Not authorized')
     end
   end
 
@@ -99,7 +101,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
       subject.perform(bulk_action.id, { csv_file: StringIO.new(csv) })
       expect(bulk_action.druid_count_total).to eq druids.length
       expect(bulk_action.druid_count_fail).to eq 3
-      expect(buffer.string).to include('Set Catalog Record IDs and Barcodes failed RuntimeError Oops for druid:bb111cc2222')
+      expect(log.string).to include('Failed RuntimeError Oops for druid:bb111cc2222')
     end
   end
 end

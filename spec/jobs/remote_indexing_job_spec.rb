@@ -10,82 +10,59 @@ RSpec.describe RemoteIndexingJob do
     )
   end
 
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, reindex: true) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   describe '#perform' do
     let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ee2222'] }
     let(:params) { { druids: } }
 
-    let(:object_client_standarderror) { instance_double(Dor::Services::Client::Object) }
-    let(:object_client_timeout) { instance_double(Dor::Services::Client::Object) }
-
     context 'when happy path' do
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
-        druids.each do |druid|
-          expect(subject).to receive(:reindex_druid_safely).with(druid, log_buffer)
-        end
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq druids.length
+        expect(object_client).to have_received(:reindex).exactly(druids.length).times
       end
 
       it 'logs info about progress' do
-        allow(subject).to receive(:reindex_druid_safely)
         subject.perform(bulk_action.id, params)
-        bulk_action_id = bulk_action.id
-        expect(log_buffer.string).to include "Starting RemoteIndexingJob for BulkAction #{bulk_action_id}"
+        expect(log.string).to include "Starting RemoteIndexingJob for BulkAction #{bulk_action.id}"
         druids.each do |druid|
-          expect(log_buffer.string).to include "RemoteIndexingJob: Attempting to index #{druid} (bulk_action.id=#{bulk_action_id})"
+          expect(log.string).to include "Reindex successful for #{druid}"
         end
-        expect(log_buffer.string).to include "Finished RemoteIndexingJob for BulkAction #{bulk_action_id}"
+        expect(log.string).to include "Finished RemoteIndexingJob for BulkAction #{bulk_action.id}"
+      end
+    end
+
+    context 'when there are errors with individual druids' do
+      let(:object_client_standarderror) { instance_double(Dor::Services::Client::Object) }
+      let(:object_client_timeout) { instance_double(Dor::Services::Client::Object) }
+
+      before do
+        allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client)
+        allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client_standarderror)
+        allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client_timeout)
+
+        allow(object_client_standarderror).to receive(:reindex).and_raise(StandardError)
+        allow(object_client_timeout).to receive(:reindex).and_raise(Argo::Exceptions::ReindexError.new('Timed out connecting to server'))
       end
 
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
-        timeout_err = Argo::Exceptions::ReindexError.new('Timed out connecting to server')
-        expect(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client)
-        expect(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client_standarderror)
-        expect(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client_timeout)
-        expect(object_client_standarderror).to receive(:reindex).and_raise(StandardError)
-        expect(object_client_timeout).to receive(:reindex).and_raise(timeout_err)
-
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_success).to eq 1
         expect(bulk_action.druid_count_fail).to eq 2
 
-        bulk_action_id = bulk_action.id
-        expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{druids[0]} (bulk_action.id=#{bulk_action_id})"
-        expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{druids[1]} (bulk_action.id=#{bulk_action_id}): StandardError"
-        expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{druids[2]} (bulk_action.id=#{bulk_action_id}): #{timeout_err}"
+        expect(log.string).to include "Reindex successful for #{druids[0]}"
+        expect(log.string).to include "Failed StandardError StandardError for #{druids[1]}"
+        expect(log.string).to include "Failed Argo::Exceptions::ReindexError Timed out connecting to server for #{druids[2]}"
       end
-    end
-  end
-
-  describe '#reindex_druid_safely' do
-    let(:druid) { '123' }
-
-    it 'logs a success and increments the success count if reindexing works' do
-      expect(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
-
-      subject.send(:reindex_druid_safely, druid, log_buffer)
-      expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{druid} (bulk_action.id=#{bulk_action.id})"
-      expect(bulk_action.druid_count_success).to eq 1
-      expect(bulk_action.druid_count_fail).to eq 0
-    end
-
-    it 'logs an error and increments the error count if reindexing works, but does not raise an error itself' do
-      expect(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
-      expect(object_client).to receive(:reindex).and_raise("didn't see that one coming")
-
-      expect { subject.send(:reindex_druid_safely, druid, log_buffer) }.not_to raise_error
-      expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{druid} (bulk_action.id=#{bulk_action.id}): didn't see that one coming"
-      expect(bulk_action.druid_count_success).to eq 0
-      expect(bulk_action.druid_count_fail).to eq 1
     end
   end
 end

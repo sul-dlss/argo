@@ -21,14 +21,14 @@ RSpec.describe ApplyApoDefaultsJob do
   let(:object_client2) do
     instance_double(Dor::Services::Client::Object, find: cocina2, apply_admin_policy_defaults: true)
   end
-  let(:logger) { double('logger', puts: nil) }
+  let(:log) { instance_double(File, puts: nil, close: true) }
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
+
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(BulkJobLog).to receive(:open).and_yield(logger)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
   end
 
   context 'with manage ability' do
@@ -49,9 +49,9 @@ RSpec.describe ApplyApoDefaultsJob do
       before { perform }
 
       it 'refreshes' do
-        expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
-        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
+        expect(log).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
+        expect(log).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
+        expect(log).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
 
         expect(object_client1).to have_received(:apply_admin_policy_defaults)
         expect(object_client2).to have_received(:apply_admin_policy_defaults)
@@ -68,9 +68,9 @@ RSpec.describe ApplyApoDefaultsJob do
       end
 
       it 'opens a version and refreshes' do
-        expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
-        expect(logger).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
+        expect(log).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
+        expect(log).to have_received(:puts).with(/Successfully applied defaults for druid:bb111cc2222/)
+        expect(log).to have_received(:puts).with(/Successfully applied defaults for druid:cc111dd2222/)
 
         expect(object_client1).to have_received(:apply_admin_policy_defaults)
         expect(object_client2).to have_received(:apply_admin_policy_defaults)
@@ -93,8 +93,8 @@ RSpec.describe ApplyApoDefaultsJob do
 
     it 'tries again and logs messages' do
       expect(bulk_action.reload.druid_count_fail).to eq 2
-      expect(logger).to have_received(:puts).with(/Apply defaults failed Faraday::TimeoutError timeout for druid:bb111cc2222/)
-      expect(logger).to have_received(:puts).with(/Apply defaults failed Faraday::TimeoutError timeout for druid:cc111dd2222/)
+      expect(log).to have_received(:puts).with(/Failed Faraday::TimeoutError timeout for druid:bb111cc2222/)
+      expect(log).to have_received(:puts).with(/Failed Faraday::TimeoutError timeout for druid:cc111dd2222/)
     end
   end
 
@@ -109,9 +109,9 @@ RSpec.describe ApplyApoDefaultsJob do
     end
 
     it 'does not refresh' do
-      expect(logger).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
-      expect(logger).to have_received(:puts).with(/Not authorized for druid:bb111cc2222/)
-      expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)
+      expect(log).to have_received(:puts).with(/Starting ApplyApoDefaultsJob for BulkAction/)
+      expect(log).to have_received(:puts).with(/Not authorized to update for druid:bb111cc2222/)
+      expect(log).to have_received(:puts).with(/Not authorized to update for druid:cc111dd2222/)
       expect(object_client1).not_to have_received(:apply_admin_policy_defaults)
       expect(object_client2).not_to have_received(:apply_admin_policy_defaults)
     end

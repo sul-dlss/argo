@@ -15,7 +15,7 @@ RSpec.describe SetSourceIdsCsvJob do
       'sul:36105014757518' # an initial set on a collection
     ]
   end
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:item1) do
     build(:dro_with_metadata, id: druids[0], source_id: 'sul:36105014757519')
   end
@@ -41,7 +41,7 @@ RSpec.describe SetSourceIdsCsvJob do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Ability).to receive(:new).and_return(ability)
     allow(VersionService).to receive(:open?).and_return(true)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
@@ -65,9 +65,9 @@ RSpec.describe SetSourceIdsCsvJob do
         end
 
         it 'logs messages and creates a file' do
-          expect(log_buffer.string).to include "Beginning set source_id for #{druids[0]}"
-          expect(log_buffer.string).to include "Source can't be blank"
-          expect(log_buffer.string).to include "Beginning set source_id for #{druids[2]}"
+          expect(log.string).to include "Source ID added/updated/removed successfully for #{druids[0]}"
+          expect(log.string).to include "Source can't be blank for #{druids[1]}"
+          expect(log.string).to include "Source ID added/updated/removed successfully for #{druids[2]}"
 
           expect(bulk_action.druid_count_total).to eq druids.length
           expect(bulk_action.druid_count_success).to eq 2
@@ -77,9 +77,10 @@ RSpec.describe SetSourceIdsCsvJob do
 
       context 'when the version is closed' do
         before do
-          allow(VersionService).to receive(:open?).and_return(false)
-          allow(job).to receive(:open_new_version).and_return(item1.new(version: 2), item2.new(version: 2),
-                                                              item3.new(version: 2))
+          allow(VersionService).to receive_messages(open?: false, openable?: true)
+          allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[0])).and_return(item1.new(version: 2))
+          allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[1])).and_return(item2.new(version: 2))
+          allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[2])).and_return(item3.new(version: 2))
           job.perform(bulk_action.id,
                       csv_file:,
                       groups:,
@@ -87,9 +88,9 @@ RSpec.describe SetSourceIdsCsvJob do
         end
 
         it 'logs messages and creates a file' do
-          expect(log_buffer.string).to include "Beginning set source_id for #{druids[0]}"
-          expect(log_buffer.string).to include "Source can't be blank"
-          expect(log_buffer.string).to include "Beginning set source_id for #{druids[2]}"
+          expect(log.string).to include "Source ID added/updated/removed successfully for #{druids[0]}"
+          expect(log.string).to include "Source can't be blank for #{druids[1]}"
+          expect(log.string).to include "Source ID added/updated/removed successfully for #{druids[2]}"
 
           expect(bulk_action.druid_count_total).to eq druids.length
           expect(bulk_action.druid_count_success).to eq 2
@@ -112,8 +113,9 @@ RSpec.describe SetSourceIdsCsvJob do
           expect(bulk_action.druid_count_total).to eq druids.length
           expect(bulk_action.druid_count_success).to be_zero
           expect(bulk_action.druid_count_fail).to eq druids.length
-          expect(log_buffer.string).to include "Unexpected error setting source_id for #{druids[0]}: ruh roh"
-          expect(log_buffer.string).to include "Unexpected error setting source_id for #{druids[1]}: ruh roh"
+          expect(log.string).to include "line 2 - Failed StandardError ruh roh for #{druids[0]}"
+          expect(log.string).to include "line 3 - Failed StandardError ruh roh for #{druids[1]}"
+          expect(log.string).to include "line 4 - Failed StandardError ruh roh for #{druids[2]}"
         end
       end
     end
@@ -132,8 +134,8 @@ RSpec.describe SetSourceIdsCsvJob do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(log_buffer.string).to include "Not authorized for #{druids[0]}"
-        expect(log_buffer.string).to include "Not authorized for #{druids[1]}"
+        expect(log.string).to include "Not authorized to update for #{druids[0]}"
+        expect(log.string).to include "Not authorized to update for #{druids[1]}"
       end
     end
   end

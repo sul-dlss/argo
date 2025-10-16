@@ -2,69 +2,51 @@
 
 ##
 # Job to update/add embargoes to objects
-class ManageEmbargoesJob < GenericJob
-  include Dry::Monads[:result]
+class ManageEmbargoesJob < BulkActionCsvJob
+  class ManageEmbargoesJobItem < BulkActionCsvJobItem
+    def perform
+      return unless check_update_ability?
 
-  ##
-  # A job that allows a user to provide a spreadsheet for managing embargoes.
-  # @param [Integer] bulk_action_id GlobalID for a BulkAction object
-  # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [String] :csv_file CSV string
-  def perform(bulk_action_id, params)
-    super
+      return unless check_release_date?
 
-    csv = CSV.parse(params[:csv_file], headers: true)
-    with_csv_items(csv, name: 'Embargo') do |cocina_object, csv_row, success, failure|
-      return failure.call('Not authorized') unless ability.can?(:update, cocina_object)
+      open_new_version_if_needed!(description: 'Manage embargo')
 
-      cocina_object = open_new_version_if_needed(cocina_object, 'Manage embargo')
-      update_embargo(cocina_object, csv_row)
-        .either(
-          ->(_val) { success.call('Embargo updated') },
-          ->(error) { failure.call(error) }
-        )
+      return failure!(message: embargo_form.errors.full_messages.join(',')) unless embargo_form.validate(changes)
+
+      embargo_form.save
+      success!(message: 'Embargo updated')
     end
-  end
 
-  private
-
-  def update_embargo(cocina_object, csv_row)
-    validate_required_field(csv_row).bind do
-      parse_date(csv_row).bind do |embargo_release_date|
-        build_form(cocina_object, build_changes(csv_row, embargo_release_date)).bind do |form|
-          Success(form.save)
-        end
+    def check_release_date?
+      if row['release_date'].blank?
+        failure!(message: 'Missing required value for "release_date"')
+        return false
       end
+
+      release_date
+
+      true
+    rescue Date::Error
+      failure!(message: "#{row['release_date']} is not a valid date")
+
+      false
     end
-  end
 
-  def validate_required_field(csv_row)
-    return Failure('Missing required value for "release_date"') unless csv_row['release_date']
+    def release_date
+      @release_date ||= DateTime.parse(row['release_date'])
+    end
 
-    Success()
-  end
+    def embargo_form
+      @embargo_form ||= EmbargoForm.new(cocina_object)
+    end
 
-  def parse_date(csv_row)
-    Success(DateTime.parse(csv_row['release_date']))
-  rescue Date::Error
-    Failure("#{csv_row['release_date']} is not a valid date")
-  end
-
-  def build_changes(csv_row, embargo_release_date)
-    {
-      release_date: embargo_release_date,
-      view_access: csv_row['view'],
-      download_access: csv_row['download'],
-      access_location: csv_row['location']
-    }
-  end
-
-  def build_form(cocina_object, changes)
-    form = EmbargoForm.new(cocina_object)
-    if form.validate(changes)
-      Success(form)
-    else
-      Failure(form.errors.full_messages.join(','))
+    def changes
+      {
+        release_date:,
+        view_access: row['view'],
+        download_access: row['download'],
+        access_location: row['location']
+      }
     end
   end
 end

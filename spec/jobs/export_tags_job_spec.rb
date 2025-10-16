@@ -7,7 +7,7 @@ RSpec.describe ExportTagsJob do
 
   let(:bulk_action) { create(:bulk_action, action_type: 'ExportTagsJob') }
   let(:csv_path) { File.join(bulk_action.output_directory, Settings.export_tags_job.csv_filename) }
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client2) }
   let(:tags_client1) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags1) }
@@ -15,7 +15,7 @@ RSpec.describe ExportTagsJob do
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
   end
@@ -53,9 +53,9 @@ RSpec.describe ExportTagsJob do
       end
 
       it 'logs messages for each druid in the list' do
-        expect(log_buffer.string).to include "Exporting tags for #{druid1} (bulk_action.id=#{bulk_action.id})"
-        expect(log_buffer.string).to include "Exporting tags for #{druid2} (bulk_action.id=#{bulk_action.id})"
-        expect(log_buffer.string).not_to include 'Unexpected error'
+        expect(log.string).to include "Exported tags for #{druid1}"
+        expect(log.string).to include "Exported tags for #{druid2}"
+        expect(log.string).not_to include 'Unexpected error'
       end
 
       it 'writes a CSV file' do
@@ -85,8 +85,8 @@ RSpec.describe ExportTagsJob do
       end
 
       it 'logs messages for each druid in the list' do
-        expect(log_buffer.string).to include "Unexpected error exporting tags for #{druid1} (bulk_action.id=#{bulk_action.id}): ruh roh"
-        expect(log_buffer.string).to include "Unexpected error exporting tags for #{druid2} (bulk_action.id=#{bulk_action.id}): ruh roh"
+        expect(log.string).to include "Failed StandardError ruh roh for #{druid1}"
+        expect(log.string).to include "Failed StandardError ruh roh for #{druid2}"
       end
 
       it 'writes an empty CSV file' do

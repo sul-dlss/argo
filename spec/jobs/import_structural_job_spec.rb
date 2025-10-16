@@ -6,17 +6,20 @@ RSpec.describe ImportStructuralJob do
   subject(:job) { described_class.new }
 
   let(:bulk_action) { create(:bulk_action, action_type: 'ImportStructuralJob') }
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Ability).to receive(:new).and_return(ability)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(VersionService).to receive(:open?).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druid1).and_return(true)
+    allow(VersionService).to receive(:open?).with(druid: druid2).and_return(false)
+    allow(VersionService).to receive(:openable?).with(druid: druid2).and_return(true)
+    allow(VersionService).to receive(:open).and_return(cocina2)
   end
 
   describe '#perform' do
@@ -140,6 +143,9 @@ RSpec.describe ImportStructuralJob do
         expect(bulk_action.druid_count_total).to eq 2
         expect(bulk_action.druid_count_success).to eq 2
         expect(bulk_action.druid_count_fail).to eq 0
+        expect(VersionService).to have_received(:open).with(druid: druid2,
+                                                            description: 'Updating content',
+                                                            opening_user_name: bulk_action.user.to_s)
       end
     end
 

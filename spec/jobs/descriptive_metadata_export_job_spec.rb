@@ -7,13 +7,13 @@ RSpec.describe DescriptiveMetadataExportJob do
 
   let(:bulk_action) { create(:bulk_action, action_type: 'ExportTagsJob') }
   let(:csv_path) { File.join(bulk_action.output_directory, Settings.descriptive_metadata_export_job.csv_filename) }
-  let(:log_buffer) { StringIO.new }
+  let(:log) { instance_double(File, puts: nil, close: true) }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(job).to receive(:with_bulk_action_log).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
   end
@@ -67,7 +67,6 @@ RSpec.describe DescriptiveMetadataExportJob do
 
       before do
         allow(Dor::Services::Client).to receive(:object).with(druid3).and_return(object_client3)
-        allow(log_buffer).to receive(:puts)
         job.perform(bulk_action.id, druids:, groups:, user:)
       end
 
@@ -78,7 +77,7 @@ RSpec.describe DescriptiveMetadataExportJob do
       end
 
       it 'logs error messages' do
-        expect(log_buffer).to have_received(:puts).with(/Failed NoMethodError .+ for #{druid3}/).once
+        expect(log).to have_received(:puts).with(/Failed NoMethodError .+ for #{druid3}/).once
       end
     end
 
@@ -87,7 +86,6 @@ RSpec.describe DescriptiveMetadataExportJob do
 
       before do
         allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::NotFoundResponse.new(response:))
-        allow(log_buffer).to receive(:puts)
         job.perform(bulk_action.id, druids:, groups:, user:)
       end
 
@@ -98,7 +96,7 @@ RSpec.describe DescriptiveMetadataExportJob do
       end
 
       it 'logs error messages' do
-        expect(log_buffer).to have_received(:puts).with(/Could not find object identified by druid '#{druid3}'/).once
+        expect(log).to have_received(:puts).with(/Could not find object for #{druid3}/).once
       end
     end
 
@@ -107,7 +105,6 @@ RSpec.describe DescriptiveMetadataExportJob do
 
       before do
         allow(Dor::Services::Client).to receive(:object).with(druid3).and_raise(Dor::Services::Client::BadRequestError.new(response:))
-        allow(log_buffer).to receive(:puts)
         job.perform(bulk_action.id, druids:, groups:, user:)
       end
 
@@ -118,7 +115,7 @@ RSpec.describe DescriptiveMetadataExportJob do
       end
 
       it 'logs error messages' do
-        expect(log_buffer).to have_received(:puts).with(/Could not request object identified by druid '#{druid3}'. Possibly malformed druid?/).once
+        expect(log).to have_received(:puts).with(/Could not request object for #{druid3}/).once
       end
     end
   end

@@ -6,7 +6,7 @@ RSpec.describe ImportTagsJob do
   subject(:job) { described_class.new }
 
   let(:bulk_action) { create(:bulk_action, action_type: 'ImportTagsJob') }
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client1, reindex: true) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client2, reindex: true) }
   let(:tags_client1) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags1, destroy: true) }
@@ -14,7 +14,7 @@ RSpec.describe ImportTagsJob do
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
   end
@@ -38,20 +38,14 @@ RSpec.describe ImportTagsJob do
       end
 
       it 'records zero failures and all successes' do
-        expect(bulk_action.druid_count_total).to eq(2)
+        expect(bulk_action.reload.druid_count_total).to eq(2)
         expect(bulk_action.druid_count_success).to eq(2)
         expect(bulk_action.druid_count_fail).to eq(0)
       end
 
       it 'logs messages for each druid in the list' do
-        expect(log_buffer.string).to include "Importing tags for #{druid1} (bulk_action.id=#{bulk_action.id})"
-        expect(log_buffer.string).to include "Importing tags for #{druid2} (bulk_action.id=#{bulk_action.id})"
-        expect(log_buffer.string).not_to include 'ExportTagsJob: Unexpected error for'
-      end
-
-      it 'invokes the indexer for each object touched' do
-        expect(object_client1).to have_received(:reindex)
-        expect(object_client2).to have_received(:reindex)
+        expect(log.string).to include "Destroyed all tags for #{druid1}"
+        expect(log.string).to include "Replaced tags (Tag : One, Tag : Two) for #{druid2}"
       end
     end
 
@@ -75,13 +69,8 @@ RSpec.describe ImportTagsJob do
       end
 
       it 'logs messages for each druid in the list' do
-        expect(log_buffer.string).to include "Unexpected error importing tags for #{druid1} (bulk_action.id=#{bulk_action.id}): ruh roh"
-        expect(log_buffer.string).to include "Unexpected error importing tags for #{druid2} (bulk_action.id=#{bulk_action.id}): ruh roh"
-      end
-
-      it 'fails to invoke the indexer' do
-        expect(object_client1).not_to have_received(:reindex)
-        expect(object_client2).not_to have_received(:reindex)
+        expect(log.string).to include "Failed StandardError ruh roh for #{druid1}"
+        expect(log.string).to include "Failed StandardError ruh roh for #{druid2}"
       end
     end
   end

@@ -8,13 +8,13 @@ RSpec.describe CreateVirtualObjectsJob do
   let(:bulk_action) { create(:bulk_action) }
   let(:csv_string) { "parent1,one,two\nparent2,three,four,five" }
   let(:errors) { [] }
-  let(:fake_log) { double('logger', puts: nil) }
+  let(:log) { instance_double(File, puts: nil, close: true) }
 
   before do
     allow(BulkAction).to receive(:find).and_return(bulk_action)
     allow(ProblematicDruidFinder).to receive(:find).and_return(problematic_druids)
     allow(VirtualObjectsCreator).to receive(:create).and_return(errors)
-    allow(BulkJobLog).to receive(:open).and_yield(fake_log)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
 
     job.perform(bulk_action.id, csv_file: csv_string)
   end
@@ -28,13 +28,13 @@ RSpec.describe CreateVirtualObjectsJob do
       end
 
       it 'logs informative messages' do
-        expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-        expect(fake_log).to have_received(:puts)
+        expect(log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
+        expect(log).to have_received(:puts)
           .with(/Could not create virtual objects because user lacks ability to manage the following virtual object druids: druid:parent1/)
           .once
-        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because the following virtual object druids were not found: druid:parent2/).once
-        expect(fake_log).to have_received(:puts).with(/No virtual objects could be created. See other log entries for more detail/).once
-        expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
+        expect(log).to have_received(:puts).with(/Could not create virtual objects because the following virtual object druids were not found: druid:parent2/).once
+        expect(log).to have_received(:puts).with(/No virtual objects could be created. See other log entries for more detail/).once
+        expect(log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
       end
 
       it 'has the expected total/success/fail counts' do
@@ -56,12 +56,12 @@ RSpec.describe CreateVirtualObjectsJob do
       end
 
       it 'logs informative messages' do
-        expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-        expect(fake_log).to have_received(:puts)
+        expect(log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
+        expect(log).to have_received(:puts)
           .with(/Could not create virtual objects because user lacks ability to manage the following virtual object druids: druid:parent1/)
           .once
-        expect(fake_log).to have_received(:puts).with(/Successfully created virtual objects: druid:parent2/)
-        expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
+        expect(log).to have_received(:puts).with(/Successfully created virtual objects: druid:parent2/)
+        expect(log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
       end
 
       it 'has the expected total/success/fail counts' do
@@ -84,9 +84,9 @@ RSpec.describe CreateVirtualObjectsJob do
       end
 
       it 'logs informative messages' do
-        expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-        expect(fake_log).to have_received(:puts).with(/Successfully created virtual objects: druid:parent1 and druid:parent2/)
-        expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
+        expect(log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
+        expect(log).to have_received(:puts).with(/Successfully created virtual objects: druid:parent1 and druid:parent2/)
+        expect(log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
       end
 
       it 'has the expected total/success/fail counts' do
@@ -99,9 +99,9 @@ RSpec.describe CreateVirtualObjectsJob do
         let(:errors) { ['parent1 is citation-only'] }
 
         it 'logs informative messages' do
-          expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-          expect(fake_log).to have_received(:puts).with(/Creating some or all virtual objects failed because some objects are not combinable: parent1 is citation-only/)
-          expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
+          expect(log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
+          expect(log).to have_received(:puts).with(/Creating some or all virtual objects failed because some objects are not combinable: parent1 is citation-only/)
+          expect(log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
         end
 
         it 'has the expected total/success/fail counts' do

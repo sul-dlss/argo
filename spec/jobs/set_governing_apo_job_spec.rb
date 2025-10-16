@@ -12,9 +12,11 @@ RSpec.describe SetGoverningApoJob do
 
   let(:new_apo_id) { 'druid:bc111bb2222' }
   let(:webauth) { { 'privgroup' => 'dorstuff', 'login' => 'someuser' } }
+  let(:ability) { instance_double(Ability, can?: true) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
+    allow(Ability).to receive(:new).and_return(ability)
   end
 
   describe '#perform' do
@@ -27,10 +29,10 @@ RSpec.describe SetGoverningApoJob do
       }.with_indifferent_access
     end
 
-    let(:buffer) { StringIO.new }
+    let(:log) { StringIO.new }
 
     before do
-      allow(BulkJobLog).to receive(:open).and_yield(buffer)
+      allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
       allow(VersionService).to receive(:open?).and_return(true)
     end
 
@@ -38,8 +40,8 @@ RSpec.describe SetGoverningApoJob do
       it 'logs info about progress' do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq druids.length
-        expect(buffer.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action.id}"
-        expect(buffer.string).to include "Finished SetGoverningApoJob for BulkAction #{bulk_action.id}"
+        expect(log.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action.id}"
+        expect(log.string).to include "Finished SetGoverningApoJob for BulkAction #{bulk_action.id}"
       end
     end
 
@@ -58,7 +60,7 @@ RSpec.describe SetGoverningApoJob do
         allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
         allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
-        allow(subject.ability).to receive(:can?).and_return(true, false)
+        allow(ability).to receive(:can?).and_return(true, false)
       end
 
       # it might be cleaner to break the testing here into smaller cases for #set_governing_apo_and_index_safely,
@@ -72,9 +74,9 @@ RSpec.describe SetGoverningApoJob do
         expect(bulk_action.druid_count_success).to eq 1
         expect(bulk_action.druid_count_fail).to eq 2
 
-        expect(buffer.string).to include "Governing APO updated for #{druids[0]}"
-        expect(buffer.string).to include "Set governing APO failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
-        expect(buffer.string).to include 'user not authorized to move item to druid:bc111bb2222 for druid:dd111ff2222'
+        expect(log.string).to include "Governing APO updated for #{druids[0]}"
+        expect(log.string).to include 'Failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for druid:cc111dd2222'
+        expect(log.string).to include 'User not authorized to move item to druid:bc111bb2222 for druid:dd111ff2222'
       end
     end
   end

@@ -8,7 +8,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
 
   let(:druids) { ['druid:123', 'druid:456'] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
-  let(:logger) { instance_double(File, puts: nil) }
+  let(:log) { instance_double(File, puts: nil, close: true) }
 
   describe '#perform' do
     let(:params) do
@@ -24,7 +24,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
     before do
-      allow(BulkJobLog).to receive(:open).and_yield(logger)
+      allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
       allow(Repository).to receive(:find).and_return(cocina_object)
       allow(CollectionChangeSetPersister).to receive(:update)
       allow(ItemChangeSetPersister).to receive(:update)
@@ -90,7 +90,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       end
 
       it 'logs errors' do
-        expect(logger).to have_received(:puts).with(%r{Not an item or collection \(https://cocina.sul.stanford.edu/models/admin_policy\)}).twice
+        expect(log).to have_received(:puts).with(%r{Not an item or collection \(https://cocina.sul.stanford.edu/models/admin_policy\)}).twice
         expect(bulk_action.druid_count_total).to eq(druids.length)
         expect(bulk_action.druid_count_fail).to eq(druids.length)
       end
@@ -113,7 +113,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       it 'logs errors' do
         expect(VersionService).not_to have_received(:open)
         expect(CollectionChangeSetPersister).not_to have_received(:update)
-        expect(logger).to have_received(:puts).with(/No changes made/).twice
+        expect(log).to have_received(:puts).with(/No changes made/).twice
         expect(bulk_action.druid_count_total).to eq(druids.length)
         expect(bulk_action.druid_count_success).to eq(druids.length)
       end
@@ -137,7 +137,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       end
 
       it 'logs errors' do
-        expect(logger).to have_received(:puts).with(/Not authorized/).twice
+        expect(log).to have_received(:puts).with(/Not authorized/).twice
         expect(bulk_action.druid_count_total).to eq(druids.length)
         expect(bulk_action.druid_count_fail).to eq(druids.length)
       end
@@ -151,7 +151,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
       end
 
       it 'logs errors' do
-        expect(logger).to have_received(:puts).with(/Unable to open new version/).twice
+        expect(log).to have_received(:puts).with(/Unable to open new version/).twice
         expect(bulk_action.druid_count_total).to eq(druids.length)
         expect(bulk_action.druid_count_fail).to eq(druids.length)
       end

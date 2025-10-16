@@ -14,7 +14,6 @@ RSpec.describe TrackingSheetReportJob do
       log_name: 'tmp/tracking_sheet_report_job_log.txt'
     )
   end
-  let(:log_buffer) { StringIO.new }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
@@ -52,15 +51,11 @@ RSpec.describe TrackingSheetReportJob do
         before do
           allow(Prawn::Document).to receive(:new).and_return(pdf)
           allow(pdf).to receive(:render_file).and_raise(StandardError)
-          allow(Honeybadger).to receive(:context)
           allow(Honeybadger).to receive(:notify)
-          allow(Rails.logger).to receive(:error)
         end
 
         it 'updates the failed druid count' do
           subject.perform(bulk_action.id, druids:, groups:, user:)
-          expect(Rails.logger).to have_received(:error)
-          expect(Honeybadger).to have_received(:context)
           expect(Honeybadger).to have_received(:notify)
           expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(druids.length)

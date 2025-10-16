@@ -7,7 +7,7 @@ RSpec.describe ExportStructuralJob do
 
   let(:bulk_action) { create(:bulk_action, action_type: 'ExportStructuralJob') }
   let(:csv_path) { File.join(bulk_action.output_directory, Settings.export_structural_job.csv_filename) }
-  let(:log_buffer) { StringIO.new }
+  let(:log) { StringIO.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: obj1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: obj2) }
   let(:json1) do
@@ -395,7 +395,7 @@ RSpec.describe ExportStructuralJob do
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
   end
@@ -423,8 +423,8 @@ RSpec.describe ExportStructuralJob do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to eq druids.length
         expect(bulk_action.druid_count_fail).to be_zero
-        expect(log_buffer.string).to include "Exported structural metadata for #{druid1}"
-        expect(log_buffer.string).to include "Exported structural metadata for #{druid2}"
+        expect(log.string).to include "Exported structural metadata for #{druid1}"
+        expect(log.string).to include "Exported structural metadata for #{druid2}"
         expect(File).to exist(csv_path)
       end
 
@@ -451,8 +451,8 @@ RSpec.describe ExportStructuralJob do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(log_buffer.string).to include "Export structural metadata failed StandardError ruh roh for #{druid1}"
-        expect(log_buffer.string).to include "Export structural metadata failed StandardError ruh roh for #{druid2}"
+        expect(log.string).to include "Failed StandardError ruh roh for #{druid1}"
+        expect(log.string).to include "Failed StandardError ruh roh for #{druid2}"
         expect(File).to exist(csv_path)
         File.open(csv_path, 'r') do |file|
           expect(file.readlines.size).to eq 1 # just a header row
@@ -531,8 +531,8 @@ RSpec.describe ExportStructuralJob do
         expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
         expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(log_buffer.string).to include 'No structural metadata to export for druid:bc123df4567'
-        expect(log_buffer.string).to include 'No structural metadata to export for druid:bd123fg5678'
+        expect(log.string).to include 'No structural metadata to export for druid:bc123df4567'
+        expect(log.string).to include 'No structural metadata to export for druid:bd123fg5678'
         expect(File).to exist(csv_path)
         File.open(csv_path, 'r') do |file|
           expect(file.readlines.size).to eq 1 # just a header row

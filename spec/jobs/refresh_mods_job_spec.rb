@@ -27,13 +27,13 @@ RSpec.describe RefreshModsJob do
   let(:object_client2) do
     instance_double(Dor::Services::Client::Object, find: cocina2, refresh_descriptive_metadata_from_ils: true)
   end
-  let(:logger) { double('logger', puts: nil) }
+  let(:log) { instance_double(File, puts: nil, close: true) }
 
   before do
     allow(Ability).to receive(:new).and_return(ability)
     allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(BulkJobLog).to receive(:open).and_yield(logger)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
   end
 
   context 'with manage ability' do
@@ -45,9 +45,9 @@ RSpec.describe RefreshModsJob do
       before { perform }
 
       it 'logs errors' do
-        expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a #{CatalogRecordId.label} for druid:bb111cc2222/)
-        expect(logger).to have_received(:puts).with(/Did not update metadata because it doesn't have a #{CatalogRecordId.label} for druid:cc111dd2222/)
+        expect(log).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
+        expect(log).to have_received(:puts).with(/Does not have a Folio Instance HRID for druid:bb111cc2222/)
+        expect(log).to have_received(:puts).with(/Does not have a Folio Instance HRID for druid:cc111dd2222/)
 
         expect(object_client1).not_to have_received(:refresh_descriptive_metadata_from_ils)
         expect(object_client2).not_to have_received(:refresh_descriptive_metadata_from_ils)
@@ -63,9 +63,9 @@ RSpec.describe RefreshModsJob do
         before { perform }
 
         it 'refreshes' do
-          expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-          expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)
-          expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:cc111dd2222/)
+          expect(log).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
+          expect(log).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)
+          expect(log).to have_received(:puts).with(/Successfully updated metadata for druid:cc111dd2222/)
 
           expect(object_client1).to have_received(:refresh_descriptive_metadata_from_ils)
           expect(object_client2).to have_received(:refresh_descriptive_metadata_from_ils)
@@ -74,17 +74,19 @@ RSpec.describe RefreshModsJob do
 
       context 'when the version is not open' do
         before do
-          allow(VersionService).to receive(:open?).and_return(false)
-          allow_any_instance_of(described_class).to receive(:open_new_version) # rubocop:disable RSpec/AnyInstance
-            .and_return(cocina1.new(version: 2), cocina2.new(version: 2))
-          perform
+          allow(VersionService).to receive_messages(open?: false, openable?: true)
+          allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[0])).and_return(cocina1.new(version: 2))
+          allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[1])).and_return(cocina2.new(version: 2))
         end
 
         it 'opens a version and refreshes' do
-          expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-          expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)
-          expect(logger).to have_received(:puts).with(/Successfully updated metadata for druid:cc111dd2222/)
+          perform
 
+          expect(log).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
+          expect(log).to have_received(:puts).with(/Successfully updated metadata for druid:bb111cc2222/)
+          expect(log).to have_received(:puts).with(/Successfully updated metadata for druid:cc111dd2222/)
+
+          expect(VersionService).to have_received(:open).exactly(2).times
           expect(object_client1).to have_received(:refresh_descriptive_metadata_from_ils)
           expect(object_client2).to have_received(:refresh_descriptive_metadata_from_ils)
         end
@@ -98,9 +100,9 @@ RSpec.describe RefreshModsJob do
     before { perform }
 
     it 'does not refresh' do
-      expect(logger).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
-      expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)
-      expect(logger).to have_received(:puts).with(/Not authorized for druid:cc111dd2222/)
+      expect(log).to have_received(:puts).with(/Starting RefreshModsJob for BulkAction/)
+      expect(log).to have_received(:puts).with(/Not authorized to update for druid:cc111dd2222/)
+      expect(log).to have_received(:puts).with(/Not authorized to update for druid:cc111dd2222/)
       expect(object_client1).not_to have_received(:refresh_descriptive_metadata_from_ils)
       expect(object_client2).not_to have_received(:refresh_descriptive_metadata_from_ils)
     end
