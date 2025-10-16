@@ -1,26 +1,23 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'fileutils'
 
 RSpec.describe DescmetadataDownloadJob do
-  let(:download_job) { described_class.new(bulk_action.id) }
-  let(:bulk_action) do
-    create(:bulk_action,
-           action_type: 'DescmetadataDownloadJob',
-           log_name: 'foo.txt')
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid]) }
+
+  let(:druid) { 'druid:hj185xx2222' }
+  let(:bulk_action) { create(:bulk_action) }
+  let(:cocina_object) { instance_double(Cocina::Models::DRO) }
+
+  let(:job_item) do
+    described_class::DescmetadataDownloadJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive_messages(check_read_ability?: true, cocina_object: cocina_object)
+    end
   end
+
   let(:output_directory) { bulk_action.output_directory }
   let(:output_zip_filename) { File.join(output_directory, Settings.bulk_metadata.zip) }
-  let(:druid_list) { ['druid:hj185xx2222', 'druid:kv840xx0000'] }
-  let(:dl_job_params) do
-    { druids: druid_list }
-  end
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_object1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_object2) }
-  let(:cocina_object1) { build(:dro, id: druid_list.first) }
-  let(:cocina_object2) { build(:dro, id: druid_list.last) }
-  let(:log) { instance_double(File, puts: nil, close: true) }
+
   let(:mods_xml) do
     <<~XML
       <?xml version="1.0" encoding="UTF-8"?>
@@ -28,64 +25,44 @@ RSpec.describe DescmetadataDownloadJob do
         <titleInfo>
           <title>Object Label for Biryani Spice Mix Pine Nut</title>
         </titleInfo>
-        <location>
-          <url usage="primary display">https://sul-purl-stage.stanford.edu/wp220vs6582</url>
-        </location>
-        <relatedItem type="host">
-          <titleInfo>
-            <title>David Rumsey Map Collection at Stanford University Libraries</title>
-          </titleInfo>
-          <location>
-            <url>https://sul-purl-stage.stanford.edu/bc778pm9866</url>
-          </location>
-          <typeOfResource collection="yes"/>
-        </relatedItem>
       </mods>
     XML
   end
 
-  let(:ability) { instance_double(Ability) }
-
   before do
-    stub_request(:post, 'https://purl-fetcher.example.edu/v1/mods')
-      .to_return(status: 200, body: mods_xml, headers: {})
-    allow(Dor::Services::Client).to receive(:object).with(druid_list[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druid_list[1]).and_return(object_client2)
-
-    allow(Ability).to receive(:new).and_return(ability)
-    allow(ability).to receive(:can?).with(:read, cocina_object1).and_return(true)
-    allow(ability).to receive(:can?).with(:read, cocina_object2).and_return(true)
-    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
+    allow(described_class::DescmetadataDownloadJobItem).to receive(:new).and_return(job_item)
+    allow(PurlFetcher::Client::Mods).to receive(:create).and_return(mods_xml)
   end
 
   after do
     FileUtils.rm_rf(output_directory)
   end
 
-  it 'creates a valid zip file' do
-    download_job.perform(bulk_action.id, dl_job_params)
+  it 'performs the job' do
+    job.perform_now
+
     expect(File).to exist(output_zip_filename)
     Zip::File.open(output_zip_filename) do |open_file|
-      expect(open_file.glob('*').map(&:name).sort).to eq ["#{druid_list.first}.xml", "#{druid_list.second}.xml"].sort
+      expect(open_file.glob('*').map(&:name).sort).to eq ["#{druid}.xml"]
     end
+
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_success).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
   end
 
-  context 'when user lacks permission to view metadata on one of the objects' do
+  context 'when the user lacks read permission' do
     before do
-      allow(ability).to receive(:can?).with(:read, cocina_object1).and_return(true)
-      allow(ability).to receive(:can?).with(:read, cocina_object2).and_return(false)
+      allow(job_item).to receive(:check_read_ability?).and_return(false)
     end
 
-    it 'creates a valid zip file with only the objects for which the user has read authorization' do
-      expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-
-      download_job.perform(bulk_action.id, dl_job_params)
+    it 'does not add the metadata to the zip file' do
+      job.perform_now
 
       expect(File).to exist(output_zip_filename)
       Zip::File.open(output_zip_filename) do |open_file|
-        expect(open_file.glob('*').map(&:name)).to eq ["#{druid_list.first}.xml"]
+        expect(open_file.glob('*').map(&:name)).to be_empty
       end
-      expect(log).to have_received(:puts).with(/Not authorized to read for #{druid_list.second}/)
     end
   end
 end

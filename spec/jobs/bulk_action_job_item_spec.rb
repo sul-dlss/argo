@@ -7,8 +7,9 @@ RSpec.describe BulkActionJobItem do
 
   let(:druid) { 'druid:bb111cc2222' }
 
-  let(:job) { instance_double(BulkActionJob, user: 'a_user', ability:) }
+  let(:job) { instance_double(BulkActionJob, user: 'a_user', ability:, close_version?: close_version) }
   let(:ability) { instance_double(Ability) }
+  let(:close_version) { true }
 
   describe '.success!' do
     before do
@@ -151,6 +152,20 @@ RSpec.describe BulkActionJobItem do
       it 'raises an error' do
         expect { bulk_action_item.close_version_if_needed! }.to raise_error('Unable to close version')
         expect(VersionService).not_to have_received(:close)
+      end
+    end
+
+    context 'when user did not request version be closed' do
+      let(:close_version) { false }
+
+      before do
+        allow(VersionService).to receive_messages(closed?: false)
+      end
+
+      it 'does not close the version' do
+        bulk_action_item.close_version_if_needed!
+        expect(VersionService).not_to have_received(:closed?)
+        expect(job).not_to have_received(:log)
       end
     end
   end

@@ -3,195 +3,137 @@
 require 'rails_helper'
 
 RSpec.describe DescriptiveMetadataImportJob do
-  let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
-  let(:item1) { build(:dro_with_metadata, id: 'druid:bc123df4567') }
-  let(:item2) { build(:dro_with_metadata, id: 'druid:df321cb7654', version: 2) }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
-  let(:filename) { 'test.csv' }
-  let(:log) { StringIO.new }
-  let(:ability) { instance_double(Ability, can?: true) }
+  subject(:job) { described_class.new(bulk_action.id, csv_file:) }
 
+  let(:druid) { 'druid:bc123df4567' }
+  let(:cocina_object) { build(:dro_with_metadata, id: druid) }
+
+  let(:expected_cocina_object) do
+    cocina_object.new(description: cocina_object.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"))
+  end
+
+  let(:bulk_action) { create(:bulk_action) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_object) }
+  let(:log) { StringIO.new }
+
+  let(:job_item) do
+    described_class::DescriptiveMetadataImportJobItem.new(druid: druid, index: 2, job: job, row:).tap do |job_item|
+      allow(job_item).to receive(:open_new_version_if_needed!)
+      allow(job_item).to receive(:check_update_ability?).and_return(true)
+      allow(job_item).to receive(:close_version_if_needed!)
+    end
+  end
+
+  let(:purl) { "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}" }
   let(:csv_file) do
     [
       'druid,source_id,title1:value,purl',
-      [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(','),
-      [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"].join(',')
+      [druid, cocina_object.identification.sourceId, 'new title 1', purl].join(',')
     ].join("\n")
   end
 
+  let(:row) { CSV.parse(csv_file, headers: true).first }
+
   before do
+    allow(described_class::DescriptiveMetadataImportJobItem).to receive(:new).and_return(job_item)
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(Repository).to receive(:find).with(item1.externalIdentifier).and_return(item1)
-    allow(Repository).to receive(:find).with(item2.externalIdentifier).and_return(item2)
-    allow(Dor::Services::Client).to receive(:object).with(item1.externalIdentifier).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(item2.externalIdentifier).and_return(object_client2)
-    allow(VersionService).to receive(:open?).and_return(true)
-    allow(Ability).to receive(:new).and_return(ability)
+    allow(Repository).to receive(:store)
+    allow(Dor::Services::Client.objects).to receive(:indexable)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
-  describe '#perform' do
+  it 'performs the job' do
+    job.perform_now
+
+    expect(described_class::DescriptiveMetadataImportJobItem)
+      .to have_received(:new).with(druid: druid, index: 2, job: job, row:)
+
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(Dor::Services::Client.objects).to have_received(:indexable).with(druid:, cocina: expected_cocina_object)
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Descriptive metadata upload')
+    expect(Repository).to have_received(:store).with(expected_cocina_object)
+    expect(job_item).to have_received(:close_version_if_needed!)
+
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_success).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
+  end
+
+  context 'when the user is not authorized to update' do
     before do
-      allow(Repository).to receive(:store)
-      allow(VersionService).to receive(:open)
-      allow(VersionService).to receive_messages(closed?: false, closeable?: true)
-      allow(VersionService).to receive(:close)
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
     end
 
-    context 'when authorized' do
-      before do
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
+    it 'does not update the descriptive metadata' do
+      job.perform_now
 
-      let(:expected1) do
-        item1.new(description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
-      end
+      expect(job_item).not_to have_received(:open_new_version_if_needed!)
+      expect(Repository).not_to have_received(:store)
+    end
+  end
 
-      let(:expected2) do
-        item2.new(description: item2.description.new(title: [{ value: 'new title 2' }], purl: "https://purl.stanford.edu/#{item2.externalIdentifier.delete_prefix('druid:')}"))
-      end
-
-      it 'updates the descriptive metadata for each item and closes each item' do
-        expect(bulk_action.druid_count_total).to eq(2)
-        expect(bulk_action.druid_count_fail).to eq(0)
-        expect(bulk_action.druid_count_success).to eq(2)
-        expect(Repository).to have_received(:store).with(expected1)
-        expect(Repository).to have_received(:store).with(expected2)
-        expect(VersionService).to have_received(:open?).twice
-        expect(VersionService).to have_received(:close).once
-      end
+  context 'when validation fails' do
+    let(:csv_file) do
+      [
+        'druid,source_id,title1.structuredValue1.value,purl',
+        [druid, cocina_object.identification.sourceId, 'new title 1', purl].join(',')
+      ].join("\n")
     end
 
-    context 'when not authorized' do
-      let(:ability) { instance_double(Ability, can?: false) }
+    it 'does not update the descriptive metadata' do
+      job.perform_now
 
-      before do
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
+      expect(job_item).not_to have_received(:open_new_version_if_needed!)
+      expect(Repository).not_to have_received(:store)
 
-      it 'does not update or close items' do
-        expect(bulk_action.druid_count_total).to eq(2)
-        expect(Repository).not_to have_received(:store)
-        expect(VersionService).not_to have_received(:close)
-      end
+      expect(log.string).to include 'Missing type for value in description'
+
+      expect(bulk_action.reload.druid_count_total).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 1
+      expect(bulk_action.druid_count_success).to eq 0
+    end
+  end
+
+  context 'when index validation fails' do
+    let(:response) { instance_double(Faraday::Response, status: 422, body: nil, reason_phrase: 'Example field error') }
+
+    before do
+      allow(Dor::Services::Client.objects).to receive(:indexable).and_raise(Dor::Services::Client::UnprocessableContentError.new(response:))
     end
 
-    context 'when validation fails' do
-      let(:csv_file) do
-        [
-          'druid,source_id,title1.structuredValue1.value,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/x#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
-        ].join("\n")
-      end
+    it 'does not update the descriptive metadata' do
+      job.perform_now
 
-      before do
-        allow(Honeybadger).to receive(:notify)
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
+      expect(job_item).not_to have_received(:open_new_version_if_needed!)
+      expect(Repository).not_to have_received(:store)
 
-      it 'updates the error count without opening, alerting honeybadger, updating or closing' do
-        expect(bulk_action.druid_count_total).to eq 1
-        expect(bulk_action.druid_count_fail).to eq 1
-        expect(bulk_action.druid_count_success).to eq 0
-        expect(VersionService).not_to have_received(:open)
-        expect(Repository).not_to have_received(:store)
-        expect(Honeybadger).not_to have_received(:notify)
-        expect(VersionService).not_to have_received(:close)
-      end
+      expect(log.string).to include "indexing validation failed for #{druid}: Example field error"
+
+      expect(bulk_action.reload.druid_count_total).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 1
+      expect(bulk_action.druid_count_success).to eq 0
+    end
+  end
+
+  context 'when unchanged' do
+    let(:csv_file) do
+      [
+        'druid,source_id,title1:value,purl',
+        [druid, cocina_object.identification.sourceId, 'factory DRO title', purl].join(',')
+      ].join("\n")
     end
 
-    context 'when index validation fails' do
-      let(:ability) { instance_double(Ability, can?: true) }
-      let(:response) { instance_double(Faraday::Response, status: 422, body: nil, reason_phrase: 'Example field error') }
+    it 'does not update the descriptive metadata' do
+      job.perform_now
 
-      before do
-        allow(Dor::Services::Client.objects).to receive(:indexable).and_raise(Dor::Services::Client::UnprocessableContentError.new(response:))
-        allow(Ability).to receive(:new).and_return(ability)
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
+      expect(job_item).not_to have_received(:open_new_version_if_needed!)
+      expect(Repository).not_to have_received(:store)
 
-      it 'updates the error count without opening, alerting honeybadger, updating or closing' do
-        expect(bulk_action.druid_count_total).to eq 2
-        expect(bulk_action.druid_count_fail).to eq 2
-        expect(bulk_action.druid_count_success).to eq 0
-        expect(VersionService).not_to have_received(:open)
-        expect(Repository).not_to have_received(:store)
-        expect(VersionService).not_to have_received(:close)
-        expect(log.string).to include 'indexing validation failed for druid:bc123df4567: Example field error'
-        expect(log.string).to include 'indexing validation failed for druid:df321cb7654: Example field error'
-      end
-    end
+      expect(log.string).to include 'Description unchanged'
 
-    context 'when missing druid column' do
-      let(:csv_file) do
-        [
-          'source_id,title1:value,purl',
-          [item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
-        ].join("\n")
-      end
-
-      before do
-        allow(Honeybadger).to receive(:notify)
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
-
-      it 'logs the error without alerting honeybadger' do
-        expect(bulk_action.druid_count_total).to eq 1
-        expect(bulk_action.druid_count_fail).to eq 1
-        expect(bulk_action.druid_count_success).to eq 0
-        expect(Repository).not_to have_received(:store)
-        expect(Honeybadger).not_to have_received(:notify)
-        expect(log.string).to include 'Column "druid" not found'
-      end
-    end
-
-    context 'when unchanged' do
-      before do
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
-
-      let(:csv_file) do
-        [
-          'druid,source_id,title1:value,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'factory DRO title', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
-        ].join("\n")
-      end
-
-      it 'does not update the descriptive metadata or close the items' do
-        expect(bulk_action.druid_count_total).to eq 1
-        expect(bulk_action.druid_count_fail).to eq 1
-        expect(bulk_action.druid_count_success).to eq 0
-        expect(Repository).not_to have_received(:store)
-        expect(VersionService).not_to have_received(:close)
-      end
-    end
-
-    context 'when not open' do
-      before do
-        allow(VersionService).to receive_messages(open?: false, openable?: true, open: item1.new(version: 2))
-        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
-      end
-
-      let(:csv_file) do
-        [
-          'druid,source_id,title1:value,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"].join(',')
-        ].join("\n")
-      end
-
-      let(:expected1) do
-        item1.new(version: 2, description: item1.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{item1.externalIdentifier.delete_prefix('druid:')}"))
-      end
-
-      it 'opens the item, updates the descriptive metadata and then closes the item' do
-        expect(bulk_action.druid_count_total).to eq 1
-        expect(Repository).to have_received(:store).with(expected1)
-        expect(VersionService).to have_received(:open?)
-        expect(VersionService).to have_received(:open).with(druid: item1.externalIdentifier, opening_user_name: bulk_action.user.to_s,
-                                                            description: 'Descriptive metadata upload')
-        expect(VersionService).to have_received(:close).once
-      end
+      expect(bulk_action.reload.druid_count_total).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 1
+      expect(bulk_action.druid_count_success).to eq 0
     end
   end
 end

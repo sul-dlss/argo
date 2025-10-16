@@ -3,105 +3,160 @@
 require 'rails_helper'
 
 RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
-  let(:bulk_action) do
-    create(:bulk_action, action_type: 'SetCatalogRecordIdsAndBarcodesCsvJob')
-  end
+  subject(:job) { described_class.new(bulk_action.id, csv_file: StringIO.new(csv)) }
 
-  let(:authorized_to_update) { true }
-  let(:open_version) { true }
-  let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:catalog_record_ids) { ["#{catalog_record_id_prefix}12345", '', "#{catalog_record_id_prefix}44444"] } # 'a12345,a66233'
-  let(:refresh) { ['true', '', 'false'] }
-  let(:barcodes) { ['36105014757517', '', '36105014757518'] }
+  let(:druid) { 'druid:bb111cc2222' }
+  let(:bulk_action) { create(:bulk_action) }
+
   let(:log) { StringIO.new }
   let(:catalog_record_id_column) { CatalogRecordId.csv_header }
-  let(:catalog_record_id_prefix) { 'in' }
 
-  # Replace catalog_record_id on this item
-  let(:item1) do
-    build(:dro_with_metadata, id: druids[0], barcode: '36105014757519', folio_instance_hrids: ['a12346'])
-  end
-
-  # Remove catalog_record_id on this item
-  let(:item2) do
-    build(:dro_with_metadata, id: druids[1], barcode: '36105014757510', folio_instance_hrids: ['a12347'])
-  end
-
-  # Add catalog_record_id on this item
-  let(:item3) do
-    build(:dro_with_metadata, id: druids[2])
+  let(:job_item) do
+    described_class::SetCatalogRecordIdsAndBarcodesCsvJobItem.new(druid: druid, index: 2, job: job, row:).tap do |job_item|
+      allow(job_item).to receive(:open_new_version_if_needed!)
+      allow(job_item).to receive(:close_version_if_needed!)
+      allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
+    end
   end
 
   let(:csv) do
     [
       "druid,barcode,#{catalog_record_id_column},#{catalog_record_id_column},refresh",
-      [druids[0], barcodes[0], catalog_record_ids[0], "#{catalog_record_id_prefix}55555", refresh[0]].join(','),
-      [druids[1], barcodes[1], catalog_record_ids[1], '', refresh[1]].join(','),
-      [druids[2], barcodes[2], catalog_record_ids[2], '', refresh[2]].join(',')
+      [druid, barcode, catalog_record_id1, catalog_record_id2, refresh].join(',')
     ].join("\n")
   end
+  let(:catalog_record_id1) { 'in12345' }
+  let(:catalog_record_id2) { 'in55555' }
+  let(:barcode) { '36105014757517' }
+  let(:refresh) { 'true' }
 
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
-  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
+  let(:row) { CSV.parse(csv, headers: true).first }
 
-  let(:ability) { instance_double(Ability, can?: authorized_to_update) }
+  let(:item_change_set) do
+    ItemChangeSet.new(dro_cocina_object).tap do |change_set|
+      allow(change_set).to receive(:validate).and_call_original
+      allow(change_set).to receive(:save).and_return(true)
+    end
+  end
+
+  let(:dro_cocina_object) { build(:dro_with_metadata, id: druid) }
+  let(:cocina_object) { dro_cocina_object }
 
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
+    allow(described_class::SetCatalogRecordIdsAndBarcodesCsvJobItem).to receive(:new).and_return(job_item)
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
-    allow(VersionService).to receive(:open?).and_return(open_version)
-    allow(Ability).to receive(:new).and_return(ability)
-    allow_any_instance_of(ItemChangeSet).to receive(:save) # rubocop:disable RSpec/AnyInstance
+    allow(ItemChangeSet).to receive(:new).and_return(item_change_set)
   end
 
-  it 'attempts to update the catalog_record_id/barcode for each druid with correct corresponding catalog_record_id/barcode' do
-    subject.perform(bulk_action.id, { csv_file: StringIO.new(csv) })
-    expect(bulk_action.druid_count_total).to eq druids.length
-    expect(bulk_action.druid_count_fail).to eq 0
-  end
+  context 'when adding catalog_record_ids and barcodes' do
+    it 'performs the job' do
+      job.perform_now
 
-  context 'with invalid barcode and catalog_record_ids' do
-    let(:csv) do
-      [
-        "druid,barcode,#{catalog_record_id_column},#{catalog_record_id_column},refresh",
-        [druids[0], 'superbad', catalog_record_ids[0], "#{catalog_record_id_prefix}55555", refresh[0]].join(','),
-        [druids[1], barcodes[1], 'trash', '', refresh[1]].join(','),
-        [druids[2], barcodes[2], catalog_record_ids[2], '', refresh[2]].join(',')
-      ].join("\n")
-    end
+      expect(job_item).to have_received(:check_update_ability?)
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Catalog record ids updated to in12345, in55555. Refresh updated to true. Barcode updated to 36105014757517.')
 
-    it 'only attempts to update the catalog_record_id/barcode for the one druid with valid barcode/catalog_record_id' do
-      subject.perform(bulk_action.id, { csv_file: StringIO.new(csv) })
-      expect(bulk_action.druid_count_total).to eq druids.length
-      expect(bulk_action.druid_count_fail).to eq 2
+      expect(ItemChangeSet).to have_received(:new).with(cocina_object).twice
+      expect(item_change_set).to have_received(:validate).with({ barcode:, catalog_record_ids: [catalog_record_id1, catalog_record_id2], refresh: true, part_label: nil, sort_key: nil }).twice
+      expect(item_change_set).to have_received(:save)
+      expect(job_item).to have_received(:close_version_if_needed!)
+
+      expect(log.string).to include("Adding #{CatalogRecordId.label} of in12345, in55555")
+      expect(log.string).to include('Adding barcode of 36105014757517')
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(0)
+      expect(bulk_action.druid_count_success).to eq(1)
     end
   end
 
-  context 'when not authorized' do
-    let(:authorized_to_update) { false }
+  context 'when removing catalog_record_ids and barcodes' do
+    let(:dro_cocina_object) { build(:dro_with_metadata, id: druid, folio_instance_hrids: %w[in12345 in55555], barcode: '36105014757517') }
 
-    it 'logs and returns' do
-      subject.perform(bulk_action.id, { csv_file: StringIO.new(csv) })
-      expect(bulk_action.druid_count_total).to eq druids.length
-      expect(bulk_action.druid_count_fail).to eq 3
-      expect(log.string).to include('Not authorized')
+    let(:catalog_record_id1) { nil }
+    let(:catalog_record_id2) { nil }
+    let(:barcode) { nil }
+    let(:refresh) { 'false' }
+
+    it 'performs the job' do
+      job.perform_now
+
+      expect(job_item).to have_received(:check_update_ability?)
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Catalog record ids removed. Refresh removed. Barcode removed.')
+
+      expect(ItemChangeSet).to have_received(:new).with(cocina_object).twice
+      expect(item_change_set).to have_received(:validate).with({ barcode:, catalog_record_ids: [], refresh: false, part_label: nil, sort_key: nil }).twice
+      expect(item_change_set).to have_received(:save)
+      expect(job_item).to have_received(:close_version_if_needed!)
+
+      expect(log.string).to include("Removing #{CatalogRecordId.label}")
+      expect(log.string).to include('Removing barcode')
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(0)
+      expect(bulk_action.druid_count_success).to eq(1)
     end
   end
 
-  context 'when error' do
+  context 'when no changes' do
     before do
-      allow(VersionService).to receive(:open?).and_raise('Oops')
+      allow(item_change_set).to receive(:changed?).and_return(false)
     end
 
-    it 'logs' do
-      subject.perform(bulk_action.id, { csv_file: StringIO.new(csv) })
-      expect(bulk_action.druid_count_total).to eq druids.length
-      expect(bulk_action.druid_count_fail).to eq 3
-      expect(log.string).to include('Failed RuntimeError Oops for druid:bb111cc2222')
+    it 'does not update the object' do
+      job.perform_now
+
+      expect(log.string).to include('No changes specified for object')
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(1)
+      expect(bulk_action.druid_count_success).to eq(0)
+    end
+  end
+
+  context 'when a Collection' do
+    let(:collection_cocina_object) { build(:collection_with_metadata, id: druid) }
+    let(:cocina_object) { collection_cocina_object }
+    let(:barcode) { nil }
+
+    let(:collection_change_set) do
+      CollectionChangeSet.new(collection_cocina_object).tap do |change_set|
+        allow(change_set).to receive(:validate).and_call_original
+        allow(change_set).to receive_messages(save: true, changed?: true)
+      end
+    end
+
+    before do
+      allow(CollectionChangeSet).to receive(:new).and_return(collection_change_set)
+    end
+
+    it 'performs the job' do
+      job.perform_now
+
+      expect(job_item).to have_received(:check_update_ability?)
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Catalog record ids updated to in12345, in55555.')
+
+      expect(CollectionChangeSet).to have_received(:new).with(cocina_object).twice
+      expect(collection_change_set).to have_received(:validate).with({ catalog_record_ids: %w[in12345 in55555], refresh: true, part_label: nil, sort_key: nil }).twice
+      expect(collection_change_set).to have_received(:save)
+      expect(job_item).to have_received(:close_version_if_needed!)
+
+      expect(log.string).to include("Adding #{CatalogRecordId.label} of in12345, in55555")
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(0)
+      expect(bulk_action.druid_count_success).to eq(1)
+    end
+  end
+
+  context 'when the user lacks update ability' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
+    end
+
+    it 'does not update the catalog_record_id/barcode' do
+      job.perform_now
+
+      expect(ItemChangeSet).not_to have_received(:new)
     end
   end
 end

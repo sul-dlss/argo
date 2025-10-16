@@ -3,119 +3,104 @@
 require 'rails_helper'
 
 RSpec.describe ManageEmbargoesJob do
-  let(:bulk_action) { create(:bulk_action, action_type: 'ManageEmbargoesJob') }
+  subject(:job) { described_class.new(bulk_action.id, csv_file:) }
+
+  let(:bulk_action) { create(:bulk_action) }
+  let(:druid) { 'druid:bb111cc2222' }
+
   let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
-  let(:release_dates) { %w[2040-04-04 2030-03-03 2035-07-27] }
-  let(:rights) { [%w[world world], %w[world world], %w[stanford stanford]] }
 
   let(:log) { StringIO.new }
-  let(:item1) do
-    build(:dro_with_metadata, id: druids[0])
-  end
-  let(:item2) do
-    build(:dro_with_metadata, id: druids[1])
-  end
-  let(:item3) do
-    build(:dro_with_metadata, id: druids[2])
-  end
+
+  let(:cocina_object) { build(:dro_with_metadata, id: druid) }
 
   let(:csv_file) do
     [
       'druid,release_date,view,download',
-      [druids[0], release_dates[0], *rights[0]].join(','),
-      [druids[1], release_dates[1], *rights[1]].join(','),
-      [druids[2], release_dates[2], *rights[2]].join(',')
+      [druid, release_date, *rights].join(',')
     ].join("\n")
   end
+  let(:release_date) { '2040-04-04' }
+  let(:rights) { %w[world world] }
+  let(:row) { CSV.parse(csv_file, headers: true).first }
 
-  let(:params) { { csv_file: } }
-  let(:ability) { instance_double(Ability, can?: true) }
-
-  before do
-    allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
-    allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
-    allow(Repository).to receive(:find).with(druids[2]).and_return(item3)
-    allow(Repository).to receive(:store)
-
-    allow(VersionService).to receive_messages(open?: true, openable?: true)
-    allow(Ability).to receive(:new).and_return(ability)
-    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-    allow(VersionService).to receive(:open).and_return(item1.new(version: 2), item2.new(version: 2),
-                                                       item3.new(version: 2))
+  let(:job_item) do
+    described_class::ManageEmbargoesJobItem.new(druid: druid, index: 2, job: job, row:).tap do |job_item|
+      allow(job_item).to receive(:open_new_version_if_needed!)
+      allow(job_item).to receive(:close_version_if_needed!)
+      allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
+    end
   end
 
-  describe '#perform' do
-    context 'when not authorized' do
-      let(:ability) { instance_double(Ability, can?: false) }
+  let(:embargo_form) { instance_double(EmbargoForm, validate: true, save: true) }
 
-      it 'logs and returns' do
-        subject.perform(bulk_action.id, params)
-        expect(log.string).to include('Not authorized')
-        expect(bulk_action.reload.druid_count_total).to eq druids.length
-      end
+  before do
+    allow(described_class::ManageEmbargoesJobItem).to receive(:new).and_return(job_item)
+    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
+    allow(EmbargoForm).to receive(:new).and_return(embargo_form)
+  end
+
+  it 'performs the job' do
+    job.perform_now
+
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Manage embargo')
+
+    expect(EmbargoForm).to have_received(:new).with(cocina_object)
+    expect(embargo_form).to have_received(:validate).with({ release_date: DateTime.parse(release_date), view_access: rights[0], download_access: rights[1], access_location: nil })
+    expect(embargo_form).to have_received(:save)
+
+    expect(job_item).to have_received(:close_version_if_needed!)
+
+    expect(bulk_action.reload.druid_count_total).to eq 1
+    expect(bulk_action.druid_count_success).to eq 1
+    expect(bulk_action.druid_count_fail).to eq 0
+  end
+
+  context 'when the user is not authorized to modify the object' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
     end
 
-    context 'when modification is allowed' do
-      it 'updates the embargo' do
-        subject.perform(bulk_action.id, params)
-        expect(Repository).to have_received(:store).exactly(3).times
-        expect(bulk_action.reload.druid_count_total).to eq druids.length
-        expect(VersionService).not_to have_received(:open)
-      end
+    it 'does not update the embargo' do
+      job.perform_now
+
+      expect(job_item).not_to have_received(:open_new_version_if_needed!)
+    end
+  end
+
+  context 'when the release date is invalid' do
+    let(:release_date) { 'invalid-date' }
+
+    it 'does not update the embargo' do
+      job.perform_now
+
+      expect(EmbargoForm).not_to have_received(:new).with(cocina_object)
+
+      expect(bulk_action.reload.druid_count_total).to eq 1
+      expect(bulk_action.druid_count_success).to eq 0
+      expect(bulk_action.druid_count_fail).to eq 1
+
+      expect(log.string).to include('is not a valid date')
+    end
+  end
+
+  context 'when the embargo form is invalid' do
+    before do
+      allow(embargo_form).to receive_messages(validate: false,
+                                              errors: instance_double(ActiveModel::Errors, full_messages: ['Download access "nobody" is not a valid option']))
     end
 
-    context 'when modification is not allowed' do
-      before do
-        allow(VersionService).to receive(:open?).and_return(false)
-      end
+    it 'does not update the embargo' do
+      job.perform_now
 
-      it 'opens new version and updates the embargo' do
-        subject.perform(bulk_action.id, params)
-        expect(bulk_action.reload.druid_count_total).to eq 3
-        expect(bulk_action.druid_count_success).to eq 3
-        expect(Repository).to have_received(:store).exactly(3).times
-        expect(VersionService).to have_received(:open).exactly(3).times
-      end
-    end
+      expect(embargo_form).not_to have_received(:save)
 
-    context 'when error' do
-      before do
-        allow(VersionService).to receive(:open?).and_raise('oops')
-      end
+      expect(bulk_action.reload.druid_count_total).to eq 1
+      expect(bulk_action.druid_count_success).to eq 0
+      expect(bulk_action.druid_count_fail).to eq 1
 
-      it 'logs' do
-        subject.perform(bulk_action.id, params)
-        expect(log.string).to include('Failed')
-      end
-    end
-
-    context 'when bad date' do
-      let(:release_dates) { ['2040-04-04', 'foo', ''] }
-
-      it 'updates the embargo and logs the bad date' do
-        subject.perform(bulk_action.id, params)
-        expect(bulk_action.reload.druid_count_total).to eq 3
-        expect(bulk_action.druid_count_fail).to eq 2
-        expect(bulk_action.druid_count_success).to eq 1
-        expect(Repository).to have_received(:store).once
-        expect(log.string).to include('foo is not a valid date')
-        expect(log.string).to include('Missing required value for "release_date"')
-      end
-    end
-
-    context 'when invalid access combination' do
-      let(:rights) { [%w[world world], %w[world world], %w[stanford nobody]] }
-      let(:change_set3) { instance_double(ItemChangeSet, validate: false, save: true) }
-
-      it 'logs the invalid items' do
-        subject.perform(bulk_action.id, params)
-
-        expect(bulk_action.reload.druid_count_total).to eq 3
-        expect(bulk_action.druid_count_success).to eq 2
-        expect(bulk_action.druid_count_fail).to eq 1
-        expect(Repository).to have_received(:store).exactly(2).times
-        expect(log.string).to include('Download access "nobody" is not a valid option')
-      end
+      expect(log.string).to include('Download access "nobody" is not a valid option')
     end
   end
 end

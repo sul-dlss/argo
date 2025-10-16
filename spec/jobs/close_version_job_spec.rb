@@ -3,54 +3,46 @@
 require 'rails_helper'
 
 RSpec.describe CloseVersionJob do
-  let(:druids) { ['druid:bc123df4567', 'druid:bc123df4598'] }
-  let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'jcoyne85') }
-  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid]) }
+
+  let(:druid) { 'druid:bc123df4567' }
   let(:bulk_action) { create(:bulk_action) }
 
-  let(:item1) do
-    build(:dro_with_metadata, id: druids[0])
+  let(:job_item) do
+    described_class::CloseVersionJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive(:close_version_if_needed!)
+      allow(job_item).to receive(:check_update_ability?).and_return(true)
+    end
   end
-  let(:item2) do
-    build(:dro_with_metadata, id: druids[1])
-  end
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, version: version_client) }
 
   before do
-    allow(Ability).to receive(:new).and_return(ability)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
+    allow(described_class::CloseVersionJobItem).to receive(:new).and_return(job_item)
   end
 
   after do
     FileUtils.rm(bulk_action.log_name)
   end
 
-  context 'with manage ability' do
-    let(:ability) { instance_double(Ability, can?: true) }
+  it 'performs the job' do
+    job.perform_now
 
-    it 'closes versions' do
-      described_class.perform_now(bulk_action.id,
-                                  druids:,
-                                  groups:,
-                                  user:)
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(job_item).to have_received(:close_version_if_needed!)
 
-      expect(version_client).to have_received(:close).twice
-    end
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
+    expect(bulk_action.druid_count_success).to eq(1)
   end
 
-  context 'without manage ability' do
-    let(:ability) { instance_double(Ability, can?: false) }
+  context 'when not authorized to update' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
+    end
 
-    it 'does not close versions' do
-      described_class.perform_now(bulk_action.id,
-                                  druids:,
-                                  groups:,
-                                  user:)
+    it 'does not close the version' do
+      job.perform_now
 
-      expect(version_client).not_to have_received(:close)
+      expect(job_item).not_to have_received(:close_version_if_needed!)
     end
   end
 end

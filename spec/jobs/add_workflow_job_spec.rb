@@ -3,76 +3,70 @@
 require 'rails_helper'
 
 RSpec.describe AddWorkflowJob do
-  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
-  let(:groups) { [] }
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid], workflow:) }
+
+  let(:druid) { 'druid:bb111cc2222' }
+  let(:workflow) { 'accessionWF' }
+  let(:version) { 1 }
+
   let(:bulk_action) { create(:bulk_action) }
-  let(:user) { bulk_action.user }
-  let(:cocina1) do
-    build(:dro_with_metadata, id: druids[0])
+
+  let(:job_item) do
+    described_class::AddWorkflowJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive(:open_new_version_if_needed!)
+      allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
+    end
   end
-  let(:cocina2) do
-    build(:dro_with_metadata, id: druids[1])
-  end
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, workflow: wf_client) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, workflow: wf_client) }
-  let(:log) { instance_double(File, puts: nil, close: true) }
-  let(:wf_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true, find: wf_response) }
-  let(:wf_response) { instance_double(Dor::Services::Response::Workflow, active_for?: active) }
-  let(:active) { false }
+
+  let(:cocina_object) { instance_double(Cocina::Models::DRO, version:) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, workflow: wf_client) }
+  let(:wf_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true) }
 
   before do
-    allow(Ability).to receive(:new).and_return(ability)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(VersionService).to receive(:open?).with(druid: druids[0]).and_return(true)
-    allow(VersionService).to receive(:open?).with(druid: druids[1]).and_return(false)
-    allow(VersionService).to receive(:openable?).with(druid: druids[1]).and_return(true)
-    allow(VersionService).to receive(:open).and_return(cocina2)
-    allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-
-    described_class.perform_now(bulk_action.id,
-                                druids:,
-                                workflow: 'accessionWF',
-                                groups:,
-                                user:)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
+    allow(described_class::AddWorkflowJobItem).to receive(:new).and_return(job_item)
+    allow(WorkflowService).to receive(:workflow_active?).and_return(false)
   end
 
-  context 'with manage ability' do
-    let(:ability) { instance_double(Ability, can?: true) }
+  it 'performs the job' do
+    job.perform_now
 
-    context 'when the workflow already exists' do
-      let(:active) { true }
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(WorkflowService).to have_received(:workflow_active?).with(druid: druid, wf_name: workflow, version:)
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Running accessionWF')
+    expect(object_client).to have_received(:workflow).with(workflow)
+    expect(wf_client).to have_received(:create).with(version: version)
 
-      it 'does not create a workflow' do
-        expect(log).to have_received(:puts).with(/Starting AddWorkflowJob for BulkAction/)
-        expect(log).to have_received(:puts).with(/accessionWF already exists for druid:bb111cc2222/)
-        expect(log).to have_received(:puts).with(/accessionWF already exists for druid:cc111dd2222/)
-
-        expect(wf_client).not_to have_received(:create)
-      end
-    end
-
-    context "when the workflow doesn't exist" do
-      it 'creates a workflow' do
-        expect(log).to have_received(:puts).with(/Starting AddWorkflowJob for BulkAction/)
-        expect(log).to have_received(:puts).with(/Started accessionWF for druid:bb111cc2222/)
-        expect(log).to have_received(:puts).with(/Started accessionWF for druid:bb111cc2222/)
-
-        expect(wf_client).to have_received(:create).twice
-        expect(VersionService).to have_received(:open)
-          .with(druid: druids[1], description: 'Running accessionWF', opening_user_name: bulk_action.user.to_s)
-      end
-    end
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_success).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
   end
 
-  context 'without manage ability' do
-    let(:ability) { instance_double(Ability, can?: false) }
+  context 'when the user is not authorized to update' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
+    end
 
     it 'does not create a workflow' do
-      expect(log).to have_received(:puts).with(/Starting AddWorkflowJob for BulkAction/)
-      expect(log).to have_received(:puts).with(/Not authorized to update for druid:cc111dd2222/)
-      expect(log).to have_received(:puts).with(/Not authorized to update for druid:cc111dd2222/)
+      job.perform_now
+
       expect(wf_client).not_to have_received(:create)
+    end
+  end
+
+  context 'when there is an active workflow' do
+    before do
+      allow(WorkflowService).to receive(:workflow_active?).and_return(true)
+    end
+
+    it 'does not create a workflow' do
+      job.perform_now
+
+      expect(wf_client).not_to have_received(:create)
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_success).to eq(0)
+      expect(bulk_action.druid_count_fail).to eq(1)
     end
   end
 end

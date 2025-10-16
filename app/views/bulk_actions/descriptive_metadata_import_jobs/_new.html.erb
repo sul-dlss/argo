@@ -11,5 +11,5 @@
       <small>Each row in the spreadsheet should start with the druid in the first field, followed by the descriptive metadata columns.</small>
     <%= f.file_field :csv_file, class: 'form-control', accept: '.csv, .xls, .ods, .xlsx' %>
   </div>
-  <%= render 'bulk_actions/common_fields', f: %>
+  <%= render 'bulk_actions/common_fields', f:, close_option: true %>
 <% end %>

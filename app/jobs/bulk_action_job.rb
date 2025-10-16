@@ -17,7 +17,7 @@ class BulkActionJob < ApplicationJob
   # @param [Hash] params additional parameters
   def perform(bulk_action_id, params)
     @bulk_action ||= BulkAction.find(bulk_action_id)
-    @params = params
+    @params = params.with_indifferent_access
     Honeybadger.context(bulk_action_id:, params:)
 
     bulk_action.reset_druid_counts
@@ -78,6 +78,12 @@ class BulkActionJob < ApplicationJob
     druids.length
   end
 
+  def close_version?
+    # close version if "true" or true
+    # Note that not every job provides or uses this parameter.
+    ActiveModel::Type::Boolean.new.cast(params[:close_version])
+  end
+
   def perform_item_class
     # For example, the bulk action item for AddWorkflowJob is AddWorkflowJob::AddWorkflowJobItem
     "#{self.class}::#{self.class.name.sub('Job', 'JobItem')}".constantize
@@ -105,7 +111,7 @@ class BulkActionJob < ApplicationJob
     return true if ability.can?(:view, Cocina::Models::DRO)
 
     log('Not authorized to view all content')
-    bulk_action.increment(:druid_count_fail, druid_count).save
+    bulk_action.increment!(:druid_count_fail, druid_count) # rubocop:disable Rails/SkipsModelValidations
 
     false
   end

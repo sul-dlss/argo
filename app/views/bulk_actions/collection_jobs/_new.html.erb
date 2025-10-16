@@ -9,5 +9,5 @@
     <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: 'form-select') %>
   </div>
   <%= render 'bulk_actions/druids', f: %>
-  <%= render 'bulk_actions/common_fields', f: %>
+  <%= render 'bulk_actions/common_fields', f:, close_option: true %>
 <% end %>

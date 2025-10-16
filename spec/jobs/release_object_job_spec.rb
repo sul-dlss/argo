@@ -3,172 +3,83 @@
 require 'rails_helper'
 
 RSpec.describe ReleaseObjectJob do
-  let(:log) { StringIO.new }
-  let(:item1) { build(:dro_with_metadata, id: druids[0], version: 2) }
-  let(:item2) { build(:dro_with_metadata, id: druids[1], version: 3) }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, workflow: workflow_client) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, workflow: workflow_client) }
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags) }
-  let(:ability) { instance_double(Ability, can?: true) }
+  subject(:job) { described_class.new(bulk_action.id, **params) }
 
-  let(:unexpected_response) do
-    Dor::Services::Client::UnexpectedResponse
-      .new(response: instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong'))
+  let(:druid) { 'druid:bb111cc2222' }
+  let(:params) do
+    {
+      druids: [druid],
+      to: 'SEARCHWORKS',
+      who: 'bergeraj',
+      what: 'self',
+      tag: 'true'
+    }
   end
+  let(:bulk_action) { create(:bulk_action) }
+  let(:cocina_object) { instance_double(Cocina::Models::DRO, version:) }
+  let(:version) { 2 }
+
+  let(:log) { StringIO.new }
+
+  let(:job_item) do
+    described_class::ReleaseObjectJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
+    end
+  end
+  let(:object_client) { instance_double(Dor::Services::Client::Object, workflow: workflow_client, release_tags: release_tags_client) }
+  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true) }
+
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
 
   before do
-    allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
-    allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
-    allow(WorkflowService).to receive(:published?).and_return(published)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(object_client1).to receive(:release_tags).and_return(release_tags_client)
-    allow(object_client2).to receive(:release_tags).and_return(release_tags_client)
-    allow(Ability).to receive(:new).and_return(ability)
+    allow(described_class::ReleaseObjectJobItem).to receive(:new).and_return(job_item)
+    allow(WorkflowService).to receive(:published?).and_return(true)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
   end
 
-  describe '#perform' do
-    let(:bulk_action) do
-      create(
-        :bulk_action,
-        action_type: 'ReleaseObjectJob'
-      )
-    end
-    let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
-    let(:params) do
-      {
-        druids:,
-        to: 'SEARCHWORKS',
-        who: 'bergeraj',
-        what: 'self',
-        tag: 'true'
-      }.with_indifferent_access
-    end
+  it 'performs the job' do
+    job.perform_now
 
-    context 'with already published objects' do
-      let(:published) { true }
-      let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: nil) }
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(WorkflowService).to have_received(:published?).with(druid: druid)
+    expect(release_tags_client).to have_received(:create).with(tag: an_instance_of(Dor::Services::Client::ReleaseTag))
+    expect(object_client).to have_received(:workflow).with('releaseWF')
+    expect(workflow_client).to have_received(:create).with(version: version)
 
-      context 'when happy path' do
-        before do
-          expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          allow(release_tags_client).to receive(:create).and_return(true)
-        end
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
+    expect(bulk_action.druid_count_success).to eq(1)
+  end
 
-        it 'updates the total druid count' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq druids.length
-          expect(workflow_client).to have_received(:create).with(version: 2).once
-          expect(workflow_client).to have_received(:create).with(version: 3).once
-        end
-
-        it 'increments the bulk_actions druid count success' do
-          expect do
-            subject.perform(bulk_action.id, params)
-          end.to change(bulk_action, :druid_count_success).from(0).to(druids.length)
-        end
-
-        it 'logs information to the logfile' do
-          subject.perform(bulk_action.id, params)
-          expect(log.string).to include 'Starting ReleaseObjectJob for BulkAction'
-          expect(log.string).to include 'Workflow creation successful'
-          expect(log.string).to include 'Finished ReleaseObjectJob for BulkAction'
-        end
-      end
-
-      context 'when a release tag fails' do
-        let(:response) { instance_double(Faraday::Response, status: 500, body: nil, reason_phrase: 'Something went wrong') }
-
-        before do
-          expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          allow(release_tags_client).to receive(:create).and_raise(unexpected_response)
-        end
-
-        it 'updates the total druid count' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq druids.length
-        end
-
-        it 'increments the bulk_actions druid count fail' do
-          expect do
-            subject.perform(bulk_action.id, params)
-          end.to change(bulk_action, :druid_count_fail).from(0).to(druids.length)
-        end
-
-        it 'logs information to the logfile' do
-          subject.perform(bulk_action.id, params)
-          expect(log.string).to include 'Failed Dor::Services::Client::UnexpectedResponse'
-        end
-      end
-
-      context 'when a release wf fails' do
-        before do
-          expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-          allow(workflow_client).to receive(:create).and_raise(unexpected_response)
-          allow(release_tags_client).to receive(:create).and_raise(unexpected_response)
-        end
-
-        it 'updates the total druid count' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq druids.length
-        end
-
-        it 'increments the bulk_actions druid count fail' do
-          expect do
-            subject.perform(bulk_action.id, params)
-          end.to change(bulk_action, :druid_count_fail).from(0).to(druids.length)
-        end
-
-        it 'logs information to the logfile' do
-          subject.perform(bulk_action.id, params)
-          expect(log.string).to include 'Failed Dor::Services::Client::UnexpectedResponse'
-        end
-      end
-
-      context 'when not authorized' do
-        let(:ability) { instance_double(Ability, can?: false) }
-
-        before do
-          expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-        end
-
-        it 'updates the total druid count' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq druids.length
-        end
-
-        it 'logs druid info to logfile' do
-          subject.perform(bulk_action.id, params)
-          expect(log.string).to include 'Starting ReleaseObjectJob for BulkAction'
-          druids.each do |druid|
-            expect(log.string).to include "Not authorized to update for #{druid}"
-          end
-          expect(log.string).to include 'Finished ReleaseObjectJob for BulkAction'
-        end
-      end
+  context 'when the user lacks update ability' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
     end
 
-    context 'when objects have never been published' do
-      let(:published) { false }
-      let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: nil) }
+    it 'does not release the object' do
+      job.perform_now
 
-      before do
-        expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-      end
+      expect(WorkflowService).not_to have_received(:published?)
+      expect(release_tags_client).not_to have_received(:create)
+      expect(workflow_client).not_to have_received(:create)
+    end
+  end
 
-      it 'does not create workflows' do
-        subject.perform(bulk_action.id, params)
-        expect(bulk_action.druid_count_total).to eq druids.length
-        expect(workflow_client).not_to have_received(:create).with(version: 2)
-        expect(workflow_client).not_to have_received(:create).with(version: 3)
-      end
+  context 'when the object has never been published' do
+    before do
+      allow(WorkflowService).to receive(:published?).and_return(false)
+    end
 
-      it 'does not increments the bulk_actions druid count success' do
-        expect do
-          subject.perform(bulk_action.id, params)
-        end.not_to change(bulk_action, :druid_count_success)
-      end
+    it 'does not release the object' do
+      job.perform_now
+
+      expect(release_tags_client).not_to have_received(:create)
+      expect(workflow_client).not_to have_received(:create)
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(1)
+      expect(bulk_action.druid_count_success).to eq(0)
     end
   end
 end

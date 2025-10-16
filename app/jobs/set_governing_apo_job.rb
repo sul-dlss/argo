@@ -16,6 +16,8 @@ class SetGoverningApoJob < BulkActionJob
       open_new_version_if_needed!(description: 'Set new governing APO')
       change_set.validate(admin_policy_id: new_apo_id)
       change_set.save
+      close_version_if_needed!
+
       success!(message: 'Governing APO updated')
     end
 

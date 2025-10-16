@@ -3,125 +3,72 @@
 require 'rails_helper'
 
 RSpec.describe SetCollectionJob do
-  subject(:job) { described_class.new }
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid], new_collection_id: collection_id) }
 
-  let(:druids) { ['druid:cc111dd2222', 'druid:dd111ff2222'] }
-  let(:new_collection_id) { 'druid:bc111bb2222' }
-  let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'amcollie') }
-  let(:output_directory) { bulk_action.output_directory }
-  let(:bulk_action) do
-    create(
-      :bulk_action,
-      action_type: 'SetCollectionJob',
-      log_name: 'tmp/set_collection_job_log.txt'
-    )
+  let(:druid) { 'druid:bb111cc2222' }
+  let(:bulk_action) { create(:bulk_action) }
+
+  let(:collection_id) { 'druid:bc111bb2222' }
+
+  let(:job_item) do
+    described_class::SetCollectionJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive(:open_new_version_if_needed!)
+      allow(job_item).to receive(:close_version_if_needed!)
+      allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
+    end
   end
-  let(:cocina1) do
-    build(:dro_with_metadata, id: druids[0])
-  end
-  let(:cocina2) do
-    build(:dro_with_metadata, id: druids[1])
-  end
+
+  let(:cocina_object) { instance_double(Cocina::Models::DRO) }
+  let(:change_set) { instance_double(ItemChangeSet, validate: true, save: true) }
 
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
+    allow(described_class::SetCollectionJobItem).to receive(:new).and_return(job_item)
+    allow(ItemChangeSet).to receive(:new).and_return(change_set)
   end
 
   after do
-    FileUtils.rm_rf(output_directory)
+    FileUtils.rm_rf(bulk_action.output_directory)
   end
 
-  describe '#perform_now' do
-    let(:params) do
-      {
-        druids:,
-        groups:,
-        user:,
-        new_collection_id:
-      }.with_indifferent_access
-    end
-    let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
-    let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }
+  context 'when changing the collection' do
+    it 'performs the job' do
+      job.perform_now
 
+      expect(job_item).to have_received(:check_update_ability?)
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Added to collections druid:bc111bb2222.')
+      expect(ItemChangeSet).to have_received(:new).with(cocina_object)
+      expect(change_set).to have_received(:validate).with(collection_ids: [collection_id])
+      expect(change_set).to have_received(:save)
+      expect(job_item).to have_received(:close_version_if_needed!)
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(0)
+      expect(bulk_action.druid_count_success).to eq(1)
+    end
+  end
+
+  context 'when removing from collection' do
+    let(:collection_id) { '' }
+
+    it 'performs the job' do
+      job.perform_now
+
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Removed collection membership.')
+      expect(change_set).to have_received(:validate).with(collection_ids: [])
+
+      expect(bulk_action.reload.druid_count_success).to eq(1)
+    end
+  end
+
+  context 'when not authorized to update' do
     before do
-      allow(VersionService).to receive(:open?).and_return(true)
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
     end
 
-    context 'with authorization' do
-      before do
-        allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-        allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-        allow(Ability).to receive(:new).and_return(instance_double(Ability, can?: true))
-      end
+    it 'does not change the collection' do
+      job.perform_now
 
-      context 'when no collections are selected' do
-        let(:new_collection_id) { '' }
-
-        it 'removes the collection successfully' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq(druids.length)
-          expect(bulk_action.druid_count_fail).to eq(0)
-          expect(bulk_action.druid_count_success).to eq(druids.length)
-        end
-      end
-
-      context 'when the objects can be modified' do
-        context 'when the version is open' do
-          it 'sets the new collection on an object' do
-            subject.perform(bulk_action.id, params)
-            expect(bulk_action.druid_count_total).to eq(druids.length)
-            expect(bulk_action.druid_count_fail).to eq(0)
-            expect(bulk_action.druid_count_success).to eq(druids.length)
-          end
-        end
-
-        context 'when the version is closed' do
-          before do
-            allow(VersionService).to receive_messages(open?: false, openable?: true)
-            allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[0])).and_return(cocina1.new(version: 2))
-            allow(VersionService).to receive(:open).with(a_hash_including(druid: druids[1])).and_return(cocina2.new(version: 2))
-          end
-
-          it 'opens a new version sets the new collection on an object' do
-            subject.perform(bulk_action.id, params)
-            expect(bulk_action.druid_count_total).to eq(druids.length)
-            expect(bulk_action.druid_count_fail).to eq(0)
-            expect(bulk_action.druid_count_success).to eq(druids.length)
-          end
-        end
-      end
-
-      context 'when the objects is not found' do
-        let(:log) { StringIO.new }
-
-        before do
-          allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-          allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_raise(Dor::Services::Client::NotFoundResponse)
-          allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
-        end
-
-        it 'sets the new collection on an object' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq(druids.length)
-          expect(bulk_action.druid_count_fail).to eq(druids.length)
-          expect(log.string).to include "Failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[0]}"
-          expect(log.string).to include "Failed Dor::Services::Client::NotFoundResponse Dor::Services::Client::NotFoundResponse for #{druids[1]}"
-        end
-      end
-    end
-
-    context 'without authorization' do
-      before do
-        allow(Ability).to receive(:new).and_return(instance_double(Ability, can?: false))
-      end
-
-      it 'does not set the new collection on an object and increments failure count' do
-        subject.perform(bulk_action.id, params)
-        expect(bulk_action.druid_count_total).to eq(druids.length)
-        expect(bulk_action.druid_count_fail).to eq(druids.length)
-        expect(bulk_action.druid_count_success).to eq(0)
-      end
+      expect(ItemChangeSet).not_to have_received(:new)
     end
   end
 end

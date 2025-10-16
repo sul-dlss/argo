@@ -3,78 +3,58 @@
 require 'rails_helper'
 
 RSpec.describe ValidateCocinaDescriptiveJob do
-  let(:bulk_action) { create(:bulk_action, action_type: described_class.to_s) }
-  let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222] }
-  let(:item1) { build(:dro, id: druids[0]) }
-  let(:item2) { build(:dro, id: druids[1]) }
+  subject(:job) { described_class.new(bulk_action.id, csv_file:) }
+
+  let(:bulk_action) { create(:bulk_action) }
+  let(:druid) { 'druid:bb111cc2222' }
+
+  let(:job_item) do
+    described_class::ValidateCocinaDescriptiveJobItem.new(druid: druid, index: 2, job: job, row:).tap do |job_item|
+      allow(job_item).to receive(:cocina_object).and_return(cocina_object)
+    end
+  end
+
+  let(:cocina_object) { build(:dro, id: druid) }
   let(:log) { instance_double(File, puts: nil, close: true) }
+
+  let(:csv_file) do
+    [
+      'druid,source_id,title1:value,purl',
+      [cocina_object.externalIdentifier, cocina_object.identification.sourceId, 'new title 1', 'https://purl/bb111cc2222'].join(',')
+    ].join("\n")
+  end
+
+  let(:row) { CSV.parse(csv_file, headers: true).first }
 
   before do
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(Repository).to receive(:find).with(druids[0]).and_return(item1)
-    allow(Repository).to receive(:find).with(druids[1]).and_return(item2)
+    allow(described_class::ValidateCocinaDescriptiveJobItem).to receive(:new).and_return(job_item)
   end
 
-  describe '#perform' do
-    context 'with valid cocina metadata' do
-      let(:csv_file) do
-        [
-          'druid,source_id,title1:value,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'https://purl/bb111cc2222'].join(','),
-          [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'https://purl/cc111dd2222'].join(',')
-        ].join("\n")
-      end
+  it 'performs the job' do
+    job.perform_now
 
-      before do
-        subject.perform(bulk_action.id, { csv_file: })
-      end
+    expect(bulk_action.reload.druid_count_total).to eq 1
+    expect(bulk_action.druid_count_fail).to eq 0
+    expect(bulk_action.druid_count_success).to eq 1
+  end
 
-      it 'updates the descriptive metadata for each item' do
-        expect(bulk_action.druid_count_total).to eq druids.length
-        expect(bulk_action.druid_count_fail).to eq 0
-        expect(bulk_action.druid_count_success).to eq druids.length
-      end
+  context 'when invalid cocina metadata' do
+    let(:csv_file) do
+      [
+        'druid,source_id,title1.structuredValue1.type,purl',
+        [cocina_object.externalIdentifier, cocina_object.identification.sourceId, 'new title 1', 'https://purl/bb111cc2222'].join(',')
+      ].join("\n")
     end
 
-    context 'with a invalid cocina metadata' do
-      let(:csv_file) do
-        [
-          'druid,source_id,title1.structuredValue1.type,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'https://purl'].join(','),
-          [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'https://purl'].join(',')
-        ].join("\n")
-      end
+    it 'returns a failure' do
+      job.perform_now
 
-      before do
-        subject.perform(bulk_action.id, { csv_file: })
-      end
+      expect(log).to have_received(:puts).with(/Unrecognized types in description: title1.structuredValue1 \(new title 1\)/)
 
-      it 'does not update the descriptive metadata for each item' do
-        expect(bulk_action.druid_count_total).to eq druids.length
-        expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(bulk_action.druid_count_success).to eq 0
-      end
-    end
-
-    context 'with duplicate columns in the cocina metadata spreadsheet' do
-      let(:csv_file) do
-        [
-          'druid,source_id,title1.structuredValue1.type,title1.structuredValue1.type,purl',
-          [item1.externalIdentifier, item1.identification.sourceId, 'new title 1', 'new title 1', 'https://purl'].join(','),
-          [item2.externalIdentifier, item2.identification.sourceId, 'new title 2', 'new title 2', 'https://purl'].join(',')
-        ].join("\n")
-      end
-
-      before do
-        subject.perform(bulk_action.id, { csv_file: })
-      end
-
-      it 'does not update the descriptive metadata for each item' do
-        expect(bulk_action.druid_count_total).to eq druids.length
-        expect(bulk_action.druid_count_fail).to eq druids.length
-        expect(bulk_action.druid_count_success).to eq 0
-      end
+      expect(bulk_action.reload.druid_count_total).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 1
+      expect(bulk_action.druid_count_success).to eq 0
     end
   end
 end

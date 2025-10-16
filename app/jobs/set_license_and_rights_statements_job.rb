@@ -29,6 +29,7 @@ class SetLicenseAndRightsStatementsJob < BulkActionJob
       # cocina object may have changed; re-instantiate the change set
       @change_set = build_change_set
       change_set.save
+      close_version_if_needed!
 
       success!(message: 'License/copyright/use statement(s) updated successfully')
     end
@@ -36,12 +37,7 @@ class SetLicenseAndRightsStatementsJob < BulkActionJob
     private
 
     def change_set_class
-      case cocina_object
-      when Cocina::Models::DROWithMetadata
-        ItemChangeSet
-      when Cocina::Models::CollectionWithMetadata
-        CollectionChangeSet
-      end
+      cocina_object.collection? ? CollectionChangeSet : ItemChangeSet
     end
 
     def build_change_set

@@ -23,6 +23,7 @@ class SetRightsJob < BulkActionJob
 
       change_set.validate(**new_access_params)
       change_set.save
+      close_version_if_needed!
 
       success!(message: 'Successfully updated rights')
     end

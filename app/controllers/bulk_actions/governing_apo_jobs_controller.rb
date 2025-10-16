@@ -12,7 +12,7 @@ module BulkActions
     end
 
     def job_params
-      super.merge(new_apo_id: params[:new_apo_id])
+      super.merge(new_apo_id: params[:new_apo_id], close_version: params[:close_version])
     end
   end
 end

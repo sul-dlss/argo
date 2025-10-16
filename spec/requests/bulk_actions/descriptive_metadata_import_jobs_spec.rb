@@ -28,7 +28,7 @@ RSpec.describe 'Bulk descriptive metadata import' do
     end
 
     it 'creates a job' do
-      params = { 'csv_file' => fixture_file_upload('bulk_upload_descriptive.csv', 'text/csv') }
+      params = { 'csv_file' => fixture_file_upload('bulk_upload_descriptive.csv', 'text/csv'), 'close_version' => 'true' }
 
       expect do
         post '/bulk_actions/descriptive_metadata_import_job', params:
@@ -36,7 +36,8 @@ RSpec.describe 'Bulk descriptive metadata import' do
         .with(Integer, {
                 groups: ["sunetid:#{user.login}", 'workgroup:sdr:administrator-role'],
                 csv_file: String,
-                csv_filename: 'bulk_upload_descriptive.csv'
+                csv_filename: 'bulk_upload_descriptive.csv',
+                close_version: 'true'
               })
       expect(response).to have_http_status(:see_other)
     end

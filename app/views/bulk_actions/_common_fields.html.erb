@@ -3,6 +3,13 @@
   <%= f.label :description, 'Describe this bulk action' %>
   <%= f.text_area :description, class: 'form-control' %>
 </div>
+<% if local_assigns[:close_option] %>
+  <div class='form-check mb-3'>
+    <%= f.check_box :close_version, { checked: true, class: 'form-check-input' }, 'true', 'false' %>
+    <%= f.label :close_version, 'Close version once action is complete', class: 'form-check-label fw-bold' %>
+    <p>Uncheck this option if you want to make additional edits to these items before closing the version.</p>
+  </div>
+<% end %>
 <div>
   <button type='submit' class='btn btn-primary'>Submit</button>
   <%= link_to 'Back', bulk_actions_path, class: 'ms-3', target: '_top' %>

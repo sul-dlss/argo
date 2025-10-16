@@ -10,7 +10,8 @@ module BulkActions
       {
         groups: current_user.groups,
         csv_file: CsvUploadNormalizer.read(params[:csv_file].path),
-        csv_filename: params[:csv_file].original_filename
+        csv_filename: params[:csv_file].original_filename,
+        close_version: params[:close_version]
       }
     end
 
