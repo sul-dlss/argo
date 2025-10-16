@@ -13,6 +13,7 @@ RSpec.describe 'Report view' do
 
     before do
       solr_conn.add(id: 'druid:hj185xx2222',
+                    SolrDocument::FIELD_BARE_DRUID => 'hj185xx2222',
                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
                     display_title_ss: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
       solr_conn.commit

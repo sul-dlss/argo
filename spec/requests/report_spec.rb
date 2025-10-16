@@ -59,12 +59,15 @@ RSpec.describe 'Reports from a search' do
     end
   end
 
-  describe 'The CSV endpoint' do
+  describe 'CSV endpoint' do
     before do
       allow(Report).to receive(:new).and_return(report)
+      allow(report).to receive(:stream_csv) do |stream:|
+        stream.write csv
+      end
     end
 
-    let(:report) { instance_double(Report, to_csv: csv) }
+    let(:report) { instance_double(Report) }
     let(:csv) { "Druid,Purl,Source Id,Tags\nab123gg7777\nqh056qq6868" }
 
     it 'downloads valid CSV data for specific fields' do
