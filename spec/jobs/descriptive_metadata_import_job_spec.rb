@@ -101,6 +101,28 @@ RSpec.describe DescriptiveMetadataImportJob do
       end
     end
 
+    context 'when index validation fails' do
+      let(:ability) { instance_double(Ability, can?: true) }
+      let(:response) { instance_double(Faraday::Response, status: 422, body: nil, reason_phrase: 'Example field error') }
+
+      before do
+        allow(Dor::Services::Client.objects).to receive(:indexable).and_raise(Dor::Services::Client::UnprocessableContentError.new(response:))
+        allow(Ability).to receive(:new).and_return(ability)
+        subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
+      end
+
+      it 'updates the error count without opening, alerting honeybadger, updating or closing' do
+        expect(bulk_action.druid_count_total).to eq 2
+        expect(bulk_action.druid_count_fail).to eq 2
+        expect(bulk_action.druid_count_success).to eq 0
+        expect(VersionService).not_to have_received(:open)
+        expect(Repository).not_to have_received(:store)
+        expect(VersionService).not_to have_received(:close)
+        expect(log.string).to include 'indexing validation failed for druid:bc123df4567: Example field error'
+        expect(log.string).to include 'indexing validation failed for druid:df321cb7654: Example field error'
+      end
+    end
+
     context 'when missing druid column' do
       let(:csv_file) do
         [
