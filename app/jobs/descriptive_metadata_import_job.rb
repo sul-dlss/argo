@@ -14,6 +14,8 @@ class DescriptiveMetadataImportJob < BulkActionCsvJob
       validate_result = CocinaValidator.validate(cocina_object, description:)
       return failure!(message: "Validation failed (#{validate_result.failure})") if validate_result.failure?
 
+      Dor::Services::Client.objects.indexable(druid: cocina_object.externalIdentifier, cocina: cocina_object.new(description:))
+
       return failure!(message: 'Description unchanged') if cocina_object.description == description
 
       open_new_version_if_needed!(description: 'Descriptive metadata upload')
@@ -23,6 +25,8 @@ class DescriptiveMetadataImportJob < BulkActionCsvJob
 
       close_version_if_needed!
       success!(message: 'Successfully updated')
+    rescue Dor::Services::Client::UnprocessableContentError => e
+      failure!(message: "indexing validation failed for #{cocina_object.externalIdentifier}: #{e.message}")
     end
   end
 end

@@ -103,9 +103,10 @@ RSpec.describe DescriptiveMetadataImportJob do
 
     context 'when index validation fails' do
       let(:ability) { instance_double(Ability, can?: true) }
+      let(:response) { instance_double(Faraday::Response, status: 422, body: nil, reason_phrase: 'Example field error') }
 
       before do
-        allow(Dor::Services::Client.objects).to receive(:indexable).and_raise(StandardError, 'Simulated index failure')
+        allow(Dor::Services::Client.objects).to receive(:indexable).and_raise(Dor::Services::Client::UnprocessableContentError.new(response:))
         allow(Ability).to receive(:new).and_return(ability)
         subject.perform(bulk_action.id, { csv_file:, csv_filename: filename })
       end
@@ -117,8 +118,8 @@ RSpec.describe DescriptiveMetadataImportJob do
         expect(VersionService).not_to have_received(:open)
         expect(Repository).not_to have_received(:store)
         expect(VersionService).not_to have_received(:close)
-        expect(log_buffer.string).to include 'indexing validation failed for druid:bc123df4567: Simulated index failure'
-        expect(log_buffer.string).to include 'indexing validation failed for druid:df321cb7654: Simulated index failure'
+        expect(log.string).to include 'indexing validation failed for druid:bc123df4567: Example field error'
+        expect(log.string).to include 'indexing validation failed for druid:df321cb7654: Example field error'
       end
     end
 
