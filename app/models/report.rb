@@ -24,6 +24,7 @@ class Report
     {
       field: 'druid', label: 'Druid',
       proc: ->(doc) { doc.druid },
+      solr_fields: %w[id],
       sort: true, default: true, width: 100, formatter: 'linkToArgo'
     },
     {
@@ -268,6 +269,32 @@ class Report
 
   def report_data
     docs_to_records(@response.documents)
+  end
+
+  def stream_csv(stream:)
+    # Wow, yet another BL kludge.
+    search_service = search_service(params)
+    # Get the underlying Faraday connection to use its streaming API
+    connection = search_service.repository.connection.connection
+    fl = @fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
+    # Setting wt=csv tells solr to return CSV data
+    data = { wt: :csv, rows: 10_000_000, fl: }.reverse_merge(search_service.search_builder.with(@params)).to_h
+
+    first_chunk = true
+    connection.post blacklight_config.solr_path do |req|
+      req.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+      req.body = RSolr::Uri.params_to_solr data
+      req.options.on_data = proc do |chunk|
+        if first_chunk
+          first_chunk = false
+          # Replace the header row (which comes back from solr with field names) and replace with field labels.
+          chunk.sub!(/^.*?\n/m, CSV.generate_line(@fields.map { |field| field.fetch(:label) }, force_quotes: true)) # Remove the header row
+        end
+        stream.write chunk
+      end
+    end
+  ensure
+    stream.close
   end
 
   ##
