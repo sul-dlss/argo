@@ -59,7 +59,7 @@ RSpec.describe Argo::ProfileQueries do
         SolrDocument::FIELD_SW_PUB_DATE,
         'content_file_count_itsi',
         'shelved_content_file_count_itsi',
-        'preserved_size_dbtsi'
+        SolrDocument::FIELD_PRESERVATION_SIZE
       ]
       expect(solr_parameters['stats']).to be true
       expect(stats_fields).to include(*required_fields)

@@ -83,7 +83,7 @@ class ProfilePresenter
   end
 
   def preserved_file_size
-    stats_field['preserved_size_dbtsi']
+    stats_field[SolrDocument::FIELD_PRESERVATION_SIZE]
   end
 
   def published_to_purl

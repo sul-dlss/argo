@@ -18,13 +18,11 @@ RSpec.describe Report do
     solr_conn.commit
   end
 
-  describe '#to_csv' do
+  describe '#stream_csv' do
     let(:csv) do
-      described_class
-        .new(current_user: user)
-        .to_csv # Returns an enumerator for more performant streaming of CSV results.
-        .to_a   # Iterate through the enumerator.
-        .join   # Coerce to string for parsing convenience.
+      stream = StringIO.new
+      described_class.new(current_user: user).stream_csv(stream:)
+      stream.string
     end
 
     it 'generates data in valid CSV format' do
@@ -35,36 +33,41 @@ RSpec.describe Report do
       rows = CSV.parse(csv)
       expect(rows).to be_a(Array)
       expect(rows.length).to be > 1 # at least headers + data
-      expect(rows[report_field_index(:druid)].length).to eq(described_class::REPORT_FIELDS.size) # default headers
+      expect(rows[report_field_index(SolrDocument::FIELD_BARE_DRUID)].length).to eq(described_class::REPORT_FIELDS.size) # default headers
     end
 
     it 'forces double quotes for all fields' do
-      expect(csv[report_field_index(:druid)]).to eq('"')
+      expect(csv[report_field_index(SolrDocument::FIELD_BARE_DRUID)]).to eq('"')
     end
 
     context 'when a field has double quotes' do
       before do
-        solr_conn.add(id: 'druid:hj185xx2222',
-                      display_title_ss: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+        solr_conn.add(
+          id: 'druid:hj185xx2222',
+          SolrDocument::FIELD_BARE_DRUID => 'hj185xx2222',
+          display_title_ss: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953'
+        )
         solr_conn.commit
       end
 
       it 'handles a title with double quotes in it' do
-        row = CSV.parse(csv).find { |row| row[report_field_index(:druid)] == 'hj185xx2222' }
-        expect(row[report_field_index(:title)]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+        row = CSV.parse(csv).find { |row| row[report_field_index(SolrDocument::FIELD_BARE_DRUID)] == 'hj185xx2222' }
+
+        expect(row[report_field_index(SolrDocument::FIELD_TITLE)]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
       end
     end
 
     context 'with multivalued fields' do
       before do
         solr_conn.add(id: 'druid:xb482ww9999',
+                      SolrDocument::FIELD_BARE_DRUID => 'xb482ww9999',
                       tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
         solr_conn.commit
       end
 
       it 'handles a multivalued fields' do
-        row = CSV.parse(csv).find { |row| row[report_field_index(:druid)] == 'xb482ww9999' }
-        expect(row[report_field_index(:tag_ssim)].split(';').length).to eq(2)
+        row = CSV.parse(csv).find { |row| row[report_field_index(SolrDocument::FIELD_BARE_DRUID)] == 'xb482ww9999' }
+        expect(row[report_field_index(SolrDocument::FIELD_TAGS)].split(';').length).to eq(2)
       end
     end
   end
@@ -85,8 +88,10 @@ RSpec.describe Report do
 
       before do
         solr_conn.add(id: 'druid:fg464dn8891',
+                      SolrDocument::FIELD_BARE_DRUID => 'fg464dn8891',
                       obj_label_tesim: 'State Banking Commission Annual Reports')
         solr_conn.add(id: 'druid:mb062dy1188',
+                      SolrDocument::FIELD_BARE_DRUID => 'mb062dy1188',
                       obj_label_tesim: 'maxims found in the leading English and American reports and elementary works')
         solr_conn.commit
       end
@@ -97,7 +102,11 @@ RSpec.describe Report do
     end
 
     it 'returns druids and source ids' do
-      doc = { id: 'druid:qq613vj0238', source_id_ssi: 'sul:36105011952764' }
+      doc = {
+        'id' => 'druid:qq613vj0238',
+        SolrDocument::FIELD_SOURCE_ID => 'sul:36105011952764',
+        SolrDocument::FIELD_BARE_DRUID => 'qq613vj0238'
+      }
       service = instance_double(Blacklight::SearchService)
       allow(Blacklight::SearchService).to receive(:new).and_return(service)
       allow(service).to receive(:search_results).and_return(
@@ -122,6 +131,7 @@ RSpec.describe Report do
 
       before do
         solr_conn.add(id: 'druid:fg464dn8891',
+                      SolrDocument::FIELD_BARE_DRUID => 'fg464dn8891',
                       obj_label_tesim: 'State Banking Commission Annual Reports',
                       tag_ssim: ['Registered By : llam813', 'Remediated By : 4.6.6.2'])
         solr_conn.commit

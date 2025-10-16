@@ -22,7 +22,7 @@ module Argo
       solr_parameters['stats.field'] << SolrDocument::FIELD_SW_PUB_DATE
       solr_parameters['stats.field'] << 'content_file_count_itsi'
       solr_parameters['stats.field'] << 'shelved_content_file_count_itsi'
-      solr_parameters['stats.field'] << 'preserved_size_dbtsi'
+      solr_parameters['stats.field'] << SolrDocument::FIELD_PRESERVATION_SIZE
       # Use this paradigm to add pivot facets
       solr_parameters['facet.pivot'] ||= []
       solr_parameters['facet.pivot'] << "#{SolrDocument::FIELD_OBJECT_TYPE},#{SolrDocument::FIELD_PROCESSING_STATUS}"
