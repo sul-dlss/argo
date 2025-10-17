@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
-##
-# Job to run checksum report
+# A job that, given list of druids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
 class ChecksumReportJob < BulkActionJob
-  ##
-  # A job that, given list of druids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
-  # @param [Integer] bulk_action_id GlobalID for a BulkAction object
-  # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array]  :druids required list of druids
-  # @option params [Array]  :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
-  # @option params [Array]  :user the user
   def perform_bulk_action
     return unless check_view_ability?
 
@@ -17,15 +9,20 @@ class ChecksumReportJob < BulkActionJob
   end
 
   def export_file
-    @export_file ||= CSV.open(report_filename, 'w')
+    @export_file ||= CSV.open(report_filename, 'w').tap do |csv|
+      # The CSV header needs to be injected before any item-level CSV is
+      # generated. If this is moved into the job item's `#perform` method, the
+      # header will be repeated once for every druid.
+      csv << %w[druid filename md5 sha256 sha512 size]
+    end
   end
 
   class ChecksumReportJobItem < BulkActionJobItem
     def perform
-      report = Preservation::Client.objects.checksum(druid:)
-      report.each do |row|
-        export_file << [druid, row['filename'], row['md5'], row['sha1'], row['sha256'], row['filesize']]
+      Preservation::Client.objects.checksum(druid:).each do |hash|
+        export_file << [druid, hash['filename'], hash['md5'], hash['sha1'], hash['sha256'], hash['filesize']]
       end
+
       success!
     rescue Preservation::Client::NotFoundError
       export_file << [druid, 'object not found or not fully accessioned']

@@ -58,6 +58,7 @@ RSpec.describe ChecksumReportJob do
                           user:)
           expect(File.read(File.join(output_directory, Settings.checksum_report_job.csv_filename))).to eq(
             <<~CSV
+              druid,filename,md5,sha256,sha512,size
               druid:123,oo000oo0000_img_1.tif,ffc0cc90e4215e0a3d822b04a8eab980,d2703add746d7b6e2e5f8a73ef7c06b087b3fae5,6b66cc2df50427d03dca8608af20b3fd96d76b67ba41c148901aa1a60527032f,4403882
               druid:123,oo000oo0000_img_2.tif,ggc0cc90e4215e0a3d822b04a8eab991,e3703add746d7b6e2e5f8a73ef7c06b087b3faf6,7c66cc2df50427d03dca8608af20b3fd96d76b67ba41c148901aa1a60527033g,5503893
               druid:456,object not found or not fully accessioned
