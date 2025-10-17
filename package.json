@@ -7,13 +7,14 @@
     "blacklight-frontend": "^7.20.2",
     "blacklight-hierarchy": "^6.0.2",
     "bootstrap": "^5.1.0",
+    "choices.js": "^11.1.0",
     "esbuild": "^0.25.0",
+    "nodemon": "^3.1.10",
     "qs": "^6.11.2",
     "renderjson": "^1.4.0",
     "sass": "^1.41.1",
     "stimulus": "^3.0.0",
-    "tabulator-tables": "^5.5.2",
-    "nodemon": "^3.1.10"
+    "tabulator-tables": "^5.5.2"
   },
   "devDependencies": {
     "eslint": "^8.0.1",

@@ -26,6 +26,7 @@ import ObjectReporter from './object_reporter'
 import CopyController from './copy_controller'
 import TextExtractionController from './text_extraction_controller'
 import CheckboxSelectController from './checkbox_select_controller'
+import MultiselectController from './multiselect_controller'
 
 const application = Application.start()
 application.register('bulk-actions', BulkActions)
@@ -55,3 +56,4 @@ application.register('object-reporter', ObjectReporter)
 application.register('copy', CopyController)
 application.register('text-extraction', TextExtractionController)
 application.register('checkbox-select', CheckboxSelectController)
+application.register('multiselect', MultiselectController)
