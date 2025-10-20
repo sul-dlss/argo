@@ -5,6 +5,7 @@ import BulkUpload from './bulk_upload'
 import Button from './button'
 import ContentTypeController from './content_type_controller'
 import FacetFilter from './facet_filter'
+import EventsJSONRenderer from './events_json_renderer'
 import JSONRenderer from './json_renderer'
 import Tokens from './tokens'
 import WorkflowGrid from './workflow_grid_controller'
@@ -33,6 +34,7 @@ application.register('bulk-upload', BulkUpload)
 application.register('button', Button)
 application.register('content-type', ContentTypeController)
 application.register('facet-filter', FacetFilter)
+application.register('events-json-renderer', EventsJSONRenderer)
 application.register('json-renderer', JSONRenderer)
 application.register('workflow-grid', WorkflowGrid)
 application.register('collection-editor', CollectionEditor)

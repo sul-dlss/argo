@@ -6,16 +6,31 @@
     <tbody>
     <% @events.each do |event| %>
       <tr>
-        <td><time-ago datetime="<%= event.timestamp %>"><%= event.timestamp %></time-ago></td>
-        <td><%= event.event_type %></td>
-        <td data-controller="expandable-snippets">
-          <pre data-expandable-snippets-target="snippet"><%= JSON.pretty_generate(event.data) %></pre>
-          <button data-expandable-snippets-target="viewMoreLink" data-action="expandable-snippets#expand" hidden type="button" class="btn btn-link">
-            View more <span class="bi-arrow-bar-down" />
-          </a>
-          <button data-expandable-snippets-target="viewLessLink" data-action="expandable-snippets#collapse" hidden type="button" class="btn btn-link">
-            View less <span class="bi-arrow-bar-up" />
-          </a>
+        <td><%= l(DateTime.parse(event.timestamp), format: :event) %></td>
+        <td><%= event.event_type %>
+        <td>
+          <div data-controller="events-json-renderer">
+            <div class="row">
+              <div class="col">
+                <a class="btn btn-primary" data-action="events-json-renderer#expand">
+                  <span class="bi-plus" />
+                </a>
+                <a class="btn btn-primary " data-action="events-json-renderer#collapse">
+                  <span class="bi-dash" />
+                </a>
+                <script data-events-json-renderer-target="events">
+                <%= EventHashPresenter
+                      .new(event: event.data)
+                      .render
+                      .to_json
+                      .html_safe %>
+                </script>
+              </div>
+              <div class="col">
+                <div class="detail" data-events-json-renderer-target="eventsSection"></div>
+              </div>
+            </div>
+          </div>
         </td>
       </tr>
     <% end %>
