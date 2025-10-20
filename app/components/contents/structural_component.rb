@@ -15,6 +15,8 @@ module Contents
 
     attr_reader :structural, :object_id, :user_version
 
+    delegate :constituents, :label, :number_of_content_items, :virtual_object?, to: :structural_presenter
+
     def viewable?
       @viewable
     end
@@ -23,24 +25,8 @@ module Contents
       @paginatable_array ||= Kaminari.paginate_array(structural.contains).page(params[:page]).per(50)
     end
 
-    def number_of_content_items
-      return constituents.size if virtual_object?
-
-      structural.contains.size
-    end
-
-    def label_for_content_items
-      return 'Constituent' if virtual_object?
-
-      'Resource'
-    end
-
-    def virtual_object?
-      constituents.present?
-    end
-
-    def constituents
-      @constituents ||= structural.hasMemberOrders.first&.members
+    def structural_presenter
+      @structural_presenter ||= StructuralPresenter.new(structural)
     end
   end
 end

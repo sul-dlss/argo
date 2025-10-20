@@ -15,12 +15,18 @@ class ContentsComponent < ApplicationComponent
   delegate :open_and_not_assembling?, :version_or_user_version_view?, :user_version_view?, :version_view?,
            :user_version_view, :version_view, to: :@presenter
 
+  delegate :enable_csv?, to: :structural_presenter
+
   def upload_csv?
-    !version_or_user_version_view? && open_and_not_assembling?
+    return false if version_or_user_version_view? && !open_and_not_assembling?
+
+    enable_csv?
   end
 
   def download_csv?
-    !version_or_user_version_view?
+    return false if version_or_user_version_view?
+
+    enable_csv?
   end
 
   def structural_link_path
@@ -31,5 +37,9 @@ class ContentsComponent < ApplicationComponent
     else
       item_structure_path(@view_token)
     end
+  end
+
+  def structural_presenter
+    @structural_presenter ||= StructuralPresenter.new(@cocina.structural)
   end
 end
