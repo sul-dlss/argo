@@ -11,23 +11,22 @@
         <td>
           <div data-controller="events-json-renderer">
             <div class="row">
-              <div class="col">
-                <a class="btn btn-primary" data-action="events-json-renderer#expand">
-                  <span class="bi-plus" />
-                </a>
-                <a class="btn btn-primary " data-action="events-json-renderer#collapse">
-                  <span class="bi-dash" />
-                </a>
-                <script data-events-json-renderer-target="events">
-                <%= EventHashPresenter
-                      .new(event: event.data)
-                      .render
-                      .to_json
-                      .html_safe %>
-                </script>
-              </div>
-              <div class="col">
-                <div class="detail" data-events-json-renderer-target="eventsSection"></div>
+              <div class="col d-flex ">
+                <div class="p-2">
+                  <a class="btn btn-primary" data-action="events-json-renderer#toggle">
+                    <span data-events-json-renderer-target="toggle" class="bi-plus" />
+                  </a>
+                  <script data-events-json-renderer-target="events">
+                    [<%= EventHashPresenter
+                          .new(event:)
+                          .render
+                          .to_json
+                          .html_safe %>]
+                  </script>
+                </div>
+                <div class="p-2">
+                  <div class="detail" data-events-json-renderer-target="eventsSection"></div>
+                </div>
               </div>
             </div>
           </div>
