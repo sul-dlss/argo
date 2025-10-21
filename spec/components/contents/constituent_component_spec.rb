@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Contents::ExternalFileComponent, type: :component do
+RSpec.describe Contents::ConstituentComponent, type: :component do
   let(:component) { described_class.new(druid: id) }
   let(:rendered) { render_inline(component) }
   let(:id) { 'druid:bf746ns6287' }

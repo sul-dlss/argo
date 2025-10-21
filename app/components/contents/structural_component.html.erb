@@ -4,5 +4,5 @@
 </div>
 <ul class="resource-list">
   <%= render Contents::ResourceComponent.with_collection(paginatable_array, counter_offset: paginatable_array.offset_value, object_id:, user_version:, viewable: viewable?) %>
-  <%= render Contents::ExternalFileComponent.with_collection(structural.hasMemberOrders.first&.members) %>
+  <%= render Contents::ConstituentComponent.with_collection(structural.hasMemberOrders.first&.members) %>
 </ul>
