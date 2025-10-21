@@ -10,11 +10,36 @@
 
 /* Overriding blacklight to keep the border-color */
 .applied-filter {
-  .constraint-value {
+  display: flex;
+
+  &:hover,
+  &:active {
+    border-color: var(--bs-body-color);
+  }
+
+  .btn-close {
+    align-self: center;
+    font-size: 0.6rem;
+    padding: 0.35em 0.65em;
+
     &:hover,
     &:active {
-      border-color: var(--bs-body-color);
+      --bs-btn-close-color: var(--stanford-digital-red);
+      mask-position: center;
+      mask-repeat: no-repeat;
+      mask-size: 65%;
+      mask-image: var(--bs-btn-close-bg);
     }
+  }
+
+  .constraint-value {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-inline: 0.75rem 0.25rem;
+    white-space: nowrap;
+    max-width: clamp(288px, calc(30vw), 500px);
+    border-inline-end: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
   }
 }
 

@@ -26,7 +26,7 @@ FactoryBot.define do
 
     admin_policy_id { 'druid:hv992ry2431' }
     agreement_id { FactoryBot.create_for_repository(:agreement).externalIdentifier }
-    label { 'test apo' }
+    label { 'this is a really long test APO label to test truncation of facet labels on show page' }
     type { Cocina::Models::ObjectType.admin_policy }
   end
 end
