@@ -47,5 +47,7 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
 
   delegate :version_view, :current_version, to: :versions_presenter
 
+  delegate :structural, to: :cocina
+
   attr_accessor :cocina, :view_token, :state_service, :version_service, :user_versions_presenter, :versions_presenter
 end
