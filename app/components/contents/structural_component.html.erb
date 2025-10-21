@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between">
   <div><%= pluralize number_of_content_items, label %></div>
-  <%= helpers.paginate paginatable_array, theme: :blacklight %>
+  <%= helpers.paginate paginatable_array, theme: :blacklight, outer_window: 2 %>
 </div>
 <ul class="resource-list">
   <%= render Contents::ResourceComponent.with_collection(paginatable_array, counter_offset: paginatable_array.offset_value, object_id:, user_version:, viewable: viewable?) %>
