@@ -1,35 +1,27 @@
 <turbo-frame id="events">
-  <table class="detail">
+  <table class="table">
     <thead>
-      <tr><th>When</th><th>Event type</th><th>Data</th></tr>
+      <tr class="d-flex">
+        <th>When</th>
+        <th>Event type</th>
+        <th class="flex-grow-1">Data</th>
+      </tr>
     </thead>
     <tbody>
     <% @events.each do |event| %>
-      <tr>
+      <tr class="d-flex">
         <td><%= l(DateTime.parse(event.timestamp), format: :event) %></td>
         <td><%= event.event_type %>
-        <td>
-          <div data-controller="events-json-renderer">
-            <div class="row">
-              <div class="col d-flex ">
-                <div class="p-2">
-                  <a class="btn btn-primary" data-action="events-json-renderer#toggle">
-                    <span data-events-json-renderer-target="toggle" class="bi-plus" />
-                  </a>
-                  <script data-events-json-renderer-target="events">
-                    [<%= EventHashPresenter
-                          .new(event:)
-                          .render
-                          .to_json
-                          .html_safe %>]
-                  </script>
-                </div>
-                <div class="p-2">
-                  <div class="detail" data-events-json-renderer-target="eventsSection"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <td cl="flex-grow-1">
+          <%= tag.div data: {
+                controller: 'json-renderer',
+                json_renderer_cocina_value: EventHashPresenter.new(event:).render.to_json
+              } do %>
+              <a href="#" data-action="json-renderer#expand">Expand all</a> |
+              <a href="#" data-action="json-renderer#collapse">Collapse all</a>
+
+              <div class="detail" data-json-renderer-target="section"></div>
+          <% end %>
         </td>
       </tr>
     <% end %>
