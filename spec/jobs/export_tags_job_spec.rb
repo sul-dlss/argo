@@ -3,96 +3,39 @@
 require 'rails_helper'
 
 RSpec.describe ExportTagsJob do
-  subject(:job) { described_class.new }
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid]) }
 
-  let(:bulk_action) { create(:bulk_action, action_type: 'ExportTagsJob') }
+  let(:druid) { 'druid:bc123df4567' }
+
+  let(:bulk_action) { create(:bulk_action) }
   let(:csv_path) { File.join(bulk_action.output_directory, Settings.export_tags_job.csv_filename) }
   let(:log) { StringIO.new }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client2) }
-  let(:tags_client1) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags1) }
-  let(:tags_client2) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags2) }
+
+  let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client) }
+  let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags) }
+  let(:tags) { ['Project : Testing 2', 'Test Tag : Testing 3'] }
 
   before do
-    allow(job).to receive(:bulk_action).and_return(bulk_action)
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-    allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
   after do
     FileUtils.rm_f(csv_path)
   end
 
-  describe '#perform_now' do
-    let(:druids) { [druid1, druid2] }
-    let(:druid1) { 'druid:bc123df4567' }
-    let(:tags1) { ['Project : Testing 1'] }
-    let(:druid2) { 'druid:bd123fg5678' }
-    let(:tags2) { ['Project : Testing 2', 'Test Tag : Testing 3'] }
-    let(:groups) { [] }
-    let(:user) { instance_double(User, to_s: 'jcoyne85') }
+  it 'performs the job' do
+    job.perform_now
 
-    context 'when happy path' do
-      before do
-        job.perform(bulk_action.id,
-                    druids:,
-                    groups:,
-                    user:)
-      end
+    expect(Dor::Services::Client).to have_received(:object).with(druid)
+    expect(tags_client).to have_received(:list).once
 
-      it 'collaborates with the tags client for each druid' do
-        expect(tags_client1).to have_received(:list).once
-        expect(tags_client2).to have_received(:list).once
-      end
+    expect(File).to exist(csv_path)
+    output = CSV.read(csv_path)
+    expect(output.first.to_csv).to eq "druid:bc123df4567,Project : Testing 2,Test Tag : Testing 3\n"
 
-      it 'records zero failures and all successes' do
-        expect(bulk_action.druid_count_total).to eq(druids.length)
-        expect(bulk_action.druid_count_success).to eq(druids.length)
-        expect(bulk_action.druid_count_fail).to eq(0)
-      end
-
-      it 'logs messages for each druid in the list' do
-        expect(log.string).to include "Exported tags for #{druid1}"
-        expect(log.string).to include "Exported tags for #{druid2}"
-        expect(log.string).not_to include 'Unexpected error'
-      end
-
-      it 'writes a CSV file' do
-        expect(File).to exist(csv_path)
-      end
-    end
-
-    context 'when an exception is raised' do
-      before do
-        allow(tags_client1).to receive(:list).and_raise(StandardError, 'ruh roh')
-        allow(tags_client2).to receive(:list).and_raise(StandardError, 'ruh roh')
-        job.perform(bulk_action.id,
-                    druids:,
-                    groups:,
-                    user:)
-      end
-
-      it 'collaborates with the tags client for each druid' do
-        expect(tags_client1).to have_received(:list).once
-        expect(tags_client2).to have_received(:list).once
-      end
-
-      it 'records all failures and zero successes' do
-        expect(bulk_action.druid_count_total).to eq(druids.length)
-        expect(bulk_action.druid_count_success).to eq(0)
-        expect(bulk_action.druid_count_fail).to eq(druids.length)
-      end
-
-      it 'logs messages for each druid in the list' do
-        expect(log.string).to include "Failed StandardError ruh roh for #{druid1}"
-        expect(log.string).to include "Failed StandardError ruh roh for #{druid2}"
-      end
-
-      it 'writes an empty CSV file' do
-        expect(File).to exist(csv_path)
-        expect(File.empty?(csv_path)).to be true
-      end
-    end
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_success).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
   end
 end

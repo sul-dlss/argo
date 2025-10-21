@@ -27,6 +27,7 @@ RSpec.describe 'Bulk set content type', :js do
                                                             groups: current_user.groups,
                                                             new_content_type: 'https://cocina.sul.stanford.edu/models/book',
                                                             new_resource_type: 'https://cocina.sul.stanford.edu/models/resources/image',
-                                                            viewing_direction: 'right-to-left')
+                                                            viewing_direction: 'right-to-left',
+                                                            close_version: 'true')
   end
 end

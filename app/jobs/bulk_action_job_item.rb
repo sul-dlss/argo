@@ -10,7 +10,7 @@ class BulkActionJobItem
     Honeybadger.context(druid:)
   end
 
-  delegate :log, :user, :ability, :export_file, to: :job
+  delegate :log, :user, :ability, :export_file, :close_version?, to: :job
 
   attr_reader :druid, :index, :job
 
@@ -44,6 +44,9 @@ class BulkActionJobItem
   end
 
   def close_version_if_needed!
+    # Do not close version unless requested to by user (via a job parameter)
+    return unless close_version?
+
     # Do not close the initial version of an object
     return if cocina_object.version == 1
 

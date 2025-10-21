@@ -3,55 +3,65 @@
 require 'rails_helper'
 
 RSpec.describe OpenVersionJob do
-  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
-  let(:groups) { [] }
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid], version_description:) }
+
+  let(:druid) { 'druid:bb111cc2222' }
+  let(:version_description) { 'New version' }
   let(:bulk_action) { create(:bulk_action) }
-  let(:user) { bulk_action.user }
 
-  let(:cocina1) do
-    build(:dro_with_metadata, id: druids[0])
-  end
-  let(:cocina2) do
-    build(:dro_with_metadata, id: druids[1])
-  end
-
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
-  let(:params) do
-    {
-      druids:,
-      groups:,
-      user:,
-      version_description: 'Changed dates'
-    }.with_indifferent_access
-  end
-
-  before do
-    allow(Ability).to receive(:new).and_return(ability)
-    allow(VersionService).to receive(:open)
-    allow(VersionService).to receive(:openable?).and_return(true)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-  end
-
-  context 'with manage ability' do
-    let(:ability) { instance_double(Ability, can?: true) }
-
-    it 'opens new versions' do
-      described_class.perform_now(bulk_action.id, params)
-
-      expect(VersionService).to have_received(:open).with(druid: anything,
-                                                          description: 'Changed dates',
-                                                          opening_user_name: user.to_s).twice
+  let(:job_item) do
+    described_class::OpenVersionJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive(:check_update_ability?).and_return(true)
     end
   end
 
-  context 'without manage ability' do
-    let(:ability) { instance_double(Ability, can?: false) }
+  before do
+    allow(described_class::OpenVersionJobItem).to receive(:new).and_return(job_item)
 
-    it 'does not open new versions' do
-      described_class.perform_now(bulk_action.id, params)
+    allow(VersionService).to receive(:open)
+    allow(VersionService).to receive(:openable?).and_return(true)
+  end
 
+  it 'performs the job' do
+    job.perform_now
+
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(VersionService).to have_received(:openable?).with(druid: druid)
+    expect(VersionService).to have_received(:open).with(druid:,
+                                                        description: version_description,
+                                                        opening_user_name: bulk_action.user.to_s)
+
+    expect(bulk_action.reload.druid_count_total).to eq(1)
+    expect(bulk_action.druid_count_fail).to eq(0)
+    expect(bulk_action.druid_count_success).to eq(1)
+  end
+
+  context 'when not openable' do
+    before do
+      allow(VersionService).to receive(:openable?).and_return(false)
+    end
+
+    it 'does not open the version' do
+      job.perform_now
+
+      expect(VersionService).to have_received(:openable?).with(druid: druid)
+      expect(VersionService).not_to have_received(:open)
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(1)
+      expect(bulk_action.druid_count_success).to eq(0)
+    end
+  end
+
+  context 'when the user lacks update ability' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
+    end
+
+    it 'does not open the version' do
+      job.perform_now
+
+      expect(VersionService).not_to have_received(:openable?)
       expect(VersionService).not_to have_received(:open)
     end
   end

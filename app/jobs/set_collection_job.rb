@@ -18,6 +18,7 @@ class SetCollectionJob < BulkActionJob
       change_set.validate(collection_ids:)
       change_set.save
 
+      close_version_if_needed!
       success!(message: 'Update successful')
     end
 
@@ -26,7 +27,7 @@ class SetCollectionJob < BulkActionJob
     end
 
     def version_message
-      collection_ids ? "Added to collections #{collection_ids.join(',')}." : 'Removed collection membership.'
+      collection_ids.present? ? "Added to collections #{collection_ids.join(',')}." : 'Removed collection membership.'
     end
   end
 end

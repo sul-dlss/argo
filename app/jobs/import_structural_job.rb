@@ -25,6 +25,8 @@ class ImportStructuralJob < BulkActionJob
       result = StructureUpdater.from_csv(cocina_object, item_csv)
       if result.success?
         Repository.store(cocina_object.new(structural: result.value!))
+        close_version_if_needed!
+
         success!(message: "Updated #{druid}")
       else
         failure!(message: "Unable to update #{druid}")

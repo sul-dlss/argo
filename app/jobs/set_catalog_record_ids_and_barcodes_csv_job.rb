@@ -21,6 +21,7 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < BulkActionCsvJob
       @change_set = build_change_set # With the new cocina model
       change_set.validate(change_set_params)
       change_set.save
+      close_version_if_needed!
 
       success!(message: "#{CatalogRecordId.label}/barcode added/updated/removed successfully")
     end
@@ -58,7 +59,8 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < BulkActionCsvJob
     end
 
     def log_barcode_update
-      return unless change_set.changed?(:barcode)
+      # ItemChangeSets have a barcode; CollectionChangeSets do not.
+      return unless change_set.is_a?(ItemChangeSet) && change_set.changed?(:barcode)
 
       if change_set.barcode
         log("Adding barcode of #{change_set.barcode}")
@@ -81,9 +83,7 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < BulkActionCsvJob
         else
           "#{property.humanize} removed."
         end
-      end
-
-      changed_properties.join(' ')
+      end.join(' ')
     end
   end
 end

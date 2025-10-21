@@ -19,5 +19,5 @@
     <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
   </div>
 
-  <%= render 'bulk_actions/common_fields', f: %>
+  <%= render 'bulk_actions/common_fields', f:, close_option: true %>
 <% end %>

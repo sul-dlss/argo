@@ -10,6 +10,8 @@ class ApplyApoDefaultsJob < BulkActionJob
       open_new_version_if_needed!(description: 'Apply admin policy defaults')
 
       Dor::Services::Client.object(druid).apply_admin_policy_defaults
+
+      close_version_if_needed!
       success!(message: 'Successfully applied defaults')
     end
   end

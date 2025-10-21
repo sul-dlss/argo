@@ -14,6 +14,8 @@ class ManageEmbargoesJob < BulkActionCsvJob
       return failure!(message: embargo_form.errors.full_messages.join(',')) unless embargo_form.validate(changes)
 
       embargo_form.save
+      close_version_if_needed!
+
       success!(message: 'Embargo updated')
     end
 

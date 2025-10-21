@@ -22,9 +22,7 @@ class AddWorkflowJob < BulkActionJob
     end
 
     def workflow_active?
-      WorkflowService.workflow_active?(druid: druid,
-                                       wf_name: workflow_name,
-                                       version: cocina_object.version)
+      WorkflowService.workflow_active?(druid: druid, wf_name: workflow_name, version: cocina_object.version)
     end
   end
 end

@@ -12,6 +12,8 @@ class RefreshModsJob < BulkActionJob
       open_new_version_if_needed!(description: 'Refresh metadata from FOLIO')
 
       Dor::Services::Client.object(druid).refresh_descriptive_metadata_from_ils
+      close_version_if_needed!
+
       success!(message: 'Successfully updated metadata')
     end
 

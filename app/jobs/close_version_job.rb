@@ -7,7 +7,7 @@ class CloseVersionJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      VersionService.close(druid: druid)
+      close_version_if_needed!
       success!(message: 'Object successfully closed')
     end
   end

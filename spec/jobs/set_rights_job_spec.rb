@@ -3,237 +3,84 @@
 require 'rails_helper'
 
 RSpec.describe SetRightsJob do
-  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2233'] }
-  let(:groups) { [] }
+  subject(:job) { described_class.new(bulk_action.id, druids: [druid], **params) }
 
-  let(:bulk_action) do
-    create(
-      :bulk_action,
-      action_type: 'SetRightsJob'
-    )
+  let(:druid) { 'druid:bb111cc2222' }
+  let(:bulk_action) { create(:bulk_action) }
+
+  let(:job_item) do
+    described_class::SetRightsJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+      allow(job_item).to receive(:open_new_version_if_needed!)
+      allow(job_item).to receive(:close_version_if_needed!)
+      allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
+    end
   end
 
-  let(:user) { bulk_action.user }
+  let(:cocina_object) { instance_double(Cocina::Models::DROWithMetadata, collection?: false) }
 
-  let(:cocina1) do
-    build(:dro_with_metadata, id: druids[0]).new(
-      access: {
-        view: 'stanford',
-        download: 'stanford'
-      },
-      structural: {
-        contains: [
-          {
-            type: Cocina::Models::FileSetType.page,
-            label: 'Book page',
-            version: 1,
-            externalIdentifier: 'abc123456',
-            structural: {
-              contains: [
-                {
-                  filename: 'p1.jpg',
-                  externalIdentifier: 'abc123456',
-                  label: 'p1.jpg',
-                  type: Cocina::Models::ObjectType.file,
-                  version: 1,
-                  administrative: {
-                    publish: true,
-                    sdrPreserve: true,
-                    shelve: true
-                  },
-                  hasMessageDigests: [],
-                  access: {
-                    view: 'stanford',
-                    download: 'stanford'
-                  }
-                }
-              ]
-            }
-          },
-          {
-            type: Cocina::Models::FileSetType.image,
-            label: 'Book page 2',
-            version: 1,
-            externalIdentifier: 'abc789012',
-            structural: {
-              contains: [
-                {
-                  filename: 'p2.jpg',
-                  externalIdentifier: 'abc123456',
-                  label: 'p2.jpg',
-                  type: Cocina::Models::ObjectType.file,
-                  version: 1,
-                  administrative: {
-                    publish: true,
-                    sdrPreserve: true,
-                    shelve: true
-                  },
-                  hasMessageDigests: [],
-                  access: {
-                    view: 'stanford',
-                    download: 'stanford'
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    )
-  end
-
-  let(:cocina2) do
-    build(:dro_with_metadata, id: druids[1]).new(
-      access: {
-        view: 'world',
-        download: 'world'
-      },
-      structural: {
-        contains: [
-          {
-            type: Cocina::Models::FileSetType.page,
-            label: 'Book page',
-            version: 1,
-            externalIdentifier: 'abc123456',
-            structural: {
-              contains: [
-                {
-                  filename: 'p1.jpg',
-                  externalIdentifier: 'abc123456',
-                  label: 'p1.jpg',
-                  type: Cocina::Models::ObjectType.file,
-                  version: 1,
-                  administrative: {
-                    publish: true,
-                    sdrPreserve: true,
-                    shelve: true
-                  },
-                  hasMessageDigests: [],
-                  access: {
-                    view: 'stanford',
-                    download: 'stanford'
-                  }
-                }
-              ]
-            }
-          },
-          {
-            type: Cocina::Models::FileSetType.image,
-            label: 'Book page 2',
-            version: 1,
-            externalIdentifier: 'abc789012',
-            structural: {
-              contains: [
-                {
-                  filename: 'p2.jpg',
-                  externalIdentifier: 'abc789012',
-                  label: 'p2.jpg',
-                  type: Cocina::Models::ObjectType.file,
-                  version: 1,
-                  administrative: {
-                    publish: true,
-                    sdrPreserve: true,
-                    shelve: true
-                  },
-                  hasMessageDigests: [],
-                  access: {
-                    view: 'stanford',
-                    download: 'stanford'
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    )
-  end
-
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
+  let(:change_set) { instance_double(ItemChangeSet, validate: true, save: true) }
 
   let(:log) { StringIO.new }
 
+  let(:params) do
+    {
+      view_access: 'world',
+      download_access: 'world'
+    }
+  end
+
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action)
+    allow(described_class::SetRightsJobItem).to receive(:new).and_return(job_item)
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
-    allow(Ability).to receive(:new).and_return(instance_double(Ability, can?: true))
-    allow(VersionService).to receive(:open?).with(druid: druids[0]).and_return(true)
-    allow(VersionService).to receive(:open?).with(druid: druids[1]).and_return(false)
-    allow(VersionService).to receive(:openable?).with(druid: druids[1]).and_return(true)
-    allow(VersionService).to receive(:open).and_return(cocina2)
-    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
-    allow(object_client1).to receive(:update)
-    allow(object_client2).to receive(:update)
+    allow(ItemChangeSet).to receive(:new).and_return(change_set)
   end
 
-  context 'when updating one object' do
+  it 'performs the job' do
+    subject.perform_now
+
+    expect(job_item).to have_received(:check_update_ability?)
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updating rights')
+    expect(change_set).to have_received(:validate).with(view_access: 'world', download_access: 'world')
+    expect(change_set).to have_received(:save)
+    expect(job_item).to have_received(:close_version_if_needed!)
+
+    expect(bulk_action.reload.druid_count_total).to eq 1
+    expect(bulk_action.druid_count_success).to eq 1
+    expect(bulk_action.druid_count_fail).to eq 0
+  end
+
+  context 'when a collection' do
+    let(:cocina_object) { instance_double(Cocina::Models::Collection, collection?: true) }
+    let(:change_set) { instance_double(CollectionChangeSet, validate: true, save: true) }
+
     let(:params) do
       {
-        druids: [druids[0]],
-        view_access: 'world',
-        download_access: 'world',
-        controlled_digital_lending: '0'
+        view_access: 'location',
+        download_access: 'world'
       }
     end
 
-    it 'changes access to world and logs success' do
-      subject.perform(bulk_action.id, params)
-      expect(object_client1).to have_received(:update)
-        .with(
-          params: cocina_object_with(
-            access: {
-              view: 'world',
-              download: 'world'
-            }
-          )
-        )
-      expect(object_client2).not_to have_received(:update)
-      expect(log.string).to include "Successfully updated rights for #{druids[0]}"
-      expect(VersionService).not_to have_received(:open)
+    before do
+      allow(CollectionChangeSet).to receive(:new).and_return(change_set)
+    end
+
+    it 'limits view access to dark or world' do
+      subject.perform_now
+
+      expect(change_set).to have_received(:validate).with(view_access: 'world')
+      expect(change_set).to have_received(:save)
     end
   end
 
-  context 'when updating two objects' do
-    let(:params) do
-      {
-        druids:,
-        view_access: 'world',
-        download_access: 'world',
-        controlled_digital_lending: '0'
-      }
+  context 'when the user does not have update ability' do
+    before do
+      allow(job_item).to receive(:check_update_ability?).and_return(false)
     end
 
-    it 'changes access to world and logs success' do
-      subject.perform(bulk_action.id, params)
+    it 'does not perform the update' do
+      subject.perform_now
 
-      expect(object_client1).to have_received(:update)
-        .with(
-          params: cocina_object_with(
-            access: {
-              view: 'world',
-              download: 'world'
-            }
-          )
-        )
-
-      expect(object_client2).to have_received(:update)
-        .with(
-          params: cocina_object_with(
-            access: {
-              view: 'world',
-              download: 'world'
-            }
-          )
-        )
-
-      expect(log.string).to include "Successfully updated rights for #{druids[0]}"
-      expect(log.string).to include "Successfully updated rights for #{druids[1]}"
-
-      expect(VersionService).to have_received(:open).with(druid: druids[1],
-                                                          description: 'Updating rights',
-                                                          opening_user_name: bulk_action.user.to_s)
+      expect(ItemChangeSet).not_to have_received(:new)
     end
   end
 end

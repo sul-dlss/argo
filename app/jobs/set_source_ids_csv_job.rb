@@ -19,6 +19,8 @@ class SetSourceIdsCsvJob < BulkActionCsvJob
       change_set.validate(source_id:)
       change_set.save
 
+      close_version_if_needed!
+
       success!(message: 'Source ID added/updated/removed successfully')
     end
 

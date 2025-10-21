@@ -7,7 +7,11 @@ module BulkActions
     self.action_type = 'SetSourceIdsCsvJob'
 
     def job_params
-      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
+      {
+        groups: current_user.groups,
+        csv_file: CsvUploadNormalizer.read(params[:csv_file].path),
+        close_version: params[:close_version]
+      }
     end
 
     def validate_job_params(job_params)

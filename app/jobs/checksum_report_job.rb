@@ -2,6 +2,8 @@
 
 # A job that, given list of druids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
 class ChecksumReportJob < BulkActionJob
+  HEADERS = %w[druid filename md5 sha1 sha256 size].freeze
+
   def perform_bulk_action
     return unless check_view_ability?
 
@@ -9,12 +11,7 @@ class ChecksumReportJob < BulkActionJob
   end
 
   def export_file
-    @export_file ||= CSV.open(report_filename, 'w').tap do |csv|
-      # The CSV header needs to be injected before any item-level CSV is
-      # generated. If this is moved into the job item's `#perform` method, the
-      # header will be repeated once for every druid.
-      csv << %w[druid filename md5 sha256 sha512 size]
-    end
+    @export_file ||= CSV.open(report_filename, 'w', write_headers: true, headers: HEADERS)
   end
 
   class ChecksumReportJobItem < BulkActionJobItem

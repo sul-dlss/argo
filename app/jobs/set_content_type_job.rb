@@ -43,6 +43,8 @@ class SetContentTypeJob < BulkActionJob
       # use dor services client to pass a hash for structural metadata and update the cocina object
       @cocina_object = cocina_object.new(cocina_update_attributes)
       Repository.store(cocina_object)
+      close_version_if_needed!
+
       success!(message: 'Successfully updated content type')
     end
 

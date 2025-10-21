@@ -17,7 +17,8 @@ module BulkActions
                   copyright_statement_option: params[:copyright_statement_option],
                   copyright_statement: params[:copyright_statement],
                   license_option: params[:license_option],
-                  license: params[:license])
+                  license: params[:license],
+                  close_version: params[:close_version])
     end
 
     private
