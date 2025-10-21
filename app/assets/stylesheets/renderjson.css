@@ -1,0 +1,12 @@
+.renderjson {
+  /* Hide top level disclosure */
+   > span > .object > .disclosure:first-of-type {
+    display: none;
+  }
+
+  .disclosure {
+    font-family: bootstrap-icons;
+    margin-right: 5px;
+    font-size: 14px;
+  }
+}
