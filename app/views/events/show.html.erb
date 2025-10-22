@@ -10,8 +10,8 @@
     <tbody>
     <% @events.each do |event| %>
       <tr>
-        <td><%= l(DateTime.parse(event.timestamp), format: :event) %></td>
-        <td><%= event.event_type %></td>
+        <td style="width: 200px;"><%= l(DateTime.parse(event.timestamp), format: :event) %></td>
+        <td style="width: 200px;"><%= event.event_type %></td>
         <td>
           <%= tag.div data: {
                 controller: 'json-renderer',

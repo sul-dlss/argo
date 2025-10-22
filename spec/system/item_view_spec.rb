@@ -13,7 +13,8 @@ RSpec.describe 'Item view', :js do
       data: {
         host: 'dor-services-stage.stanford.edu',
         **props
-      }
+      },
+      timestamp: Time.zone.now.to_s
     )
   end
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
@@ -255,8 +256,8 @@ RSpec.describe 'Item view', :js do
             # NOTE: Without scrolling to the events section, the clicks below were flappy. (example RSpec seed: 39192)
             scroll_to find_by_id('document-events-heading')
             within '#events' do
-              click_button 'View more'
-              click_button 'View less'
+              click_link 'Expand all'
+              click_link 'Collapse all'
             end
 
             expect(page).to have_text 'View content in folder hierarchy'
