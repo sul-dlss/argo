@@ -4,6 +4,7 @@ class EventsController < ApplicationController
   def show
     object_client = Dor::Services::Client.object(decrypted_token.fetch(:druid))
     @events = object_client.events.list
+    @event_presenters = @events.map { |event| EventHashPresenter.new(event:) }
   end
 
   private

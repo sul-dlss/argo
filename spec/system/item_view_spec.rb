@@ -270,6 +270,31 @@ RSpec.describe 'Item view', :js do
               expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2'
             end
           end
+
+          context 'when the event is flat' do # rubocop:disable RSpec/NestedGroups
+            let(:event) do
+              Dor::Services::Client::Events::Event.new(
+                event_type: 'shelve_request_received',
+                data: {
+                  host: 'dor-services-stage.stanford.edu'
+                },
+                timestamp: Time.zone.now.to_s
+              )
+            end
+
+            it 'shows the event data properly without the expand and collapse links' do
+              visit solr_document_path item_id
+              click_button 'Events'
+              scroll_to find_by_id('document-events-heading')
+              within '#events' do
+                expect(page).to have_text 'shelve_request_received'
+                expect(page).to have_text 'host'
+                expect(page).to have_text 'dor-services-stage.stanford.edu'
+                expect(page).to have_no_link('Expand all')
+                expect(page).to have_no_link('Collapse all')
+              end
+            end
+          end
         end
 
         context 'when the title has an ampersand in it' do

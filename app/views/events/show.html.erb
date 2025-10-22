@@ -8,18 +8,19 @@
       </tr>
     </thead>
     <tbody>
-    <% @events.each do |event| %>
+    <% @event_presenters.each do |presenter| %>
       <tr class="d-flex">
-        <td style="width: 200px;"><%= l(DateTime.parse(event.timestamp), format: :event) %></td>
-        <td style="width: 200px;"><%= event.event_type %></td>
+        <td style="width: 200px;"><%= l(DateTime.parse(presenter.timestamp), format: :event) %></td>
+        <td style="width: 200px;"><%= presenter.event_type %></td>
         <td class="flex-grow-1">
           <%= tag.div data: {
                 controller: 'json-renderer',
-                json_renderer_cocina_value: EventHashPresenter.new(event:).render.to_json
+                json_renderer_cocina_value: presenter.render.to_json
               } do %>
-              <a href="#" data-action="json-renderer#expand">Expand all</a> |
-              <a href="#" data-action="json-renderer#collapse">Collapse all</a>
-
+              <% if presenter.render_expand_collapse? %>
+                <a href="#" data-action="json-renderer#expand">Expand all</a> |
+                <a href="#" data-action="json-renderer#collapse">Collapse all</a>
+              <% end %>
               <div class="detail" data-json-renderer-target="section"></div>
           <% end %>
         </td>
