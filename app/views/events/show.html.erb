@@ -1,21 +1,28 @@
 <turbo-frame id="events">
-  <table class="detail">
+  <table class="table">
     <thead>
-      <tr><th>When</th><th>Event type</th><th>Data</th></tr>
+      <tr class="d-flex">
+        <th style="width: 200px;">When</th>
+        <th style="width: 200px;">Event type</th>
+        <th class="flex-grow-1">Data</th>
+      </tr>
     </thead>
     <tbody>
-    <% @events.each do |event| %>
-      <tr>
-        <td><time-ago datetime="<%= event.timestamp %>"><%= event.timestamp %></time-ago></td>
-        <td><%= event.event_type %></td>
-        <td data-controller="expandable-snippets">
-          <pre data-expandable-snippets-target="snippet"><%= JSON.pretty_generate(event.data) %></pre>
-          <button data-expandable-snippets-target="viewMoreLink" data-action="expandable-snippets#expand" hidden type="button" class="btn btn-link">
-            View more <span class="bi-arrow-bar-down" />
-          </a>
-          <button data-expandable-snippets-target="viewLessLink" data-action="expandable-snippets#collapse" hidden type="button" class="btn btn-link">
-            View less <span class="bi-arrow-bar-up" />
-          </a>
+    <% @event_presenters.each do |presenter| %>
+      <tr class="d-flex">
+        <td style="width: 200px;"><%= l(DateTime.parse(presenter.timestamp), format: :event) %></td>
+        <td style="width: 200px;"><%= presenter.event_type %></td>
+        <td class="flex-grow-1">
+          <%= tag.div data: {
+                controller: 'json-renderer',
+                json_renderer_cocina_value: presenter.render.to_json
+              } do %>
+              <% if presenter.render_expand_collapse? %>
+                <a href="#" data-action="json-renderer#expand">Expand all</a> |
+                <a href="#" data-action="json-renderer#collapse">Collapse all</a>
+              <% end %>
+              <div class="detail" data-json-renderer-target="section"></div>
+          <% end %>
         </td>
       </tr>
     <% end %>

@@ -29,6 +29,7 @@ en:
       am: am
       formats:
         default: "%Y-%m-%d %I:%M%p"
+        event: "%Y-%m-%d"
   argo:
     search:
       catalog_view: 'Results View'
