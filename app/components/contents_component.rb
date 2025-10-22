@@ -24,6 +24,9 @@ class ContentsComponent < ApplicationComponent
   end
 
   def download_csv?
+    logger.info("Checking if CSV download is enabled for #{@cocina.externalIdentifier}")
+    logger.info("Version or user version view: #{version_or_user_version_view?}")
+    logger.info("Enable CSV: #{enable_csv?}")
     return enable_csv? unless version_or_user_version_view?
 
     false
