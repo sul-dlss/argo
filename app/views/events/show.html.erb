@@ -1,18 +1,18 @@
 <turbo-frame id="events">
   <table class="table">
     <thead>
-      <tr>
+      <tr class="d-flex">
         <th style="width: 200px;">When</th>
         <th style="width: 200px;">Event type</th>
-        <th>Data</th>
+        <th class="flex-grow-1">Data</th>
       </tr>
     </thead>
     <tbody>
     <% @events.each do |event| %>
-      <tr>
+      <tr class="d-flex">
         <td style="width: 200px;"><%= l(DateTime.parse(event.timestamp), format: :event) %></td>
         <td style="width: 200px;"><%= event.event_type %></td>
-        <td>
+        <td class="flex-grow-1">
           <%= tag.div data: {
                 controller: 'json-renderer',
                 json_renderer_cocina_value: EventHashPresenter.new(event:).render.to_json
