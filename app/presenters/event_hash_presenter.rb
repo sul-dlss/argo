@@ -15,17 +15,17 @@ class EventHashPresenter
     DeepCompactBlank.run(enumerable: data)
   end
 
-  # Determine if the data has nested structures that can be expanded/collapsed
+  # Determine if the event has a nested structure.
   #
-  # If the data structure isn't an expandable hash, return false
-  # Otherwise, check if any value is a hash or an array containing hashes/arrays.
+  # If the event has any values that are arrays or hashes,
+  # render the expand/collapse controls. If not, e.g. an
+  # event with only string values, do not render the controls
+  # because they are noisy and misleading.
   #
   # @return [Boolean] true if there are nested structures, false otherwise
   def render_expand_collapse?
     return false unless data.is_a?(Hash)
 
-    data.any? do |v|
-      v.is_a?(Hash) || (v.is_a?(Array) && (v.any?(Hash) || v.any?(Array)))
-    end
+    data.values.any?(Enumerable)
   end
 end
