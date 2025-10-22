@@ -47,7 +47,7 @@ class PermittedQueries
   ##
   # Returns a list of collections that the user has access to. Excludes those with the tag: "collection status : inactive"
   # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (DRUID)", "DRUID"]
-  def permitted_collections
+  def permitted_collections(with_none: true)
     q = if admin?
           '*:*'
         elsif permitted_apos.empty?
@@ -66,8 +66,11 @@ class PermittedQueries
              .dig('response', 'docs')
              .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE, doc['id']).downcase.delete('[]') }
 
-    [['None', '']] + result.map do |doc|
-      ["#{doc[SolrDocument::FIELD_TITLE]} (#{doc['id']})", doc['id'].to_s]
+    [].tap do |options|
+      options << ['None', ''] if with_none
+      result.each do |doc|
+        options << ["#{doc[SolrDocument::FIELD_TITLE]} (#{doc['id']})", doc['id'].to_s]
+      end
     end
   end
 

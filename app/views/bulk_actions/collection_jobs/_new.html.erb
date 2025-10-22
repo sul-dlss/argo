@@ -2,11 +2,11 @@
   <%= render 'bulk_actions/errors' %>
 
   <span class='help-block'>
-    Set collection
+    Set collection(s)
   </span>
   <div class='mb-3'>
-    <%= f.label :new_collection_id, 'Collection:' %>
-    <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: 'form-select') %>
+    <%= f.label :new_collection_id, 'Collections:' %>
+    <%= f.select(:new_collection_id, options_for_select(current_user.permitted_collections(with_none: false)), {}, multiple: true, data: { controller: 'multiselect' }) %>
   </div>
   <%= render 'bulk_actions/druids', f: %>
   <%= render 'bulk_actions/common_fields', f:, close_option: true %>

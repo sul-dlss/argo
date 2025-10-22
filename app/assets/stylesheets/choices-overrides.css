@@ -1,0 +1,28 @@
+/* Change minimal font size to 16px */
+.choices__inner {
+  font-size: 16px;
+}
+
+.choices__list--multiple .choices__item {
+  font-size: 16px;
+}
+
+.choices__list--dropdown .choices__item, .choices__list[aria-expanded] .choices__item {
+  font-size: 16px;
+}
+
+.choices__heading {
+  font-size: 16px;
+}
+
+.choices__input {
+  font-size: 16px;
+}
+
+@media (min-width: 640px) {
+  .choices__list--dropdown .choices__item--selectable[data-select-text]::after, .choices__list[aria-expanded] .choices__item--selectable[data-select-text]::after {
+    font-size: 16px;
+    /* Adequate contrast */
+    opacity: 1;
+  }
+}
