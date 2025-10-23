@@ -32,6 +32,13 @@
       </tr>
 
       <tr>
+        <th class="col-3" scope="row">Ticket</th>
+        <td>
+          <%= render Show::TicketTagComponent.new(document: @presenter.document) %>
+        </td>
+      </tr>
+
+      <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>
           <%= render Show::TagsComponent.new(document: @presenter.document, presenter: @presenter) %>

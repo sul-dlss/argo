@@ -23,6 +23,13 @@
       </tr>
 
       <tr>
+        <th class="col-3" scope="row">Ticket</th>
+        <td>
+          <%= render Show::TicketTagComponent.new(document: @presenter.document) %>
+        </td>
+      </tr>
+
+      <tr>
         <th class="col-3" scope="row">Source IDs</th>
         <td>
           <%= render Show::SourceIdComponent.new(document: @solr_document, presenter: @presenter) %>

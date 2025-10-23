@@ -53,6 +53,7 @@ class SolrDocument
   FIELD_SW_SUBJECT_GEOGRAPHIC = 'sw_subject_geographic_ssimdv'
   FIELD_SW_SUBJECT_TEMPORAL = 'sw_subject_temporal_ssimdv'
   FIELD_TAGS = 'tag_ssim'
+  FIELD_TICKET_TAG = 'ticket_tag_ssim'
   FIELD_TITLE = 'display_title_ss'
   FIELD_TOPIC = 'topic_ssimdv'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
