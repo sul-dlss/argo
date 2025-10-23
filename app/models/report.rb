@@ -187,6 +187,10 @@ class Report
             },
       solr_fields: %w[identifier_ssim],
       sort: false, default: false, width: 50
+    },
+    {
+      field: SolrDocument::FIELD_DOI, label: 'DOI',
+      sort: false, default: false, width: 50
     }
   ].freeze
 
