@@ -75,6 +75,7 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights'
 
     config.add_show_field 'project_tag_ssim', label: 'Project', link_to_facet: true
+    config.add_show_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', link_to_facet: true
     config.add_show_field 'tag_ssim', label: 'Tags', link_to_facet: true
     config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
@@ -221,6 +222,7 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_COLLECTION_ID, if: false
     config.add_facet_field 'tag_ssim', if: false
     config.add_facet_field 'project_tag_ssim', if: false
+    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, if: false
 
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 

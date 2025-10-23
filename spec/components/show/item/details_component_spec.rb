@@ -16,7 +16,8 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
                      SolrDocument::FIELD_REGISTERED_DATE => ['2012-04-05T01:00:04.148Z'],
                      SolrDocument::FIELD_OBJECT_TYPE => object_type,
                      SolrDocument::FIELD_DOI => '10.25740/yr775yn6440',
-                     SolrDocument::FIELD_ORCIDS => %w[0000-0002-7262-6251 0000-0002-7262-999X])
+                     SolrDocument::FIELD_ORCIDS => %w[0000-0002-7262-6251 0000-0002-7262-999X],
+                     SolrDocument::FIELD_TICKET_TAG => ['DIGREQ-1234'])
   end
   let(:object_type) { 'item' }
 
@@ -36,10 +37,10 @@ RSpec.describe Show::Item::DetailsComponent, type: :component do
       expect(barcode_button).to be_present
       expect(rendered.to_html).to include 'Preservation size'
       expect(rendered.to_html).to include 'Content type'
+      expect(rendered.to_html).to include 'Ticket'
+      expect(rendered.to_html).to include 'DIGREQ-1234'
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
-    end
 
-    it 'includes doi and orcid when available' do
       expect(rendered.to_html).to include '10.25740/yr775yn6440'
       expect(rendered.to_html).to include '0000-0002-7262-6251, 0000-0002-7262-999X'
     end
