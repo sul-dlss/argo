@@ -6,7 +6,19 @@ class DocumentComponent < Blacklight::DocumentComponent
   end
 
   def child_component
-    type = @document.object_type
-    "Show::#{type.classify}Component".constantize.new(presenter: @presenter)
+    component_class.new(presenter: @presenter)
+  end
+
+  def component_class
+    case @document.object_type
+    when 'collection'
+      Show::CollectionComponent
+    when 'agreement'
+      Show::AgreementComponent
+    when 'adminPolicy'
+      Show::AdminPolicyComponent
+    else
+      Show::ItemComponent
+    end
   end
 end
