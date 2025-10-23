@@ -47,6 +47,7 @@ class RegistrationCsvConverter
   #  12: rights_controlledDigitalLending (optional: "true" is valid only when "view" is "stanford" and "download" is "none")
   #  13: project_name (optional)
   #  14: tags (optional, may repeat)
+  #  15: tickets (optional, may repeat)
 
   def convert
     CSV.parse(csv_string, headers: true).map { |row| convert_row(row) }
@@ -56,7 +57,7 @@ class RegistrationCsvConverter
     model = Cocina::Models::RequestDRO.new(model_params(row))
     Success(model:,
             workflow: params[:initial_workflow] || row.fetch('initial_workflow'),
-            tags: tags(row))
+            tags: tags(row) + ticket_tags(row))
   rescue Cocina::Models::ValidationError => e
     Failure(e)
   end
@@ -97,12 +98,19 @@ class RegistrationCsvConverter
   end
 
   def tags(row)
-    tags = params[:tags] || []
-    if tags.empty?
-      tag_count = row.headers.count('tags')
-      tag_count.times { |n| tags << row.field('tags', n + row.index('tags')) }
-    end
-    tags.compact
+    params[:tags].presence || values_from_repeating_column(row, 'tags')
+  end
+
+  def ticket_tags(row)
+    tickets = params[:tickets].presence || values_from_repeating_column(row, 'tickets')
+    tickets.map { |tag| "Ticket : #{tag}" }
+  end
+
+  def values_from_repeating_column(row, column_name)
+    [].tap do |values|
+      count = row.headers.count(column_name)
+      count.times { |n| values << row.field(column_name, n + row.index(column_name)) }
+    end.compact
   end
 
   def dro_type(content_type)

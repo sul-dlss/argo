@@ -6,25 +6,30 @@
   </span>
   <div class='mb-3'>
     <%= f.label :csv_file, 'Upload a CSV file' %>
-      <p><small><em>Please note that each row should have headers for:
-        <ul>
-        <li>administrative_policy_object (required)</li>
-        <li>collection (optional)</li>
-        <li>initial_workflow (required)</li>
-        <li>content_type (required)</li>
-        <li>reading_order (required if "content_type" is "book" or "image")</li>
-        <li>source_id (required)</li>
-        <li><%= CatalogRecordId.csv_header %> (optional)</li>
-        <li>barcode (optional)</li>
-        <li>label (required unless a <%= CatalogRecordId.csv_header %> has been entered)</li>
-        <li>rights_view (required)</li>
-        <li>rights_download (required)</li>
-        <li>rights_location (required if "view" or "download" uses "location-based")</li>
-        <li>rights_controlledDigitalLending (optional: to use, enter "true" and also set "view" to "stanford" and "download" to "none")
-        <li>project_name (optional)</li>
-        <li>tags (optional, may repeat)</li>
-        </ul>
-  </em></small></p>
+      <p>
+        <small>
+          <em>Please note that each row should have headers for:
+            <ul>
+              <li>administrative_policy_object (required)</li>
+              <li>collection (optional)</li>
+              <li>initial_workflow (required)</li>
+              <li>content_type (required)</li>
+              <li>reading_order (required if "content_type" is "book" or "image")</li>
+              <li>source_id (required)</li>
+              <li><%= CatalogRecordId.csv_header %> (optional)</li>
+              <li>barcode (optional)</li>
+              <li>label (required unless a <%= CatalogRecordId.csv_header %> has been entered)</li>
+              <li>rights_view (required)</li>
+              <li>rights_download (required)</li>
+              <li>rights_location (required if "view" or "download" uses "location-based")</li>
+              <li>rights_controlledDigitalLending (optional: to use, enter "true" and also set "view" to "stanford" and "download" to "none")</li>
+              <li>project_name (optional)</li>
+              <li>tags (optional, may repeat)</li>
+              <li>tickets (optional, may repeat)</li>
+            </ul>
+          </em>
+        </small>
+      </p>
     <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
   </div>
   <%= render 'bulk_actions/common_fields', f: %>
