@@ -23,8 +23,8 @@ RSpec.describe RegistrationCsvConverter do
   context 'when all values provided in CSV' do
     let(:csv_string) do
       <<~CSV
-        administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags
-        druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two
+        administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags,tickets,tickets
+        druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two,DIGREQ-1234,DIGREQ-5678
         xdruid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,world,world
       CSV
     end
@@ -33,7 +33,7 @@ RSpec.describe RegistrationCsvConverter do
       expect(results.size).to be 2
       expect(results.first.success?).to be true
       expect(results.first.value![:workflow]).to eq('accessionWF')
-      expect(results.first.value![:tags]).to eq(['csv : test', 'Project : two'])
+      expect(results.first.value![:tags]).to eq(['csv : test', 'Project : two', 'Ticket : DIGREQ-1234', 'Ticket : DIGREQ-5678'])
       expect(results.first.value![:model]).to eq(expected_cocina)
       expect(results.second.success?).to be false
     end
@@ -56,7 +56,8 @@ RSpec.describe RegistrationCsvConverter do
         content_type: Cocina::Models::ObjectType.book,
         rights_view: 'world',
         rights_download: 'world',
-        tags: ['csv : test', 'Project : two']
+        tags: ['csv : test', 'Project : two'],
+        tickets: %w[DIGREQ-1234 DIGREQ-5678]
       }
     end
 
@@ -64,7 +65,7 @@ RSpec.describe RegistrationCsvConverter do
       expect(results.size).to be 2
       expect(results.first.success?).to be true
       expect(results.first.value![:workflow]).to eq('accessionWF')
-      expect(results.first.value![:tags]).to eq(['csv : test', 'Project : two'])
+      expect(results.first.value![:tags]).to eq(['csv : test', 'Project : two', 'Ticket : DIGREQ-1234', 'Ticket : DIGREQ-5678'])
       expect(results.first.value![:model]).to eq(expected_cocina)
     end
   end
