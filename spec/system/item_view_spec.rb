@@ -200,6 +200,25 @@ RSpec.describe 'Item view', :js do
           }
         end
 
+        context 'when item is a virtual object' do
+          let(:solr_doc) do
+            {
+              id: 'druid:hj185xx2222',
+              SolrDocument::FIELD_OBJECT_TYPE => 'virtual object',
+              display_title_ss: title
+            }
+          end
+
+          let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
+
+          it 'renders the page' do
+            visit solr_document_path item_id
+
+            expect(page).to have_css 'h1', text: title
+            expect(page).to have_css '.object-type-virtual-object'
+          end
+        end
+
         context 'when the file is on stacks' do
           let(:solr_doc) do
             {
