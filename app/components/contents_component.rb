@@ -18,15 +18,11 @@ class ContentsComponent < ApplicationComponent
   delegate :enable_csv?, to: :structural_presenter
 
   def upload_csv?
-    return enable_csv? if !version_or_user_version_view? && open_and_not_assembling?
-
-    false
+    !version_or_user_version_view? && open_and_not_assembling?
   end
 
   def download_csv?
-    return enable_csv? unless version_or_user_version_view?
-
-    false
+    !version_or_user_version_view?
   end
 
   def structural_link_path
