@@ -36,6 +36,11 @@ class RegistrationForm < Reform::Form
 It's legal to have more than one colon in a hierarchy, but at least one colon is required." }
   end
 
+  collection :tickets, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
+                       prepopulator: ->(*) { (2 - tickets.count).times { tickets << VirtualModel.new } } do
+    property :name, virtual: true
+  end
+
   collection :items, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
                      prepopulator: ->(*) { (1 - items.count).times { items << VirtualModel.new } } do
     property :source_id, virtual: true
@@ -68,9 +73,12 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     false
   end
 
-  def save_items
-    tags_with_user = tags.map(&:name) + [registered_by_tag]
+  def tags_with_user
+    ticket_tags = tickets.filter_map { |ticket| "Ticket : #{ticket.name}" if ticket.name.present? }
+    tags.map(&:name) + [registered_by_tag] + ticket_tags
+  end
 
+  def save_items
     items.map do |item|
       request_model = cocina_model(item) # might raise Cocina::Models::ValidationError
       result = RegistrationService.register(model: request_model, workflow: workflow_id, tags: tags_with_user)
