@@ -107,13 +107,21 @@ RSpec.describe BulkActionJobItem do
       let(:cocina_object) { instance_double(Cocina::Models::DRO, version: 1) }
 
       before do
-        allow(VersionService).to receive(:closed?).with(druid:).and_return(false)
+        allow(VersionService).to receive_messages(closed?: false, closeable?: true)
         allow(VersionService).to receive(:close)
       end
 
       it 'does not close the version' do
         bulk_action_item.close_version_if_needed!
         expect(VersionService).not_to have_received(:close)
+      end
+
+      context 'when forced' do
+        it 'closes the version' do
+          bulk_action_item.close_version_if_needed!(force: true)
+          expect(VersionService).to have_received(:close).with(druid:)
+          expect(job).to have_received(:log).with('Closed version')
+        end
       end
     end
 
@@ -166,6 +174,21 @@ RSpec.describe BulkActionJobItem do
         bulk_action_item.close_version_if_needed!
         expect(VersionService).not_to have_received(:closed?)
         expect(job).not_to have_received(:log)
+      end
+    end
+
+    context 'when forced' do
+      let(:close_version) { false }
+
+      before do
+        allow(VersionService).to receive_messages(closed?: false, closeable?: true)
+        allow(VersionService).to receive(:close)
+      end
+
+      it 'closes the version' do
+        bulk_action_item.close_version_if_needed!(force: true)
+        expect(VersionService).to have_received(:close).with(druid:)
+        expect(job).to have_received(:log).with('Closed version')
       end
     end
   end

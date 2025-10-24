@@ -27,7 +27,7 @@ RSpec.describe CloseVersionJob do
     job.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:close_version_if_needed!)
+    expect(job_item).to have_received(:close_version_if_needed!).with(force: true)
 
     expect(bulk_action.reload.druid_count_total).to eq(1)
     expect(bulk_action.druid_count_fail).to eq(0)
