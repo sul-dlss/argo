@@ -7,7 +7,7 @@ class CloseVersionJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      close_version_if_needed!
+      close_version_if_needed!(force: true)
       success!(message: 'Object successfully closed')
     end
   end

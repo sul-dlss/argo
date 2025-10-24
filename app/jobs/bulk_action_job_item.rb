@@ -43,12 +43,13 @@ class BulkActionJobItem
     log("Opened new version (#{description})")
   end
 
-  def close_version_if_needed!
+  def close_version_if_needed!(force: false)
+    # Note that force is set for the close version job which doesn't use the close_version param.
     # Do not close version unless requested to by user (via a job parameter)
-    return unless close_version?
+    return unless close_version? || force
 
     # Do not close the initial version of an object
-    return if cocina_object.version == 1
+    return if cocina_object.version == 1 && !force
 
     return log('Version already closed') if VersionService.closed?(druid:)
 
