@@ -16,7 +16,6 @@ class ReleaseObjectJob < BulkActionJob
       return failure!(message: 'Object has never been published and cannot be released') unless WorkflowService.published?(druid:)
 
       object_client.release_tags.create(tag: new_tag)
-      object_client.workflow('releaseWF').create(version: cocina_object.version)
 
       success!(message: 'Workflow creation successful')
     end

@@ -16,9 +16,7 @@ class ManageReleasesController < ApplicationController
   def update
     authorize! :update, @cocina
 
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    object_client.release_tags.create(tag: new_tag)
-    object_client.workflow('releaseWF').create(version: @cocina.version)
+    Dor::Services::Client.object(@cocina.externalIdentifier).release_tags.create(tag: new_tag)
 
     redirect_to solr_document_path(@cocina.externalIdentifier), notice: "Updated release for #{@cocina.externalIdentifier}"
   end

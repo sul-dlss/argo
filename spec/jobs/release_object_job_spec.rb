@@ -26,9 +26,7 @@ RSpec.describe ReleaseObjectJob do
       allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
     end
   end
-  let(:object_client) { instance_double(Dor::Services::Client::Object, workflow: workflow_client, release_tags: release_tags_client) }
-  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true) }
-
+  let(:object_client) { instance_double(Dor::Services::Client::Object, release_tags: release_tags_client) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
 
   before do
@@ -44,8 +42,6 @@ RSpec.describe ReleaseObjectJob do
     expect(job_item).to have_received(:check_update_ability?)
     expect(WorkflowService).to have_received(:published?).with(druid: druid)
     expect(release_tags_client).to have_received(:create).with(tag: an_instance_of(Dor::Services::Client::ReleaseTag))
-    expect(object_client).to have_received(:workflow).with('releaseWF')
-    expect(workflow_client).to have_received(:create).with(version: version)
 
     expect(bulk_action.reload.druid_count_total).to eq(1)
     expect(bulk_action.druid_count_fail).to eq(0)
@@ -62,7 +58,6 @@ RSpec.describe ReleaseObjectJob do
 
       expect(WorkflowService).not_to have_received(:published?)
       expect(release_tags_client).not_to have_received(:create)
-      expect(workflow_client).not_to have_received(:create)
     end
   end
 
@@ -75,7 +70,6 @@ RSpec.describe ReleaseObjectJob do
       job.perform_now
 
       expect(release_tags_client).not_to have_received(:create)
-      expect(workflow_client).not_to have_received(:create)
 
       expect(bulk_action.reload.druid_count_total).to eq(1)
       expect(bulk_action.druid_count_fail).to eq(1)

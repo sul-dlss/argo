@@ -18,10 +18,8 @@ RSpec.describe 'Collection manage release' do
                     events: events_client,
                     version: version_client,
                     user_version: user_version_client,
-                    release_tags: release_tags_client,
-                    workflow: workflow_client)
+                    release_tags: release_tags_client)
   end
-  let(:workflow_client) { instance_double(Dor::Services::Client::ObjectWorkflow, create: true) }
   let(:cocina_model) do
     build(:collection_with_metadata, id: collection_id)
   end
@@ -45,7 +43,7 @@ RSpec.describe 'Collection manage release' do
     expect(page).to have_css 'a', text: 'Manage release'
   end
 
-  it 'sets a tag and starts releaseWF' do
+  it 'sets a tag' do
     visit edit_item_manage_release_path(collection_id)
 
     expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{collection_id}"
@@ -62,7 +60,5 @@ RSpec.describe 'Collection manage release' do
       expect(tag.release).to be true
       expect(tag.date).to be_a DateTime
     end
-    expect(object_client).to have_received(:workflow).with('releaseWF')
-    expect(workflow_client).to have_received(:create).with(version: cocina_model.version)
   end
 end
