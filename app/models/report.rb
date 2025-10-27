@@ -96,6 +96,10 @@ class Report
       sort: true, default: false, width: 100
     },
     {
+      field: 'ticket_tag_ssim', label: 'Tickets',
+      sort: true, default: false, width: 100
+    },
+    {
       field: SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type',
       sort: true, default: false, width: 100
     },
