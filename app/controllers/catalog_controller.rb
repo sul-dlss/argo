@@ -188,11 +188,6 @@ class CatalogController < ApplicationController
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
-    config.add_facet_field SolrDocument::FIELD_CONSTITUENTS, label: 'Virtual Objects', component: true,
-                                                             query: {
-                                                               has_constituents: { label: 'Virtual Objects', fq: "#{SolrDocument::FIELD_CONSTITUENTS}:*" }
-                                                             }
-
     config.add_facet_field 'identifiers', label: 'Identifiers',
                                           component: true,
                                           query: {
