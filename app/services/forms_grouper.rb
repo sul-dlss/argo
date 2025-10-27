@@ -72,10 +72,15 @@ class FormsGrouper
                             else
                               # If there is no matching form number, increment the
                               # current highest form number and use it for form
-                              # elements for this type
-                              max_form = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }.first
-                              field, number = max_form.scan(/(\D+)(\d+)/).first
-                              new_form = "#{field}#{number.to_i.succ}"
+                              # elements for this type.
+                              # Unless there isn't a highest form number, in which case,
+                              # start with form1.
+                              new_form = if (max_form = ordered_mapping.max_by { |k, _v| k[/\d+/].to_i }&.first)
+                                           field, number = max_form.scan(/(\D+)(\d+)/).first
+                                           "#{field}#{number.to_i.succ}"
+                                         else
+                                           'form1'
+                                         end
                               ordered_mapping[new_form] = type_for_form_number
                               new_form
                             end
