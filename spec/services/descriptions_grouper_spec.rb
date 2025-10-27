@@ -1251,4 +1251,42 @@ RSpec.describe DescriptionsGrouper do
       expect(run.dig(druid2, 'note6.type')).to eq('statement of responsibility')
     end
   end
+
+  context 'with a forms that are varlues only' do
+    let(:descriptions) do
+      {
+        druid1 => DescriptionExport.export(description:, source_id: '')
+      }
+    end
+
+    let(:description) do
+      {
+        'form' => [
+          {
+            'value' => 'still image'
+          },
+          {
+            'value' => 'Document'
+          },
+          {
+            'value' => '1 item'
+          },
+          {
+            'value' => 'photographs'
+          },
+          {
+            'value' => 'access'
+          },
+          {
+            'value' => 'reformatted digital'
+          }
+        ]
+      }
+    end
+
+    it 'groups forms as expected' do
+      expect(run.dig(druid1, 'form1.value')).to eq('still image')
+      expect(run.dig(druid1, 'form6.value')).to eq('reformatted digital')
+    end
+  end
 end
