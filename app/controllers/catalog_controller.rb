@@ -69,6 +69,7 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_SOURCE_ID, label: 'Source'
     config.add_index_field 'identifier_tesim', label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field SolrDocument::FIELD_RELEASED_TO, label: 'Released to'
+    config.add_index_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', link_to_facet: true
 
     config.add_index_field 'status_ssi', label: 'Status'
     config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
