@@ -28,6 +28,11 @@ class CsvRegistrationForm < Reform::Form
 It's legal to have more than one colon in a hierarchy, but at least one colon is required." }
   end
 
+  collection :tickets, populate_if_empty: VirtualModel, virtual: true, save: false, skip_if: :all_blank,
+                       prepopulator: ->(*) { (2 - tickets.count).times { tickets << VirtualModel.new } } do
+    property :name, virtual: true
+  end
+
   property :csv_file, virtual: true
 
   validate :csv_file_validation
@@ -49,6 +54,10 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     end
   end
 
+  def ticket_tags
+    tickets.filter_map { |ticket| "Ticket : #{ticket.name}" if ticket.name.present? }
+  end
+
   def job_params
     {
       administrative_policy_object: admin_policy,
@@ -57,7 +66,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
       content_type:,
       reading_order: viewing_direction,
       project_name: project.presence,
-      tags: tags.map(&:name) + [registered_by_tag],
+      tags: tags.map(&:name) + ticket_tags + [registered_by_tag],
       groups: current_user.groups,
       csv_file: job_csv
     }.merge(access_params).compact
