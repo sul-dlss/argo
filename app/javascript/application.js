@@ -20,12 +20,14 @@ document.addEventListener('turbo:before-fetch-response', async (event) => {
   const tokenExpired = response.status === 401 && await response.text() === 'authentication expired'
   const shibbolethExpired = response.status === 302 && response.headers.get('Location').startsWith('https://login.stanford.edu/')
   if (tokenExpired || shibbolethExpired) {
+    console.dir(event.detail)
     alert('Your session has expired. The page will be refreshed.')
     window.location.reload()
   }
 })
 
 document.addEventListener('turbo:fetch-request-error', async (event) => {
+  console.dir(event.detail)
   alert('A network error occurred, possibly because your session has expired. The page will be refreshed.')
   window.location.reload()
 })
