@@ -24,6 +24,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in 'Project Name', with: 'X-Files'
       fill_in 'Tags', with: 'i : believe'
+      fill_in 'Tickets', with: 'DIGREQ-1234'
 
       click_button 'Upload CSV'
 
@@ -50,7 +51,7 @@ RSpec.describe 'Item registration page', :js do
           reading_order: 'left-to-right',
           rights_download: 'stanford',
           rights_view: 'stanford',
-          tags: ['i : believe', "Registered By : #{user.login}"]
+          tags: ['i : believe', 'Ticket : DIGREQ-1234', "Registered By : #{user.login}"]
         }
       )
     end
