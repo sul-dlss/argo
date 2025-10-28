@@ -65,5 +65,20 @@ RSpec.describe 'Upload the descriptive CSV' do
         expect(response.body).to include('not a valid CSV file')
       end
     end
+
+    context 'when import as unindexable metadata' do
+      let(:dsc_response) { instance_double(Faraday::Response, status: 422, body: nil, reason_phrase: 'Example field error') }
+
+      before do
+        allow(Dor::Services::Client.objects).to receive(:indexable).and_raise(Dor::Services::Client::UnprocessableContentError.new(response: dsc_response))
+      end
+
+      it "doesn't updates the descriptive and raises Dor::Services::Client::UnprocessableContentError" do
+        put "/items/#{druid}/descriptive", params: { data: file }
+        expect(object_client).not_to have_received(:update)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include('indexing validation failed')
+      end
+    end
   end
 end
