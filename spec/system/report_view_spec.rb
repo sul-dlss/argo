@@ -28,6 +28,8 @@ RSpec.describe 'Report view' do
       visit report_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       click_button('Columns')
       expect(page).to have_content('Select Columns to Display and Download')
+      # count the # of categories
+      expect(page).to have_css('.fst-italic', count: Report::REPORT_FIELDS_BY_CATEGORY.count)
       # count the # of total fields
       expect(page).to have_css('input.form-check-input',
                                count: Report::REPORT_FIELDS.count)

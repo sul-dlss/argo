@@ -20,183 +20,233 @@ class Report
   ROWS_PER_PAGE = 100
   ROWS_PER_PAGE_CSV = 10_000
 
+  FREQUENTLY_USED_CATEGORY = 'Frequently used'
+  CITATION_CATEGORY = 'Citation'
+  HISTORY_CATEGORY = 'History'
+  IDENTIFIERS_CATEGORY = 'Identifiers'
+  CONTENT_CATEGORY = 'Content'
+
   REPORT_FIELDS = [
     {
       field: 'druid', label: 'Druid',
       proc: ->(doc) { doc.druid },
-      sort: true, default: true, width: 100, formatter: 'linkToArgo'
+      sort: true, default: true, width: 100, formatter: 'linkToArgo',
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: 'purl', label: 'Purl',
       proc: ->(doc) { "#{Settings.purl_url}/#{doc.druid}" },
       solr_fields: %w[id],
-      sort: false, default: false, width: 100, formatter: 'linkToPurl'
-    },
-    {
-      field: SolrDocument::FIELD_RELEASED_TO, label: 'Released To',
-      proc: ->(doc) { doc.released_to.presence&.to_sentence || 'Not released' },
-      sort: false, default: false, width: 100
+      sort: false, default: true, width: 100, formatter: 'linkToPurl',
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: 'title', label: 'Title',
       proc: ->(doc) { doc.title_display },
       solr_fields: [SolrDocument::FIELD_TITLE,
                     SolrDocument::FIELD_LABEL],
-      sort: false, default: true, width: 100
-    },
-    {
-      field: 'citation', label: 'Citation',
-      proc: ->(doc) { CitationPresenter.new(doc).render },
-      solr_fields: [SolrDocument::FIELD_AUTHOR,
-                    SolrDocument::FIELD_TITLE,
-                    SolrDocument::FIELD_LABEL,
-                    SolrDocument::FIELD_PLACE,
-                    SolrDocument::FIELD_PUBLISHER,
-                    SolrDocument::FIELD_MODS_CREATED_DATE],
-      sort: false, default: false, width: 100
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: 'source_id_ssi', label: 'Source ID',
-      sort: false, default: true, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_APO_ID, label: 'Admin Policy ID',
-      proc: ->(doc) { Druid.new(doc[SolrDocument::FIELD_APO_ID].first).without_namespace },
-      sort: false, default: false, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_APO_TITLE, label: 'Admin Policy',
-      sort: false, default: true, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
-      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| Druid.new(id).without_namespace } },
-      sort: false, default: false, width: 100
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection',
       proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_TITLE].join(',') },
-      sort: false, default: true, width: 100
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: 'project_tag_ssim', label: 'Project',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: 'registered_by_tag_ssim', label: 'Registered By',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: 'registered_earliest_dttsi', label: 'Registered',
-      proc: ->(doc) { DatePresenter.render(doc[:registered_earliest_dttsi]) },
-      sort: true, default: false, width: 100
+      sort: true, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: 'tag_ssim', label: 'Tags',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: 'ticket_tag_ssim', label: 'Tickets',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_CONSTITUENTS, label: 'Constituents',
-      proc: ->(doc) { doc[SolrDocument::FIELD_CONSTITUENTS]&.size || 'Not a virtual object' },
-      sort: true, default: false, width: 100
-    },
-    {
-      field: CatalogRecordId.index_field, label: CatalogRecordId.label,
-      sort: true, default: false, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_BARCODE_ID, label: 'Barcode',
-      sort: true, default: false, width: 100
-    },
-    {
-      field: SolrDocument::FIELD_CURRENT_VERSION, label: 'Version',
-      sort: false, default: true, width: 100
+      sort: true, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
       field: SolrDocument::FIELD_PROCESSING_STATUS, label: 'Status',
-      sort: false, default: true, width: 100
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights',
-      sort: false, default: true, width: 100
+      field: SolrDocument::FIELD_RELEASED_TO, label: 'Released to',
+      proc: ->(doc) { doc.released_to.presence&.to_sentence || 'Not released' },
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: 'Embargo Release Date',
-      proc: ->(doc) { doc.embargo_release_date || 'Not embargoed' },
-      sort: false, default: false, width: 100
+      field: SolrDocument::FIELD_OBJECT_TYPE, label: 'Object type',
+      sort: true, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: 'Accession. Datetime',
+      field: SolrDocument::FIELD_CONTENT_TYPE, label: 'Content type',
+      sort: true, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_APO_TITLE, label: 'Admin policy',
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access rights',
+      sort: false, default: true, width: 100,
+      category: FREQUENTLY_USED_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_AUTHOR, label: 'Author',
+      sort: false, default: false, width: 100,
+      category: CITATION_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_PLACE, label: 'Place of publication',
+      sort: false, default: false, width: 100,
+      category: CITATION_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_PUBLISHER, label: 'Publisher',
+      sort: false, default: false, width: 100,
+      category: CITATION_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_MODS_CREATED_DATE, label: 'Created date',
+      sort: false, default: false, width: 100,
+      category: CITATION_CATEGORY
+    },
+    {
+      field: 'registered_earliest_dttsi', label: 'Registered date',
+      proc: ->(doc) { DatePresenter.render(doc[:registered_earliest_dttsi]) },
+      sort: true, default: false, width: 100,
+      category: HISTORY_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: 'Accessioned date',
       proc: ->(doc) { DatePresenter.render(doc[SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE]) },
-      sort: true, default: false, width: 100
+      sort: true, default: false, width: 100,
+      category: HISTORY_CATEGORY
     },
     {
-      field: 'published_earliest_dttsi', label: 'Pub. Date',
+      field: 'published_earliest_dttsi', label: 'Published date',
       proc: ->(doc) { DatePresenter.render(doc[:published_earliest_dttsi]) },
-      sort: true, default: false, width: 100
+      sort: true, default: false, width: 100,
+      category: HISTORY_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: 'Embargo release date',
+      proc: ->(doc) { doc.embargo_release_date || 'Not embargoed' },
+      sort: false, default: false, width: 100,
+      category: HISTORY_CATEGORY
+    },
+    {
+      field: 'registered_by_tag_ssim', label: 'Registered by',
+      sort: true, default: false, width: 100,
+      category: HISTORY_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_CURRENT_VERSION, label: 'Version',
+      sort: false, default: false, width: 100,
+      category: HISTORY_CATEGORY
+    },
+    {
+      field: 'ticket_tag_ssim', label: 'Tickets',
+      sort: true, default: false, width: 100,
+      category: HISTORY_CATEGORY
     },
     {
       field: SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Errors',
       proc: ->(doc) { doc[SolrDocument::FIELD_WORKFLOW_ERRORS] },
-      sort: false, default: false, width: 100
+      sort: false, default: false, width: 100,
+      category: HISTORY_CATEGORY
+    },
+    {
+      field: CatalogRecordId.index_field, label: CatalogRecordId.label,
+      sort: true, default: false, width: 100,
+      category: IDENTIFIERS_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_BARCODE_ID, label: 'Barcode',
+      sort: true, default: false, width: 100,
+      category: IDENTIFIERS_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_APO_ID, label: 'Admin policy ID',
+      proc: ->(doc) { Druid.new(doc[SolrDocument::FIELD_APO_ID].first).without_namespace },
+      sort: false, default: false, width: 100,
+      category: IDENTIFIERS_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
+      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| Druid.new(id).without_namespace } },
+      sort: false, default: false, width: 100,
+      category: IDENTIFIERS_CATEGORY
+    },
+    {
+      field: 'dissertation_id', label: 'Dissertation ID',
+      proc: lambda { |doc|
+        doc[:identifier_ssim].filter do |id|
+          id.include?('dissertationid')
+        end.map { |id| id.split(':').last }
+      },
+      solr_fields: %w[identifier_ssim],
+      sort: false, default: false, width: 50,
+      category: IDENTIFIERS_CATEGORY
+    },
+    {
+      field: SolrDocument::FIELD_DOI, label: 'DOI',
+      sort: false, default: false, width: 50,
+      category: IDENTIFIERS_CATEGORY
     },
     {
       field: 'file_count', label: 'Files',
       proc: ->(doc) { doc[:content_file_count_itsi] },
       solr_fields: %w[content_file_count_itsi],
-      sort: false, default: true, width: 50
+      sort: false, default: false, width: 50,
+      category: CONTENT_CATEGORY
     },
     {
-      field: 'shelved_file_count', label: 'Shelved Files',
+      field: 'shelved_file_count', label: 'Shelved files',
       proc: ->(doc) { doc[:shelved_content_file_count_itsi] },
       solr_fields: %w[shelved_content_file_count_itsi],
-      sort: false, default: true, width: 50
+      sort: false, default: false, width: 50,
+      category: CONTENT_CATEGORY
     },
     {
       field: 'resource_count', label: 'Resources',
       proc: ->(doc) { doc[:resource_count_itsi] },
       solr_fields: %w[resource_count_itsi],
-      sort: false, default: false, width: 50
+      sort: false, default: false, width: 50,
+      category: CONTENT_CATEGORY
     },
     {
-      field: 'preserved_size_human', label: 'Preservation Size',
+      field: SolrDocument::FIELD_CONSTITUENTS, label: 'Constituents',
+      proc: ->(doc) { doc[SolrDocument::FIELD_CONSTITUENTS]&.size || 'Not a virtual object' },
+      sort: true, default: false, width: 100,
+      category: CONTENT_CATEGORY
+    },
+    {
+      field: 'preserved_size_human', label: 'Preservation size',
       proc: ->(doc) { number_to_human_size(doc.preservation_size) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
-      sort: false, default: true, width: 50
+      sort: false, default: false, width: 50,
+      category: CONTENT_CATEGORY
     },
     {
-      field: 'preserved_size', label: 'Preservation Size (bytes)',
+      field: 'preserved_size', label: 'Preservation size (bytes)',
       proc: ->(doc) { number_with_precision(doc.preservation_size, precision: 0) },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
-      sort: false, default: true, width: 50
-    },
-    {
-      field: 'dissertation_id', label: 'Dissertation ID',
-      proc: lambda { |doc|
-              doc[:identifier_ssim].filter do |id|
-                id.include?('dissertationid')
-              end.map { |id| id.split(':').last }
-            },
-      solr_fields: %w[identifier_ssim],
-      sort: false, default: false, width: 50
-    },
-    {
-      field: SolrDocument::FIELD_DOI, label: 'DOI',
-      sort: false, default: false, width: 50
+      sort: false, default: false, width: 50,
+      category: CONTENT_CATEGORY
     }
   ].freeze
+
+  REPORT_FIELDS_BY_CATEGORY = REPORT_FIELDS.group_by { |f| f[:category] }.freeze
 
   COLUMN_MODEL = REPORT_FIELDS.map do |spec|
     {

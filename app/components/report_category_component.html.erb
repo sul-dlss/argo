@@ -1,0 +1,8 @@
+<div class="fst-italic mb-1"><%= category %></div>
+<% fields.each do |field| %>
+  <div class="form-check">
+    <label for="<%= field[:field] %>" class="form-check-label"><%= field[:label] %>
+      <%= check_box_tag field[:field], field[:label], field[:default], { class: 'form-check-input', data: { action: 'change->object-reporter#toggleColumn', checkbox_select_target: 'checkbox' } } %>
+    </label>
+  </div>
+<% end %>
