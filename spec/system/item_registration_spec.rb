@@ -35,6 +35,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in 'Project Name', with: 'special division : project #4'
       fill_in 'Tags', with: 'tag : test'
+      fill_in 'Tickets', with: 'DIGREQ-1234'
 
       fill_in 'Barcode', with: barcode
       fill_in 'Source ID', with: 'source:id1'
@@ -90,6 +91,14 @@ RSpec.describe 'Item registration page', :js do
             'name' => ''
           }
         },
+        'tickets_attributes' => {
+          '0' => {
+            'name' => 'DIGREQ-1234'
+          },
+          '1' => {
+            'name' => ''
+          }
+        },
         'items_attributes' => {
           '0' => {
             'source_id' => 'source:id1',
@@ -114,6 +123,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in 'Project Name', with: 'X-Files'
       fill_in 'Tags', with: 'i : believe'
+      fill_in 'Tickets', with: 'DIGREQ-1234'
 
       fill_in 'Barcode', with: barcode
       fill_in 'Source ID', with: source_id
@@ -145,6 +155,8 @@ RSpec.describe 'Item registration page', :js do
         expect(page).to have_css 'td', text: 'book'
         expect(page).to have_css 'th', text: 'Project'
         expect(page).to have_css 'td a', text: 'X-Files'
+        expect(page).to have_css 'th', text: 'Tickets'
+        expect(page).to have_css 'td a', text: 'DIGREQ-1234'
         expect(page).to have_css 'th', text: 'Source IDs'
         expect(page).to have_css 'td', text: source_id
         expect(page).to have_css 'th', text: 'Barcode'
@@ -153,6 +165,7 @@ RSpec.describe 'Item registration page', :js do
         expect(page).to have_css 'td a', text: 'Project : X-Files'
         expect(page).to have_css 'td a', text: 'i : believe'
         expect(page).to have_css 'td a', text: "Registered By : #{user.sunetid}"
+        expect(page).to have_css 'td a', text: 'Ticket : DIGREQ-1234'
       end
     end
   end
