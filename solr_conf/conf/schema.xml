@@ -35,6 +35,17 @@
     <dynamicField name="*_ipsi"   type="intPoint" stored="true"  indexed="true"  multiValued="false"/>
     <dynamicField name="*_ipsidv" type="intPoint" stored="true"  indexed="true"  multiValued="false" docValues="true"/>
     <dynamicField name="*_ipsim"  type="intPoint" stored="true"  indexed="true"  multiValued="true"/>
+    
+    <!-- Long field (_lp...) (64-bit signed integer). (very efficient searches for specific values, or ranges of values.) -->
+    <!-- For single valued fields, docValues="true" must be used to enable sorting. -->
+    <dynamicField name="*_lpi"    type="longPoint" stored="false" indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_lpim"   type="longPoint" stored="false" indexed="true"  multiValued="true"/>
+    <dynamicField name="*_lps"    type="longPoint" stored="true"  indexed="false" multiValued="false" docValues="true"/>
+    <dynamicField name="*_lpsm"   type="longPoint" stored="true"  indexed="false" multiValued="true"/>
+    <dynamicField name="*_lpsi"   type="longPoint" stored="true"  indexed="true"  multiValued="false"/>
+    <dynamicField name="*_lpsidv" type="longPoint" stored="true"  indexed="true"  multiValued="false" docValues="true"/>
+    <dynamicField name="*_lpsim"  type="longPoint" stored="true"  indexed="true"  multiValued="true"/>
+    
     <!-- DEPRECATED: use IntPointField (_ip...) instead as type int is TrieInteger integer (_i...) -->
     <dynamicField name="*_ii"   type="int" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_iim"  type="int" stored="false" indexed="true"  multiValued="true"/>
@@ -170,6 +181,7 @@
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
 
     <fieldType name="intPoint" class="solr.IntPointField" />
+    <fieldType name="longPoint" class="solr.LongPointField" />
     <fieldType name="datePoint" class="solr.DatePointField" />
     <fieldType name="doublePoint" class="solr.DoublePointField" />
 
