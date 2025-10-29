@@ -14,6 +14,7 @@ class CatalogController < ApplicationController
   HOME_FACETS = [
     SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
     SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
+    SolrDocument::FIELD_TICKET_TAG,
     SolrDocument::FIELD_OBJECT_TYPE,
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
@@ -69,7 +70,7 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_SOURCE_ID, label: 'Source'
     config.add_index_field 'identifier_tesim', label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field SolrDocument::FIELD_RELEASED_TO, label: 'Released to'
-    config.add_index_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', link_to_facet: true
+    config.add_index_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', link_to_facet: true, sort: 'index'
 
     config.add_index_field 'status_ssi', label: 'Status'
     config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
@@ -90,6 +91,7 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
                                                                         component: LazyNonprojectTagFacetComponent,
                                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000
     config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
@@ -218,7 +220,6 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_COLLECTION_ID, if: false
     config.add_facet_field 'tag_ssim', if: false
     config.add_facet_field 'project_tag_ssim', if: false
-    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, if: false
 
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
