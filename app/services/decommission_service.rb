@@ -20,7 +20,10 @@ class DecommissionService
                          description: "Decommissioned: #{reason}",
                          opening_user_name: sunetid)
 
-    release_tags.each do |release_tag|
+    released_to.each do |release_target|
+      release_tag = latest_release_tag_for(to: release_target)
+      next unless release_tag.release
+
       object_client.release_tags.create(tag: release_tag.new(release: false))
     end
 
@@ -55,5 +58,13 @@ class DecommissionService
 
   def release_tags
     object_client.release_tags.list
+  end
+
+  def released_to
+    release_tags.pluck(:to).uniq
+  end
+
+  def latest_release_tag_for(to:)
+    release_tags.select { |tag| tag.to == to }.max_by(&:date)
   end
 end
