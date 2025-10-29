@@ -27,7 +27,7 @@ document.addEventListener('turbo:before-fetch-response', async (event) => {
 })
 
 document.addEventListener('turbo:fetch-request-error', async (event) => {
+  console.log("refreshing page after turbo:fetch-request-error")
   console.dir(event.detail)
-  alert('A network error occurred, possibly because your session has expired. The page will be refreshed.')
   window.location.reload()
 })
