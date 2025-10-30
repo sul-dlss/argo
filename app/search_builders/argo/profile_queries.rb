@@ -19,7 +19,7 @@ module Argo
       solr_parameters['stats'] = true
       solr_parameters['stats.field'] ||= []
       # Use this paradigm to compute needed statistics
-      solr_parameters['stats.field'] << SolrDocument::FIELD_SW_PUB_DATE
+      solr_parameters['stats.field'] << SolrDocument::FIELD_PUBLICATION_DATE
       solr_parameters['stats.field'] << 'content_file_count_itsi'
       solr_parameters['stats.field'] << 'shelved_content_file_count_itsi'
       solr_parameters['stats.field'] << SolrDocument::FIELD_PRESERVATION_SIZE

@@ -215,12 +215,21 @@ class CatalogController < ApplicationController
                                       }
 
     config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Resource Type', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_PUB_DATE, label: 'SW Date', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'SW Topic', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC, label: 'SW Region', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_SUBJECT_TEMPORAL, label: 'SW Era', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_GENRE, label: 'SW Genre', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'SW Language', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SUBJECT_TEMPORAL, label: 'Era', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_GENRE, label: 'Genre', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'Language', component: true, limit: 10
+
+    config.add_facet_field 'sw_format_ssimdv', label: 'OLD SW Resource Type', component: true, limit: 10
+    config.add_facet_field 'sw_pub_date_facet_ssidv', label: 'OLD SW Date', component: true, limit: 10
+    config.add_facet_field 'topic_ssimdv', label: 'OLD SW Topic', component: true, limit: 10
+    config.add_facet_field 'sw_subject_geographic_ssimdv', label: 'OLD SW Region', component: true, limit: 10
+    config.add_facet_field 'sw_subject_temporal_ssimdv', label: 'OLD SW Era', component: true, limit: 10
+    config.add_facet_field 'sw_genre_ssimdv', label: 'OLD SW Genre', component: true, limit: 10
+    config.add_facet_field 'sw_language_ssimdv', label: 'OLD SW Language', component: true, limit: 10
+
     config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field SolrDocument::FIELD_APO_ID, if: false
@@ -290,7 +299,7 @@ class CatalogController < ApplicationController
           author_text_nostem_im^3
           contributor_text_nostem_im
 
-          topic_tesim^2
+          subject_topic_tesim^2
 
           tag_text_unstemmed_im
 
@@ -298,7 +307,7 @@ class CatalogController < ApplicationController
           originInfo_publisher_tesim
 
           content_type_ssimdv
-          sw_format_ssimdv
+          sw_resource_type_ssimdv
           object_type_ssim
 
           descriptive_text_nostem_i
