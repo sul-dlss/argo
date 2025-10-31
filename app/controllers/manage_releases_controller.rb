@@ -25,7 +25,7 @@ class ManageReleasesController < ApplicationController
     Dor::Services::Client::ReleaseTag.new(
       to: params[:to],
       who: current_user.sunetid,
-      what: 'self',
+      what: params[:what] || 'self',
       release: params[:tag] == 'true',
       date: DateTime.now.utc.iso8601
     )

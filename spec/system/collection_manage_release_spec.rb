@@ -56,7 +56,7 @@ RSpec.describe 'Collection manage release' do
       tag = args[:tag]
       expect(tag.to).to eq 'Searchworks'
       expect(tag.who).to eq 'esnowden'
-      expect(tag.what).to eq 'self'
+      expect(tag.what).to eq 'collection'
       expect(tag.release).to be true
       expect(tag.date).to be_a DateTime
     end
