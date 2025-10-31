@@ -1,0 +1,11 @@
+<%= render EditModalComponent.new do |component| %>
+  <% component.with_header { 'Create Collection' } %>
+  <% component.with_body do %>
+    <h4>APO &mdash; <%= @cocina_admin_policy.label %></h4>
+    <%= form_tag collections_path(@cocina_admin_policy.externalIdentifier) do %>
+      <%= hidden_field_tag :apo_druid, @cocina_admin_policy.externalIdentifier %>
+      <%= hidden_field_tag :modal, true %>
+      <%= render 'form' %>
+    <% end %>
+  <% end %>
+<% end %>

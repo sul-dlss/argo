@@ -189,7 +189,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     it 'renders the appropriate buttons' do
       expect(page).to have_link 'Edit APO', href: '/apo/druid:zt570qh4444/edit'
-      expect(page).to have_link 'Create Collection', href: '/apo/druid:zt570qh4444/collections/new'
+      expect(page).to have_link 'Create Collection', href: '/collections/new?apo_druid=druid%3Azt570qh4444&modal=true'
       expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:zt570qh4444'
       expect(page).to have_link 'Add workflow', href: '/items/druid:zt570qh4444/workflows/new'
       expect(page).to have_link 'Purge', href: '/items/druid:zt570qh4444/purge'

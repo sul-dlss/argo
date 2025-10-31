@@ -1,75 +1,14 @@
-<%= render EditModalComponent.new do |component| %>
-  <% component.with_header { 'Create Collection' } %>
-  <% component.with_body do %>
-    <div data-controller="collection-editor">
-      <h4>APO &mdash; <%= @cocina.label %></h4>
-      <%= form_tag apo_collections_path(@cocina.externalIdentifier) do %>
-        <div class="mb-3" style="padding-left:20px">
-          <div class="form-check">
-            <label class="form-check-label" for="from-title">
-              Create a Collection from Title/Abstract
-            </label>
-            <%= radio_button_tag 'collection_radio', 'create', true, id: 'from-title',
-                                                                     class: 'form-check-input',
-                                                                     data: { action: 'change->collection-editor#revealCreateCollection' } %>
-          </div>
+<% @page_title = 'Register Collection' %>
 
-          <div class="form-check">
-            <label class="form-check-label" for="from-catalog">
-              Create a Collection from <%= CatalogRecordId.type.capitalize %>
-            </label>
-            <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-catalog',
-                                                                      class: 'form-check-input',
-                                                                      data: { action: 'change->collection-editor#revealCreateCollectionCatalogRecordId' } %>
-          </div>
-        </div>
+<h1>Register Collection</h1>
 
-        <div data-collection-editor-target="createCollectionFields">
-          <div class="mb-3">
-            <label for="collection_title">
-              Collection Title
-            </label>
-            <%= text_field_tag 'collection_title', nil, class: 'form-control', data: { action: 'collection-editor#checkTitle' }, autocomplete: 'off' %>
-            <div data-collection-editor-target="titleWarning" class="mt-2 alert alert-warning" hidden>Collection with this title already exists.</div>
-          </div>
-          <div class="mb-3">
-            <label for="collection_abstract">
-              Collection Abstract
-            </label>
-            <%= text_area_tag 'collection_abstract', nil, class: 'form-control' %>
-          </div>
-          <div class="mb-3">
-            <label for="collection_rights">
-              Collection Object Visibility
-            </label>
-            <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
-          </div>
-        </div>
+<%= form_tag collections_path do %>
+  <div class="mb-4">
+    <label for="apo_druid">
+      Admin Policy
+    </label>
+    <%= select_tag :apo_druid, options_for_select(@apo_list), class: 'form-select' %>
+  </div>
 
-        <div data-collection-editor-target="catalogRecordIdFields" hidden>
-          <div class="mb-3">
-            <label for="collection_catalog_record_id">
-              Collection <%= CatalogRecordId.label %>
-            </label>
-            <%= text_field_tag 'collection_catalog_record_id', nil, class: 'form-control',
-                                                                    pattern: CatalogRecordId.html_pattern_string,
-                                                                    data: { action: 'collection-editor#checkCatalogRecordId', collection_editor_target: 'catalogRecordId' }, autocomplete: 'off' %>
-            <div data-collection-editor-target="catalogRecordIdFormatError" class="mt-2 alert alert-danger" role="alert" hidden>Collection Folio Instance HRID must be in an allowed format.</div>
-            <div data-collection-editor-target="catalogRecordIdWarning" class="mt-2 alert alert-warning" role="alert" hidden>Collection with this <%= CatalogRecordId.label %> already exists.</div>
-          </div>
-          <div class="mb-3">
-            <label for="collection_rights_catalog_record_id">
-              Collection Object Visibility
-            </label>
-            <%= select_tag :collection_rights_catalog_record_id, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
-          </div>
-        </div>
-        <div class="mb-3">
-          <%= button_tag 'register', id: 'register', class: 'btn btn-primary' do %>
-            Register Collection
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
+  <%= render 'form' %>
 <% end %>
