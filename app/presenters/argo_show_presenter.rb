@@ -41,6 +41,10 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
     version_view? || user_version_view?
   end
 
+  def dark?
+    cocina.access.view == 'dark'
+  end
+
   delegate :open?, :openable?, :open_and_not_assembling?, to: :version_service
 
   delegate :user_version_view, :head_user_version, to: :user_versions_presenter
