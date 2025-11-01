@@ -23,7 +23,7 @@ RSpec.describe 'Create collections' do
     end
 
     it 'is successful' do
-      get "/apo/#{apo_id}/collections/new"
+      get "/collections/new?modal=true&apo_druid=#{apo_id}"
       expect(response).to be_successful
     end
   end
@@ -43,15 +43,18 @@ RSpec.describe 'Create collections' do
     end
 
     it 'creates a collection using the form' do
-      post "/apo/#{apo_id}/collections", params: { 'label' => ':auto',
-                                                   'collection_catalog_record_id' => '1234567',
-                                                   'collection_rights_catalog_record_id' => 'dark' }
+      post '/collections', params: {
+        'apo_druid' => apo_id,
+        'modal' => 'true',
+        'label' => ':auto',
+        'collection_catalog_record_id' => '1234567',
+        'collection_rights_catalog_record_id' => 'dark'
+      }
       expect(response).to be_redirect # redirects to catalog page
       expect(form).to have_received(:save)
       expect(object_client).to have_received(:update).with(params: cocina_admin_policy_with_registration_collections([collection_id]))
       expect(version_service).to have_received(:open)
       expect(version_service).to have_received(:close)
-      expect(object_client).to have_received(:reindex)
     end
   end
 

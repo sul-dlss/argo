@@ -5,44 +5,46 @@ class CollectionsController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
   def new
-    @cocina = Repository.find(params[:apo_id])
-    authorize! :update, @cocina
+    authorize! :create, Cocina::Models::Collection
 
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
+    if modal?
+      @cocina_admin_policy = Repository.find(params[:apo_druid])
+    else
+      @apo_list = AdminPolicyOptions.for(current_user)
     end
+
+    render new_view
   end
 
   def create
-    cocina_admin_policy = Repository.find(params[:apo_id])
-    authorize! :update, cocina_admin_policy
+    @cocina_admin_policy = Repository.find(params[:apo_druid])
+    authorize! :update, @cocina_admin_policy
 
     form = CollectionForm.new
-    return render 'new' unless form.validate(params.merge(apo_druid: params[:apo_id]))
+    return render new_view unless form.validate(params)
 
     form.save
     collection_druid = form.model.externalIdentifier
     # open version for APO if not already open
-    version_service = VersionService.new(druid: cocina_admin_policy.externalIdentifier)
-    cocina_admin_policy = version_service.open(description: "Created new collection: #{collection_druid}") unless version_service.open?
+    version_service = VersionService.new(druid: @cocina_admin_policy.externalIdentifier)
+    @cocina_admin_policy = version_service.open(description: "Created new collection: #{collection_druid}") unless version_service.open?
 
     # update APO
-    collections = Array(cocina_admin_policy.administrative.collectionsForRegistration).dup
+    collections = Array(@cocina_admin_policy.administrative.collectionsForRegistration).dup
     # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
     # 1. If collection is already listed, remove it temporarily
     collections.delete(collection_druid)
     # 2. Move the collection DRUID to the front of the list of registration collections
     collections.unshift(collection_druid)
-    updated_cocina_admin_policy = cocina_admin_policy.new(
-      administrative: cocina_admin_policy.administrative.new(
+    updated_cocina_admin_policy = @cocina_admin_policy.new(
+      administrative: @cocina_admin_policy.administrative.new(
         collectionsForRegistration: collections
       )
     )
     Repository.store(updated_cocina_admin_policy)
-    # Close the APO version and reindex
+    # Close the APO version
     version_service.close
-    Dor::Services::Client.object(params[:apo_id]).reindex
-    redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_druid}"
+    redirect_to solr_document_path(collection_druid), notice: "Created collection #{collection_druid}"
   end
 
   # save the form
@@ -105,5 +107,13 @@ class CollectionsController < ApplicationController
 
   def solr_conn
     @solr_conn ||= blacklight_config.repository_class.new(blacklight_config).connection
+  end
+
+  def modal?
+    params[:modal] == 'true'
+  end
+
+  def new_view
+    modal? ? 'new_modal' : 'new'
   end
 end
