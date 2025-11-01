@@ -2,6 +2,7 @@
 
 class ReportController < CatalogController
   include Blacklight::Catalog
+  include ActionController::Live
 
   helper ArgoHelper
   copy_blacklight_config_from CatalogController
@@ -32,15 +33,12 @@ class ReportController < CatalogController
   end
 
   def download
-    # Tells Rack to stream the response instead of filling a buffer
-    response.headers.delete('Content-Length')
     response.headers['Cache-Control'] = 'no-cache'
     response.headers['Content-Type'] = 'text/csv'
     response.headers['Content-Disposition'] = 'attachment; filename="report.csv"'
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    response.headers['X-Accel-Buffering'] = 'no'
 
-    self.response_body = Report.new(params, current_user:).to_csv
+    Report.new(params, current_user:).stream_csv(stream: response.stream)
   end
 
   # reset workflow states for objects
