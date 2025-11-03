@@ -28,23 +28,17 @@ class Report
 
   REPORT_FIELDS = [
     {
-      field: 'druid', label: 'Druid',
-      proc: ->(doc) { doc.druid },
+      field: SolrDocument::FIELD_BARE_DRUID, label: 'Druid',
       sort: true, default: true, width: 100, formatter: 'linkToArgo',
       category: FREQUENTLY_USED_CATEGORY
     },
     {
-      field: 'purl', label: 'Purl',
-      proc: ->(doc) { "#{Settings.purl_url}/#{doc.druid}" },
-      solr_fields: %w[id],
+      field: SolrDocument::FIELD_PURL, label: 'Purl',
       sort: false, default: true, width: 100, formatter: 'linkToPurl',
       category: FREQUENTLY_USED_CATEGORY
     },
     {
-      field: 'title', label: 'Title',
-      proc: ->(doc) { doc.title_display },
-      solr_fields: [SolrDocument::FIELD_TITLE,
-                    SolrDocument::FIELD_LABEL],
+      field: SolrDocument::FIELD_TITLE, label: 'Title',
       sort: false, default: true, width: 100,
       category: FREQUENTLY_USED_CATEGORY
     },
@@ -55,7 +49,6 @@ class Report
     },
     {
       field: SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection',
-      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_TITLE].join(',') },
       sort: false, default: true, width: 100,
       category: FREQUENTLY_USED_CATEGORY
     },
@@ -76,7 +69,6 @@ class Report
     },
     {
       field: SolrDocument::FIELD_RELEASED_TO, label: 'Released to',
-      proc: ->(doc) { doc.released_to.presence&.to_sentence || 'Not released' },
       sort: false, default: true, width: 100,
       category: FREQUENTLY_USED_CATEGORY
     },
@@ -121,26 +113,22 @@ class Report
       category: CITATION_CATEGORY
     },
     {
-      field: 'registered_earliest_dttsi', label: 'Registered date',
-      proc: ->(doc) { DatePresenter.render(doc[:registered_earliest_dttsi]) },
+      field: SolrDocument::FIELD_FORMATTED_REGISTERED_EARLIEST, label: 'Registered date',
       sort: true, default: false, width: 100,
       category: HISTORY_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: 'Accessioned date',
-      proc: ->(doc) { DatePresenter.render(doc[SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE]) },
+      field: SolrDocument::FIELD_FORMATTED_EARLIEST_ACCESSIONED_DATE, label: 'Accessioned date',
       sort: true, default: false, width: 100,
       category: HISTORY_CATEGORY
     },
     {
-      field: 'published_earliest_dttsi', label: 'Published date',
-      proc: ->(doc) { DatePresenter.render(doc[:published_earliest_dttsi]) },
+      field: SolrDocument::FIELD_FORMATTED_PUBLISHED_EARLIEST_DATE, label: 'Published date',
       sort: true, default: false, width: 100,
       category: HISTORY_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: 'Embargo release date',
-      proc: ->(doc) { doc.embargo_release_date || 'Not embargoed' },
+      field: SolrDocument::FIELD_FORMATTED_EMBARGO_RELEASE_DATE, label: 'Embargo release date',
       sort: false, default: false, width: 100,
       category: HISTORY_CATEGORY
     },
@@ -161,7 +149,6 @@ class Report
     },
     {
       field: SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Errors',
-      proc: ->(doc) { doc[SolrDocument::FIELD_WORKFLOW_ERRORS] },
       sort: false, default: false, width: 100,
       category: HISTORY_CATEGORY
     },
@@ -176,25 +163,17 @@ class Report
       category: IDENTIFIERS_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_APO_ID, label: 'Admin policy ID',
-      proc: ->(doc) { Druid.new(doc[SolrDocument::FIELD_APO_ID].first).without_namespace },
+      field: SolrDocument::FIELD_BARE_APO_ID, label: 'Admin policy ID',
       sort: false, default: false, width: 100,
       category: IDENTIFIERS_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
-      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| Druid.new(id).without_namespace } },
+      field: SolrDocument::FIELD_BARE_COLLECTION_ID, label: 'Collection ID',
       sort: false, default: false, width: 100,
       category: IDENTIFIERS_CATEGORY
     },
     {
-      field: 'dissertation_id', label: 'Dissertation ID',
-      proc: lambda { |doc|
-        doc[:identifier_ssim].filter do |id|
-          id.include?('dissertationid')
-        end.map { |id| id.split(':').last }
-      },
-      solr_fields: %w[identifier_ssim],
+      field: SolrDocument::FIELD_DISSERTATION_ID, label: 'Dissertation ID',
       sort: false, default: false, width: 50,
       category: IDENTIFIERS_CATEGORY
     },
@@ -204,43 +183,32 @@ class Report
       category: IDENTIFIERS_CATEGORY
     },
     {
-      field: 'file_count', label: 'Files',
-      proc: ->(doc) { doc[:content_file_count_itsi] },
-      solr_fields: %w[content_file_count_itsi],
+      field: 'content_file_count_itsi', label: 'Files',
       sort: false, default: false, width: 50,
       category: CONTENT_CATEGORY
     },
     {
-      field: 'shelved_file_count', label: 'Shelved files',
-      proc: ->(doc) { doc[:shelved_content_file_count_itsi] },
-      solr_fields: %w[shelved_content_file_count_itsi],
+      field: 'shelved_content_file_count_itsi', label: 'Shelved files',
       sort: false, default: false, width: 50,
       category: CONTENT_CATEGORY
     },
     {
-      field: 'resource_count', label: 'Resources',
-      proc: ->(doc) { doc[:resource_count_itsi] },
-      solr_fields: %w[resource_count_itsi],
+      field: 'resource_count_itsi', label: 'Resources',
       sort: false, default: false, width: 50,
       category: CONTENT_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_CONSTITUENTS, label: 'Constituents',
-      proc: ->(doc) { doc[SolrDocument::FIELD_CONSTITUENTS]&.size || 'Not a virtual object' },
+      field: SolrDocument::FIELD_CONSTITUENTS_COUNT, label: 'Constituents',
       sort: true, default: false, width: 100,
       category: CONTENT_CATEGORY
     },
     {
-      field: 'preserved_size_human', label: 'Preservation size',
-      proc: ->(doc) { number_to_human_size(doc.preservation_size) },
-      solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
+      field: SolrDocument::FIELD_HUMAN_PRESERVED_SIZE, label: 'Preservation size',
       sort: false, default: false, width: 50,
       category: CONTENT_CATEGORY
     },
     {
-      field: 'preserved_size', label: 'Preservation size (bytes)',
-      proc: ->(doc) { number_with_precision(doc.preservation_size, precision: 0) },
-      solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
+      field: SolrDocument::FIELD_PRESERVATION_SIZE, label: 'Preservation size (bytes)',
       sort: false, default: false, width: 50,
       category: CONTENT_CATEGORY
     }
@@ -306,21 +274,20 @@ class Report
     until @response.documents.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
-          druids << ("#{rec[:druid]}\t#{rec[:source_id_ssi]}") # rubocop:disable Style/RedundantParentheses
+          druids << ("#{rec[SolrDocument::FIELD_BARE_DRUID]}\t#{rec[SolrDocument::FIELD_SOURCE_ID]}") # rubocop:disable Style/RedundantParentheses
         elsif opts[:tags].present?
           tags = ''
-          rec[:tag_ssim]&.split(';')&.each do |tag|
+          rec[SolrDocument::FIELD_TAGS]&.split(';')&.each do |tag|
             tags += "\t#{tag}"
           end
-          druids << (rec[:druid] + tags)
+          druids << (rec[SolrDocument::FIELD_BARE_DRUID] + tags)
         else
-          druids << rec[:druid]
+          druids << rec[SolrDocument::FIELD_BARE_DRUID]
         end
       end
       params[:page] += 1
       (@response,) = search_results(params)
     end
-
     druids
   end
 
@@ -328,24 +295,31 @@ class Report
     docs_to_records(@response.documents)
   end
 
-  ##
-  # Converts the `report_data` into CSV data
-  #
-  # @return [Enumerator] data in CSV format
-  def to_csv
-    @params[:page] = 1
-    @params[:per_page] = ROWS_PER_PAGE_CSV
-    Enumerator.new do |yielder|
-      yielder << CSV.generate_line(@fields.map { |field| field.fetch(:label) }, force_quotes: true) # header row
-      (@response,) = search_results(params)
-      until @response.documents.empty?
-        report_data.each do |record|
-          yielder << CSV.generate_line(@fields.map { |field| record[field.fetch(:field).to_sym].to_s }, force_quotes: true)
+  def stream_csv(stream:)
+    # Wow, yet another BL kludge.
+    search_service = search_service(params)
+    # Get the underlying Faraday connection to use its streaming API
+    connection = search_service.repository.connection.connection
+    fl = @fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
+    # Setting wt=csv tells solr to return CSV data
+    data = { wt: :csv, rows: 10_000_000, fl:, 'csv.mv.separator' => ';' }
+           .reverse_merge(search_service.search_builder.with(@params)).to_h
+
+    first_chunk = true
+    connection.post blacklight_config.solr_path do |req|
+      req.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+      req.body = RSolr::Uri.params_to_solr data
+      req.options.on_data = proc do |chunk|
+        if first_chunk
+          first_chunk = false
+          # Replace the header row (which comes back from solr with field names) and replace with field labels.
+          chunk.sub!(/^.*?\n/m, CSV.generate_line(@fields.map { |field| field.fetch(:label) }, force_quotes: true)) # Remove the header row
         end
-        @params[:page] += 1
-        (@response,) = search_results(@params)
+        stream.write chunk
       end
     end
+  ensure
+    stream.close
   end
 
   private
@@ -354,16 +328,10 @@ class Report
     search_service(params).search_results
   end
 
-  # TODO: Refactor to use Blacklight::Searchable instead.  Requires a SearchState rather than params
   def search_service(params)
-    search_service_class.new(config: blacklight_config,
-                             user_params: params,
-                             current_user:)
-  end
-
-  # We can remove this when https://github.com/projectblacklight/blacklight/pull/2320 is merged into Blacklight
-  def search_service_class
-    Blacklight::SearchService
+    Blacklight::SearchService.new(config: blacklight_config,
+                                  user_params: params,
+                                  current_user:)
   end
 
   # @param [Array<SolrDocument>] docs
@@ -372,14 +340,9 @@ class Report
   def docs_to_records(docs, fields = REPORT_FIELDS)
     docs.map do |doc|
       fields.to_h do |spec|
-        val =
-          begin
-            spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
-          rescue StandardError
-            nil
-          end
+        val = doc[spec[:field].to_s]
         val = val.join(';') if val.is_a?(Array)
-        [spec[:field].to_sym, val.to_s]
+        [spec[:field], val.to_s]
       end
     end
   end
