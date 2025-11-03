@@ -101,7 +101,7 @@ Rails.application.routes.draw do
     get 'workflow_grid'
   end
 
-  resources :collections, only: :update do
+  resources :collections, only: %i[new create update] do
     member do
       get :count
     end
@@ -111,7 +111,6 @@ Rails.application.routes.draw do
   end
 
   resources :apo, only: %i[new update create edit] do
-    resources :collections, only: %i[new create]
     collection do
       get :spreadsheet_template
     end

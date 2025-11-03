@@ -111,7 +111,7 @@ module Show
 
     def create_collection
       render ActionButton.new(
-        url: new_apo_collection_path(apo_id: druid), label: 'Create Collection',
+        url: new_collection_path(apo_druid: druid, modal: true), label: 'Create Collection',
         open_modal: true,
         disabled: collection_button_disabled?
       )

@@ -86,11 +86,14 @@
                   <span class='caret'></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="registerDropdown">
-                  <%= link_to 'Register Items', registration_path, class: 'dropdown-item' %>
+                  <%= link_to 'Items', registration_path, class: 'dropdown-item' %>
                   <% if can? :create, Cocina::Models::AdminPolicy %>
-                    <%= link_to 'Register APO', new_apo_path, class: 'dropdown-item' %>
+                    <%= link_to 'APO', new_apo_path, class: 'dropdown-item' %>
                   <% end %>
                   <%= link_to 'Agreement', new_agreement_path, class: 'dropdown-item' %>
+                  <% if can? :create, Cocina::Models::Collection %>
+                    <%= link_to 'Collection', new_collection_path, class: 'dropdown-item' %>
+                  <% end %>
                 </div>
               </li>
               <hr class="d-md-none d-block">
