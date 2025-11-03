@@ -115,7 +115,7 @@ RSpec.describe ImportStructuralJob do
     job.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updating content')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated structural metadata')
     expect(Repository).to have_received(:store).with(instance_of(Cocina::Models::DROWithMetadata))
     expect(job_item).to have_received(:close_version_if_needed!)
 

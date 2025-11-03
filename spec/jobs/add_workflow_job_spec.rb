@@ -33,7 +33,7 @@ RSpec.describe AddWorkflowJob do
 
     expect(job_item).to have_received(:check_update_ability?)
     expect(WorkflowService).to have_received(:workflow_active?).with(druid: druid, wf_name: workflow, version:)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Running accessionWF')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Started accessionWF')
     expect(object_client).to have_received(:workflow).with(workflow)
     expect(wf_client).to have_received(:create).with(version: version)
 

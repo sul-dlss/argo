@@ -13,7 +13,7 @@ class SetGoverningApoJob < BulkActionJob
     def perform
       return failure!(message: "User not authorized to move item to #{new_apo_id}") unless can_manage?
 
-      open_new_version_if_needed!(description: 'Set new governing APO')
+      open_new_version_if_needed!(description: 'Updated governing APO')
       change_set.validate(admin_policy_id: new_apo_id)
       change_set.save
       close_version_if_needed!

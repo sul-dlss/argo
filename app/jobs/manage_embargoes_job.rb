@@ -9,7 +9,7 @@ class ManageEmbargoesJob < BulkActionCsvJob
 
       return unless check_release_date?
 
-      open_new_version_if_needed!(description: 'Manage embargo')
+      open_new_version_if_needed!(description: 'Created or updated embargo')
 
       return failure!(message: embargo_form.errors.full_messages.join(',')) unless embargo_form.validate(changes)
 

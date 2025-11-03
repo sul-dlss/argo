@@ -46,7 +46,7 @@ module Show
 
     delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
     delegate :open?, :openable?, :open_and_not_assembling?, :user_version_view, :version_or_user_version_view?,
-             :user_version_view?, :version_view?, :version_view, to: :presenter
+             :user_version_view?, :version_view?, :version_view, :dark?, to: :presenter
 
     def button_disabled?
       !open_and_not_assembling? || version_or_user_version_view?
@@ -67,7 +67,7 @@ module Show
         url: edit_item_manage_release_path(druid),
         label: 'Manage release',
         open_modal: true,
-        disabled: version_or_user_version_view?
+        disabled: version_or_user_version_view? || dark?
       )
     end
 
@@ -111,7 +111,7 @@ module Show
 
     def create_collection
       render ActionButton.new(
-        url: new_apo_collection_path(apo_id: druid), label: 'Create Collection',
+        url: new_collection_path(apo_druid: druid, modal: true), label: 'Create Collection',
         open_modal: true,
         disabled: collection_button_disabled?
       )

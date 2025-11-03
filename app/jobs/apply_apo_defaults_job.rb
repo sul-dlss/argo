@@ -7,7 +7,7 @@ class ApplyApoDefaultsJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      open_new_version_if_needed!(description: 'Apply admin policy defaults')
+      open_new_version_if_needed!(description: 'Applied admin policy defaults')
 
       Dor::Services::Client.object(druid).apply_admin_policy_defaults
 

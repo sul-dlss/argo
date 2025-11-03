@@ -76,7 +76,7 @@ class ApplyModsMetadata
     return if version_service.open?
 
     @cocina = version_service.open(druid: cocina.externalIdentifier,
-                                   description: "Descriptive metadata upload from #{original_filename}",
+                                   description: "Updated descriptive metadata from #{original_filename}",
                                    opening_user_name: ability.current_user.sunetid)
   end
 

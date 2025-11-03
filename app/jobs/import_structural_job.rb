@@ -20,7 +20,7 @@ class ImportStructuralJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      open_new_version_if_needed!(description: 'Updating content')
+      open_new_version_if_needed!(description: 'Updated structural metadata')
 
       result = StructureUpdater.from_csv(cocina_object, item_csv)
       if result.success?

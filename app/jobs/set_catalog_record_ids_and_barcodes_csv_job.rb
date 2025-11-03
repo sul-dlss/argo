@@ -13,7 +13,7 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < BulkActionCsvJob
       return failure!(message: "Invalid #{CatalogRecordId.label}/barcode: #{change_set.errors.full_messages.to_sentence}") unless change_set.validate(change_set_params)
       return failure!(message: 'No changes specified for object') unless change_set.changed?
 
-      open_new_version_if_needed!(description: version_message)
+      open_new_version_if_needed!(description: 'Updated FOLIO HRID, barcode, or serials metadata')
 
       log_catalog_record_id_update
       log_barcode_update
@@ -67,23 +67,6 @@ class SetCatalogRecordIdsAndBarcodesCsvJob < BulkActionCsvJob
       else
         log('Removing barcode')
       end
-    end
-
-    def version_message
-      # Yes, this is a private API, but it seems this is what the gem maintainers want folks to use:
-      #   https://github.com/apotonick/disposable/issues/57#issuecomment-268738396
-      changed_properties = change_set.instance_variable_get(:@_changes).select { |_property, changed| changed == true }.keys
-
-      return [] if changed_properties.blank?
-
-      changed_properties.map do |property|
-        change = change_set.public_send(property)
-        if change.present?
-          "#{property.humanize} updated to #{Array(change).join(', ')}."
-        else
-          "#{property.humanize} removed."
-        end
-      end.join(' ')
     end
   end
 end

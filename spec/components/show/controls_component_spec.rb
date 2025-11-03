@@ -22,7 +22,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
                     version_view: version,
                     version_view?: version.present?,
                     version_or_user_version_view?: version.present? || user_version.present?,
-                    user_versions_presenter:)
+                    user_versions_presenter:,
+                    dark?: dark)
   end
   let(:user_versions_presenter) { instance_double(UserVersionsPresenter, user_version_withdrawable?: user_version_withdrawable, user_version_restorable?: user_version_restorable) }
   let(:cocina) { instance_double(Cocina::Models::DRO, dro?: dro, type: 'https://cocina.sul.stanford.edu/models/book') }
@@ -32,6 +33,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:version) { nil }
   let(:user_version_withdrawable) { false }
   let(:user_version_restorable) { false }
+  let(:dark) { false }
 
   before do
     rendered
@@ -79,6 +81,14 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
         it 'does not generate errors given an object that has no associated APO' do
           expect(rendered.css('a').to_html).to eq ''
+        end
+      end
+
+      context 'when the item is dark' do
+        let(:dark) { true }
+
+        it 'disables the manage release button' do
+          expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release/edit', class: 'disabled'
         end
       end
 
@@ -189,7 +199,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
 
     it 'renders the appropriate buttons' do
       expect(page).to have_link 'Edit APO', href: '/apo/druid:zt570qh4444/edit'
-      expect(page).to have_link 'Create Collection', href: '/apo/druid:zt570qh4444/collections/new'
+      expect(page).to have_link 'Create Collection', href: '/collections/new?apo_druid=druid%3Azt570qh4444&modal=true'
       expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:zt570qh4444'
       expect(page).to have_link 'Add workflow', href: '/items/druid:zt570qh4444/workflows/new'
       expect(page).to have_link 'Purge', href: '/items/druid:zt570qh4444/purge'

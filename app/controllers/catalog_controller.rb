@@ -71,7 +71,7 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_SOURCE_ID, label: 'Source'
     config.add_index_field 'identifier_tesim', label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field SolrDocument::FIELD_RELEASED_TO, label: 'Released to'
-    config.add_index_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', link_to_facet: true, sort: 'index'
+    config.add_index_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', link_to_facet: true
 
     config.add_index_field 'status_ssi', label: 'Status'
     config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
@@ -92,7 +92,7 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
                                                                         component: LazyNonprojectTagFacetComponent,
                                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000
+    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000, sort: 'index'
     config.add_facet_field 'exclude_google_books', label: 'Exclude Google Books', component: true, query: {
       yes: {
         label: 'Yes',

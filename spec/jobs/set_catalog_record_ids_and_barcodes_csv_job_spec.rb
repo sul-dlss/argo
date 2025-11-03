@@ -53,7 +53,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
       job.perform_now
 
       expect(job_item).to have_received(:check_update_ability?)
-      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Catalog record ids updated to in12345, in55555. Refresh updated to true. Barcode updated to 36105014757517.')
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated FOLIO HRID, barcode, or serials metadata')
 
       expect(ItemChangeSet).to have_received(:new).with(cocina_object).twice
       expect(item_change_set).to have_received(:validate).with({ barcode:, catalog_record_ids: [catalog_record_id1, catalog_record_id2], refresh: true, part_label: nil, sort_key: nil }).twice
@@ -81,7 +81,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
       job.perform_now
 
       expect(job_item).to have_received(:check_update_ability?)
-      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Catalog record ids removed. Refresh removed. Barcode removed.')
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated FOLIO HRID, barcode, or serials metadata')
 
       expect(ItemChangeSet).to have_received(:new).with(cocina_object).twice
       expect(item_change_set).to have_received(:validate).with({ barcode:, catalog_record_ids: [], refresh: false, part_label: nil, sort_key: nil }).twice
@@ -133,7 +133,7 @@ RSpec.describe SetCatalogRecordIdsAndBarcodesCsvJob do
       job.perform_now
 
       expect(job_item).to have_received(:check_update_ability?)
-      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Catalog record ids updated to in12345, in55555.')
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated FOLIO HRID, barcode, or serials metadata')
 
       expect(CollectionChangeSet).to have_received(:new).with(cocina_object).twice
       expect(collection_change_set).to have_received(:validate).with({ catalog_record_ids: %w[in12345 in55555], refresh: true, part_label: nil, sort_key: nil }).twice

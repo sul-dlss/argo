@@ -24,7 +24,7 @@ class SetLicenseAndRightsStatementsJob < BulkActionJob
 
       return success!(message: 'No changes made') unless change_set.changed?
 
-      open_new_version_if_needed!(description: 'updated license, copyright statement, and/or use and reproduction statement')
+      open_new_version_if_needed!(description: 'Updated license, copyright statement, and/or use and reproduction statement')
 
       # cocina object may have changed; re-instantiate the change set
       @change_set = build_change_set

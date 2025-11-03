@@ -38,7 +38,7 @@ class SetContentTypeJob < BulkActionJob
       # collections, APOs, and agreements do not have content types
       return failure!(message: "Object is a #{cocina_object.type} and cannot be updated") unless cocina_object.dro?
 
-      open_new_version_if_needed!(description: 'Updating content type')
+      open_new_version_if_needed!(description: 'Updated content type')
 
       # use dor services client to pass a hash for structural metadata and update the cocina object
       @cocina_object = cocina_object.new(cocina_update_attributes)

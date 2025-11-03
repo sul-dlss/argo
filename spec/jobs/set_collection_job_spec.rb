@@ -35,7 +35,7 @@ RSpec.describe SetCollectionJob do
       job.perform_now
 
       expect(job_item).to have_received(:check_update_ability?)
-      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Added to collections druid:bc111bb2222.')
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated collection')
       expect(ItemChangeSet).to have_received(:new).with(cocina_object)
       expect(change_set).to have_received(:validate).with(collection_ids: [collection_id])
       expect(change_set).to have_received(:save)
@@ -53,7 +53,7 @@ RSpec.describe SetCollectionJob do
     it 'performs the job' do
       job.perform_now
 
-      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Removed collection membership.')
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated collection')
       expect(change_set).to have_received(:validate).with(collection_ids: [])
 
       expect(bulk_action.reload.druid_count_success).to eq(1)
