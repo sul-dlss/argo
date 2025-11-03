@@ -15,6 +15,7 @@ class CatalogController < ApplicationController
     SolrDocument::FIELD_EXPLODED_PROJECT_TAG,
     SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG,
     SolrDocument::FIELD_TICKET_TAG,
+    'exclude_google_books',
     SolrDocument::FIELD_OBJECT_TYPE,
     SolrDocument::FIELD_CONTENT_TYPE,
     SolrDocument::FIELD_COLLECTION_TITLE,
@@ -92,6 +93,12 @@ class CatalogController < ApplicationController
                                                                         component: LazyNonprojectTagFacetComponent,
                                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000, sort: 'index'
+    config.add_facet_field 'exclude_google_books', label: 'Exclude Google Books', component: true, query: {
+      yes: {
+        label: 'Yes',
+        fq: "-#{SolrDocument::FIELD_APO_ID}:\"#{Settings.google_books_apo}\""
+      }
+    }
     config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
