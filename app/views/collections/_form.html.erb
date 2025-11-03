@@ -51,6 +51,7 @@
                                                               data: { action: 'collection-editor#checkCatalogRecordId', collection_editor_target: 'catalogRecordId' }, autocomplete: 'off' %>
       <div data-collection-editor-target="catalogRecordIdFormatError" class="mt-2 alert alert-danger" role="alert" hidden>Collection Folio Instance HRID must be in an allowed format.</div>
       <div data-collection-editor-target="catalogRecordIdWarning" class="mt-2 alert alert-warning" role="alert" hidden>Collection with this <%= CatalogRecordId.label %> already exists.</div>
+      <div data-collection-editor-target="catalogRecordDoesNotExistWarning" class="mt-2 alert alert-warning" role="alert" hidden><%= CatalogRecordId.label %> does not exist.</div>
     </div>
     <div class="mb-3">
       <label for="collection_rights_catalog_record_id">

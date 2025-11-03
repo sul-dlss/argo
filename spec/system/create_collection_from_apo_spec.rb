@@ -6,6 +6,8 @@ RSpec.describe 'Add collection from APO show page' do
   before do
     allow(Blacklight::Solr::Repository).to receive(:new).and_return(repo)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(FolioClient).to receive(:fetch_marc_hash).with(instance_hrid: 'a123')
+
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
@@ -24,7 +26,7 @@ RSpec.describe 'Add collection from APO show page' do
       choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
       expect(page).to have_text("Collection #{CatalogRecordId.label}")
       expect(page).to have_no_text('already exists')
-      fill_in 'collection_catalog_record_id', with: 'foo'
+      fill_in 'collection_catalog_record_id', with: 'a123'
       expect(page).to have_text('already exists')
     end
   end
@@ -40,6 +42,23 @@ RSpec.describe 'Add collection from APO show page' do
       expect(page).to have_text('Collection Folio Instance HRID must be in an allowed format.')
       fill_in 'collection_catalog_record_id', with: 'a123'
       expect(page).to have_no_text('Collection Folio Instance HRID must be in an allowed format.')
+    end
+  end
+
+  describe 'when non-existent FOLIO Collection HRID is provided', :js do
+    before do
+      allow(FolioClient).to receive(:fetch_marc_hash).with(instance_hrid: 'a1234').and_raise(FolioClient::ResourceNotFound)
+    end
+
+    it 'warns that catalog id does not exist' do
+      visit new_collection_path(apo_druid:, modal: true)
+
+      choose "Create a Collection from #{CatalogRecordId.type.capitalize}"
+      expect(page).to have_text("Collection #{CatalogRecordId.label}")
+      fill_in 'collection_catalog_record_id', with: 'a1234'
+      expect(page).to have_text('does not exist')
+      fill_in 'collection_catalog_record_id', with: 'a123'
+      expect(page).to have_no_text('does not exist')
     end
   end
 

@@ -35,4 +35,17 @@ export default class extends Controller {
     this.hideCollection()
     this.selectCollectionFieldsTarget.hidden = false
   }
+
+  async validateCatalogRecordId (event) {
+    event.target.setCustomValidity('')
+    if (event.target.validity.patternMismatch) return
+
+    await fetch(`/registration/catalog_record_id?catalog_record_id=${event.target.value}`)
+      .then(resp => resp.json())
+      .then(data => {
+        if (!data) {
+          event.target.setCustomValidity('Record not found')
+        }
+      })
+  }
 }
