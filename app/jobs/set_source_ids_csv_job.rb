@@ -13,7 +13,7 @@ class SetSourceIdsCsvJob < BulkActionCsvJob
       return failure!(message: change_set.errors.full_messages.to_sentence) unless change_set.validate(source_id:)
       return success!(message: 'No changes to source ID') unless change_set.changed?
 
-      open_new_version_if_needed!(description: 'Set source ID')
+      open_new_version_if_needed!(description: 'Updated source ID')
 
       @change_set = build_change_set # Rebuild with the new cocina model
       change_set.validate(source_id:)

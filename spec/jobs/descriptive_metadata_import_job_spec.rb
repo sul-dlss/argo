@@ -50,7 +50,7 @@ RSpec.describe DescriptiveMetadataImportJob do
 
     expect(job_item).to have_received(:check_update_ability?)
     expect(Dor::Services::Client.objects).to have_received(:indexable).with(druid:, cocina: expected_cocina_object)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Descriptive metadata upload')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated descriptive metadata')
     expect(Repository).to have_received(:store).with(expected_cocina_object)
     expect(job_item).to have_received(:close_version_if_needed!)
 

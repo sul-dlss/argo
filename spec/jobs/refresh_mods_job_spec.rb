@@ -35,7 +35,7 @@ RSpec.describe RefreshModsJob do
     job.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Refresh metadata from FOLIO')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Refreshed metadata from FOLIO')
     expect(object_client).to have_received(:refresh_descriptive_metadata_from_ils)
     expect(job_item).to have_received(:close_version_if_needed!)
 

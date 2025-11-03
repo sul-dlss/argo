@@ -56,7 +56,7 @@ RSpec.describe SetContentTypeJob do
       job.perform_now
 
       expect(job_item).to have_received(:check_update_ability?)
-      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updating content type')
+      expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated content type')
       expect(Repository).to have_received(:store)
         .with(cocina_object_with_types(
                 resource_types: [Cocina::Models::FileSetType.page, Cocina::Models::FileSetType.image]
