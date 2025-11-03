@@ -9,7 +9,7 @@ class RefreshModsJob < BulkActionJob
 
       return failure!(message: "Does not have a #{CatalogRecordId.label}") if catalog_record_id.blank?
 
-      open_new_version_if_needed!(description: 'Refresh metadata from FOLIO')
+      open_new_version_if_needed!(description: 'Refreshed metadata from FOLIO')
 
       Dor::Services::Client.object(druid).refresh_descriptive_metadata_from_ils
       close_version_if_needed!

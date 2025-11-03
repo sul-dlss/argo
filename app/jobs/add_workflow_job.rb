@@ -15,7 +15,7 @@ class AddWorkflowJob < BulkActionJob
 
       return failure!(message: "#{workflow_name} already exists") if workflow_active?
 
-      open_new_version_if_needed!(description: "Running #{workflow_name}")
+      open_new_version_if_needed!(description: "Started #{workflow_name}")
 
       Dor::Services::Client.object(druid).workflow(workflow_name).create(version: cocina_object.version)
       success!(message: "Started #{workflow_name}")

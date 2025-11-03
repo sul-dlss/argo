@@ -40,7 +40,7 @@ RSpec.describe SetSourceIdsCsvJob do
     job.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Set source ID')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated source ID')
     expect(ItemChangeSet).to have_received(:new).with(cocina_object).twice
     expect(change_set).to have_received(:validate).with(source_id:).twice
     expect(change_set).to have_received(:save)

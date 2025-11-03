@@ -19,7 +19,7 @@ class SetRightsJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      open_new_version_if_needed!(description: 'Updating rights')
+      open_new_version_if_needed!(description: 'Updated rights')
 
       change_set.validate(**new_access_params)
       change_set.save

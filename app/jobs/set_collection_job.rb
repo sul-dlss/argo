@@ -13,7 +13,7 @@ class SetCollectionJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      open_new_version_if_needed!(description: version_message)
+      open_new_version_if_needed!(description: 'Updated collection')
 
       change_set.validate(collection_ids:)
       change_set.save
@@ -24,10 +24,6 @@ class SetCollectionJob < BulkActionJob
 
     def change_set
       @change_set ||= ItemChangeSet.new(cocina_object)
-    end
-
-    def version_message
-      collection_ids.present? ? "Added to collections #{collection_ids.join(',')}." : 'Removed collection membership.'
     end
   end
 end

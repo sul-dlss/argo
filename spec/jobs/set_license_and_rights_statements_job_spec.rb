@@ -41,7 +41,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob do
     expect(ItemChangeSet).to have_received(:new).with(cocina_object).twice
     expect(change_set).to have_received(:validate).with(copyright:).twice
     expect(change_set).to have_received(:save)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'updated license, copyright statement, and/or use and reproduction statement')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated license, copyright statement, and/or use and reproduction statement')
     expect(job_item).to have_received(:close_version_if_needed!)
 
     expect(bulk_action.reload.druid_count_total).to eq(1)

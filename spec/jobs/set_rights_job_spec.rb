@@ -39,7 +39,7 @@ RSpec.describe SetRightsJob do
     subject.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updating rights')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Updated rights')
     expect(change_set).to have_received(:validate).with(view_access: 'world', download_access: 'world')
     expect(change_set).to have_received(:save)
     expect(job_item).to have_received(:close_version_if_needed!)

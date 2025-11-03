@@ -44,7 +44,7 @@ RSpec.describe ManageEmbargoesJob do
     job.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Manage embargo')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Created or updated embargo')
 
     expect(EmbargoForm).to have_received(:new).with(cocina_object)
     expect(embargo_form).to have_received(:validate).with({ release_date: DateTime.parse(release_date), view_access: rights[0], download_access: rights[1], access_location: nil })

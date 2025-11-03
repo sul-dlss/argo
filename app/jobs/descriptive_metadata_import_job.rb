@@ -18,7 +18,7 @@ class DescriptiveMetadataImportJob < BulkActionCsvJob
 
       return failure!(message: 'Description unchanged') if cocina_object.description == description
 
-      open_new_version_if_needed!(description: 'Descriptive metadata upload')
+      open_new_version_if_needed!(description: 'Updated descriptive metadata')
 
       @cocina_object = cocina_object.new(description:)
       Repository.store(cocina_object)

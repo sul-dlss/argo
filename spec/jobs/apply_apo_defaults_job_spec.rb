@@ -32,7 +32,7 @@ RSpec.describe ApplyApoDefaultsJob do
     job.perform_now
 
     expect(job_item).to have_received(:check_update_ability?)
-    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Apply admin policy defaults')
+    expect(job_item).to have_received(:open_new_version_if_needed!).with(description: 'Applied admin policy defaults')
     expect(object_client).to have_received(:apply_admin_policy_defaults)
     expect(job_item).to have_received(:close_version_if_needed!)
 
