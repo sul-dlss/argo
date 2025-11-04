@@ -86,7 +86,7 @@
       <div class="mb-3">
         <%= collection.label :collection_catalog_record_id, "Collection #{CatalogRecordId.label}", class: 'col-sm-4 control-label' %>
         <div class="col-sm-8">
-          <%= collection.text_field :collection_catalog_record_id, class: 'form-control', pattern: CatalogRecordId.html_pattern_string %>
+          <%= collection.text_field :collection_catalog_record_id, class: 'form-control', pattern: CatalogRecordId.html_pattern_string, data: { action: 'apo-form#validateCatalogRecordId' } %>
         </div>
       </div>
       <div class="mb-3">
