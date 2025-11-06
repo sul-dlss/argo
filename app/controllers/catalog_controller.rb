@@ -92,7 +92,8 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
                                                                         component: LazyNonprojectTagFacetComponent,
                                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000, sort: 'index'
+    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000, sort: 'index',
+                                                           unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field 'exclude_google_books', label: 'Exclude Google Books', component: true, query: {
       yes: {
         label: 'Yes',
