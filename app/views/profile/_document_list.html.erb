@@ -89,11 +89,11 @@
     </tr>
     <tr>
       <td>has value</td>
-      <td><%= @presenter.sw_date['count'] %></td>
+      <td><%= @presenter.date['count'] %></td>
     </tr>
     <tr>
       <td>value missing</td>
-      <td><%= @presenter.sw_date['missing'] %></td>
+      <td><%= @presenter.date['missing'] %></td>
     </tr>
     <tr>
       <td><h5>Language</h5></td><td></td>
@@ -102,18 +102,18 @@
     <tr>
       <td><h5>Topic</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row', collection: @presenter.sw_topic, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.topic, as: :item %>
     <tr>
       <td><h5>Region</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row', collection: @presenter.sw_region, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.region, as: :item %>
     <tr>
       <td><h5>Era</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row', collection: @presenter.sw_era, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.era, as: :item %>
     <tr>
       <td><h5>Genre</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row', collection: @presenter.sw_genre, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.genre, as: :item %>
   </table>
 </div>

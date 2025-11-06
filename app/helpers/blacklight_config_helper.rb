@@ -23,7 +23,7 @@ module BlacklightConfigHelper
         author_text_nostem_im^3
         contributor_text_nostem_im
 
-        topic_tesim^2
+        subject_topic_tesim^2
 
         tag_text_unstemmed_im
 
@@ -31,7 +31,7 @@ module BlacklightConfigHelper
         originInfo_publisher_tesim
 
         content_type_ssimdv
-        sw_format_ssimdv
+        sw_resource_type_ssimdv
         object_type_ssim
 
         descriptive_text_nostem_i

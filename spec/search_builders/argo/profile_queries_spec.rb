@@ -22,9 +22,9 @@ RSpec.describe Argo::ProfileQueries do
       SolrDocument::FIELD_SW_FORMAT,
       SolrDocument::FIELD_SW_LANGUAGE,
       SolrDocument::FIELD_TOPIC,
-      SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC,
-      SolrDocument::FIELD_SW_SUBJECT_TEMPORAL,
-      SolrDocument::FIELD_SW_GENRE
+      SolrDocument::FIELD_SUBJECT_GEOGRAPHIC,
+      SolrDocument::FIELD_SUBJECT_TEMPORAL,
+      SolrDocument::FIELD_GENRE
     ]
   end
 
@@ -56,7 +56,7 @@ RSpec.describe Argo::ProfileQueries do
       solr_parameters = subject.add_profile_queries(catalog_config)
       stats_fields = solr_parameters['stats.field']
       required_fields = [
-        SolrDocument::FIELD_SW_PUB_DATE,
+        SolrDocument::FIELD_PUBLICATION_DATE,
         'content_file_count_itsi',
         'shelved_content_file_count_itsi',
         SolrDocument::FIELD_PRESERVATION_SIZE

@@ -46,28 +46,28 @@ class ProfilePresenter
     aggregations[SolrDocument::FIELD_SW_FORMAT].items
   end
 
-  def sw_date
-    stats_field[SolrDocument::FIELD_SW_PUB_DATE]
+  def date
+    stats_field[SolrDocument::FIELD_PUBLICATION_DATE]
   end
 
   def sw_language
     aggregations[SolrDocument::FIELD_SW_LANGUAGE].items
   end
 
-  def sw_topic
+  def topic
     aggregations[SolrDocument::FIELD_TOPIC].items
   end
 
-  def sw_region
-    aggregations[SolrDocument::FIELD_SW_SUBJECT_GEOGRAPHIC].items
+  def region
+    aggregations[SolrDocument::FIELD_SUBJECT_GEOGRAPHIC].items
   end
 
-  def sw_era
-    aggregations[SolrDocument::FIELD_SW_SUBJECT_TEMPORAL].items
+  def era
+    aggregations[SolrDocument::FIELD_SUBJECT_TEMPORAL].items
   end
 
-  def sw_genre
-    aggregations[SolrDocument::FIELD_SW_GENRE].items
+  def genre
+    aggregations[SolrDocument::FIELD_GENRE].items
   end
 
   def type_status_pivot
