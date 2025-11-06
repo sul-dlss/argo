@@ -222,14 +222,6 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_GENRE, label: 'Genre', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'Language', component: true, limit: 10
 
-    config.add_facet_field 'sw_format_ssimdv', label: 'OLD SW Resource Type', component: true, limit: 10
-    config.add_facet_field 'sw_pub_date_facet_ssidv', label: 'OLD SW Date', component: true, limit: 10
-    config.add_facet_field 'topic_ssimdv', label: 'OLD SW Topic', component: true, limit: 10
-    config.add_facet_field 'sw_subject_geographic_ssimdv', label: 'OLD SW Region', component: true, limit: 10
-    config.add_facet_field 'sw_subject_temporal_ssimdv', label: 'OLD SW Era', component: true, limit: 10
-    config.add_facet_field 'sw_genre_ssimdv', label: 'OLD SW Genre', component: true, limit: 10
-    config.add_facet_field 'sw_language_ssimdv', label: 'OLD SW Language', component: true, limit: 10
-
     config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field SolrDocument::FIELD_APO_ID, if: false
