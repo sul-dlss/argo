@@ -10,6 +10,7 @@ gem 'coderay' # Pretty format for XML
 gem 'config'
 gem 'cssbundling-rails', '~> 1.1'
 gem 'csv'
+gem 'datacite'
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'
 gem 'dry-monads'

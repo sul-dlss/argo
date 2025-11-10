@@ -24,8 +24,9 @@ class Ability
 
   attr_reader :current_user
 
-  def grant_permissions
+  def grant_permissions # rubocop:disable Metrics/PerceivedComplexity
     can :manage, :all if current_user.admin?
+    cannot :assign, :doi unless current_user.admin?
     cannot :impersonate, User unless current_user.webauth_admin?
 
     # NOTE: Lock down SDR token creation to *explicitly* authorized users

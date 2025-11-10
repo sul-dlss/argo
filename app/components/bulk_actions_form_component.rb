@@ -25,6 +25,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Close version', new_close_version_job_path(search_of_druids)],
         ['Add workflow', new_add_workflow_job_path(search_of_druids)],
         ['Text extraction', new_text_extraction_job_path(search_of_druids)],
+        ['Assign DOIs', new_doi_assignment_job_path(search_of_druids)],
         ['Register new druids (via CSV)', new_register_druid_job_path],
         ['Purge', new_purge_job_path(search_of_druids)]
       ]],

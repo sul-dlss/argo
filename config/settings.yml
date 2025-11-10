@@ -2,6 +2,11 @@
 source_id_regex: \A.+:.+\z
 google_books_apo: ~ # set in shared_configs because env-specific
 
+# DataCite DOIs
+datacite:
+  batch_size: 1000
+  prefix: '10.80343'
+
 # Bulk Metadata
 bulk_metadata:
   directory: "/tmp/bulk_jobs/"

@@ -6,7 +6,7 @@
     </button>
   <% end %>
   <div class='mb-3'>
-    <label for='druids'>Druids to perform bulk action on</label>
+    <label for='druids'>Druids to perform bulk action on<%= " <strong>(Maximum #{number_with_delimiter(batch_size)} druids)</strong>".html_safe if defined?(batch_size) %></label>
     <textarea id='druids' name='druids' class='form-control' rows='10' data-bulk-actions-target="druids"></textarea>
   </div>
 </div>
