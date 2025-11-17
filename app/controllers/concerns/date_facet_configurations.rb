@@ -62,17 +62,6 @@ module DateFacetConfigurations
                                                       }, raw_facet_field: SolrDocument::FIELD_LAST_PUBLISHED_DATE
       config.add_facet_field SolrDocument::FIELD_LAST_PUBLISHED_DATE, label: 'Last Published', if: false, home: false
 
-      config.add_facet_field 'object_modified_date', home: false, label: 'Last Modified',
-                                                     component: DateChoiceFacetComponent,
-                                                     query: {
-                                                       days_7: { label: 'within 7 days',
-                                                                 fq: "#{SolrDocument::FIELD_LAST_MODIFIED_DATE}:[NOW/DAY-7DAYS TO *]" },
-                                                       days_30: { label: 'within 30 days',
-                                                                  fq: "#{SolrDocument::FIELD_LAST_MODIFIED_DATE}:[NOW/DAY-30DAYS TO *]" }
-                                                     }, raw_facet_field: SolrDocument::FIELD_LAST_MODIFIED_DATE
-
-      config.add_facet_field SolrDocument::FIELD_LAST_MODIFIED_DATE, label: 'Last Modified', if: false, home: false
-
       config.add_facet_field 'version_opened_date', home: false, label: 'Last Opened',
                                                     component: DateChoiceFacetComponent,
                                                     query: {

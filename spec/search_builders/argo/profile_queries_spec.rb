@@ -23,7 +23,6 @@ RSpec.describe Argo::ProfileQueries do
       SolrDocument::FIELD_SW_LANGUAGE,
       SolrDocument::FIELD_TOPIC,
       SolrDocument::FIELD_SUBJECT_GEOGRAPHIC,
-      SolrDocument::FIELD_SUBJECT_TEMPORAL,
       SolrDocument::FIELD_GENRE
     ]
   end

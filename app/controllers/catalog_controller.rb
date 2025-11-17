@@ -186,13 +186,6 @@ class CatalogController < ApplicationController
                            }
     config.add_facet_field SolrDocument::FIELD_WORKFLOW_WPS, label: 'Workflows (WPS)', limit: 9999,
                                                              component: LazyWpsWorkflowFacetComponent
-    config.add_facet_field SolrDocument::FIELD_WORKFLOW_WSP, label: 'Workflows (WSP)',
-                                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                                             limit: 9999
-    config.add_facet_field SolrDocument::FIELD_WORKFLOW_SWP, label: 'Workflows (SWP)',
-                                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                                             limit: 9999
-
     config.add_facet_field SolrDocument::FIELD_METADATA_SOURCE, label: 'Metadata Source', component: true
 
     # common method since search results and reports all do the same configuration
@@ -218,7 +211,6 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SUBJECT_TEMPORAL, label: 'Era', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_GENRE, label: 'Genre', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'Language', component: true, limit: 10
 
