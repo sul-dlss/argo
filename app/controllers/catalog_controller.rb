@@ -22,7 +22,6 @@ class CatalogController < ApplicationController
     SolrDocument::FIELD_APO_TITLE,
     'released_to_earthworks',
     'released_to_searchworks',
-    SolrDocument::FIELD_WORKFLOW_WPS,
     'identifier_tesim'
   ].map(&:to_s).freeze
 
