@@ -222,16 +222,6 @@ RSpec.describe SolrDocument do
     end
   end
 
-  describe '#modified_date' do
-    let(:document_attributes) do
-      { SolrDocument::FIELD_LAST_MODIFIED_DATE => single_date }
-    end
-
-    it 'returns date' do
-      expect(document.modified_date).to match_array(single_date)
-    end
-  end
-
   describe '#opened_date' do
     let(:document_attributes) do
       { SolrDocument::FIELD_LAST_OPENED_DATE => single_date }

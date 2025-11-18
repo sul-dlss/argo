@@ -62,10 +62,6 @@ class ProfilePresenter
     aggregations[SolrDocument::FIELD_SUBJECT_GEOGRAPHIC].items
   end
 
-  def era
-    aggregations[SolrDocument::FIELD_SUBJECT_TEMPORAL].items
-  end
-
   def genre
     aggregations[SolrDocument::FIELD_GENRE].items
   end

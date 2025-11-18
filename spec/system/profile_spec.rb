@@ -76,7 +76,6 @@ RSpec.describe 'Profile' do
       expect(page).to have_css 'h5', text: 'Language'
       expect(page).to have_css 'h5', text: 'Topic'
       expect(page).to have_css 'h5', text: 'Region'
-      expect(page).to have_css 'h5', text: 'Era'
       expect(page).to have_css 'h5', text: 'Genre'
       expect(page).to have_css 'td:nth-child(1)', text: 'Image'
       expect(page).to have_css 'td:nth-child(1)', text: 'has value'

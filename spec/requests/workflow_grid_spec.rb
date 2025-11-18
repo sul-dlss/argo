@@ -13,9 +13,7 @@ RSpec.describe 'Display the workflow grid' do
     {
       'response' => { 'docs' => [] },
       'facet_counts' => {
-        'facet_fields' => { SolrDocument::FIELD_WORKFLOW_WPS => ['accessionWF:publish:waiting', 500],
-                            SolrDocument::FIELD_WORKFLOW_WSP => [],
-                            SolrDocument::FIELD_WORKFLOW_SWP => [] }
+        'facet_fields' => { SolrDocument::FIELD_WORKFLOW_WPS => ['accessionWF:publish:waiting', 500] }
       }
     }
   end

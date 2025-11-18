@@ -34,7 +34,6 @@ class SolrDocument
   FIELD_GENRE = 'genre_ssimdv'
   FIELD_LABEL = 'obj_label_tesim'
   FIELD_LAST_ACCESSIONED_DATE = 'accessioned_latest_dtpsidv'
-  FIELD_LAST_MODIFIED_DATE = 'modified_latest_dtpsidv'
   FIELD_LAST_OPENED_DATE = 'opened_latest_dtpsidv'
   FIELD_LAST_PUBLISHED_DATE = 'published_latest_dtpsidv'
   FIELD_LICENSE = 'use_license_machine_ssidv'
@@ -58,7 +57,6 @@ class SolrDocument
   FIELD_SOURCE_ID = 'source_id_ssi'
   FIELD_STATUS = 'status_ssi'
   FIELD_SUBJECT_GEOGRAPHIC = 'subject_place_ssimdv'
-  FIELD_SUBJECT_TEMPORAL = 'subject_temporal_ssimdv'
   FIELD_SW_FORMAT = 'sw_resource_type_ssimdv'
   FIELD_SW_LANGUAGE = 'sw_language_names_ssimdv'
   FIELD_TAGS = 'tag_ssim'
@@ -67,9 +65,7 @@ class SolrDocument
   FIELD_TOPIC = 'subject_topic_other_ssimdv'
   FIELD_USE_STATEMENT = 'use_statement_ssim'
   FIELD_WORKFLOW_ERRORS = 'wf_error_ssim'
-  FIELD_WORKFLOW_SWP = 'wf_swp_ssimdv'
   FIELD_WORKFLOW_WPS = 'wf_wps_ssimdv'
-  FIELD_WORKFLOW_WSP = 'wf_wsp_ssimdv'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
@@ -84,7 +80,6 @@ class SolrDocument
   attribute :registered_date, Blacklight::Types::Date, FIELD_REGISTERED_DATE
   attribute :accessioned_date, Blacklight::Types::Array, FIELD_LAST_ACCESSIONED_DATE
   attribute :published_date, Blacklight::Types::Array, FIELD_LAST_PUBLISHED_DATE
-  attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
   attribute :created_date, Blacklight::Types::Date, FIELD_CREATED_DATE
   attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
   attribute :preservation_size, Blacklight::Types::Value, FIELD_PRESERVATION_SIZE
