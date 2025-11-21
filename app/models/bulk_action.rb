@@ -37,6 +37,7 @@ class BulkAction < ApplicationRecord
                      TrackingSheetReportJob
                      ExportCocinaJsonJob
                      TextExtractionJob
+                     DoiAssignmentJob
                      ExportCatalogLinksJob]
             }
 

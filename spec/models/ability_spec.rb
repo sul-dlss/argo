@@ -45,6 +45,7 @@ RSpec.describe Ability do
     let(:admin) { true }
 
     it { is_expected.to be_able_to(:manage, :everything) }
+    it { is_expected.to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.to be_able_to(:update, dro) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, apo_id) }
@@ -61,6 +62,7 @@ RSpec.describe Ability do
     let(:manager) { true }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.to be_able_to(:update, dro) }
     it { is_expected.to be_able_to(:update, dro_with_metadata) }
@@ -77,6 +79,7 @@ RSpec.describe Ability do
   context 'as a viewer' do
     let(:viewer) { true }
 
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:update, dro_with_metadata) }
@@ -101,6 +104,7 @@ RSpec.describe Ability do
   context 'as a user authorized for SDR API' do
     let(:sdr_api_authorized) { true }
 
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.to be_able_to(:create, :token) }
     it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:update, dro_with_metadata) }
@@ -136,6 +140,7 @@ RSpec.describe Ability do
     let(:apo_roles) { ['dor-apo-manager'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.to be_able_to(:update, dro) }
     it { is_expected.to be_able_to(:update, dro_with_metadata) }
@@ -161,6 +166,7 @@ RSpec.describe Ability do
     let(:new_cocina_object_roles) { ['dor-apo-manager'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:update, dro_with_metadata) }
@@ -186,6 +192,7 @@ RSpec.describe Ability do
     let(:apo_roles) { ['dor-apo-metadata'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:update, dro_with_metadata) }
@@ -201,6 +208,7 @@ RSpec.describe Ability do
     let(:apo_roles) { ['dor-viewer'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:assign, :doi) }
     it { is_expected.not_to be_able_to(:create, :token) }
     it { is_expected.not_to be_able_to(:update, dro) }
     it { is_expected.not_to be_able_to(:update, dro_with_metadata) }
