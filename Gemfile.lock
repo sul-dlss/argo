@@ -150,7 +150,7 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.108.2)
+    cocina-models (0.108.3)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -356,7 +356,7 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.26.1)
+    minitest (5.26.2)
     moab-versioning (6.1.2)
       druid-tools (>= 1.0.0)
       json
@@ -408,7 +408,8 @@ GEM
     nom-xml (1.2.0)
       i18n
       nokogiri
-    okcomputer (1.19.0)
+    okcomputer (1.19.1)
+      benchmark
     openapi_parser (1.0.0)
     optimist (3.2.1)
     orm_adapter (0.5.0)
@@ -582,7 +583,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
-    rubocop-rails (2.34.0)
+    rubocop-rails (2.34.1)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
