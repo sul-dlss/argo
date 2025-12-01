@@ -111,19 +111,12 @@ GEM
     bootsnap (1.19.0)
       msgpack (~> 1.2)
     builder (3.3.0)
-    bundler-audit (0.9.3)
-      bundler (>= 1.2.0)
-      thor (~> 1.0)
     cancancan (3.6.1)
     capistrano (3.19.2)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
       sshkit (>= 1.9.0)
-    capistrano-bundle_audit (0.4.0)
-      bundler-audit (~> 0.5)
-      capistrano (~> 3.0)
-      capistrano-bundler (>= 1.4)
     capistrano-bundler (2.2.0)
       capistrano (~> 3.1)
     capistrano-maintenance (1.2.1)
@@ -197,10 +190,9 @@ GEM
     disposable (0.6.3)
       declarative (>= 0.0.9, < 1.0.0)
       representable (>= 3.1.1, < 4)
-    dlss-capistrano (5.3.0)
+    dlss-capistrano (6.0.0)
       bcrypt_pbkdf
       capistrano (~> 3.0)
-      capistrano-bundle_audit (>= 0.3.0)
       capistrano-one_time_key (>= 0.2.0)
       capistrano-shared_configs
       ed25519
