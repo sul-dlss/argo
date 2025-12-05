@@ -71,8 +71,7 @@ sdr_api:
   password: notusedanywhere
   url: http://localhost:3006
 
-# These workflows are inactive, and the workflow-server doesn't know about them
-# so we don't draw them on the workflow grid
+# These workflows are inactive or not useful to display on the workflow grid
 inactive_workflows:
   - accession2WF
   - sdrMigrationWF
@@ -83,6 +82,10 @@ inactive_workflows:
   - eemsAccessionWF
   - gisDiscoveryWF
   - etdSubmitWF
+  - hydrusAssemblyWF
+  - disseminationWF
+  - registrationWF
+  - versioningWF
 
 tech_md_service:
   url: "http://localhost:3005"
