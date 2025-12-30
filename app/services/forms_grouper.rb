@@ -124,9 +124,9 @@ class FormsGrouper
       .map { |row| row&.select { |field| row.count(field) > 1 } }
       .compact_blank
       .each do |repeats|
-      repeat_types_counts.merge!(
-        repeats.index_with { |e| repeats.count(e) }
-      )
+        repeat_types_counts.merge!(
+          repeats.index_with { |e| repeats.count(e) }
+        )
     end
     # repeat_types_counts is now:
     #
