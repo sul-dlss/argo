@@ -54,7 +54,7 @@ services:
       - dor-services-app
 
   solr:
-    image: solr:9.6.1
+    image: solr:9.10.0
     volumes:
       - ./solr_conf/conf/:/myconfig
     command: solr-create -c argo -d /myconfig
