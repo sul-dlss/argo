@@ -1,8 +1,8 @@
 bulk_metadata:
   directory: 'spec/fixtures/bulk_upload/workspace/'
 
-# URLs
-solrizer_url: 'http://localhost:8983/solr/argo'
+solr:
+  url: 'http://localhost:8983/solr/argo'
 
 features:
   ocr_workflow: true

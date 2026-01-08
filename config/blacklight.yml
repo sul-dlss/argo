@@ -1,6 +1,12 @@
+default: &default
+  adapter: solr
+  url: <%= Settings.solr.url %>
+
 development:
-  adapter: solr
-  url: <%= Settings.solrizer_url %>
-test: &test
-  adapter: solr
-  url: <%= Settings.solrizer_url %>
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

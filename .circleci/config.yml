@@ -149,7 +149,7 @@ jobs:
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
       SETTINGS__REDIS_URL: redis://redis:6379/
       SETTINGS__SDR_API__URL: http://sdr-api:3000
-      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__SOLR__URL: http://solr:8983/solr/argo
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
       TT: 1 # track templates
     executor: ruby_with_all_deps
