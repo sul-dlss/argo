@@ -1,2 +1,2 @@
-# URLs
-solrizer_url: 'http://localhost:8983/solr/argo'
+solr:
+  url: 'http://localhost:8983/solr/argo'

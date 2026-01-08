@@ -48,11 +48,13 @@ normalizer_url: "https://modsulator-app-stage.stanford.edu/v1/normalizer"
 purl_url: "https://sul-purl-stage.stanford.edu"
 searchworks_url: "http://searchworks.stanford.edu/view/%{id}"
 robot_status_url: "https://robot-console-stage.stanford.edu"
-solrizer_url: "http://solr:8983/solr/argo"
 spreadsheet_url: "https://modsulator-app-stage.stanford.edu/v1/spreadsheet"
 stacks_file_url: "https://stacks-test.stanford.edu/file"
 stacks_version_file_url: "https://stacks-test.stanford.edu/v2/file"
 stacks_url: "https://stacks-test.stanford.edu/image"
+
+solr:
+  url: "http://solr:8983/solr/argo"
 
 apo:
   default_workflow_option: "registrationWF"
