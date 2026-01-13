@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
-  <!-- NOTE:  these 2 lib dirs are here for testing only and do NOT go in the prod file -->
+  <!-- NOTE:  these lib dirs are here for testing only and do NOT go in the prod file -->
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
   <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib" />
