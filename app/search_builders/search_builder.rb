@@ -12,6 +12,7 @@ class SearchBuilder < Blacklight::SearchBuilder
     druids_only
     add_date_field_queries
     add_profile_queries
+    strip_qualified_druids
   ]
 
   # Override blacklight in order to customize facet paging behavior.
