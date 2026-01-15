@@ -59,6 +59,18 @@ RSpec.describe SearchBuilder do
       expect(subject.processor_chain
         .count { |x| x == :add_profile_queries }).to eq 1
     end
+
+    it 'has strip_qualified_druids in chain once' do
+      expect(subject.processor_chain)
+        .to include :strip_qualified_druids
+      expect(subject.processor_chain
+               .count { |x| x == :strip_qualified_druids }).to eq 1
+      new_search = described_class.new(subject.processor_chain, context)
+      expect(new_search.processor_chain)
+        .to include :strip_qualified_druids
+      expect(subject.processor_chain
+               .count { |x| x == :strip_qualified_druids }).to eq 1
+    end
   end
 
   describe '#add_facet_paging_to_solr' do

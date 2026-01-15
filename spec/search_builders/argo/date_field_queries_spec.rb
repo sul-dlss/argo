@@ -11,10 +11,6 @@ end
 RSpec.describe Argo::DateFieldQueries do
   subject { TestClass.new }
 
-  let(:user) do
-    double('user', manager?: false, admin?: false, viewer?: false)
-  end
-
   describe 'add_date_field_queries' do
     describe 'when a date field is faceted' do
       it 'removes the raw fq query in favor of default range query' do
