@@ -28,17 +28,16 @@ class VersionsController < ApplicationController
   end
 
   def open
-    VersionService.open(druid: @cocina_object.externalIdentifier,
-                        description: params[:description],
-                        opening_user_name: current_user.to_s)
+    begin
+      VersionService.open(druid: @cocina_object.externalIdentifier,
+                          description: params[:description],
+                          opening_user_name: current_user.to_s)
+    rescue Dor::Services::Client::UnexpectedResponse => e
+      return redirect_to solr_document_path(params[:item_id]), alert: e.message
+    end
     msg = "#{@cocina_object.externalIdentifier} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
     Dor::Services::Client.object(@cocina_object.externalIdentifier).reindex
-  rescue StandardError => e
-    raise e unless e.to_s == 'Object net yet accessioned'
-
-    render status: :internal_server_error, plain: 'Object net yet accessioned'
-    nil
   end
 
   # as long as this isn't a bulk operation, and we get description
