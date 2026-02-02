@@ -658,3 +658,18 @@ Rails/FindByOrAssignmentMemoization: # new in 2.33
   Enabled: true
 Rails/OrderArguments: # new in 2.33
   Enabled: true
+
+Style/EmptyClassDefinition: # new in 1.83
+  Enabled: true
+Style/ModuleMemberExistenceCheck: # new in 1.82
+  Enabled: true
+Style/NegativeArrayIndex: # new in 1.83
+  Enabled: true
+Style/ReverseFind: # new in 1.83
+  Enabled: true
+Rails/HttpStatusNameConsistency: # new in 2.34
+  Enabled: true
+Rails/RedirectBackOrTo: # new in 2.34
+  Enabled: true
+RSpec/LeakyLocalVariable: # new in 3.8
+  Enabled: true

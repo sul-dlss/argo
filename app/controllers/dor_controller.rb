@@ -11,8 +11,8 @@ class DorController < ApplicationController
       Rails.logger.error "#{flash[:error]}: #{e.inspect}"
     end
 
-    redirect_back(
-      fallback_location: proc { solr_document_path(params[:druid]) }
+    redirect_back_or_to(
+      proc { solr_document_path(params[:druid]) }
     )
   end
 end

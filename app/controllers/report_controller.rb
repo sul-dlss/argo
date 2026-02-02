@@ -61,7 +61,7 @@ class ReportController < CatalogController
       Honeybadger.notify(e, context: { druid: })
     end
     message = "#{ids.size} objects were reset back to waiting for #{workflow}:#{step}.  It may take a few seconds to update."
-    redirect_back(fallback_location: report_workflow_grid_path, notice: message)
+    redirect_back_or_to(report_workflow_grid_path, notice: message)
   end
 
   # This draws the full page that supports the workflow grid
