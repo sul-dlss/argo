@@ -5,11 +5,11 @@ class CollectionsController < ApplicationController
   include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
 
   def new
-    authorize! :create, Cocina::Models::Collection
-
     if modal?
       @cocina_admin_policy = Repository.find(params[:apo_druid])
+      authorize! :update, @cocina_admin_policy
     else
+      authorize! :create, Cocina::Models::Collection
       @apo_list = AdminPolicyOptions.for(current_user)
     end
 
