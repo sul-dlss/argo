@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DescriptionImport
+class DescriptionImport # rubocop:disable Metrics/ClassLength
   include Dry::Monads[:result]
 
   def self.import(csv_row:)
@@ -117,18 +117,42 @@ class DescriptionImport
     return unless compacted_params_hash && compacted_params_hash[:language]
 
     compacted_params_hash[:language].delete_if do |language|
-      language[:value].nil? && language[:code].nil? && language[:uri].nil? && language[:note].blank?
+      !language_sufficient?(language)
+    end
+  end
+
+  # Ignore Language that is just "type" or "source"
+  def language_sufficient?(descriptive_value)
+    %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
+      descriptive_value[key].present?
+    end
+  end
+
+  # date is an array of DescriptiveValue.
+  def remove_date_without_value(compacted_params_hash)
+    return unless compacted_params_hash && compacted_params_hash[:date]
+
+    compacted_params_hash[:date].delete_if do |date|
+      !descriptive_value_sufficient?(date)
+    end
+  end
+
+  # Ignore DescriptiveValue that is just "type" or "source"
+  def descriptive_value_sufficient?(descriptive_value)
+    %i[value code uri identifier note valueAt structuredValue parallelValue groupedValue].any? do |key|
+      descriptive_value[key].present?
     end
   end
 
   def remove_nested_attributes_without_value(compacted_params_hash)
-    # event can have contributors, geographic can have form, relatedResource can have form and/or contributor
+    # event can have contributors and dates, geographic can have form, relatedResource can have form and/or contributor
     %i[relatedResource event geographic].each do |parent_property|
       next if compacted_params_hash[parent_property].blank?
 
       compacted_params_hash[parent_property].each do |parent_object|
-        remove_contributors_if_role_without_name(parent_object)
-        remove_form_if_source_without_value(parent_object)
+        remove_contributors_if_role_without_name(parent_object) unless parent_property == :geographic
+        remove_form_if_source_without_value(parent_object) unless parent_property == :event
+        remove_date_without_value(parent_object) if parent_property == :event
       end
     end
   end
