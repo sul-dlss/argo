@@ -750,4 +750,64 @@ RSpec.describe DescriptionImport do
       end
     end
   end
+
+  context 'with language property' do
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    context 'when language has a value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,language1.value,language1.code,language1.uri,language1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,English,en,https://id.loc.gov/vocabulary/iso639-2/eng,English
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.language.as_json).to eq [{ 'appliesTo' => [],
+                                                         'code' => 'en',
+                                                         'displayLabel' => 'English',
+                                                         'groupedValue' => [],
+                                                         'note' => [],
+                                                         'parallelValue' => [],
+                                                         'structuredValue' => [],
+                                                         'uri' => 'https://id.loc.gov/vocabulary/iso639-2/eng',
+                                                         'value' => 'English' }]
+      end
+    end
+
+    context 'when language has no value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,language1.value,language1.code,language1.uri,language1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,,,Should not be accepted
+        CSV
+      end
+
+      it 'rejects the item' do
+        expect(updated.value!.language).to be_empty
+      end
+    end
+
+    context 'when language has a note' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,language1.value,language1.code,language1.uri,language1.note1.value
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,,,A language note
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.language.as_json).to eq [
+          { 'appliesTo' => [],
+            'groupedValue' => [],
+            'note' => [{ 'structuredValue' => [], 'parallelValue' => [], 'groupedValue' => [], 'value' => 'A language note',
+                         'identifier' => [], 'note' => [], 'appliesTo' => [] }],
+            'parallelValue' => [],
+            'structuredValue' => [] }
+        ]
+      end
+    end
+  end
 end

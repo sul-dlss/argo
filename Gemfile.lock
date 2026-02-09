@@ -197,7 +197,7 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.25.3)
+    dor-services-client (15.26.0)
       activesupport (>= 7.0.0)
       cocina-models (~> 0.109.0)
       deprecation
