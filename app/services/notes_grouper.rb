@@ -57,12 +57,12 @@ class NotesGrouper
         new_note_number = case description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
                                           .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
                                           .count do |_key, value|
-                                 hash = value.to_h
-                                 num = hash.keys.first[/\d+/]
-                                 [hash["old_note#{num}.displayLabel"],
-                                  hash["old_note#{num}.type"]] == [label_for_note_number, type_for_note_number] ||
-                                   [hash["note#{num}.displayLabel"],
-                                    hash["note#{num}.type"]] == [label_for_note_number, type_for_note_number]
+                                            hash = value.to_h
+                                            num = hash.keys.first[/\d+/]
+                                            [hash["old_note#{num}.displayLabel"],
+                                             hash["old_note#{num}.type"]] == [label_for_note_number, type_for_note_number] ||
+                                              [hash["note#{num}.displayLabel"],
+                                               hash["note#{num}.type"]] == [label_for_note_number, type_for_note_number]
                                end
 
                           when 1
@@ -102,15 +102,15 @@ class NotesGrouper
     label_and_type_values = descriptions
                             .values
                             .map do |description|
-      notes_count = description.keys.grep(/^note\d+\./).max_by { |field| field[/\d+/].to_i }
-      next if notes_count.nil?
+                              notes_count = description.keys.grep(/^note\d+\./).max_by { |field| field[/\d+/].to_i }
+                              next if notes_count.nil?
 
-      1.upto(notes_count[/\d+/].to_i).map do |note_number|
-        [
-          description["note#{note_number}.displayLabel"],
-          description["note#{note_number}.type"]
-        ]
-      end
+                              1.upto(notes_count[/\d+/].to_i).map do |note_number|
+                                [
+                                  description["note#{note_number}.displayLabel"],
+                                  description["note#{note_number}.type"]
+                                ]
+                              end
     end
     # e.g., when passed a set of six descriptions
     # [
@@ -148,9 +148,9 @@ class NotesGrouper
       .map { |row| row&.select { |field| row.count(field) > 1 } }
       .compact_blank
       .each do |repeats|
-      repeat_types_counts.merge!(
-        repeats.index_with { |e| repeats.count(e) }
-      )
+        repeat_types_counts.merge!(
+          repeats.index_with { |e| repeats.count(e) }
+        )
     end
     # e.g.: {["Display label", nil]=>2, [nil, nil]=>3}
 
