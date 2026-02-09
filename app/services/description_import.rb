@@ -27,6 +27,7 @@ class DescriptionImport
 
     remove_contributors_if_role_without_name(compacted_params)
     remove_form_if_source_without_value(compacted_params)
+    remove_language_without_value(compacted_params)
     remove_nested_attributes_without_value(compacted_params)
 
     Success(Cocina::Models::Description.new(compacted_params))
@@ -109,6 +110,14 @@ class DescriptionImport
 
     compacted_params_hash[:form].delete_if do |form|
       form && form[:value].nil? && form[:structuredValue].nil? && (form[:source].present? || form[:type].present?)
+    end
+  end
+
+  def remove_language_without_value(compacted_params_hash)
+    return unless compacted_params_hash && compacted_params_hash[:language]
+
+    compacted_params_hash[:language].delete_if do |language|
+      language[:value].nil? && language[:code].nil? && language[:uri].nil? && language[:note].blank?
     end
   end
 
