@@ -810,4 +810,53 @@ RSpec.describe DescriptionImport do
       end
     end
   end
+
+  context 'with event date property' do
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    context 'when event date has a value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,2022-01-01,creation
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.event.first.date).to eq [
+          Cocina::Models::DescriptiveValue.new(type: 'creation', value: '2022-01-01')
+        ]
+      end
+    end
+
+    context 'when event date has no value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,creation
+        CSV
+      end
+
+      it 'rejects the item' do
+        expect(updated.value!.event.first.date).to be_empty
+      end
+    end
+
+    context 'when event date has a note' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type,event1.date1.note1.value
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,creation,A date note
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.event.first.date).to eq [
+          Cocina::Models::DescriptiveValue.new(type: 'creation', note: [{ value: 'A date note' }])
+        ]
+      end
+    end
+  end
 end
