@@ -25,7 +25,7 @@ class DescriptionImport # rubocop:disable Metrics/ClassLength
 
     compacted_params = compact_params(params)
 
-    remove_contributors_if_role_without_name(compacted_params)
+    remove_contributors_without_value(compacted_params)
     remove_form_if_source_without_value(compacted_params)
     remove_language_without_value(compacted_params)
     remove_nested_attributes_without_value(compacted_params)
@@ -97,11 +97,11 @@ class DescriptionImport # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def remove_contributors_if_role_without_name(compacted_params_hash)
+  def remove_contributors_without_value(compacted_params_hash)
     return unless compacted_params_hash && compacted_params_hash[:contributor]
 
     compacted_params_hash[:contributor].delete_if do |contributor|
-      contributor && contributor[:name].nil? && contributor[:role].present?
+      contributor[:name].nil? && contributor[:identifier].blank? && contributor[:valueAt].blank?
     end
   end
 
@@ -150,7 +150,7 @@ class DescriptionImport # rubocop:disable Metrics/ClassLength
       next if compacted_params_hash[parent_property].blank?
 
       compacted_params_hash[parent_property].each do |parent_object|
-        remove_contributors_if_role_without_name(parent_object) unless parent_property == :geographic
+        remove_contributors_without_value(parent_object) unless parent_property == :geographic
         remove_form_if_source_without_value(parent_object) unless parent_property == :event
         remove_date_without_value(parent_object) if parent_property == :event
       end
