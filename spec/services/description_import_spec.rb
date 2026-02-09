@@ -362,7 +362,9 @@ RSpec.describe DescriptionImport do
     end
   end
 
-  context 'when nested contributor role' do
+  context 'with a contributor role within an event' do
+    subject(:contributors) { updated.value!.event.first.contributor }
+
     let(:csv) do
       CSV.parse(csv_data, headers: true)
     end
@@ -400,92 +402,124 @@ RSpec.describe DescriptionImport do
     end
     let(:expected) { Cocina::Models::Description.new(expected_hash) }
 
-    [nil, 'Someone'].each do |name|
-      context "when role as code (not value), name: '#{name}'" do
+    context 'when name value is missing' do
+      context 'when role as code (not value) and name value is missing' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
-            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,#{name},pbl,,noted
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,,pbl,,noted
           CSV
-        end
-        let(:expected_contributor) do
-          if name
-            {
-              name: [{ value: name }],
-              role: [{ code: 'pbl' }]
-            }
-          end
         end
 
         it 'has the expected value' do
-          expect(updated.value!.to_h).to eq expected.to_h
+          expect(contributors).to be_empty
         end
       end
 
-      context "when role as value (not code), name: '#{name}'" do
+      context 'when role as value (not code)' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
-            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,#{name},,Publisher,noted
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,,,Publisher,noted
           CSV
-        end
-        let(:expected_contributor) do
-          if name
-            {
-              name: [{ value: name }],
-              role: [{ value: 'Publisher' }]
-            }
-          end
         end
 
         it 'has the expected value' do
-          expect(updated.value!.to_h).to eq expected.to_h
+          expect(contributors).to be_empty
         end
       end
 
-      context "when role as both code and value, name: '#{name}'" do
+      context 'when role as both code and value' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
-            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,#{name},pbl,Publisher,noted
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,,pbl,Publisher,noted
           CSV
-        end
-        let(:expected_contributor) do
-          if name
-            {
-              name: [{ value: name }],
-              role: [
-                {
-                  code: 'pbl',
-                  value: 'Publisher'
-                }
-              ]
-            }
-          end
         end
 
         it 'has the expected value' do
-          expect(updated.value!.to_h).to eq expected.to_h
+          expect(contributors).to be_empty
         end
       end
 
-      context "when role code and value both empty, name: '#{name}'" do
+      context 'when role code and value both empty' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
-            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,#{name},,,noted
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,,,,noted
           CSV
-        end
-        let(:expected_contributor) do
-          if name
-            {
-              name: [{ value: name }]
-            }
-          end
         end
 
         it 'has the expected value' do
-          expect(updated.value!.to_h).to eq expected.to_h
+          expect(contributors).to be_empty
+        end
+      end
+    end
+
+    context 'when name value is present ("Someone")' do
+      context 'when role as code (not value)' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,Someone,pbl,,noted
+          CSV
+        end
+
+        it 'has the expected value' do
+          expect(contributors).to eq [Cocina::Models::Contributor.new(
+            name: [{ value: 'Someone' }],
+            role: [{ code: 'pbl' }]
+          )]
+        end
+      end
+
+      context 'when role as value (not code)' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,Someone,,Publisher,noted
+          CSV
+        end
+
+        it 'has the expected value' do
+          expect(contributors).to eq [Cocina::Models::Contributor.new(
+            name: [{ value: 'Someone' }],
+            role: [{ value: 'Publisher' }]
+          )]
+        end
+      end
+
+      context 'when role as both code and value' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,Someone,pbl,Publisher,noted
+          CSV
+        end
+
+        it 'has the expected value' do
+          expect(contributors).to eq [Cocina::Models::Contributor.new(
+            name: [{ value: 'Someone' }],
+            role: [
+              {
+                code: 'pbl',
+                value: 'Publisher'
+              }
+            ]
+          )]
+        end
+      end
+
+      context 'when role code and value both empty' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
+            jr825qh8124,event:contrib-roles,https://purl/jr825qh8124,my great event,Someone,,,noted
+          CSV
+        end
+
+        it 'has the expected value' do
+          expect(contributors).to eq [Cocina::Models::Contributor.new(name: [{ value: 'Someone' }])]
         end
       end
     end
