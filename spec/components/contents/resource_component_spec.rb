@@ -7,7 +7,7 @@ RSpec.describe Contents::ResourceComponent, type: :component do
     described_class.new(resource:,
                         resource_counter: 1,
                         counter_offset: 50,
-                        object_id: 'druid:kb487gt5106',
+                        item_id: 'druid:kb487gt5106',
                         viewable: true,
                         user_version: nil)
   end

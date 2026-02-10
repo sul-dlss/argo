@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Contents::FileComponent, type: :component do
-  let(:component) { described_class.new(file:, object_id: 'druid:kb487gt5106', viewable: true, image: true, user_version:) }
+  let(:component) { described_class.new(file:, item_id: 'druid:kb487gt5106', viewable: true, image: true, user_version:) }
   let(:rendered) { render_inline(component) }
   let(:file) do
     instance_double(Cocina::Models::File,
@@ -60,7 +60,7 @@ RSpec.describe Contents::FileComponent, type: :component do
   end
 
   context 'with a fileset that is not an image' do
-    let(:component) { described_class.new(file:, object_id: 'druid:kb487gt5106', viewable: true, image: false, user_version:) }
+    let(:component) { described_class.new(file:, item_id: 'druid:kb487gt5106', viewable: true, image: false, user_version:) }
 
     it 'renders the component without height' do
       expect(rendered.to_html).to include 'World'
