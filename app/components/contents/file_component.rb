@@ -2,15 +2,15 @@
 
 module Contents
   class FileComponent < ViewComponent::Base
-    def initialize(file:, object_id:, user_version:, viewable:, image:)
+    def initialize(file:, item_id:, user_version:, viewable:, image:)
       @file = file
-      @object_id = object_id
+      @item_id = item_id
       @user_version = user_version
       @viewable = viewable
       @image = image
     end
 
-    attr_reader :file, :object_id, :user_version
+    attr_reader :file, :item_id, :user_version
 
     def viewable?
       @viewable
@@ -59,7 +59,7 @@ module Contents
     end
 
     def files_link
-      attrs = { item_id: object_id, user_version_id: user_version, id: filename }.compact
+      attrs = { item_id:, user_version_id: user_version, id: filename }.compact
       user_version ? item_public_version_files_path(**attrs) : item_files_path(**attrs)
     end
   end

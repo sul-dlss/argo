@@ -6,7 +6,7 @@ RSpec.describe Contents::StructuralComponent, type: :component do
   let(:component) do
     described_class.new(structural: Cocina::Models::DROStructural.new(contains:, hasMemberOrders: member_orders),
                         viewable: true,
-                        object_id: 'druid:kb487gt5106',
+                        item_id: 'druid:kb487gt5106',
                         user_version: nil)
   end
   let(:rendered) { render_inline(component) }
