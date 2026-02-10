@@ -8,37 +8,55 @@ class DescriptionImportFilter
   # @raises Cocina::Models::ValidationError
   def self.filter(compacted_params)
     new.filter(compacted_params)
+    Cocina::Models::Description.new(compacted_params)
   end
 
-  def filter(compacted_params)
-    remove_contributors_without_value(compacted_params)
-    remove_form_without_value(compacted_params)
-    remove_language_without_value(compacted_params)
-    remove_nested_attributes_without_value(compacted_params)
+  ATTRIBUTES_TO_FILTER = {
+    contributor: :remove_contributors_without_value,
+    form: :remove_form_without_value,
+    language: :remove_language_without_value,
+    date: :remove_date_without_value
+  }.freeze
 
-    Cocina::Models::Description.new(compacted_params)
+  MODELS_WITH_NESTED_ATTRIBUTES = {
+    relatedResource: Cocina::Models::RelatedResource,
+    event: Cocina::Models::Event,
+    geographic: Cocina::Models::DescriptiveGeographicMetadata,
+    adminMetadata: Cocina::Models::DescriptiveAdminMetadata
+  }.freeze
+
+  # recursive, breadth first search for incomplete nodes
+  def filter(compacted_params, model: Cocina::Models::Description)
+    ATTRIBUTES_TO_FILTER.each do |attribute, method|
+      send(method, compacted_params[attribute]) if model.attribute_names.include?(attribute)
+    end
+
+    MODELS_WITH_NESTED_ATTRIBUTES.each do |attribute, model|
+      case compacted_params[attribute]
+      when Hash
+        filter(compacted_params[attribute], model:)
+      when Array
+        compacted_params[attribute].each { |attributes| filter(attributes, model:) }
+      end
+    end
+
+    compacted_params
   end
 
   private
 
-  def remove_contributors_without_value(compacted_params_hash)
-    return unless compacted_params_hash && compacted_params_hash[:contributor]
-
-    compacted_params_hash[:contributor].delete_if do |contributor|
+  def remove_contributors_without_value(contributors)
+    Array(contributors).delete_if do |contributor|
       contributor[:name].nil? && contributor[:identifier].blank? && contributor[:valueAt].blank?
     end
   end
 
-  def remove_form_without_value(compacted_params_hash)
-    compacted_params_hash[:form]&.delete_if { !descriptive_value_sufficient?(it) }
+  def remove_form_without_value(forms)
+    Array(forms).delete_if { !descriptive_value_sufficient?(it) }
   end
 
-  def remove_language_without_value(compacted_params_hash)
-    return unless compacted_params_hash && compacted_params_hash[:language]
-
-    compacted_params_hash[:language].delete_if do |language|
-      !language_sufficient?(language)
-    end
+  def remove_language_without_value(languages)
+    Array(languages).delete_if { !language_sufficient?(it) }
   end
 
   # Ignore Language that is just "type" or "source"
@@ -48,30 +66,15 @@ class DescriptionImportFilter
     end
   end
 
-  # date is an array of DescriptiveValue.
-  def remove_date_without_value(compacted_params_hash)
-    return unless compacted_params_hash && compacted_params_hash[:date]
-
-    compacted_params_hash[:date].delete_if { !descriptive_value_sufficient?(it) }
+  # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
+  def remove_date_without_value(dates)
+    Array(dates).delete_if { !descriptive_value_sufficient?(it) }
   end
 
   # Ignore DescriptiveValue that is just "type" or "source"
   def descriptive_value_sufficient?(descriptive_value)
     %i[value code uri identifier note valueAt structuredValue parallelValue groupedValue].any? do |key|
       descriptive_value[key].present?
-    end
-  end
-
-  def remove_nested_attributes_without_value(compacted_params_hash)
-    # event can have contributors and dates, geographic can have form, relatedResource can have form and/or contributor
-    %i[relatedResource event geographic].each do |parent_property|
-      next if compacted_params_hash[parent_property].blank?
-
-      compacted_params_hash[parent_property].each do |parent_object|
-        remove_contributors_without_value(parent_object) unless parent_property == :geographic
-        remove_form_without_value(parent_object) unless parent_property == :event
-        remove_date_without_value(parent_object) if parent_property == :event
-      end
     end
   end
 end
