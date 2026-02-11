@@ -816,5 +816,20 @@ RSpec.describe DescriptionImport do
         ]
       end
     end
+
+    context 'when the event date is nested within adminMetadata and has no value' do
+      # Found in https://argo.stanford.edu/view/db586ns4974
+      # See https://github.com/sul-dlss/cocina-models/issues/830
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,adminMetadata.event1.date1.value,adminMetadata.event1.date1.type
+          druid:db586ns4974,desc:no-title-type,A title,https://purl/bc123df4567,,creation
+        CSV
+      end
+
+      it 'rejects the item' do
+        expect(updated.value!.adminMetadata.event.first.date).to be_empty
+      end
+    end
   end
 end
