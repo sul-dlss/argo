@@ -142,7 +142,7 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.109.0)
+    cocina-models (0.110.1)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -150,9 +150,10 @@ GEM
       edtf
       equivalent-xml
       i18n
+      json_schemer (~> 2.0)
       jsonpath
+      marc (~> 1.3)
       nokogiri
-      openapi_parser (~> 1.0)
       super_diff
       thor
       zeitwerk (~> 2.1)
@@ -197,9 +198,9 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.26.0)
+    dor-services-client (15.27.1)
       activesupport (>= 7.0.0)
-      cocina-models (~> 0.109.0)
+      cocina-models (~> 0.110.1)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -278,6 +279,7 @@ GEM
       zeitwerk
     globalid (1.3.0)
       activesupport (>= 6.1)
+    hana (1.3.7)
     hashdiff (1.2.1)
     honeybadger (6.3.0)
       logger
@@ -301,6 +303,11 @@ GEM
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
     json (2.18.1)
+    json_schemer (2.5.0)
+      bigdecimal
+      hana (~> 1.3)
+      regexp_parser (~> 2.0)
+      simpleidn (~> 0.2)
     jsonpath (1.1.5)
       multi_json
     kaminari (1.2.2)
@@ -403,7 +410,6 @@ GEM
       nokogiri
     okcomputer (1.19.1)
       benchmark
-    openapi_parser (1.0.0)
     optimist (3.2.1)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
@@ -593,9 +599,9 @@ GEM
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    sdr-client (2.27.3)
+    sdr-client (2.28.1)
       activesupport
-      cocina-models (~> 0.109.0)
+      cocina-models (~> 0.110.1)
       config
       dry-monads
       faraday (>= 0.16)
@@ -620,6 +626,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
+    simpleidn (0.2.3)
     smart_properties (1.17.0)
     spreadsheet (1.3.4)
       bigdecimal
