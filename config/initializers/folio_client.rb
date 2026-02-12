@@ -5,8 +5,7 @@ FolioClient.configure(
   url: Settings.catalog.folio.okapi.url,
   login_params: {
     username: Settings.catalog.folio.okapi.username,
-    password: Settings.catalog.folio.okapi.password,
-    legacy_auth: Settings.catalog.folio.okapi.legacy_auth
+    password: Settings.catalog.folio.okapi.password
   },
   okapi_headers: {
     'X-Okapi-Tenant': Settings.catalog.folio.tenant_id,

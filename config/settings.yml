@@ -65,7 +65,6 @@ catalog:
       url: "https://okapi-dev.example.com"
       username: "app"
       password: "supersecret"
-      legacy_auth: true
     tenant_id: "example_tenant"
 
 sdr_api:
