@@ -34,7 +34,7 @@ RSpec.describe 'Technicals' do
   end
 
   context 'with results' do
-    let(:result) { Success(['filename' => 'sunburst.png']) }
+    let(:result) { Success([{ 'filename' => 'sunburst.png' }]) }
 
     it 'renders something useful' do
       get '/items/skret-t0k3n/technical'

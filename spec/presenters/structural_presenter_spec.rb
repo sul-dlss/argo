@@ -28,7 +28,7 @@ RSpec.describe StructuralPresenter do
     context 'when a virtual object' do
       let(:member_orders) do
         [
-          members: %w[druid:aa111bb2222 druid:cc333dd4444]
+          { members: %w[druid:aa111bb2222 druid:cc333dd4444] }
         ]
       end
 
@@ -48,7 +48,7 @@ RSpec.describe StructuralPresenter do
     context 'when a virtual object' do
       let(:member_orders) do
         [
-          members: %w[druid:aa111bb2222 druid:cc333dd4444]
+          { members: %w[druid:aa111bb2222 druid:cc333dd4444] }
         ]
       end
 
@@ -76,7 +76,7 @@ RSpec.describe StructuralPresenter do
     context 'when a virtual object' do
       let(:member_orders) do
         [
-          members: %w[druid:aa111bb2222 druid:cc333dd4444]
+          { members: %w[druid:aa111bb2222 druid:cc333dd4444] }
         ]
       end
 
@@ -96,7 +96,7 @@ RSpec.describe StructuralPresenter do
     context 'when a virtual object' do
       let(:member_orders) do
         [
-          members: %w[druid:aa111bb2222 druid:cc333dd4444]
+          { members: %w[druid:aa111bb2222 druid:cc333dd4444] }
         ]
       end
 
@@ -116,7 +116,7 @@ RSpec.describe StructuralPresenter do
     context 'when a virtual object' do
       let(:member_orders) do
         [
-          members: %w[druid:aa111bb2222 druid:cc333dd4444]
+          { members: %w[druid:aa111bb2222 druid:cc333dd4444] }
         ]
       end
 

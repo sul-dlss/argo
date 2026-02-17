@@ -281,7 +281,7 @@ RSpec.describe 'Create a new item' do
                               identification: { sourceId: 'sul:1234' },
                               structural: {
                                 hasMemberOrders: [
-                                  viewingDirection: 'left-to-right'
+                                  { viewingDirection: 'left-to-right' }
                                 ]
                               },
                               administrative: {
@@ -353,7 +353,7 @@ RSpec.describe 'Create a new item' do
                               identification: { sourceId: 'sul:1234' },
                               structural: {
                                 hasMemberOrders: [
-                                  viewingDirection: 'right-to-left'
+                                  { viewingDirection: 'right-to-left' }
                                 ]
                               },
                               administrative: {

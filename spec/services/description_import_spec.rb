@@ -671,14 +671,14 @@ RSpec.describe DescriptionImport do
               []
             end
           h[:relatedResource] = [
-            form: form_value,
-            title: [],
-            contributor: [],
-            event: [],
-            language: [],
-            note: [],
-            identifier: [],
-            subject: []
+            { form: form_value,
+              title: [],
+              contributor: [],
+              event: [],
+              language: [],
+              note: [],
+              identifier: [],
+              subject: [] }
           ]
         end
       end

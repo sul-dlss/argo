@@ -43,8 +43,8 @@ RSpec.describe DeepCompactBlank do
                 title: 'awesome',
                 nope: [],
                 container: [
-                  ok: 'stuff',
-                  byebye: []
+                  { ok: 'stuff',
+                    byebye: [] }
                 ]
               }
             ]
@@ -59,7 +59,7 @@ RSpec.describe DeepCompactBlank do
                                     {
                                       title: 'awesome',
                                       container: [
-                                        ok: 'stuff'
+                                        { ok: 'stuff' }
                                       ]
                                     }
                                   ]
