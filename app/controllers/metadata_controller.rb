@@ -4,8 +4,7 @@ class MetadataController < ApplicationController
   # Shows the modal with the descriptive metadata from MODS. This is triggered by the "Description" button on
   # the item show page.
   def descriptive
-    xml = PurlFetcher::Client::Mods.create(cocina:)
-    @mods_display = ModsDisplay::Record.new(xml).mods_display_html
+    @cocina_display = CocinaDisplay::CocinaRecord.new(CocinaDisplay::Utils.deep_compact_blank(cocina.as_json))
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
