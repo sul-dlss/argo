@@ -43,7 +43,7 @@ class ProfilePresenter
   end
 
   def sw_resource_type
-    aggregations[SolrDocument::FIELD_SW_FORMAT].items
+    aggregations[SolrDocument::FIELD_SW_RESOURCE_TYPE].items
   end
 
   def date
