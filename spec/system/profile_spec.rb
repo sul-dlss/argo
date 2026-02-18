@@ -25,7 +25,7 @@ RSpec.describe 'Profile' do
                   SolrDocument::FIELD_ACCESS_RIGHTS => 'dark',
                   use_statement_ssim: 'contact govinfolib@lists.stanford.edu',
                   copyright_ssim: 'Copyright © Stanford University. All Rights Reserved.',
-                  SolrDocument::FIELD_SW_FORMAT => 'Image',
+                  SolrDocument::FIELD_SW_RESOURCE_TYPE => 'Image',
                   SolrDocument::FIELD_SW_LANGUAGE => 'English',
                   SolrDocument::FIELD_PROCESSING_STATUS => 'Unknown Status')
     solr_conn.commit
