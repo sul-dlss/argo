@@ -208,7 +208,7 @@ class CatalogController < ApplicationController
                                       }
 
     config.add_facet_field SolrDocument::FIELD_SW_RESOURCE_TYPE, label: 'SW Resource Type', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Format', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Format', limit: -1, sort: :index, component: Blacklight::Hierarchy::FacetFieldListComponent
     config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', component: true, limit: 10
