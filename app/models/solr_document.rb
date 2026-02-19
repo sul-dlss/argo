@@ -58,7 +58,6 @@ class SolrDocument
   FIELD_STATUS = 'status_ssi'
   FIELD_SUBJECT_GEOGRAPHIC = 'subject_place_ssimdv'
   FIELD_SW_FORMAT = 'sw_format_ssimdv'
-  FIELD_SW_RESOURCE_TYPE = 'sw_resource_type_ssimdv'
   FIELD_SW_LANGUAGE = 'sw_language_names_ssimdv'
   FIELD_TAGS = 'tag_ssim'
   FIELD_TICKET_TAG = 'ticket_tag_ssim'
@@ -122,7 +121,7 @@ class SolrDocument
     title: FIELD_TITLE,
     author: 'dc_creator_ssi',
     language: SolrDocument::FIELD_SW_LANGUAGE,
-    format: SolrDocument::FIELD_SW_RESOURCE_TYPE
+    format: SolrDocument::FIELD_SW_FORMAT
   )
 
   def embargoed?
