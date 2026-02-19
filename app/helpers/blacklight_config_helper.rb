@@ -31,7 +31,7 @@ module BlacklightConfigHelper
         originInfo_publisher_tesim
 
         content_type_ssimdv
-        sw_resource_type_ssimdv
+        sw_format_ssimdv
         object_type_ssim
 
         descriptive_text_nostem_i
