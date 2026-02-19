@@ -395,14 +395,14 @@ GEM
     net-ssh (7.3.0)
     nio4r (2.7.5)
     nkf (0.2.0)
-    nokogiri (1.19.0)
+    nokogiri (1.19.1)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.19.0-arm64-darwin)
+    nokogiri (1.19.1-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.0-x86_64-darwin)
+    nokogiri (1.19.1-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.0-x86_64-linux-gnu)
+    nokogiri (1.19.1-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri-happymapper (0.10.1)
       nokogiri (~> 1.5)
@@ -735,7 +735,7 @@ DEPENDENCIES
   listen (~> 3.2)
   lograge
   mods_display (~> 1.0)
-  nokogiri (~> 1.18)
+  nokogiri (~> 1.19)
   okcomputer
   overmind
   pg
