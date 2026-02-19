@@ -3,11 +3,11 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@5.2.0
   ruby: circleci/ruby@2.3.1
-  node: circleci/node@7.0.0
+  node: circleci/node@7.2.1
 
 references:
   default_ruby_version: &default_ruby_version 3.4.1-browsers
-  default_postgres_version: &default_postgres_version '12.9'
+  default_postgres_version: &default_postgres_version "12.9"
   ruby_envs: &ruby_envs
     environment:
       BUNDLE_JOBS: 3
@@ -23,7 +23,7 @@ executors:
   default:
     parameters:
       ruby_tag:
-        description: 'The `cimg/ruby` Docker image version tag.'
+        description: "The `cimg/ruby` Docker image version tag."
         type: string
         default: *default_ruby_version
     docker:
@@ -32,11 +32,11 @@ executors:
   ruby_with_all_deps:
     parameters:
       ruby_tag:
-        description: 'The `cimg/ruby` Docker image version tag.'
+        description: "The `cimg/ruby` Docker image version tag."
         type: string
         default: *default_ruby_version
       postgres_tag:
-        description: 'The `cimg/postgres` Docker image version tag.'
+        description: "The `cimg/postgres` Docker image version tag."
         type: string
         default: *default_postgres_version
     docker:
@@ -61,12 +61,12 @@ executors:
           SOLR_URL: http://solr:8983/solr/argo
           SETTINGS__SOLR__URL: http://solr:8983/solr/argo
           SETTINGS__SURI__URL: http://suri:3000
-          SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
-          SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
-          SETTINGS__RABBITMQ__ENABLED: 'false'
+          SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: "true"
+          SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: "false"
+          SETTINGS__RABBITMQ__ENABLED: "false"
           SETTINGS__REDIS_URL: redis://redis:6379/
           SETTINGS__ROBOTS_REDIS_URL: redis://redis:6379/
-          RAILS_LOG_TO_STDOUT: 'true'
+          RAILS_LOG_TO_STDOUT: "true"
       - image: suldlss/sdr-api:latest
         name: sdr-api
         environment:
@@ -78,7 +78,7 @@ executors:
           SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
           USER_EMAIL: argo@dlss.sul.stanford.edu
           USER_PASSWORD: notusedanywhere
-          RAILS_LOG_TO_STDOUT: 'true'
+          RAILS_LOG_TO_STDOUT: "true"
           SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
           # To generate the token: docker-compose run dor-services-app rake generate_token
           SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
@@ -98,7 +98,7 @@ executors:
           DATABASE_PASSWORD: sekret
           DATABASE_HOSTNAME: db
           DATABASE_PORT: 5432
-          RAILS_LOG_TO_STDOUT: 'true'
+          RAILS_LOG_TO_STDOUT: "true"
           REDIS_URL: redis://redis:6379/
       - image: cimg/redis:6.2
         name: redis
@@ -138,7 +138,7 @@ jobs:
           command: yarn run lint
   test:
     environment:
-      TZ: 'America/Los_Angeles'
+      TZ: "America/Los_Angeles"
       DATABASE_NAME: argo_test
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: sekret
