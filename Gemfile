@@ -20,7 +20,7 @@ gem 'honeybadger'
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jsbundling-rails', '~> 1.0'
 gem 'lograge'
-gem 'nokogiri', '~> 1.18'
+gem 'nokogiri', '~> 1.19'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'pg'
 gem 'prawn', '~> 1' # Prawn is used to create "tracksheets"

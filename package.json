@@ -16,20 +16,20 @@
     "stimulus": "^3.0.0",
     "tabulator-tables": "^5.5.2"
   },
+  "type": "module",
   "devDependencies": {
-    "eslint": "^8.0.1",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
-    "eslint-plugin-promise": "^6.0.0",
-    "standard": "^17.1.0"
+    "@eslint/js": "^10.0.0",
+    "@stylistic/eslint-plugin": "^5.9.0",
+    "eslint": "^10.0.0",
+    "eslint-plugin-n": "^17.19.0",
+    "globals": "^15.14.0"
   },
   "license": "Apache-2.0",
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --inject:app/javascript/jquery-shim.js --define:global=window --outdir=app/assets/builds",
     "build:css": "sass ./app/assets/stylesheets/blacklight.scss ./app/assets/builds/blacklight.css --no-source-map --load-path=node_modules --quiet-deps",
-    "lint": "standard app/javascript/**/*.js",
-    "lint_fix": "standard --fix app/javascript/**/*.js",
+    "lint": "eslint app/javascript/**/*.js",
+    "lint_fix": "eslint --fix app/javascript/**/*.js",
     "watch:css": "nodemon --watch ./app/assets/stylesheets/ --ext scss,css --exec \"yarn build:css\""
   }
 }
