@@ -20,6 +20,8 @@ class CocinaDescriptiveComponent < ApplicationComponent
       general_note_display_data
       genre_display_data
       access_display_data
+      identifier_display_data
+      related_resource_display_data
       map_display_data
     ]
   end
