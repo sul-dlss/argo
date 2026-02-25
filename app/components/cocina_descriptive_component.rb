@@ -16,6 +16,7 @@ class CocinaDescriptiveComponent < ApplicationComponent
       event_note_display_data
       subject_display_data
       form_display_data
+      form_note_display_data
       general_note_display_data
       genre_display_data
       access_display_data
