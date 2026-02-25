@@ -14,6 +14,7 @@ class DescriptionImportFilter
   ATTRIBUTES_TO_FILTER = {
     contributor: :remove_contributors_without_value,
     form: :remove_form_without_value,
+    identifier: :remove_identifiers_without_value,
     language: :remove_language_without_value,
     date: :remove_date_without_value
   }.freeze
@@ -49,6 +50,10 @@ class DescriptionImportFilter
     Array(contributors).delete_if do |contributor|
       contributor[:name].nil? && contributor[:identifier].blank? && contributor[:valueAt].blank?
     end
+  end
+
+  def remove_identifiers_without_value(identifiers)
+    Array(identifiers).delete_if { !descriptive_value_sufficient?(it) }
   end
 
   def remove_form_without_value(forms)
