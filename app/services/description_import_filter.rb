@@ -15,7 +15,8 @@ class DescriptionImportFilter
     contributor: :remove_contributors_without_value,
     form: :remove_form_without_value,
     language: :remove_language_without_value,
-    date: :remove_date_without_value
+    date: :remove_date_without_value,
+    subject: :remove_subject_without_value
   }.freeze
 
   MODELS_WITH_NESTED_ATTRIBUTES = {
@@ -53,6 +54,10 @@ class DescriptionImportFilter
 
   def remove_form_without_value(forms)
     Array(forms).delete_if { !descriptive_value_sufficient?(it) }
+  end
+
+  def remove_subject_without_value(subjects)
+    Array(subjects).delete_if { !descriptive_value_sufficient?(it) }
   end
 
   def remove_language_without_value(languages)
