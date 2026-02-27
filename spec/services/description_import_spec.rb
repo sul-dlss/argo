@@ -809,6 +809,50 @@ RSpec.describe DescriptionImport do
     end
   end
 
+  context 'with subject property' do
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    context 'when subject has a value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,subject1.value,subject1.type,subject1.source.code,subject1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,A 13.36/2:C 64/2/2016,classification,sudoc,SUDOC
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.subject.as_json).to eq [{ 'appliesTo' => [],
+                                                        'displayLabel' => 'SUDOC',
+                                                        'groupedValue' => [],
+                                                        'note' => [],
+                                                        'parallelValue' => [],
+                                                        'structuredValue' => [],
+                                                        'identifier' => [],
+                                                        'type' => 'classification',
+                                                        'source' => {
+                                                          'code' => 'sudoc',
+                                                          'note' => []
+                                                        },
+                                                        'value' => 'A 13.36/2:C 64/2/2016' }]
+      end
+    end
+
+    context 'when subject has no value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,subject1.value,subject1.type,subject1.source.code,subject1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,classification,sudoc,SUDOC
+        CSV
+      end
+
+      it 'rejects the item' do
+        expect(updated.value!.subject).to be_empty
+      end
+    end
+  end
+
   context 'with event date property' do
     let(:csv) do
       CSV.parse(csv_data, headers: true)
