@@ -12,6 +12,7 @@ class CocinaDescriptiveComponent < ApplicationComponent
       title_display_data
       contributor_display_data
       language_display_data
+      publication_display_data
       event_date_display_data
       event_note_display_data
       subject_display_data

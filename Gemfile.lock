@@ -156,7 +156,7 @@ GEM
       super_diff
       thor
       zeitwerk (~> 2.1)
-    cocina_display (1.8.1)
+    cocina_display (1.10.0)
       activesupport (>= 7)
       edtf (~> 3.2)
       geo_coord (~> 0.2)
@@ -360,7 +360,6 @@ GEM
     matrix (0.4.3)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (6.0.2)
       drb (~> 2.0)
       prism (~> 1.5)
@@ -390,9 +389,6 @@ GEM
     net-ssh (7.3.0)
     nio4r (2.7.5)
     nkf (0.2.0)
-    nokogiri (1.19.1)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.19.1-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.1-x86_64-darwin)
