@@ -230,6 +230,7 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       hierarchy: {
+        'sw_format' => [['ssimdv'], ':'],
         'wf_wps' => [['ssimdv'], ':'],
         'wf_wsp' => [['ssimdv'], ':'],
         'wf_swp' => [['ssimdv'], ':'],
