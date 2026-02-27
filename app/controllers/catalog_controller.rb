@@ -206,7 +206,7 @@ class CatalogController < ApplicationController
                                         no_sw_format: { label: 'No SW Format', fq: "-#{SolrDocument::FIELD_SW_FORMAT}:*" }
                                       }
 
-    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Format', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Format', limit: -1, sort: :index, component: Blacklight::Hierarchy::FacetFieldListComponent
     config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', component: true, limit: 10
@@ -230,6 +230,7 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       hierarchy: {
+        'sw_format' => [['ssimdv'], ':'],
         'wf_wps' => [['ssimdv'], ':'],
         'wf_wsp' => [['ssimdv'], ':'],
         'wf_swp' => [['ssimdv'], ':'],
