@@ -12,6 +12,7 @@ class DescriptionImportFilter
   end
 
   ATTRIBUTES_TO_FILTER = {
+    note: :remove_note_without_value,
     contributor: :remove_contributors_without_value,
     form: :remove_form_without_value,
     identifier: :remove_identifiers_without_value,
@@ -46,6 +47,10 @@ class DescriptionImportFilter
   end
 
   private
+
+  def remove_note_without_value(notes)
+    Array(notes).delete_if { !descriptive_value_sufficient?(it) }
+  end
 
   def remove_contributors_without_value(contributors)
     Array(contributors).delete_if do |contributor|

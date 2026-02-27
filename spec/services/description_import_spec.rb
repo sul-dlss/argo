@@ -853,6 +853,47 @@ RSpec.describe DescriptionImport do
     end
   end
 
+  context 'with note property' do
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    context 'when note has a value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,note1.value,note1.code,note1.uri,note1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,My note,huh,https://example.com,Da note
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.note.as_json).to eq [{ 'appliesTo' => [],
+                                                     'code' => 'huh',
+                                                     'displayLabel' => 'Da note',
+                                                     'groupedValue' => [],
+                                                     'note' => [],
+                                                     'parallelValue' => [],
+                                                     'structuredValue' => [],
+                                                     'uri' => 'https://example.com',
+                                                     'identifier' => [],
+                                                     'value' => 'My note' }]
+      end
+    end
+
+    context 'when note has no value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,note1.value,note1.code,note1.uri,note1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,,,Should not be accepted
+        CSV
+      end
+
+      it 'rejects the item' do
+        expect(updated.value!.note).to be_empty
+      end
+    end
+  end
+
   context 'with event date property' do
     let(:csv) do
       CSV.parse(csv_data, headers: true)
