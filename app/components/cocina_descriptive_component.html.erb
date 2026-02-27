@@ -1,0 +1,11 @@
+<dl>
+<% cocina_display_methods.each do |method| %>
+  <% display_data = @cocina_display.public_send(method) %>
+  <% display_data.each do |data| %>
+    <%= tag.dt data.label %>
+    <% data.objects.each do |val| %>
+      <%= tag.dd val.to_s %>
+    <% end %>
+  <% end %>
+<% end %>
+</dl>
