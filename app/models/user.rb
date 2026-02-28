@@ -7,10 +7,10 @@ class User < ApplicationRecord
   has_many :bulk_actions
 
   # The code base requires Arrays for these constants, for intersection ops.
-  ADMIN_GROUPS = %w[workgroup:sdr:administrator-role].freeze
-  MANAGER_GROUPS = %w[workgroup:sdr:manager-role].freeze
-  VIEWER_GROUPS = %w[workgroup:sdr:viewer-role].freeze
-  SDR_API_AUTHORIZED_GROUPS = %w[workgroup:sdr:api-authorized-users].freeze
+  ADMIN_GROUPS = %w[sdr:administrator].freeze
+  MANAGER_GROUPS = %w[sdr:manager].freeze
+  VIEWER_GROUPS = %w[sdr:viewer].freeze
+  SDR_API_AUTHORIZED_GROUPS = %w[sdr:api-authorized].freeze
 
   # @return [Array<String>] list of roles the user can adopt. These must match the roles that Ability looks for.
   # NOTE: 'sdr-administrator' and 'sdr-viewer' may be removed in the future. See https://github.com/sul-dlss/dor-services-app/issues/3856
@@ -50,14 +50,13 @@ class User < ApplicationRecord
     return @role_cache[admin_policy_id] if @role_cache[admin_policy_id]
 
     # Try to retrieve a Solr doc
-    obj_doc = SearchService.query("id:\"#{admin_policy_id}\"")['response']['docs'].first || {}
-    return [] if obj_doc.empty?
+    cocina_object = Dor::Services::Client.object(admin_policy_id).find
+    return [] if cocina_object.nil?
 
     apo_roles = Set.new
     # Check additional known roles
     KNOWN_ROLES.each do |role|
-      solr_apo_roles = ["apo_role_#{role}_ssim", "apo_role_person_#{role}_ssim"]
-      apo_roles << role if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
+      apo_roles << role if role_allowed?(cocina_object.administrative, role)
     end
     # store and return an array of roles (Set.sort is an Array)
     @role_cache[admin_policy_id] = apo_roles.sort
@@ -66,9 +65,18 @@ class User < ApplicationRecord
   # Validate a user belongs to a workgroup allowed to access a DOR object
   # @param dor_doc [Hash] A Solr document for a DOR object
   # @param role [String] Role to be validated for the DOR object
-  def solr_role_allowed?(solr_doc, solr_role)
-    # solr_doc[solr_role] returns an array of groups permitted to adopt the role
-    (solr_doc[solr_role] & groups).present?
+  def role_allowed?(cocina_administrative, role)
+    # cocina_object[role] returns an array of groups permitted to adopt the role
+    (identifiers_for_role(cocina_administrative.roles, role) & groups).present?
+  end
+
+  def identifiers_for_role(cocina_roles, role)
+    return [] if cocina_roles.nil?
+
+    cocina_role = cocina_roles.find { |r| r.name == role }
+    return [] if cocina_role.nil?
+
+    cocina_role.members.map(&:identifier)
   end
 
   # Allow a repository admin to see the repository with different permissions
@@ -98,7 +106,7 @@ class User < ApplicationRecord
   end
 
   def webauth_groups=(groups)
-    @webauth_groups = groups.map { |g| "workgroup:#{g}" }
+    @webauth_groups = groups.map(&:to_s)
   end
 
   # @return [Boolean] is the user a repository wide administrator
