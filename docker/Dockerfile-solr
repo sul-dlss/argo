@@ -1,5 +1,7 @@
-FROM solr:9.6.1
+FROM solr:9.10.0
 
 COPY solr_conf/conf/* /myconfig/
 
-CMD ["solr-create", "-c", "argo", "-d", "/myconfig"]
+ENV SOLR_OPTS="-Dsolr.config.lib.enabled=true"
+
+CMD ["solr-precreate", "argo", "/myconfig"]

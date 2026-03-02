@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@5.2.0
-  ruby: circleci/ruby@2.3.1
+  codecov: codecov/codecov@5.4.3
+  ruby: circleci/ruby@2.6.0
   node: circleci/node@7.2.1
 
 references:
@@ -144,6 +144,7 @@ jobs:
       DATABASE_PASSWORD: sekret
       DATABASE_HOSTNAME: db
       DATABASE_PORT: 5432
+      DOCKER_API_VERSION: "1.44"
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
