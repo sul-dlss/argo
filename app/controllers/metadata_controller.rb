@@ -17,7 +17,8 @@ class MetadataController < ApplicationController
     if params.key?(:user_version_id)
       Repository.find_user_version(params[:item_id], params[:user_version_id])
     elsif params.key?(:version_id)
-      Repository.find_version(params[:item_id], params[:version_id])
+      version = Repository.find_version(params[:item_id], params[:version_id])
+      version.is_a?(Hash) ? version[:cocina_object] : version
     else
       Repository.find(params[:item_id])
     end
