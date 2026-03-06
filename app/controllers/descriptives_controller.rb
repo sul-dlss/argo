@@ -64,12 +64,29 @@ class DescriptivesController < ApplicationController
     render :edit, status: :unprocessable_content
   end
 
+  def source_id
+    return @cocina.dig(:cocina_object, :identification, :sourceId) if @cocina.is_a?(Hash)
+
+    @cocina.identification.sourceId
+  end
+
+  def description
+    return @cocina.dig(:cocina_object, :description) if @cocina.is_a?(Hash)
+
+    @cocina.description
+  end
+
+  def external_id
+    return @cocina.dig(:cocina_object, :externalIdentifier) if @cocina.is_a?(Hash)
+
+    @cocina.externalIdentifier
+  end
+
   def create_csv
-    description = DescriptionExport.export(source_id: @cocina.identification.sourceId,
-                                           description: @cocina.description)
-    headers = DescriptionHeaders.create(headers: description.keys)
+    exported = DescriptionExport.export(source_id:, description:)
+    headers = DescriptionHeaders.create(headers: exported.keys)
     CSV.generate(write_headers: true, headers: ['druid'] + headers) do |body|
-      body << ([@cocina.externalIdentifier] + description.values_at(*headers))
+      body << ([external_id] + exported.values_at(*headers))
     end
   end
 end

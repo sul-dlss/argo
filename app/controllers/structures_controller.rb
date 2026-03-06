@@ -16,7 +16,9 @@ class StructuresController < ApplicationController
       end
       format.html do
         # Lazy loading of the structural part of the show page
-        @cocina_item = find_cocina_from_token
+        cocina_item = find_cocina_from_token
+        @structural = cocina_item[:structural] || cocina_item[:cocina_object][:structural]
+        @item_id = cocina_item[:externalIdentifier] || cocina_item[:cocina_object][:externalIdentifier]
         @user_version = decrypted_token.fetch(:user_version_id, nil)
         @viewable = can?(:view_content, @cocina_item) && !params.key?(:version_id)
       end
@@ -34,8 +36,10 @@ class StructuresController < ApplicationController
   end
 
   def hierarchy
-    @cocina_item = find_cocina_from_token
-    @root_directory = FileHierarchyService.to_hierarchy(cocina_object: @cocina_item)
+    cocina_object = find_cocina_from_token
+    @root_directory = FileHierarchyService.to_hierarchy(
+      cocina_object: cocina_object.is_a?(Hash) ? cocina_object[:cocina_object] : cocina_object
+    )
   end
 
   private
