@@ -80,6 +80,8 @@ RSpec/ContextWording:
 # We exclude system specs here because they have a lot of setup overhead, so
 # testing a bunch of things in one go is more efficient.
 RSpec/ExampleLength:
+  CountAsOne:
+    - 'hash'
   Exclude:
     - "spec/system/**/*_spec.rb"
     - "spec/services/descriptions_grouper_spec.rb"

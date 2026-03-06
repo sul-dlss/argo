@@ -9,19 +9,12 @@
 #    it's super easy to coerce a hash into other data structures, so it gives us
 #    flexibility.
 class CocinaHashPresenter
-  attr_reader :invalid_cocina_message
-
   def initialize(cocina_object:, without_metadata: false)
-    @cocina_object_hash = if cocina_object.is_a?(Hash)
-                            # This is what dor-services-client returns if invalid Cocina is requested
-                            # TODO: Figure out how to get cocina_object[:error_message] in the right place
-                            cocina_object[:cocina_object]
-                          elsif without_metadata
+    @cocina_object_hash = if without_metadata
                             Cocina::Models.without_metadata(cocina_object).to_h
                           else
                             cocina_object.to_h
                           end
-    @invalid_cocina_message = cocina_object[:error_message] if cocina_object.is_a?(Hash)
   end
 
   def render
