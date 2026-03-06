@@ -1,3 +1,37 @@
+GIT
+  remote: https://github.com/sul-dlss/cocina-models.git
+  revision: c6faf3947803387a4c7c2630d3f8589bedd43aac
+  branch: main
+  specs:
+    cocina-models (0.113.0)
+      activesupport
+      deprecation
+      dry-struct (~> 1.0)
+      dry-types (~> 1.1)
+      edtf
+      equivalent-xml
+      i18n
+      json_schemer (~> 2.0)
+      jsonpath
+      nokogiri
+      super_diff
+      thor
+      zeitwerk (~> 2.1)
+
+GIT
+  remote: https://github.com/sul-dlss/dor-services-client.git
+  revision: b0f6a4a38253e40caffef9acc91199925a5d44d5
+  branch: allow-building-incomplete-cocina/argo#5022
+  specs:
+    dor-services-client (15.32.0)
+      activesupport (>= 7.0.0)
+      cocina-models (~> 0.113.0)
+      deprecation
+      faraday (~> 2.0)
+      faraday-retry
+      nokogiri
+      zeitwerk (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -142,20 +176,6 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.113.0)
-      activesupport
-      deprecation
-      dry-struct (~> 1.0)
-      dry-types (~> 1.1)
-      edtf
-      equivalent-xml
-      i18n
-      json_schemer (~> 2.0)
-      jsonpath
-      nokogiri
-      super_diff
-      thor
-      zeitwerk (~> 2.1)
     cocina_display (1.10.0)
       activesupport (>= 7)
       edtf (~> 3.2)
@@ -694,7 +714,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   capybara-screenshot
-  cocina-models (~> 0.69)
+  cocina-models!
   cocina_display (~> 1.8)
   coderay
   config

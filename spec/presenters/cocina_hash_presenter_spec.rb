@@ -30,20 +30,6 @@ RSpec.describe CocinaHashPresenter do
     }
   end
 
-  describe '#invalid_cocina_message' do
-    it 'returns nil' do
-      expect(presenter.invalid_cocina_message).to be_nil
-    end
-
-    context 'when an invalid cocina hash is provided' do
-      let(:cocina_object) { invalid_cocina_hash }
-
-      it 'returns the error message from the hash' do
-        expect(presenter.invalid_cocina_message).to eq('Multiple value, groupedValue, structuredValue, and parallelValue in description: note1')
-      end
-    end
-  end
-
   describe '#render' do
     context 'when cocina object has descriptive metadata' do
       # NOTE: You might not see an empty e.g. `structuredValue` array above, but it's there in the instance
@@ -94,48 +80,85 @@ RSpec.describe CocinaHashPresenter do
 
       it 'renders the invalid cocina without raising exceptions' do
         expect(presenter.render)
-          .to eq(cocinaVersion: Cocina::Models::VERSION,
-                 lock: 'abc123',
-                 type: 'https://cocina.sul.stanford.edu/models/object',
-                 externalIdentifier: 'druid:bc234fg5678',
-                 label: 'factory DRO label',
-                 version: 1,
-                 access: {
-                   view: 'dark',
-                   download: 'none',
-                   controlledDigitalLending: false
+          .to eq(cocina_object: {
+                   cocinaVersion: Cocina::Models::VERSION,
+                   lock: 'abc123',
+                   type: 'https://cocina.sul.stanford.edu/models/object',
+                   externalIdentifier: 'druid:bc234fg5678',
+                   label: 'factory DRO label',
+                   version: 1,
+                   access: {
+                     view: 'dark',
+                     download: 'none',
+                     controlledDigitalLending: false
+                   },
+                   administrative: {
+                     hasAdminPolicy: 'druid:hv992ry2431'
+                   },
+                   identification: {
+                     catalogLinks: [],
+                     sourceId: 'sul:1234'
+                   },
+                   description: {
+                     title: [
+                       {
+                         structuredValue: [],
+                         parallelValue: [],
+                         groupedValue: [],
+                         value: 'factory DRO title',
+                         identifier: [],
+                         note: [],
+                         appliesTo: []
+                       }
+                     ],
+                     contributor: [],
+                     event: [],
+                     form: [],
+                     geographic: [],
+                     language: [],
+                     note: [
+                       {
+                         note: [],
+                         value: 'Relief shown by contours and spot heights',
+                         appliesTo: [],
+                         identifier: [],
+                         groupedValue: [],
+                         parallelValue: [
+                           {
+                             'note' => [],
+                             'value' => 'Confidential "Gunji Gokuh" printed on upper right margin',
+                             'appliesTo' => [],
+                             'identifier' => [],
+                             'groupedValue' => [],
+                             'parallelValue' => [],
+                             'structuredValue' => []
+                           },
+                           {
+                             'note' => [],
+                             'value' => 'Confidential "軍事極祕" printed on upper right margin.',
+                             'appliesTo' => [],
+                             'identifier' => [],
+                             'groupedValue' => [],
+                             'parallelValue' => [],
+                             'structuredValue' => []
+                           }
+                         ],
+                         structuredValue: []
+                       }
+                     ],
+                     identifier: [],
+                     subject: [],
+                     relatedResource: [],
+                     marcEncodedData: [],
+                     purl: 'https://purl.stanford.edu/bc234fg5678'
+                   },
+                   structural: {
+                     contains: [],
+                     hasMemberOrders: [],
+                     isMemberOf: []
+                   }
                  },
-                 administrative: {
-                   hasAdminPolicy: 'druid:hv992ry2431'
-                 },
-                 identification: {
-                   catalogLinks: [],
-                   sourceId: 'sul:1234'
-                 },
-                 description: {
-                   title: [
-                     { value: 'factory DRO title' }
-                   ],
-                   note: [
-                     {
-                       value: 'Relief shown by contours and spot heights',
-                       parallelValue: [
-                         {
-                           'value' => 'Confidential "Gunji Gokuh" printed on upper right margin'
-                         },
-                         {
-                           'value' => 'Confidential "軍事極祕" printed on upper right margin.'
-                         }
-                       ]
-                     }
-                   ],
-                   purl: 'https://purl.stanford.edu/bc234fg5678'
-                 },
-                 structural: {
-                   contains: [],
-                   hasMemberOrders: [],
-                   isMemberOf: []
-                 })
+                 error_message: 'Multiple value, groupedValue, structuredValue, and parallelValue in description: note1')
       end
     end
   end

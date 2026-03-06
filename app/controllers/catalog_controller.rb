@@ -355,7 +355,8 @@ class CatalogController < ApplicationController
       @document = SolrDocument.new(object_client.user_version.solr(user_version_param))
     elsif version_param
       @cocina = Repository.find_version(druid_param, version_param)
-      @document = SolrDocument.new(object_client.version.solr(version_param))
+      # Skip validating the Cocina underlying the Solr representation
+      @document = SolrDocument.new(object_client.version.solr(version_param, validate: false))
     else
       _deprecated_response, @document = search_service.fetch(druid_param)
       @cocina = Repository.find_lite(druid_param, structural: false)
@@ -370,6 +371,7 @@ class CatalogController < ApplicationController
     @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
 
     @head_user_version = @user_versions_presenter.head_user_version
+
     @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
