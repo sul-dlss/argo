@@ -12,6 +12,7 @@ class DescriptionImportFilter
   end
 
   ATTRIBUTES_TO_FILTER = {
+    digitalLocation: :remove_digital_location_without_value,
     note: :remove_note_without_value,
     contributor: :remove_contributors_without_value,
     form: :remove_form_without_value,
@@ -25,7 +26,8 @@ class DescriptionImportFilter
     relatedResource: Cocina::Models::RelatedResource,
     event: Cocina::Models::Event,
     geographic: Cocina::Models::DescriptiveGeographicMetadata,
-    adminMetadata: Cocina::Models::DescriptiveAdminMetadata
+    adminMetadata: Cocina::Models::DescriptiveAdminMetadata,
+    access: Cocina::Models::DescriptiveAccessMetadata
   }.freeze
 
   # recursive, breadth first search for incomplete nodes
@@ -47,6 +49,10 @@ class DescriptionImportFilter
   end
 
   private
+
+  def remove_digital_location_without_value(digital_locations)
+    Array(digital_locations).delete_if { !descriptive_value_sufficient?(it) }
+  end
 
   def remove_note_without_value(notes)
     Array(notes).delete_if { !descriptive_value_sufficient?(it) }
