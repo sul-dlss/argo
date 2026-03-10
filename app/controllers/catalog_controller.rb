@@ -371,7 +371,6 @@ class CatalogController < ApplicationController
     @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
 
     @head_user_version = @user_versions_presenter.head_user_version
-
     @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
     # If you have this token, it indicates you have read access to the object
