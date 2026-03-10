@@ -709,6 +709,45 @@ RSpec.describe DescriptionImport do
     end
   end
 
+  context 'with access property' do
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    context 'when access has a value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,access.digitalLocation1.value,access.digitalLocation1.type
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,Searchworks,discovery
+        CSV
+      end
+
+      it 'deserializes the item' do
+        expect(updated.value!.access.digitalLocation.as_json).to eq [{ 'structuredValue' => [],
+                                                                       'parallelValue' => [],
+                                                                       'groupedValue' => [],
+                                                                       'value' => 'Searchworks',
+                                                                       'type' => 'discovery',
+                                                                       'identifier' => [],
+                                                                       'note' => [],
+                                                                       'appliesTo' => [] }]
+      end
+    end
+
+    context 'when access has no value' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,access.digitalLocation1.value,access.digitalLocation1.type
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,discovery
+        CSV
+      end
+
+      it 'rejects the item' do
+        expect(updated.value!.access.digitalLocation).to be_empty
+      end
+    end
+  end
+
   context 'with identifier property' do
     let(:csv) do
       CSV.parse(csv_data, headers: true)
