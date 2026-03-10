@@ -224,14 +224,6 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.32.0)
-      activesupport (>= 7.0.0)
-      cocina-models (~> 0.113.0)
-      deprecation
-      faraday (~> 2.0)
-      faraday-retry
-      nokogiri
-      zeitwerk (~> 2.1)
     drb (2.2.3)
     druid-tools (3.0.0)
     dry-core (1.2.0)
@@ -724,7 +716,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client (~> 15.1)
+  dor-services-client!
   druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
