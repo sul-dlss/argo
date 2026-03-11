@@ -18,7 +18,8 @@ RSpec.describe 'View Cocina model for version' do
   end
 
   context 'with an invalid cocina object' do
-    let(:invalid_item) do
+    let(:item) { Dor::Services::Client::InvalidCocina.new(invalid_item_hash.merge(error_message: 'Foo!')) }
+    let(:invalid_item_hash) do
       FactoryBot.create_for_repository(:persisted_item).to_h.tap do |hash|
         hash[:description][:title] = [
           {
@@ -28,12 +29,11 @@ RSpec.describe 'View Cocina model for version' do
         ]
       end
     end
-    let(:item) { Cocina::Models.build(invalid_item, validate: false) }
 
     it 'returns json' do
       get "/items/#{item.externalIdentifier}/version/1.json"
       expect(response).to be_successful
-      expect(response.parsed_body).to include(type: Cocina::Models::ObjectType.object)
+      expect(response.parsed_body).to include(type: Cocina::Models::ObjectType.object, error_message: 'Foo!')
     end
   end
 
