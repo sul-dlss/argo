@@ -25,6 +25,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
                                        user_version_view?: user_versions_presenter.present? && user_version_view.present?,
                                        previous_user_version_view?: user_version.present? && user_version_view != head_user_version,
                                        current_version:,
+                                       invalid_cocina?: invalid_cocina,
                                        current_version_view?: version.present? && version == current_version,
                                        version_or_user_version_view?: version.present? || user_version.present?)
   end
@@ -34,6 +35,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
   let(:current_version) { nil }
   let(:user_versions_presenter) { nil }
   let(:user_version_view) { nil }
+  let(:invalid_cocina) { false }
   let(:rendered) { render_inline(component) }
 
   before do
@@ -126,6 +128,15 @@ RSpec.describe DocumentTitleComponent, type: :component do
       it 'renders the expected version label' do
         expect(rendered.content).to include('You are viewing an older system version.')
         expect(rendered.content).to include('View latest version')
+      end
+
+      context 'when it has invalid cocina' do
+        let(:invalid_cocina) { true }
+
+        it 'renders the expected version label' do
+          expect(rendered.content).to include('You are viewing an older system version that is no longer valid. You can view the JSON below.')
+          expect(rendered.content).to include('View latest version')
+        end
       end
     end
 

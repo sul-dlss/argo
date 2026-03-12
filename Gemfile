@@ -44,7 +44,8 @@ gem 'blacklight', '~> 7.41'
 # pinned because 6.7.0 is effectively coupled to BL >= 8.3.0 and Argo hasn't been updated to BL8 yet
 gem 'blacklight-hierarchy', '~> 6.6.0'
 gem 'cocina_display', '~> 1.8'
-gem 'dor-services-client', '~> 15.1'
+gem 'cocina-models', github: 'sul-dlss/cocina-models', branch: 'main'
+gem 'dor-services-client', github: 'sul-dlss/dor-services-client', branch: 'allow-building-incomplete-cocina/argo#5022' # '~> 15.1'
 gem 'druid-tools'
 gem 'folio_client', '~> 0.13'
 gem 'preservation-client', '~> 7.0'
@@ -75,7 +76,7 @@ end
 group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
-  gem 'cocina-models', '~> 0.69' # only need RSpec matchers here; don't need to pin to patch level
+  # gem 'cocina-models', '~> 0.69' # only need RSpec matchers here; don't need to pin to patch level
   gem 'rspec_junit_formatter' # used by CircleCI to format test results
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov'

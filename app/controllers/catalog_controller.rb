@@ -355,7 +355,8 @@ class CatalogController < ApplicationController
       @document = SolrDocument.new(object_client.user_version.solr(user_version_param))
     elsif version_param
       @cocina = Repository.find_version(druid_param, version_param)
-      @document = SolrDocument.new(object_client.version.solr(version_param))
+      # Skip validating the Cocina underlying the Solr representation
+      @document = SolrDocument.new(object_client.version.solr(version_param, validate: false))
     else
       _deprecated_response, @document = search_service.fetch(druid_param)
       @cocina = Repository.find_lite(druid_param, structural: false)
