@@ -11,7 +11,7 @@
 class CocinaHashPresenter
   def initialize(cocina_object:, without_metadata: false)
     @cocina_object_hash = if without_metadata
-                            Cocina::Models.without_metadata(cocina_object).to_h
+                            cocina_object.to_h.except(*Cocina::Models::ObjectMetadata.attribute_names)
                           else
                             cocina_object.to_h
                           end
