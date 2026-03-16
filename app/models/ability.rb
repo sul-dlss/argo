@@ -11,7 +11,8 @@
 class Ability
   include CanCan::Ability
 
-  DRO_MODELS = [Cocina::Models::DRO, Cocina::Models::DROWithMetadata, Cocina::Models::DROLite].freeze
+  DRO_MODELS = [Cocina::Models::DRO, Cocina::Models::DROWithMetadata, Cocina::Models::DROLite,
+                Dor::Services::Client::InvalidCocina].freeze
   COLLECTION_MODELS = [Cocina::Models::Collection, Cocina::Models::CollectionWithMetadata,
                        Cocina::Models::CollectionLite].freeze
   ADMIN_POLICY_MODELS = [Cocina::Models::AdminPolicy, Cocina::Models::AdminPolicyWithMetadata,
@@ -31,6 +32,8 @@ class Ability
     # NOTE: Lock down SDR token creation to *explicitly* authorized users
     cannot :create, :token
     can :create, :token if current_user.sdr_api_authorized?
+
+    alias_action :open, :close, :open_ui, :close_ui, to: :update
 
     if current_user.manager?
       can %i[update manage_governing_apo view_content read],

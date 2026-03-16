@@ -10,7 +10,11 @@
 #    flexibility.
 class CocinaHashPresenter
   def initialize(cocina_object:, without_metadata: false)
-    @cocina_object_hash = hash_from(cocina_object, without_metadata)
+    @cocina_object_hash = if without_metadata
+                            cocina_object.to_h.except(*Cocina::Models::ObjectMetadata.attribute_names)
+                          else
+                            cocina_object.to_h
+                          end
   end
 
   def render
@@ -25,10 +29,4 @@ class CocinaHashPresenter
   private
 
   attr_reader :cocina_object_hash
-
-  def hash_from(cocina_object, without_metadata)
-    return Cocina::Models.without_metadata(cocina_object).to_h if without_metadata
-
-    cocina_object.to_h
-  end
 end

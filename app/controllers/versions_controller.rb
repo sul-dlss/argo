@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class VersionsController < ApplicationController
-  before_action :load_and_authorize_resource, except: [:show]
+  before_action :load_cocina_object_version, only: :show
+  load_resource :cocina_object, parent: false, class: 'Repository', id_param: 'item_id', except: :show
+  authorize_resource :cocina_object, parent: false, id_param: 'item_id'
 
   def show
-    load_and_authorize_view_resource
-    find_version_cocina
     respond_to do |format|
-      format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina).render }
+      format.json { render json: CocinaHashPresenter.new(cocina_object: @cocina_object).render }
     end
   end
 
@@ -55,17 +55,7 @@ class VersionsController < ApplicationController
 
   private
 
-  def load_and_authorize_resource
-    @cocina_object = Repository.find(params[:item_id])
-    authorize! :update, @cocina_object
-  end
-
-  def load_and_authorize_view_resource
-    @cocina_object = Repository.find(params[:item_id])
-    authorize! :read, @cocina_object
-  end
-
-  def find_version_cocina
-    @cocina = Repository.find_version(params[:item_id], params[:version_id])
+  def load_cocina_object_version
+    @cocina_object = Repository.find_version(params[:item_id], params[:version_id])
   end
 end
