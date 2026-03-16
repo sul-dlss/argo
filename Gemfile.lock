@@ -1,38 +1,3 @@
-GIT
-  remote: https://github.com/sul-dlss/cocina-models.git
-  revision: c6faf3947803387a4c7c2630d3f8589bedd43aac
-  branch: main
-  specs:
-    cocina-models (0.113.0)
-      activesupport
-      deprecation
-      dry-struct (~> 1.0)
-      dry-types (~> 1.1)
-      edtf
-      equivalent-xml
-      i18n
-      json_schemer (~> 2.0)
-      jsonpath
-      nokogiri
-      super_diff
-      thor
-      zeitwerk (~> 2.1)
-
-GIT
-  remote: https://github.com/sul-dlss/dor-services-client.git
-  revision: 90729d7773cb1d12c42c40bd002b159963d4a1a8
-  branch: allow-building-incomplete-cocina/argo#5022
-  specs:
-    dor-services-client (15.32.0)
-      activesupport (>= 7.0.0)
-      cocina-models (~> 0.113.0)
-      deprecation
-      faraday (~> 2.0)
-      faraday-retry
-      hashie
-      nokogiri
-      zeitwerk (~> 2.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -240,12 +205,13 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.33.0)
+    dor-services-client (15.34.0)
       activesupport (>= 7.0.0)
       cocina-models (~> 0.114.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
+      hashie
       nokogiri
       zeitwerk (~> 2.1)
     drb (2.2.3)
@@ -721,7 +687,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   capybara-screenshot
-  cocina-models!
+  cocina-models (~> 0.69)
   cocina_display (~> 1.8)
   coderay
   config
@@ -731,7 +697,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client!
+  dor-services-client (~> 15.1)
   druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
