@@ -94,5 +94,15 @@ RSpec.describe CsvUploadNormalizer do
         expect(csv).to eq(expected_csv)
       end
     end
+
+    context 'when remove_blank_columns is false' do
+      let(:csv) { described_class.read(filepath.to_s, remove_blank_columns: false) }
+      let(:filepath) { file_fixture('import_tags.csv') }
+      let(:expected_csv) { "druid:bc903cd4962,tags : test,\ndruid:cc466fh7891,tags : test,tags : another tag\n" }
+
+      it 'reads the CSV without removing blank columns' do
+        expect(csv).to eq(expected_csv)
+      end
+    end
   end
 end

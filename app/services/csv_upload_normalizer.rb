@@ -9,9 +9,12 @@ class CsvUploadNormalizer
   end
 
   # @param path [String] path to uploaded file
-  def initialize(path)
+  def initialize(path, remove_blank_columns: true)
     @path = path
+    @remove_blank_columns = remove_blank_columns
   end
+
+  attr_reader :remove_blank_columns
 
   # Reads uploaded file (could be csv or Excel) and normalizes to CSV.
   # This includes handling BOM and druids without prefixes.
@@ -33,10 +36,10 @@ class CsvUploadNormalizer
 
       # Remove columns that lack a header (e.g., if the header row winds up with
       # any repeated commas in it)
-      csv.by_col!.delete_if { |(column, *)| column.nil? }
+      csv.by_col!.delete_if { |(column, *)| column.nil? } if remove_blank_columns
 
       # Normalize the druids in the druid column, if present, to have the 'druid:' prefix
-      csv.headers.find { |header| header.match?(/\Adruid\z/i) }.tap do |druid_column|
+      csv.headers.compact.find { |header| header.match?(/\Adruid\z/i) }.tap do |druid_column|
         next if druid_column.nil?
 
         csv[druid_column] = csv[druid_column].map { |druid| Druid.new(druid).with_namespace if druid.present? }
