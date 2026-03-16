@@ -198,7 +198,7 @@ RSpec.describe 'User version view', :js do
         expect(page).to have_link('image.jpg')
 
         expect(user_version_client).to have_received(:find).with('2').at_least(:once)
-        expect(user_version_client).to have_received(:solr).with('2')
+        expect(user_version_client).to have_received(:solr).with('2', validate: false)
       end
     end
 
@@ -219,7 +219,7 @@ RSpec.describe 'User version view', :js do
         expect(page).to have_link('image.jpg')
 
         expect(user_version_client).to have_received(:find).with('1').at_least(:once)
-        expect(user_version_client).to have_received(:solr).with('1')
+        expect(user_version_client).to have_received(:solr).with('1', validate: false)
       end
     end
 

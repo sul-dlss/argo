@@ -352,7 +352,8 @@ class CatalogController < ApplicationController
   def show
     if user_version_param
       @cocina = Repository.find_user_version(druid_param, user_version_param)
-      @document = SolrDocument.new(object_client.user_version.solr(user_version_param))
+      # Skip validating the Cocina underlying the Solr representation
+      @document = SolrDocument.new(object_client.user_version.solr(user_version_param, validate: false))
     elsif version_param
       @cocina = Repository.find_version(druid_param, version_param)
       # Skip validating the Cocina underlying the Solr representation

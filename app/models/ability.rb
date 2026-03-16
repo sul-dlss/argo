@@ -33,7 +33,7 @@ class Ability
     cannot :create, :token
     can :create, :token if current_user.sdr_api_authorized?
 
-    alias_action :open, :close, :open_ui, :close_ui, to: :update
+    alias_action :open, :close, :open_ui, :close_ui, :withdraw, :restore, to: :update
 
     if current_user.manager?
       can %i[update manage_governing_apo view_content read],
