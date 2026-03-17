@@ -933,66 +933,85 @@ RSpec.describe DescriptionImport do
     end
   end
 
-  context 'with event date property' do
+  context 'with event property' do
     let(:csv) do
       CSV.parse(csv_data, headers: true)
     end
 
-    context 'when event date has a value' do
+    context 'when event has only has a type' do
       let(:csv_data) do
         <<~CSV
-          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
-          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,2022-01-01,creation
-        CSV
-      end
-
-      it 'deserializes the item' do
-        expect(updated.value!.event.first.date).to eq [
-          Cocina::Models::DescriptiveValue.new(type: 'creation', value: '2022-01-01')
-        ]
-      end
-    end
-
-    context 'when event date has no value' do
-      let(:csv_data) do
-        <<~CSV
-          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
-          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,creation
+          druid,source_id,title1.value,purl,event1.date1.value,event1.type
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,publication
         CSV
       end
 
       it 'rejects the item' do
-        expect(updated.value!.event.first.date).to be_empty
+        expect(updated.value!.event).to be_empty
       end
     end
 
-    context 'when event date has a note' do
-      let(:csv_data) do
-        <<~CSV
-          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type,event1.date1.note1.value
-          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,creation,A date note
-        CSV
+    context 'when the event has a date property' do
+      let(:csv) do
+        CSV.parse(csv_data, headers: true)
       end
 
-      it 'deserializes the item' do
-        expect(updated.value!.event.first.date).to eq [
-          Cocina::Models::DescriptiveValue.new(type: 'creation', note: [{ value: 'A date note' }])
-        ]
-      end
-    end
+      context 'when event date has a value' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
+            druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,2022-01-01,creation
+          CSV
+        end
 
-    context 'when the event date is nested within adminMetadata and has no value' do
-      # Found in https://argo.stanford.edu/view/db586ns4974
-      # See https://github.com/sul-dlss/cocina-models/issues/830
-      let(:csv_data) do
-        <<~CSV
-          druid,source_id,title1.value,purl,adminMetadata.event1.date1.value,adminMetadata.event1.date1.type
-          druid:db586ns4974,desc:no-title-type,A title,https://purl/bc123df4567,,creation
-        CSV
+        it 'deserializes the item' do
+          expect(updated.value!.event.first.date).to eq [
+            Cocina::Models::DescriptiveValue.new(type: 'creation', value: '2022-01-01')
+          ]
+        end
       end
 
-      it 'rejects the item' do
-        expect(updated.value!.adminMetadata.event.first.date).to be_empty
+      context 'when event date has no value' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
+            druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,creation
+          CSV
+        end
+
+        it 'rejects the item' do
+          expect(updated.value!.event.first.date).to be_empty
+        end
+      end
+
+      context 'when event date has a note' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type,event1.date1.note1.value
+            druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,,creation,A date note
+          CSV
+        end
+
+        it 'deserializes the item' do
+          expect(updated.value!.event.first.date).to eq [
+            Cocina::Models::DescriptiveValue.new(type: 'creation', note: [{ value: 'A date note' }])
+          ]
+        end
+      end
+
+      context 'when the event date is nested within adminMetadata and has no value' do
+        # Found in https://argo.stanford.edu/view/db586ns4974
+        # See https://github.com/sul-dlss/cocina-models/issues/830
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,adminMetadata.event1.date1.value,adminMetadata.event1.date1.type
+            druid:db586ns4974,desc:no-title-type,A title,https://purl/bc123df4567,,creation
+          CSV
+        end
+
+        it 'rejects the item' do
+          expect(updated.value!.adminMetadata.event.first.date).to be_empty
+        end
       end
     end
   end

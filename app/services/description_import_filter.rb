@@ -19,7 +19,8 @@ class DescriptionImportFilter
     identifier: :remove_identifiers_without_value,
     language: :remove_language_without_value,
     date: :remove_date_without_value,
-    subject: :remove_subject_without_value
+    subject: :remove_subject_without_value,
+    event: :remove_event_without_value
   }.freeze
 
   MODELS_WITH_NESTED_ATTRIBUTES = {
@@ -76,6 +77,10 @@ class DescriptionImportFilter
     Array(subjects).delete_if { !descriptive_value_sufficient?(it) }
   end
 
+  def remove_event_without_value(events)
+    Array(events).delete_if { !event_sufficient?(it) }
+  end
+
   def remove_language_without_value(languages)
     Array(languages).delete_if { !language_sufficient?(it) }
   end
@@ -95,6 +100,13 @@ class DescriptionImportFilter
   # Ignore DescriptiveValue that is just "type" or "source"
   def descriptive_value_sufficient?(descriptive_value)
     %i[value code uri identifier note valueAt structuredValue parallelValue groupedValue].any? do |key|
+      descriptive_value[key].present?
+    end
+  end
+
+  # Ignore Event that is just "type"
+  def event_sufficient?(descriptive_value)
+    %i[date contributor location identifier note structuredValue].any? do |key|
       descriptive_value[key].present?
     end
   end
