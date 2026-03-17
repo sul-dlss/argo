@@ -4,7 +4,7 @@ module Types
   include Dry.Types()
 end
 
-class StateService
+class StateService # rubocop:disable Style/OneClassPerFile
   # NOTE: each of these states must have a corresponding view with the same name in app/views/workflow_service: the names are used to render lock/unlock icons/links
   STATES = Types::Symbol.enum(:unlock, :lock, :lock_inactive, :unlock_inactive, :lock_assembling)
 
