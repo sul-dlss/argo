@@ -40,23 +40,6 @@ class ImportTagsJob < BulkActionCsvJob
     end
   end
 
-  # def perform(bulk_action_id, params)
-  #   super
-
-  #   with_bulk_action_log do |log_buffer|
-  #     druids_with_tags = ImportTagsCsvConverter.convert(csv_string: params[:csv_file])
-
-  #     # NOTE: We use this instead of `update_druid_count` because import
-  #     #       tags does not use the `druids` form field.
-  #     bulk_action.update(druid_count_total: druids_with_tags.count)
-
-  #     druids_with_tags.each do |druid, tags|
-  #       log_buffer.puts("#{Time.current} #{self.class}: Importing tags for #{druid} (bulk_action.id=#{bulk_action_id})")
-  #       import_tags(druid, log_buffer, tags)
-  #     end
-  #   end
-  # end
-
   private
 
   def import_tags(druid, log_buffer, tags)

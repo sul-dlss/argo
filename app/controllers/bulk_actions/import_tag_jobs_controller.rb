@@ -7,7 +7,7 @@ module BulkActions
     self.action_type = 'ImportTagsJob'
 
     def job_params
-      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
+      { groups: current_user.groups, csv_file: CsvUploadNormalizer.read(params[:csv_file].path, remove_blank_columns: false) }
     end
   end
 end
