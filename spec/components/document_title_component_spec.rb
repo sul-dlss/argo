@@ -107,6 +107,15 @@ RSpec.describe DocumentTitleComponent, type: :component do
         expect(rendered.content).to include('You are viewing an older public version.')
         expect(rendered.content).to include('View latest version')
       end
+
+      context 'when it has invalid cocina' do
+        let(:invalid_cocina) { true }
+
+        it 'renders the expected version label' do
+          expect(rendered.content).to include('You are viewing an older public version that is no longer valid. You can view the JSON below.')
+          expect(rendered.content).to include('View latest version')
+        end
+      end
     end
 
     context 'with a head user version' do

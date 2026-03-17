@@ -24,7 +24,8 @@ class Repository
 
   # @param [String] id the identifier for the item to be found
   # @param [String] user_version the user version to be found
-  # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] cocina model instance corresponding to the given druid
+  # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy] cocina model instance corresponding
+  #   to the given druid & user version
   # @raise [Dor::Services::Client::NotFoundResponse] when dor-services-app cannot find the requested user version
   def self.find_user_version(id, user_version)
     raise ArgumentError, 'Missing identifier' unless id
