@@ -3,6 +3,9 @@
 class DescriptionImport
   include Dry::Monads[:result]
 
+  class_attribute :permitted_types, default: Cocina::Models::Validators::DescriptionTypesValidator.new(nil, nil)
+                                             .send(:types_yaml).values.flatten.pluck('value')
+
   def self.import(csv_row:)
     new(csv_row:).import
   end
@@ -47,8 +50,15 @@ class DescriptionImport
     return value if keys.empty?
 
     key = keys.shift
+    value = normalize_type(value) if key == :type
     val = keys.empty? ? value : nest_hashes(value, *keys)
     key.is_a?(Integer) ? [].tap { |arr| arr[key] = val } : { key => val }
+  end
+
+  # If the type is found in the permitted types, return it as-is; otherwise, return it in downcase.
+  # Almost all types are expected to be downcase, but some are not (e.g. OCLC, ISSN, etc.)
+  def normalize_type(value)
+    permitted_types.include?(value) ? value : value.downcase
   end
 
   # @params [Array,Hash] what a tree or list like data structure. It's one of the nodes in the Cocina descriptive

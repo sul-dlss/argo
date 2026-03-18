@@ -1015,4 +1015,21 @@ RSpec.describe DescriptionImport do
       end
     end
   end
+
+  context 'with geographic type that is not normalized' do
+    let(:csv) do
+      CSV.parse(csv_data, headers: true)
+    end
+
+    let(:csv_data) do
+      <<~CSV
+        druid,source_id,title1.value,purl,geographic1.subject1.structuredValue1.value,geographic1.subject1.structuredValue1.type
+        druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,7.37939062,Latitude
+      CSV
+    end
+
+    it 'normalizes the type' do
+      expect(updated.value!.geographic.first.subject.first.structuredValue.first.type).to eq 'latitude'
+    end
+  end
 end
