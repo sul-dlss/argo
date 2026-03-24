@@ -1,14 +1,19 @@
 :root {
-  /* Stanford colors that are not defined in the component library */
-  --stanford-illuminating-light: #ffe781;
-  --stanford-sky-light: #67afd2;
-  --stanford-bay-light: #8ab8a7;
+  /* Stanford colors that are not defined in the component library version used by
+   Argo */
   --stanford-60-black: #767674;
-  --stanford-stone-dark-rgb: 84, 73, 72;
-  --stanford-poppy-light: #f9a44a;
+  --stanford-archway-light: #766253;
+  --stanford-bay-light: #8ab8a7;
+  --stanford-illuminating-light: #ffe781;
+  --stanford-palo-verde-dark: #017e7c;
   --stanford-palo-verde-light: #59b3a9;
+  --stanford-plum-light: #734675;
+  --stanford-poppy-light: #f9a44a;
+  --stanford-sky-light: #67afd2;
+  --stanford-spirited-dark: #c74632;
 
-  /* non-standard colors (not part of Stanford's palette) */
+  /* Non-standard colors (not part of Stanford's palette) */
   --argo-floral-white: #f9f6ef;
   --argo-tahuna-sands: #d2c295;
+  --stanford-poppy-darker: #c15600;
 }

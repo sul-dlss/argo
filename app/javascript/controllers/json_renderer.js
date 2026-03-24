@@ -8,7 +8,7 @@ export default class extends Controller {
   }
 
   connect () {
-    renderjson.set_icons('\uF4FC', '\uF2E8') // Bootstrap icons
+    renderjson.set_icons('\uF231', '\uF229') // Bootstrap icons
     this.collapse()
   }
 
