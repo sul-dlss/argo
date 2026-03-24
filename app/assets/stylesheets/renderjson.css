@@ -1,12 +1,60 @@
 .renderjson {
-  /* Hide top level disclosure */
-   > span > .object > .disclosure:first-of-type {
+  /* Bump up the font size slightly to make the JSON more readable. The default
+   font size is 0.875em. */
+  font-size: 0.95em;
+
+  /* Allow elements to be positioned absolutely within the container. This has the
+   effect of shifting the expand/collapse controls so that their positioning is
+   consistent. */
+  position: relative;
+
+  /* Hide the top-level disclosure so that the Cocina is not fully collapsible */
+  > span > .object > .disclosure:first-of-type {
     display: none;
   }
 
+  /* Prevent text selection of links within the entire container. Without this, it
+   is possible to copy/paste elements that make the JSON invalid, such as the
+   expand/collapse controls and the collapsed message text (e.g., "3 items") */
+  a {
+    user-select: none;
+  }
+
   .disclosure {
+    color: var(--stanford-60-black);
     font-family: bootstrap-icons;
-    margin-right: 5px;
-    font-size: 14px;
+    font-size: x-large;
+
+    /* Position the expand/collapse controls so that they are left-aligned within
+     the container and vertically centered with the text. */
+    position: absolute;
+    inset-inline-start: 0;
+    transform: translateY(-20%);
+  }
+
+  /* Colorize the JSON elements. The colors are chosen to be visually distinct and
+   to provide contrast against the default background color. */
+  .syntax, .keyword {
+    color: var(--stanford-80-black);
+  }
+
+  .string {
+    color: var(--stanford-poppy-darker);
+  }
+
+  .number {
+    color: var(--stanford-spirited-dark);
+  }
+
+  .boolean {
+    color: var(--stanford-palo-verde-dark);
+  }
+
+  .key {
+    color: var(--stanford-plum-light);
+  }
+
+  .object.syntax, .array.syntax {
+    color: var(--stanford-archway-light);
   }
 }
