@@ -94,6 +94,91 @@ class NotesGrouper
 
   attr_reader :descriptions, :ordered_mapping
 
+  class SlotAllocator
+    def initialize(description:, ordered_mapping:)
+      @description = description
+      @ordered_mapping = ordered_mapping
+      @pipeline = SlotAllocationPipeline.new(
+        matching_slots: method(:matching_slots_for),
+        choose_existing: method(:choose_from_existing_slots),
+        fallback: method(:fallback_slot_for)
+      )
+    end
+
+    def allocate(key:, token:, slot_mapping:)
+      pipeline.allocate(token: token, key: key, slot_mapping: slot_mapping)
+    end
+
+    private
+
+    attr_reader :description, :ordered_mapping, :pipeline
+
+    def matching_slots_for(token)
+      ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
+    end
+
+    def choose_from_existing_slots(slots:, token:, key:, slot_mapping:)
+      if matching_note_tuple_count(token) == 1
+        # If there is only one matching note number in the mapping, use it and move on.
+        slots.first
+      else
+        # If there are multiple notes of this type, use the first note number not already used.
+        # Also applies when there are no displayLabels or types for the note
+        slots.find { |mapped_note_number| !slot_mapping.value?(mapped_note_number) }
+      end
+    end
+
+    # no-op for parity with Forms pipeline; DescriptionRewriter handles fallback
+    def fallback_slot_for(token:, key:, slot_mapping:)
+      nil
+    end
+
+    # kept for parity, intentionally unused right now
+    def append_slot(token)
+      max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
+      new_note = "note#{max + 1}"
+      ordered_mapping[new_note] = token.to_key
+      new_note
+    end
+
+    def matching_note_tuple_count(token)
+      description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
+        .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
+        .count { |_key, value| tuple_matches?(value, token) }
+    end
+
+    def tuple_matches?(value, token)
+      hash = value.to_h
+      num = hash.keys.first[/\d+/]
+
+      NoteToken.from_grouped_hash(hash, num) == token ||
+        NoteToken.from_ungrouped_hash(hash, num) == token
+    end
+  end
+
+  class SlotAllocationPipeline
+    def initialize(matching_slots:, choose_existing:, fallback:)
+      @matching_slots = matching_slots
+      @choose_existing = choose_existing
+      @fallback = fallback
+    end
+
+    def allocate(token:, key:, slot_mapping:)
+      slots = matching_slots.call(token)
+      chosen = choose_existing.call(
+        slots: slots,
+        token: token,
+        key: key,
+        slot_mapping: slot_mapping
+      )
+      chosen || fallback.call(token: token, key: key, slot_mapping: slot_mapping)
+    end
+
+    private
+
+    attr_reader :matching_slots, :choose_existing, :fallback
+  end
+
   class NoteToken
     attr_reader :display_label, :type
 
@@ -215,64 +300,6 @@ class NotesGrouper
 
     def prefix_name
       'note'
-    end
-  end
-
-  class SlotAllocator
-    def initialize(description:, ordered_mapping:)
-      @description = description
-      @ordered_mapping = ordered_mapping
-    end
-
-    def allocate(key:, token:, slot_mapping:)
-      slots = matching_slots_for(token)
-
-      # If there is only one matching note number in the mapping, use it and move on.
-      # ordered_mapping.key(token.to_key)
-      return slots.first if matching_note_tuple_count(token) == 1
-
-      # If there are multiple notes of this type, e.g., an
-      # item with multiple notes of type "abstract" with a
-      # nil display label, use the first note number not
-      # already used.
-      # Also applies when there are no displayLabels or types for the note
-      # ordered_mapping.find do |mapped_note_number, mapped_note_tuple|
-      #   mapped_note_tuple == token.to_key &&
-      #     !slot_mapping.value?(mapped_note_number)
-      # end&.first
-      slots.find do |mapped_note_number|
-        !slot_mapping.value?(mapped_note_number)
-      end
-    end
-
-    private
-
-    attr_reader :description, :ordered_mapping
-
-    def matching_slots_for(token)
-      ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
-    end
-
-    # no-op for parity
-    def append_slot(token)
-      # max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
-      # new_note = "note#{max + 1}"
-      # ordered_mapping[new_note] = token.to_key
-      # new_note
-    end
-
-    def matching_note_tuple_count(token)
-      description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
-        .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
-        .count { |_key, value| tuple_matches?(value, token) }
-    end
-
-    def tuple_matches?(value, token)
-      hash = value.to_h
-      num = hash.keys.first[/\d+/]
-
-      NoteToken.from_grouped_hash(hash, num) == token ||
-        NoteToken.from_ungrouped_hash(hash, num) == token
     end
   end
 

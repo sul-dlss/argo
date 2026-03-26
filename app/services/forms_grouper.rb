@@ -85,7 +85,6 @@ class FormsGrouper
     end
   end
 
-
   attr_reader :descriptions, :ordered_mapping
 
   class FormToken
@@ -205,28 +204,36 @@ class FormsGrouper
     def initialize(description:, ordered_mapping:)
       @description = description
       @ordered_mapping = ordered_mapping
+      @pipeline = NotesGrouper::SlotAllocationPipeline.new(
+        matching_slots: method(:matching_slots_for),
+        choose_existing: method(:choose_from_existing_slots),
+        fallback: method(:fallback_slot_for)
+      )
     end
 
     def allocate(key:, token:, slot_mapping:)
-      target = matching_slots_for(token).find do |mapped_form_number| # , mapped_form_token|
-        # next false unless mapped_form_token == token.to_key && !slot_mapping.value?(mapped_form_number)
+      pipeline.allocate(token: token, slot_mapping: slot_mapping, key: key)
+    end
+
+    private
+
+    attr_reader :description, :ordered_mapping, :pipeline
+
+    def matching_slots_for(token)
+      ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
+    end
+
+    def choose_from_existing_slots(slots:, token:, key:, slot_mapping:)
+      slots.find do |mapped_form_number|
         next false if slot_mapping.value?(mapped_form_number)
 
         remapped_key = key.sub(/\Aold_form\d+/, mapped_form_number)
         !description.key?(remapped_key)
       end
-
-      return target if target
-
-      append_slot(token)
     end
 
-    private
-
-    attr_reader :description, :ordered_mapping
-
-    def matching_slots_for(token)
-      ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
+    def fallback_slot_for(token:, key:, slot_mapping:)
+      append_slot(token)
     end
 
     def append_slot(token)
