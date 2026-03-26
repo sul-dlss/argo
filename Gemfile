@@ -43,7 +43,7 @@ gem 'zip_tricks'
 gem 'blacklight', '~> 7.41'
 # pinned because 6.7.0 is effectively coupled to BL >= 8.3.0 and Argo hasn't been updated to BL8 yet
 gem 'blacklight-hierarchy', '~> 6.6.0'
-gem 'cocina_display', '~> 1.8'
+gem 'cocina_display', '~> 2'
 gem 'dor-services-client', '~> 15.1'
 gem 'druid-tools'
 gem 'folio_client', '~> 0.13'
