@@ -40,16 +40,48 @@ class NotesGrouper
   attr_reader :descriptions, :ordered_mapping
 
   class NoteToken
+    attr_reader :display_label, :type
+
     def self.from_description(description, prefix)
-      [description["#{prefix}.displayLabel"], description["#{prefix}.type"]]
+      new(
+        display_label: description["#{prefix}.displayLabel"],
+        type: description["#{prefix}.type"]
+      )
     end
 
     def self.from_grouped_hash(hash, num)
-      [hash["old_note#{num}.displayLabel"], hash["old_note#{num}.type"]]
+      new(
+        display_label: hash["old_note#{num}.displayLabel"],
+        type: hash["old_note#{num}.type"]
+      )
     end
 
     def self.from_ungrouped_hash(hash, num)
-      [hash["note#{num}.displayLabel"], hash["note#{num}.type"]]
+      new(
+        display_label: hash["note#{num}.displayLabel"],
+        type: hash["note#{num}.type"]
+      )
+    end
+
+    def initialize(display_label:, type:)
+      @display_label = display_label
+      @type = type
+    end
+
+    def to_key
+      [display_label, type]
+    end
+
+    def ==(other)
+      other.is_a?(NoteToken) && to_key == other.to_key
+    end
+
+    def eql?(...)
+      self.==(...)
+    end
+
+    def hash
+      to_key.hash
     end
   end
 
@@ -63,7 +95,7 @@ class NotesGrouper
     def rewrite!
       # Build up a description-specific mapping as a way to track for the current description
       # how we are mapping old note elements to new ones.
-      mapping = {}
+      slot_mapping = {}
 
       # First, we rename all the note header values, e.g., "note1.type" to "old_note1.type"
       # so that we can track which values have already been changed, else we get collisions and are
@@ -74,32 +106,27 @@ class NotesGrouper
 
       description.transform_keys! do |key|
         # Short-circuit by returning the key unchanged if not note-related.
-        note_number = key.match(/^old_note(\d+)/)
-        next key unless note_number
+        number = extract_old_number(key)
+        next key unless number
+
+        old_prefix = "old_#{prefix_name}#{number}"
 
         # If we already have a description-specific mapping for the note_number
         # being operated on, use it and move on
-        if mapping.key?(note_number[0])
-          next key.sub(/^old_note\d+/, mapping[note_number[0]])
+        if slot_mapping.key?(old_prefix)
+          next replace_old_prefix(key, slot_mapping[old_prefix])
         end
 
+        token = token_for(number: number)
+
         # Get the displayLabel and type values of the note number corresponding to the key currently being transformed
-        note_token = NoteToken.from_description(description, "old_note#{note_number[1]}")
-        label_for_note_number, type_for_note_number = note_token
-
-        new_note_number = slot_allocator.allocate(
-          key: key,
-          note_token: note_token,
-        )
-
-        # Fall back to original number if look-up returned nil
-        new_note_number ||= "note#{note_number[1]}"
+        new_prefix = allocate_slot(key: key, token: token, slot_mapping: slot_mapping)
 
         # Extend the description-specific mapping with the above information
-        mapping[note_number[0]] = new_note_number
+        slot_mapping[old_prefix] = new_prefix
 
         # Map the current "old" note number element to the new one.
-        key.sub(/^old_note\d+/, new_note_number)
+        replace_old_prefix(key, new_prefix)
       end
 
       description
@@ -108,6 +135,32 @@ class NotesGrouper
     private
 
     attr_reader :description, :ordered_mapping, :slot_allocator
+
+    def extract_old_number(key)
+      match = key.match(/^old_note(\d+)/)
+      match && match[1]
+    end
+
+    def replace_old_prefix(key, prefix)
+      key.sub(/^old_note\d+/, prefix)
+    end
+
+    def token_for(number:)
+      NoteToken.from_description(description, "old_#{prefix_name}#{number}")
+    end
+
+    def allocate_slot(key:, token:, slot_mapping:)
+      # Fall back to original number if look-up returned nil
+      slot_allocator.allocate(
+        key: key,
+        token: token,
+        slot_mapping: slot_mapping
+      ) || "#{prefix_name}#{extract_old_number(key)}"
+    end
+
+    def prefix_name
+      'note'
+    end
   end
 
   class SlotAllocator
@@ -116,20 +169,20 @@ class NotesGrouper
       @ordered_mapping = ordered_mapping
     end
 
-    def allocate(key:, note_token:)
-      case matching_note_tuple_count(note_token)
+    def allocate(key:, token:, slot_mapping:)
+      case matching_note_tuple_count(token)
       when 1
         # If there is only one matching note number in the mapping, use it and move on.
-        ordered_mapping.key(note_token)
+        ordered_mapping.key(token.to_key)
       else
         # If there are multiple notes of this type, e.g., an
         # item with multiple notes of type "abstract" with a
         # nil display label, use the first note number not
         # already used.
         # Also applies when there are no displayLabels or types for the note
-        ordered_mapping.find do |mapped_note_number, mapped_note_token|
-          mapped_note_token == note_token &&
-            !description.key?(key.sub(/^old_note\d+/, mapped_note_number))
+        ordered_mapping.find do |mapped_note_number, mapped_note_tuple|
+          mapped_note_tuple == token.to_key &&
+            !slot_mapping.value?(mapped_note_number)
         end&.first
       end
     end
@@ -138,17 +191,18 @@ class NotesGrouper
 
     attr_reader :description, :ordered_mapping
 
-    def matching_note_tuple_count(note_token)
+    def matching_note_tuple_count(token)
       description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
         .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
-        .count { |_key, value| tuple_matches?(value, note_token) }
+        .count { |_key, value| tuple_matches?(value, token) }
     end
 
-    def tuple_matches?(value, note_token)
+    def tuple_matches?(value, token)
       hash = value.to_h
       num = hash.keys.first[/\d+/]
-      NoteToken.from_grouped_hash(hash, num) == note_token ||
-        NoteToken.from_ungrouped_hash(hash, num) == note_token
+
+      NoteToken.from_grouped_hash(hash, num) == token ||
+        NoteToken.from_ungrouped_hash(hash, num) == token
     end
   end
 
@@ -163,7 +217,7 @@ class NotesGrouper
         next if notes_count.nil?
 
         1.upto(notes_count[/\d+/].to_i).map do |note_number|
-          NoteToken.from_description(description, "note#{note_number}")
+          NoteToken.from_description(description, "note#{note_number}").to_key
         end
       end
 

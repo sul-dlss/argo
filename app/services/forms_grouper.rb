@@ -38,13 +38,159 @@ class FormsGrouper
 
   attr_reader :descriptions, :ordered_mapping
 
+  class FormToken
+    attr_reader :value, :type
+
+    def self.from_description(description, prefix)
+      new(
+        value: description["#{prefix}.value"],
+        type: description["#{prefix}.type"]
+      )
+    end
+
+    def self.from_grouped_hash(hash, num)
+      new(
+        value: hash["old_form#{num}.value"],
+        type: hash["old_form#{num}.type"]
+      )
+    end
+
+    def self.from_ungrouped_hash(hash, num)
+      new(
+        value: hash["form#{num}.value"],
+        type: hash["form#{num}.type"]
+      )
+    end
+
+    def initialize(value:, type:)
+      @value = value
+      @type = type
+    end
+
+    def to_key
+      type || value
+    end
+
+    def ==(other)
+      other.is_a?(FormToken) && to_key == other.to_key
+    end
+
+    def eql?(...)
+      self.==(...)
+    end
+
+    def hash
+      to_key.hash
+    end
+  end
+
+  class DescriptionRewriter
+    def initialize(description:, ordered_mapping:)
+      @description = description
+      @ordered_mapping = ordered_mapping
+      @slot_allocator = SlotAllocator.new(description: description, ordered_mapping: ordered_mapping)
+    end
+
+    def rewrite!
+      slot_mapping = {}
+
+      description.transform_keys! do |key|
+        key.match?(/^form\d+/) ? key.sub(/^(\D+)/, 'old_\1') : key
+      end
+
+      description.transform_keys! do |key|
+        number = extract_old_number(key)
+        next key unless number
+
+        old_prefix = "old_#{prefix_name}#{number}"
+
+        if slot_mapping.key?(old_prefix)
+          next replace_old_prefix(key, slot_mapping[old_prefix])
+        end
+
+        token = token_for(number: number)
+
+        new_prefix = allocate_slot(key: key, token: token, slot_mapping: slot_mapping)
+
+        slot_mapping[old_prefix] = new_prefix
+
+        replace_old_prefix(key, new_prefix)
+      end
+
+      description
+    end
+
+    private
+
+    attr_reader :description, :slot_allocator
+
+    def extract_old_number(key)
+      match = key.match(/^old_form(\d+)/)
+      match && match[1]
+    end
+
+    def replace_old_prefix(key, prefix)
+      key.sub(/^old_form\d+/, prefix)
+    end
+
+    def token_for(number:)
+      FormToken.from_description(description, "old_#{prefix_name}#{number}")
+    end
+
+    def allocate_slot(key:, token:, slot_mapping:)
+      # Fall back to original number if look-up returned nil
+      slot_allocator.allocate(
+        key: key,
+        token: token,
+        slot_mapping: slot_mapping
+      ) || "#{prefix_name}#{extract_old_number(key)}"
+    end
+
+    def prefix_name
+      'form'
+    end
+  end
+
+  class SlotAllocator
+    def initialize(description:, ordered_mapping:)
+      @description = description
+      @ordered_mapping = ordered_mapping
+    end
+
+    def allocate(key:, token:, slot_mapping:)
+      target = ordered_mapping.find do |mapped_form_number, mapped_form_token|
+        next false unless mapped_form_token == token.to_key && !slot_mapping.value?(mapped_form_number)
+
+        remapped_key = key.sub(/\Aold_form\d+/, mapped_form_number)
+        !description.key?(remapped_key)
+      end&.first
+
+      return target if target
+
+      max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
+      new_form = "form#{max + 1}"
+      ordered_mapping[new_form] = token.to_key
+      new_form
+    end
+
+    private
+
+    attr_reader :description, :ordered_mapping
+  end
+
   class SeedMappingBuilder
     def initialize(descriptions)
       @descriptions = descriptions
     end
 
     def build
-      typed_rows = descriptions.values.map { |desc| typed_values_in_form_order(desc) }
+      typed_rows = descriptions.values.map do |description|
+        # typed_values_in_form_order(desc)
+        description.keys
+          .grep(/\Aform\d+\.type\z/)
+          .sort_by { |k| k[/\d+/].to_i }
+          .map { |k| description[k] }
+      end
       flat = typed_rows.flatten
 
       unique_in_freq_order = flat.tally.sort_by { |_type, count| -count }.map(&:first)
@@ -67,91 +213,5 @@ class FormsGrouper
     private
 
     attr_reader :descriptions
-
-    def typed_values_in_form_order(description)
-      description.keys
-                 .grep(/\Aform\d+\.type\z/)
-                 .sort_by { |k| k[/\d+/].to_i }
-                 .map { |k| description[k] }
-    end
-  end
-
-  class DescriptionRewriter
-    def initialize(description:, ordered_mapping:)
-      @description = description
-      @allocator = SlotAllocator.new(description: description, ordered_mapping: ordered_mapping)
-    end
-
-    def rewrite!
-      local_map = {}
-
-      rename_to_old_prefixes!
-
-      description.transform_keys! do |key|
-        old_form = old_form_prefix(key)
-        next key unless old_form
-
-        target = local_map[old_form] ||= allocator.allocate(old_form, key)
-        key.sub(/\Aold_form\d+/, target)
-      end
-
-      description
-    end
-
-    private
-
-    attr_reader :description, :allocator
-
-    def rename_to_old_prefixes!
-      description.transform_keys! { |k| k.sub(/\A(form\d+)/, 'old_\1') }
-    end
-
-    def old_form_prefix(key)
-      m = key.match(/\Aold_form(\d+)/)
-      return unless m
-
-      "old_form#{m[1]}"
-    end
-  end
-
-  class SlotAllocator
-    def initialize(description:, ordered_mapping:)
-      @description = description
-      @ordered_mapping = ordered_mapping
-    end
-
-    def allocate(old_form, key_being_transformed)
-      token = FormToken.token_for(description, old_form)
-
-      target = first_unused_slot_for_token(token, key_being_transformed)
-      return target if target
-
-      append_new_slot(token)
-    end
-
-    private
-
-    attr_reader :description, :ordered_mapping
-
-    def first_unused_slot_for_token(token, key_being_transformed)
-      ordered_mapping.find do |form_num, mapped_token|
-        next false unless mapped_token == token
-
-        remapped_key = key_being_transformed.sub(/\Aold_form\d+/, form_num)
-        !description.key?(remapped_key)
-      end&.first
-    end
-
-    def append_new_slot(token)
-      max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
-      new_form = "form#{max + 1}"
-      ordered_mapping[new_form] = token
-      new_form
-    end  end
-
-  class FormToken
-    def self.token_for(description, old_form)
-      description["#{old_form}.type"] || description["#{old_form}.value"]
-    end
   end
 end
