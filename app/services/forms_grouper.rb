@@ -141,62 +141,24 @@ class FormsGrouper
     end
 
     def rewrite!
-      slot_mapping = {}
-
-      description.transform_keys! do |key|
-        key.match?(/^form\d+/) ? key.sub(/^(\D+)/, 'old_\1') : key
-      end
-
-      description.transform_keys! do |key|
-        number = extract_old_number(key)
-        next key unless number
-
-        old_prefix = "old_#{prefix_name}#{number}"
-
-        if slot_mapping.key?(old_prefix)
-          next replace_old_prefix(key, slot_mapping[old_prefix])
-        end
-
-        token = token_for(number: number)
-
-        new_prefix = allocate_slot(key: key, token: token, slot_mapping: slot_mapping)
-
-        slot_mapping[old_prefix] = new_prefix
-
-        replace_old_prefix(key, new_prefix)
-      end
-
-      description
+      NotesGrouper::TokenMappingRewriter.new(
+        description: description,
+        prefix_name: 'form',
+        token_for: method(:token_for),
+        allocate_slot: method(:allocate_slot)
+      ).rewrite!
     end
 
     private
 
-    attr_reader :description, :slot_allocator
-
-    def extract_old_number(key)
-      match = key.match(/^old_form(\d+)/)
-      match && match[1]
-    end
-
-    def replace_old_prefix(key, prefix)
-      key.sub(/^old_form\d+/, prefix)
-    end
+    attr_reader :description, :ordered_mapping, :slot_allocator
 
     def token_for(number:)
-      FormToken.from_description(description, "old_#{prefix_name}#{number}")
+      FormToken.from_description(description, "old_form#{number}")
     end
 
     def allocate_slot(key:, token:, slot_mapping:)
-      # Fall back to original number if look-up returned nil
-      slot_allocator.allocate(
-        key: key,
-        token: token,
-        slot_mapping: slot_mapping
-      ) || "#{prefix_name}#{extract_old_number(key)}"
-    end
-
-    def prefix_name
-      'form'
+      slot_allocator.allocate(key: key, token: token, slot_mapping: slot_mapping)
     end
   end
 

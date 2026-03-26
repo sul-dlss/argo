@@ -233,73 +233,24 @@ class NotesGrouper
     end
 
     def rewrite!
-      # Build up a description-specific mapping as a way to track for the current description
-      # how we are mapping old note elements to new ones.
-      slot_mapping = {}
-
-      # First, we rename all the note header values, e.g., "note1.type" to "old_note1.type"
-      # so that we can track which values have already been changed, else we get collisions and are
-      # unable to distinguish already grouped data from yet-to-be-grouped data.
-      description.transform_keys! do |key|
-        key.match?(/^note\d+/) ? key.sub(/^(\D+)/, 'old_\1') : key
-      end
-
-      description.transform_keys! do |key|
-        # Short-circuit by returning the key unchanged if not note-related.
-        number = extract_old_number(key)
-        next key unless number
-
-        old_prefix = "old_#{prefix_name}#{number}"
-
-        # If we already have a description-specific mapping for the note_number
-        # being operated on, use it and move on
-        if slot_mapping.key?(old_prefix)
-          next replace_old_prefix(key, slot_mapping[old_prefix])
-        end
-
-        token = token_for(number: number)
-
-        # Get the displayLabel and type values of the note number corresponding to the key currently being transformed
-        new_prefix = allocate_slot(key: key, token: token, slot_mapping: slot_mapping)
-
-        # Extend the description-specific mapping with the above information
-        slot_mapping[old_prefix] = new_prefix
-
-        # Map the current "old" note number element to the new one.
-        replace_old_prefix(key, new_prefix)
-      end
-
-      description
+      TokenMappingRewriter.new(
+        description: description,
+        prefix_name: 'note',
+        token_for: method(:token_for),
+        allocate_slot: method(:allocate_slot)
+      ).rewrite!
     end
 
     private
 
     attr_reader :description, :ordered_mapping, :slot_allocator
 
-    def extract_old_number(key)
-      match = key.match(/^old_note(\d+)/)
-      match && match[1]
-    end
-
-    def replace_old_prefix(key, prefix)
-      key.sub(/^old_note\d+/, prefix)
-    end
-
     def token_for(number:)
-      NoteToken.from_description(description, "old_#{prefix_name}#{number}")
+      NoteToken.from_description(description, "old_note#{number}")
     end
 
     def allocate_slot(key:, token:, slot_mapping:)
-      # Fall back to original number if look-up returned nil
-      slot_allocator.allocate(
-        key: key,
-        token: token,
-        slot_mapping: slot_mapping
-      ) || "#{prefix_name}#{extract_old_number(key)}"
-    end
-
-    def prefix_name
-      'note'
+      slot_allocator.allocate(key: key, token: token, slot_mapping: slot_mapping)
     end
   end
 
@@ -329,5 +280,55 @@ class NotesGrouper
     private
 
     attr_reader :prefix, :rows, :unique_order_strategy, :repeat_counts_strategy, :expand_strategy
+  end
+
+  class TokenMappingRewriter
+    def initialize(description:, prefix_name:, token_for:, allocate_slot:)
+      @description = description
+      @prefix_name = prefix_name
+      @token_for = token_for
+      @allocate_slot = allocate_slot
+    end
+
+    def rewrite!
+      slot_mapping = {}
+
+      rename_prefixes!
+
+      description.transform_keys! do |key|
+        number = extract_old_number(key)
+        next key unless number
+
+        old_prefix = "old_#{prefix_name}#{number}"
+
+        slot_mapping[old_prefix] ||= begin
+                                       token = token_for.call(number: number)
+                                       allocate_slot.call(key: key, token: token, slot_mapping: slot_mapping) || "#{prefix_name}#{number}"
+                                     end
+
+        replace_old_prefix(key, slot_mapping[old_prefix])
+      end
+
+      description
+    end
+
+    private
+
+    attr_reader :description, :prefix_name, :token_for, :allocate_slot
+
+    def rename_prefixes!
+      description.transform_keys! do |key|
+        key.match?(/^#{prefix_name}\d+/) ? key.sub(/^(\D+)/, 'old_\1') : key
+      end
+    end
+
+    def extract_old_number(key)
+      match = key.match(/^old_#{prefix_name}(\d+)/)
+      match && match[1]
+    end
+
+    def replace_old_prefix(key, prefix)
+      key.sub(/^old_#{prefix_name}\d+/, prefix)
+    end
   end
 end
