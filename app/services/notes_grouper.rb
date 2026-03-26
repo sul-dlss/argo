@@ -16,6 +16,8 @@
 #
 # NOTE: This class is tested in the context of the DescriptionsGrouper
 class NotesGrouper
+  PREFIX = 'note'
+
   def self.group(descriptions:)
     new(descriptions:).group
   end
@@ -26,7 +28,13 @@ class NotesGrouper
     # label and type values in order from most ubiquitous to least. Why? This
     # way leftmost columns will be more populated, with less used values
     # pushed to the right.
-    @ordered_mapping = SeedMappingBuilder.new(descriptions).build
+    @ordered_mapping = SeedMappingBuilder.build(
+      prefix: PREFIX,
+      rows:,
+      unique_order_strategy:,
+      repeat_counts_strategy:,
+      expand_strategy:
+    )
   end
 
   def group
@@ -36,6 +44,53 @@ class NotesGrouper
   end
 
   private
+
+  def rows
+    descriptions.values.map do |description|
+      notes_count = description.keys.grep(/^note\d+\./).max_by { |field| field[/\d+/].to_i }
+      next if notes_count.nil?
+
+      1.upto(notes_count[/\d+/].to_i).map do |note_number|
+        NoteToken.from_description(description, "note#{note_number}").to_key
+      end
+    end
+  end
+
+  def unique_order_strategy
+    ->(computed_rows) do
+      computed_rows
+        .flatten(1)
+        .index_with { |token| computed_rows.flatten(1).count(token) }
+        .sort_by { |_value, count| -count }
+        .to_h
+        .keys
+    end
+  end
+
+  def repeat_counts_strategy
+    ->(computed_rows) do
+      repeat_types_counts = {}
+      computed_rows
+        .map { |row| row&.select { |field| row.count(field) > 1 } }
+        .compact_blank
+        .each do |repeats|
+        repeat_types_counts.merge!(
+          repeats.index_with { |e| repeats.count(e) }
+        )
+      end
+      repeat_types_counts
+    end
+  end
+
+  def expand_strategy
+    ->(unique, repeats) do
+      expanded = unique.dup
+      repeats.each do |value, count|
+        expanded.insert(expanded.index(value), *Array.new(count - 1) { value })
+      end
+      expanded
+    end
+  end
 
   attr_reader :descriptions, :ordered_mapping
 
@@ -170,26 +225,41 @@ class NotesGrouper
     end
 
     def allocate(key:, token:, slot_mapping:)
-      case matching_note_tuple_count(token)
-      when 1
-        # If there is only one matching note number in the mapping, use it and move on.
-        ordered_mapping.key(token.to_key)
-      else
-        # If there are multiple notes of this type, e.g., an
-        # item with multiple notes of type "abstract" with a
-        # nil display label, use the first note number not
-        # already used.
-        # Also applies when there are no displayLabels or types for the note
-        ordered_mapping.find do |mapped_note_number, mapped_note_tuple|
-          mapped_note_tuple == token.to_key &&
-            !slot_mapping.value?(mapped_note_number)
-        end&.first
+      slots = matching_slots_for(token)
+
+      # If there is only one matching note number in the mapping, use it and move on.
+      # ordered_mapping.key(token.to_key)
+      return slots.first if matching_note_tuple_count(token) == 1
+
+      # If there are multiple notes of this type, e.g., an
+      # item with multiple notes of type "abstract" with a
+      # nil display label, use the first note number not
+      # already used.
+      # Also applies when there are no displayLabels or types for the note
+      # ordered_mapping.find do |mapped_note_number, mapped_note_tuple|
+      #   mapped_note_tuple == token.to_key &&
+      #     !slot_mapping.value?(mapped_note_number)
+      # end&.first
+      slots.find do |mapped_note_number|
+        !slot_mapping.value?(mapped_note_number)
       end
     end
 
     private
 
     attr_reader :description, :ordered_mapping
+
+    def matching_slots_for(token)
+      ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
+    end
+
+    # no-op for parity
+    def append_slot(token)
+      # max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
+      # new_note = "note#{max + 1}"
+      # ordered_mapping[new_note] = token.to_key
+      # new_note
+    end
 
     def matching_note_tuple_count(token)
       description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
@@ -207,49 +277,30 @@ class NotesGrouper
   end
 
   class SeedMappingBuilder
-    def initialize(descriptions)
-      @descriptions = descriptions
+    def self.build(...)
+      new(...).build
+    end
+
+    def initialize(prefix:, rows:, unique_order_strategy:, repeat_counts_strategy:, expand_strategy:)
+      @prefix = prefix
+      @rows = rows
+      @unique_order_strategy = unique_order_strategy
+      @repeat_counts_strategy = repeat_counts_strategy
+      @expand_strategy = expand_strategy
     end
 
     def build
-      label_and_type_values = descriptions.values.map do |description|
-        notes_count = description.keys.grep(/^note\d+\./).max_by { |field| field[/\d+/].to_i }
-        next if notes_count.nil?
+      return {} if rows.empty?
 
-        1.upto(notes_count[/\d+/].to_i).map do |note_number|
-          NoteToken.from_description(description, "note#{note_number}").to_key
-        end
-      end
+      unique = unique_order_strategy.call(rows)
+      repeats = repeat_counts_strategy.call(rows)
+      expanded = expand_strategy.call(unique, repeats)
 
-      return {} unless label_and_type_values.any?
-
-      # Order based on frequency of a given tuple
-      unique_types_in_order = label_and_type_values
-                              .flatten(1)
-                              .index_with { |note_type| label_and_type_values.flatten(1).count(note_type) }
-                              .sort_by { |_value, count| -count }
-                              .to_h
-                              .keys
-
-      repeat_types_counts = {}
-      label_and_type_values
-        .map { |row| row&.select { |field| row.count(field) > 1 } }
-        .compact_blank
-        .each do |repeats|
-          repeat_types_counts.merge!(
-            repeats.index_with { |e| repeats.count(e) }
-          )
-        end
-
-      repeat_types_counts.each do |value, count|
-        unique_types_in_order.insert(unique_types_in_order.index(value), *Array.new(count - 1) { value })
-      end
-
-      unique_types_in_order.map.with_index(1).to_h { |key, index| ["note#{index}", key] }
+      expanded.map.with_index(1).to_h { |token, i| ["#{prefix}#{i}", token] }
     end
 
     private
 
-    attr_reader :descriptions
+    attr_reader :prefix, :rows, :unique_order_strategy, :repeat_counts_strategy, :expand_strategy
   end
 end

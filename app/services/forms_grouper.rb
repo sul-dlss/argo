@@ -16,13 +16,21 @@
 #
 # NOTE: This class is tested in the context of the DescriptionsGrouper
 class FormsGrouper
+  PREFIX = 'form'
+
   def self.group(descriptions:)
     new(descriptions:).group
   end
 
   def initialize(descriptions:)
     @descriptions = descriptions
-    @ordered_mapping = SeedMappingBuilder.new(descriptions).build
+    @ordered_mapping = NotesGrouper::SeedMappingBuilder.build(
+      prefix: PREFIX,
+      rows:,
+      unique_order_strategy:,
+      repeat_counts_strategy:,
+      expand_strategy:
+    )
   end
 
   def group
@@ -35,6 +43,48 @@ class FormsGrouper
   end
 
   private
+
+  def rows
+    descriptions.values.map do |description|
+      description.keys
+        .grep(/\Aform\d+\.type\z/)
+        .sort_by { |k| k[/\d+/].to_i }
+        .map { |k| description[k] }
+    end
+  end
+
+  def unique_order_strategy
+    ->(computed_rows) do
+      computed_rows
+        .flatten
+        .tally
+        .sort_by { |_type, count| -count }
+        .map(&:first)
+    end
+  end
+
+  def repeat_counts_strategy
+    ->(computed_rows) do
+      max_repeats = Hash.new(1)
+      computed_rows.each do |row|
+        row.tally.each do |type, count|
+          max_repeats[type] = [max_repeats[type], count].max
+        end
+      end
+      max_repeats
+    end
+  end
+
+  def expand_strategy
+    ->(unique, repeats) do
+      expanded = []
+      unique.each do |type|
+        repeats[type].times { expanded << type }
+      end
+      expanded
+    end
+  end
+
 
   attr_reader :descriptions, :ordered_mapping
 
@@ -158,60 +208,32 @@ class FormsGrouper
     end
 
     def allocate(key:, token:, slot_mapping:)
-      target = ordered_mapping.find do |mapped_form_number, mapped_form_token|
-        next false unless mapped_form_token == token.to_key && !slot_mapping.value?(mapped_form_number)
+      target = matching_slots_for(token).find do |mapped_form_number| # , mapped_form_token|
+        # next false unless mapped_form_token == token.to_key && !slot_mapping.value?(mapped_form_number)
+        next false if slot_mapping.value?(mapped_form_number)
 
         remapped_key = key.sub(/\Aold_form\d+/, mapped_form_number)
         !description.key?(remapped_key)
-      end&.first
+      end
 
       return target if target
 
-      max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
-      new_form = "form#{max + 1}"
-      ordered_mapping[new_form] = token.to_key
-      new_form
+      append_slot(token)
     end
 
     private
 
     attr_reader :description, :ordered_mapping
-  end
 
-  class SeedMappingBuilder
-    def initialize(descriptions)
-      @descriptions = descriptions
+    def matching_slots_for(token)
+      ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
     end
 
-    def build
-      typed_rows = descriptions.values.map do |description|
-        # typed_values_in_form_order(desc)
-        description.keys
-          .grep(/\Aform\d+\.type\z/)
-          .sort_by { |k| k[/\d+/].to_i }
-          .map { |k| description[k] }
-      end
-      flat = typed_rows.flatten
-
-      unique_in_freq_order = flat.tally.sort_by { |_type, count| -count }.map(&:first)
-
-      max_repeats = Hash.new(1)
-      typed_rows.each do |row|
-        row.tally.each do |type, count|
-          max_repeats[type] = [max_repeats[type], count].max
-        end
-      end
-
-      expanded = []
-      unique_in_freq_order.each do |type|
-        max_repeats[type].times { expanded << type }
-      end
-
-      expanded.map.with_index(1) { |type, i| ["form#{i}", type] }.to_h
+    def append_slot(token)
+      max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
+      new_form = "form#{max + 1}"
+      ordered_mapping[new_form] = token.to_key
+      new_form
     end
-
-    private
-
-    attr_reader :descriptions
   end
 end
