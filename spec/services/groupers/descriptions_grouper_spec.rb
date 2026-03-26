@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DescriptionsGrouper do
+RSpec.describe Groupers::DescriptionsGrouper do
   subject(:run) { described_class.group(descriptions:) }
 
   let(:descriptions) do
