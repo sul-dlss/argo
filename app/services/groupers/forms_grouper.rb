@@ -16,6 +16,9 @@
 #
 # NOTE: This class is tested in the context of the DescriptionsGrouper
 module Groupers
+  # Groups flattened form fields into stable semantic form slots (form1, form2, ...).
+  # Seed mapping is computed once per batch; each description is then rewritten
+  # against that mapping.
   class FormsGrouper
     PREFIX = 'form'
 
@@ -88,6 +91,8 @@ module Groupers
 
     attr_reader :descriptions, :ordered_mapping
 
+    # Value object representing the semantic identity of a form entry.
+    # For forms, type is primary; value is fallback when type is absent.
     class FormToken
       attr_reader :value, :type
 
@@ -134,17 +139,18 @@ module Groupers
       end
     end
 
+    # Rewrites one flattened description hash from old_formN.* to canonical formN.* slots.
+    # Delegates slot-choice policy to SlotAllocator.
     class DescriptionRewriter
       def initialize(description:, ordered_mapping:)
         @description = description
-        @ordered_mapping = ordered_mapping
         @slot_allocator = SlotAllocator.new(description: description, ordered_mapping: ordered_mapping)
       end
 
       def rewrite!
         TokenMappingRewriter.new(
           description: description,
-          prefix_name: 'form',
+          prefix_name: PREFIX,
           token_for: method(:token_for),
           allocate_slot: method(:allocate_slot)
         ).rewrite!
@@ -152,7 +158,7 @@ module Groupers
 
       private
 
-      attr_reader :description, :ordered_mapping, :slot_allocator
+      attr_reader :description, :slot_allocator
 
       def token_for(number:)
         FormToken.from_description(description, "old_form#{number}")
@@ -163,12 +169,15 @@ module Groupers
       end
     end
 
+    # Chooses the best existing form slot for a token within a description.
+    # If no existing slot is available, forms semantics allow appending a new slot.
+    # (This differs intentionally from NotesGrouper::SlotAllocator behavior.)
     class SlotAllocator
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
         @pipeline = SlotAllocationPipeline.new(
-          matching_slots: method(:matching_slots_for),
+          slots_for: method(:slots_for),
           choose_existing: method(:choose_from_existing_slots),
           fallback: method(:fallback_slot_for)
         )
@@ -182,24 +191,27 @@ module Groupers
 
       attr_reader :description, :ordered_mapping, :pipeline
 
-      def matching_slots_for(token)
+      def slots_for(token)
         ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
       end
 
-      def choose_from_existing_slots(slots:, token:, key:, slot_mapping:)
-        slots.find do |mapped_form_number|
-          next false if slot_mapping.value?(mapped_form_number)
+      # Selects the first candidate slot that is not already assigned in this
+      # description and does not collide with an already-present key path.
+      def choose_from_existing_slots(slots:, key:, slot_mapping:, **)
+        slots.find do |slot|
+          next false if slot_mapping.value?(slot)
 
-          remapped_key = key.sub(/\Aold_form\d+/, mapped_form_number)
+          remapped_key = key.sub(/\Aold_form\d+/, slot)
           !description.key?(remapped_key)
         end
       end
 
-      def fallback_slot_for(token:, key:, slot_mapping:)
-        append_slot(token)
+      # Forms allocator fallback: expand the global form slot map.
+      def fallback_slot_for(token:, **)
+        append_slot_for(token)
       end
 
-      def append_slot(token)
+      def append_slot_for(token)
         max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
         new_form = "form#{max + 1}"
         ordered_mapping[new_form] = token.to_key

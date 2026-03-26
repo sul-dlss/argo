@@ -16,6 +16,9 @@
 #
 # NOTE: This class is tested in the context of the DescriptionsGrouper
 module Groupers
+  # Groups flattened note fields into stable semantic note slots (note1, note2, ...).
+  # Seed mapping is computed once per batch; each description is then rewritten
+  # against that mapping.
   class NotesGrouper
     PREFIX = 'note'
 
@@ -95,12 +98,14 @@ module Groupers
 
     attr_reader :descriptions, :ordered_mapping
 
+    # Chooses the best existing note slot for a token within a description.
+    # Notes matching is tuple-aware and count-sensitive.
     class SlotAllocator
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
         @pipeline = SlotAllocationPipeline.new(
-          matching_slots: method(:matching_slots_for),
+          slots_for: method(:slots_for),
           choose_existing: method(:choose_from_existing_slots),
           fallback: method(:fallback_slot_for)
         )
@@ -114,10 +119,13 @@ module Groupers
 
       attr_reader :description, :ordered_mapping, :pipeline
 
-      def matching_slots_for(token)
+      def slots_for(token)
         ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
       end
 
+      # Notes selection policy:
+      # - single tuple match => use that slot
+      # - multiple tuple matches => first not already assigned in this description
       # key intentionally unused in Notes selection strategy
       def choose_from_existing_slots(slots:, slot_mapping:, token:, **)
         if matching_note_tuple_count(token) == 1
@@ -126,11 +134,15 @@ module Groupers
         else
           # If there are multiple notes of this type, use the first note number not already used.
           # Also applies when there are no displayLabels or types for the note
-          slots.find { |mapped_note_number| !slot_mapping.value?(mapped_note_number) }
+          slots.find { |slot| !slot_mapping.value?(slot) }
         end
       end
 
-      # no-op for parity with Forms pipeline; DescriptionRewriter handles fallback
+      # NotesGrouper allocator fallback is intentionally nil for parity with
+      # FormsGrouper, but also because Notes semantics do not allow appending
+      # new note slots.
+      #
+      # TokenMappingRewriter will fall back to the original note number.
       def fallback_slot_for(**)
         nil
       end
@@ -150,6 +162,8 @@ module Groupers
       end
     end
 
+    # Value object representing the semantic identity of a note entry.
+    # For notes, identity is [displayLabel, type].
     class NoteToken
       attr_reader :display_label, :type
 
@@ -196,17 +210,18 @@ module Groupers
       end
     end
 
+    # Rewrites one flattened description hash from old_noteN.* to canonical noteN.* slots.
+    # Delegates slot-choice policy to SlotAllocator.
     class DescriptionRewriter
       def initialize(description:, ordered_mapping:)
         @description = description
-        @ordered_mapping = ordered_mapping
         @slot_allocator = SlotAllocator.new(description: description, ordered_mapping: ordered_mapping)
       end
 
       def rewrite!
         TokenMappingRewriter.new(
           description: description,
-          prefix_name: 'note',
+          prefix_name: PREFIX,
           token_for: method(:token_for),
           allocate_slot: method(:allocate_slot)
         ).rewrite!
@@ -214,7 +229,7 @@ module Groupers
 
       private
 
-      attr_reader :description, :ordered_mapping, :slot_allocator
+      attr_reader :description, :slot_allocator
 
       def token_for(number:)
         NoteToken.from_description(description, "old_note#{number}")

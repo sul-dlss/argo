@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
 module Groupers
+  # Shared allocation flow:
+  # 1) compute candidate slots for token
+  # 2) choose best existing slot
+  # 3) apply grouper-specific fallback when no existing slot is suitable
   class SlotAllocationPipeline
-    def initialize(matching_slots:, choose_existing:, fallback:)
-      @matching_slots = matching_slots
+    def initialize(slots_for:, choose_existing:, fallback:)
+      @slots_for = slots_for
       @choose_existing = choose_existing
       @fallback = fallback
     end
 
     def allocate(token:, key:, slot_mapping:)
-      slots = matching_slots.call(token)
+      slots = slots_for.call(token)
       chosen = choose_existing.call(
         slots: slots,
         token: token,
@@ -21,6 +25,6 @@ module Groupers
 
     private
 
-    attr_reader :matching_slots, :choose_existing, :fallback
+    attr_reader :slots_for, :choose_existing, :fallback
   end
 end

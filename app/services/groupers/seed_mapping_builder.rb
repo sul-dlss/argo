@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Groupers
+  # Shared seed-map pipeline used by both groupers.
+  #
+  # Each grouper provides:
+  # - rows extraction
+  # - unique ordering strategy
+  # - repeat counting + expansion strategy
   class SeedMappingBuilder
     def self.build(...)
       new(...).build

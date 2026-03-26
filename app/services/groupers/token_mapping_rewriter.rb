@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module Groupers
+  # Shared rewrite engine for flattened tokenized fields.
+  #
+  # Responsibilities:
+  # 1) temporarily rename prefixN.* -> old_prefixN.* to avoid key collisions
+  # 2) compute one slot mapping per old_prefixN within a description
+  # 3) rewrite old_prefixN.* keys to canonical prefixM.* keys
   class TokenMappingRewriter
     def initialize(description:, prefix_name:, token_for:, allocate_slot:)
       @description = description
@@ -9,6 +15,8 @@ module Groupers
       @allocate_slot = allocate_slot
     end
 
+    # Per-description mapping of old_prefixN => canonical prefixM.
+    # This ensures all fields for the same token move together.
     def rewrite!
       slot_mapping = {}
 
