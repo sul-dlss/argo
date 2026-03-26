@@ -98,12 +98,37 @@ module Groupers
 
     attr_reader :descriptions, :ordered_mapping
 
+    class TokenMatchCounter
+      def initialize(description:)
+        @description = description
+      end
+
+      def count(token)
+        description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
+          .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
+          .count { |_key, value| tuple_matches?(value, token) }
+      end
+
+      private
+
+      attr_reader :description
+
+      def tuple_matches?(value, token)
+        hash = value.to_h
+        num = hash.keys.first[/\d+/]
+
+        NoteToken.from_grouped_hash(hash, num) == token ||
+          NoteToken.from_ungrouped_hash(hash, num) == token
+      end
+    end
+
     # Chooses the best existing note slot for a token within a description.
     # Notes matching is tuple-aware and count-sensitive.
     class SlotAllocator
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
+        @match_counter = TokenMatchCounter.new(description: description)
         @pipeline = SlotAllocationPipeline.new(
           slots_for: method(:slots_for),
           choose_existing: method(:choose_from_existing_slots),
@@ -117,7 +142,7 @@ module Groupers
 
       private
 
-      attr_reader :description, :ordered_mapping, :pipeline
+      attr_reader :description, :ordered_mapping, :pipeline, :match_counter
 
       def slots_for(token)
         ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
@@ -128,7 +153,7 @@ module Groupers
       # - multiple tuple matches => first not already assigned in this description
       # key intentionally unused in Notes selection strategy
       def choose_from_existing_slots(slots:, slot_mapping:, token:, **)
-        if matching_note_tuple_count(token) == 1
+        if match_counter.count(token) == 1
           # If there is only one matching note number in the mapping, use it and move on.
           slots.first
         else
@@ -145,20 +170,6 @@ module Groupers
       # TokenMappingRewriter will fall back to the original note number.
       def fallback_slot_for(**)
         nil
-      end
-
-      def matching_note_tuple_count(token)
-        description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
-          .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
-          .count { |_key, value| tuple_matches?(value, token) }
-      end
-
-      def tuple_matches?(value, token)
-        hash = value.to_h
-        num = hash.keys.first[/\d+/]
-
-        NoteToken.from_grouped_hash(hash, num) == token ||
-          NoteToken.from_ungrouped_hash(hash, num) == token
       end
     end
 
