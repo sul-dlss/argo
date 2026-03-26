@@ -117,7 +117,8 @@ class NotesGrouper
       ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
     end
 
-    def choose_from_existing_slots(slots:, token:, key:, slot_mapping:)
+    # key intentionally unused in Notes selection strategy
+    def choose_from_existing_slots(slots:, slot_mapping:, token:, **)
       if matching_note_tuple_count(token) == 1
         # If there is only one matching note number in the mapping, use it and move on.
         slots.first
@@ -129,16 +130,8 @@ class NotesGrouper
     end
 
     # no-op for parity with Forms pipeline; DescriptionRewriter handles fallback
-    def fallback_slot_for(token:, key:, slot_mapping:)
+    def fallback_slot_for(**)
       nil
-    end
-
-    # kept for parity, intentionally unused right now
-    def append_slot(token)
-      max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
-      new_note = "note#{max + 1}"
-      ordered_mapping[new_note] = token.to_key
-      new_note
     end
 
     def matching_note_tuple_count(token)
@@ -301,10 +294,10 @@ class NotesGrouper
 
         old_prefix = "old_#{prefix_name}#{number}"
 
-        slot_mapping[old_prefix] ||= begin
-                                       token = token_for.call(number: number)
-                                       allocate_slot.call(key: key, token: token, slot_mapping: slot_mapping) || "#{prefix_name}#{number}"
-                                     end
+        unless slot_mapping.key?(old_prefix)
+          token = token_for.call(number: number)
+          slot_mapping[old_prefix] = allocate_slot.call(key: key, token: token, slot_mapping: slot_mapping) || "#{prefix_name}#{number}"
+        end
 
         replace_old_prefix(key, slot_mapping[old_prefix])
       end
