@@ -2,9 +2,8 @@
 
 module Groupers
   class NotesGrouper
-    # Counts how many noteN tokens in a description match a given token, where N
-    # is any positive integer. Used to determine whether a token is unique
-    # enough to be used as a seed for grouping.
+    # Counts occurrences of a token tuple within note tuple-bearing keys of one
+    # flattened description.
     class TokenMatchCounter
       def initialize(description:)
         @description = description

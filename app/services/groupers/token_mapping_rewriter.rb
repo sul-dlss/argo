@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 module Groupers
-  # Shared rewrite engine for flattened tokenized fields.
+  # Shared key-rewrite engine.
+  #
+  # Input: flattened hash with prefix-indexed keys (e.g., form1.value, note2.type).
+  # Output: same hash with canonicalized slot prefixes.
+  # Guarantees:
+  # - all fields for one old_prefixN move together to one target slot
+  # - unrelated keys remain unchanged
   #
   # Responsibilities:
   # 1) temporarily rename prefixN.* -> old_prefixN.* to avoid key collisions

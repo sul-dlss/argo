@@ -2,9 +2,12 @@
 
 module Groupers
   # Shared allocation flow:
+  #
   # 1) compute candidate slots for token
-  # 2) choose best existing slot
-  # 3) apply grouper-specific fallback when no existing slot is suitable
+  # 2) choose existing slot via policy
+  # 3) fallback via policy if none chosen
+  #
+  # Policies are injected to keep grouper-specific behavior explicit.
   class SlotAllocationPipeline
     def initialize(slots_for:, choose_existing:, fallback:)
       @slots_for = slots_for
@@ -14,13 +17,12 @@ module Groupers
 
     def allocate(token:, key:, slot_mapping:)
       slots = slots_for.call(token)
-      chosen = choose_existing.call(
+      choose_existing.call(
         slots: slots,
         token: token,
         key: key,
         slot_mapping: slot_mapping
-      )
-      chosen || fallback.call(token: token, key: key, slot_mapping: slot_mapping)
+      ) || fallback.call(token: token, key: key, slot_mapping: slot_mapping)
     end
 
     private
