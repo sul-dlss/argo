@@ -29,6 +29,8 @@ module Groupers
         old_prefix = "old_#{prefix_name}#{number}"
 
         unless slot_mapping.key?(old_prefix)
+          # Shared fallback point: if allocator returns nil, retain original
+          # column number for this prefix family.
           token = token_for.call(number: number)
           slot_mapping[old_prefix] = allocate_slot.call(key: key, token: token, slot_mapping: slot_mapping) || "#{prefix_name}#{number}"
         end

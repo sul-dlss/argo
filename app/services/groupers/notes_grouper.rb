@@ -35,9 +35,9 @@ module Groupers
       @ordered_mapping = SeedMappingBuilder.build(
         prefix: PREFIX,
         rows:,
-        unique_order_strategy:,
-        repeat_counts_strategy:,
-        expand_strategy:
+        unique_order_strategy: method(:unique_order_strategy),
+        repeat_counts_strategy: method(:repeat_counts_strategy),
+        expand_strategy: method(:expand_strategy)
       )
     end
 
@@ -55,200 +55,49 @@ module Groupers
         next if notes_count.nil?
 
         1.upto(notes_count[/\d+/].to_i).map do |note_number|
-          NoteToken.from_description(description, "note#{note_number}").to_key
+          Token.from_description(description, "note#{note_number}").to_key
         end
       end
     end
 
-    def unique_order_strategy
-      ->(computed_rows) do
-        computed_rows
-          .flatten(1)
-          .index_with { |token| computed_rows.flatten(1).count(token) }
-          .sort_by { |_value, count| -count }
-          .to_h
-          .keys
+    def unique_order_strategy(computed_rows)
+      flat = computed_rows.flatten(1)
+
+      counts = Hash.new(0)
+      first_seen = {}
+
+      flat.each_with_index do |token, idx|
+        counts[token] += 1
+        first_seen[token] ||= idx
+      end
+
+      counts.keys.sort_by do |token|
+        [
+          -counts[token],      # most frequent first
+          first_seen[token]    # preserve first-seen ordering on ties
+        ]
       end
     end
 
-    def repeat_counts_strategy
-      ->(computed_rows) do
-        repeat_types_counts = {}
-        computed_rows
-          .map { |row| row&.select { |field| row.count(field) > 1 } }
-          .compact_blank
-          .each do |repeats|
-          repeat_types_counts.merge!(
-            repeats.index_with { |e| repeats.count(e) }
-          )
-        end
-        repeat_types_counts
+    def repeat_counts_strategy(computed_rows)
+      repeat_types_counts = {}
+      computed_rows.each do |row|
+        next if row.blank?
+
+        repeats_for_row = row.tally.select { |_token, count| count > 1 }
+        repeat_types_counts.merge!(repeats_for_row)
       end
+      repeat_types_counts
     end
 
-    def expand_strategy
-      ->(unique, repeats) do
-        expanded = unique.dup
-        repeats.each do |value, count|
-          expanded.insert(expanded.index(value), *Array.new(count - 1) { value })
-        end
-        expanded
+    def expand_strategy(unique, repeats)
+      expanded = unique.dup
+      repeats.each do |value, count|
+        expanded.insert(expanded.index(value), *Array.new(count - 1) { value })
       end
+      expanded
     end
 
     attr_reader :descriptions, :ordered_mapping
-
-    class TokenMatchCounter
-      def initialize(description:)
-        @description = description
-      end
-
-      def count(token)
-        description.slice(*description.keys.grep(/note.+(displayLabel|type)/))
-          .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
-          .count { |_key, value| tuple_matches?(value, token) }
-      end
-
-      private
-
-      attr_reader :description
-
-      def tuple_matches?(value, token)
-        hash = value.to_h
-        num = hash.keys.first[/\d+/]
-
-        NoteToken.from_grouped_hash(hash, num) == token ||
-          NoteToken.from_ungrouped_hash(hash, num) == token
-      end
-    end
-
-    # Chooses the best existing note slot for a token within a description.
-    # Notes matching is tuple-aware and count-sensitive.
-    class SlotAllocator
-      def initialize(description:, ordered_mapping:)
-        @description = description
-        @ordered_mapping = ordered_mapping
-        @match_counter = TokenMatchCounter.new(description: description)
-        @pipeline = SlotAllocationPipeline.new(
-          slots_for: method(:slots_for),
-          choose_existing: method(:choose_from_existing_slots),
-          fallback: method(:fallback_slot_for)
-        )
-      end
-
-      def allocate(key:, token:, slot_mapping:)
-        pipeline.allocate(token: token, key: key, slot_mapping: slot_mapping)
-      end
-
-      private
-
-      attr_reader :description, :ordered_mapping, :pipeline, :match_counter
-
-      def slots_for(token)
-        ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
-      end
-
-      # Notes selection policy:
-      # - single tuple match => use that slot
-      # - multiple tuple matches => first not already assigned in this description
-      # key intentionally unused in Notes selection strategy
-      def choose_from_existing_slots(slots:, slot_mapping:, token:, **)
-        if match_counter.count(token) == 1
-          # If there is only one matching note number in the mapping, use it and move on.
-          slots.first
-        else
-          # If there are multiple notes of this type, use the first note number not already used.
-          # Also applies when there are no displayLabels or types for the note
-          slots.find { |slot| !slot_mapping.value?(slot) }
-        end
-      end
-
-      # NotesGrouper allocator fallback is intentionally nil for parity with
-      # FormsGrouper, but also because Notes semantics do not allow appending
-      # new note slots.
-      #
-      # TokenMappingRewriter will fall back to the original note number.
-      def fallback_slot_for(**)
-        nil
-      end
-    end
-
-    # Value object representing the semantic identity of a note entry.
-    # For notes, identity is [displayLabel, type].
-    class NoteToken
-      attr_reader :display_label, :type
-
-      def self.from_description(description, prefix)
-        new(
-          display_label: description["#{prefix}.displayLabel"],
-          type: description["#{prefix}.type"]
-        )
-      end
-
-      def self.from_grouped_hash(hash, num)
-        new(
-          display_label: hash["old_note#{num}.displayLabel"],
-          type: hash["old_note#{num}.type"]
-        )
-      end
-
-      def self.from_ungrouped_hash(hash, num)
-        new(
-          display_label: hash["note#{num}.displayLabel"],
-          type: hash["note#{num}.type"]
-        )
-      end
-
-      def initialize(display_label:, type:)
-        @display_label = display_label
-        @type = type
-      end
-
-      def to_key
-        [display_label, type]
-      end
-
-      def ==(other)
-        other.is_a?(NoteToken) && to_key == other.to_key
-      end
-
-      def eql?(...)
-        self.==(...)
-      end
-
-      def hash
-        to_key.hash
-      end
-    end
-
-    # Rewrites one flattened description hash from old_noteN.* to canonical noteN.* slots.
-    # Delegates slot-choice policy to SlotAllocator.
-    class DescriptionRewriter
-      def initialize(description:, ordered_mapping:)
-        @description = description
-        @slot_allocator = SlotAllocator.new(description: description, ordered_mapping: ordered_mapping)
-      end
-
-      def rewrite!
-        TokenMappingRewriter.new(
-          description: description,
-          prefix_name: PREFIX,
-          token_for: method(:token_for),
-          allocate_slot: method(:allocate_slot)
-        ).rewrite!
-      end
-
-      private
-
-      attr_reader :description, :slot_allocator
-
-      def token_for(number:)
-        NoteToken.from_description(description, "old_note#{number}")
-      end
-
-      def allocate_slot(key:, token:, slot_mapping:)
-        slot_allocator.allocate(key: key, token: token, slot_mapping: slot_mapping)
-      end
-    end
   end
 end
