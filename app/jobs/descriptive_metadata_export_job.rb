@@ -3,7 +3,7 @@
 # Export a spreadsheet of descriptive metadata
 class DescriptiveMetadataExportJob < BulkActionJob
   def perform_bulk_action
-    grouped_descriptions = DescriptionsGrouper.group(descriptions:)
+    grouped_descriptions = Groupers::DescriptionsGrouper.group(descriptions:)
     ordered_headers = DescriptionHeaders.create(headers: grouped_descriptions.values.flat_map(&:keys).uniq)
 
     log('Writing to file')
