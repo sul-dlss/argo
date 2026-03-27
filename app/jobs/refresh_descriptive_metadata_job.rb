@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-##
 # job to refresh the descriptive metadata from ILS (Folio)
 class RefreshDescriptiveMetadataJob < BulkActionJob
   class RefreshDescriptiveMetadataJobItem < BulkActionJobItem
@@ -8,6 +7,7 @@ class RefreshDescriptiveMetadataJob < BulkActionJob
       return unless check_update_ability?
 
       return failure!(message: "Does not have a #{CatalogRecordId.label}") if catalog_record_id.blank?
+      return failure!(message: 'Refresh is set to false') if refresh_disabled?
 
       open_new_version_if_needed!(description: 'Refreshed metadata from FOLIO')
 
@@ -21,6 +21,12 @@ class RefreshDescriptiveMetadataJob < BulkActionJob
       @catalog_record_id ||= cocina_object.identification&.catalogLinks&.find do |link|
         link.catalog == CatalogRecordId.type
       end&.catalogRecordId
+    end
+
+    def refresh_disabled?
+      cocina_object.identification&.catalogLinks&.find do |link|
+        link.refresh == true && link.catalog == CatalogRecordId.type
+      end.nil?
     end
   end
 end

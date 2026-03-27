@@ -60,6 +60,28 @@ RSpec.describe RefreshDescriptiveMetadataJob do
     end
   end
 
+  context 'when refresh is set to false' do
+    let(:cocina_object) do
+      build(:dro_with_metadata, id: druid).new(
+        {
+          identification: {
+            catalogLinks: [{ catalog: 'folio', catalogRecordId: 'a45678', refresh: false }],
+            sourceId: 'sul:1234'
+          }
+        }
+      )
+    end
+
+    it 'does not refresh the metadata' do
+      job.perform_now
+      expect(object_client).not_to have_received(:refresh_descriptive_metadata_from_ils)
+      expect(log).to have_received(:puts).with(/Refresh is set to false/)
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(1)
+      expect(bulk_action.druid_count_success).to eq(0)
+    end
+  end
+
   context 'when the user lacks update ability' do
     before do
       allow(job_item).to receive(:check_update_ability?).and_return(false)
