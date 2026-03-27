@@ -2,8 +2,8 @@
 
 ##
 # job to refresh the descriptive metadata from ILS (Folio)
-class RefreshModsJob < BulkActionJob
-  class RefreshModsJobItem < BulkActionJobItem
+class RefreshDescriptiveMetadataJob < BulkActionJob
+  class RefreshDescriptiveMetadataJobItem < BulkActionJobItem
     def perform
       return unless check_update_ability?
 

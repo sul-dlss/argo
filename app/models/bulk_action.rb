@@ -17,7 +17,7 @@ class BulkAction < ApplicationRecord
                      SetGoverningApoJob
                      SetCatalogRecordIdsAndBarcodesCsvJob
                      OpenVersionJob
-                     RefreshModsJob
+                     RefreshDescriptiveMetadataJob
                      RepublishJob
                      CloseVersionJob
                      ChecksumReportJob
