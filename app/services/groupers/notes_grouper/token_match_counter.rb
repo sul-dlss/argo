@@ -2,13 +2,19 @@
 
 module Groupers
   class NotesGrouper
-    # Counts occurrences of a token tuple within note tuple-bearing keys of one
-    # flattened description.
+    # Counts occurrences of a note token within note tuple-bearing keys
+    # of a single flattened description.
     class TokenMatchCounter
+      # @param description [Hash{String => String}]
+      # @return [void]
       def initialize(description:)
         @description = description
       end
 
+      # Counts logical note entries that match the provided token.
+      #
+      # @param token [Token]
+      # @return [Integer]
       def count(token)
         description
           .slice(*description.keys.grep(/#{PREFIX}.+(displayLabel|type)/o))
@@ -18,8 +24,13 @@ module Groupers
 
       private
 
+      # @return [Hash{String => String}]
       attr_reader :description
 
+      # @param value [Array<Array(String, Object)>]
+      #   Grouped key pairs for one logical note prefix.
+      # @param token [Token]
+      # @return [Boolean]
       def tuple_matches?(value, token)
         hash = value.to_h
         num = hash.keys.first[/\d+/]

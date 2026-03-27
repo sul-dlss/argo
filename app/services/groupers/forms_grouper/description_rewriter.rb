@@ -3,13 +3,20 @@
 module Groupers
   class FormsGrouper
     # Rewrites one flattened description hash from old_formN.* to canonical formN.* slots.
-    # Delegates slot-choice policy to SlotAllocator.
+    #
+    # Delegates slot-choice behavior to SlotAllocator while using
+    # TokenMappingRewriter for the shared remapping mechanics.
     class DescriptionRewriter
+      # @param description [Hash{String => String}]
+      # @param ordered_mapping [Hash{String => (String, nil)}]
+      # @return [void]
       def initialize(description:, ordered_mapping:)
         @description = description
         @slot_allocator = SlotAllocator.new(description:, ordered_mapping:)
       end
 
+      # @return [Hash{String => String}]
+      #   The same hash instance with keys rewritten to canonical form slots.
       def rewrite!
         TokenMappingRewriter.new(
           description:,
@@ -21,8 +28,14 @@ module Groupers
 
       private
 
-      attr_reader :description, :slot_allocator
+      # @return [Hash{String => String}]
+      attr_reader :description
 
+      # @return [SlotAllocator]
+      attr_reader :slot_allocator
+
+      # @param number [String]
+      # @return [Token]
       def token_for(number:)
         Token.from_description(description, "old_#{PREFIX}#{number}")
       end

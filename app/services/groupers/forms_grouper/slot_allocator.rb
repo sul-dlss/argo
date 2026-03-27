@@ -10,6 +10,9 @@ module Groupers
     #
     # (This differs intentionally from NotesGrouper::SlotAllocator behavior.)
     class SlotAllocator
+      # @param description [Hash{String => String}]
+      # @param ordered_mapping [Hash{String => (String, nil)}]
+      # @return [void]
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
@@ -20,22 +23,44 @@ module Groupers
         )
       end
 
+      # @param token [Token]
+      # @param key [String]
+      # @param slot_mapping [Hash{String => String}]
+      # @return [String]
+      #   Canonical slot selected for this token.
       delegate :allocate, to: :pipeline
 
       private
 
-      attr_reader :description, :ordered_mapping, :pipeline
+      # @return [Hash{String => String}]
+      attr_reader :description
 
+      # @return [Hash{String => (String, nil)}]
+      attr_reader :ordered_mapping
+
+      # @return [SlotAllocationPipeline]
+      attr_reader :pipeline
+
+      # @param token [Token]
+      # @return [Array<String>]
+      #   Canonical slots currently mapped to this token key.
       def slots_for(token)
         ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
       end
 
       # Forms fallback behavior is to expand the global slot map.
       # This differs intentionally from notes fallback behavior.
+      #
+      # @param token [Token]
+      # @return [String]
+      #   Newly appended canonical form slot.
       def fallback_slot_for(token:, **)
         append_slot_for(token)
       end
 
+      # @param token [Token]
+      # @return [String]
+      #   Newly appended canonical form slot.
       def append_slot_for(token)
         max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
         new_form = "#{PREFIX}#{max + 1}"

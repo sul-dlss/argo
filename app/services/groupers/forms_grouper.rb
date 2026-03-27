@@ -17,15 +17,23 @@
 # NOTE: This class is tested in the context of the DescriptionsGrouper
 module Groupers
   # Groups flattened form fields into stable semantic form slots (form1, form2, ...).
-  # Seed mapping is computed once per batch; each description is then rewritten
-  # against that mapping.
+  #
+  # Pipeline:
+  # 1) Build ordered seed mapping from form token rows.
+  # 2) Rewrite each description against canonical form slots.
   class FormsGrouper
     PREFIX = 'form'
 
+    # @param descriptions [Hash<String, Hash{String => String}>]
+    #   Mapping of druid => flattened description hash.
+    # @return [Hash<String, Hash{String => String}>]
+    #   Mapping of druid => grouped flattened description hash.
     def self.group(descriptions:)
       new(descriptions:).group
     end
 
+    # @param descriptions [Hash<String, Hash{String => String}>]
+    # @return [void]
     def initialize(descriptions:)
       @descriptions = descriptions
       @ordered_mapping = SeedMappingBuilder.build(
@@ -37,6 +45,8 @@ module Groupers
       )
     end
 
+    # @return [Hash<String, Hash{String => String}>]
+    #   Mapping of druid => grouped flattened description hash.
     def group
       descriptions.transform_values do |description|
         DescriptionRewriter.new(description:, ordered_mapping:).rewrite!
@@ -45,6 +55,11 @@ module Groupers
 
     private
 
+    # Builds per-description rows for seed mapping.
+    #
+    # Each row is the ordered list of form type values from one description.
+    #
+    # @return [Array<Array<String, nil>>]
     def rows
       descriptions.values.map do |description|
         description
@@ -55,6 +70,10 @@ module Groupers
       end
     end
 
+    # Orders unique form tokens by descending frequency.
+    #
+    # @param computed_rows [Array<Array<String, nil>>]
+    # @return [Array<String, nil>]
     def unique_order_strategy(computed_rows)
       computed_rows
         .flatten
@@ -63,6 +82,10 @@ module Groupers
         .map(&:first)
     end
 
+    # Computes max repeat count for each token across rows.
+    #
+    # @param computed_rows [Array<Array<String, nil>>]
+    # @return [Hash{(String, nil) => Integer}]
     def repeat_counts_strategy(computed_rows)
       Hash.new(1).tap do |max_repeats|
         computed_rows.each do |row|
@@ -73,6 +96,11 @@ module Groupers
       end
     end
 
+    # Expands unique tokens by repeat count.
+    #
+    # @param unique [Array<String, nil>]
+    # @param repeats [Hash{(String, nil) => Integer}]
+    # @return [Array<String, nil>]
     def expand_strategy(unique, repeats)
       [].tap do |expanded|
         unique.each do |type|
@@ -81,6 +109,12 @@ module Groupers
       end
     end
 
-    attr_reader :descriptions, :ordered_mapping
+    # @return [Hash<String, Hash{String => String}>]
+    # @!visibility private
+    attr_reader :descriptions
+
+    # @return [Hash{String => (String, nil)}]
+    # @!visibility private
+    attr_reader :ordered_mapping
   end
 end

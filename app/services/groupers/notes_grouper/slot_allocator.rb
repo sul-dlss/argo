@@ -8,26 +8,45 @@ module Groupers
     # - Do not append slots here; when no slot is chosen, return nil and let
     #   TokenMappingRewriter fall back to the original note number.
     #   This preserves legacy notes grouping behavior.
-    #
-    # Notes matching is tuple-aware and count-sensitive.
     class SlotAllocator
+      # @param description [Hash{String => String}]
+      # @param ordered_mapping [Hash{String => Array(String, nil)>}]
+      # @return [void]
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
-        @token_match_counter = TokenMatchCounter.new(description:)
+        @match_counter = TokenMatchCounter.new(description:)
         @pipeline = SlotAllocationPipeline.new(
           slots_for: method(:slots_for),
-          choose_existing: SlotSelectionPolicy.new(token_match_counter:).method(:call),
+          choose_existing: SlotSelectionPolicy.new(token_match_counter: match_counter).method(:call),
           fallback: method(:fallback_slot_for)
         )
       end
 
+      # @param token [Token]
+      # @param key [String]
+      # @param slot_mapping [Hash{String => String}]
+      # @return [String, nil]
+      #   Canonical slot selected for this token, or nil if no slot is selected.
       delegate :allocate, to: :pipeline
 
       private
 
-      attr_reader :description, :ordered_mapping, :pipeline, :match_counter, :token_match_counter
+      # @return [Hash{String => String}]
+      attr_reader :description
 
+      # @return [Hash{String => Array(String, nil)>}]
+      attr_reader :ordered_mapping
+
+      # @return [TokenMatchCounter]
+      attr_reader :match_counter
+
+      # @return [SlotAllocationPipeline]
+      attr_reader :pipeline
+
+      # @param token [Token]
+      # @return [Array<String>]
+      #   Canonical slots currently mapped to this token key.
       def slots_for(token)
         ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
       end
@@ -37,6 +56,8 @@ module Groupers
       # (e.g., note3 stays note3 when no canonical slot is selected).
       #
       # This differs intentionally from forms, which appends slots.
+      #
+      # @return [nil]
       def fallback_slot_for(**)
         nil
       end
