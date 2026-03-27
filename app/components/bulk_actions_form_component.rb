@@ -29,7 +29,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Purge', new_purge_job_path(search_of_druids)]
       ]],
       ['Manage descriptive metadata', [
-        ['Refresh metadata from FOLIO record', new_refresh_mods_job_path(search_of_druids)],
+        ['Refresh metadata from FOLIO record', new_refresh_descriptive_metadata_job_path(search_of_druids)],
         ['Download descriptive metadata spreadsheet', new_descriptive_metadata_export_job_path(search_of_druids)],
         ['Validate descriptive metadata spreadsheet', new_validate_cocina_descriptive_job_path],
         ['Upload descriptive metadata spreadsheet', new_descriptive_metadata_import_job_path(search_of_druids)],

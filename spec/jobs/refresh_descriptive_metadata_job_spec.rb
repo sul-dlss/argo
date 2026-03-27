@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe RefreshModsJob do
+RSpec.describe RefreshDescriptiveMetadataJob do
   subject(:job) { described_class.new(bulk_action.id, druids: [druid]) }
 
   let(:druid) { 'druid:bb111cc2222' }
   let(:bulk_action) { create(:bulk_action) }
 
   let(:job_item) do
-    described_class::RefreshModsJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
+    described_class::RefreshDescriptiveMetadataJobItem.new(druid: druid, index: 0, job: job).tap do |job_item|
       allow(job_item).to receive(:open_new_version_if_needed!)
       allow(job_item).to receive(:close_version_if_needed!)
       allow(job_item).to receive_messages(check_update_ability?: true, cocina_object: cocina_object)
@@ -26,7 +26,7 @@ RSpec.describe RefreshModsJob do
   let(:log) { instance_double(File, puts: nil, close: true) }
 
   before do
-    allow(described_class::RefreshModsJobItem).to receive(:new).and_return(job_item)
+    allow(described_class::RefreshDescriptiveMetadataJobItem).to receive(:new).and_return(job_item)
     allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
     allow_any_instance_of(BulkAction).to receive(:open_log_file).and_return(log) # rubocop:disable RSpec/AnyInstance
   end
