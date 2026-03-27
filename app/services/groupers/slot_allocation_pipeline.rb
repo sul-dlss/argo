@@ -17,12 +17,8 @@ module Groupers
 
     def allocate(token:, key:, slot_mapping:)
       slots = slots_for.call(token)
-      choose_existing.call(
-        slots: slots,
-        token: token,
-        key: key,
-        slot_mapping: slot_mapping
-      ) || fallback.call(token: token, key: key, slot_mapping: slot_mapping)
+      choose_existing.call(slots:, token:, key:, slot_mapping:) ||
+        fallback.call(token:, key:, slot_mapping:)
     end
 
     private

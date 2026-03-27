@@ -14,25 +14,22 @@ module Groupers
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
-        @token_match_counter = TokenMatchCounter.new(description: description)
-        @selection_policy = SlotSelectionPolicy.new(token_match_counter: token_match_counter)
+        @token_match_counter = TokenMatchCounter.new(description:)
         @pipeline = SlotAllocationPipeline.new(
           slots_for: method(:slots_for),
-          choose_existing: selection_policy.method(:call),
+          choose_existing: SlotSelectionPolicy.new(token_match_counter:).method(:call),
           fallback: method(:fallback_slot_for)
         )
       end
 
-      def allocate(key:, token:, slot_mapping:)
-        pipeline.allocate(token: token, key: key, slot_mapping: slot_mapping)
-      end
+      delegate :allocate, to: :pipeline
 
       private
 
-      attr_reader :description, :ordered_mapping, :pipeline, :match_counter, :selection_policy, :token_match_counter
+      attr_reader :description, :ordered_mapping, :pipeline, :match_counter, :token_match_counter
 
       def slots_for(token)
-        ordered_mapping.select { |_slot, mapped_note_tuple| mapped_note_tuple == token.to_key }.keys
+        ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
       end
 
       # Notes fallback behavior is intentionally nil.

@@ -43,7 +43,7 @@ module Groupers
 
     def group
       descriptions.transform_values do |description|
-        DescriptionRewriter.new(description: description, ordered_mapping: ordered_mapping).rewrite!
+        DescriptionRewriter.new(description:, ordered_mapping:).rewrite!
       end
     end
 
@@ -51,11 +51,13 @@ module Groupers
 
     def rows
       descriptions.values.map do |description|
-        notes_count = description.keys.grep(/^note\d+\./).max_by { |field| field[/\d+/].to_i }
+        notes_count = description.keys
+                                 .grep(/^#{PREFIX}\d+\./o)
+                                 .max_by { |field| field[/\d+/].to_i }
         next if notes_count.nil?
 
-        1.upto(notes_count[/\d+/].to_i).map do |note_number|
-          Token.from_description(description, "note#{note_number}").to_key
+        1.upto(notes_count[/\d+/].to_i).map do |number|
+          Token.from_description(description, "#{PREFIX}#{number}").to_key
         end
       end
     end
@@ -66,36 +68,36 @@ module Groupers
       counts = Hash.new(0)
       first_seen = {}
 
-      flat.each_with_index do |token, idx|
+      flat.each_with_index do |token, index|
         counts[token] += 1
-        first_seen[token] ||= idx
+        first_seen[token] ||= index
       end
 
       counts.keys.sort_by do |token|
         [
-          -counts[token],      # most frequent first
-          first_seen[token]    # preserve first-seen ordering on ties
+          -counts[token],   # most frequent first
+          first_seen[token] # preserve first-seen ordering on ties
         ]
       end
     end
 
     def repeat_counts_strategy(computed_rows)
-      repeat_types_counts = {}
-      computed_rows.each do |row|
-        next if row.blank?
+      {}.tap do |repeat_types_counts|
+        computed_rows.each do |row|
+          next if row.blank?
 
-        repeats_for_row = row.tally.select { |_token, count| count > 1 }
-        repeat_types_counts.merge!(repeats_for_row)
+          repeats_for_row = row.tally.select { |_token, count| count > 1 }
+          repeat_types_counts.merge!(repeats_for_row)
+        end
       end
-      repeat_types_counts
     end
 
     def expand_strategy(unique, repeats)
-      expanded = unique.dup
-      repeats.each do |value, count|
-        expanded.insert(expanded.index(value), *Array.new(count - 1) { value })
+      unique.dup.tap do |expanded|
+        repeats.each do |value, count|
+          expanded.insert(expanded.index(value), *Array.new(count - 1) { value })
+        end
       end
-      expanded
     end
 
     attr_reader :descriptions, :ordered_mapping

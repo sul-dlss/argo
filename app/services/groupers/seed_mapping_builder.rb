@@ -30,9 +30,10 @@ module Groupers
 
       unique = unique_order_strategy.call(rows)
       repeats = repeat_counts_strategy.call(rows)
-      expanded = expand_strategy.call(unique, repeats)
-
-      expanded.map.with_index(1).to_h { |token, i| ["#{prefix}#{i}", token] }
+      expand_strategy.call(unique, repeats)
+                     .map
+                     .with_index(1)
+                     .to_h { |token, i| ["#{prefix}#{i}", token] }
     end
 
     private

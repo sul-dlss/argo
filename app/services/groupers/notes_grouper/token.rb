@@ -16,17 +16,19 @@ module Groupers
 
       def self.from_grouped_hash(hash, num)
         new(
-          display_label: hash["old_note#{num}.displayLabel"],
-          type: hash["old_note#{num}.type"]
+          display_label: hash["old_#{PREFIX}#{num}.displayLabel"],
+          type: hash["old_#{PREFIX}#{num}.type"]
         )
       end
 
       def self.from_ungrouped_hash(hash, num)
         new(
-          display_label: hash["note#{num}.displayLabel"],
-          type: hash["note#{num}.type"]
+          display_label: hash["#{PREFIX}#{num}.displayLabel"],
+          type: hash["#{PREFIX}#{num}.type"]
         )
       end
+
+      delegate :hash, to: :to_key
 
       def initialize(display_label:, type:)
         @display_label = display_label
@@ -40,12 +42,7 @@ module Groupers
       def ==(other)
         other.is_a?(Token) && to_key == other.to_key
       end
-
-      def eql?(...)
-        self.==(...)
-      end
-
-      delegate :hash, to: :to_key
+      alias eql? ==
     end
   end
 end

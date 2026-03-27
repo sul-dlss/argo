@@ -14,22 +14,27 @@ module Groupers
   # 2) compute one slot mapping per old_prefixN within a description
   # 3) rewrite old_prefixN.* keys to canonical prefixM.* keys
   class TokenMappingRewriter
-    def initialize(description:, prefix_name:, token_for:, allocate_slot:)
+    def initialize(description:, prefix_name:, token_for:, slot_allocator:)
       @description = description
       @prefix_name = prefix_name
       @token_for = token_for
-      @allocate_slot = allocate_slot
+      @slot_allocator = slot_allocator
     end
 
     # Per-description mapping of old_prefixN => canonical prefixM.
     # This ensures all fields for the same token move together.
-    def rewrite!
+    def rewrite! # rubocop:disable Metrics/CyclomaticComplexity
       slot_mapping = {}
 
-      rename_prefixes!
+      # Rename prefixes on the first pass to avoid collisions during mapping.
+      # This allows us to compute all slot mappings first, then rewrite keys in
+      # one pass.
+      description.transform_keys! do |key|
+        key.match?(/^#{prefix_name}\d+/) ? key.sub(/^(\D+)/, 'old_\1') : key
+      end
 
       description.transform_keys! do |key|
-        number = extract_old_number(key)
+        number = (match = key.match(/^old_#{prefix_name}(\d+)/)) && match[1]
         next key unless number
 
         old_prefix = "old_#{prefix_name}#{number}"
@@ -37,11 +42,11 @@ module Groupers
         unless slot_mapping.key?(old_prefix)
           # Shared fallback point: if allocator returns nil, retain original
           # column number for this prefix family.
-          token = token_for.call(number: number)
-          slot_mapping[old_prefix] = allocate_slot.call(key: key, token: token, slot_mapping: slot_mapping) || "#{prefix_name}#{number}"
+          token = token_for.call(number:)
+          slot_mapping[old_prefix] = slot_allocator.allocate(key:, token:, slot_mapping:) || "#{prefix_name}#{number}"
         end
 
-        replace_old_prefix(key, slot_mapping[old_prefix])
+        key.sub(/^old_#{prefix_name}\d+/, slot_mapping[old_prefix])
       end
 
       description
@@ -49,21 +54,6 @@ module Groupers
 
     private
 
-    attr_reader :description, :prefix_name, :token_for, :allocate_slot
-
-    def rename_prefixes!
-      description.transform_keys! do |key|
-        key.match?(/^#{prefix_name}\d+/) ? key.sub(/^(\D+)/, 'old_\1') : key
-      end
-    end
-
-    def extract_old_number(key)
-      match = key.match(/^old_#{prefix_name}(\d+)/)
-      match && match[1]
-    end
-
-    def replace_old_prefix(key, prefix)
-      key.sub(/^old_#{prefix_name}\d+/, prefix)
-    end
+    attr_reader :description, :prefix_name, :token_for, :slot_allocator
   end
 end

@@ -14,19 +14,7 @@ module Groupers
         )
       end
 
-      def self.from_grouped_hash(hash, num)
-        new(
-          value: hash["old_form#{num}.value"],
-          type: hash["old_form#{num}.type"]
-        )
-      end
-
-      def self.from_ungrouped_hash(hash, num)
-        new(
-          value: hash["form#{num}.value"],
-          type: hash["form#{num}.type"]
-        )
-      end
+      delegate :hash, to: :to_key
 
       def initialize(value:, type:)
         @value = value
@@ -40,12 +28,7 @@ module Groupers
       def ==(other)
         other.is_a?(Token) && to_key == other.to_key
       end
-
-      def eql?(...)
-        self.==(...)
-      end
-
-      delegate :hash, to: :to_key
+      alias eql? ==
     end
   end
 end

@@ -39,10 +39,7 @@ module Groupers
 
     def group
       descriptions.transform_values do |description|
-        DescriptionRewriter.new(
-          description: description,
-          ordered_mapping: ordered_mapping
-        ).rewrite!
+        DescriptionRewriter.new(description:, ordered_mapping:).rewrite!
       end
     end
 
@@ -52,9 +49,9 @@ module Groupers
       descriptions.values.map do |description|
         description
           .keys
-          .grep(/\Aform\d+\.type\z/)
-          .sort_by { |k| k[/\d+/].to_i }
-          .map { |k| description[k] }
+          .grep(/\A#{PREFIX}\d+\.type\z/o)
+          .sort_by { |key| key[/\d+/].to_i }
+          .map { |key| description[key] }
       end
     end
 
@@ -67,21 +64,21 @@ module Groupers
     end
 
     def repeat_counts_strategy(computed_rows)
-      max_repeats = Hash.new(1)
-      computed_rows.each do |row|
-        row.tally.each do |type, count|
-          max_repeats[type] = [max_repeats[type], count].max
+      Hash.new(1).tap do |max_repeats|
+        computed_rows.each do |row|
+          row.tally.each do |type, count|
+            max_repeats[type] = [max_repeats[type], count].max
+          end
         end
       end
-      max_repeats
     end
 
     def expand_strategy(unique, repeats)
-      expanded = []
-      unique.each do |type|
-        repeats[type].times { expanded << type }
+      [].tap do |expanded|
+        unique.each do |type|
+          repeats[type].times { expanded << type }
+        end
       end
-      expanded
     end
 
     attr_reader :descriptions, :ordered_mapping

@@ -13,21 +13,18 @@ module Groupers
       def initialize(description:, ordered_mapping:)
         @description = description
         @ordered_mapping = ordered_mapping
-        @selection_policy = SlotSelectionPolicy.new(description: description)
         @pipeline = SlotAllocationPipeline.new(
           slots_for: method(:slots_for),
-          choose_existing: selection_policy.method(:call),
+          choose_existing: SlotSelectionPolicy.new(description:).method(:call),
           fallback: method(:fallback_slot_for)
         )
       end
 
-      def allocate(key:, token:, slot_mapping:)
-        pipeline.allocate(token: token, slot_mapping: slot_mapping, key: key)
-      end
+      delegate :allocate, to: :pipeline
 
       private
 
-      attr_reader :description, :ordered_mapping, :pipeline, :selection_policy
+      attr_reader :description, :ordered_mapping, :pipeline
 
       def slots_for(token)
         ordered_mapping.select { |_slot, mapped_token| mapped_token == token.to_key }.keys
@@ -41,7 +38,7 @@ module Groupers
 
       def append_slot_for(token)
         max = ordered_mapping.keys.map { |k| k[/\d+/].to_i }.max || 0
-        new_form = "form#{max + 1}"
+        new_form = "#{PREFIX}#{max + 1}"
         ordered_mapping[new_form] = token.to_key
         new_form
       end

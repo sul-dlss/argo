@@ -11,8 +11,8 @@ module Groupers
 
       def count(token)
         description
-          .slice(*description.keys.grep(/note.+(displayLabel|type)/))
-          .group_by { |k, _v| k.match(/(.*note\d+)\./)[1] }
+          .slice(*description.keys.grep(/#{PREFIX}.+(displayLabel|type)/o))
+          .group_by { |key, _value| key.match(/(.*#{PREFIX}\d+)\./o)[1] }
           .count { |_key, value| tuple_matches?(value, token) }
       end
 
@@ -24,8 +24,7 @@ module Groupers
         hash = value.to_h
         num = hash.keys.first[/\d+/]
 
-        Token.from_grouped_hash(hash, num) == token ||
-          Token.from_ungrouped_hash(hash, num) == token
+        Token.from_grouped_hash(hash, num) == token || Token.from_ungrouped_hash(hash, num) == token
       end
     end
   end

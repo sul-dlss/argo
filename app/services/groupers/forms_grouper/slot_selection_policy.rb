@@ -14,7 +14,7 @@ module Groupers
         slots.find do |slot|
           next false if slot_mapping.value?(slot)
 
-          remapped_key = key.sub(/\Aold_form\d+/, slot)
+          remapped_key = key.sub(/\Aold_#{PREFIX}\d+/o, slot)
           !description.key?(remapped_key)
         end
       end

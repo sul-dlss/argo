@@ -7,15 +7,15 @@ module Groupers
     class DescriptionRewriter
       def initialize(description:, ordered_mapping:)
         @description = description
-        @slot_allocator = SlotAllocator.new(description: description, ordered_mapping: ordered_mapping)
+        @slot_allocator = SlotAllocator.new(description:, ordered_mapping:)
       end
 
       def rewrite!
         TokenMappingRewriter.new(
-          description: description,
+          description:,
           prefix_name: PREFIX,
           token_for: method(:token_for),
-          allocate_slot: method(:allocate_slot)
+          slot_allocator:
         ).rewrite!
       end
 
@@ -24,11 +24,7 @@ module Groupers
       attr_reader :description, :slot_allocator
 
       def token_for(number:)
-        Token.from_description(description, "old_note#{number}")
-      end
-
-      def allocate_slot(key:, token:, slot_mapping:)
-        slot_allocator.allocate(key: key, token: token, slot_mapping: slot_mapping)
+        Token.from_description(description, "old_#{PREFIX}#{number}")
       end
     end
   end
