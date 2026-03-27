@@ -45,9 +45,7 @@ module Groupers
         self.==(...)
       end
 
-      def hash
-        to_key.hash
-      end
+      delegate :hash, to: :to_key
     end
   end
 end

@@ -14,7 +14,7 @@ module Groupers
 
     def group
       descriptions.then { |descs| FormsGrouper.group(descriptions: descs) }
-        .then { |descs| NotesGrouper.group(descriptions: descs) }
+                  .then { |descs| NotesGrouper.group(descriptions: descs) }
     end
 
     private
