@@ -90,7 +90,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (4.0.1)
+    bigdecimal (4.1.0)
     bindex (0.8.1)
     blacklight (7.41.0)
       deprecation
@@ -408,7 +408,7 @@ GEM
     overmind (2.5.1)
     overmind (2.5.1-arm64-darwin)
     parallel (1.27.0)
-    parser (3.3.11.0)
+    parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
@@ -750,4 +750,4 @@ DEPENDENCIES
   zip_tricks
 
 BUNDLED WITH
-  4.0.8
+  4.0.9
