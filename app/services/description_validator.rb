@@ -203,8 +203,8 @@ class DescriptionValidator
 
     return true if rest.empty?
 
-    # error if not a Cocina model class
-    return false if type.is_a?(Dry::Types::AnyClass)
+    # Catch CSV headers such as `note1.type1` that have a number at the end of the header
+    return false unless type.respond_to?(:schema)
 
     resolve_address(type, rest)
   end
