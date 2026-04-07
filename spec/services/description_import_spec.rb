@@ -1013,6 +1013,38 @@ RSpec.describe DescriptionImport do
           expect(updated.value!.adminMetadata.event.first.date).to be_empty
         end
       end
+
+      context 'when adminMetadata event data begins at event2 with no event1 column' do
+        # See https://github.com/sul-dlss/argo/issues/5099
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,adminMetadata.event2.date1.value,adminMetadata.event2.date1.type
+            druid:bc123df4567,desc:test,A title,https://purl/bc123df4567,2023-01-01,creation
+          CSV
+        end
+
+        it 'imports successfully with event data' do
+          expect(updated.value!.adminMetadata.event.first.date).to eq [
+            Cocina::Models::DescriptiveValue.new(value: '2023-01-01', type: 'creation')
+          ]
+        end
+      end
+
+      context 'when adminMetadata event1 column is blank and data is in event2' do
+        # See https://github.com/sul-dlss/argo/issues/5099
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,adminMetadata.event1.date1.value,adminMetadata.event1.date1.type,adminMetadata.event2.date1.value,adminMetadata.event2.date1.type
+            druid:bc123df4567,desc:test,A title,https://purl/bc123df4567,,,2023-01-01,creation
+          CSV
+        end
+
+        it 'imports successfully with event data from event2' do
+          expect(updated.value!.adminMetadata.event.first.date).to eq [
+            Cocina::Models::DescriptiveValue.new(value: '2023-01-01', type: 'creation')
+          ]
+        end
+      end
     end
   end
 
