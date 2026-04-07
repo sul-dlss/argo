@@ -7,8 +7,6 @@ module WorkflowHelper
     # per https://github.com/sul-dlss/argo/issues/3741, this should be hardcoded
     %w[
       accessionWF
-      gisAssemblyWF
-      gisDeliveryWF
       goobiWF
       registrationWF
       wasSeedPreassemblyWF

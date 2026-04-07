@@ -30,7 +30,7 @@ RSpec.describe 'Add a workflow to an item' do
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(WorkflowService).to receive(:workflow_active?).with(druid: item_id, version: 1, wf_name: 'gisAssemblyWF').and_return(false)
+    allow(WorkflowService).to receive(:workflow_active?).with(druid: item_id, version: 1, wf_name: 'goobiWF').and_return(false)
     allow(WorkflowService).to receive(:workflows_for).with(druid: item_id).and_return([])
     allow(MilestoneService).to receive(:milestones_for).and_return({})
     allow(WorkflowService).to receive(:accessioned?).and_return(true)
@@ -42,9 +42,9 @@ RSpec.describe 'Add a workflow to an item' do
     expect(page).to have_no_css 'option[value="accessionWF"]'
     click_button 'Add'
     within '.flash_messages' do
-      expect(page).to have_css '.alert.alert-info', text: 'Added gisAssemblyWF'
+      expect(page).to have_css '.alert.alert-info', text: 'Added goobiWF'
     end
-    expect(object_client).to have_received(:workflow).with('gisAssemblyWF')
+    expect(object_client).to have_received(:workflow).with('goobiWF')
     expect(workflow_client).to have_received(:create)
   end
 end
