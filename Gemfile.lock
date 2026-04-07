@@ -1,3 +1,18 @@
+GIT
+  remote: https://github.com/sul-dlss/folio_client.git
+  revision: b2945d3e62bb3b9aa2dde0d808e67426a6b5b9ca
+  branch: cookie-based-auth-tweaks
+  specs:
+    folio_client (0.20.0)
+      activesupport (>= 4.2)
+      deprecation
+      dry-monads
+      faraday
+      faraday-cookie_jar
+      marc
+      ostruct
+      zeitwerk
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -276,14 +291,6 @@ GEM
       faraday (~> 2.0)
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
-    folio_client (0.20.0)
-      activesupport (>= 4.2)
-      dry-monads
-      faraday
-      faraday-cookie_jar
-      marc
-      ostruct
-      zeitwerk
     geo_coord (0.2.0)
     globalid (1.3.0)
       activesupport (>= 6.1)
@@ -294,7 +301,7 @@ GEM
     honeybadger (6.5.3)
       logger
       ostruct
-    http-cookie (1.1.0)
+    http-cookie (1.1.4)
       domain_name (~> 0.5)
     http_logger (1.0.2)
     i18n (1.14.8)
@@ -705,7 +712,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   faraday-multipart
-  folio_client (~> 0.13)
+  folio_client!
   honeybadger
   http_logger
   jbuilder (~> 2.5)
