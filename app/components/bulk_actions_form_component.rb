@@ -57,6 +57,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Import tags', new_import_tag_job_path],
         ['Download tracking sheets', new_tracking_sheet_report_job_path(search_of_druids)],
         ['Download checksum report', new_checksum_report_job_path(search_of_druids)],
+        ['Download missing technical metadata report', new_missing_techmd_report_job_path(search_of_druids)],
         ['Download full Cocina JSON', new_export_cocina_json_job_path(search_of_druids)]
       ]]
     ]

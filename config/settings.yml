@@ -13,6 +13,8 @@ bulk_metadata:
 
 checksum_report_job:
   csv_filename: "checksum_report.csv"
+missing_techmd_report_job:
+  csv_filename: "missing_techmd_report.csv"
 descriptive_metadata_export_job:
   csv_filename: "descriptive.csv"
 export_catalog_links_job:
