@@ -37,7 +37,8 @@ class BulkAction < ApplicationRecord
                      TrackingSheetReportJob
                      ExportCocinaJsonJob
                      TextExtractionJob
-                     ExportCatalogLinksJob]
+                     ExportCatalogLinksJob
+                     MissingTechmdReportJob]
             }
 
   after_create :create_output_directory, :create_log_file

@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         resource :descriptive_metadata_import_job, only: %i[new create]
         resource :download_mods_job, only: %i[new create]
         resource :checksum_report_job, only: %i[new create]
+        resource :missing_techmd_report_job, only: %i[new create]
         resource :validate_cocina_descriptive_job, only: %i[new create]
         resource :tracking_sheet_report_job, only: %i[new create]
         resource :export_cocina_json_job, only: %i[new create]

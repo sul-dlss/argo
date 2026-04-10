@@ -1,0 +1,10 @@
+<%= form_with url: missing_techmd_report_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <%= render 'bulk_actions/errors' %>
+
+  <span class='help-block'>
+    Check the technical metadata service for each object and download a CSV of druids with no technical metadata results.
+  </span>
+
+  <%= render 'bulk_actions/druids', f: %>
+  <%= render 'bulk_actions/common_fields', f: %>
+<% end %>
