@@ -156,7 +156,7 @@ GEM
       super_diff
       thor
       zeitwerk (~> 2.1)
-    cocina_display (2.1.0)
+    cocina_display (2.2.0)
       activesupport (>= 7)
       edtf (~> 3.2)
       geo_coord (~> 0.2)
@@ -205,7 +205,7 @@ GEM
       ed25519
     docile (1.4.1)
     domain_name (0.6.20240107)
-    dor-services-client (15.37.0)
+    dor-services-client (15.38.0)
       activesupport (>= 7.0.0)
       cocina-models (~> 0.116.0)
       deprecation
@@ -292,10 +292,10 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    honeybadger (6.5.3)
+    honeybadger (6.5.5)
       logger
       ostruct
-    http-cookie (1.1.0)
+    http-cookie (1.1.4)
       domain_name (~> 0.5)
     http_logger (1.0.2)
     i18n (1.14.8)
@@ -375,7 +375,7 @@ GEM
       nokogiri
       nokogiri-happymapper
     msgpack (1.8.0)
-    multi_json (1.19.1)
+    multi_json (1.20.1)
     multipart-post (2.4.1)
     net-http (0.9.1)
       uri (>= 0.11.1)
@@ -408,7 +408,7 @@ GEM
     ostruct (0.6.3)
     overmind (2.5.1)
     overmind (2.5.1-arm64-darwin)
-    parallel (1.28.0)
+    parallel (2.0.1)
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
@@ -439,7 +439,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (7.2.0)
+    puma (8.0.0)
       nio4r (~> 2.0)
     purl_fetcher-client (1.5.4)
       activesupport
@@ -545,11 +545,11 @@ GEM
     rspec-support (3.13.7)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.86.0)
+    rubocop (1.86.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
-      parallel (~> 1.10)
+      parallel (>= 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
@@ -594,7 +594,7 @@ GEM
       launchy
       zeitwerk
     securerandom (0.4.1)
-    selenium-webdriver (4.41.0)
+    selenium-webdriver (4.43.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -751,4 +751,4 @@ DEPENDENCIES
   zip_tricks
 
 BUNDLED WITH
-  4.0.9
+  4.0.10
