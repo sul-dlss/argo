@@ -67,6 +67,7 @@ group :test, :development do
 end
 
 group :development do
+  gem 'brakeman', require: false
   gem 'listen', '~> 3.2' # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'overmind'
   gem 'web-console'

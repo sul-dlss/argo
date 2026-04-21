@@ -36,5 +36,11 @@ task lint: %i[rubocop erblint jslint]
 
 task(:default).clear
 
+desc 'run security audit'
+task audit: :environment do
+  puts 'Running security audit...'
+  system('brakeman')
+end
+
 desc 'run linters and tests (for CI)'
-task default: %i[lint spec]
+task default: %i[lint audit spec]

@@ -74,6 +74,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
 To run just the linters, run `bin/rake lint`. To run the linters individually, run `bundle exec erb_lint --lint-all`, `bundle exec rubocop`, and `bundle exec rake jslint`
 
+To run just the security audit, run `brakeman`.
 
 ## Recommended Local Development
 
