@@ -53,6 +53,9 @@ gem 'rsolr'
 gem 'sdr-client', '~> 2.0'
 
 group :test, :development do
+  gem 'brakeman', require: false
+  # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
+  gem 'bundler-audit', require: false
   gem 'debug'
   gem 'erb_lint', require: false
   gem 'factory_bot_rails'
@@ -67,7 +70,6 @@ group :test, :development do
 end
 
 group :development do
-  gem 'brakeman', require: false
   gem 'listen', '~> 3.2' # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'overmind'
   gem 'web-console'

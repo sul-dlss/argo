@@ -112,6 +112,9 @@ GEM
     brakeman (8.0.4)
       racc
     builder (3.3.0)
+    bundler-audit (0.9.3)
+      bundler (>= 1.2.0)
+      thor (~> 1.0)
     cancancan (3.6.1)
     capistrano (3.20.0)
       airbrussh (>= 1.0.0)
@@ -685,6 +688,7 @@ DEPENDENCIES
   blacklight-hierarchy (~> 6.6.0)
   bootsnap (>= 1.4.2)
   brakeman
+  bundler-audit
   cancancan
   capistrano-maintenance (~> 1.2)
   capistrano-passenger
