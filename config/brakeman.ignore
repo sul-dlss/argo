@@ -1,0 +1,24 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "4d4621990e803b4d5934311ada8c57c1b4c2fdd8877d34fb9931ddceb780ea77",
+      "note": "Path validated at runtime: safe_path? checks File.expand_path(path).start_with?(base_directory) before send_file is called. params[:apo_id] is also authorized via CanCan load_resource."
+    },
+    {
+      "fingerprint": "cf7def59a93a295930d36d788bb01632e98f52c0cac755228139ad3545f51454",
+      "note": "Path validated at runtime: safe_path? checks File.expand_path(path).start_with?(base_directory) before send_file is called. params[:apo_id] is also authorized via CanCan load_resource."
+    },
+    {
+      "fingerprint": "065c3193388cc08b1891c0f77c8b3944c324a2eafe821a12217fd3648d976502",
+      "note": "Path traversal mitigated: File.expand_path used on both base and constructed path, with start_with? containment check before FileUtils.remove_dir is called."
+    },
+    {
+      "fingerprint": "8a36b1e88141428be10ca5ad67a1864c51b7681bc49b43240850763163a6745a",
+      "note": "Path traversal mitigated: File.basename strips all directory components from params[:filename] before it is joined with the output_directory."
+    },
+    {
+      "fingerprint": "307dc4d62cf0687088a56255d526584769951adfce725caf262d5aba72dd425a",
+      "note": "False positive: CodeRay::Duo#highlight HTML-encodes all source content internally before wrapping in markup. The .html_safe call is on CodeRay's own generated HTML output, not on the raw parameter value."
+    }
+  ]
+}

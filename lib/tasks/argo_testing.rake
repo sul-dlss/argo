@@ -39,7 +39,7 @@ task(:default).clear
 desc 'run security audit'
 task audit: :environment do
   puts 'Running security audit...'
-  system('brakeman')
+  system('brakeman -i config/brakeman.ignore')
 end
 
 desc 'run linters and tests (for CI)'

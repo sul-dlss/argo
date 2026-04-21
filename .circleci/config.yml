@@ -148,7 +148,7 @@ jobs:
           command: bin/bundler-audit
       - run:
           name: Security audit
-          command: bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error
+          command: bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error -i config/brakeman.ignore
   test:
     environment:
       TZ: "America/Los_Angeles"

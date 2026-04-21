@@ -21,7 +21,9 @@ class BulkActionsController < ApplicationController
 
   # GET /bulk_actions/1/file
   def file
-    send_file(@bulk_action.file(params[:filename])) if @bulk_action.present?
+    return if @bulk_action.blank?
+
+    send_file(@bulk_action.file(File.basename(params[:filename].to_s)))
   end
 
   private
