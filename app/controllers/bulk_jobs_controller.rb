@@ -24,16 +24,18 @@ class BulkJobsController < ApplicationController
         @user_log.create_csv_log
       end
       format.csv do
-        if File.exist?(@user_log.csv_file)
-          send_file(@user_log.csv_file, type: 'text/csv')
+        csv_path = @user_log.csv_file
+        if File.exist?(csv_path) && safe_path?(csv_path)
+          send_file(csv_path, type: 'text/csv')
         else
           render :nothing, status: :not_found
           # Display error message and log the error
         end
       end
       format.xml do
-        if File.exist?(@user_log.desc_metadata_xml_file)
-          send_file(@user_log.desc_metadata_xml_file, type: 'application/xml')
+        xml_path = @user_log.desc_metadata_xml_file
+        if File.exist?(xml_path) && safe_path?(xml_path)
+          send_file(xml_path, type: 'application/xml')
         else
           render :nothing, status: :not_found
           # Display error message and log the error
@@ -47,7 +49,10 @@ class BulkJobsController < ApplicationController
   # DELETE /apos/:apo_id/bulk_jobs
   def destroy
     @apo = params[:apo_id]
-    directory_to_delete = File.join(Settings.bulk_metadata.directory, params[:dir])
+    base = File.expand_path(Settings.bulk_metadata.directory)
+    directory_to_delete = File.expand_path(File.join(base, params[:dir]))
+    return redirect_to apo_bulk_jobs_path(@apo), alert: 'Invalid directory.' unless directory_to_delete.start_with?(base)
+
     FileUtils.remove_dir(directory_to_delete, true)
     redirect_to apo_bulk_jobs_path(@apo), notice: "Bulk job for APO (#{@apo}) deleted."
   end
@@ -63,6 +68,11 @@ class BulkJobsController < ApplicationController
   end
 
   # Given a DRUID, loads any metadata bulk upload information associated with that DRUID into a hash.
+  def safe_path?(path)
+    base = File.expand_path(Settings.bulk_metadata.directory)
+    File.expand_path(path).start_with?(base)
+  end
+
   def load_bulk_jobs(druid)
     directory_list = []
     bulk_info = []

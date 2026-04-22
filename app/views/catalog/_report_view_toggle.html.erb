@@ -1,5 +1,5 @@
 <div class='report-toggle'>
-  <% cleaned_params = params.except(:controller, :action).permit! %>
+  <% cleaned_params = params.except(:controller, :action).permit(:q, :search_field, :op, :sort, :per_page, :page, :view, :utf8, f: {}) %>
   <button class='btn btn-outline-primary dropdown-toggle' type='button' id='argo-view-dropdown' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
     Select View
     <span class='caret'></span>

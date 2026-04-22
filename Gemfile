@@ -53,6 +53,10 @@ gem 'rsolr'
 gem 'sdr-client', '~> 2.0'
 
 group :test, :development do
+  # Security audit for known security defects in code (use config/brakeman.ignore to ignore issues)
+  gem 'brakeman', require: false
+  # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
+  gem 'bundler-audit', require: false
   gem 'debug'
   gem 'erb_lint', require: false
   gem 'factory_bot_rails'

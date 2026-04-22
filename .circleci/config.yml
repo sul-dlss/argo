@@ -110,6 +110,7 @@ workflows:
       - lint
       - erblint
       - lint_js
+      - security_audit
 jobs:
   lint:
     executor: default
@@ -136,6 +137,18 @@ jobs:
       - run:
           name: Lint JavaScript
           command: yarn run lint
+  security_audit:
+    executor: default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          key: gems-v2
+      - run:
+          name: Gem audit
+          command: bin/bundler-audit
+      - run:
+          name: Security audit
+          command: bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error -i config/brakeman.ignore
   test:
     environment:
       TZ: "America/Los_Angeles"

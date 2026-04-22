@@ -1,1 +1,2 @@
+<%# brakeman:ignore:CrossSiteScripting - CodeRay HTML-encodes the XML source internally; .html_safe is on CodeRay's own generated markup, not raw user input %>
 <%= CodeRay::Duo[:xml, :div].highlight(PrettyXml.print(@history_xml)).html_safe %>
