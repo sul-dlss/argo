@@ -66,7 +66,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     bin/rails db:prepare test:prepare
     ```
 
-5. **Run the linters and the tests**
+5. **Run the linters, audits and the tests**
 
     ```
     bin/rake
@@ -74,7 +74,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
 To run just the linters, run `bin/rake lint`. To run the linters individually, run `bundle exec erb_lint --lint-all`, `bundle exec rubocop`, and `bundle exec rake jslint`
 
-To run just the security audit, run `bin/brakeman`, or bundler-audit `bin/bundler-audit`
+To run just the security audits, run `bin/rake audit`. To run the audits individually, run `bin/brakeman`, `bin/bundler-audit`, `bun/bundle outdated`, and `yarn outdated`.
 
 ## Recommended Local Development
 

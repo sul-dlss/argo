@@ -48,5 +48,20 @@ task security_audit: :environment do
   system('bin/brakeman -i config/brakeman.ignore')
 end
 
-desc 'run linters and tests (for CI)'
-task default: %i[lint bundle_audit security_audit spec]
+desc 'run bundle outdated'
+task bundle_outdated: :environment do
+  puts 'Running bundle outdated...'
+  system('bin/bundle outdated')
+end
+
+desc 'run yarn outdated'
+task yarn_outdated: :environment do
+  puts 'Running yarn outdated...'
+  system('yarn outdated')
+end
+
+desc 'run linters, audits and tests (for CI)'
+task default: %i[lint bundle_audit security_audit bundle_outdated yarn_outdated spec]
+
+desc 'Run all configured security and version audits'
+task audit: %i[bundle_audit bundle_outdated yarn_outdated security_audit]
