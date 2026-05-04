@@ -32,8 +32,8 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_content 'Register druids job was successfully created.'
-      expect(page).to have_content 'Bulk Actions'
+      expect(page).to have_text 'Register druids job was successfully created.'
+      expect(page).to have_text 'Bulk Actions'
 
       expect(BulkAction).to have_received(:new).with(user:, action_type: 'RegisterDruidsJob')
       expect(bulk_action).to have_received(:save)
@@ -74,8 +74,8 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_content 'Register druids job was successfully created.'
-      expect(page).to have_content 'Bulk Actions'
+      expect(page).to have_text 'Register druids job was successfully created.'
+      expect(page).to have_text 'Bulk Actions'
 
       expect(BulkAction).to have_received(:new).with(user:, action_type: 'RegisterDruidsJob')
       expect(bulk_action).to have_received(:save)
@@ -132,15 +132,15 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_content 'Register DOR Items'
-      expect(page).to have_content 'Csv file missing headers: source_id.'
+      expect(page).to have_text 'Register DOR Items'
+      expect(page).to have_text 'Csv file missing headers: source_id.'
 
       attach_file 'Upload a CSV file', file_fixture('item_registration.csv')
 
       click_button 'Register'
 
-      expect(page).to have_content 'Register druids job was successfully created.'
-      expect(page).to have_content 'Bulk Actions'
+      expect(page).to have_text 'Register druids job was successfully created.'
+      expect(page).to have_text 'Bulk Actions'
 
       expect(BulkAction).to have_received(:new).with(user:, action_type: 'RegisterDruidsJob')
       expect(bulk_action).to have_received(:save)
@@ -182,8 +182,8 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_content 'Register DOR Items'
-      expect(page).to have_content 'Csv file is invalid'
+      expect(page).to have_text 'Register DOR Items'
+      expect(page).to have_text 'Csv file is invalid'
     end
   end
 end

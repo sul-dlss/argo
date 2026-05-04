@@ -131,7 +131,7 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_content 'Items successfully registered.'
+      expect(page).to have_text 'Items successfully registered.'
 
       druid_link = find('td > a')
 
@@ -190,7 +190,7 @@ RSpec.describe 'Item registration page', :js do
       click_button 'Register'
 
       expect(page).to have_css('.is-invalid')
-      expect(page).to have_no_content 'Items successfully registered.'
+      expect(page).to have_no_text 'Items successfully registered.'
 
       # clear the validation error
       fill_in CatalogRecordId.label, with: ''
@@ -218,7 +218,7 @@ RSpec.describe 'Item registration page', :js do
       click_button 'Register'
 
       expect(page).to have_css('.is-invalid')
-      expect(page).to have_no_content 'Items successfully registered.'
+      expect(page).to have_no_text 'Items successfully registered.'
     end
   end
 
@@ -248,7 +248,7 @@ RSpec.describe 'Item registration page', :js do
 
       click_button 'Register'
 
-      expect(page).to have_content "Save error with #{source_id}: a12345"
+      expect(page).to have_text "Save error with #{source_id}: a12345"
     end
   end
 end

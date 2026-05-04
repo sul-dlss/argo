@@ -46,7 +46,7 @@ RSpec.describe 'Indexing and search results for titles', skip: ENV['CI'].present
       fill_in 'q', with: title_value_simple
       click_button 'search'
       # check for item order as a measure of relevancy ranking
-      expect(page).to have_content(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{plural.externalIdentifier}.*#{plural_and_unanchored.externalIdentifier}/m)
+      expect(page).to have_text(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{plural.externalIdentifier}.*#{plural_and_unanchored.externalIdentifier}/m)
       solr_conn.delete_by_id([plural_and_unanchored.externalIdentifier, plural.externalIdentifier, unanchored.externalIdentifier])
       # solr_conn.commit is in after block
     end
@@ -133,7 +133,7 @@ RSpec.describe 'Indexing and search results for titles', skip: ENV['CI'].present
       fill_in 'q', with: subtitle_value
       click_button 'search'
       # check for item order as a measure of relevancy ranking
-      expect(page).to have_content(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{plural.externalIdentifier}.*#{plural_and_unanchored.externalIdentifier}/m)
+      expect(page).to have_text(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{plural.externalIdentifier}.*#{plural_and_unanchored.externalIdentifier}/m)
       solr_conn.delete_by_id([plural_and_unanchored.externalIdentifier, plural.externalIdentifier, unanchored.externalIdentifier])
       # solr_conn.commit is in after block
     end
@@ -217,7 +217,7 @@ RSpec.describe 'Indexing and search results for titles', skip: ENV['CI'].present
       fill_in 'q', with: additional_title_value
       click_button 'search'
       # check for item order as a measure of relevancy ranking
-      expect(page).to have_content(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{same_stems.externalIdentifier}.*#{order_reversed.externalIdentifier}/m)
+      expect(page).to have_text(/#{solr_id}.*#{unanchored.externalIdentifier}.*#{same_stems.externalIdentifier}.*#{order_reversed.externalIdentifier}/m)
       solr_conn.delete_by_id([same_stems.externalIdentifier, order_reversed.externalIdentifier, unanchored.externalIdentifier])
       # solr_conn.commit is in after block
     end
@@ -310,8 +310,8 @@ RSpec.describe 'Indexing and search results for titles', skip: ENV['CI'].present
       fill_in 'q', with: search_term
       click_button 'search'
       # check for item order as a measure of relevancy ranking
-      expect(page).to have_content('3 of 3') # unmatching isn't there, as expected
-      expect(page).to have_content(/#{main_title_match.externalIdentifier}.*#{full_title_match.externalIdentifier}.*#{additional_title_match.externalIdentifier}/m)
+      expect(page).to have_text('3 of 3') # unmatching isn't there, as expected
+      expect(page).to have_text(/#{main_title_match.externalIdentifier}.*#{full_title_match.externalIdentifier}.*#{additional_title_match.externalIdentifier}/m)
       solr_conn.delete_by_id([main_title_match.externalIdentifier, full_title_match.externalIdentifier, additional_title_match.externalIdentifier])
     end
   end

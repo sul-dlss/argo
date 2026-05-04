@@ -14,7 +14,7 @@ Capybara/ClickLinkOrButtonStyle:
     - 'spec/system/apo_spec.rb'
 
 # Offense count: 5
-Capybara/VisibilityMatcher:
+Capybara/RSpec/VisibilityMatcher:
   Exclude:
     - 'spec/components/version_milestones_component_spec.rb'
     - 'spec/system/bulk_jobs_spec.rb'

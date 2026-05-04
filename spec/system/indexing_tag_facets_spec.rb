@@ -52,7 +52,7 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
     # Note that "Project" is not indexed as part of facet
     click_link_or_button 'ARS 78s'
     click_link_or_button 'broken'
-    expect(page).to have_content('1 entry found')
+    expect(page).to have_text('1 entry found')
     expect(page).to have_css('dd.blacklight-id', text: solr_id)
   end
 
@@ -66,7 +66,7 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
       click_link_or_button 'whimbrel'
       click_link_or_button 'curlew'
     end
-    expect(page).to have_content('1 entry found')
+    expect(page).to have_text('1 entry found')
     expect(page).to have_css('dd.blacklight-id', text: solr_id)
   end
 end

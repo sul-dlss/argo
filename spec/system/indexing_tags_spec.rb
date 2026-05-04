@@ -53,14 +53,14 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
     # project tags values include "Project" in searchable value
     fill_in 'q', with: 'Project'
     click_button 'search'
-    expect(page).to have_content('1 entry found')
+    expect(page).to have_text('1 entry found')
     expect(page).to have_css('dd.blacklight-id', text: solr_id)
 
     # project tags are searchable, tokenized
     ['ARS', '78s', 'ARS 78s', 'broken', '"78s broken"'].each do |token|
       fill_in 'q', with: token
       click_button 'search'
-      expect(page).to have_content('1 entry found')
+      expect(page).to have_text('1 entry found')
       expect(page).to have_css('dd.blacklight-id', text: solr_id)
     end
 
@@ -68,7 +68,7 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
     ['willet', 'murder of crows', 'murder', 'of', 'crows', 'curlew', '"crows curlew"'].each do |token|
       fill_in 'q', with: token
       click_button 'search'
-      expect(page).to have_content('1 entry found')
+      expect(page).to have_text('1 entry found')
       expect(page).to have_css('dd.blacklight-id', text: solr_id)
     end
 
@@ -82,7 +82,7 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
     ['jira-517', 'jira', '517', '"jira 517"'].each do |token|
       fill_in 'q', with: token
       click_button 'search'
-      expect(page).to have_content('1 entry found')
+      expect(page).to have_text('1 entry found')
       expect(page).to have_css('dd.blacklight-id', text: solr_id)
     end
   end

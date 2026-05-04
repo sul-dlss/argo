@@ -29,7 +29,7 @@ RSpec.describe 'Bulk jobs view', :js do
       visit apo_bulk_jobs_path(apo_id)
       expect(page).to have_link 'Submit new file ...', href: new_apo_upload_path(apo_id: 'druid:hv992yv2222')
       click_link 'Status information'
-      expect(page).to have_content 'All spreadsheet rows converted to MODS'
+      expect(page).to have_text 'All spreadsheet rows converted to MODS'
     end
   end
 
@@ -70,17 +70,17 @@ RSpec.describe 'Bulk jobs view', :js do
       choose('convert_only')
       expect(find('button#spreadsheet_submit')).not_to be_disabled
       click_button('Submit')
-      expect(page).to have_content('Bulk processing started')
+      expect(page).to have_text('Bulk processing started')
       perform_enqueued_jobs
       reload_page_until_timeout do
         page.has_button?('Delete')
       end
       click_button('Delete', match: :first)
-      expect(page).to have_content('Are you sure you want to delete the job directory and the files it contains?')
+      expect(page).to have_text('Are you sure you want to delete the job directory and the files it contains?')
       within '.modal-dialog' do
         click_button('Delete')
       end
-      expect(page).to have_content(/Bulk job for APO.+deleted\./)
+      expect(page).to have_text(/Bulk job for APO.+deleted\./)
     end
 
     it 'uploading a file with an invalid extension displays a warning' do

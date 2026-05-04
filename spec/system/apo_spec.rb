@@ -62,7 +62,7 @@ RSpec.describe 'Create an apo', :js do
     fill_in 'Version description', with: 'Test a change'
 
     click_button 'Open Version'
-    expect(page).to have_content 'open for modification!'
+    expect(page).to have_text 'open for modification!'
 
     click_on 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render

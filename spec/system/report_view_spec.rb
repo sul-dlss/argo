@@ -22,13 +22,13 @@ RSpec.describe 'Report view' do
     it 'shows table without error' do
       visit report_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       expect(page).to have_css 'div#objectsTable'
-      expect(page).to have_content('hj185xx2222')
+      expect(page).to have_text('hj185xx2222')
     end
 
     it 'shows the column selector when clicked' do
       visit report_path f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       click_button('Columns')
-      expect(page).to have_content('Select Columns to Display and Download')
+      expect(page).to have_text('Select Columns to Display and Download')
       # count the # of categories
       expect(page).to have_css('.fst-italic', count: Report::REPORT_FIELDS_BY_CATEGORY.count)
       # count the # of total fields

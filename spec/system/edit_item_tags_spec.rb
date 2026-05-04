@@ -23,7 +23,7 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
       click_button '+ Add another tag'
       fill_in currently_with: '', with: 'foo'
       click_button 'Save'
-      expect(page).to have_content 'Tag must include the pattern:'
+      expect(page).to have_text 'Tag must include the pattern:'
 
       fill_in currently_with: 'foo', with: first_new_tag
       click_button '+ Add another tag'
@@ -31,10 +31,10 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
 
       click_button 'Save'
     end
-    expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
+    expect(page).to have_text "Tags for #{item.externalIdentifier} have been updated!"
     within_table('Details') do
-      expect(page).to have_content first_new_tag
-      expect(page).to have_content second_new_tag
+      expect(page).to have_text first_new_tag
+      expect(page).to have_text second_new_tag
     end
 
     find("a[aria-label='Edit tags']").click
@@ -42,10 +42,10 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
       find(:xpath, "//input[@value='#{first_new_tag}']").fill_in(with: replacement_tag)
       click_button 'Save'
     end
-    expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
+    expect(page).to have_text "Tags for #{item.externalIdentifier} have been updated!"
     within_table('Details') do
-      expect(page).to have_content replacement_tag
-      expect(page).to have_content second_new_tag
+      expect(page).to have_text replacement_tag
+      expect(page).to have_text second_new_tag
     end
 
     # Remove tags
@@ -54,10 +54,10 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
       find(:xpath, "//input[@value='#{replacement_tag}']/../..").first('button').click
       click_button 'Save'
     end
-    expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
+    expect(page).to have_text "Tags for #{item.externalIdentifier} have been updated!"
     within_table('Details') do
-      expect(page).to have_no_content replacement_tag
-      expect(page).to have_content second_new_tag
+      expect(page).to have_no_text replacement_tag
+      expect(page).to have_text second_new_tag
     end
 
     find("a[aria-label='Edit tags']").click
@@ -65,10 +65,10 @@ RSpec.describe 'Edit administrative tags for a single item', :js do
       find(:xpath, "//input[@value='#{second_new_tag}']/../..").first('button').click
       click_button 'Save'
     end
-    expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
+    expect(page).to have_text "Tags for #{item.externalIdentifier} have been updated!"
     within_table('Details') do
-      expect(page).to have_no_content replacement_tag
-      expect(page).to have_no_content second_new_tag
+      expect(page).to have_no_text replacement_tag
+      expect(page).to have_no_text second_new_tag
     end
   end
 end
