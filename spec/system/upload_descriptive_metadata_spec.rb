@@ -38,7 +38,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
       attach_file("Upload Cocina descriptive metadata spreadsheet for #{item.externalIdentifier}", file.path)
       click_button 'Upload'
 
-      expect(page).to have_content 'Descriptive metadata has been updated.'
+      expect(page).to have_text 'Descriptive metadata has been updated.'
       expect(object_client).to have_received(:reindex)
     end
   end
@@ -70,7 +70,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
       attach_file("Upload Cocina descriptive metadata spreadsheet for #{item.externalIdentifier}", file.path)
       click_button 'Upload'
 
-      expect(page).to have_content 'Descriptive metadata has been updated.'
+      expect(page).to have_text 'Descriptive metadata has been updated.'
       expect(object_client).to have_received(:reindex)
     end
   end

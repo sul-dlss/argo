@@ -185,13 +185,13 @@ RSpec.describe 'User version view', :js do
       it 'shows the user version' do
         visit item_public_version_path(item_id: druid, user_version_id: 2)
 
-        expect(page).to have_content(title)
-        expect(page).to have_content('You are viewing the latest version.')
-        expect(page).to have_no_content('View latest version')
-        expect(page).to have_no_content('Technical metadata')
+        expect(page).to have_text(title)
+        expect(page).to have_text('You are viewing the latest version.')
+        expect(page).to have_no_text('View latest version')
+        expect(page).to have_no_text('Technical metadata')
         # And nothing should be editable
         expect(page).to have_no_css('.bi-pencil')
-        expect(page).to have_content('Older versions are not released')
+        expect(page).to have_text('Older versions are not released')
         expect(page).to have_no_css('.open-close') # Lock icon
         expect(page).to have_no_link('Withdraw')
         expect(page).to have_no_link('Restore')
@@ -206,13 +206,13 @@ RSpec.describe 'User version view', :js do
       it 'shows the older version' do
         visit item_public_version_path(item_id: druid, user_version_id: 1)
 
-        expect(page).to have_content(title)
-        expect(page).to have_content('You are viewing an older public version.')
+        expect(page).to have_text(title)
+        expect(page).to have_text('You are viewing an older public version.')
         expect(page).to have_link('View latest version', href: "/view/#{druid}")
-        expect(page).to have_no_content('Technical metadata')
+        expect(page).to have_no_text('Technical metadata')
         # And nothing should be editable
         expect(page).to have_no_css('.bi-pencil')
-        expect(page).to have_content('Older versions are not released')
+        expect(page).to have_text('Older versions are not released')
         expect(page).to have_no_css('.open-close') # Lock icon
         expect(page).to have_no_link('Withdraw')
         expect(page).to have_no_link('Restore')
@@ -231,7 +231,7 @@ RSpec.describe 'User version view', :js do
         accept_confirm 'Once you withdraw this version, the Purl will no longer display it. Are you sure?' do
           click_link('Withdraw')
         end
-        expect(page).to have_content('Withdrawn. Purl will no longer display this version.')
+        expect(page).to have_text('Withdrawn. Purl will no longer display this version.')
         expect(user_version_client).to have_received(:update)
           .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: true))
       end
@@ -243,7 +243,7 @@ RSpec.describe 'User version view', :js do
       it 'restores' do
         visit item_public_version_path(item_id: druid, user_version_id: 2)
         click_link('Restore')
-        expect(page).to have_content('Restored. Purl will display this version.')
+        expect(page).to have_text('Restored. Purl will display this version.')
         expect(user_version_client).to have_received(:update)
           .with(user_version: Dor::Services::Client::UserVersion::Version.new(userVersion: '2', withdrawn: false))
       end
@@ -257,7 +257,7 @@ RSpec.describe 'User version view', :js do
       it 'shows a 404' do
         visit item_public_version_path(item_id: druid, user_version_id: 4)
 
-        expect(page).to have_content('The page you were looking for doesn’t exist.')
+        expect(page).to have_text('The page you were looking for doesn’t exist.')
       end
     end
   end

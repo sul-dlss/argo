@@ -32,21 +32,21 @@ RSpec.describe 'Viewing an Admin policy' do
     context 'for open version ui' do
       it 'renders the open version ui' do
         visit "/items/#{apo_druid}/version/open_ui"
-        expect(page).to have_content('description')
+        expect(page).to have_text('description')
       end
     end
 
     context 'for close version ui' do
       it 'renders the close version ui' do
         visit "/items/#{apo_druid}/version/close_ui"
-        expect(page).to have_content('description')
+        expect(page).to have_text('description')
       end
     end
 
     context 'for add workflow' do
       it 'renders the add workflow ui' do
         visit new_item_workflow_path(apo_druid)
-        expect(page).to have_content('Add workflow')
+        expect(page).to have_text('Add workflow')
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe 'Viewing an Admin policy' do
       it 'renders the add collection ui' do
         allow(current_user).to receive(:permitted_collections).and_return(['druid:ab123cd4567'])
         visit "/items/#{apo_druid}/collection_ui"
-        expect(page).to have_content('Add Collection')
+        expect(page).to have_text('Add Collection')
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe 'Viewing an Admin policy' do
 
       it 'renders the tag ui' do
         visit "/items/#{apo_druid}/tags/edit"
-        expect(page).to have_content('Save')
+        expect(page).to have_text('Save')
       end
     end
   end

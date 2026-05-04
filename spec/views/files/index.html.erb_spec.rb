@@ -23,10 +23,10 @@ RSpec.describe 'files/index' do
     let(:access) { instance_double(Cocina::Models::FileAccess, download: 'world') }
 
     it 'renders the partial content with links' do
-      expect(rendered).to have_content 'Stacks'
-      expect(rendered).to have_content 'Preservation'
+      expect(rendered).to have_text 'Stacks'
+      expect(rendered).to have_text 'Preservation'
       expect(rendered).to have_link stacks_url, href: stacks_url
-      expect(rendered).to have_no_content '(not available for download)'
+      expect(rendered).to have_no_text '(not available for download)'
       expect(rendered).to have_link preserved_url, href: preserved_url
     end
   end
@@ -35,10 +35,10 @@ RSpec.describe 'files/index' do
     let(:access) { instance_double(Cocina::Models::FileAccess, download: 'none') }
 
     it 'renders the partial content without links' do
-      expect(rendered).to have_content 'Stacks'
-      expect(rendered).to have_content 'Preservation'
+      expect(rendered).to have_text 'Stacks'
+      expect(rendered).to have_text 'Preservation'
       expect(rendered).to have_no_link stacks_url, href: stacks_url
-      expect(rendered).to have_content '(not available for download)'
+      expect(rendered).to have_text '(not available for download)'
       expect(rendered).to have_link preserved_url, href: preserved_url
     end
   end
@@ -50,10 +50,10 @@ RSpec.describe 'files/index' do
     let(:stacks_url) { 'https://stacks-test.stanford.edu/v2/file/rn653dy9317/version/2/dir/M1090_S15_B01_F07_0106.jp2' }
 
     it 'renders the partial content with links' do
-      expect(rendered).to have_content 'Stacks'
-      expect(rendered).to have_content 'Preservation'
+      expect(rendered).to have_text 'Stacks'
+      expect(rendered).to have_text 'Preservation'
       expect(rendered).to have_link stacks_url, href: stacks_url
-      expect(rendered).to have_no_content '(not available for download)'
+      expect(rendered).to have_no_text '(not available for download)'
       expect(rendered).to have_link preserved_url, href: preserved_url
     end
   end

@@ -31,7 +31,7 @@ RSpec.describe 'Indexing and search results for identifiers', skip: ENV['CI'].pr
       [prefixed_druid, prefixed_druid.split(':').last].each do |query|
         fill_in 'q', with: query
         click_button 'search'
-        expect(page).to have_content('1 entry found')
+        expect(page).to have_text('1 entry found')
         expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
@@ -118,7 +118,7 @@ RSpec.describe 'Indexing and search results for identifiers', skip: ENV['CI'].pr
       [barcode, "barcode:#{barcode}"].each do |query|
         fill_in 'q', with: query
         click_button 'search'
-        expect(page).to have_content('1 entry found')
+        expect(page).to have_text('1 entry found')
         expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end
@@ -141,7 +141,7 @@ RSpec.describe 'Indexing and search results for identifiers', skip: ENV['CI'].pr
       [catalog_id, "folio:#{catalog_id}"].each do |query|
         fill_in 'q', with: query
         click_button 'search'
-        expect(page).to have_content('1 entry found')
+        expect(page).to have_text('1 entry found')
         expect(page).to have_css('dd.blacklight-id', text: solr_id)
       end
     end

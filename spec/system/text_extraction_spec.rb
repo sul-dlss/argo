@@ -26,7 +26,7 @@ RSpec.describe 'Text Extractions', :js do
         visit "/items/#{druid}/text_extraction/new"
 
         expect(page).to have_css 'h3', text: 'Text extraction'
-        expect(page).to have_content 'Avoid auto-generating OCR files for PDF documents'
+        expect(page).to have_text 'Avoid auto-generating OCR files for PDF documents'
         expect(page).to have_css 'div', text: 'Content language'
 
         first('button[aria-label="toggle dropdown"]').click
@@ -52,7 +52,7 @@ RSpec.describe 'Text Extractions', :js do
         visit "/items/#{druid}/text_extraction/new"
 
         expect(page).to have_css 'h3', text: 'Text extraction'
-        expect(page).to have_content 'Avoid auto-generating caption/transcript files for media that do not contain any speech or lyrics'
+        expect(page).to have_text 'Avoid auto-generating caption/transcript files for media that do not contain any speech or lyrics'
       end
     end
   end

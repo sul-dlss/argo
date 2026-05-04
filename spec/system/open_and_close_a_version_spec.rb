@@ -33,13 +33,13 @@ RSpec.describe 'Open and close a version' do
     fill_in 'Version description', with: 'Test a change'
 
     click_button 'Open Version'
-    expect(page).to have_content "#{item.externalIdentifier} is open for modification!"
+    expect(page).to have_text "#{item.externalIdentifier} is open for modification!"
 
     click_link 'Close Version'
-    expect(page).to have_content 'Test a change'
+    expect(page).to have_text 'Test a change'
 
     click_button 'Close Version'
 
-    expect(page).to have_content "Version 2 of #{item.externalIdentifier} has been closed!"
+    expect(page).to have_text "Version 2 of #{item.externalIdentifier} has been closed!"
   end
 end
