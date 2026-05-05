@@ -50,6 +50,7 @@ RSpec.describe 'Item manage release' do
       expect(tag.what).to eq 'self'
       expect(tag.release).to be true
       expect(tag.date).to be_a DateTime
+      expect(args[:lane_id]).to eq 'low'
     end
   end
 end
