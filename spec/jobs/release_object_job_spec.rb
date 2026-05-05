@@ -41,7 +41,8 @@ RSpec.describe ReleaseObjectJob do
 
     expect(job_item).to have_received(:check_update_ability?)
     expect(WorkflowService).to have_received(:published?).with(druid: druid)
-    expect(release_tags_client).to have_received(:create).with(tag: an_instance_of(Dor::Services::Client::ReleaseTag))
+    expect(release_tags_client).to have_received(:create)
+      .with(tag: an_instance_of(Dor::Services::Client::ReleaseTag), lane_id: 'low')
 
     expect(bulk_action.reload.druid_count_total).to eq(1)
     expect(bulk_action.druid_count_fail).to eq(0)
