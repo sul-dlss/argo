@@ -112,7 +112,7 @@ class FilesController < ApplicationController
     @cocina_model = if params.key?(:user_version_id)
                       Repository.find_user_version(params[:item_id], params[:user_version_id])
                     else
-                      Repository.find(params[:item_id])
+                      Repository.find(params.expect(:item_id))
                     end
   end
 

@@ -55,7 +55,7 @@ module CreatesBulkActions
   def identifiers
     return [] if params[:druids].blank?
 
-    params[:druids].split.map { |druid| Druid.new(druid).with_namespace }
+    params.expect(:druids).split.map { |druid| Druid.new(druid).with_namespace }
   end
 
   # Override to perform validation

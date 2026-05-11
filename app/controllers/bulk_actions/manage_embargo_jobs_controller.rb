@@ -9,7 +9,7 @@ module BulkActions
     def job_params
       {
         groups: current_user.groups,
-        csv_file: CsvUploadNormalizer.read(params[:csv_file].path),
+        csv_file: CsvUploadNormalizer.read(params.expect(:csv_file).path),
         close_version: params[:close_version]
       }
     end
