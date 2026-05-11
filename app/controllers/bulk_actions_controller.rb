@@ -23,14 +23,14 @@ class BulkActionsController < ApplicationController
   def file
     return if @bulk_action.blank?
 
-    send_file(@bulk_action.file(File.basename(params[:filename].to_s)))
+    send_file(@bulk_action.file(File.basename(params.expect(:filename).to_s)))
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_bulk_action
-    @bulk_action = current_user.bulk_actions.find(params[:id])
+    @bulk_action = current_user.bulk_actions.find(params.expect(:id))
   rescue ActiveRecord::RecordNotFound
     render plain: 'Object Not Found', status: :not_found
   end

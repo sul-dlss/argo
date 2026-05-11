@@ -6,7 +6,7 @@ class CollectionsController < ApplicationController
 
   def new
     if modal?
-      @cocina_admin_policy = Repository.find(params[:apo_druid])
+      @cocina_admin_policy = Repository.find(params.expect(:apo_druid))
       authorize! :update, @cocina_admin_policy
     else
       authorize! :create, Cocina::Models::Collection
@@ -17,7 +17,7 @@ class CollectionsController < ApplicationController
   end
 
   def create
-    @cocina_admin_policy = Repository.find(params[:apo_druid])
+    @cocina_admin_policy = Repository.find(params.expect(:apo_druid))
     authorize! :update, @cocina_admin_policy
 
     form = CollectionForm.new
@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
 
   # save the form
   def update
-    @cocina = Repository.find(params[:id])
+    @cocina = Repository.find(params.expect(:id))
     authorize! :update, @cocina
     return unless enforce_versioning?
 

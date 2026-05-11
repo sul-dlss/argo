@@ -19,7 +19,7 @@ class MetadataController < ApplicationController
     elsif params.key?(:version_id)
       Repository.find_version(params[:item_id], params[:version_id])
     else
-      Repository.find(params[:item_id])
+      Repository.find(params.expect(:item_id))
     end
   end
 end

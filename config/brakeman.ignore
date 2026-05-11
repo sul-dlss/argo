@@ -1,24 +1,141 @@
 {
   "ignored_warnings": [
     {
-      "fingerprint": "4d4621990e803b4d5934311ada8c57c1b4c2fdd8877d34fb9931ddceb780ea77",
-      "note": "Path validated at runtime: safe_path? checks File.expand_path(path).start_with?(base_directory) before send_file is called. params[:apo_id] is also authorized via CanCan load_resource."
-    },
-    {
-      "fingerprint": "cf7def59a93a295930d36d788bb01632e98f52c0cac755228139ad3545f51454",
-      "note": "Path validated at runtime: safe_path? checks File.expand_path(path).start_with?(base_directory) before send_file is called. params[:apo_id] is also authorized via CanCan load_resource."
-    },
-    {
+      "warning_type": "File Access",
+      "warning_code": 16,
       "fingerprint": "065c3193388cc08b1891c0f77c8b3944c324a2eafe821a12217fd3648d976502",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/bulk_jobs_controller.rb",
+      "line": 56,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "FileUtils.remove_dir(File.expand_path(File.join(File.expand_path(Settings.bulk_metadata.directory), params[:dir])), true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BulkJobsController",
+        "method": "destroy"
+      },
+      "user_input": "params[:dir]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
       "note": "Path traversal mitigated: File.expand_path used on both base and constructed path, with start_with? containment check before FileUtils.remove_dir is called."
     },
     {
-      "fingerprint": "8a36b1e88141428be10ca5ad67a1864c51b7681bc49b43240850763163a6745a",
-      "note": "Path traversal mitigated: File.basename strips all directory components from params[:filename] before it is joined with the output_directory."
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "307dc4d62cf0687088a56255d526584769951adfce725caf262d5aba72dd425a",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped parameter value",
+      "file": "app/views/workflows/_history.html.erb",
+      "line": 2,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "CodeRay::Duo[:xml, :div].highlight(PrettyXml.print(Dor::Services::Client.object(params[:item_id]).workflows.xml.to_xml))",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "WorkflowsController",
+          "method": "history",
+          "line": 73,
+          "file": "app/controllers/workflows_controller.rb",
+          "rendered": {
+            "name": "workflows/history",
+            "file": "app/views/workflows/history.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "workflows/history",
+          "line": 3,
+          "file": "app/views/workflows/history.html.erb",
+          "rendered": {
+            "name": "workflows/_history",
+            "file": "app/views/workflows/_history.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "workflows/_history"
+      },
+      "user_input": "params[:item_id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": "False positive: CodeRay::Duo#highlight HTML-encodes all source content internally before wrapping in markup. The .html_safe call is on CodeRay's own generated HTML output, not on the raw parameter value."
     },
     {
-      "fingerprint": "307dc4d62cf0687088a56255d526584769951adfce725caf262d5aba72dd425a",
-      "note": "False positive: CodeRay::Duo#highlight HTML-encodes all source content internally before wrapping in markup. The .html_safe call is on CodeRay's own generated HTML output, not on the raw parameter value."
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "4d4621990e803b4d5934311ada8c57c1b4c2fdd8877d34fb9931ddceb780ea77",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/bulk_jobs_controller.rb",
+      "line": 29,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(UserLog.new(params[:apo_id], params[:time]).csv_file, :type => \"text/csv\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BulkJobsController",
+        "method": "show"
+      },
+      "user_input": "UserLog.new(params[:apo_id], params[:time]).csv_file",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": "Path validated at runtime: safe_path? checks File.expand_path(path).start_with?(base_directory) before send_file is called. params[:apo_id] is also authorized via CanCan load_resource."
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "b52fbb625ebe65f17b457e9684e5c885bb296795a45c111448bf929b65b94a56",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/bulk_actions_controller.rb",
+      "line": 26,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(current_user.bulk_actions.find(params.expect(:id)).file(File.basename(params.expect(:filename).to_s)))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BulkActionsController",
+        "method": "file"
+      },
+      "user_input": "params.expect(:filename).to_s",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": "Path traversal mitigated: File.basename strips all directory components from params[:filename] before it is used."
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "cf7def59a93a295930d36d788bb01632e98f52c0cac755228139ad3545f51454",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/bulk_jobs_controller.rb",
+      "line": 38,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(UserLog.new(params[:apo_id], params[:time]).desc_metadata_xml_file, :type => \"application/xml\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BulkJobsController",
+        "method": "show"
+      },
+      "user_input": "UserLog.new(params[:apo_id], params[:time]).desc_metadata_xml_file",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": "Path validated at runtime: safe_path? checks File.expand_path(path).start_with?(base_directory) before send_file is called. params[:apo_id] is also authorized via CanCan load_resource."
     }
-  ]
+  ],
+  "brakeman_version": "8.0.4"
 }

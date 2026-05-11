@@ -222,7 +222,7 @@ class ItemsController < ApplicationController
   def load_cocina
     raise 'missing druid' unless params[:id]
 
-    @cocina = Repository.find(params[:id])
+    @cocina = Repository.find(params.expect(:id))
   end
 
   def reindex
