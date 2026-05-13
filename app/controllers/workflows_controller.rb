@@ -7,7 +7,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:item_id` The druid for the object.
   # @option params [String] `:id` The workflow name. e.g., accessionWF.
   def show
-    workflow = Dor::Services::Client.object(params.expect(:item_id)).workflow(params.expect(:id)).find
+    workflow = Dor::Services::Client.object(params[:item_id]).workflow(params[:id]).find
     respond_to do |format|
       format.html do
         @presenter = build_show_presenter(workflow)
@@ -25,7 +25,7 @@ class WorkflowsController < ApplicationController
 
   # add a workflow to an object if the workflow is not present in the active table
   def create
-    cocina_object = Repository.find(params.expect(:item_id))
+    cocina_object = Repository.find(params[:item_id])
 
     unless params[:wf]
       return respond_to do |format|
@@ -52,7 +52,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:status` The status to which we want to reset the workflow.
   def update
     params.require %i[process status]
-    cocina = Repository.find(params.expect(:item_id))
+    cocina = Repository.find(params[:item_id])
 
     return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], cocina)
 
@@ -86,7 +86,7 @@ class WorkflowsController < ApplicationController
     WorkflowPresenter.new(view: view_context,
                           workflow_name: params[:id],
                           workflow_status: status,
-                          cocina_object: Repository.find(params.expect(:item_id)))
+                          cocina_object: Repository.find(params[:item_id]))
   end
 
   def workflow_processes(workflow_name)

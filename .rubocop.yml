@@ -632,7 +632,7 @@ Performance/ZipWithoutBlock: # new in 1.24
 Rails/MultipleRoutePaths: # new in 2.29
   Enabled: true
 Rails/StrongParametersExpect: # new in 2.29
-  Enabled: true
+  Enabled: false # caused a bunch of controller failures
 RSpec/IncludeExamples: # new in 3.6
   Enabled: true
 

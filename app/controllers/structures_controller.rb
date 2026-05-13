@@ -24,7 +24,7 @@ class StructuresController < ApplicationController
   end
 
   def update
-    csv = params.expect(:csv).read.force_encoding('UTF-8')
+    csv = params[:csv].read.force_encoding('UTF-8')
     StructureUpdater.from_csv(@cocina, csv)
                     .bind { |structural| CocinaValidator.validate_and_save(@cocina, structural:) }
                     .either(

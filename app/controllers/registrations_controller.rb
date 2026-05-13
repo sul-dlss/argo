@@ -33,7 +33,7 @@ class RegistrationsController < ApplicationController
       '*:*',
       rows: 0,
       'facet.field': facet_field,
-      'facet.prefix': params.expect(:term).titlecase,
+      'facet.prefix': params[:term].titlecase,
       'facet.mincount': 1,
       'facet.limit': 15,
       'json.nl': 'map'
@@ -47,7 +47,7 @@ class RegistrationsController < ApplicationController
     raise 'Malformed input' unless Regexp.new(Settings.source_id_regex).match?(params[:source_id])
 
     begin
-      Dor::Services::Client.objects.find(source_id: params.expect(:source_id))
+      Dor::Services::Client.objects.find(source_id: params[:source_id])
       resp = true
     rescue Dor::Services::Client::NotFoundResponse
       resp = false

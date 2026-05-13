@@ -30,7 +30,7 @@ class TextExtractionController < ApplicationController
   private
 
   def load_and_authorize_resource
-    @cocina_object = Repository.find(params.expect(:item_id))
+    @cocina_object = Repository.find(params[:item_id])
     authorize! :update, @cocina_object
   end
 end

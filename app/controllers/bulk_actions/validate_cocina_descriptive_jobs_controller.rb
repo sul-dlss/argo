@@ -7,7 +7,7 @@ module BulkActions
     self.action_type = 'ValidateCocinaDescriptiveJob'
 
     def job_params
-      { csv_file: CsvUploadNormalizer.read(params.expect(:csv_file).path) }
+      { csv_file: CsvUploadNormalizer.read(params[:csv_file].path) }
     end
 
     def validate_job_params(job_params)

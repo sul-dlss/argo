@@ -53,7 +53,7 @@ class TagsController < ApplicationController
   end
 
   def update
-    cocina = Repository.find(params.expect(:item_id))
+    cocina = Repository.find(params[:item_id])
     authorize! :update, cocina
 
     current_tags = tags_client.list

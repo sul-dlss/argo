@@ -7,9 +7,7 @@ class PurgeJob < BulkActionJob
     def perform
       return unless check_update_ability?
 
-      if WorkflowService.submitted?(druid:)
-        return failure!(message: 'Cannot purge item because it has already been submitted')
-      end
+      return failure!(message: 'Cannot purge item because it has already been submitted') if WorkflowService.submitted?(druid:)
 
       PurgeService.purge(druid:, user_name: user)
 

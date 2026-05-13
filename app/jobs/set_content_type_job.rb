@@ -19,12 +19,8 @@ class SetContentTypeJob < BulkActionJob
   end
 
   def perform_bulk_action
-    if current_resource_type.blank? && new_resource_type.blank? && new_content_type.blank?
-      raise 'Must provide values for types.'
-    end
-    if new_content_type.blank? && new_resource_type.present?
-      raise 'Must provide a new content type when changing resource type.'
-    end
+    raise 'Must provide values for types.' if current_resource_type.blank? && new_resource_type.blank? && new_content_type.blank?
+    raise 'Must provide a new content type when changing resource type.' if new_content_type.blank? && new_resource_type.present?
 
     super
   end

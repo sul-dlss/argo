@@ -93,20 +93,20 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "b52fbb625ebe65f17b457e9684e5c885bb296795a45c111448bf929b65b94a56",
+      "fingerprint": "8a36b1e88141428be10ca5ad67a1864c51b7681bc49b43240850763163a6745a",
       "check_name": "SendFile",
       "message": "Parameter value used in file name",
       "file": "app/controllers/bulk_actions_controller.rb",
       "line": 26,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(current_user.bulk_actions.find(params.expect(:id)).file(File.basename(params.expect(:filename).to_s)))",
+      "code": "send_file(current_user.bulk_actions.find(params[:id]).file(File.basename(params[:filename].to_s)))",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "BulkActionsController",
         "method": "file"
       },
-      "user_input": "params.expect(:filename).to_s",
+      "user_input": "params[:filename].to_s",
       "confidence": "Weak",
       "cwe_id": [
         22
