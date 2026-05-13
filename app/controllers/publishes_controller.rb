@@ -16,6 +16,6 @@ class PublishesController < ApplicationController
   private
 
   def load_cocina
-    @cocina = Repository.find(params.expect(:item_id))
+    @cocina = Repository.find(params[:item_id])
   end
 end

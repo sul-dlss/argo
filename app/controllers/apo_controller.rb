@@ -21,7 +21,7 @@ class ApoController < ApplicationController
 
   # Draw the form controls for collection, rights and initial workflow
   def registration_options
-    administrative = Repository.find(params.expect(:id)).administrative
+    administrative = Repository.find(params[:id]).administrative
 
     # workflow_list
     @workflows = ([params[:workflow_id]] + [Settings.apo.default_workflow_option] + Array(administrative.registrationWorkflow)).compact.uniq

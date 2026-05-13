@@ -4,7 +4,7 @@ class EmbargosController < ApplicationController
   load_and_authorize_resource :cocina, parent: false, class: 'Repository', id_param: 'item_id', only: %i[edit update]
 
   def new
-    cocina = Repository.find(params.expect(:item_id))
+    cocina = Repository.find(params[:item_id])
     authorize! :update, cocina
     @change_set = EmbargoForm.new(cocina)
 

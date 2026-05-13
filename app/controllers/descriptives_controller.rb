@@ -17,7 +17,7 @@ class DescriptivesController < ApplicationController
 
   # Handle upload of the spreadsheet
   def update
-    csv = CSV.parse(CsvUploadNormalizer.read(params.expect(:data).tempfile), headers: true)
+    csv = CSV.parse(CsvUploadNormalizer.read(params[:data].tempfile), headers: true)
     validator = DescriptionValidator.new(csv)
     if validator.valid?
       DescriptionImport.import(csv_row: csv.first)

@@ -24,19 +24,13 @@ class StructureUpdater
   def validate # rubocop:disable Naming/PredicateMethod
     @errors = []
     csv.each.with_index(2) do |row, index|
-      if invalid_resource_type?(row)
-        errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type"
-      end
+      errors << "On row #{index} found \"#{row['resource_type']}\", which is not a valid resource type" if invalid_resource_type?(row)
       unless existing_file?(row)
         errors << "On row #{index} found #{row['filename']}, which appears to be a new file"
         next
       end
-      if invalid_preservation_change?(row)
-        errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported"
-      end
-      if invalid_location_rights?(row)
-        errors << "On row #{index} found #{row['filename']}, which set view or download rights to location-based but did not specify a location"
-      end
+      errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported" if invalid_preservation_change?(row)
+      errors << "On row #{index} found #{row['filename']}, which set view or download rights to location-based but did not specify a location" if invalid_location_rights?(row)
     end
     csv.rewind
     errors.empty?

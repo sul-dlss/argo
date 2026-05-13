@@ -24,9 +24,7 @@ class EmbargoForm < ApplicationChangeSet
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
   def save_model
-    unless changed?(:release_date) || changed?(:view_access) || changed?(:download_access) || changed?(:access_location)
-      return
-    end
+    return unless changed?(:release_date) || changed?(:view_access) || changed?(:download_access) || changed?(:access_location)
 
     updated = model
 

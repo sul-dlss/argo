@@ -23,9 +23,7 @@ class CatalogRecordIdForm < Reform::Form
 
   collection :catalog_record_ids, populate_if_empty: Row, save: false, virtual: true,
                                   prepopulator: lambda { |*|
-                                                  if catalog_record_ids.empty?
-                                                    catalog_record_ids << CatalogRecordIdForm::Row.new(value: '', refresh: true)
-                                                  end
+                                                  catalog_record_ids << CatalogRecordIdForm::Row.new(value: '', refresh: true) if catalog_record_ids.empty?
                                                 } do
     property :value
     property :refresh, type: Dry::Types['params.nil'] | Dry::Types['params.bool']

@@ -290,7 +290,7 @@ RSpec.describe 'Item view', :js do
             end
           end
 
-          context 'when the event is flat' do # rubocop:disable RSpec/NestedGroups
+          context 'when the event is flat' do
             let(:event) do
               Dor::Services::Client::Events::Event.new(
                 event_type: 'shelve_request_received',

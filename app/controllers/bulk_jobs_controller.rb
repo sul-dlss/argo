@@ -10,7 +10,7 @@ class BulkJobsController < ApplicationController
   def index
     authorize! :read, @cocina
 
-    @document = find(params.expect(:apo_id))
+    @document = find(params[:apo_id])
     @bulk_jobs = load_bulk_jobs(params[:apo_id])
   end
 
