@@ -1,3 +1,23 @@
+GIT
+  remote: https://github.com/sul-dlss/cocina-models.git
+  revision: 568fbd0d7d5fcaec4ca465b0738b57688e2ae655
+  branch: validate-unexpected-properties#1027
+  specs:
+    cocina-models (0.117.0)
+      activesupport
+      deprecation
+      dry-struct (~> 1.0)
+      dry-types (~> 1.1)
+      edtf
+      equivalent-xml
+      i18n
+      json_schemer (~> 2.0)
+      jsonpath
+      nokogiri
+      super_diff
+      thor
+      zeitwerk (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -147,20 +167,6 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.117.0)
-      activesupport
-      deprecation
-      dry-struct (~> 1.0)
-      dry-types (~> 1.1)
-      edtf
-      equivalent-xml
-      i18n
-      json_schemer (~> 2.0)
-      jsonpath
-      nokogiri
-      super_diff
-      thor
-      zeitwerk (~> 2.1)
     cocina_display (2.4.0)
       activesupport (>= 7)
       edtf (~> 3.2)
@@ -695,7 +701,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   capybara-screenshot
-  cocina-models (~> 0.69)
+  cocina-models!
   cocina_display (~> 2)
   coderay
   config
