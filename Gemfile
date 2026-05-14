@@ -36,6 +36,7 @@ gem 'roo-xls' # needed to work with legacy Excel files (xls)
 gem 'rubyzip'
 gem 'sidekiq', '~> 8.0'
 gem 'turbo-rails', '~> 2.0'
+# NOTE: When VC is updated >= 4.9.0, remove exceptions from config/bundler-audit.yml for CVE-2026-44836/7
 gem 'view_component'
 gem 'zip_tricks'
 

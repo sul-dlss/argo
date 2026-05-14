@@ -130,7 +130,7 @@ class SolrDocument
 
   # @return [boolean] true if NOT an adminPolicy or an agreement
   def publishable?
-    item? || collection?
+    item? || collection? || virtual_object?
   end
 
   def admin_policy?
@@ -146,9 +146,7 @@ class SolrDocument
   end
 
   def virtual_object?
-    return false unless item?
-
-    constituents&.any?
+    object_type == 'virtual object'
   end
 
   def collection?
