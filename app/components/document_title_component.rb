@@ -3,7 +3,6 @@
 class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   def object_type_label
     return 'apo' if @document.admin_policy?
-    return 'virtual object' if @document.virtual_object?
 
     @document.object_type
   end

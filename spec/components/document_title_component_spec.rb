@@ -163,7 +163,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
   context 'with a virtual object' do
     let(:admin_policy) { false }
     let(:virtual_object) { true }
-    let(:object_type) { 'item' }
+    let(:object_type) { 'virtual object' }
 
     it 'renders the expected object type label' do
       expect(rendered.css('div.object-type').first.text.strip).to eq('virtual object')
