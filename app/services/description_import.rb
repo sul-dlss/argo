@@ -4,7 +4,7 @@ class DescriptionImport
   include Dry::Monads[:result]
 
   class_attribute :permitted_types, default: Cocina::Models::Validators::DescriptionTypesValidator.new(nil, nil)
-                                             .send(:types_yaml).values.flatten.pluck('value')
+                                                                                                  .send(:types_yaml).values.flatten.pluck('value')
 
   def self.import(csv_row:)
     new(csv_row:).import
