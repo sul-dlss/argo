@@ -2,9 +2,9 @@
 
 class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   def object_type_label
-    return 'apo' if @document.admin_policy?
+    return 'apo' if @presenter.document.admin_policy?
 
-    @document.object_type
+    @presenter.document.object_type
   end
 
   def object_type_class

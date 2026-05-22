@@ -301,7 +301,7 @@ RSpec.describe ApoForm do
         SolrDocument.new(id: druid, SolrDocument::FIELD_TITLE => title)
       end
     end
-    let(:search_service_result) { [nil, default_collection_objects] }
+    let(:search_service_result) { default_collection_objects }
     let(:search_service) { instance_double(Blacklight::SearchService) }
 
     before do

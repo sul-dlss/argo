@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DocumentTitleComponent, type: :component do
-  subject(:component) { described_class.new(presenter:, document:) }
+  subject(:component) { described_class.new(presenter:) }
 
   let(:ability_mock) { instance_double(Ability, can?: true) }
   let(:document) do

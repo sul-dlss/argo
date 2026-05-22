@@ -8,7 +8,7 @@ class ManageReleasesController < ApplicationController
 
   def edit
     authorize! :update, @cocina
-    _, @document = search_service.fetch params[:item_id]
+    @document = search_service.fetch params[:item_id]
 
     render layout: false
   end

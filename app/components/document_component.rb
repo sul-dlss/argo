@@ -6,6 +6,8 @@ class DocumentComponent < Blacklight::DocumentComponent
   end
 
   def child_component
+    return super unless @view_context.action_name == 'show' && @view_context.controller_name == 'catalog'
+
     component_class.new(presenter: @presenter)
   end
 

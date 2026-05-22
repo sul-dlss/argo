@@ -4,6 +4,7 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
 
   helper ArgoHelper
+  helper ItemsHelper
   include DateFacetConfigurations
 
   before_action :limit_facets_on_home_page, only: [:index]
@@ -91,28 +92,27 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG, label: 'Tag', limit: 100_000,
                                                                         component: LazyNonprojectTagFacetComponent,
                                                                         unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', component: true, limit: 100_000, sort: 'index'
-    config.add_facet_field 'exclude_google_books', label: 'Exclude Google Books', component: true, query: {
+    config.add_facet_field SolrDocument::FIELD_TICKET_TAG, label: 'Ticket', limit: 100_000, sort: 'index'
+    config.add_facet_field 'exclude_google_books', label: 'Exclude Google Books', query: {
       yes: {
         label: 'Yes',
         fq: "-#{SolrDocument::FIELD_APO_ID}:\"#{Settings.google_books_apo}\""
       }
     }
-    config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_ROLES, label: 'File Role', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights', component: true, limit: 1000,
+    config.add_facet_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type', limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type', limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_MIMETYPES, label: 'MIME Types', limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_FILE_ROLES, label: 'File Role', limit: 10
+    config.add_facet_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights', limit: 1000,
                                                               sort: 'index'
-    config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
+    config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', limit: 10
+    config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', limit: 10,
                                                                  more_limit: 9999, sort: 'index'
-    config.add_facet_field SolrDocument::FIELD_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
+    config.add_facet_field SolrDocument::FIELD_APO_TITLE, label: 'Admin Policy', limit: 10,
                                                           more_limit: 9999, sort: 'index'
-    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_PROCESSING_STATUS, label: 'Processing Status', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', limit: 10
+    config.add_facet_field SolrDocument::FIELD_PROCESSING_STATUS, label: 'Processing Status', limit: 10
     config.add_facet_field 'released_to_earthworks',
-                           component: true,
                            query: {
                              week: {
                                label: 'Last week',
@@ -136,7 +136,6 @@ class CatalogController < ApplicationController
                              }
                            }
     config.add_facet_field 'released_to_purl_sitemap',
-                           component: true,
                            query: {
                              week: {
                                label: 'Last week',
@@ -160,7 +159,6 @@ class CatalogController < ApplicationController
                              }
                            }
     config.add_facet_field 'released_to_searchworks',
-                           component: true,
                            query: {
                              week: {
                                label: 'Last week',
@@ -185,13 +183,12 @@ class CatalogController < ApplicationController
                            }
     config.add_facet_field SolrDocument::FIELD_WORKFLOW_WPS, label: 'Workflows (WPS)', limit: 9999,
                                                              component: LazyWpsWorkflowFacetComponent
-    config.add_facet_field SolrDocument::FIELD_METADATA_SOURCE, label: 'Metadata Source', component: true
+    config.add_facet_field SolrDocument::FIELD_METADATA_SOURCE, label: 'Metadata Source'
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
     config.add_facet_field 'identifiers', label: 'Identifiers',
-                                          component: true,
                                           query: {
                                             has_orcids: { label: 'Has contributor ORCIDs',
                                                           fq: "+#{SolrDocument::FIELD_ORCIDS}:*" },
@@ -199,7 +196,7 @@ class CatalogController < ApplicationController
                                             has_barcode: { label: 'Has barcode', fq: "+#{SolrDocument::FIELD_BARCODE_ID}:*" }
                                           }
 
-    config.add_facet_field 'empties', label: 'Empty Fields', component: true,
+    config.add_facet_field 'empties', label: 'Empty Fields',
                                       query: {
                                         no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
                                                                        fq: "-#{SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE}:*" },
@@ -207,20 +204,20 @@ class CatalogController < ApplicationController
                                       }
 
     config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Format', limit: -1, sort: :index, component: Blacklight::Hierarchy::FacetFieldListComponent
-    config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_GENRE, label: 'Genre', component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'Language', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', limit: 10
+    config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', limit: 10
+    config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', limit: 10
+    config.add_facet_field SolrDocument::FIELD_GENRE, label: 'Genre', limit: 10
+    config.add_facet_field SolrDocument::FIELD_SW_LANGUAGE, label: 'Language', limit: 10
 
-    config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE, label: 'MODS Resource Type', limit: 10
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field SolrDocument::FIELD_APO_ID, if: false
     config.add_facet_field SolrDocument::FIELD_COLLECTION_ID, if: false
     config.add_facet_field 'tag_ssim', if: false
     config.add_facet_field 'project_tag_ssim', if: false
 
-    config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
+    config.add_facet_fields_to_solr_request!
 
     config.add_search_field 'text', label: 'All Fields'
     config.add_sort_field 'score desc, id asc', label: 'Relevance', default: true
@@ -249,6 +246,7 @@ class CatalogController < ApplicationController
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
 
+    config.index.sidebar_component = SidebarComponent
     config.show.document_component = DocumentComponent
   end
 
@@ -323,8 +321,8 @@ class CatalogController < ApplicationController
 
   def lazy_nonproject_tag_facet
     limit_facets_to([SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG])
-    (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG)
+    response = search_service.search_results
+    facet_config = blacklight_config.facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_NONPROJECT_TAG)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_nonproject_tag_facet'
@@ -332,8 +330,8 @@ class CatalogController < ApplicationController
 
   def lazy_project_tag_facet
     limit_facets_to([SolrDocument::FIELD_EXPLODED_PROJECT_TAG])
-    (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_PROJECT_TAG)
+    response = search_service.search_results
+    facet_config = blacklight_config.facet_configuration_for_field(SolrDocument::FIELD_EXPLODED_PROJECT_TAG)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_project_tag_facet'
@@ -342,8 +340,8 @@ class CatalogController < ApplicationController
   def lazy_wps_workflow_facet
     limit_facets_to([SolrDocument::FIELD_WORKFLOW_WPS])
 
-    (response,) = search_service.search_results
-    facet_config = facet_configuration_for_field(SolrDocument::FIELD_WORKFLOW_WPS)
+    response = search_service.search_results
+    facet_config = blacklight_config.facet_configuration_for_field(SolrDocument::FIELD_WORKFLOW_WPS)
     display_facet = response.aggregations[facet_config.field]
     @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
     render partial: 'lazy_wps_workflow_facet'
@@ -359,7 +357,7 @@ class CatalogController < ApplicationController
       # Skip validating the Cocina underlying the Solr representation
       @document = SolrDocument.new(object_client.version.solr(version_param, validate: false))
     else
-      _deprecated_response, @document = search_service.fetch(druid_param)
+      @document = search_service.fetch(druid_param)
       @cocina = Repository.find_lite(druid_param, structural: false)
     end
 

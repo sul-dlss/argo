@@ -234,7 +234,7 @@ class Report
     }
   end
 
-  attr_reader :response, :document_list, :num_found, :params, :current_user
+  attr_reader :response, :document_list, :num_found, :params, :controller
 
   copy_blacklight_config_from CatalogController
 
@@ -249,8 +249,10 @@ class Report
   end
 
   # @param [Array<String>] fields
-  def initialize(params = {}, current_user: NullUser.new)
-    @current_user = current_user
+  def initialize(params = {}, controller:)
+    raise "not a controller #{controller.inspect}" unless controller.respond_to?(:current_user)
+
+    @controller = controller
     @fields = if params[:fields].present?
                 params
                   .delete(:fields)
@@ -262,14 +264,14 @@ class Report
                 REPORT_FIELDS
               end
     @params = params
-    (@response,) = search_results(@params)
+    @response = search_results(@params)
     @num_found = @response['response']['numFound'].to_i
   end
 
   def druids(opts = {})
     params[:page] = 1
     params[:per_page] = ROWS_PER_PAGE
-    (@response,) = search_results(params)
+    @response = search_results(params)
     druids = []
     until @response.documents.empty?
       report_data.each do |rec|
@@ -286,7 +288,7 @@ class Report
         end
       end
       params[:page] += 1
-      (@response,) = search_results(params)
+      @response = search_results(params)
     end
     druids
   end
@@ -302,8 +304,9 @@ class Report
     connection = search_service.repository.connection.connection
     fl = @fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
     # Setting wt=csv tells solr to return CSV data
+    search_service.search_builder
     data = { wt: :csv, rows: 10_000_000, fl:, 'csv.mv.separator' => ';' }
-           .reverse_merge(search_service.search_builder.with(@params)).to_h
+           .reverse_merge(search_service.search_builder.with(search_state)).to_h
 
     first_chunk = true
     connection.post blacklight_config.solr_path do |req|
@@ -328,10 +331,15 @@ class Report
     search_service(params).search_results
   end
 
-  def search_service(params)
+  def search_service(_params)
     Blacklight::SearchService.new(config: blacklight_config,
-                                  user_params: params,
-                                  current_user:)
+                                  search_builder_class: ReportSearchBuilder,
+                                  search_state:,
+                                  current_user: controller.current_user)
+  end
+
+  def search_state
+    Blacklight::SearchState.new(params, blacklight_config, controller)
   end
 
   # @param [Array<SolrDocument>] docs

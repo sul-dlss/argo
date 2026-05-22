@@ -17,7 +17,7 @@ class ReportController < CatalogController
     # progressively loads report results via the server-side API
     # (ReportController & Report model).
     params[:page] ||= 1
-    @report = Report.new(params, current_user:)
+    @report = Report.new(params, controller: self)
 
     respond_to do |format|
       format.json do
@@ -38,7 +38,7 @@ class ReportController < CatalogController
     response.headers['Content-Disposition'] = 'attachment; filename="report.csv"'
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
 
-    Report.new(params, current_user:).stream_csv(stream: response.stream)
+    Report.new(params, controller: self).stream_csv(stream: response.stream)
   end
 
   # reset workflow states for objects
@@ -47,7 +47,7 @@ class ReportController < CatalogController
 
     workflow = params[:reset_workflow]
     step = params[:reset_step]
-    ids = Report.new(params, current_user:).druids
+    ids = Report.new(params, controller: self).druids
     ids.each do |druid|
       druid = Druid.new(druid).with_namespace
       cocina = Repository.find(druid)
@@ -66,7 +66,7 @@ class ReportController < CatalogController
 
   # This draws the full page that supports the workflow grid
   def workflow_grid
-    (@response, _deprecated_document_list) = search_service.search_results
+    @response = search_service.search_results
     return unless request.headers['X-Requester'] == 'frontend'
 
     # This is triggered by javascript that refreshes the data every 10s

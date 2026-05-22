@@ -9,9 +9,12 @@ RSpec.describe Report do
     described_class::REPORT_FIELDS.index { |field| field[:field] == field_name.to_s }
   end
 
+  subject { described_class.new({ q: 'report' }, controller:) }
+
   let(:user) { instance_double(User, admin?: true) }
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+  let(:controller) { instance_double(ReportController, current_user: user, action_name: 'index') }
 
   before do
     solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
@@ -21,7 +24,7 @@ RSpec.describe Report do
   describe '#stream_csv' do
     let(:csv) do
       stream = StringIO.new
-      described_class.new(current_user: user).stream_csv(stream:)
+      described_class.new(controller:).stream_csv(stream:)
       stream.string
     end
 
@@ -83,7 +86,7 @@ RSpec.describe Report do
   describe '#druids' do
     context 'with no attributes' do
       subject(:report) do
-        described_class.new({ q: 'report' }, current_user: user).druids
+        described_class.new({ q: 'report' }, controller:).druids
       end
 
       before do
@@ -120,13 +123,13 @@ RSpec.describe Report do
 
       expect(described_class.new(
         { q: 'report' },
-        current_user: user
+        controller:
       ).druids(source_id: true)).to include "qq613vj0238\tsul:36105011952764"
     end
 
     context 'with tags: true' do
       subject(:report) do
-        described_class.new({ q: 'report' }, current_user: user).druids(tags: true)
+        described_class.new({ q: 'report' }, controller:).druids(tags: true)
       end
 
       before do

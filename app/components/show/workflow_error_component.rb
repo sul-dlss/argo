@@ -12,7 +12,7 @@ module Show
 
     def workflow_errors
       field_config = blacklight_config.show_fields_for([:show]).fetch(SolrDocument::FIELD_WORKFLOW_ERRORS)
-      Blacklight::FieldPresenter.new(self, document, field_config).render
+      safe_join Blacklight::FieldPresenter.new(self, document, field_config).render
     end
 
     def render?
