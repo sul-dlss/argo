@@ -5,12 +5,13 @@ module WorkflowHelper
   # @return [Array<Array<String, String>] array suitable for select_tag options
   def workflow_options(except: [])
     # per https://github.com/sul-dlss/argo/issues/3741, this should be hardcoded
-    %w[
+    (%w[
       accessionWF
       goobiWF
       registrationWF
       wasSeedPreassemblyWF
-    ].reject { |workflow| except.include?(workflow) }.map do |workflow|
+      gisDerivativeWF
+    ] - except).map do |workflow|
       [workflow, workflow]
     end
   end
