@@ -297,7 +297,7 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    honeybadger (6.6.1)
+    honeybadger (6.6.2)
       logger
       ostruct
     http-cookie (1.1.6)
@@ -314,12 +314,12 @@ GEM
       reline (>= 0.4.2)
     iso8601 (0.13.0)
     janeway-jsonpath (0.6.0)
-    jbuilder (2.15.0)
+    jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
-    json (2.19.5)
+    json (2.19.7)
     json_schemer (2.5.0)
       bigdecimal
       hana (~> 1.3)
@@ -379,7 +379,7 @@ GEM
       json
       nokogiri
       nokogiri-happymapper
-    msgpack (1.8.0)
+    msgpack (1.8.1)
     multi_json (1.21.1)
     multipart-post (2.4.1)
     net-http (0.9.1)
@@ -406,7 +406,7 @@ GEM
       racc (~> 1.4)
     nokogiri-happymapper (0.10.1)
       nokogiri (~> 1.5)
-    okcomputer (1.19.1)
+    okcomputer (1.19.2)
       benchmark
     optimist (3.2.1)
     orm_adapter (0.5.0)
@@ -444,7 +444,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (8.0.1)
+    puma (8.0.2)
       nio4r (~> 2.0)
     purl_fetcher-client (1.5.4)
       activesupport
@@ -550,7 +550,7 @@ GEM
     rspec-support (3.13.7)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.86.2)
+    rubocop (1.87.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -574,7 +574,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
-    rubocop-rails (2.35.2)
+    rubocop-rails (2.35.3)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
@@ -605,7 +605,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sidekiq (8.1.5)
+    sidekiq (8.1.6)
       connection_pool (>= 3.0.0)
       json (>= 2.16.0)
       logger (>= 1.7.0)
