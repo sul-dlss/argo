@@ -72,7 +72,6 @@ class ApoForm < ApplicationChangeSet
     @default_collection_objects ||=
       @search_service
       .fetch(default_collections, rows: default_collections.size)
-      .last
       .sort_by do |solr_doc|
         solr_doc.title_display.downcase || solr_doc.label.downcase
       end

@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
-# @TODO after upgrading to BL 8, inherit from Blacklight::SearchNavbarComponent and remove most of it except for
-# "container_classes"
-class SearchNavbarComponent < Blacklight::Component
-  def initialize(blacklight_config:)
-    @blacklight_config = blacklight_config
-  end
-
-  attr_reader :blacklight_config
-
+class SearchNavbarComponent < Blacklight::SearchNavbarComponent
   def container_classes
     'container'
   end
@@ -22,7 +14,7 @@ class SearchNavbarComponent < Blacklight::Component
       url: helpers.search_action_url,
       advanced_search_url: helpers.search_action_url(action: 'advanced_search'),
       params: helpers.search_state.params_for_search.except(:qt),
-      autocomplete_path: suggest_index_catalog_path
+      autocomplete_path: helpers.suggest_index_catalog_path
     )
   end
 

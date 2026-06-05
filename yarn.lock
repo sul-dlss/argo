@@ -420,30 +420,21 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
-"blacklight-frontend@>=7.1 <10.0.0":
+"blacklight-frontend@>=7.1 <10.0.0", blacklight-frontend@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-9.0.0.tgz#74fb324ca604465ae7b89aed2f8d3df5c097f9bd"
   integrity sha512-lvNivnINpi2gS3XLugfpEljHQV1TXMrY/0g/c94NVnAvQgvIK/trdqAGQq2Y+cdLPFjs0+L+qO3EbxjgGTxmIA==
   dependencies:
     bootstrap ">=5.3.5 <6.0.0"
 
-blacklight-frontend@^7.20.2:
-  version "7.38.0"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.38.0.tgz#0dce6531602c7bb3a0e3c5f99cea788158d19401"
-  integrity sha512-zsX+cMgeuUuKxwx1FydE4H1XzkTJoywmwGOznllyVYCatIlG2xCVM8IFbuv+VB9Qwoss9z0MjH87l2nMnSPKIA==
-  dependencies:
-    bootstrap ">=4.3.1 <6.0.0"
-    jquery "^3.5.1"
-    typeahead.js "^0.11.1"
-
-blacklight-hierarchy@^6.0.2:
+blacklight-hierarchy@^6.9.0:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-6.9.0.tgz#55ad4d3f9c72ccb4411757286d3772b161fa3ce3"
   integrity sha512-ZKrbQfQTGgkOgYczd9cBDZuHEDpMyEHitdTFDnqJnvEByolMZnq96KNB//3b4Q9jo4toGm+6Sy1fK59+BmCP+Q==
   dependencies:
     blacklight-frontend ">=7.1 <10.0.0"
 
-"bootstrap@>=4.3.1 <6.0.0", "bootstrap@>=5.3.5 <6.0.0", bootstrap@^5.1.0:
+"bootstrap@>=5.3.5 <6.0.0", bootstrap@^5.3.0:
   version "5.3.8"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.3.8.tgz#6401a10057a22752d21f4e19055508980656aeed"
   integrity sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg==
@@ -939,15 +930,10 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
-jquery@>=1.7:
+jquery@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.0.0.tgz#95c33ac29005ff72ec444c5ba1cf457e61404fbb"
   integrity sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==
-
-jquery@^3.5.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
-  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
 
 json-buffer@3.0.1:
   version "3.0.1"
@@ -1259,13 +1245,6 @@ type-check@^0.4.0, type-check@~0.4.0:
   integrity sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==
   dependencies:
     prelude-ls "^1.2.1"
-
-typeahead.js@^0.11.1:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/typeahead.js/-/typeahead.js-0.11.1.tgz#4e64e671b22310a8606f4aec805924ba84b015b8"
-  integrity sha512-yGaLzGjVHyryZdNfrWz2NHXUwEO7hrlVmGMGCo5+6mH3nEEhcQ0Te3mK3G60uRnxfERu8twOWSU4WmwScbwhMg==
-  dependencies:
-    jquery ">=1.7"
 
 undefsafe@^2.0.5:
   version "2.0.5"

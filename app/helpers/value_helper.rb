@@ -29,9 +29,8 @@ module ValueHelper
   # @return [String]
   def link_to_admin_policy_with_objs(args)
     policy_link = link_to_admin_policy(args)
-    facet_config = facet_configuration_for_field(SolrDocument::FIELD_APO_ID)
-    path_for_facet = facet_item_presenter(facet_config, args[:document].apo_id,
-                                          SolrDocument::FIELD_APO_ID).href
+    facet_config = blacklight_config.facet_configuration_for_field(SolrDocument::FIELD_APO_ID)
+    path_for_facet = facet_field_presenter(facet_config, {}).item_presenter(args[:document].apo_id).href
     objs_link = link_to 'All objects with this APO', path_for_facet
     "#{policy_link} (#{objs_link})".html_safe
   end
@@ -53,14 +52,14 @@ module ValueHelper
   # @return [String]
   def links_to_collections_with_objs(**args)
     with_objs = args.fetch(:with_objs, true)
-    facet_config = facet_configuration_for_field(SolrDocument::FIELD_COLLECTION_ID)
+    facet_config = blacklight_config.facet_configuration_for_field(SolrDocument::FIELD_COLLECTION_ID)
 
     args[:value].map.with_index do |val, i|
       collection_link = link_to(
         args[:document].collection_titles[i],
         solr_document_path(val)
       )
-      path_for_facet = facet_item_presenter(facet_config, val, SolrDocument::FIELD_COLLECTION_ID).href
+      path_for_facet = facet_field_presenter(facet_config, {}).item_presenter(val).href
 
       objs_link = link_to 'All objects in this collection', path_for_facet
       with_objs ? "#{collection_link} (#{objs_link})" : collection_link

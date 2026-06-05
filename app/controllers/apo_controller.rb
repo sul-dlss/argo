@@ -138,11 +138,12 @@ class ApoController < ApplicationController
 
   def search_service
     @search_service ||= Blacklight::SearchService.new(config: CatalogController.blacklight_config,
+                                                      search_state: Blacklight::SearchState.new(params, blacklight_config),
                                                       current_user:)
   end
 
   def link_to_members_with_type(type)
-    facet_config = facet_configuration_for_field(ApoConcern::FIELD_APO_ID)
+    facet_config = blacklight_config.facet_configuration_for_field(ApoConcern::FIELD_APO_ID)
     search_state = Blacklight::SearchState.new({ f: { SolrDocument::FIELD_OBJECT_TYPE => [type] } }, blacklight_config)
     Blacklight::FacetItemPresenter.new(params[:id],
                                        facet_config,

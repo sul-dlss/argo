@@ -8,7 +8,7 @@ module Show
 
     def call
       field_config = fields.fetch(SolrDocument::FIELD_TICKET_TAG)
-      Blacklight::FieldPresenter.new(self, @document, field_config).render
+      safe_join Blacklight::FieldPresenter.new(self, @document, field_config).render
     end
 
     private

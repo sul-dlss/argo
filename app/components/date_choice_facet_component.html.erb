@@ -3,15 +3,15 @@
     <%= @facet_field.label %>
   <% end %>
   <% component.with_body do %>
-     <%= render Blacklight::FacetFieldListComponent.new(facet_field: @facet_field, layout: false) %>
+     <%= render Blacklight::Facets::ListComponent.new(facet_field: @facet_field, layout: false) %>
 
     <div data-controller="date-choice">
-      <div class='mb-3 row'>
+      <div class="mb-3 row">
         <div class="col-3"><label for="<%= @facet_field.key %>_after_datepicker">From:</label></div>
         <div class="col"><input id="<%= @facet_field.key %>_after_datepicker" type="date"
                data-date-choice-target="afterDate" data-action="change->date-choice#updateQuery" autocomplete="off"></div>
       </div>
-      <div class='mb-3 row'>
+      <div class="mb-3 row">
         <div class="col-3"><label for="<%= @facet_field.key %>_before_datepicker">Through:</label></div>
         <div class="col"><input id="<%= @facet_field.key %>_before_datepicker" type="date"
                data-date-choice-target="beforeDate" data-action="change->date-choice#updateQuery" autocomplete="off"></div>

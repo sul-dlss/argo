@@ -7,9 +7,10 @@ export default class extends Controller {
     fetch(this.data.get('url'), {
       method: 'POST',
       headers: {
-        'X-CSRF-Token': Blacklight.csrfToken() // eslint-disable-line no-undef
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]')?.content
       }
-    }).then(response => response.text())
+    })
+      .then(response => response.text())
       .then(token => {
         this.buttonTarget.style.display = 'none'
         this.resultTarget.style.display = 'inline'

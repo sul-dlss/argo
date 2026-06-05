@@ -92,19 +92,17 @@ GEM
       smart_properties
     bigdecimal (4.1.2)
     bindex (0.8.1)
-    blacklight (7.41.0)
-      deprecation
+    blacklight (9.0.0)
       globalid
-      hashdiff
       i18n (>= 1.7.0)
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
-      rails (>= 6.1, < 8.1)
-      view_component (>= 2.74, < 4)
+      rails (>= 7.0, < 9)
+      view_component (>= 3.0, < 5.0)
       zeitwerk
-    blacklight-hierarchy (6.6.0)
-      blacklight (>= 7.18, < 9)
+    blacklight-hierarchy (6.9.0)
+      blacklight (>= 7.18, < 10)
       deprecation
       rails (>= 7.1, < 9)
     bootsnap (1.24.5)
@@ -369,7 +367,6 @@ GEM
       rexml
     marcel (1.2.1)
     matrix (0.4.3)
-    method_source (1.1.0)
     mini_mime (1.1.5)
     minitest (6.0.6)
       drb (~> 2.0)
@@ -651,10 +648,10 @@ GEM
     unicode-emoji (4.2.0)
     uri (1.1.1)
     useragent (0.16.11)
-    view_component (3.24.0)
-      activesupport (>= 5.2.0, < 8.2)
+    view_component (4.11.0)
+      actionview (>= 7.1.0)
+      activesupport (>= 7.1.0)
       concurrent-ruby (~> 1)
-      method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.3.0)
@@ -684,8 +681,8 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.41)
-  blacklight-hierarchy (~> 6.6.0)
+  blacklight (~> 9.0)
+  blacklight-hierarchy (~> 6.9)
   bootsnap (>= 1.4.2)
   brakeman
   bundler-audit

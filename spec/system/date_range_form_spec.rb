@@ -102,7 +102,7 @@ RSpec.describe 'Date range form', :js do
     before do
       visit root_path(query_params.merge(all: true))
       scroll_to find_by_id('facet-published_latest_date-header')
-      find('[data-target="#facet-published_latest_date"]').click
+      find('[data-bs-target="#facet-published_latest_date"]').click
     end
 
     it 'includes existing parameters in the new query' do

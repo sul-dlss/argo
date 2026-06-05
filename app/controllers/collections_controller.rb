@@ -84,7 +84,7 @@ class CollectionsController < ApplicationController
   private
 
   def link_to_collection
-    facet_config = facet_configuration_for_field(CollectionConcern::FIELD_COLLECTION_ID)
+    facet_config = blacklight_config.facet_configuration_for_field(CollectionConcern::FIELD_COLLECTION_ID)
     search_state = Blacklight::SearchState.new({}, blacklight_config)
     Blacklight::FacetItemPresenter.new(params[:id],
                                        facet_config,

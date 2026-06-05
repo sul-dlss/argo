@@ -1,5 +1,6 @@
-<div class="facet-pagination top row justify-content-between">
-  <%= render 'facet_pagination' %>
+<% view_config = blacklight_config.view_config(document_index_view_type) %>
+<div class="facet-pagination top d-flex flex-wrap w-100 justify-content-between border-bottom pb-3 mb-3">
+  <%= render view_config.facet_pagination_component.new(facet_field: @presenter) %>
 </div>
 
 <div data-controller="facet-filter">
@@ -10,17 +11,17 @@
      <% end %>
     <% component.with_body do %>
 
-      <%= render 'facet_index_navigation' if @facet.index_range && @display_facet.index? %>
+      <%= render view_config.facet_filters_component.new(presenter: @presenter) %>
       <div data-facet-filter-target="list">
-        <%= render_facet_limit(@display_facet, layout: false) %>
+        <%= render Blacklight::FacetComponent.new(display_facet: @display_facet, blacklight_config: blacklight_config, layout: false) %>
       </div>
     <% end %>
     <% component.with_footer do %>
-      <div class="facet_pagination bottom row">
+      <div class="facet-pagination bottom d-flex flex-wrap w-100 justify-content-between">
         <div class="col-sm-4">
           <input type="text" id="filterInput" data-action="keyup->facet-filter#filter" placeholder="Filter..." class="form-control form-control-sm" autocomplete="off">
         </div>
-        <%= render 'facet_pagination' %>
+        <%= render view_config.facet_pagination_component.new(facet_field: @presenter) %>
       </div>
     <% end %>
   <% end %>

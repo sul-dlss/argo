@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DateChoiceFacetComponent < Blacklight::FacetFieldListComponent
+class DateChoiceFacetComponent < Blacklight::Facets::ListComponent
   def search_params
     @facet_field.search_state.params_for_search.except(:page, :utf8)
   end

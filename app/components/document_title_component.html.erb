@@ -6,14 +6,14 @@
         <%= version_banner %>
         <% if show_latest_link? %>
           <div class="text-body">
-              <%= link_to('View latest version', solr_document_path(@document.id)) %>
+              <%= link_to('View latest version', solr_document_path(@presenter.document.id)) %>
           </div>
         <% end %>
       </div>
     </div>
   <% end %>
   <div class="row">
-    <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:update, @presenter.cocina) && !version_or_user_version_view? %>
+    <%= render OpenCloseComponent.new(id: @presenter.document.id) if helpers.can?(:update, @presenter.cocina) && !version_or_user_version_view? %>
 
     <%= content_tag @as, class: @classes do %>
       <%= title -%>

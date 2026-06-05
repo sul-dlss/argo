@@ -41,9 +41,8 @@ gem 'view_component'
 gem 'zip_tricks'
 
 # Stanford related gems
-gem 'blacklight', '~> 7.41'
-# pinned because 6.7.0 is effectively coupled to BL >= 8.3.0 and Argo hasn't been updated to BL8 yet
-gem 'blacklight-hierarchy', '~> 6.6.0'
+gem 'blacklight', '~> 9.0'
+gem 'blacklight-hierarchy', '~> 6.9'
 gem 'cocina_display', '~> 2'
 gem 'dor-services-client', '~> 15.1'
 gem 'druid-tools'

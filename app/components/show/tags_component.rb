@@ -29,7 +29,7 @@ module Show
 
     def render_field(field_name)
       field_config = fields.fetch(field_name)
-      Blacklight::FieldPresenter.new(self, @document, field_config).render
+      safe_join Blacklight::FieldPresenter.new(self, @document, field_config).render
     end
 
     def fields
