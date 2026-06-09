@@ -30,6 +30,7 @@ class StructureUpdater
         next
       end
       errors << "On row #{index} found #{row['filename']}, which changed preserve from no to yes, which is not supported" if invalid_preservation_change?(row)
+      errors << "On row #{index} found #{row['filename']}, which has shelve=yes with publish=no and preserve=no, which would cause the file to be deleted from all systems" if shelve_without_publish_or_preserve?(row)
       errors << "On row #{index} found #{row['filename']}, which set view or download rights to location-based but did not specify a location" if invalid_location_rights?(row)
     end
     csv.rewind
@@ -44,6 +45,12 @@ class StructureUpdater
   # Ensure no existing files change preserve from no to yes
   def invalid_preservation_change?(row)
     existing_files_by_filename[row['filename']].administrative.sdrPreserve == false && row['preserve'] == 'yes'
+  end
+
+  # Ensure no files are set to shelve=yes with both publish and preserve disabled,
+  # which would cause the file to be deleted from all systems at end of accessioning
+  def shelve_without_publish_or_preserve?(row)
+    row['shelve'] == 'yes' && row['publish'] == 'no' && row['preserve'] == 'no'
   end
 
   # Ensure no existing files set location-based access without specifying a location
