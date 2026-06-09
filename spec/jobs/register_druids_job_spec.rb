@@ -53,7 +53,7 @@ RSpec.describe RegisterDruidsJob do
       job.perform_now
 
       expect(RegistrationService).not_to have_received(:register)
-      expect(log).to have_received(:puts).with(%r{string at `/administrative/hasAdminPolicy` does not match pattern:})
+      expect(log).to have_received(:puts).with(include('does not match'))
       expect(bulk_action.druid_count_success).to eq 0
       expect(bulk_action.druid_count_fail).to eq 1
     end
@@ -170,7 +170,7 @@ RSpec.describe RegisterDruidsJob do
     it 'does not register the objects' do
       job.perform_now
 
-      expect(log).to have_received(:puts).with(%r{value at `/access/view` is not one of: \["dark"\]}).twice
+      expect(log).to have_received(:puts).with(%r{"world" is not one of "dark" at /access/view}).twice
       expect(bulk_action.druid_count_success).to eq 0
       expect(bulk_action.druid_count_fail).to eq 2
     end

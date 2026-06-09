@@ -672,7 +672,7 @@ RSpec.describe DescriptionImport do
             end
           h[:relatedResource] = [
             { form: form_value,
-              title: [],
+              title: [{ value: title }],
               contributor: [],
               event: [],
               language: [],
@@ -688,8 +688,8 @@ RSpec.describe DescriptionImport do
         context "when form has type, no source, value: '#{form_value}'" do
           let(:csv_data) do
             <<~CSV
-              druid,source_id,purl,title1.value,relatedResource1.form1.value,relatedResource1.form1.type,relatedResource1.form1.source.code,relatedResource1.form1.source.value,relatedResource1.form1.source.uri
-              jr825qh8124,form:values,https://purl/jr825qh8124,#{title},#{form_value},genre,,,
+              druid,source_id,purl,title1.value,relatedResource1.title1.value,relatedResource1.form1.value,relatedResource1.form1.type,relatedResource1.form1.source.code,relatedResource1.form1.source.value,relatedResource1.form1.source.uri
+              jr825qh8124,form:values,https://purl/jr825qh8124,#{title},#{title},#{form_value},genre,,,
             CSV
           end
           let(:expected_form) do
