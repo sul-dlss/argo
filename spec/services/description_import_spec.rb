@@ -743,7 +743,7 @@ RSpec.describe DescriptionImport do
       end
 
       it 'rejects the item' do
-        expect(updated.value!.access.digitalLocation).to be_empty
+        expect(updated).to be_failure
       end
     end
   end
@@ -980,7 +980,7 @@ RSpec.describe DescriptionImport do
         end
 
         it 'rejects the item' do
-          expect(updated.value!.event.first.date).to be_empty
+          expect(updated).to be_failure
         end
       end
 
@@ -1010,7 +1010,7 @@ RSpec.describe DescriptionImport do
         end
 
         it 'rejects the item' do
-          expect(updated.value!.adminMetadata.event.first.date).to be_empty
+          expect(updated).to be_failure
         end
       end
 
