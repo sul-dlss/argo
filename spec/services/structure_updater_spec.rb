@@ -369,6 +369,24 @@ RSpec.describe StructureUpdater do
     end
   end
 
+  context 'when setting shelve=yes with publish=no and preserve=no for a file' do
+    let(:csv) do
+      <<~CSV
+        druid,resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_view,rights_download,rights_location,mimetype,role,file_language,sdr_generated_text,corrected_for_accessibility
+        #{bare_druid},Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,yes,no,world,world,,image/tiff,
+        #{bare_druid},Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,,image/jp2,
+        #{bare_druid},Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,,image/tiff,
+        #{bare_druid},Image 2,image,2,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,CCTV新闻联播文本数据-20060615-20220630-Stanford University.xlsx,yes,yes,no,world,world,,image/jp2,
+      CSV
+    end
+
+    it 'returns an error' do
+      expect(result.failure).to include(
+        'On row 2 found bb045jk9908_0001.tiff, which has shelve=yes with publish=no and preserve=no, which would cause the file to be deleted from all systems'
+      )
+    end
+  end
+
   context 'with specify location-based rights and no location' do
     let(:csv) do
       <<~CSV
