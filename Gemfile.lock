@@ -92,7 +92,7 @@ GEM
       smart_properties
     bigdecimal (4.1.2)
     bindex (0.8.1)
-    blacklight (7.41.0)
+    blacklight (7.42.0)
       deprecation
       globalid
       hashdiff
@@ -100,7 +100,7 @@ GEM
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
-      rails (>= 6.1, < 8.1)
+      rails (>= 6.1, < 9)
       view_component (>= 2.74, < 4)
       zeitwerk
     blacklight-hierarchy (6.6.0)
@@ -109,7 +109,7 @@ GEM
       rails (>= 7.1, < 9)
     bootsnap (1.24.6)
       msgpack (~> 1.2)
-    brakeman (8.0.4)
+    brakeman (8.0.5)
       racc
     builder (3.3.0)
     bundler-audit (0.9.3)
@@ -295,7 +295,7 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
-    honeybadger (6.7.0)
+    honeybadger (6.9.0)
       logger
       ostruct
     http-cookie (1.1.6)
@@ -374,11 +374,11 @@ GEM
       json
       nokogiri
       nokogiri-happymapper
-    msgpack (1.8.1)
+    msgpack (1.8.3)
     multipart-post (2.4.1)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.4)
+    net-imap (0.6.4.1)
       date
       net-protocol
     net-pop (0.1.2)
@@ -393,7 +393,7 @@ GEM
       net-protocol
     net-ssh (7.3.2)
     nio4r (2.7.5)
-    nkf (0.2.0)
+    nkf (0.3.0)
     nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-linux-gnu)
@@ -491,7 +491,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis-client (0.29.0)
+    redis-client (0.30.0)
       connection_pool
     reform (2.6.2)
       disposable (>= 0.5.0, < 1.0.0)
@@ -752,4 +752,4 @@ DEPENDENCIES
   zip_tricks
 
 BUNDLED WITH
-  4.0.13
+  4.0.14
