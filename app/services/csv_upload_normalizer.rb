@@ -3,6 +3,7 @@
 # Reads and normalizes a CSV that is uploaded as part of Bulk Actions.
 class CsvUploadNormalizer
   SUPPORTED_FILE_EXTENSIONS = %w[.csv .ods .xls .xlsx].freeze
+  DRUID_HEADER = 'druid'
 
   def self.read(...)
     new(...).read
@@ -24,13 +25,8 @@ class CsvUploadNormalizer
   def read # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     raise 'Unsupported upload file type' unless normalized_file_extension.in?(SUPPORTED_FILE_EXTENSIONS)
 
-    # If handed *anything but* a CSV file, first pre-process into a CSV string with Roo.
-    csv_string = normalized_file_extension == '.csv' ? normalized_csv_string : Roo::Spreadsheet.open(path).to_csv
-
-    # Deal with both pre-processed CSV strings or files, using the built-in CSV
-    # library to parse either.
-    table = CSV.parse(csv_string, headers: true, skip_blanks: true, skip_lines: /^\s*$/,
-                                  converters: whitespace_only_nullifier).tap do |csv|
+    # Cleanup and normalize the CSV data
+    table = normalized_csv_data.tap do |csv|
       # Remove rows that are a bunch of nils
       csv.by_row!.delete_if { |row| row.fields.none? }
 
@@ -59,18 +55,31 @@ class CsvUploadNormalizer
     @normalized_file_extension ||= File.extname(path).downcase
   end
 
+  # Given raw CSV data from normalized_csv_file remove any preamble
+  # rows before the proper header row based on DRUID_HEADER
+  def normalized_csv_data
+    raw = normalized_csv_file
+
+    # Find the first row that starts with DRUID_HEADER
+    druid_index = raw.index { |line| line.first.casecmp?(DRUID_HEADER) }
+
+    # DROP all preamble rows leading up to the proper header row
+    csv_string = CSV.generate do |csv|
+      raw[druid_index..].map { |row| csv << row }
+    end
+    CSV.parse(csv_string, headers: true)
+  end
+
   # This method:
   #
-  # 1. Removes the BOM if present (since CSV.parse will not)
-  # 2. Ignores any preamble lines before the legitimate header row
-  # 3. Removes line feeds at the end of lines (`CSV#parse` wants newlines)
-  def normalized_csv_string
-    csv = File.read(path, encoding: 'bom|utf-8')
-    lines = csv.split(/\r?\n/)
-    lines.shift until lines.first&.match?(/\Adruid,/i) || lines.empty?
-    return csv if lines.empty?
+  # 1. Reads a CSV with the standard library if the extention is CSV
+  # 2. Otherwise reads the file with ROO and parses into a CSV
+  def normalized_csv_file
+    return CSV.read(path, skip_blanks: true, converters: whitespace_only_nullifier) if normalized_file_extension == '.csv' # .map { |line| line.map { |field| field }.join(",") }.flatten.join("\n")
 
-    lines.join("\n")
+    # If handed *anything but* a CSV file, first pre-process into a CSV string with Roo.
+    CSV.parse(Roo::Spreadsheet.open(path).to_csv, skip_blanks: true, skip_lines: /^\s*$/,
+                                                  converters: whitespace_only_nullifier)
   end
 
   def whitespace_only_nullifier
