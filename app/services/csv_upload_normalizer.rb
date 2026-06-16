@@ -38,6 +38,7 @@ class CsvUploadNormalizer
       csv.headers.compact.find { |header| header.match?(/\Adruid\z/i) }.tap do |druid_column|
         next if druid_column.nil?
 
+        csv.by_col!
         csv[druid_column] = csv[druid_column].map { |druid| Druid.new(druid).with_namespace if druid.present? }
       end
     end
@@ -57,6 +58,8 @@ class CsvUploadNormalizer
 
   # Given raw CSV data from normalized_csv_file remove any preamble
   # rows before the proper header row based on DRUID_HEADER
+  #
+  # @return [CSV:Table] the imported CSV data with headers
   def normalized_csv_data
     raw = normalized_csv_file
 
@@ -67,6 +70,7 @@ class CsvUploadNormalizer
     csv_string = CSV.generate do |csv|
       raw[druid_index..].map { |row| csv << row }
     end
+
     CSV.parse(csv_string, headers: true)
   end
 
@@ -74,8 +78,9 @@ class CsvUploadNormalizer
   #
   # 1. Reads a CSV with the standard library if the extention is CSV
   # 2. Otherwise reads the file with ROO and parses into a CSV
+  # @return [Array] an array of rows in a CSV file
   def normalized_csv_file
-    return CSV.read(path, skip_blanks: true, converters: whitespace_only_nullifier) if normalized_file_extension == '.csv' # .map { |line| line.map { |field| field }.join(",") }.flatten.join("\n")
+    return CSV.read(path, skip_blanks: true, converters: whitespace_only_nullifier) if normalized_file_extension == '.csv'
 
     # If handed *anything but* a CSV file, first pre-process into a CSV string with Roo.
     CSV.parse(Roo::Spreadsheet.open(path).to_csv, skip_blanks: true, skip_lines: /^\s*$/,
