@@ -104,5 +104,15 @@ RSpec.describe CsvUploadNormalizer do
         expect(csv).to eq(expected_csv)
       end
     end
+
+    context 'with a problematic LibreOffice exported CSV' do
+      let(:parsed_csv) { CSV.parse(csv, headers: true) }
+      let(:filepath) { file_fixture('zero-druids-processed.csv') }
+
+      it 'reads the CSV and preserves already-namespaced druids' do
+        expect(parsed_csv.count).to eq 1
+        expect(parsed_csv['druid']).to eq(['druid:zs481mz5645'])
+      end
+    end
   end
 end
