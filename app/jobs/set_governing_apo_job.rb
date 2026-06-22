@@ -24,7 +24,7 @@ class SetGoverningApoJob < BulkActionJob
     private
 
     def change_set
-      @change_set ||= ItemChangeSet.new(cocina_object)
+      @change_set ||= (cocina_object.collection? ? CollectionChangeSet : ItemChangeSet).new(cocina_object)
     end
 
     def can_manage?

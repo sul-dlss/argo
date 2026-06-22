@@ -7,7 +7,7 @@ RSpec.describe SetGoverningApoJob do
 
   let(:druid) { 'druid:bb111cc2222' }
   let(:new_apo_id) { 'druid:bc111bb2222' }
-  let(:cocina_object) { instance_double(Cocina::Models::DROWithMetadata) }
+  let(:cocina_object) { instance_double(Cocina::Models::DROWithMetadata, collection?: false) }
 
   let(:bulk_action) { create(:bulk_action) }
 
@@ -44,6 +44,23 @@ RSpec.describe SetGoverningApoJob do
     expect(bulk_action.reload.druid_count_total).to eq(1)
     expect(bulk_action.druid_count_fail).to eq(0)
     expect(bulk_action.druid_count_success).to eq(1)
+  end
+
+  context 'when the cocina object is a Collection' do
+    let(:cocina_object) { instance_double(Cocina::Models::CollectionWithMetadata, collection?: true) }
+    let(:change_set) { instance_double(CollectionChangeSet, validate: true, save: true) }
+
+    before do
+      allow(CollectionChangeSet).to receive(:new).and_return(change_set)
+    end
+
+    it 'uses CollectionChangeSet' do
+      job.perform_now
+
+      expect(CollectionChangeSet).to have_received(:new).with(cocina_object)
+      expect(change_set).to have_received(:validate).with(admin_policy_id: new_apo_id)
+      expect(change_set).to have_received(:save)
+    end
   end
 
   context 'when the user lacks manage ability' do
