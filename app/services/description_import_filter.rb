@@ -70,6 +70,7 @@ class DescriptionImportFilter
   end
 
   def remove_form_without_value(forms)
+    Array(forms).each { |form| remove_note_without_value(form[:note]) }
     Array(forms).delete_if { !descriptive_value_sufficient?(it) }
   end
 

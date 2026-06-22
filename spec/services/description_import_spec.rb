@@ -656,6 +656,25 @@ RSpec.describe DescriptionImport do
           expect(updated.value!.to_h).to eq expected.to_h
         end
       end
+
+      context 'when form has a note sub-property but no main value' do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,purl,title1.value,form1.value,form1.note1.displayLabel
+            jr825qh8124,form:note-no-value,https://purl/jr825qh8124,#{title},,format
+          CSV
+        end
+        let(:expected_hash) do
+          {
+            title: [{ value: title }],
+            purl: 'https://purl/jr825qh8124'
+          }
+        end
+
+        it 'drops the form entry' do
+          expect(updated.value!.form).to be_empty
+        end
+      end
     end
 
     context 'when at nested level' do
