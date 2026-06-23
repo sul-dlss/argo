@@ -45,4 +45,17 @@ RSpec.describe ExportCatalogLinksJob do
     expect(csv.headers).to eq %w[druid folio_instance_hrid refresh part_label sort_key barcode]
     expect(csv[0].to_h.values).to eq [druid, 'in1234', 'true', 'Part 1', '1', '36105010101010']
   end
+
+  context 'when the object is a collection' do
+    let(:cocina_object) { build(:collection, id: druid).new(identification: { catalogLinks: [link], sourceId: 'sul:123' }) }
+
+    it 'performs the job with no barcode' do
+      job.perform_now
+
+      expect(bulk_action.reload.druid_count_success).to eq(1)
+
+      csv = CSV.read(csv_path, headers: true)
+      expect(csv[0].to_h.values).to eq [druid, 'in1234', 'true', 'Part 1', '1', nil]
+    end
+  end
 end
