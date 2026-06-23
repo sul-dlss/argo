@@ -24,7 +24,7 @@ class ExportCatalogLinksJob < BulkActionJob
       identification = object_client.find_lite.identification
       link = identification.catalogLinks.find { |catalog_link| catalog_link.catalog == 'folio' }
 
-      [link&.catalogRecordId, link&.refresh, link&.partLabel, link&.sortKey, identification.barcode]
+      [link&.catalogRecordId, link&.refresh, link&.partLabel, link&.sortKey, identification.try(:barcode)]
     end
   end
 
