@@ -180,6 +180,9 @@ jobs:
           key: gems-v2
       - node/install-packages:
           pkg-manager: yarn
+      - run:
+          name: Build JS assets
+          command: yarn build
       # Check DB status
       - run:
           name: Wait for DB

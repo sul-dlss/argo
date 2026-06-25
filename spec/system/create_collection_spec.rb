@@ -6,7 +6,7 @@ RSpec.describe 'Add collection' do
   before do
     allow(Blacklight::Solr::Repository).to receive(:new).and_return(repo)
     allow(AdminPolicyOptions).to receive(:for).and_return([['An APO', 'druid:vt333hq2222']])
-    allow(FolioClient).to receive(:fetch_marc_hash).with(instance_hrid: 'a123')
+    allow(FolioClient).to receive(:fetch_instance_info).with(hrid: 'a123')
 
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
@@ -44,7 +44,7 @@ RSpec.describe 'Add collection' do
 
   describe 'when non-existent FOLIO Collection HRID is provided', :js do
     before do
-      allow(FolioClient).to receive(:fetch_marc_hash).with(instance_hrid: 'a1234').and_raise(FolioClient::ResourceNotFound)
+      allow(FolioClient).to receive(:fetch_instance_info).with(hrid: 'a1234').and_raise(FolioClient::ResourceNotFound)
     end
 
     it 'warns that catalog id does not exist' do
