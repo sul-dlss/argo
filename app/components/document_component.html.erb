@@ -9,5 +9,7 @@
                 class: 'document document-component' do %>
   <%= with_title(component: DocumentTitleComponent) %>
 
-  <%= render child_component %>
+  <% unless @presenter.head_invalid_cocina? %>
+    <%= render child_component %>
+  <% end %>
 <% end %>

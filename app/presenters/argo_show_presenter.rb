@@ -45,6 +45,10 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
     cocina.respond_to?(:error_message)
   end
 
+  def head_invalid_cocina?
+    invalid_cocina? && !version_or_user_version_view?
+  end
+
   def dark?
     cocina.access.view == 'dark'
   end

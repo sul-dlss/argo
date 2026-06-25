@@ -360,22 +360,32 @@ class CatalogController < ApplicationController
       @document = SolrDocument.new(object_client.version.solr(version_param, validate: false))
     else
       _deprecated_response, @document = search_service.fetch(druid_param)
-      @cocina = Repository.find_lite(druid_param, structural: false)
+      begin
+        @cocina = Repository.find_lite(druid_param, structural: false)
+      rescue Cocina::Models::Error => e
+        Honeybadger.notify(e, context: { druid: druid_param })
+        @cocina = Dor::Services::Client::InvalidCocina.new('externalIdentifier' => druid_param,
+                                                           'error_message' => e.message,
+                                                           'administrative' => { 'hasAdminPolicy' => @document.apo_id })
+      end
     end
 
     authorize! :read, @cocina
 
-    @workflows = WorkflowService.workflows_for(druid: druid_param)
+    unless @cocina.is_a?(Dor::Services::Client::InvalidCocina)
 
-    @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: object_client.user_version.inventory)
-    @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory:)
-    @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
+      @workflows = WorkflowService.workflows_for(druid: druid_param)
 
-    @head_user_version = @user_versions_presenter.head_user_version
-    @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
+      @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: object_client.user_version.inventory)
+      @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory:)
+      @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
 
-    # If you have this token, it indicates you have read access to the object
-    @verified_token_with_expiration = generate_token
+      @head_user_version = @user_versions_presenter.head_user_version
+      @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
+
+      # If you have this token, it indicates you have read access to the object
+      @verified_token_with_expiration = generate_token
+    end
 
     respond_to do |format|
       format.html { @search_context = setup_next_and_previous_documents }
