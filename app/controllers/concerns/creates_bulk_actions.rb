@@ -13,8 +13,12 @@ module CreatesBulkActions
   def create
     begin
       bulk_action_job_params = job_params
-    rescue StandardError => e
       # if job_params calls CsvUploadNormalizer, CSV::MalformedCSVError may be raised
+    rescue CSV::MalformedCSVError => e
+      @errors = ["Error starting bulk action: #{e.message}"]
+      return render :new, status: :unprocessable_content
+    rescue StandardError => e
+      Honeybadger.notify(e)
       @errors = ["Error starting bulk action: #{e.message}"]
       return render :new, status: :unprocessable_content
     end
