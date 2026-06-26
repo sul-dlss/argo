@@ -64,7 +64,7 @@ class CsvUploadNormalizer
     raw = normalized_csv_file
 
     # Find the first row that starts with DRUID_HEADER
-    druid_index = raw.index { |line| line.first.casecmp?(DRUID_HEADER) }
+    druid_index = raw.index { |line| line.first&.casecmp?(DRUID_HEADER) }
 
     # DROP all preamble rows leading up to the proper header row
     csv_string = CSV.generate do |csv|
