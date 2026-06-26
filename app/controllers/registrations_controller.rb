@@ -59,7 +59,7 @@ class RegistrationsController < ApplicationController
   # Allow the front end to check if a catalog record ID exists
   def catalog_record_id
     resp = begin
-      FolioClient.fetch_marc_hash(instance_hrid: params[:catalog_record_id])
+      FolioClient.fetch_instance_info(hrid: params[:catalog_record_id])
       true
     rescue FolioClient::ResourceNotFound, FolioClient::MultipleResourcesFound
       false

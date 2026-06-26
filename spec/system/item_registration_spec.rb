@@ -229,7 +229,7 @@ RSpec.describe 'Item registration page', :js do
     before do
       allow(Dor::Services::Client::Objects).to receive(:find).with(source_id:).and_return(true)
       allow(Dor::Services::Client::Objects).to receive(:register).and_raise(Dor::Services::Client::UnexpectedResponse, 'FOLIO error')
-      allow(FolioClient).to receive(:fetch_marc_hash).and_return(true)
+      allow(FolioClient).to receive(:fetch_instance_info).and_return(true)
     end
 
     it 'displays an error message with the HRID' do
