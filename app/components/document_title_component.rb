@@ -12,7 +12,9 @@ class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   end
 
   def version_banner
-    if head_user_version_view? || current_version_view?
+    if head_invalid_cocina?
+      'This item is currently not available, likely because it is part of an ongoing cocina migration. Please check back later.'
+    elsif head_user_version_view? || current_version_view?
       'You are viewing the latest version.'
     elsif invalid_cocina?
       "You are viewing an older #{version_type} version that is no longer valid. You can view the JSON below."
@@ -22,6 +24,7 @@ class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   end
 
   def show_latest_link?
+    return false if head_invalid_cocina?
     return previous_user_version_view? if @presenter.user_version_view?
 
     !current_version_view?
@@ -34,5 +37,5 @@ class DocumentTitleComponent < Blacklight::DocumentTitleComponent
   end
 
   delegate :version_or_user_version_view?, :head_user_version_view?, :previous_user_version_view?, :current_version_view?,
-           :invalid_cocina?, to: :@presenter
+           :invalid_cocina?, :head_invalid_cocina?, to: :@presenter
 end

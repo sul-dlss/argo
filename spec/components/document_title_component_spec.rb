@@ -26,6 +26,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
                                        previous_user_version_view?: user_version.present? && user_version_view != head_user_version,
                                        current_version:,
                                        invalid_cocina?: invalid_cocina,
+                                       head_invalid_cocina?: invalid_cocina && !(version.present? || user_version.present?),
                                        current_version_view?: version.present? && version == current_version,
                                        version_or_user_version_view?: version.present? || user_version.present?)
   end
@@ -95,6 +96,18 @@ RSpec.describe DocumentTitleComponent, type: :component do
 
     it 'renders the expected object type class' do
       expect(rendered.css('div.object-type').first.classes).to include('object-type-item')
+    end
+
+    context 'when head_invalid_cocina? is true' do
+      let(:invalid_cocina) { true }
+
+      it 'renders the cocina migration banner' do
+        expect(rendered.content).to include('This item is currently not available')
+      end
+
+      it 'does not render the View latest version link' do
+        expect(rendered.content).not_to include('View latest version')
+      end
     end
 
     context 'with a previous user version' do
