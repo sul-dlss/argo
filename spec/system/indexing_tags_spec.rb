@@ -36,7 +36,7 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
       fill_in currently_with: '', with: project_tag2
       click_button 'Save'
     end
-    click_link_or_button 'Reindex'
+    click_link 'Reindex'
     expect(page).to have_text('Successfully updated index') # rubocop:disable RSpec/ExpectInHook
     visit '/'
   end

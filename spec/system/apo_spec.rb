@@ -64,7 +64,7 @@ RSpec.describe 'Create an apo', :js do
     click_button 'Open Version'
     expect(page).to have_text 'open for modification!'
 
-    click_on 'Edit APO'
+    click_link 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
     expect(find_field('Title').value).to eq('APO Title')
     expect(find_field('View access').value).to eq('dark')
@@ -93,7 +93,7 @@ RSpec.describe 'Create an apo', :js do
     click_button 'Update APO'
     expect(page).to have_text 'Actions' # wait for form to render
 
-    click_on 'Edit APO'
+    click_link 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
     expect(find_field('Title').value).to eq('New APO Title')
     # expect(find_field('View access').value).to eq('stanford') # should work, but flaky and fails often
@@ -112,7 +112,7 @@ RSpec.describe 'Create an apo', :js do
     select preexisting_collection.externalIdentifier, from: 'apo_collection_collection'
     click_button 'Update APO'
     expect(page).to have_text 'View in new window' # wait for show page to render
-    click_on 'Edit APO'
+    click_link 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
 
     # Add another default collection to this apo.

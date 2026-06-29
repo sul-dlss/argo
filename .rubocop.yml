@@ -705,3 +705,5 @@ Capybara/RSpec/HaveContent: # new in 2.23
   Enabled: true
 Capybara/RSpec/VisibilityMatcher: # new in 1.39
   Enabled: true
+Capybara/AmbiguousClick: # new in 2.21
+  Enabled: true
