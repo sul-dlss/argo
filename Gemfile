@@ -4,26 +4,26 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'barby' # Barby creates barcodes. Used in generating tracksheets
-gem 'bootsnap', '>= 1.4.2', require: false # Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'cancancan' # authorization
 gem 'coderay' # Pretty format for XML
 gem 'config'
-gem 'cssbundling-rails', '~> 1.1'
+gem 'cssbundling-rails'
 gem 'csv'
 gem 'devise'
-gem 'devise-remote-user', '~> 1.0'
+gem 'devise-remote-user'
 gem 'dry-monads'
-gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
+gem 'equivalent-xml' # For ignoring_attr_values() with arguments
 gem 'faraday' # HTTP client library
 gem 'faraday-multipart'
 gem 'honeybadger'
-gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jsbundling-rails', '~> 1.0'
+gem 'jbuilder' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jsbundling-rails'
 gem 'lograge'
-gem 'nokogiri', '~> 1.19'
+gem 'nokogiri'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'pg'
-gem 'prawn', '~> 1' # Prawn is used to create "tracksheets"
+gem 'prawn' # Prawn is used to create "tracksheets"
 gem 'prawn-table'
 gem 'propshaft'
 gem 'puma' # Use Puma as the app server
@@ -35,7 +35,7 @@ gem 'roo', '~> 2.9.0' # work with newer Excel files and other types (xlsx, ods, 
 gem 'roo-xls' # needed to work with legacy Excel files (xls)
 gem 'rubyzip'
 gem 'sidekiq', '~> 8.0'
-gem 'turbo-rails', '~> 2.0'
+gem 'turbo-rails'
 # NOTE: When VC is updated >= 4.9.0, remove exceptions from config/bundler-audit.yml for CVE-2026-44836/7
 gem 'view_component'
 gem 'zip_tricks'
@@ -44,14 +44,14 @@ gem 'zip_tricks'
 gem 'blacklight', '~> 7.41'
 # pinned because 6.7.0 is effectively coupled to BL >= 8.3.0 and Argo hasn't been updated to BL8 yet
 gem 'blacklight-hierarchy', '~> 6.6.0'
-gem 'cocina_display', '~> 2'
+gem 'cocina_display'
 gem 'dor-services-client', '~> 15.1'
 gem 'druid-tools'
-gem 'folio_client', '~> 1.0'
-gem 'preservation-client', '~> 7.0'
-gem 'purl_fetcher-client', '~> 1.3'
+gem 'folio_client'
+gem 'preservation-client'
+gem 'purl_fetcher-client'
 gem 'rsolr'
-gem 'sdr-client', '~> 2.0'
+gem 'sdr-client'
 
 group :test, :development do
   # Security audit for known security defects in code (use config/brakeman.ignore to ignore issues)
