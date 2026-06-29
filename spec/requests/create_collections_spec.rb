@@ -89,6 +89,19 @@ RSpec.describe 'Create collections' do
       end
     end
 
+    context 'when the title contains embedded double quotes' do
+      let(:title) { 'Scrapbook from "Cruise Bravo"' }
+      let(:result) { { 'response' => { 'numFound' => 1 } } }
+
+      it 'escapes the quotes in the Solr query' do
+        get '/collections/exists', params: { title: }
+        expect(response.body).to eq('true')
+        expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
+          q: "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\" AND obj_label_tesim:\"Scrapbook from \\\"Cruise Bravo\\\"\""
+        ))
+      end
+    end
+
     context 'when the catalog_record_id is provided and the collection exists' do
       let(:result) { { 'response' => { 'numFound' => 1 } } }
 

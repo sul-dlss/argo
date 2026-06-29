@@ -96,7 +96,7 @@ class CollectionsController < ApplicationController
     return false unless title || catalog_record_id
 
     query = "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
-    query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title}\"" if title
+    query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title.gsub('"', '\\"')}\"" if title
     if catalog_record_id
       query += " AND identifier_ssim:\"#{CatalogRecordId.indexing_prefix}:#{params[:catalog_record_id]}\""
     end
