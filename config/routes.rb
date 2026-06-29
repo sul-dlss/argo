@@ -263,6 +263,7 @@ Rails.application.routes.draw do
       get 'tracksheet'
       get 'source_id'
       get 'catalog_record_id'
+      get 'marc_record'
       get 'spreadsheet'
       get 'suggest_project', action: 'autocomplete'
     end

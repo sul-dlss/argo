@@ -73,6 +73,23 @@ class RegistrationsController < ApplicationController
     render json: resp.to_json, layout: false
   end
 
+  # Allow the front end to check if a MARC record exists for a catalog record ID
+  def marc_record
+    resp = begin
+      FolioClient.fetch_marc_hash(instance_hrid: params[:catalog_record_id])
+      true
+    rescue FolioClient::ResourceNotFound
+      false
+    rescue FolioClient::Error => e
+      # In production, this will prevent false negatives when ILS (Folio) is not available.
+      # In other environments, where Folio is never available, it will assume MARC exists.
+      return render plain: e.message, status: :bad_gateway if Rails.env.production?
+
+      true
+    end
+    render json: resp.to_json, layout: false
+  end
+
   def spreadsheet
     respond_to do |format|
       format.csv do

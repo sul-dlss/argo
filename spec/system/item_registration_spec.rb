@@ -132,6 +132,8 @@ RSpec.describe 'Item registration page', :js do
       click_button 'Register'
 
       expect(page).to have_text 'Items successfully registered.'
+      expect(page).to have_css('th', text: 'Title')
+      expect(page).to have_css('th', text: 'MARC Status')
 
       druid_link = find('td > a')
 

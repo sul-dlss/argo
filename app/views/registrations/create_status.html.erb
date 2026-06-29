@@ -10,17 +10,28 @@
           <th>Barcode</th>
           <th><%= CatalogRecordId.label %></th>
           <th>Source ID</th>
-          <th>Label</th>
+          <th>Title</th>
+          <th>MARC Status</th>
         </tr>
       </thead>
       <tbody>
       <% @registration_form.created.each do |dro| %>
-        <tr>
+        <% catalog_record_id = dro.identification.catalogLinks.first&.catalogRecordId %>
+        <% cocina_display = CocinaDisplay::CocinaRecord.new(CocinaDisplay::Utils.deep_compact_blank(dro.as_json)) %>
+        <tr data-controller="marc-availability"
+            data-marc-availability-catalog-record-id-value="<%= catalog_record_id %>">
           <td><%= link_to Druid.new(dro).without_namespace, solr_document_path(dro.externalIdentifier) %></td>
           <td><%= dro.identification.barcode %></td>
-          <td><%= dro.identification.catalogLinks.first&.catalogRecordId %></td>
+          <td><%= catalog_record_id %></td>
           <td><%= dro.identification.sourceId %></td>
-          <td><%= dro.label %></td>
+          <td><%= cocina_display.display_title || dro.label %></td>
+          <td data-marc-availability-target="status">
+            <% if catalog_record_id.present? %>
+              <span class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Checking...</span>
+              </span>
+            <% end %>
+          </td>
         </tr>
       <% end %>
       </tbody>
