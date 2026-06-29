@@ -6,13 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 3
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: link_or_button, strict
-Capybara/ClickLinkOrButtonStyle:
-  Exclude:
-    - 'spec/system/apo_spec.rb'
-
 # Offense count: 1
 Capybara/RSpec/VisibilityMatcher:
   Exclude:

@@ -10,7 +10,6 @@ require 'rails_helper'
 # tag tests need javascript for facet testing because they are so slow to load in production
 #   javascript possibly also needed for the edit tags modal
 #
-# rubocop:disable Capybara/ClickLinkOrButtonStyle
 RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].present? do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:solr_id) { item.externalIdentifier }
@@ -37,7 +36,7 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
       fill_in currently_with: '', with: project_tag2
       click_button 'Save'
     end
-    click_link_or_button 'Reindex'
+    click_link 'Reindex'
     expect(page).to have_text('Successfully updated index') # rubocop:disable RSpec/ExpectInHook
     visit '/'
   end
@@ -87,4 +86,3 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
     end
   end
 end
-# rubocop:enable Capybara/ClickLinkOrButtonStyle

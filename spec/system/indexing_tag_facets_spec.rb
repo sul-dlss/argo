@@ -10,7 +10,6 @@ require 'rails_helper'
 # tag tests need javascript for facet testing because they are so slow to load in production
 #   javascript possibly also needed for the edit tags modal
 #
-# rubocop:disable Capybara/ClickLinkOrButtonStyle
 RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].present? do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:solr_id) { item.externalIdentifier }
@@ -34,7 +33,7 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
       fill_in currently_with: '', with: project_tag2
       click_button 'Save'
     end
-    click_link_or_button 'Reindex'
+    click_link 'Reindex'
     expect(page).to have_text('Successfully updated index') # rubocop:disable RSpec/ExpectInHook
     visit '/'
     fill_in 'q', with: solr_id
@@ -47,11 +46,11 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
   end
 
   it 'project tags are hierarchical' do
-    click_link_or_button('Project', wait: 20) # ensure facet has been expanded by javascript
+    click_button('Project', wait: 20) # ensure facet has been expanded by javascript
     expect(page).to have_css('#facet-exploded_project_tag_ssimdv', wait: 20)
     # Note that "Project" is not indexed as part of facet
-    click_link_or_button 'ARS 78s'
-    click_link_or_button 'broken'
+    click_link 'ARS 78s'
+    click_link 'broken'
     expect(page).to have_text('1 entry found')
     expect(page).to have_css('dd.blacklight-id', text: solr_id)
   end
@@ -59,15 +58,14 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
   it 'non-project tags are hierarchical', skip: 'unable to get non-project tag test working' do
     fill_in 'q', with: solr_id
     click_button 'search'
-    click_link_or_button('Tag', wait: 20) # ensure facet has been expanded by javascript
-    click_link_or_button 'willet'
+    click_link('Tag', wait: 20) # ensure facet has been expanded by javascript
+    click_link 'willet'
     skip 'FIXME: failure perhaps associated with the toggle for the willet link being closed and unopenable'
     within('#facet-exploded_nonproject_tag_ssimdv') do
-      click_link_or_button 'whimbrel'
-      click_link_or_button 'curlew'
+      click_link 'whimbrel'
+      click_link 'curlew'
     end
     expect(page).to have_text('1 entry found')
     expect(page).to have_css('dd.blacklight-id', text: solr_id)
   end
 end
-# rubocop:enable Capybara/ClickLinkOrButtonStyle
