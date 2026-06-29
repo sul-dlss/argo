@@ -1,6 +1,13 @@
 <h1>DOR item(s) submitted</h1>
 
 <p>Items successfully registered.</p>
+
+<% if @folio_items_to_check.any? %>
+  <turbo-frame id="marc_warnings" src="<%= marc_warnings_registration_path(items: @folio_items_to_check) %>">
+    <p class="text-muted">Checking Folio for MARC records for <%= @folio_items_to_check.size %> objects &hellip;</p>
+  </turbo-frame>
+<% end %>
+
 <div class="row">
   <div class="col-sm-4">
     <table class="table">
@@ -10,28 +17,17 @@
           <th>Barcode</th>
           <th><%= CatalogRecordId.label %></th>
           <th>Source ID</th>
-          <th>Title</th>
-          <th>MARC Status</th>
+          <th>Label</th>
         </tr>
       </thead>
       <tbody>
       <% @registration_form.created.each do |dro| %>
-        <% catalog_record_id = dro.identification.catalogLinks.first&.catalogRecordId %>
-        <% cocina_display = CocinaDisplay::CocinaRecord.new(CocinaDisplay::Utils.deep_compact_blank(dro.as_json)) %>
-        <tr data-controller="marc-availability"
-            data-marc-availability-catalog-record-id-value="<%= catalog_record_id %>">
+        <tr>
           <td><%= link_to Druid.new(dro).without_namespace, solr_document_path(dro.externalIdentifier) %></td>
           <td><%= dro.identification.barcode %></td>
-          <td><%= catalog_record_id %></td>
+          <td><%= dro.identification.catalogLinks.first&.catalogRecordId %></td>
           <td><%= dro.identification.sourceId %></td>
-          <td><%= cocina_display.display_title || dro.label %></td>
-          <td data-marc-availability-target="status">
-            <% if catalog_record_id.present? %>
-              <span class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Checking...</span>
-              </span>
-            <% end %>
-          </td>
+          <td><%= dro.label %></td>
         </tr>
       <% end %>
       </tbody>

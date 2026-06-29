@@ -132,8 +132,6 @@ RSpec.describe 'Item registration page', :js do
       click_button 'Register'
 
       expect(page).to have_text 'Items successfully registered.'
-      expect(page).to have_css('th', text: 'Title')
-      expect(page).to have_css('th', text: 'MARC Status')
 
       druid_link = find('td > a')
 
@@ -251,6 +249,55 @@ RSpec.describe 'Item registration page', :js do
       click_button 'Register'
 
       expect(page).to have_text "Save error with #{source_id}: a12345"
+    end
+  end
+
+  context 'when registration succeeds but MARC record is missing' do
+    let(:hrid) { 'a12345' }
+
+    before do
+      # Register a real item with no HRID so dor-services-app doesn't call FOLIO
+      # and the druid is indexed in Solr (needed for the status page links to resolve)
+      real_dro = FactoryBot.create_for_repository(:persisted_item)
+
+      # Build a version of that DRO with a catalog record ID attached so the MARC check fires
+      dro_with_catalog_link = Cocina::Models.build(
+        real_dro.as_json.merge(
+          'identification' => real_dro.identification.as_json.merge(
+            'catalogLinks' => [{ 'catalog' => 'folio', 'catalogRecordId' => hrid, 'refresh' => true }]
+          )
+        )
+      )
+
+      # Intercept the form's register call and return our modified DRO instead of hitting dor-services-app
+      allow_any_instance_of(Dor::Services::Client::Objects).to receive(:register).and_return(dro_with_catalog_link)
+
+      # Stub the client-side HRID field validation so the field isn't marked invalid
+      allow(FolioClient).to receive(:fetch_instance_info).and_return(true)
+
+      # Simulate the HRID having no MARC record
+      allow(FolioClient).to receive(:fetch_marc_hash).with(instance_hrid: hrid).and_raise(FolioClient::ResourceNotFound)
+    end
+
+    it 'displays the MARC warning banner with the affected druid' do
+      visit registration_path
+      select '[Internal System Objects]', from: 'Admin Policy'
+      select 'registrationWF', from: 'Initial Workflow'
+      select 'book', from: 'Content Type'
+      select 'left-to-right', from: 'Viewing Direction'
+
+      fill_in 'Project Name', with: 'special division : project #4'
+      fill_in 'Tags', with: 'tag : test'
+
+      fill_in CatalogRecordId.label, with: hrid
+      fill_in 'Source ID', with: source_id
+      fill_in 'Label', with: 'object title'
+
+      click_button 'Register'
+
+      expect(page).to have_text 'Items successfully registered.'
+      expect(page).to have_css('.alert-warning')
+      expect(page).to have_text 'The following druids do not have MARC records.'
     end
   end
 end
