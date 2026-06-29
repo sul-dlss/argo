@@ -414,19 +414,20 @@ GEM
       racc
     patience_diff (1.2.0)
       optimist (~> 3.0)
-    pdf-core (0.4.0)
+    pdf-core (0.9.0)
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
     pp (0.6.4)
       prettyprint
-    prawn (1.3.0)
-      pdf-core (~> 0.4.0)
-      ttfunk (~> 1.4.0)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
-    preservation-client (7.4.0)
+    preservation-client (8.0.0)
       activesupport (>= 4.2)
       faraday (~> 2.0)
+      faraday-retry (~> 2.0)
       moab-versioning (>= 5.0.0, < 7)
       zeitwerk (~> 2.1)
     prettyprint (0.2.0)
@@ -438,7 +439,7 @@ GEM
     public_suffix (7.0.5)
     puma (8.0.2)
       nio4r (~> 2.0)
-    purl_fetcher-client (1.5.4)
+    purl_fetcher-client (3.2.0)
       activesupport
       faraday (~> 2.1)
     racc (1.8.1)
@@ -635,7 +636,7 @@ GEM
     timeout (0.6.1)
     trailblazer-option (0.1.2)
     tsort (0.2.0)
-    ttfunk (1.4.0)
+    ttfunk (1.7.0)
     turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
@@ -682,7 +683,7 @@ DEPENDENCIES
   barby
   blacklight (~> 7.41)
   blacklight-hierarchy (~> 6.6.0)
-  bootsnap (>= 1.4.2)
+  bootsnap
   brakeman
   bundler-audit
   cancancan
@@ -692,40 +693,40 @@ DEPENDENCIES
   capybara
   capybara-screenshot
   cocina-models (~> 0.69)
-  cocina_display (~> 2)
+  cocina_display
   coderay
   config
-  cssbundling-rails (~> 1.1)
+  cssbundling-rails
   csv
   debug
   devise
-  devise-remote-user (~> 1.0)
+  devise-remote-user
   dlss-capistrano
   dor-services-client (~> 15.1)
   druid-tools
   dry-monads
-  equivalent-xml (>= 0.6.0)
+  equivalent-xml
   erb_lint
   factory_bot_rails
   faraday
   faraday-multipart
-  folio_client (~> 1.0)
+  folio_client
   honeybadger
   http_logger
-  jbuilder (~> 2.5)
-  jsbundling-rails (~> 1.0)
+  jbuilder
+  jsbundling-rails
   listen (~> 3.2)
   lograge
-  nokogiri (~> 1.19)
+  nokogiri
   okcomputer
   overmind
   pg
-  prawn (~> 1)
+  prawn
   prawn-table
-  preservation-client (~> 7.0)
+  preservation-client
   propshaft
   puma
-  purl_fetcher-client (~> 1.3)
+  purl_fetcher-client
   rails (~> 8.0.0)
   rake
   reform-rails
@@ -742,11 +743,11 @@ DEPENDENCIES
   rubocop-rspec
   rubocop-rspec_rails
   rubyzip
-  sdr-client (~> 2.0)
+  sdr-client
   selenium-webdriver
   sidekiq (~> 8.0)
   simplecov
-  turbo-rails (~> 2.0)
+  turbo-rails
   view_component
   web-console
   webmock
