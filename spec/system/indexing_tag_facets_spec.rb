@@ -10,7 +10,6 @@ require 'rails_helper'
 # tag tests need javascript for facet testing because they are so slow to load in production
 #   javascript possibly also needed for the edit tags modal
 #
-# rubocop:disable Capybara/ClickLinkOrButtonStyle
 RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].present? do
   let(:item) { FactoryBot.create_for_repository(:persisted_item) }
   let(:solr_id) { item.externalIdentifier }
@@ -70,4 +69,3 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
     expect(page).to have_css('dd.blacklight-id', text: solr_id)
   end
 end
-# rubocop:enable Capybara/ClickLinkOrButtonStyle
