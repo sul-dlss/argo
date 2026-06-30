@@ -782,7 +782,6 @@ RSpec.describe DescriptionImport do
 
       it 'deserializes the item' do
         expect(updated.value!.identifier.as_json).to eq [{ 'appliesTo' => [],
-                                                           'identifier' => [],
                                                            'displayLabel' => 'ISBN:',
                                                            'groupedValue' => [],
                                                            'note' => [],
@@ -816,13 +815,13 @@ RSpec.describe DescriptionImport do
       let(:csv_data) do
         <<~CSV
           druid,source_id,title1.value,purl,language1.value,language1.code,language1.uri,language1.displayLabel
-          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,English,en,https://id.loc.gov/vocabulary/iso639-2/eng,English
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,English,eng,https://id.loc.gov/vocabulary/iso639-2/eng,English
         CSV
       end
 
       it 'deserializes the item' do
         expect(updated.value!.language.as_json).to eq [{ 'appliesTo' => [],
-                                                         'code' => 'en',
+                                                         'code' => 'eng',
                                                          'displayLabel' => 'English',
                                                          'groupedValue' => [],
                                                          'note' => [],
@@ -876,7 +875,7 @@ RSpec.describe DescriptionImport do
       let(:csv_data) do
         <<~CSV
           druid,source_id,title1.value,purl,subject1.value,subject1.type,subject1.source.code,subject1.displayLabel
-          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,A 13.36/2:C 64/2/2016,classification,sudoc,SUDOC
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,A 13.36/2:C 64/2/2016,classification,sudocs,SUDOC
         CSV
       end
 
@@ -890,7 +889,7 @@ RSpec.describe DescriptionImport do
                                                         'identifier' => [],
                                                         'type' => 'classification',
                                                         'source' => {
-                                                          'code' => 'sudoc',
+                                                          'code' => 'sudocs',
                                                           'note' => []
                                                         },
                                                         'value' => 'A 13.36/2:C 64/2/2016' }]
