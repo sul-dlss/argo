@@ -1,0 +1,17 @@
+<turbo-frame id="marc_warnings">
+  <% if @warnings.any? %>
+    <div class="alert alert-warning alert-dismissible d-flex shadow-sm align-items-center my-3" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+      <div class="text-body pe-5">
+        <strong class="h5 alert-heading d-block mb-1">Warning</strong>
+        <p class="mb-1">The following druids do not have MARC records. You can work with these items in Argo, but to release these items to SearchWorks, the MARC record must be created first.</p>
+        <ul class="mb-0">
+          <% @warnings.each do |warning| %>
+            <li><%= link_to warning[:druid], solr_document_path("druid:#{warning[:druid]}"), target: '_top' %></li>
+          <% end %>
+        </ul>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+</turbo-frame>

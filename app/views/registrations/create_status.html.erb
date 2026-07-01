@@ -1,6 +1,13 @@
 <h1>DOR item(s) submitted</h1>
 
 <p>Items successfully registered.</p>
+
+<% if @folio_items_to_check.any? %>
+  <turbo-frame id="marc_warnings" src="<%= marc_warnings_registration_path(items: @folio_items_to_check) %>">
+    <p class="text-muted">Checking Folio for MARC records for <%= @folio_items_to_check.size %> objects &hellip;</p>
+  </turbo-frame>
+<% end %>
+
 <div class="row">
   <div class="col-sm-4">
     <table class="table">

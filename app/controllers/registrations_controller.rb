@@ -73,6 +73,33 @@ class RegistrationsController < ApplicationController
     render json: resp.to_json, layout: false
   end
 
+  # Server-side check for MARC record availability on multiple registered items (lazy-loaded in a Turbo Frame)
+  def marc_warnings
+    @warnings = []
+
+    Array(params[:items]).each do |item|
+      druid = item[:druid]
+      catalog_record_id = item[:catalog_record_id]
+      next if catalog_record_id.blank?
+
+      has_marc = begin
+        FolioClient.fetch_marc_hash(instance_hrid: catalog_record_id)
+        true
+      rescue FolioClient::ResourceNotFound
+        false
+      rescue FolioClient::Error => e
+        # In production, this will prevent false negatives when ILS (Folio) is not available.
+        # In other environments, where Folio is never available, it will assume MARC exists.
+        Rails.logger.warn("FolioClient error in marc_warnings for #{catalog_record_id}: #{e.message}")
+        true
+      end
+
+      @warnings << { druid: druid, catalog_record_id: catalog_record_id } unless has_marc
+    end
+
+    render layout: false
+  end
+
   def spreadsheet
     respond_to do |format|
       format.csv do
@@ -99,6 +126,10 @@ class RegistrationsController < ApplicationController
   def form_create
     @registration_form = RegistrationForm.new(nil)
     if @registration_form.validate(create_params) && @registration_form.save
+      @folio_items_to_check = @registration_form.created.filter_map do |dro|
+        hrid = dro.identification.catalogLinks.first&.catalogRecordId
+        { druid: Druid.new(dro).without_namespace, catalog_record_id: hrid } if hrid.present?
+      end
       render 'create_status'
     else
       prepopulate
