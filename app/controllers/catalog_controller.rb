@@ -303,7 +303,7 @@ class CatalogController < ApplicationController
           id
           druid_bare_ssi
           druid_prefixed_ssi
-          obj_label_tesim
+          main_title_tenim
           identifier_ssim
           identifier_tesim
           barcode_id_ssimdv

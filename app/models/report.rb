@@ -3,8 +3,7 @@
 # Runs a query against solr and returns the results.
 # Does exactly what blacklight does, paginates the solr requests until all results
 # have been received
-# rubocop:disable Metrics/ClassLength
-class Report
+class Report # rubocop:disable Metrics/ClassLength
   include Blacklight::Configurable
   include DateFacetConfigurations
   include Blacklight::Searchable
@@ -347,4 +346,3 @@ class Report
     end
   end
 end
-# rubocop:enable Metrics/ClassLength

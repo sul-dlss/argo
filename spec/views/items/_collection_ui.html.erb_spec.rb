@@ -5,7 +5,14 @@ require 'rails_helper'
 RSpec.describe 'items/_collection_ui.html.erb' do
   let(:collection_list) do
     [
-      instance_double(Cocina::Models::Collection, label: 'But catz are nice too', externalIdentifier: 'druid:abc123')
+      instance_double(
+        Cocina::Models::Collection,
+        label: 'Unused',
+        externalIdentifier: 'druid:abc123',
+        description: Cocina::Models::Description.new(
+          title: [{ value: 'But catz are nice too' }], purl: 'https://purl.stanford.edu/abc123'
+        )
+      )
     ]
   end
   let(:current_user) do

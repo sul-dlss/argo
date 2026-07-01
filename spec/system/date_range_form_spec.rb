@@ -12,23 +12,28 @@ RSpec.describe 'Date range form', :js do
     solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
     solr_conn.add(:id => 'druid:xb482ww9999',
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                  :obj_label_tesim => 'Report about stuff',
+                  :display_title_ss => 'Report about stuff',
+                  :main_title_tenim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published)
     solr_conn.add(:id => 'druid:xb482bw3980',
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                  :obj_label_tesim => 'Report about stuff',
+                  :display_title_ss => 'Report about stuff',
+                  :main_title_tenim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published)
     solr_conn.add(:id => 'druid:xb482bw3981',
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                  :obj_label_tesim => 'Report about stuff',
+                  :display_title_ss => 'Report about stuff',
+                  :main_title_tenim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published)
     solr_conn.add(:id => 'druid:xb482bw3982',
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                  :obj_label_tesim => 'Report about stuff',
+                  :display_title_ss => 'Report about stuff',
+                  :main_title_tenim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published)
     solr_conn.add(:id => 'druid:xb482bw3983',
                   SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                  :obj_label_tesim => 'Report about stuff',
+                  :display_title_ss => 'Report about stuff',
+                  :main_title_tenim => 'Report about stuff',
                   SolrDocument::FIELD_LAST_PUBLISHED_DATE => last_published)
     solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
