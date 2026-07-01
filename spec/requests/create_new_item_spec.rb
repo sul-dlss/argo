@@ -36,7 +36,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: '',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -72,7 +72,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'This things'
+              title: 'This things'
             }
           ],
           tag: ['Registered By : jcoyne85']
@@ -99,7 +99,7 @@ RSpec.describe 'Create a new item' do
             {
               source_id:,
               barcode_id: '36105010362304',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -128,7 +128,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -138,33 +138,24 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.document,
-                              label: 'Test DRO',
+                              label: '',
                               version: 1,
                               description: {
-                                title: [{ value: 'Test DRO' }],
+                                title: [{ value: 'test parameters for registration' }],
                                 purl: 'https://purl.stanford.edu/bc234fg5678'
                               },
                               access: {},
-                              identification: { sourceId: 'sul:1234' },
-                              structural: {},
+                              identification: { sourceId: 'foo:bar' },
+                              structural: {
+                                isMemberOf: ['druid:hv992ry7777']
+                              },
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431'
                               }).to_json
     end
 
-    let(:request_json) do
-      "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.document}\"," \
-        '"label":"test parameters for registration","version":1,' \
-        '"access":{"view":"world","download":"world","controlledDigitalLending":false},' \
-        '"administrative":' \
-        '{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
-        '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
-        '"isMemberOf":["druid:hv992ry7777"]}}'
-    end
-
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
-        .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
 
@@ -190,7 +181,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -200,7 +191,7 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.image,
-                              label: 'Test DRO',
+                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -216,26 +207,16 @@ RSpec.describe 'Create a new item' do
                                 hasAdminPolicy: 'druid:hv992ry2431'
                               }).to_json
     end
-    let(:request_json) do
-      "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
-        '"label":"test parameters for registration","version":1,' \
-        '"access":{"view":"stanford","download":"stanford","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
-        '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
-        '"isMemberOf":["druid:hv992ry7777"]}}'
-    end
 
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
-        .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
 
     it 'registers the object' do
       post '/registration', params: submitted
       expect(response).to have_http_status(:ok)
-      expect(workflow_client).to have_received(:create)
-        .with(version: '1')
+      expect(workflow_client).to have_received(:create).with(version: '1')
     end
   end
 
@@ -257,7 +238,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -267,7 +248,7 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.book,
-                              label: 'Test DRO',
+                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'xTest DRO' }],
@@ -289,20 +270,8 @@ RSpec.describe 'Create a new item' do
                               }).to_json
     end
 
-    let(:request_json) do
-      "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.book}\"," \
-        '"label":"test parameters for registration","version":1,' \
-        '"access":{"view":"location-based","download":"location-based","location":' \
-        '"music","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-        '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
-        '"structural":{"contains":[],"hasMemberOrders":[{"members":[],' \
-        '"viewingDirection":"left-to-right"}],"isMemberOf":["druid:hv992ry7777"]}}'
-    end
-
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
-        .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
 
@@ -330,7 +299,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -340,7 +309,7 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.image,
-                              label: 'Test DRO',
+                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -361,18 +330,8 @@ RSpec.describe 'Create a new item' do
                               }).to_json
     end
 
-    let(:request_json) do
-      "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
-        '"label":"test parameters for registration","version":1,' \
-        '"access":{"view":"world","download":"none","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
-        '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[{"members":[],' \
-        '"viewingDirection":"right-to-left"}],"isMemberOf":["druid:hv992ry7777"]}}'
-    end
-
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
-        .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
 
@@ -394,7 +353,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ],
           tag: ['Registered By : jcoyne85'],
@@ -408,7 +367,7 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.image,
-                              label: 'Test DRO',
+                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -425,18 +384,8 @@ RSpec.describe 'Create a new item' do
                               }).to_json
     end
 
-    let(:request_json) do
-      "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.image}\"," \
-        '"label":"test parameters for registration","version":1,' \
-        '"access":{"view":"dark","download":"none","controlledDigitalLending":false},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-        '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],' \
-        '"hasMemberOrders":[],"isMemberOf":["druid:hv992ry7777"]}}'
-    end
-
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
-        .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
 
@@ -479,7 +428,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'This things'
+              title: 'This things'
             }
           ],
           tag: ['Registered By : jcoyne85']
@@ -506,7 +455,7 @@ RSpec.describe 'Create a new item' do
           items: [
             {
               source_id: 'foo:bar',
-              label: 'test parameters for registration'
+              title: 'test parameters for registration'
             }
           ]
         }
@@ -516,7 +465,7 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.book,
-                              label: 'Test DRO',
+                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -533,18 +482,9 @@ RSpec.describe 'Create a new item' do
                                 hasAdminPolicy: 'druid:hv992ry2431'
                               }).to_json
     end
-    let(:request_json) do
-      "{\"cocinaVersion\":\"#{Cocina::Models::VERSION}\",\"type\":\"#{Cocina::Models::ObjectType.book}\"," \
-        '"label":"test parameters for registration","version":1,"access":' \
-        '{"view":"stanford","download":"none","controlledDigitalLending":true},' \
-        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},"identification":' \
-        '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
-        '"isMemberOf":["druid:hv992ry7777"]}}'
-    end
 
     before do
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects?assign_doi=false")
-        .with(body: request_json)
         .to_return(status: 200, body: json, headers:)
     end
 

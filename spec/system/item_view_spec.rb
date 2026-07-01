@@ -52,7 +52,8 @@ RSpec.describe 'Item view', :js do
         {
           id: 'druid:hj185xx2222',
           SolrDocument::FIELD_OBJECT_TYPE => 'item',
-          display_title_ss: title
+          display_title_ss: title,
+          main_title_tenim: title
         }
       end
       let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
@@ -205,7 +206,8 @@ RSpec.describe 'Item view', :js do
             {
               id: 'druid:hj185xx2222',
               SolrDocument::FIELD_OBJECT_TYPE => 'virtual object',
-              display_title_ss: title
+              display_title_ss: title,
+              main_title_tenim: title
             }
           end
 

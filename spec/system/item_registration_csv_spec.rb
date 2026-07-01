@@ -41,7 +41,7 @@ RSpec.describe 'Item registration page', :js do
         {
           administrative_policy_object: 'druid:hv992ry2431',
           content_type: 'https://cocina.sul.stanford.edu/models/book',
-          csv_file: "source_id,catkey,barcode,label\nfoo:123,,,My new object\n",
+          csv_file: "source_id,catkey,barcode,title\nfoo:123,,,My new object\n",
           groups:
            ["sunetid:#{user.login}",
             'workgroup:sdr:administrator-role',
@@ -83,7 +83,7 @@ RSpec.describe 'Item registration page', :js do
         {
           administrative_policy_object: 'druid:hv992ry2431',
           content_type: 'https://cocina.sul.stanford.edu/models/book',
-          csv_file: "source_id,catkey,barcode,label\nfoo:123,,,My new object\n",
+          csv_file: "source_id,catkey,barcode,title\nfoo:123,,,My new object\n",
           groups:
            ["sunetid:#{user.login}",
             'workgroup:sdr:administrator-role',
@@ -102,7 +102,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when registration fails validation' do
     let(:non_default_apo) do
       FactoryBot.create_for_repository(:persisted_apo,
-                                       label: 'My First APO',
+                                       title: 'My First APO',
                                        roles: [
                                          {
                                            name: 'dor-apo-manager',
@@ -148,7 +148,7 @@ RSpec.describe 'Item registration page', :js do
         {
           administrative_policy_object: non_default_apo.externalIdentifier,
           content_type: 'https://cocina.sul.stanford.edu/models/object',
-          csv_file: "source_id,catkey,barcode,label\nfoo:123,,,My new object\n",
+          csv_file: "source_id,catkey,barcode,title\nfoo:123,,,My new object\n",
           groups:
             ["sunetid:#{user.login}",
              'workgroup:sdr:administrator-role',

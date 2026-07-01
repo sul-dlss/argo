@@ -1,2 +1,2 @@
-source_id,catkey,barcode,label
+source_id,catkey,barcode,title
 foo:123,,,My new object

@@ -32,8 +32,8 @@ RSpec.describe CocinaHashPresenter do
                                lock: cocina_object.lock,
                                type: 'https://cocina.sul.stanford.edu/models/collection',
                                externalIdentifier: cocina_object.externalIdentifier,
-                               label: cocina_object.label,
                                version: 1,
+                               label: '',
                                access: {
                                  view: 'dark'
                                },

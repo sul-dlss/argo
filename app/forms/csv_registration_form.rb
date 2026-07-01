@@ -109,6 +109,6 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   end
 
   def one_of_data_headers
-    @one_of_data_headers ||= ['label', CatalogRecordId.csv_header]
+    @one_of_data_headers ||= ['title', CatalogRecordId.csv_header]
   end
 end

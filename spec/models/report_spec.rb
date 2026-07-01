@@ -89,10 +89,12 @@ RSpec.describe Report do
       before do
         solr_conn.add(id: 'druid:fg464dn8891',
                       SolrDocument::FIELD_BARE_DRUID => 'fg464dn8891',
-                      obj_label_tesim: 'State Banking Commission Annual Reports')
+                      display_title_ss: 'State Banking Commission Annual Reports',
+                      main_title_tenim: 'State Banking Commission Annual Reports')
         solr_conn.add(id: 'druid:mb062dy1188',
                       SolrDocument::FIELD_BARE_DRUID => 'mb062dy1188',
-                      obj_label_tesim: 'maxims found in the leading English and American reports and elementary works')
+                      display_title_ss: 'maxims found in the leading English and American reports and elementary works',
+                      main_title_tenim: 'maxims found in the leading English and American reports and elementary works')
         solr_conn.commit
       end
 
@@ -132,7 +134,8 @@ RSpec.describe Report do
       before do
         solr_conn.add(id: 'druid:fg464dn8891',
                       SolrDocument::FIELD_BARE_DRUID => 'fg464dn8891',
-                      obj_label_tesim: 'State Banking Commission Annual Reports',
+                      display_title_ss: 'State Banking Commission Annual Reports',
+                      main_title_tenim: 'State Banking Commission Annual Reports',
                       tag_ssim: ['Registered By : llam813', 'Remediated By : 4.6.6.2'])
         solr_conn.commit
       end

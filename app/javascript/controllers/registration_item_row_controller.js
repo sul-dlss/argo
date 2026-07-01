@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ['barcode', 'catalogRecordId', 'sourceId', 'label']
+  static targets = ['barcode', 'catalogRecordId', 'sourceId', 'title']
   static values = {
     csv: Boolean
   }
@@ -12,7 +12,7 @@ export default class extends Controller {
       this.validateCatalogRecordId()
       this.validateSourceId()
       this.validateBarcode()
-      this.validateLabel()
+      this.validateTitle()
     }
   }
 
@@ -89,8 +89,8 @@ export default class extends Controller {
     }
   }
 
-  validateLabel () {
-    const field = this.labelTarget
+  validateTitle () {
+    const field = this.titleTarget
     if (this.catalogRecordIdTarget.value === '') {
       field.required = true
     } else {

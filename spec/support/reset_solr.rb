@@ -11,7 +11,8 @@ module ResetSolr
     solr_conn.add(id: 'druid:hv992ry2431',
                   SolrDocument::FIELD_OBJECT_TYPE => ['adminPolicy'],
                   apo_register_permissions_ssim: ['workgroup:dlss:developers'],
-                  display_title_ss: ['[Internal System Objects]'])
+                  display_title_ss: ['[Internal System Objects]'],
+                  main_title_tenim: ['[Internal System Objects]'])
     solr_conn.commit
   end
 end

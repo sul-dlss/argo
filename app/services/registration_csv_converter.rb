@@ -40,7 +40,7 @@ class RegistrationCsvConverter
   #   5: source_id (required)
   #   6: folio_id (optional)
   #   7: barcode (optional)
-  #   8: label (required unless a folio_id has been entered)
+  #   8: title (required unless a folio_id has been entered)
   #   9: rights_view (required)
   #  10: rights_download (required)
   #  11: rights_location (required if "view" or "download" uses "location-based")
@@ -66,7 +66,6 @@ class RegistrationCsvConverter
     model_params = {
       type: dro_type(params[:content_type] || row.fetch('content_type')),
       version: 1,
-      label: row[catalog_record_id_column] ? row['label'] : row.fetch('label'),
       administrative: {
         hasAdminPolicy: params[:administrative_policy_object] || row.fetch('administrative_policy_object')
       },
@@ -77,6 +76,7 @@ class RegistrationCsvConverter
       }.compact
     }
 
+    model_params[:description] = description(row)
     model_params[:structural] = structural(row)
     model_params[:access] = access(row)
     project_name = params[:project_name] || row['project_name']
@@ -149,6 +149,13 @@ class RegistrationCsvConverter
       structural[:isMemberOf] = [collection] if collection
       reading_order = params[:reading_order] || row['reading_order']
       structural[:hasMemberOrders] = [{ viewingDirection: reading_order }] if reading_order.present?
+    end
+  end
+
+  def description(row)
+    {}.tap do |description|
+      title = row[catalog_record_id_column] ? row['title'] : row.fetch('title')
+      description[:title] = [{ value: title }]
     end
   end
 

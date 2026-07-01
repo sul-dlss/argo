@@ -85,7 +85,7 @@ RSpec.describe AdminPolicyPersister do
             purl: 'https://purl.stanford.edu/zt570qh4444'
           },
           externalIdentifier: 'druid:zt570qh4444',
-          label: 'My title',
+          label: '',
           type: Cocina::Models::ObjectType.admin_policy,
           version: 1
         )

@@ -22,9 +22,11 @@ class AdminPolicyPersister
 
   def model_for_registration
     Cocina::Models::RequestAdminPolicy.new(
-      label: title,
       version: 1,
       type: Cocina::Models::ObjectType.admin_policy,
+      description: {
+        title: [{ value: title }]
+      },
       administrative: {
         hasAdminPolicy: SolrDocument::UBER_APO_ID,
         hasAgreement: agreement_object_id,
@@ -65,7 +67,6 @@ class AdminPolicyPersister
     form.access_location = nil if clear_location?
 
     updated = model
-    updated = updated.new(label: title)
     updated = updated_administrative(updated)
     updated_description(updated)
   end
@@ -100,8 +101,7 @@ class AdminPolicyPersister
 
   def updated_description(updated)
     description = { title: [{ value: title }], purl: model.description.purl }
-    updated_description = updated.description.new(description)
-    updated.new(description: updated_description)
+    updated.new(description: updated.description.new(description))
   end
 
   def updated_administrative(updated)
