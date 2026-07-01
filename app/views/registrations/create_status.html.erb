@@ -10,7 +10,7 @@
           <th>Barcode</th>
           <th><%= CatalogRecordId.label %></th>
           <th>Source ID</th>
-          <th>Label</th>
+          <th>Title</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +20,7 @@
           <td><%= dro.identification.barcode %></td>
           <td><%= dro.identification.catalogLinks.first&.catalogRecordId %></td>
           <td><%= dro.identification.sourceId %></td>
-          <td><%= dro.label %></td>
+          <td><%= Cocina::Models::Builders::TitleBuilder.build(dro.description.title) %></td>
         </tr>
       <% end %>
       </tbody>

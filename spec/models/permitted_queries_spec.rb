@@ -44,8 +44,10 @@ RSpec.describe PermittedQueries do
       before do
         solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:collection")
         solr_conn.add(id: 'druid:bg444xg6666', SolrDocument::FIELD_OBJECT_TYPE => 'collection',
-                      display_title_ss: 'Inactive collection', tag_ssim: PermittedQueries::INACTIVE_TAG)
-        solr_conn.add(id: 'druid:bg555xg7777', SolrDocument::FIELD_OBJECT_TYPE => 'collection', display_title_ss: 'My collection')
+                      display_title_ss: 'Inactive collection', main_title_tenim: 'Inactive collection',
+                      tag_ssim: PermittedQueries::INACTIVE_TAG)
+        solr_conn.add(id: 'druid:bg555xg7777', SolrDocument::FIELD_OBJECT_TYPE => 'collection',
+                      display_title_ss: 'My collection', main_title_tenim: 'My collection')
         solr_conn.commit
       end
 

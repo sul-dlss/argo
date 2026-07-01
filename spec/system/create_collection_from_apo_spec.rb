@@ -16,7 +16,8 @@ RSpec.describe 'Add collection from APO show page' do
   let(:result) { { 'response' => { 'numFound' => 1 } } }
   let(:apo_druid) { 'druid:vt333hq2222' }
   let(:cocina_model) do
-    instance_double(Cocina::Models::AdminPolicyWithMetadata, label: 'hey', externalIdentifier: apo_druid)
+    instance_double(Cocina::Models::AdminPolicyWithMetadata, label: '', externalIdentifier: apo_druid,
+                                                             description: Cocina::Models::Description.new(title: [{ value: 'My Title' }], purl: "https://purl.stanford.edu/#{apo_druid}"))
   end
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 

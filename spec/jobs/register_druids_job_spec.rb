@@ -19,12 +19,15 @@ RSpec.describe RegisterDruidsJob do
   let(:identification) do
     Cocina::Models::Identification.new(barcode: '36105010101010', catalogLinks: [catalog_link], sourceId: 'foo:bar1')
   end
+  let(:description) do
+    Cocina::Models::Description.new(title: [{ value: 'My object' }], purl: 'https://purl.stanford.edu/123')
+  end
 
   let(:cocina_object) do
     instance_double(Cocina::Models::DROWithMetadata,
                     externalIdentifier: 'druid:123',
-                    label: 'My object',
-                    identification:)
+                    identification:,
+                    description:)
   end
 
   let(:csv_string) do
@@ -93,7 +96,7 @@ RSpec.describe RegisterDruidsJob do
                                                                    workflow: 'accessionWF')
       expect(log).to have_received(:puts).with(/Registration successful for druid:123/).twice
       expect(bulk_action.druid_count_success).to eq 2
-      expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Label\n123,36105010101010,in12345,foo:bar1,My object\n123,36105010101010,in12345,foo:bar1,My object\n")
+      expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Title\n123,36105010101010,in12345,foo:bar1,My object\n123,36105010101010,in12345,foo:bar1,My object\n")
     end
   end
 

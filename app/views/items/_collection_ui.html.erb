@@ -11,7 +11,7 @@
       <div class='panel-body'>
         <ul class='list-group'>
           <% @collection_list.each do |collection| %>
-            <%= render 'collection_ui_line_item', collection_label: collection.label,
+            <%= render 'collection_ui_line_item', collection_label: Cocina::Models::Builders::TitleBuilder.build(collection.description.title),
                                                   collection_id: collection.externalIdentifier,
                                                   item_id: @cocina.externalIdentifier %>
           <% end %>

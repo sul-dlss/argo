@@ -39,7 +39,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in 'Barcode', with: barcode
       fill_in 'Source ID', with: 'source:id1'
-      fill_in 'Label', with: 'object title'
+      fill_in 'Title', with: 'object title'
 
       registration_params = {}
       expect_any_instance_of(RegistrationForm).to receive(:validate) do |form, attributes|
@@ -103,7 +103,7 @@ RSpec.describe 'Item registration page', :js do
           '0' => {
             'source_id' => 'source:id1',
             'catalog_record_id' => '',
-            'label' => 'object title',
+            'title' => 'object title',
             'barcode' => barcode
           }
         }
@@ -127,7 +127,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in 'Barcode', with: barcode
       fill_in 'Source ID', with: source_id
-      fill_in 'Label', with: 'object title'
+      fill_in 'Title', with: 'object title'
 
       click_button 'Register'
 
@@ -185,7 +185,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in CatalogRecordId.label, with: 'not_a_catkey'
       fill_in 'Source ID', with: source_id
-      fill_in 'Label', with: 'object title'
+      fill_in 'Title', with: 'object title'
 
       click_button 'Register'
 
@@ -213,7 +213,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in 'Barcode', with: 'not_a_barcode'
       fill_in 'Source ID', with: source_id
-      fill_in 'Label', with: 'object title'
+      fill_in 'Title', with: 'object title'
 
       click_button 'Register'
 
@@ -244,7 +244,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in CatalogRecordId.label, with: 'a12345'
       fill_in 'Source ID', with: source_id
-      fill_in 'Label', with: 'object title'
+      fill_in 'Title', with: 'object title'
 
       click_button 'Register'
 

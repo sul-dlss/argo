@@ -98,8 +98,7 @@ class ApplyModsMetadata
   end
 
   def cocina_description
-    @cocina_description ||= Cocina::Models::Description.new(Cocina::Models::Mapping::FromMods::Description.props(mods: mods_ng, druid: cocina.externalIdentifier,
-                                                                                                                 label: cocina.label))
+    @cocina_description ||= Cocina::Models::Description.new(Cocina::Models::Mapping::FromMods::Description.props(mods: mods_ng, druid: cocina.externalIdentifier, label: ''))
   end
 
   def mods_ng

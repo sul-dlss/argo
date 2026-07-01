@@ -11,7 +11,7 @@ FactoryBot.define do
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
                                        },
-                                       :identification => { sourceId: "sul:#{SecureRandom.uuid}" },
+                                       'identification' => { 'sourceId' => "sul:#{SecureRandom.uuid}" },
                                        'access' => {}
                                      })
       )
