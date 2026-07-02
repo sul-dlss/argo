@@ -372,22 +372,17 @@ class CatalogController < ApplicationController
 
     authorize! :read, @cocina
 
-    if @cocina.is_a?(Dor::Services::Client::InvalidCocina)
-      @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory: [])
-      @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: [])
-    else
-      @workflows = WorkflowService.workflows_for(druid: druid_param)
+    @workflows = WorkflowService.workflows_for(druid: druid_param)
 
-      @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: object_client.user_version.inventory)
-      @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory:)
-      @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
+    @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: object_client.user_version.inventory)
+    @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory:)
+    @milestones_presenter = MilestonesPresenter.new(druid: druid_param, version_inventory:)
 
-      @head_user_version = @user_versions_presenter.head_user_version
-      @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
+    @head_user_version = @user_versions_presenter.head_user_version
+    @release_tags = @cocina.admin_policy? ? [] : object_client.release_tags.list
 
-      # If you have this token, it indicates you have read access to the object
-      @verified_token_with_expiration = generate_token
-    end
+    # If you have this token, it indicates you have read access to the object
+    @verified_token_with_expiration = generate_token
 
     respond_to do |format|
       format.html { @search_context = setup_next_and_previous_documents }
