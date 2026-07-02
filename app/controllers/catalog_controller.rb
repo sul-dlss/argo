@@ -372,8 +372,10 @@ class CatalogController < ApplicationController
 
     authorize! :read, @cocina
 
-    unless @cocina.is_a?(Dor::Services::Client::InvalidCocina)
-
+    if @cocina.is_a?(Dor::Services::Client::InvalidCocina)
+      @versions_presenter = VersionsPresenter.new(version_view: version_param, version_inventory: [])
+      @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: [])
+    else
       @workflows = WorkflowService.workflows_for(druid: druid_param)
 
       @user_versions_presenter = UserVersionsPresenter.new(user_version_view: user_version_param, user_version_inventory: object_client.user_version.inventory)
