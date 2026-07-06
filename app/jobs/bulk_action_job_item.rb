@@ -23,12 +23,12 @@ class BulkActionJobItem
 
   # Indicate that the action was successful.
   def success!(message: nil)
-    job.success!(druid: druid, message: message)
+    job.success!(druid: druid, message: "Success: #{message}")
   end
 
   # Indicate that the action failed.
   def failure!(message:)
-    job.failure!(druid: druid, message: message)
+    job.failure!(druid: druid, message: "Error: #{message}")
   end
 
   def cocina_object

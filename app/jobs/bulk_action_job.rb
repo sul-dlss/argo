@@ -44,7 +44,7 @@ class BulkActionJob < ApplicationJob
     druids.each_with_index do |druid, index|
       perform_item_class.new(druid:, index:, job: self).perform
     rescue StandardError => e
-      failure!(druid: druid, message: "Failed #{e.class} #{e.message}")
+      failure!(druid: druid, message: "Error: #{e.class} #{e.message}")
       Honeybadger.notify(e)
     end
   end
