@@ -20,12 +20,10 @@ RSpec.describe 'Catalog show with invalid HEAD cocina' do
 
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
   let(:user_version_client) { instance_double(Dor::Services::Client::UserVersion, inventory: []) }
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, list: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     version: version_client,
-                    user_version: user_version_client,
-                    release_tags: release_tags_client)
+                    user_version: user_version_client)
   end
 
   let(:version_service) do
