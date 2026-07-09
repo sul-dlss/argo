@@ -42,8 +42,8 @@ class ProfilePresenter
     aggregations[SolrDocument::FIELD_LICENSE].items
   end
 
-  def sw_format
-    aggregations[SolrDocument::FIELD_SW_FORMAT].items
+  def format
+    aggregations[SolrDocument::FIELD_FORMAT].items
   end
 
   def date
