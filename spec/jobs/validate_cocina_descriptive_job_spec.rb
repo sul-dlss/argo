@@ -42,8 +42,8 @@ RSpec.describe ValidateCocinaDescriptiveJob do
   context 'when invalid cocina metadata' do
     let(:csv_file) do
       [
-        'druid,source_id,title1.structuredValue1.type,purl',
-        [cocina_object.externalIdentifier, cocina_object.identification.sourceId, 'new title 1', 'https://purl/bb111cc2222'].join(',')
+        'druid,source_id,title1.structuredValue1.value,title1.structuredValue1.type,purl',
+        [cocina_object.externalIdentifier, cocina_object.identification.sourceId, 'new title 1', 'new title 1', 'https://purl/bb111cc2222'].join(',')
       ].join("\n")
     end
 
