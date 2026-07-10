@@ -60,7 +60,7 @@ RSpec.describe TrackSheet do
       it 'builds the table for the solr doc with the correct title' do
         expect(call).to include(
           [
-            'Object Label:',
+            'Object Title:',
             'Correct title' # we get the cocina title out!
           ]
         )
@@ -73,7 +73,7 @@ RSpec.describe TrackSheet do
       it 'builds the table for the solr doc with a truncated title' do
         expect(call).to include(
           [
-            'Object Label:',
+            'Object Title:',
             'Stanford University. School of Engineeering Roger Howe Professorship: Stanford (Calif.), 2010-01-21.  And m...'
           ]
         )
@@ -86,7 +86,7 @@ RSpec.describe TrackSheet do
       it 'builds the table for the solr doc with a blank title' do
         expect(call).to include(
           [
-            'Object Label:',
+            'Object Title:',
             ''
           ]
         )

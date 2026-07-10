@@ -32,7 +32,6 @@ class SolrDocument
   FIELD_FORMATTED_REGISTERED_EARLIEST = 'formatted_registered_earliest_ss'
   FIELD_HUMAN_PRESERVED_SIZE = 'human_preserved_size_ss'
   FIELD_GENRE = 'genre_ssimdv'
-  FIELD_LABEL = 'obj_label_tesim'
   FIELD_LAST_ACCESSIONED_DATE = 'accessioned_latest_dtpsidv'
   FIELD_LAST_OPENED_DATE = 'opened_latest_dtpsidv'
   FIELD_LAST_PUBLISHED_DATE = 'published_latest_dtpsidv'
@@ -41,6 +40,7 @@ class SolrDocument
   FIELD_MODS_TYPE_OF_RESOURCE = 'mods_typeOfResource_ssimdv'
   FIELD_OBJECT_TYPE = 'objectType_ssimdv'
   FIELD_ORCIDS = 'contributor_orcids_ssimdv'
+  FIELD_MAIN_TITLE = 'main_title_tenim'
   FIELD_PROCESSING_STATUS = 'processing_status_text_ssidv'
   FIELD_MODS_CREATED_DATE = 'originInfo_date_created_tesim'
   FIELD_PLACE = 'originInfo_place_placeTerm_tesim'
@@ -85,7 +85,6 @@ class SolrDocument
   attribute :preservation_size, Blacklight::Types::Value, FIELD_PRESERVATION_SIZE
   attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
 
-  attribute :label, Blacklight::Types::String, FIELD_LABEL
   attribute :title_display, Blacklight::Types::String, FIELD_TITLE
   attribute :author, Blacklight::Types::String, FIELD_AUTHOR
   attribute :place, Blacklight::Types::String, FIELD_PLACE

@@ -3,7 +3,7 @@
 ##
 # job to register a list of druids
 class RegisterDruidsJob < BulkActionJob
-  HEADERS = ['Druid', 'Barcode', CatalogRecordId.label, 'Source Id', 'Label'].freeze
+  HEADERS = ['Druid', 'Barcode', CatalogRecordId.label, 'Source Id', 'Title'].freeze
 
   def perform_bulk_action
     convert_results.each.with_index do |convert_result, index|
@@ -58,7 +58,7 @@ class RegisterDruidsJob < BulkActionJob
         cocina_object.identification.barcode,
         cocina_object.identification.catalogLinks.first&.catalogRecordId,
         cocina_object.identification.sourceId,
-        cocina_object.label
+        Cocina::Models::Builders::TitleBuilder.build(cocina_object.description.title)
       ]
     end
   end

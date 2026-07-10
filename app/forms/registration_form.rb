@@ -45,7 +45,7 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
                      prepopulator: ->(*) { (1 - items.count).times { items << VirtualModel.new } } do
     property :source_id, virtual: true
     property :catalog_record_id, virtual: true
-    property :label, virtual: true
+    property :title, virtual: true
     property :barcode, virtual: true
     validates :source_id, format: { with: /\A.+:.+\z/, message: 'ID is invalid' }
     validates :barcode, allow_blank: true, format: { with: VALID_BARCODE_REGEX, message: 'is invalid' }
@@ -106,10 +106,10 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
   def cocina_model(item)
     model_params = {
       type: content_type,
-      label: item.label,
       version: 1,
       administrative:,
       identification: identification(item),
+      description: { title: [{ value: item.title }] },
       structural:,
       access:
     }

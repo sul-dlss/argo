@@ -19,17 +19,20 @@ RSpec.describe RegisterDruidsJob do
   let(:identification) do
     Cocina::Models::Identification.new(barcode: '36105010101010', catalogLinks: [catalog_link], sourceId: 'foo:bar1')
   end
+  let(:description) do
+    Cocina::Models::Description.new(title: [{ value: 'My object' }], purl: 'https://purl.stanford.edu/123')
+  end
 
   let(:cocina_object) do
     instance_double(Cocina::Models::DROWithMetadata,
                     externalIdentifier: 'druid:123',
-                    label: 'My object',
-                    identification:)
+                    identification:,
+                    description:)
   end
 
   let(:csv_string) do
     <<~CSV
-      administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags
+      administrative_policy_object,collection,initial_workflow,content_type,source_id,title,rights_view,rights_download,tags,tags
       druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two
       druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,world,world
     CSV
@@ -44,7 +47,7 @@ RSpec.describe RegisterDruidsJob do
   context 'when parsing fails' do
     let(:csv_string) do
       <<~CSV
-        administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download
+        administrative_policy_object,initial_workflow,content_type,source_id,title,rights_view,rights_download
         druid:123,accessionWF,book,foo:123,My new object,world,world
       CSV
     end
@@ -63,7 +66,7 @@ RSpec.describe RegisterDruidsJob do
     let(:response) { Failure(RuntimeError.new('connection problem')) }
     let(:csv_string) do
       <<~CSV
-        administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download,tags,tags
+        administrative_policy_object,initial_workflow,content_type,source_id,title,rights_view,rights_download,tags,tags
         druid:bc123df4567,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two
       CSV
     end
@@ -93,7 +96,7 @@ RSpec.describe RegisterDruidsJob do
                                                                    workflow: 'accessionWF')
       expect(log).to have_received(:puts).with(/Registration successful for druid:123/).twice
       expect(bulk_action.druid_count_success).to eq 2
-      expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Label\n123,36105010101010,in12345,foo:bar1,My object\n123,36105010101010,in12345,foo:bar1,My object\n")
+      expect(File.read(csv_filepath)).to eq("Druid,Barcode,Folio Instance HRID,Source Id,Title\n123,36105010101010,in12345,foo:bar1,My object\n123,36105010101010,in12345,foo:bar1,My object\n")
     end
   end
 
@@ -101,7 +104,7 @@ RSpec.describe RegisterDruidsJob do
     # Params are provided from registration page (not bulk action page)
     let(:csv_string) do
       <<~CSV
-        source_id,label
+        source_id,title
         foo:123,My new object
         foo:123,A label
       CSV
@@ -136,7 +139,7 @@ RSpec.describe RegisterDruidsJob do
   context 'with valid view:stanford, download:none, and rights_controlledDigitalLending:true' do
     let(:csv_string) do
       <<~CSV
-        administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
+        administrative_policy_object,collection,initial_workflow,content_type,source_id,title,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
         druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,stanford,none,true,csv : test,Project : two
         druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,stanford,none,true
       CSV
@@ -161,7 +164,7 @@ RSpec.describe RegisterDruidsJob do
   context 'with invalid view:world, download:none, and rights_controlledDigitalLending:true' do
     let(:csv_string) do
       <<~CSV
-        administrative_policy_object,collection,initial_workflow,content_type,source_id,label,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
+        administrative_policy_object,collection,initial_workflow,content_type,source_id,title,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
         druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,none,true,csv : test,Project : two
         druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,world,none,true
       CSV

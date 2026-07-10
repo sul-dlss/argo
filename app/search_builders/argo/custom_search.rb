@@ -17,7 +17,7 @@ module Argo
 
     # When a user issues a query containing just a druid, strip off the 'druid:'
     # prefix if it exists, lest we return results that match the word 'druid' in
-    # e.g. the label.
+    # e.g. titles.
     def strip_qualified_druids(solr_parameters)
       return unless DruidTools::Druid.valid?(solr_parameters[:q])
 

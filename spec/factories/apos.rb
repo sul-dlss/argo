@@ -6,7 +6,6 @@ FactoryBot.define do
       ApoMethodSender.new(
         Cocina::Models.build_request({
                                        'type' => type,
-                                       'label' => label,
                                        'version' => 1,
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id,
@@ -15,6 +14,9 @@ FactoryBot.define do
                                            'view' => 'world',
                                            'download' => 'world'
                                          }
+                                       },
+                                       'description' => {
+                                         'title' => [{ value: title }]
                                        }
                                      })
       )
@@ -26,7 +28,7 @@ FactoryBot.define do
 
     admin_policy_id { 'druid:hv992ry2431' }
     agreement_id { FactoryBot.create_for_repository(:agreement).externalIdentifier }
-    label { 'this is a really long test APO label to test truncation of facet labels on show page' }
+    title { 'this is a really long test APO title to test truncation of facet labels on show page' }
     type { Cocina::Models::ObjectType.admin_policy }
   end
 end

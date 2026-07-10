@@ -93,8 +93,8 @@ class TrackSheet
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
   def doc_to_table(solr_doc)
     table_data = []
-    label = solr_doc.title_display.truncate(110)
-    table_data.push(['Object Label:', label])
+    title = solr_doc.title_display.truncate(110)
+    table_data.push(['Object Title:', title])
     table_data.push(['Project Name:', solr_doc.project_tag]) if solr_doc.project_tag
 
     tags = solr_doc.tags.filter_map do |tag|

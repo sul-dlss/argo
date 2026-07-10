@@ -21,7 +21,7 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors' do
         expect(form.errors.full_messages).to include(
-          /missing header\. One of these must be provided: label, folio_instance_hrid/
+          /missing header\. One of these must be provided: title, folio_instance_hrid/
         )
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors' do
         expect(form.errors.full_messages).to include(
-          /missing data\. For each row, one of these must be provided: label, folio_instance_hrid/
+          /missing data\. For each row, one of these must be provided: title, folio_instance_hrid/
         )
       end
     end
