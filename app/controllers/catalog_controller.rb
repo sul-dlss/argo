@@ -203,10 +203,10 @@ class CatalogController < ApplicationController
                                       query: {
                                         no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource',
                                                                        fq: "-#{SolrDocument::FIELD_MODS_TYPE_OF_RESOURCE}:*" },
-                                        no_sw_format: { label: 'No SW Format', fq: "-#{SolrDocument::FIELD_SW_FORMAT}:*" }
+                                        no_format: { label: 'No Format', fq: "-#{SolrDocument::FIELD_FORMAT}:*" }
                                       }
 
-    config.add_facet_field SolrDocument::FIELD_SW_FORMAT, label: 'SW Format', limit: -1, sort: :index, component: Blacklight::Hierarchy::FacetFieldListComponent
+    config.add_facet_field SolrDocument::FIELD_FORMAT, label: 'Format', limit: -1, sort: :index, component: Blacklight::Hierarchy::FacetFieldListComponent
     config.add_facet_field SolrDocument::FIELD_PUBLICATION_DATE, label: 'Date', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_TOPIC, label: 'Topic', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_SUBJECT_GEOGRAPHIC, label: 'Region', component: true, limit: 10
@@ -230,7 +230,7 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       hierarchy: {
-        'sw_format' => [['ssimdv'], ':'],
+        'format' => [['ssimdv'], ':'],
         'wf_wps' => [['ssimdv'], ':'],
         'wf_wsp' => [['ssimdv'], ':'],
         'wf_swp' => [['ssimdv'], ':'],
@@ -291,7 +291,7 @@ class CatalogController < ApplicationController
           originInfo_publisher_tesim
 
           content_type_ssimdv
-          sw_format_ssimdv
+          format_ssimdv
           object_type_ssim
 
           descriptive_text_nostem_i
