@@ -3,10 +3,16 @@
 # Validate the descriptive metadata spreadsheet
 class DescriptionValidator
   def initialize(csv, bulk_job: false)
-    @csv = csv
     @headers = csv.headers
     @bulk_job = bulk_job # indicates if validating from a bulk job
     @errors = []
+    # CSV::Row#[] (and CSV::Row#to_h, which calls it internally) does a linear scan
+    # over the row's headers, so repeatedly looking up cells by header name is
+    # O(headers) per call. `to_a.to_h` builds the same Hash without those per-key
+    # scans, giving O(1) lookups for the row-by-row checks below. (This collapses
+    # duplicate header columns to their last value, but duplicate headers are
+    # already reported as an error by validate_duplicate_headers.)
+    @rows = csv.map { |row| row.to_a.to_h }
   end
 
   def valid?
@@ -31,8 +37,9 @@ class DescriptionValidator
   end
 
   def validate_cell_values
-    @csv.each.with_index(2) do |row, i|
-      @headers.excluding('druid').each do |header|
+    non_druid_headers = @headers.excluding('druid')
+    @rows.each.with_index(2) do |row, i|
+      non_druid_headers.each do |header|
         location = row['druid'] || "row #{i}"
         cell_value = row[header]&.strip
         @errors << "Value error: #{location} has 0 value in #{header}." if cell_value == '0'
@@ -103,7 +110,7 @@ class DescriptionValidator
 
       next unless @headers.include?(title_value_header) || @headers.include?(title_structured_value_header)
 
-      @csv.each do |row|
+      @rows.each do |row|
         next if row[title_type_header].blank? && row[title_structured_value_header].blank? && row[title_value_header].blank?
 
         @errors << "Missing title value for #{title_type_header}." if row[title_value_header].blank? && row[title_structured_value_header].blank?
@@ -119,7 +126,7 @@ class DescriptionValidator
 
       next unless @headers.include?(title_structured_value_header)
 
-      @csv.each do |row|
+      @rows.each do |row|
         next if row[title_structured_value_header].blank? && row[title_structured_type_header].blank?
 
         @errors << "Missing title value for #{title_structured_type_header}." if row[title_structured_value_header].blank?
@@ -142,7 +149,7 @@ class DescriptionValidator
     duplicate_druids.each do |druid|
       @errors << "Duplicate druids: The druid \"#{druid}\" should occur only once."
     end
-    @csv.each.with_index(2) do |row, i|
+    @rows.each.with_index(2) do |row, i|
       @errors << "Missing druid: No druid present in row #{i}." if row['druid'].blank?
     end
   end
@@ -170,7 +177,7 @@ class DescriptionValidator
   end
 
   def duplicate_druids
-    @csv.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.many? }.keys
+    @rows.map { |row| row['druid'] }.group_by { |e| e }.filter { |_k, v| v.many? }.keys
   end
 
   def invalid_headers
