@@ -40,6 +40,43 @@ RSpec.describe Report do
       expect(csv[report_field_index(SolrDocument::FIELD_BARE_DRUID)]).to eq('"')
     end
 
+    context 'when the search params specify a later results page' do
+      let(:csv) do
+        stream = StringIO.new
+        described_class.new(
+          {
+            f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] },
+            page: 2,
+            per_page: 1,
+            sort: 'id asc'
+          },
+          current_user: user
+        ).stream_csv(stream:)
+        stream.string
+      end
+
+      before do
+        solr_conn.add(
+          id: 'druid:aa111aa1111',
+          SolrDocument::FIELD_BARE_DRUID => 'aa111aa1111',
+          SolrDocument::FIELD_OBJECT_TYPE => 'item'
+        )
+        solr_conn.add(
+          id: 'druid:bb222bb2222',
+          SolrDocument::FIELD_BARE_DRUID => 'bb222bb2222',
+          SolrDocument::FIELD_OBJECT_TYPE => 'item'
+        )
+        solr_conn.commit
+      end
+
+      it 'downloads all matching records starting with the first result' do
+        rows = CSV.parse(csv)
+        druid_index = report_field_index(SolrDocument::FIELD_BARE_DRUID)
+
+        expect(rows.drop(1).pluck(druid_index)).to eq %w[aa111aa1111 bb222bb2222]
+      end
+    end
+
     context 'when a field has double quotes' do
       before do
         solr_conn.add(

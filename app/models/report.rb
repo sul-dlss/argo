@@ -300,9 +300,10 @@ class Report # rubocop:disable Metrics/ClassLength
     # Get the underlying Faraday connection to use its streaming API
     connection = search_service.repository.connection.connection
     fl = @fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
+    search_params = @params.except(:page, :per_page, :rows)
     # Setting wt=csv tells solr to return CSV data
     data = { wt: :csv, rows: 10_000_000, fl:, 'csv.mv.separator' => ';' }
-           .reverse_merge(search_service.search_builder.with(@params)).to_h
+           .reverse_merge(search_service.search_builder.with(search_params)).to_h
 
     first_chunk = true
     connection.post blacklight_config.solr_path do |req|
