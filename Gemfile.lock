@@ -147,7 +147,7 @@ GEM
       launchy
     childprocess (5.1.0)
       logger (~> 1.5)
-    cocina-models (0.128.0)
+    cocina-models (0.129.0)
       activesupport
       cocina_display
       deprecation
@@ -161,7 +161,7 @@ GEM
       super_diff
       thor
       zeitwerk (~> 2.1)
-    cocina_display (2.8.0)
+    cocina_display (2.9.0)
       activesupport (>= 7)
       edtf (~> 3.2)
       geo_coord (~> 0.2)
@@ -209,9 +209,9 @@ GEM
       capistrano-shared_configs
       ed25519
     domain_name (0.6.20240107)
-    dor-services-client (15.63.0)
+    dor-services-client (15.64.1)
       activesupport (>= 7.0.0)
-      cocina-models (~> 0.128.0)
+      cocina-models (~> 0.129.0)
       deprecation
       faraday (~> 2.0)
       faraday-retry
@@ -318,9 +318,9 @@ GEM
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
     json (2.21.1)
-    jsonschema_rs (0.47.0-arm64-darwin)
+    jsonschema_rs (0.48.0-arm64-darwin)
       bigdecimal (>= 3.1, < 5)
-    jsonschema_rs (0.47.0-x86_64-linux)
+    jsonschema_rs (0.48.0-x86_64-linux)
       bigdecimal (>= 3.1, < 5)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -590,9 +590,9 @@ GEM
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    sdr-client (2.45.0)
+    sdr-client (2.46.0)
       activesupport
-      cocina-models (~> 0.128.0)
+      cocina-models (~> 0.129.0)
       config
       dry-monads
       faraday (>= 0.16)
