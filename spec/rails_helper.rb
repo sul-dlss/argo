@@ -17,7 +17,6 @@ WebMock.disable_net_connect!(allow_localhost: true,
                              allow: [
                                'https://chromedriver.storage.googleapis.com',
                                'solr',
-                               'dor-indexing-app',
                                'dor-services-app',
                                'workflow',
                                'techmd',

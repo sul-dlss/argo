@@ -8,6 +8,7 @@ FactoryBot.define do
                                        'type' => type,
                                        'label' => 'test collection',
                                        'version' => 1,
+                                       'description' => description,
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
                                        },
@@ -24,5 +25,8 @@ FactoryBot.define do
     admin_policy_id { 'druid:hv992ry2431' }
 
     type { Cocina::Models::ObjectType.collection }
+    description do
+      { 'title' => [{ value: 'A Collection Title' }] }
+    end
   end
 end

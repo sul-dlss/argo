@@ -11,6 +11,7 @@ FactoryBot.define do
                                        'type' => type,
                                        'label' => label,
                                        'version' => 1,
+                                       'description' => description,
                                        'identification' => identification,
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
@@ -38,6 +39,9 @@ FactoryBot.define do
       {
         'sourceId' => source_id
       }
+    end
+    description do
+      { 'title' => [{ value: 'A Title' }] }
     end
 
     factory :agreement do
