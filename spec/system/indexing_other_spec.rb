@@ -4,7 +4,7 @@ require 'rails_helper'
 
 # Integration tests for expected behaviors of our Solr indexing choices, through
 #   our whole stack: tests create cocina objects with factories, write them
-#   to dor-services-app, index the new objects via dor-indexing-app and then use
+#   to dor-services-app, index the new objects and then use
 #   the Argo UI to test Solr behavior such as search results and facet values.
 #
 # rubocop:disable RSpec/RepeatedExample
