@@ -13,10 +13,17 @@ RSpec.describe 'Create an apo', :js do
                                      admin_policy_id: agreement.administrative.hasAdminPolicy)
   end
 
-  # let(:workflow_client) { WorkflowClientFactory.build }
   let(:accession_processes) { Dor::Services::Client.workflows.template('accessionWF').fetch('processes').pluck('name') }
 
+  let(:solr_conn) do
+    blacklight_config = CatalogController.blacklight_config
+    blacklight_config.repository_class.new(blacklight_config).connection
+  end
+
   before do
+    preexisting_collection
+    solr_conn.commit
+
     sign_in user, groups: ['sdr:administrator-role']
   end
 
@@ -64,6 +71,8 @@ RSpec.describe 'Create an apo', :js do
     click_button 'Open Version'
     expect(page).to have_text 'open for modification!'
 
+    solr_conn.commit
+
     click_link 'Edit APO'
     expect(page).to have_text 'Add group' # wait for form to render
     expect(find_field('Title').value).to eq('APO Title')
@@ -73,6 +82,7 @@ RSpec.describe 'Create an apo', :js do
     expect(page).to have_css('.permissionName', text: 'developers')
     expect(page).to have_css('.permissionName', text: 'someone')
     expect(find_field('Default use license').value).to eq 'https://creativecommons.org/licenses/by-sa/3.0/legalcode'
+
     within_fieldset 'Default Collections' do
       expect(page).to have_link('New Testing Collection')
     end

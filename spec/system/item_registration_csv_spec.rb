@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Item registration page', :js do
   let(:bulk_action) { instance_double(BulkAction, save: true, enqueue_job: true) }
   let(:user) { create(:user) }
+  let(:solr_conn) do
+    blacklight_config = CatalogController.blacklight_config
+    blacklight_config.repository_class.new(blacklight_config).connection
+  end
 
   before do
     ResetSolr.reset_solr
@@ -113,6 +117,7 @@ RSpec.describe 'Item registration page', :js do
 
     before do
       non_default_apo # create a second APO to make sure the form does not reset to the default APO
+      solr_conn.commit
     end
 
     it 'reports error, retains user values, and allows user to submit a corrected CSV' do

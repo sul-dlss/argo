@@ -10,6 +10,8 @@ class CocinaDescriptiveComponent < ApplicationComponent
   def cocina_display_methods
     %i[
       title_display_data
+      abstract_display_data
+      table_of_contents_display_data
       form_display_data
       form_note_display_data
       event_display_data

@@ -8,10 +8,12 @@ RSpec.describe 'Count the members of an apo' do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
+  let(:solr_conn) do
+    blacklight_config = CatalogController.blacklight_config
+    blacklight_config.repository_class.new(blacklight_config).connection
+  end
 
   before do
-    blacklight_config = CatalogController.blacklight_config
-    solr_conn = blacklight_config.repository_class.new(blacklight_config).connection
     # Ensure we start from fresh or the link text may not be what we expect
     solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item OR #{SolrDocument::FIELD_OBJECT_TYPE}:collection")
     solr_conn.commit
@@ -22,6 +24,7 @@ RSpec.describe 'Count the members of an apo' do
     before do
       FactoryBot.create_for_repository(:persisted_collection)
       FactoryBot.create_for_repository(:persisted_collection)
+      solr_conn.commit
     end
 
     it 'returns the count' do
@@ -42,6 +45,11 @@ RSpec.describe 'Count the members of an apo' do
   describe 'counting the item members' do
     let(:item) { FactoryBot.create_for_repository(:persisted_item) }
     let(:admin_policy_id) { item.administrative.hasAdminPolicy }
+
+    before do
+      item
+      solr_conn.commit
+    end
 
     it 'returns the count' do
       get "/apo/#{admin_policy_id}/count_items"

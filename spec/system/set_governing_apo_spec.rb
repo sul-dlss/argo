@@ -24,6 +24,7 @@ RSpec.describe 'Set governing APO' do
 
     new_apo
     item
+    solr_conn.commit
 
     allow(VersionService).to receive(:new).and_return(version_service)
     allow(WorkflowService).to receive(:accessioned?).and_return(true)
