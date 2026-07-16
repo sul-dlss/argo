@@ -16,6 +16,7 @@ RSpec.describe 'Update serials metadata', :js do
 
   before do
     allow(VersionService).to receive(:new).and_return(version_service)
+
     sign_in user, groups: ['sdr:administrator-role']
     visit solr_document_path(item.externalIdentifier)
   end
@@ -36,6 +37,8 @@ RSpec.describe 'Update serials metadata', :js do
     fill_in 'Sort key', with: '17'
     click_button 'Update'
 
-    expect(page).to have_text 'test object, part 17, supplement'
+    expect(page).to have_text('Serials metadata has been updated!')
+
+    expect(page).to have_text 'A Title, part 17, supplement'
   end
 end
