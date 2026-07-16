@@ -8,11 +8,17 @@ RSpec.describe 'Count the members of a collection' do
   let(:rendered) do
     Capybara::Node::Simple.new(response.body)
   end
+  let(:solr_conn) do
+    blacklight_config = CatalogController.blacklight_config
+    blacklight_config.repository_class.new(blacklight_config).connection
+  end
 
   before do
     sign_in user, groups: ['sdr:administrator-role']
+
     FactoryBot.create_for_repository(:persisted_item, collection_id: collection.externalIdentifier)
     FactoryBot.create_for_repository(:persisted_item, collection_id: collection.externalIdentifier)
+    solr_conn.commit
   end
 
   it 'returns the count' do
