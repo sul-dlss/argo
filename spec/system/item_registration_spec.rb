@@ -291,7 +291,7 @@ RSpec.describe 'Item registration page', :js do
 
       fill_in CatalogRecordId.label, with: hrid
       fill_in 'Source ID', with: source_id
-      fill_in 'Label', with: 'object title'
+      fill_in 'Title', with: 'object title'
 
       click_button 'Register'
 

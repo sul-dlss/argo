@@ -138,7 +138,6 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.document,
-                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'test parameters for registration' }],
@@ -191,7 +190,6 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.image,
-                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -248,7 +246,6 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.book,
-                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'xTest DRO' }],
@@ -309,7 +306,6 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.image,
-                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -367,7 +363,6 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.image,
-                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],
@@ -465,7 +460,6 @@ RSpec.describe 'Create a new item' do
     let(:json) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.book,
-                              label: '',
                               version: 1,
                               description: {
                                 title: [{ value: 'Test DRO' }],

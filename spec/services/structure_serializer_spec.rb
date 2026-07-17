@@ -20,7 +20,6 @@ RSpec.describe StructureSerializer do
         {
           "type": "#{Cocina::Models::ObjectType.image}",
           "externalIdentifier": "#{druid}",
-          "label": "dood",
           "version": 1,
           "access": {
             "view": "world",
@@ -65,7 +64,6 @@ RSpec.describe StructureSerializer do
         {
           "type": "#{Cocina::Models::ObjectType.image}",
           "externalIdentifier": "#{druid}",
-          "label": "dood",
           "version": 1,
           "access": {
             "view": "world",

@@ -51,7 +51,6 @@ RSpec.describe 'User version view', :js do
       {
         type: Cocina::Models::ObjectType.image.to_s,
         externalIdentifier: 'druid:hj185xx2222',
-        label: title,
         version: 3,
         access: {
           view: 'world',

@@ -9,7 +9,6 @@ FactoryBot.define do
       ItemMethodSender.new(
         Cocina::Models.build_request({
                                        'type' => type,
-                                       'label' => label,
                                        'version' => 1,
                                        'description' => description,
                                        'identification' => identification,
@@ -32,7 +31,6 @@ FactoryBot.define do
                                                  members: [{ identifier: 'sdr:administrator-role',
                                                              type: 'workgroup' }] }]).externalIdentifier
     end
-    label { 'test object' }
     type { Cocina::Models::ObjectType.object }
     source_id { "sul:#{SecureRandom.uuid}" }
     identification do
@@ -46,7 +44,6 @@ FactoryBot.define do
 
     factory :agreement do
       type { Cocina::Models::ObjectType.agreement }
-      label { 'Test Agreement' }
       admin_policy_id { 'druid:hv992ry2431' }
     end
   end

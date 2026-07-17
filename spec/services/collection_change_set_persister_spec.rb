@@ -28,7 +28,6 @@ RSpec.describe CollectionChangeSetPersister do
     let(:model) do
       model = Cocina::Models::Collection.new(
         externalIdentifier: 'druid:bc123df4568',
-        label: 'test',
         type: Cocina::Models::ObjectType.collection,
         version: 1,
         description: {

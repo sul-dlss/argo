@@ -33,7 +33,6 @@ RSpec.describe CocinaHashPresenter do
                                type: 'https://cocina.sul.stanford.edu/models/collection',
                                externalIdentifier: cocina_object.externalIdentifier,
                                version: 1,
-                               label: '',
                                access: {
                                  view: 'dark'
                                },

@@ -13,7 +13,7 @@ RSpec.describe 'Set governing APO' do
   let(:version_service) { instance_double(VersionService, open_and_not_assembling?: true, open?: true) }
 
   let(:item) do
-    FactoryBot.create_for_repository(:persisted_item, label: 'Foo', title: 'Test')
+    FactoryBot.create_for_repository(:persisted_item, title: 'Test')
   end
   let(:item_id) { item.externalIdentifier }
   let(:blacklight_config) { CatalogController.blacklight_config }

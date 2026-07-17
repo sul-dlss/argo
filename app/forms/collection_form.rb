@@ -49,7 +49,6 @@ class CollectionForm
   # @return [Hash] the parameters used to register a collection. Must be called after `validate`
   def cocina_model
     reg_params = {
-      label: params[:collection_title].presence || ':auto',
       version: 1,
       type: Cocina::Models::ObjectType.collection,
       administrative: {

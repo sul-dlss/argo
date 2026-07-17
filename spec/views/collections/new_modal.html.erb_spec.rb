@@ -7,7 +7,6 @@ RSpec.describe 'collections/new_modal' do
     instance_double(
       Cocina::Models::AdminPolicy,
       externalIdentifier: 'druid:zt570qh4444',
-      label: '',
       description: Cocina::Models::Description.new(
         title: [{ value: 'My Title' }],
         purl: 'https://purl.stanford.edu/zt570qh4444'

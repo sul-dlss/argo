@@ -26,7 +26,6 @@ class AgreementForm < ApplicationForm
   def model
     Cocina::Models.build_request({
                                    'type' => Cocina::Models::ObjectType.agreement,
-                                   'label' => title,
                                    'version' => 1,
                                    'access' => { 'view' => 'dark' },
                                    'description' => { 'title' => [{ 'value' => title }] },

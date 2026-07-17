@@ -27,7 +27,6 @@ RSpec.describe ItemChangeSetPersister do
     let(:model) do
       model = Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
-        label: 'test',
         type: Cocina::Models::ObjectType.object,
         version: 1,
         description: {
@@ -125,7 +124,6 @@ RSpec.describe ItemChangeSetPersister do
       let(:model) do
         model = Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
-          label: 'test',
           type: Cocina::Models::ObjectType.object,
           version: 1,
           description: {

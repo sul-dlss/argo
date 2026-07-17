@@ -46,7 +46,6 @@ RSpec.describe 'Create collections' do
       post '/collections', params: {
         'apo_druid' => apo_id,
         'modal' => 'true',
-        'label' => ':auto',
         'collection_catalog_record_id' => '1234567',
         'collection_rights_catalog_record_id' => 'dark'
       }
