@@ -34,7 +34,7 @@ RSpec.describe RegisterDruidsJob do
     <<~CSV
       administrative_policy_object,collection,initial_workflow,content_type,source_id,title,rights_view,rights_download,tags,tags
       druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,world,csv : test,Project : two
-      druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,world,world
+      druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A title,world,world
     CSV
   end
 
@@ -106,7 +106,7 @@ RSpec.describe RegisterDruidsJob do
       <<~CSV
         source_id,title
         foo:123,My new object
-        foo:123,A label
+        foo:123,A title
       CSV
     end
 
@@ -141,7 +141,7 @@ RSpec.describe RegisterDruidsJob do
       <<~CSV
         administrative_policy_object,collection,initial_workflow,content_type,source_id,title,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
         druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,stanford,none,true,csv : test,Project : two
-        druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,stanford,none,true
+        druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A title,stanford,none,true
       CSV
     end
 
@@ -166,7 +166,7 @@ RSpec.describe RegisterDruidsJob do
       <<~CSV
         administrative_policy_object,collection,initial_workflow,content_type,source_id,title,rights_view,rights_download,rights_controlledDigitalLending,tags,tags
         druid:bc123df4567,druid:bk024qs1808,accessionWF,book,foo:123,My new object,world,none,true,csv : test,Project : two
-        druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A label,world,none,true
+        druid:dj123qx4567,druid:bk024qs1808,accessionWF,book,foo:123,A title,world,none,true
       CSV
     end
 

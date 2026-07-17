@@ -10,8 +10,4 @@ class CollectionMethodSender
   def title=(title)
     @cocina_model = @cocina_model.new(description: { title: [{ value: title }] })
   end
-
-  def label=(label)
-    @cocina_model = @cocina_model.new(label:)
-  end
 end

@@ -6,7 +6,6 @@ FactoryBot.define do
       CollectionMethodSender.new(
         Cocina::Models.build_request({
                                        'type' => type,
-                                       'label' => 'test collection',
                                        'version' => 1,
                                        'description' => description,
                                        'administrative' => {

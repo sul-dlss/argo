@@ -7,7 +7,6 @@ RSpec.describe CocinaDescriptiveComponent, type: :component do
     { 'cocinaVersion' => '0.86.0',
       'type' => 'https://cocina.sul.stanford.edu/models/book',
       'externalIdentifier' => 'druid:bb000cr7262',
-      'label' => 'Ḥirz-i jān jadīd : yaʻnī k̲h̲ulāṣah Mufīd-i ‘ām',
       'version' => 2,
       'access' =>
       { 'view' => 'stanford',

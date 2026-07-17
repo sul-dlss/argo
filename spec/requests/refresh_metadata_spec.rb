@@ -26,7 +26,7 @@ RSpec.describe 'Refresh metadata' do
         post "/items/#{druid}/refresh_metadata"
 
         expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq "object must have #{CatalogRecordId.label} to refresh descMetadata"
+        expect(response.body).to eq "object must have #{CatalogRecordId.label} to refresh descriptive metadata"
       end
     end
 

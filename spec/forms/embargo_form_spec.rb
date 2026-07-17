@@ -12,7 +12,6 @@ RSpec.describe EmbargoForm do
     {
       externalIdentifier: 'druid:bc234fg5678',
       type: Cocina::Models::ObjectType.image,
-      label: 'Test DRO',
       version: 1,
       description: {
         title: [{ value: 'Test DRO' }],

@@ -23,7 +23,7 @@ RSpec.describe DescmetadataDownloadJob do
       <?xml version="1.0" encoding="UTF-8"?>
       <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" version="3.7" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd">
         <titleInfo>
-          <title>Object Label for Biryani Spice Mix Pine Nut</title>
+          <title>Object Title for Biryani Spice Mix Pine Nut</title>
         </titleInfo>
       </mods>
     XML

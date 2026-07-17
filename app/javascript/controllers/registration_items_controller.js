@@ -33,13 +33,13 @@ export default class extends Controller {
     const rowsOnPage = this.element.querySelectorAll(this.selectorValue)
 
     lines.forEach((line, index) => {
-      const [barcode, catalogRecordId, sourceId, label] = line.split(/\t/)
+      const [barcode, catalogRecordId, sourceId, title] = line.split(/\t/)
 
       const elements = rowsOnPage[index].querySelectorAll('input')
       elements[0].value = barcode
       elements[1].value = catalogRecordId
       elements[2].value = sourceId
-      elements[3].value = label
+      elements[3].value = title
       // Trigger client side validations for existing rows
       // Newly added rows will validate when the connect for RegistrationItemRowController is run at
       // the conclusion of this method.

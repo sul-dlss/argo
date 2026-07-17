@@ -35,7 +35,6 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
     let(:cocina) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::ObjectType.document,
-                              label: 'my dro',
                               version: 1,
                               description: {
                                 title: [{ value: 'my dro' }],

@@ -86,7 +86,7 @@ class ItemsController < ApplicationController
                           link.catalog == CatalogRecordId.type
                         end&.catalogRecordId
     if catalog_record_id.blank?
-      render status: :bad_request, plain: "object must have #{CatalogRecordId.label} to refresh descMetadata"
+      render status: :bad_request, plain: "object must have #{CatalogRecordId.label} to refresh descriptive metadata"
       return
     end
 

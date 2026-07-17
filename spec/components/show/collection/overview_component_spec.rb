@@ -9,7 +9,6 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:cocina) do
     Cocina::Models::Collection.new(externalIdentifier: 'druid:bc234fg5678',
                                    type: Cocina::Models::ObjectType.collection,
-                                   label: 'my collection',
                                    version: 1,
                                    description: {
                                      title: [{ value: 'my collection' }],

@@ -7,7 +7,6 @@ RSpec.describe 'items/_collection_ui.html.erb' do
     [
       instance_double(
         Cocina::Models::Collection,
-        label: 'Unused',
         externalIdentifier: 'druid:abc123',
         description: Cocina::Models::Description.new(
           title: [{ value: 'But catz are nice too' }], purl: 'https://purl.stanford.edu/abc123'
