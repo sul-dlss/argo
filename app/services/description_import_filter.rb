@@ -8,6 +8,7 @@ class DescriptionImportFilter
   # @raises Cocina::Models::ValidationError
   def self.filter(compacted_params)
     new.filter(compacted_params)
+
     Cocina::Models::Description.new(compacted_params)
   end
 
@@ -28,15 +29,12 @@ class DescriptionImportFilter
     event: Cocina::Models::Event,
     geographic: Cocina::Models::DescriptiveGeographicMetadata,
     adminMetadata: Cocina::Models::DescriptiveAdminMetadata,
-    access: Cocina::Models::DescriptiveAccessMetadata
+    access: Cocina::Models::DescriptiveAccessMetadata,
+    form: Cocina::Models::DescriptiveValue
   }.freeze
 
-  # recursive, breadth first search for incomplete nodes
+  # recursive, depth first search for incomplete nodes
   def filter(compacted_params, model: Cocina::Models::Description)
-    ATTRIBUTES_TO_FILTER.each do |attribute, method|
-      send(method, compacted_params[attribute]) if model.attribute_names.include?(attribute)
-    end
-
     MODELS_WITH_NESTED_ATTRIBUTES.each do |attribute, model|
       case compacted_params[attribute]
       when Hash
@@ -44,6 +42,12 @@ class DescriptionImportFilter
       when Array
         compacted_params[attribute].each { |attributes| filter(attributes, model:) }
       end
+    end
+
+    ATTRIBUTES_TO_FILTER.each do |attribute, method|
+      next unless model.attribute_names.include?(attribute)
+
+      send(method, compacted_params[attribute])
     end
 
     compacted_params
@@ -56,7 +60,7 @@ class DescriptionImportFilter
   end
 
   def remove_note_without_value(notes)
-    Array(notes).delete_if { !descriptive_value_sufficient?(it) }
+    Array(notes).delete_if { !note_sufficient?(it) }
   end
 
   def remove_contributors_without_value(contributors)
@@ -70,7 +74,6 @@ class DescriptionImportFilter
   end
 
   def remove_form_without_value(forms)
-    Array(forms).each { |form| remove_note_without_value(form[:note]) }
     Array(forms).delete_if { !descriptive_value_sufficient?(it) }
   end
 
@@ -86,6 +89,11 @@ class DescriptionImportFilter
     Array(languages).delete_if { !language_sufficient?(it) }
   end
 
+  # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
+  def remove_date_without_value(dates)
+    Array(dates).delete_if { !descriptive_value_sufficient?(it) }
+  end
+
   # Ignore Language that is just "type" or "source"
   def language_sufficient?(descriptive_value)
     %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
@@ -93,10 +101,12 @@ class DescriptionImportFilter
     end
   end
 
-  # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
-  def remove_date_without_value(dates)
-    Array(dates).delete_if { !descriptive_value_sufficient?(it) }
+  def note_sufficient?(descriptive_value)
+    %i[value valueAt structuredValue parallelValue groupedValue].any? do |key|
+      descriptive_value[key].present?
+    end
   end
+
 
   # Ignore DescriptiveValue that is just "type" or "source"
   def descriptive_value_sufficient?(descriptive_value)

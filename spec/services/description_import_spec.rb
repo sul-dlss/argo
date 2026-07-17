@@ -377,7 +377,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'has the expected value' do
+      it 'drops the contributor' do
         expect(contributors).to be_empty
       end
     end
@@ -800,7 +800,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the identifier' do
         expect(updated.value!.identifier).to be_empty
       end
     end
@@ -840,7 +840,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the language' do
         expect(updated.value!.language).to be_empty
       end
     end
@@ -904,7 +904,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the subject' do
         expect(updated.value!.subject).to be_empty
       end
     end
@@ -945,7 +945,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the note' do
         expect(updated.value!.note).to be_empty
       end
     end
@@ -964,7 +964,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the event' do
         expect(updated.value!.event).to be_empty
       end
     end
@@ -989,7 +989,7 @@ RSpec.describe DescriptionImport do
         end
       end
 
-      context 'when event date has no value' do
+      context 'when event contains only a valueless date' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
@@ -997,8 +997,8 @@ RSpec.describe DescriptionImport do
           CSV
         end
 
-        it 'rejects the item' do
-          expect(updated).to be_failure
+        it 'drops the event date & the event' do
+          expect(updated.value!.event).to be_empty
         end
       end
 
