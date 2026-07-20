@@ -42,7 +42,6 @@ class DescriptionValidator
       non_druid_headers.each do |header|
         location = row['druid'] || "row #{i}"
         cell_value = row[header]&.strip
-        @errors << "Value error: #{location} has 0 value in #{header}." if cell_value == '0'
         @errors << "Value error: #{location} has spreadsheet formula error in #{header}." if %w[#NA #REF! #VALUE?
                                                                                                 #NAME?].include? cell_value
       end
