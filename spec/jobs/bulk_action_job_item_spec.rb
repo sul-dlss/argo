@@ -18,7 +18,7 @@ RSpec.describe BulkActionJobItem do
 
     it 'calls job.success!' do
       bulk_action_item.success!(message: 'Testing successful')
-      expect(job).to have_received(:success!).with(druid:, message: 'Testing successful')
+      expect(job).to have_received(:success!).with(druid:, message: 'Success: Testing successful')
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe BulkActionJobItem do
 
     it 'calls job.failure!' do
       bulk_action_item.failure!(message: 'Testing failed')
-      expect(job).to have_received(:failure!).with(druid:, message: 'Testing failed')
+      expect(job).to have_received(:failure!).with(druid:, message: 'Error: Testing failed')
     end
   end
 
@@ -220,7 +220,7 @@ RSpec.describe BulkActionJobItem do
       it 'returns false' do
         expect(bulk_action_item.check_update_ability?).to be false
         expect(ability).to have_received(:can?).with(:update, cocina_object)
-        expect(job).to have_received(:failure!).with(druid:, message: 'Not authorized to update')
+        expect(job).to have_received(:failure!).with(druid:, message: 'Error: Not authorized to update')
       end
     end
   end
@@ -252,7 +252,7 @@ RSpec.describe BulkActionJobItem do
       it 'returns false' do
         expect(bulk_action_item.check_read_ability?).to be false
         expect(ability).to have_received(:can?).with(:read, cocina_object)
-        expect(job).to have_received(:failure!).with(druid:, message: 'Not authorized to read')
+        expect(job).to have_received(:failure!).with(druid:, message: 'Error: Not authorized to read')
       end
     end
   end

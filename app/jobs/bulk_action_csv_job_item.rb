@@ -12,10 +12,10 @@ class BulkActionCsvJobItem < BulkActionJobItem
   attr_reader :row
 
   def success!(message:)
-    job.success!(druid: druid, message: message, index:)
+    job.success!(druid: druid, message: "Success: #{message}", index:)
   end
 
   def failure!(message:)
-    job.failure!(druid: druid, message: message, index:)
+    job.failure!(druid: druid, message: "Error: #{message}", index:)
   end
 end

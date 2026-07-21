@@ -52,8 +52,8 @@ RSpec.describe BulkActionCsvJob do
 
       expect(log).to have_received(:puts).with(/Starting TestBulkActionCsvJob for BulkAction #{bulk_action.id}/)
       expect(log).to have_received(:puts).with(/Finished TestBulkActionCsvJob for BulkAction #{bulk_action.id}/)
-      expect(log).to have_received(:puts).with(/line 2 - Testing successful for #{DRUID1}/o)
-      expect(log).to have_received(:puts).with(/line 3 - Testing failed for #{DRUID2}/o)
+      expect(log).to have_received(:puts).with(/line 2 - Success: Testing successful for #{DRUID1}/o)
+      expect(log).to have_received(:puts).with(/line 3 - Error: Testing failed for #{DRUID2}/o)
 
       expect(bulk_action.reload.druid_count_total).to eq(2)
       expect(bulk_action.druid_count_success).to eq(1)

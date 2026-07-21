@@ -76,7 +76,7 @@ RSpec.describe BulkActionJob do
       TestBulkActionJob.perform_now(bulk_action.id, druids: [DRUID1, DRUID2])
 
       expect(log).to have_received(:puts).with(/Testing successful for #{DRUID1}/o)
-      expect(log).to have_received(:puts).with(/Failed StandardError Something bad happened for #{DRUID2}/o)
+      expect(log).to have_received(:puts).with(/Error: StandardError Something bad happened for #{DRUID2}/o)
 
       expect(bulk_action.reload.druid_count_total).to eq(2)
       expect(bulk_action.druid_count_success).to eq(1)

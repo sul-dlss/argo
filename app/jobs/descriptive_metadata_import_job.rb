@@ -16,7 +16,7 @@ class DescriptiveMetadataImportJob < BulkActionCsvJob
 
       Dor::Services::Client.objects.indexable(druid: cocina_object.externalIdentifier, cocina: cocina_object.new(description:))
 
-      return failure!(message: 'Description unchanged') if cocina_object.description == description
+      return success!(message: 'Description unchanged') if cocina_object.description == description
 
       open_new_version_if_needed!(description: 'Updated descriptive metadata')
 

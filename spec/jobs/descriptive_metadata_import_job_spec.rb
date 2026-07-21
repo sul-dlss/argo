@@ -132,8 +132,8 @@ RSpec.describe DescriptiveMetadataImportJob do
       expect(log.string).to include 'Description unchanged'
 
       expect(bulk_action.reload.druid_count_total).to eq 1
-      expect(bulk_action.druid_count_fail).to eq 1
-      expect(bulk_action.druid_count_success).to eq 0
+      expect(bulk_action.druid_count_fail).to eq 0
+      expect(bulk_action.druid_count_success).to eq 1
     end
   end
 end

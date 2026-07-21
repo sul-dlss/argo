@@ -23,7 +23,7 @@ RSpec.describe BulkActionCsvJobItem do
 
     it 'calls job.success!' do
       bulk_action_item.success!(message: 'Testing successful')
-      expect(job).to have_received(:success!).with(druid:, message: 'Testing successful', index: 2)
+      expect(job).to have_received(:success!).with(druid:, message: 'Success: Testing successful', index: 2)
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe BulkActionCsvJobItem do
 
     it 'calls job.failure!' do
       bulk_action_item.failure!(message: 'Testing failed')
-      expect(job).to have_received(:failure!).with(druid:, message: 'Testing failed', index: 2)
+      expect(job).to have_received(:failure!).with(druid:, message: 'Error: Testing failed', index: 2)
     end
   end
 end

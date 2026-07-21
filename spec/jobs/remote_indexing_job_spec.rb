@@ -51,8 +51,8 @@ RSpec.describe RemoteIndexingJob do
         expect(bulk_action.druid_count_fail).to eq 2
 
         expect(log.string).to include "Reindex successful for #{druids[0]}"
-        expect(log.string).to include "Failed StandardError StandardError for #{druids[1]}"
-        expect(log.string).to include "Failed Argo::Exceptions::ReindexError Timed out connecting to server for #{druids[2]}"
+        expect(log.string).to include "Error: StandardError StandardError for #{druids[1]}"
+        expect(log.string).to include "Error: Argo::Exceptions::ReindexError Timed out connecting to server for #{druids[2]}"
       end
     end
   end
