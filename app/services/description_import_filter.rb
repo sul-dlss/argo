@@ -13,24 +13,29 @@ class DescriptionImportFilter
   end
 
   ATTRIBUTES_TO_FILTER = {
-    digitalLocation: :remove_digital_location_without_value,
-    note: :remove_note_without_value,
     contributor: :remove_contributors_without_value,
+    date: :remove_date_without_value,
+    digitalLocation: :remove_digital_location_without_value,
+    event: :remove_event_without_value,
     form: :remove_form_without_value,
     identifier: :remove_identifiers_without_value,
     language: :remove_language_without_value,
-    date: :remove_date_without_value,
-    subject: :remove_subject_without_value,
-    event: :remove_event_without_value
+    note: :remove_note_without_value,
+    subject: :remove_subject_without_value
   }.freeze
 
   MODELS_WITH_NESTED_ATTRIBUTES = {
-    relatedResource: Cocina::Models::RelatedResource,
-    event: Cocina::Models::Event,
-    geographic: Cocina::Models::DescriptiveGeographicMetadata,
-    adminMetadata: Cocina::Models::DescriptiveAdminMetadata,
     access: Cocina::Models::DescriptiveAccessMetadata,
-    form: Cocina::Models::DescriptiveValue
+    adminMetadata: Cocina::Models::DescriptiveAdminMetadata,
+    contributor: Cocina::Models::Contributor,
+    date: Cocina::Models::DescriptiveValue,
+    event: Cocina::Models::Event,
+    form: Cocina::Models::DescriptiveValue,
+    geographic: Cocina::Models::DescriptiveGeographicMetadata,
+    relatedResource: Cocina::Models::RelatedResource,
+    structuredValue: Cocina::Models::DescriptiveValue,
+    subject: Cocina::Models::DescriptiveValue,
+    title: Cocina::Models::DescriptiveValue
   }.freeze
 
   # recursive, depth first search for incomplete nodes
@@ -50,7 +55,7 @@ class DescriptionImportFilter
       send(method, compacted_params[attribute])
     end
 
-    compacted_params
+    compacted_params.compact_blank!
   end
 
   private
@@ -106,7 +111,6 @@ class DescriptionImportFilter
       descriptive_value[key].present?
     end
   end
-
 
   # Ignore DescriptiveValue that is just "type" or "source"
   def descriptive_value_sufficient?(descriptive_value)
