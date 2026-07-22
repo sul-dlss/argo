@@ -14,14 +14,16 @@ class DescriptionImportFilter
 
   ATTRIBUTES_TO_FILTER = {
     contributor: :remove_contributors_without_value,
-    date: :remove_date_without_value,
-    digitalLocation: :remove_digital_location_without_value,
-    event: :remove_event_without_value,
-    form: :remove_form_without_value,
-    identifier: :remove_identifiers_without_value,
-    language: :remove_language_without_value,
-    note: :remove_note_without_value,
-    subject: :remove_subject_without_value
+    date: :remove_dates_without_value,
+    digitalLocation: :remove_descriptive_values_without_value,
+    event: :remove_events_without_value,
+    form: :remove_descriptive_values_without_value,
+    identifier: :remove_descriptive_values_without_value,
+    language: :remove_languages_without_value,
+    name: :remove_descriptive_values_without_value,
+    note: :remove_notes_without_value,
+    structuredValue: :remove_descriptive_values_without_value,
+    subject: :remove_descriptive_values_without_value
   }.freeze
 
   MODELS_WITH_NESTED_ATTRIBUTES = {
@@ -32,6 +34,7 @@ class DescriptionImportFilter
     event: Cocina::Models::Event,
     form: Cocina::Models::DescriptiveValue,
     geographic: Cocina::Models::DescriptiveGeographicMetadata,
+    name: Cocina::Models::DescriptiveValue,
     relatedResource: Cocina::Models::RelatedResource,
     structuredValue: Cocina::Models::DescriptiveValue,
     subject: Cocina::Models::DescriptiveValue,
@@ -60,56 +63,29 @@ class DescriptionImportFilter
 
   private
 
-  def remove_digital_location_without_value(digital_locations)
-    Array(digital_locations).delete_if { !descriptive_value_sufficient?(it) }
+  def remove_descriptive_values_without_value(descriptive_values)
+    Array(descriptive_values).delete_if { !descriptive_value_sufficient?(it) }
   end
 
-  def remove_note_without_value(notes)
+  def remove_notes_without_value(notes)
     Array(notes).delete_if { !note_sufficient?(it) }
   end
 
   def remove_contributors_without_value(contributors)
-    Array(contributors).delete_if do |contributor|
-      contributor[:name].nil? && contributor[:identifier].blank? && contributor[:valueAt].blank?
-    end
+    Array(contributors).delete_if { !contributor_sufficient?(it) }
   end
 
-  def remove_identifiers_without_value(identifiers)
-    Array(identifiers).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  def remove_form_without_value(forms)
-    Array(forms).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  def remove_subject_without_value(subjects)
-    Array(subjects).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  def remove_event_without_value(events)
+  def remove_events_without_value(events)
     Array(events).delete_if { !event_sufficient?(it) }
   end
 
-  def remove_language_without_value(languages)
+  def remove_languages_without_value(languages)
     Array(languages).delete_if { !language_sufficient?(it) }
   end
 
   # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
-  def remove_date_without_value(dates)
+  def remove_dates_without_value(dates)
     Array(dates).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  # Ignore Language that is just "type" or "source"
-  def language_sufficient?(descriptive_value)
-    %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
-      descriptive_value[key].present?
-    end
-  end
-
-  def note_sufficient?(descriptive_value)
-    %i[value valueAt structuredValue parallelValue groupedValue].any? do |key|
-      descriptive_value[key].present?
-    end
   end
 
   # Ignore DescriptiveValue that is just "type" or "source"
@@ -119,10 +95,29 @@ class DescriptionImportFilter
     end
   end
 
+  def note_sufficient?(note)
+    %i[value valueAt structuredValue parallelValue groupedValue].any? do |key|
+      note[key].present?
+    end
+  end
+
+  def contributor_sufficient?(contributor)
+    %i[identifier name valueAt].any? do |key|
+      contributor[key].present?
+    end
+  end
+
+  # Ignore Language that is just "type" or "source"
+  def language_sufficient?(language)
+    %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
+      language[key].present?
+    end
+  end
+
   # Ignore Event that is just "type"
-  def event_sufficient?(descriptive_value)
+  def event_sufficient?(event)
     %i[date contributor location identifier note structuredValue].any? do |key|
-      descriptive_value[key].present?
+      event[key].present?
     end
   end
 end
