@@ -8,35 +8,41 @@ class DescriptionImportFilter
   # @raises Cocina::Models::ValidationError
   def self.filter(compacted_params)
     new.filter(compacted_params)
+
     Cocina::Models::Description.new(compacted_params)
   end
 
   ATTRIBUTES_TO_FILTER = {
-    digitalLocation: :remove_digital_location_without_value,
-    note: :remove_note_without_value,
     contributor: :remove_contributors_without_value,
-    form: :remove_form_without_value,
-    identifier: :remove_identifiers_without_value,
-    language: :remove_language_without_value,
-    date: :remove_date_without_value,
-    subject: :remove_subject_without_value,
-    event: :remove_event_without_value
+    date: :remove_dates_without_value,
+    digitalLocation: :remove_descriptive_values_without_value,
+    event: :remove_events_without_value,
+    form: :remove_descriptive_values_without_value,
+    identifier: :remove_descriptive_values_without_value,
+    language: :remove_languages_without_value,
+    name: :remove_descriptive_values_without_value,
+    note: :remove_notes_without_value,
+    structuredValue: :remove_descriptive_values_without_value,
+    subject: :remove_descriptive_values_without_value
   }.freeze
 
   MODELS_WITH_NESTED_ATTRIBUTES = {
-    relatedResource: Cocina::Models::RelatedResource,
-    event: Cocina::Models::Event,
-    geographic: Cocina::Models::DescriptiveGeographicMetadata,
+    access: Cocina::Models::DescriptiveAccessMetadata,
     adminMetadata: Cocina::Models::DescriptiveAdminMetadata,
-    access: Cocina::Models::DescriptiveAccessMetadata
+    contributor: Cocina::Models::Contributor,
+    date: Cocina::Models::DescriptiveValue,
+    event: Cocina::Models::Event,
+    form: Cocina::Models::DescriptiveValue,
+    geographic: Cocina::Models::DescriptiveGeographicMetadata,
+    name: Cocina::Models::DescriptiveValue,
+    relatedResource: Cocina::Models::RelatedResource,
+    structuredValue: Cocina::Models::DescriptiveValue,
+    subject: Cocina::Models::DescriptiveValue,
+    title: Cocina::Models::DescriptiveValue
   }.freeze
 
-  # recursive, breadth first search for incomplete nodes
+  # recursive, depth first search for incomplete nodes
   def filter(compacted_params, model: Cocina::Models::Description)
-    ATTRIBUTES_TO_FILTER.each do |attribute, method|
-      send(method, compacted_params[attribute]) if model.attribute_names.include?(attribute)
-    end
-
     MODELS_WITH_NESTED_ATTRIBUTES.each do |attribute, model|
       case compacted_params[attribute]
       when Hash
@@ -46,55 +52,39 @@ class DescriptionImportFilter
       end
     end
 
-    compacted_params
+    ATTRIBUTES_TO_FILTER.each do |attribute, method|
+      next unless model.attribute_names.include?(attribute)
+
+      send(method, compacted_params[attribute])
+    end
+
+    compacted_params.compact_blank!
   end
 
   private
 
-  def remove_digital_location_without_value(digital_locations)
-    Array(digital_locations).delete_if { !descriptive_value_sufficient?(it) }
+  def remove_descriptive_values_without_value(descriptive_values)
+    Array(descriptive_values).delete_if { !descriptive_value_sufficient?(it) }
   end
 
-  def remove_note_without_value(notes)
-    Array(notes).delete_if { !descriptive_value_sufficient?(it) }
+  def remove_notes_without_value(notes)
+    Array(notes).delete_if { !note_sufficient?(it) }
   end
 
   def remove_contributors_without_value(contributors)
-    Array(contributors).delete_if do |contributor|
-      contributor[:name].nil? && contributor[:identifier].blank? && contributor[:valueAt].blank?
-    end
+    Array(contributors).delete_if { !contributor_sufficient?(it) }
   end
 
-  def remove_identifiers_without_value(identifiers)
-    Array(identifiers).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  def remove_form_without_value(forms)
-    Array(forms).each { |form| remove_note_without_value(form[:note]) }
-    Array(forms).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  def remove_subject_without_value(subjects)
-    Array(subjects).delete_if { !descriptive_value_sufficient?(it) }
-  end
-
-  def remove_event_without_value(events)
+  def remove_events_without_value(events)
     Array(events).delete_if { !event_sufficient?(it) }
   end
 
-  def remove_language_without_value(languages)
+  def remove_languages_without_value(languages)
     Array(languages).delete_if { !language_sufficient?(it) }
   end
 
-  # Ignore Language that is just "type" or "source"
-  def language_sufficient?(descriptive_value)
-    %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
-      descriptive_value[key].present?
-    end
-  end
-
   # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
-  def remove_date_without_value(dates)
+  def remove_dates_without_value(dates)
     Array(dates).delete_if { !descriptive_value_sufficient?(it) }
   end
 
@@ -105,10 +95,29 @@ class DescriptionImportFilter
     end
   end
 
+  def note_sufficient?(note)
+    %i[value valueAt structuredValue parallelValue groupedValue].any? do |key|
+      note[key].present?
+    end
+  end
+
+  def contributor_sufficient?(contributor)
+    %i[identifier name valueAt].any? do |key|
+      contributor[key].present?
+    end
+  end
+
+  # Ignore Language that is just "type" or "source"
+  def language_sufficient?(language)
+    %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
+      language[key].present?
+    end
+  end
+
   # Ignore Event that is just "type"
-  def event_sufficient?(descriptive_value)
+  def event_sufficient?(event)
     %i[date contributor location identifier note structuredValue].any? do |key|
-      descriptive_value[key].present?
+      event[key].present?
     end
   end
 end

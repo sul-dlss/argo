@@ -32,7 +32,7 @@ RSpec.describe DescriptionImport do
           }],
           "contributor": [{
             "name": [{
-              "structuredValue": [{#{"\t\t\t\t\t\t"}
+              "structuredValue": [{
                 "value": "Harvey, Robert Gibson",
                 "type": "name"
               }, {
@@ -43,13 +43,13 @@ RSpec.describe DescriptionImport do
             "type": "person",
             "status": "primary"
           }],
-          "event": [{#{"\t\t\t\t"}
-            "location": [{#{"\t\t\t\t\t"}
+          "event": [{
+            "location": [{
               "code": "xx",
               "source": {
                 "code": "marccountry"
               }
-            }],#{"\t\t\t\t"}
+            }],
             "note": [{
               "value": "monographic",
               "type": "issuance",
@@ -125,7 +125,7 @@ RSpec.describe DescriptionImport do
                 }]
               }],
               "type": "organization"
-            }]#{"\t\t\t\t"}
+            }]
           }],
           "adminMetadata": {
             "contributor": [{
@@ -270,7 +270,7 @@ RSpec.describe DescriptionImport do
     let(:expected) { Cocina::Models::Description.new(expected_hash) }
 
     [nil, 'Someone'].each do |name|
-      context "when role as code (not value), name: '#{name}'" do
+      context "when role has code (not value), name: '#{name}'" do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,contributor1.name1.value,contributor1.role1.code,contributor1.role1.value
@@ -291,7 +291,7 @@ RSpec.describe DescriptionImport do
         end
       end
 
-      context "when role as value (not code), name: '#{name}'" do
+      context "when role has value (not code), name: '#{name}'" do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,contributor1.name1.value,contributor1.role1.code,contributor1.role1.value
@@ -312,7 +312,7 @@ RSpec.describe DescriptionImport do
         end
       end
 
-      context "when role as both code and value, name: '#{name}'" do
+      context "when role has both code and value, name: '#{name}'" do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,contributor1.name1.value,contributor1.role1.code,contributor1.role1.value
@@ -360,6 +360,20 @@ RSpec.describe DescriptionImport do
     end
   end
 
+  context 'with a valueless contributor within adminMetadata' do
+    let(:csv) { CSV.parse(csv_data, headers: true) }
+    let(:csv_data) do
+      <<~CSV
+        druid,source_id,title1.value,purl,adminMetadata.identifier1.value,adminMetadata.contributor1.name1.source.code,adminMetadata.contributor1.type,adminMetadata.contributor1.role1.value
+        druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,bc123df4567,marcorg,organization,original cataloging agency
+      CSV
+    end
+
+    it 'drops the contributor' do
+      expect(updated.value!.adminMetadata.contributor).to be_empty
+    end
+  end
+
   context 'with a contributor within an event' do
     subject(:contributors) { updated.value!.event.first.contributor }
 
@@ -377,13 +391,13 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'has the expected value' do
+      it 'drops the contributor' do
         expect(contributors).to be_empty
       end
     end
 
     context 'when name value is present ("Someone")' do
-      context 'when role as code (not value)' do
+      context 'when role has code (not value)' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
@@ -399,7 +413,7 @@ RSpec.describe DescriptionImport do
         end
       end
 
-      context 'when role as value (not code)' do
+      context 'when role has value (not code)' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
@@ -415,7 +429,7 @@ RSpec.describe DescriptionImport do
         end
       end
 
-      context 'when role as both code and value' do
+      context 'when role has both code and value' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,purl,title1.value,event1.contributor1.name1.value,event1.contributor1.role1.code,event1.contributor1.role1.value,event1.note1.value
@@ -761,8 +775,8 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
-        expect(updated).to be_failure
+      it 'drops the access node' do
+        expect(updated.value!.access).to be_nil
       end
     end
   end
@@ -800,7 +814,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the identifier' do
         expect(updated.value!.identifier).to be_empty
       end
     end
@@ -840,7 +854,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the language' do
         expect(updated.value!.language).to be_empty
       end
     end
@@ -904,7 +918,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the subject' do
         expect(updated.value!.subject).to be_empty
       end
     end
@@ -945,8 +959,105 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the note' do
         expect(updated.value!.note).to be_empty
+      end
+    end
+
+    context 'when note nested under access has no value"' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,access.digitalLocation1.value,access.note1.code,access.note1.uri,access.note1.displayLabel
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,Searchworks,foo,https://example.org,Best Note Label
+        CSV
+      end
+
+      it 'drops the nested note and keeps the access' do
+        expect(updated.value!.access.note).to be_empty
+      end
+    end
+
+    context 'when note nested under adminMetadata has no value"' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,adminMetadata.note1.type,adminMetadata.note1.code,adminMetadata.note1.uri,adminMetadata.note1.displayLabel,adminMetadata.identifier1.value
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,Searchworks,foo,https://example.org,Best Note Label,bc123df4567
+        CSV
+      end
+
+      it 'drops the nested note and keeps the adminMetadata' do
+        expect(updated.value!.adminMetadata.note).to be_empty
+      end
+    end
+
+    # NOTE: These are properties that are valid with a single value-ful identifier
+    %w[contributor event].each do |note_parent|
+      context "when note nested under #{note_parent} has no value" do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,#{note_parent}1.identifier1.value,#{note_parent}1.note1.code,#{note_parent}1.note1.uri,#{note_parent}1.note1.displayLabel
+            druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,ParentID,foo,https://example.org,Best Note Label
+          CSV
+        end
+
+        it "drops the nested note and keeps the #{note_parent}" do
+          expect(updated.value!.public_send(note_parent).first.note).to be_empty
+        end
+      end
+    end
+
+    # NOTE: These are properties that are valid with a single basic value
+    %w[subject title].each do |note_parent|
+      context "when note nested under #{note_parent} has no value" do
+        let(:csv_data) do
+          <<~CSV
+            druid,source_id,title1.value,purl,#{note_parent}1.value,#{note_parent}1.note1.code,#{note_parent}1.note1.uri,#{note_parent}1.note1.displayLabel
+            druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,Parent Value,foo,https://example.org,Best Note Label
+          CSV
+        end
+
+        it "drops the nested note and keeps the #{note_parent}" do
+          expect(updated.value!.public_send(note_parent).first.note).to be_empty
+        end
+      end
+    end
+
+    context 'when note nested under event.date has no value"' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type,event1.date1.note1.type
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,2022-01-05,creation,start
+        CSV
+      end
+
+      it 'drops the nested note and keeps the event.date' do
+        expect(updated.value!.event.first.date.first.note).to be_empty
+      end
+    end
+
+    context 'when note nested under subject.structuredValue has no value"' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,purl,subject1.structuredValue1.value,subject1.structuredValue1.type,subject1.structuredValue1.note1.uri
+          druid:bc123df4567,desc:no-title-type,A title,https://purl/bc123df4567,7.37939062,Latitude,https://maps.example.org
+        CSV
+      end
+
+      it 'drops the nested note and keeps the event.date' do
+        expect(updated.value!.subject.first.structuredValue.first.note).to be_empty
+      end
+    end
+
+    context 'when valueless note nested under valueless structuredValue"' do
+      let(:csv_data) do
+        <<~CSV
+          druid,source_id,title1.value,subject1.structuredValue1.note1.type,subject1.structuredValue1.note1.value,purl
+          druid:dt363zr3464,blank:notes,A main title,affiliation,,https://sul-purl-stage.stanford.edu/dt363zr3464
+        CSV
+      end
+
+      it 'drops the entire subject (incl. structuredValue and note)' do
+        expect(updated.value!.subject).to be_empty
       end
     end
   end
@@ -964,7 +1075,7 @@ RSpec.describe DescriptionImport do
         CSV
       end
 
-      it 'rejects the item' do
+      it 'drops the event' do
         expect(updated.value!.event).to be_empty
       end
     end
@@ -989,7 +1100,7 @@ RSpec.describe DescriptionImport do
         end
       end
 
-      context 'when event date has no value' do
+      context 'when event contains only a valueless date' do
         let(:csv_data) do
           <<~CSV
             druid,source_id,title1.value,purl,event1.date1.value,event1.date1.type
@@ -997,8 +1108,8 @@ RSpec.describe DescriptionImport do
           CSV
         end
 
-        it 'rejects the item' do
-          expect(updated).to be_failure
+        it 'drops the event date & the event' do
+          expect(updated.value!.event).to be_empty
         end
       end
 
@@ -1027,8 +1138,8 @@ RSpec.describe DescriptionImport do
           CSV
         end
 
-        it 'rejects the item' do
-          expect(updated).to be_failure
+        it 'drops the adminMetadata' do
+          expect(updated.value!.adminMetadata).to be_nil
         end
       end
 
