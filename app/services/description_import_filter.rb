@@ -14,7 +14,7 @@ class DescriptionImportFilter
 
   ATTRIBUTES_TO_FILTER = {
     contributor: :remove_empty_contributors,
-    date: :remove_empty_dates,
+    date: :remove_empty_descriptive_values,
     digitalLocation: :remove_empty_descriptive_values,
     event: :remove_empty_events,
     form: :remove_empty_descriptive_values,
@@ -81,11 +81,6 @@ class DescriptionImportFilter
 
   def remove_empty_languages(languages)
     Array(languages).delete_if { !language_sufficient?(it) }
-  end
-
-  # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
-  def remove_empty_dates(dates)
-    Array(dates).delete_if { !descriptive_value_sufficient?(it) }
   end
 
   # Ignore DescriptiveValue that is just "type" or "source"
