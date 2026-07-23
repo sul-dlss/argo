@@ -13,17 +13,17 @@ class DescriptionImportFilter
   end
 
   ATTRIBUTES_TO_FILTER = {
-    contributor: :remove_contributors_without_value,
-    date: :remove_dates_without_value,
-    digitalLocation: :remove_descriptive_values_without_value,
-    event: :remove_events_without_value,
-    form: :remove_descriptive_values_without_value,
-    identifier: :remove_descriptive_values_without_value,
-    language: :remove_languages_without_value,
-    name: :remove_descriptive_values_without_value,
-    note: :remove_notes_without_value,
-    structuredValue: :remove_descriptive_values_without_value,
-    subject: :remove_descriptive_values_without_value
+    contributor: :remove_empty_contributors,
+    date: :remove_empty_dates,
+    digitalLocation: :remove_empty_descriptive_values,
+    event: :remove_empty_events,
+    form: :remove_empty_descriptive_values,
+    identifier: :remove_empty_descriptive_values,
+    language: :remove_empty_languages,
+    name: :remove_empty_descriptive_values,
+    note: :remove_empty_notes,
+    structuredValue: :remove_empty_descriptive_values,
+    subject: :remove_empty_descriptive_values
   }.freeze
 
   MODELS_WITH_NESTED_ATTRIBUTES = {
@@ -63,28 +63,28 @@ class DescriptionImportFilter
 
   private
 
-  def remove_descriptive_values_without_value(descriptive_values)
+  def remove_empty_descriptive_values(descriptive_values)
     Array(descriptive_values).delete_if { !descriptive_value_sufficient?(it) }
   end
 
-  def remove_notes_without_value(notes)
+  def remove_empty_notes(notes)
     Array(notes).delete_if { !note_sufficient?(it) }
   end
 
-  def remove_contributors_without_value(contributors)
+  def remove_empty_contributors(contributors)
     Array(contributors).delete_if { !contributor_sufficient?(it) }
   end
 
-  def remove_events_without_value(events)
+  def remove_empty_events(events)
     Array(events).delete_if { !event_sufficient?(it) }
   end
 
-  def remove_languages_without_value(languages)
+  def remove_empty_languages(languages)
     Array(languages).delete_if { !language_sufficient?(it) }
   end
 
   # @param [Array<Hash>] dates an array of hashes that each represent a DescriptiveValue.
-  def remove_dates_without_value(dates)
+  def remove_empty_dates(dates)
     Array(dates).delete_if { !descriptive_value_sufficient?(it) }
   end
 
