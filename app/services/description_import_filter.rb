@@ -12,86 +12,44 @@ class DescriptionImportFilter
     Cocina::Models::Description.new(compacted_params)
   end
 
+  SUFFICIENT_DESCRIPTIVE_VALUE_KEYS = %i[value code uri identifier note valueAt structuredValue parallelValue groupedValue].freeze
   ATTRIBUTES_TO_FILTER = {
-    contributor: :contributor_sufficient?,
-    date: :descriptive_value_sufficient?,
-    digitalLocation: :descriptive_value_sufficient?,
-    event: :event_sufficient?,
-    form: :descriptive_value_sufficient?,
-    identifier: :descriptive_value_sufficient?,
-    language: :language_sufficient?,
-    name: :descriptive_value_sufficient?,
-    note: :note_sufficient?,
-    structuredValue: :descriptive_value_sufficient?,
-    subject: :descriptive_value_sufficient?
+    contributor: %i[identifier name valueAt],
+    date: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS,
+    digitalLocation: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS,
+    event: %i[date contributor location identifier note structuredValue],
+    form: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS,
+    identifier: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS,
+    language: %i[value code uri note script valueAt structuredValue parallelValue groupedValue],
+    name: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS,
+    note: %i[value valueAt structuredValue parallelValue groupedValue],
+    structuredValue: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS,
+    subject: SUFFICIENT_DESCRIPTIVE_VALUE_KEYS
   }.freeze
 
-  MODELS_WITH_NESTED_ATTRIBUTES = {
-    access: Cocina::Models::DescriptiveAccessMetadata,
-    adminMetadata: Cocina::Models::DescriptiveAdminMetadata,
-    contributor: Cocina::Models::Contributor,
-    date: Cocina::Models::DescriptiveValue,
-    event: Cocina::Models::Event,
-    form: Cocina::Models::DescriptiveValue,
-    geographic: Cocina::Models::DescriptiveGeographicMetadata,
-    name: Cocina::Models::DescriptiveValue,
-    relatedResource: Cocina::Models::RelatedResource,
-    structuredValue: Cocina::Models::DescriptiveValue,
-    subject: Cocina::Models::DescriptiveValue,
-    title: Cocina::Models::DescriptiveValue
-  }.freeze
+  MODELS_WITH_NESTED_ATTRIBUTES = %i[
+    access adminMetadata contributor date event form geographic name relatedResource structuredValue subject title
+  ].freeze
 
-  # recursive, depth first search for incomplete nodes
-  def filter(compacted_params, model: Cocina::Models::Description)
-    MODELS_WITH_NESTED_ATTRIBUTES.each do |attribute, model|
+  # Recursive, depth-first search for insufficient nodes
+  def filter(compacted_params) # rubocop:disable Metrics/CyclomaticComplexity
+    MODELS_WITH_NESTED_ATTRIBUTES.each do |attribute|
       case compacted_params[attribute]
       when Hash
-        filter(compacted_params[attribute], model:)
+        filter(compacted_params[attribute])
       when Array
-        compacted_params[attribute].each { |attributes| filter(attributes, model:) }
+        compacted_params[attribute].each { |attributes| filter(attributes) }
       end
     end
 
-    ATTRIBUTES_TO_FILTER.each do |attribute, method|
-      next if model.attribute_names.exclude?(attribute)
+    ATTRIBUTES_TO_FILTER.each do |attribute, sufficient_values|
       next if (values = compacted_params[attribute]).blank?
 
-      Array(values).delete_if { |value| !send(method, value) }
+      Array(values).delete_if do |value|
+        sufficient_values.none? { |key| value[key].present? }
+      end
     end
 
     compacted_params.compact_blank!
-  end
-
-  private
-
-  def descriptive_value_sufficient?(descriptive_value)
-    %i[value code uri identifier note valueAt structuredValue parallelValue groupedValue].any? do |key|
-      descriptive_value[key].present?
-    end
-  end
-
-  def note_sufficient?(note)
-    %i[value valueAt structuredValue parallelValue groupedValue].any? do |key|
-      note[key].present?
-    end
-  end
-
-  def contributor_sufficient?(contributor)
-    %i[identifier name valueAt].any? do |key|
-      contributor[key].present?
-    end
-  end
-
-  def language_sufficient?(language)
-    %i[value code uri note script valueAt structuredValue parallelValue groupedValue].any? do |key|
-      language[key].present?
-    end
-  end
-
-  # Ignore Event that is just "type"
-  def event_sufficient?(event)
-    %i[date contributor location identifier note structuredValue].any? do |key|
-      event[key].present?
-    end
   end
 end
