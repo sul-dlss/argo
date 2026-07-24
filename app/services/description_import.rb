@@ -6,12 +6,13 @@ class DescriptionImport
   class_attribute :permitted_types, default: Cocina::Models::Validators::DescriptionTypesVisitorValidator.new
                                                                                                          .send(:types_yaml).values.flatten.pluck('value')
 
-  def self.import(csv_row:)
-    new(csv_row:).import
+  def self.import(csv_row:, druid:)
+    new(csv_row:, druid:).import
   end
 
-  def initialize(csv_row:)
+  def initialize(csv_row:, druid:)
     @csv_row = csv_row
+    @druid = druid
   end
 
   def import
@@ -25,6 +26,8 @@ class DescriptionImport
     headers.each do |address|
       visit(params, split_address(address), @csv_row[address]) if @csv_row[address]
     end
+
+    params[:purl] = Cocina::Models::Mapping::Purl.for(druid: @druid)
 
     Success(DescriptionImportFilter.filter(compact_params(params)))
   rescue Cocina::Models::ValidationError => e

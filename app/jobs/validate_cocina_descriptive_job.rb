@@ -3,7 +3,7 @@
 class ValidateCocinaDescriptiveJob < BulkActionCsvJob
   class ValidateCocinaDescriptiveJobItem < BulkActionCsvJobItem
     def perform
-      import_result = DescriptionImport.import(csv_row: row)
+      import_result = DescriptionImport.import(csv_row: row, druid: cocina_object.externalIdentifier)
       return failure!(message: import_result.failure) if import_result.failure?
 
       description = import_result.value!

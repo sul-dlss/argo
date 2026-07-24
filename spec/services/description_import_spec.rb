@@ -3,7 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe DescriptionImport do
-  subject(:updated) { described_class.import(csv_row: csv.first) }
+  subject(:updated) { described_class.import(csv_row:, druid:) }
+
+  let(:csv_row) { csv.first }
+  let(:druid) { csv_row['druid'].presence || 'druid:bc123df4567' }
+  let(:purl) { Cocina::Models::Mapping::Purl.for(druid:) }
+
+  context 'with a druid' do
+    let(:druid) { 'druid:bc123df4567' }
+    let(:csv) { CSV.parse("title1.value\nA title\n", headers: true) }
+
+    it 'derives the purl from the druid' do
+      result = described_class.import(csv_row: csv.first, druid:)
+
+      expect(result.value!.purl).to eq Cocina::Models::Mapping::Purl.for(druid:)
+    end
+
+    context 'when the spreadsheet contains a purl' do
+      let(:csv) { CSV.parse("title1.value,purl\nA title,https://example.com/wrong\n", headers: true) }
+
+      it 'uses the purl derived from the druid' do
+        result = described_class.import(csv_row: csv.first, druid:)
+
+        expect(result.value!.purl).to eq Cocina::Models::Mapping::Purl.for(druid:)
+      end
+    end
+  end
 
   context 'with a valid csv' do
     let(:csv) do
@@ -209,7 +234,7 @@ RSpec.describe DescriptionImport do
     end
 
     let(:expected) do
-      Cocina::Models::Description.new(title: [{ value: 'my title' }], purl: 'https://purl')
+      Cocina::Models::Description.new(title: [{ value: 'my title' }], purl:)
     end
 
     it 'ignores the empty field' do
@@ -232,7 +257,7 @@ RSpec.describe DescriptionImport do
     let(:expected) do
       Cocina::Models::Description.new(
         title: [{ value: 'Title 2' }],
-        purl: 'https://purl/jr825qh8124',
+        purl:,
         contributor: [
           { name: [
             { parallelValue: [
@@ -262,7 +287,7 @@ RSpec.describe DescriptionImport do
     let(:expected_hash) do
       {
         title: [{ value: 'my great contributor' }],
-        purl: 'https://purl/jr825qh8124'
+        purl:
       }.tap do |h|
         h[:contributor] = [expected_contributor] if expected_contributor
       end
@@ -508,7 +533,7 @@ RSpec.describe DescriptionImport do
       let(:expected_hash) do
         {
           title: [{ value: title }],
-          purl: 'https://purl/jr825qh8124'
+          purl:
         }.tap do |h|
           h[:form] = [expected_form] if expected_form
         end
@@ -681,7 +706,7 @@ RSpec.describe DescriptionImport do
         let(:expected_hash) do
           {
             title: [{ value: title }],
-            purl: 'https://purl/jr825qh8124'
+            purl:
           }
         end
 
@@ -695,7 +720,7 @@ RSpec.describe DescriptionImport do
       let(:expected_hash) do
         {
           title: [{ value: title }],
-          purl: 'https://purl/jr825qh8124'
+          purl:
         }.tap do |h|
           form_value =
             if expected_form

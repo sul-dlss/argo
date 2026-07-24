@@ -28,6 +28,7 @@ RSpec.describe 'Upload the descriptive CSV' do
     context 'when import was successful' do
       it 'updates the descriptive' do
         put "/items/#{druid}/descriptive", params: { data: file }
+        expect(DescriptionImport).to have_received(:import).with(csv_row: instance_of(CSV::Row), druid:)
         expect(object_client).to have_received(:update)
         expect(response).to have_http_status(:see_other)
       end

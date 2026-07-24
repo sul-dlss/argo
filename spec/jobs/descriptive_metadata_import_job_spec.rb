@@ -6,10 +6,13 @@ RSpec.describe DescriptiveMetadataImportJob do
   subject(:job) { described_class.new(bulk_action.id, csv_file:) }
 
   let(:druid) { 'druid:bc123df4567' }
-  let(:cocina_object) { build(:dro_with_metadata, id: druid) }
+  let(:cocina_object) do
+    object = build(:dro_with_metadata, id: druid)
+    object.new(description: object.description.new(purl:))
+  end
 
   let(:expected_cocina_object) do
-    cocina_object.new(description: cocina_object.description.new(title: [{ value: 'new title 1' }], purl: "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"))
+    cocina_object.new(description: cocina_object.description.new(title: [{ value: 'new title 1' }], purl:))
   end
 
   let(:bulk_action) { create(:bulk_action) }
@@ -24,11 +27,11 @@ RSpec.describe DescriptiveMetadataImportJob do
     end
   end
 
-  let(:purl) { "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}" }
+  let(:purl) { Cocina::Models::Mapping::Purl.for(druid:) }
   let(:csv_file) do
     [
-      'druid,source_id,title1:value,purl',
-      [druid, cocina_object.identification.sourceId, 'new title 1', purl].join(',')
+      'druid,source_id,title1:value',
+      [druid, cocina_object.identification.sourceId, 'new title 1'].join(',')
     ].join("\n")
   end
 
@@ -75,8 +78,8 @@ RSpec.describe DescriptiveMetadataImportJob do
   context 'when validation fails' do
     let(:csv_file) do
       [
-        'druid,source_id,title1.structuredValue1.value,purl',
-        [druid, cocina_object.identification.sourceId, 'new title 1', purl].join(',')
+        'druid,source_id,title1.structuredValue1.value',
+        [druid, cocina_object.identification.sourceId, 'new title 1'].join(',')
       ].join("\n")
     end
 
@@ -118,8 +121,8 @@ RSpec.describe DescriptiveMetadataImportJob do
   context 'when unchanged' do
     let(:csv_file) do
       [
-        'druid,source_id,title1:value,purl',
-        [druid, cocina_object.identification.sourceId, 'factory DRO title', purl].join(',')
+        'druid,source_id,title1:value',
+        [druid, cocina_object.identification.sourceId, 'factory DRO title'].join(',')
       ].join("\n")
     end
 
