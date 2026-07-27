@@ -6,11 +6,11 @@ RSpec.describe DescriptiveMetadataImportJob do
   subject(:job) { described_class.new(bulk_action.id, csv_file:) }
 
   let(:druid) { 'druid:bc123df4567' }
+  let(:purl) { "#{Settings.purl_url}/#{druid.delete_prefix('druid:')}" }
   let(:cocina_object) do
     object = build(:dro_with_metadata, id: druid)
     object.new(description: object.description.new(purl:))
   end
-
   let(:expected_cocina_object) do
     cocina_object.new(description: cocina_object.description.new(title: [{ value: 'new title 1' }], purl:))
   end
@@ -27,7 +27,6 @@ RSpec.describe DescriptiveMetadataImportJob do
     end
   end
 
-  let(:purl) { Cocina::Models::Mapping::Purl.for(druid:) }
   let(:csv_file) do
     [
       'druid,source_id,title1:value',

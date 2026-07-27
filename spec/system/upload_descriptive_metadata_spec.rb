@@ -22,7 +22,7 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
 
   context 'with a csv file' do
     let(:csv) do
-      "title1.value\nmy title\n"
+      "title1.value,purl\nmy title,https://purl.stanford.edu/#{Druid.new(item.externalIdentifier).without_namespace}\n"
     end
     let(:file) do
       Tempfile.new(%w[upload .csv]).tap do |file|
@@ -55,6 +55,8 @@ RSpec.describe 'Descriptive metadata spreadsheet upload', :js do
         # Write our data into the sheet
         worksheet.write('A1', 'title1.value')
         worksheet.write('A2', 'my title from excel')
+        worksheet.write('B1', 'purl')
+        worksheet.write('B2', "https://purl.stanford.edu/#{Druid.new(item.externalIdentifier).without_namespace}")
 
         # Close - require to avoid file curruption
         workbook.close

@@ -7,7 +7,7 @@ RSpec.describe DescriptionImport do
 
   let(:csv_row) { csv.first }
   let(:druid) { csv_row['druid'].presence || 'druid:bc123df4567' }
-  let(:purl) { Cocina::Models::Mapping::Purl.for(druid:) }
+  let(:purl) { "#{Settings.purl_url}/#{druid.delete_prefix('druid:')}" }
 
   context 'with a druid' do
     let(:druid) { 'druid:bc123df4567' }
@@ -16,7 +16,7 @@ RSpec.describe DescriptionImport do
     it 'derives the purl from the druid' do
       result = described_class.import(csv_row: csv.first, druid:)
 
-      expect(result.value!.purl).to eq Cocina::Models::Mapping::Purl.for(druid:)
+      expect(result.value!.purl).to eq purl
     end
 
     context 'when the spreadsheet contains a purl' do
