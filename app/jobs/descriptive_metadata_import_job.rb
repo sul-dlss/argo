@@ -5,7 +5,7 @@ class DescriptiveMetadataImportJob < BulkActionCsvJob
     def perform
       return unless check_update_ability?
 
-      import_result = DescriptionImport.import(csv_row: row)
+      import_result = DescriptionImport.import(csv_row: row, druid: cocina_object.externalIdentifier)
       return failure!(message: import_result.failure.to_sentence) if import_result.failure?
 
       description = import_result.value!

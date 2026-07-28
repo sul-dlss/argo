@@ -20,7 +20,7 @@ class DescriptivesController < ApplicationController
     csv = CSV.parse(CsvUploadNormalizer.read(params[:data].tempfile), headers: true)
     validator = DescriptionValidator.new(csv)
     if validator.valid?
-      DescriptionImport.import(csv_row: csv.first)
+      DescriptionImport.import(csv_row: csv.first, druid: @cocina.externalIdentifier)
                        .bind { |description| CocinaValidator.validate_and_save(@cocina, description:) }
                        .either(
                          ->(_updated) { display_success },
