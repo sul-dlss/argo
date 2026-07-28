@@ -161,7 +161,7 @@ GEM
       super_diff
       thor
       zeitwerk (~> 2.1)
-    cocina_display (2.9.0)
+    cocina_display (2.9.1)
       activesupport (>= 7)
       edtf (~> 3.2)
       geo_coord (~> 0.2)
