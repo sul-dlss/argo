@@ -15,7 +15,6 @@ RSpec.describe StructureUpdater do
       {
         "type": "#{Cocina::Models::ObjectType.image}",
         "externalIdentifier": "#{druid}",
-        "label": "dood",
         "version": 1,
         "access": {
           "view": "world",
