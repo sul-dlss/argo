@@ -14,7 +14,6 @@ RSpec.describe 'Download item files' do
     {
       type: Cocina::Models::ObjectType.image,
       externalIdentifier: 'druid:rn653dy9317',
-      label: 'M1090_S15_B01_F07_0106',
       version:,
       description: {
         title: [{ value: 'M1090_S15_B01_F07_0106' }],
