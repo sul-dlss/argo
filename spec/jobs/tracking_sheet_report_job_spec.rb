@@ -34,6 +34,20 @@ RSpec.describe TrackingSheetReportJob do
     expect(bulk_action.druid_count_success).to eq(1)
   end
 
+  context 'when the title contains UTF-8 characters' do
+    let(:solr_doc) { { id: druid, SolrDocument::FIELD_TITLE => 'آرغو' } }
+
+    it 'performs the job' do
+      subject.perform_now
+
+      expect(File).to exist(File.join(output_directory, Settings.tracking_sheet_report_job.pdf_filename))
+
+      expect(bulk_action.reload.druid_count_total).to eq(1)
+      expect(bulk_action.druid_count_fail).to eq(0)
+      expect(bulk_action.druid_count_success).to eq(1)
+    end
+  end
+
   context 'when there is an error writing the PDF' do
     let(:pdf) { Prawn::Document.new(page_size: [5.5.in, 8.5.in]) }
 

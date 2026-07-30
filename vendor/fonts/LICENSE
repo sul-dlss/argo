@@ -1,0 +1,22 @@
+GNU Unifont
+===========
+
+File:     unifont-15.0.06.ttf
+Version:  15.0.06
+Source:   https://ftp.gnu.org/gnu/unifont/unifont-15.0.06/unifont-15.0.06.ttf
+Project:  https://unifoundry.com/unifont/
+
+Copyright (C) 1998-2023 Roman Czyborra, Paul Hardy, Qianqian Fang,
+Andrew Miller, Johnnie Weaver, David Corbett, Nils Moskopp,
+Rebecca Bettencourt, Minseo Lee, et al.
+
+Dual license: SIL Open Font License version 1.1, and GNU GPL version 2
+or later with the GNU Font Embedding Exception.
+
+  - SIL Open Font License v1.1: https://scripts.sil.org/OFL
+  - GNU GPL v2 or later:        https://gnu.org/licenses/gpl.html
+
+Used here (under the OFL) as an embeddable pan-Unicode font so that
+tracking-sheet PDFs can render titles and metadata in any Basic
+Multilingual Plane script (Latin, Cyrillic, Greek, Arabic, CJK,
+Hangul, Kana, etc.).
