@@ -34,7 +34,7 @@ RSpec.describe 'Registration' do
     it 'generates a tracking sheet with the right default name' do
       get("/registration/tracksheet?druid=#{druid}", headers:)
 
-      expect(response.headers['Content-Type']).to eq('pdf; charset=utf-8')
+      expect(response.headers['Content-Type']).to eq('application/pdf; charset=utf-8')
       expect(response.headers['content-disposition']).to eq('attachment; filename=tracksheet-1.pdf')
     end
 
