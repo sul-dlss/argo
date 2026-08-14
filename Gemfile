@@ -6,6 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'barby' # Barby creates barcodes. Used in generating tracksheets
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'cancancan' # authorization
+gem 'cocina-models'
 gem 'coderay' # Pretty format for XML
 gem 'config'
 gem 'cssbundling-rails'
@@ -80,7 +81,6 @@ end
 group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
-  gem 'cocina-models', '~> 0.69' # only need RSpec matchers here; don't need to pin to patch level
   gem 'rspec_junit_formatter' # used by CircleCI to format test results
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov'
