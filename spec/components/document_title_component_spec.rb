@@ -46,7 +46,7 @@ RSpec.describe DocumentTitleComponent, type: :component do
   context 'with an APO' do
     let(:admin_policy) { true }
     let(:virtual_object) { false }
-    let(:object_type) { 'adminPolicy' }
+    let(:object_type) { 'APO' }
 
     it 'renders the expected object type label' do
       expect(rendered.css('div.object-type').first.text.strip).to eq('apo')

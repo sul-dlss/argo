@@ -333,7 +333,7 @@ RSpec.describe 'Item view', :js do
     end
   end
 
-  context 'for an adminPolicy' do
+  context 'for an APO' do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, administrative:, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
     let(:id) { 'druid:qv778ht9999' }

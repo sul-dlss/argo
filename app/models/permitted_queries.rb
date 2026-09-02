@@ -37,7 +37,7 @@ class PermittedQueries
     repository
       .search(
         q:, defType: 'lucene', rows: PERMITTED_QUERIES_LIMIT, fl: "id,#{SolrDocument::FIELD_TITLE}",
-        fq: ["#{SolrDocument::FIELD_OBJECT_TYPE}:adminPolicy", '!project_tag_ssim:Hydrus']
+        fq: ["#{SolrDocument::FIELD_OBJECT_TYPE}:APO", '!project_tag_ssim:Hydrus']
       )
       .dig('response', 'docs')
       .sort_by { |doc| doc.fetch(SolrDocument::FIELD_TITLE).downcase.delete('[]') }

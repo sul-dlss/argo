@@ -12,7 +12,7 @@ RSpec.describe Show::Apo::DetailsComponent, type: :component do
                      SolrDocument::FIELD_REGISTERED_DATE => ['2012-04-05T01:00:04.148Z'],
                      SolrDocument::FIELD_OBJECT_TYPE => object_type)
   end
-  let(:object_type) { 'adminPolicy' }
+  let(:object_type) { 'APO' }
 
   context 'when open is true' do
     it 'renders the appropriate buttons' do

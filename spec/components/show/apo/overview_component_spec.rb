@@ -12,7 +12,7 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
 
   let(:doc) do
     SolrDocument.new('id' => 'druid:kv840xx0000',
-                     SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
+                     SolrDocument::FIELD_OBJECT_TYPE => 'APO')
   end
 
   context 'when showing an APO including registration workflows' do

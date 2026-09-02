@@ -15,7 +15,7 @@ class DocumentComponent < Blacklight::DocumentComponent
       Show::CollectionComponent
     when 'agreement'
       Show::AgreementComponent
-    when 'adminPolicy'
+    when 'APO'
       Show::AdminPolicyComponent
     else
       Show::ItemComponent

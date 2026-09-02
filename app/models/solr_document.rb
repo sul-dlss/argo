@@ -127,13 +127,13 @@ class SolrDocument
     embargo_status == 'embargoed'
   end
 
-  # @return [boolean] true if NOT an adminPolicy or an agreement
+  # @return [boolean] true if NOT an APO or an agreement
   def publishable?
     item? || collection? || virtual_object?
   end
 
   def admin_policy?
-    object_type == 'adminPolicy'
+    object_type == 'APO'
   end
 
   def agreement?

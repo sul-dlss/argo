@@ -35,6 +35,7 @@ RSpec.describe 'Indexing and facet results for tags', :js, skip: ENV['CI'].prese
     end
     click_link 'Reindex'
     expect(page).to have_text('Successfully updated index') # rubocop:disable RSpec/ExpectInHook
+    SolrCommit.commit # the reindexed document is not searchable until Solr commits
     visit '/'
     fill_in 'q', with: solr_id
     click_button 'search'

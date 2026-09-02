@@ -51,8 +51,8 @@ RSpec.describe SolrDocument do
       it { is_expected.to be false }
     end
 
-    context 'when adminPolicy' do
-      let(:type) { 'adminPolicy' }
+    context 'when APO' do
+      let(:type) { 'APO' }
 
       it { is_expected.to be false }
     end
@@ -65,9 +65,9 @@ RSpec.describe SolrDocument do
   end
 
   describe '#admin_policy?' do
-    context 'when object type is an adminPolicy' do
+    context 'when object type is an APO' do
       let(:document_attributes) do
-        { SolrDocument::FIELD_OBJECT_TYPE => ['adminPolicy'] }
+        { SolrDocument::FIELD_OBJECT_TYPE => ['APO'] }
       end
 
       it 'checks and returns true' do
@@ -75,7 +75,7 @@ RSpec.describe SolrDocument do
       end
     end
 
-    context 'when object type is not an adminPolicy' do
+    context 'when object type is not an APO' do
       let(:document_attributes) do
         { SolrDocument::FIELD_OBJECT_TYPE => ['item'] }
       end

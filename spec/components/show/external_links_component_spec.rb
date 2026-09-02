@@ -15,7 +15,7 @@ RSpec.describe Show::ExternalLinksComponent, type: :component do
   let(:user_version) { nil }
   let(:version) { nil }
 
-  context 'for a non-publishable item (adminPolicy)' do
+  context 'for a non-publishable item (APO)' do
     let(:document) do
       instance_double(SolrDocument, id: 'druid:ab123cd3445',
                                     to_param: 'druid:ab123cd3445',

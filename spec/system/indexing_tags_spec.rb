@@ -38,7 +38,11 @@ RSpec.describe 'Indexing and search results for tags', :js, skip: ENV['CI'].pres
     end
     click_link 'Reindex'
     expect(page).to have_text('Successfully updated index') # rubocop:disable RSpec/ExpectInHook
-    visit '/'
+    SolrCommit.commit # the reindexed document is not searchable until Solr commits
+    # The factory also registers an APO and an agreement, whose titles are indexed and would
+    #   otherwise turn up in the searches below (the APO title contains "of"). Constrain the
+    #   searches to items so the counts asserted below reflect only the item under test.
+    visit search_catalog_path(f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] })
   end
 
   after do
