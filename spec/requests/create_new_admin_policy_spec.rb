@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Create a new Admin Policy' do
+RSpec.describe 'Create a new APO' do
   let(:user) { create(:user) }
 
   before do

@@ -73,7 +73,7 @@ RSpec.describe 'Search results' do
           expect(page).to have_css 'dd', text: 'image'
           expect(page).to have_css 'dt', text: 'Status:'
           expect(page).to have_css 'dd', text: 'v1 Unknown Status'
-          expect(page).to have_css 'dt', text: 'Admin Policy:'
+          expect(page).to have_css 'dt', text: 'APO:'
           expect(page).to have_css 'dd a', text: 'Stanford University Libraries - Special Collections'
           expect(page).to have_css 'dt', text: 'Project:'
           expect(page).to have_css 'dd a', text: 'Fuller Slides'

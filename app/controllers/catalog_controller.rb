@@ -64,7 +64,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'id', label: 'DRUID'
     config.add_index_field SolrDocument::FIELD_OBJECT_TYPE, label: 'Object Type'
     config.add_index_field SolrDocument::FIELD_CONTENT_TYPE, label: 'Content Type'
-    config.add_index_field SolrDocument::FIELD_APO_ID, label: 'Admin Policy', helper_method: :link_to_admin_policy
+    config.add_index_field SolrDocument::FIELD_APO_ID, label: 'APO', helper_method: :link_to_admin_policy
     config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection', helper_method: :links_to_collections
     config.add_index_field SolrDocument::FIELD_PROJECT_TAG, label: 'Project', link_to_facet: true
     config.add_index_field SolrDocument::FIELD_SOURCE_ID, label: 'Source'
@@ -107,7 +107,7 @@ class CatalogController < ApplicationController
     config.add_facet_field SolrDocument::FIELD_LICENSE, label: 'License', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection', component: true, limit: 10,
                                                                  more_limit: 9999, sort: 'index'
-    config.add_facet_field SolrDocument::FIELD_APO_TITLE, label: 'Admin Policy', component: true, limit: 10,
+    config.add_facet_field SolrDocument::FIELD_APO_TITLE, label: 'APO', component: true, limit: 10,
                                                           more_limit: 9999, sort: 'index'
     config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version', component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_PROCESSING_STATUS, label: 'Processing Status', component: true, limit: 10

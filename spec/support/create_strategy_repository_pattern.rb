@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# db/seeds.rb requires this file directly rather than through rails_helper's spec/support glob,
+#   so pull in our own dependency instead of relying on the glob having loaded it.
+require_relative 'solr_commit'
+
 class CreateStategyForRepositoryPattern
   def association(runner)
     runner.run

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Update an existing Admin Policy' do
+RSpec.describe 'Update an existing APO' do
   let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:object_client) do
