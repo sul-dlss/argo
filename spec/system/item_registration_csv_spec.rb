@@ -19,7 +19,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when successful registration' do
     it 'starts bulk action' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -64,7 +64,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when successful registration with dark' do
     it 'starts bulk action and changes download to none' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -123,7 +123,7 @@ RSpec.describe 'Item registration page', :js do
     it 'reports error, retains user values, and allows user to submit a corrected CSV' do
       visit registration_path
 
-      select 'My First APO', from: 'Admin Policy'
+      select 'My First APO', from: 'APO'
       select 'registrationWF', from: 'Initial Workflow'
       select 'file', from: 'Content Type'
       select 'Dark', from: 'View access'
@@ -171,7 +171,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when invalid CSV' do
     it 'reports error' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'

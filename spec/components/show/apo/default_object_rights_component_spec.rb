@@ -12,7 +12,7 @@ RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
   end
   let(:doc) do
     SolrDocument.new('id' => 'druid:bb663yf7144',
-                     SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',
+                     SolrDocument::FIELD_OBJECT_TYPE => 'APO',
                      SolrDocument::FIELD_DEFAULT_ACCESS_RIGHTS => 'location - spec')
   end
   let(:rendered) { render_inline(component) }

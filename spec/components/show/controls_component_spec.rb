@@ -193,7 +193,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
     let(:doc) do
       SolrDocument.new('id' => view_apo_id,
                        SolrDocument::FIELD_PROCESSING_STATUS => 'not registered',
-                       SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',
+                       SolrDocument::FIELD_OBJECT_TYPE => 'APO',
                        SolrDocument::FIELD_APO_ID => [governing_apo_id])
     end
 

@@ -28,7 +28,7 @@ RSpec.describe 'Item registration page', :js do
 
     it 'invokes item registration method with the expected values and relays errors properly' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'goobiWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -114,7 +114,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when registration succeeds' do
     it 'register an item correctly' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -173,7 +173,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when invalid catalog_record_id' do
     it 'does not register' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -201,7 +201,7 @@ RSpec.describe 'Item registration page', :js do
   context 'when invalid barcode' do
     it 'does not register' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -234,7 +234,7 @@ RSpec.describe 'Item registration page', :js do
 
     it 'displays an error message with the HRID' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+      select '[Internal System Objects]', from: 'APO' # "uber APO"
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'
@@ -281,7 +281,7 @@ RSpec.describe 'Item registration page', :js do
 
     it 'displays the MARC warning banner with the affected druid' do
       visit registration_path
-      select '[Internal System Objects]', from: 'Admin Policy'
+      select '[Internal System Objects]', from: 'APO'
       select 'registrationWF', from: 'Initial Workflow'
       select 'book', from: 'Content Type'
       select 'left-to-right', from: 'Viewing Direction'

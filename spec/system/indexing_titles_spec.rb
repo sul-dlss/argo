@@ -15,7 +15,11 @@ RSpec.describe 'Indexing and search results for titles', skip: ENV['CI'].present
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     solr_conn.commit # ensure no deletes are pending
-    visit '/'
+    # Every item the factory registers brings along its own APO and agreement, which the specs
+    #   do not clean up. Their titles ("...APO title to test truncation..." and "A Title") match
+    #   the searches below and crowd the items under test out of the first page of results, so
+    #   constrain these searches, which are only ever about items, to items.
+    visit search_catalog_path(f: { SolrDocument::FIELD_OBJECT_TYPE => ['item'] })
   end
 
   after do

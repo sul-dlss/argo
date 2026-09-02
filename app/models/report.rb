@@ -82,7 +82,7 @@ class Report # rubocop:disable Metrics/ClassLength
       category: FREQUENTLY_USED_CATEGORY
     },
     {
-      field: SolrDocument::FIELD_APO_TITLE, label: 'Admin policy',
+      field: SolrDocument::FIELD_APO_TITLE, label: 'APO',
       sort: false, default: true, width: 100,
       category: FREQUENTLY_USED_CATEGORY
     },

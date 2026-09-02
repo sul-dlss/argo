@@ -243,7 +243,7 @@ RSpec.describe 'Item view', :js do
             within_table('Overview') do
               expect(page).to have_css 'th', text: 'DRUID'
               expect(page).to have_css 'td', text: item_id
-              expect(page).to have_css 'th', text: 'Admin policy'
+              expect(page).to have_css 'th', text: 'APO'
               expect(page).to have_css 'td a', text: 'Stanford University Libraries - Special Collections'
               expect(page).to have_css 'th', text: 'Status'
               expect(page).to have_css 'th', text: 'Access rights'
@@ -333,7 +333,7 @@ RSpec.describe 'Item view', :js do
     end
   end
 
-  context 'for an adminPolicy' do
+  context 'for an APO' do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicyWithMetadata, administrative:, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
     let(:id) { 'druid:qv778ht9999' }
