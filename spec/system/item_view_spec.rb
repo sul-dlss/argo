@@ -243,7 +243,7 @@ RSpec.describe 'Item view', :js do
             within_table('Overview') do
               expect(page).to have_css 'th', text: 'DRUID'
               expect(page).to have_css 'td', text: item_id
-              expect(page).to have_css 'th', text: 'Admin policy'
+              expect(page).to have_css 'th', text: 'APO'
               expect(page).to have_css 'td a', text: 'Stanford University Libraries - Special Collections'
               expect(page).to have_css 'th', text: 'Status'
               expect(page).to have_css 'th', text: 'Access rights'
