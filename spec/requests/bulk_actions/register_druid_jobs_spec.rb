@@ -27,8 +27,9 @@ RSpec.describe 'BulkActions::RegisterDruidJobs' do
 
         expect { post '/bulk_actions/register_druid_job', params: }.not_to have_enqueued_job(RegisterDruidsJob)
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to match('column, which is not valid')
-        expect(response.body).to match('missing title. For each row, one of these must be provided: title')
+        expect(response.body).to include('column, which is not valid (titles must be in a column named')
+        # Both errors are rendered as one sentence, so they have to read as clauses.
+        expect(response.body).to include(') and is missing a title (each row needs a value in title or folio_instance_hrid)')
       end
     end
 
@@ -38,8 +39,8 @@ RSpec.describe 'BulkActions::RegisterDruidJobs' do
 
         expect { post '/bulk_actions/register_druid_job', params: }.not_to have_enqueued_job(RegisterDruidsJob)
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to match('column, which is not valid')
-        expect(response.body).not_to match('missing title')
+        expect(response.body).to include('column, which is not valid')
+        expect(response.body).not_to include('is missing a title')
       end
     end
   end

@@ -21,7 +21,7 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors' do
         expect(form.errors.full_messages).to include(
-          /missing title\. For each row, one of these must be provided: title, folio_instance_hrid/
+          /is missing a title \(each row needs a value in title or folio_instance_hrid\)/
         )
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors calling out the label column' do
         expect(form.errors.full_messages).to include(
-          /has a "label" column, which is not valid\. Titles must be in a column named "title"\./
+          /has a "label" column, which is not valid \(titles must be in a column named "title"\)/
         )
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors' do
         expect(form.errors.full_messages).to include(
-          /missing title\. For each row, one of these must be provided: title, folio_instance_hrid/
+          /is missing a title \(each row needs a value in title or folio_instance_hrid\)/
         )
       end
     end

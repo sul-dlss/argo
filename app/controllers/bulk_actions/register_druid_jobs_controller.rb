@@ -35,14 +35,14 @@ module BulkActions
       # "label" has been removed from Cocina but users may still have template files referencing it.
       return [] if csv.headers.none? { |header| header&.casecmp?('label') }
 
-      ['has a "label" column, which is not valid. Titles must be in a column named "title".']
+      ['has a "label" column, which is not valid (titles must be in a column named "title")']
     end
 
     # A missing column reads as blank data for every row, so this covers an absent header too.
     def missing_title_errors(csv)
       return [] if csv.all? { |row| ADDITIONAL_HEADERS.any? { |header| row[header].present? } }
 
-      ["missing title. For each row, one of these must be provided: #{ADDITIONAL_HEADERS.join(', ')}"]
+      ["is missing a title (each row needs a value in #{ADDITIONAL_HEADERS.join(' or ')})"]
     end
   end
 end
