@@ -25,14 +25,24 @@ module BulkActions
 
     def validate_job_params(job_params)
       validate_csv_headers(job_params.fetch(:csv_file), REQUIRED_HEADERS) do |csv|
-        if ADDITIONAL_HEADERS.none? { |header| csv.headers.include?(header) }
-          ["missing header. One of these must be provided: #{ADDITIONAL_HEADERS.join(', ')}"]
-        elsif csv.any? { |row| ADDITIONAL_HEADERS.none? { |header| row[header].present? } }
-          ["missing data. For each row, one of these must be provided: #{ADDITIONAL_HEADERS.join(', ')}"]
-        else
-          []
-        end
+        label_header_errors(csv) + missing_title_errors(csv)
       end
+    end
+
+    private
+
+    def label_header_errors(csv)
+      # "label" has been removed from Cocina but users may still have template files referencing it.
+      return [] if csv.headers.none? { |header| header&.casecmp?('label') }
+
+      ['has a "label" column, which is not valid. Titles must be in a column named "title".']
+    end
+
+    # A missing column reads as blank data for every row, so this covers an absent header too.
+    def missing_title_errors(csv)
+      return [] if csv.all? { |row| ADDITIONAL_HEADERS.any? { |header| row[header].present? } }
+
+      ["missing title. For each row, one of these must be provided: #{ADDITIONAL_HEADERS.join(', ')}"]
     end
   end
 end

@@ -21,7 +21,21 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors' do
         expect(form.errors.full_messages).to include(
-          /missing header\. One of these must be provided: title, folio_instance_hrid/
+          /missing title\. For each row, one of these must be provided: title, folio_instance_hrid/
+        )
+      end
+    end
+
+    context 'when the CSV has a label column instead of a title column' do
+      let(:csv_fixture) { file_fixture('item_registration_label.csv') }
+
+      it 'is not valid' do
+        expect(form).not_to be_valid
+      end
+
+      it 'returns errors calling out the label column' do
+        expect(form.errors.full_messages).to include(
+          /has a "label" column, which is not valid\. Titles must be in a column named "title"\./
         )
       end
     end
@@ -35,7 +49,7 @@ RSpec.describe CsvRegistrationForm do
 
       it 'returns errors' do
         expect(form.errors.full_messages).to include(
-          /missing data\. For each row, one of these must be provided: title, folio_instance_hrid/
+          /missing title\. For each row, one of these must be provided: title, folio_instance_hrid/
         )
       end
     end
