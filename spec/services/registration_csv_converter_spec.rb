@@ -147,4 +147,20 @@ RSpec.describe RegistrationCsvConverter do
                                                                                'download' => 'none' }))
     end
   end
+
+  context 'when CSV is missing a required column' do
+    # This CSV has a "label" column where "title" is expected.
+    let(:csv_string) do
+      <<~CSV
+        administrative_policy_object,initial_workflow,content_type,source_id,label,rights_view,rights_download
+        druid:bc123df4567,accessionWF,book,foo:123,My new object,world,world
+      CSV
+    end
+
+    it 'returns a failure for each row instead of raising' do
+      expect(results.size).to be 1
+      expect(results.first.failure?).to be true
+      expect(results.first.failure.message).to eq 'Missing required column: title'
+    end
+  end
 end

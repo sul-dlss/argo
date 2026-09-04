@@ -138,7 +138,7 @@ RSpec.describe 'Item registration page', :js do
       click_button 'Register'
 
       expect(page).to have_text 'Register DOR Items'
-      expect(page).to have_text 'Csv file missing headers: source_id.'
+      expect(page).to have_text 'Csv file missing headers: source_id'
 
       attach_file 'Upload a CSV file', file_fixture('item_registration.csv')
 

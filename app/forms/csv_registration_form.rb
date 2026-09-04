@@ -92,20 +92,28 @@ It's legal to have more than one colon in a hierarchy, but at least one colon is
     @job_csv ||= CsvUploadNormalizer.read(csv_file.path)
   end
 
-  def csv_file_validation # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def csv_file_validation
     validator = CsvUploadValidator.new(csv: job_csv, required_headers: 'source_id')
-    errors.add(:csv_file, validator.errors.join(' ')) unless validator.valid? do |csv|
-      # Validates that data is present for one of the required columns.
-      if one_of_data_headers.none? { |header| csv.headers.include?(header) }
-        ["missing header. One of these must be provided: #{one_of_data_headers.join(', ')}"]
-      elsif csv.any? { |row| one_of_data_headers.none? { |header| row[header].present? } }
-        ["missing data. For each row, one of these must be provided: #{one_of_data_headers.join(', ')}"]
-      else
-        []
-      end
+    errors.add(:csv_file, validator.errors.to_sentence) unless validator.valid? do |csv|
+      label_header_errors(csv) + missing_title_errors(csv)
     end
   rescue CSV::MalformedCSVError => e
     errors.add :csv_file, "is invalid: #{e.message}"
+  end
+
+  def label_header_errors(csv)
+    # "label" has been removed from Cocina but users may still have template files referencing it.
+    return [] if csv.headers.none? { |header| header&.casecmp?('label') }
+
+    ['has a "label" column, which is not valid (titles must be in a column named "title")']
+  end
+
+  # Validates that data is present for one of the required columns. A missing column
+  # reads as blank data for every row, so this covers an absent header too.
+  def missing_title_errors(csv)
+    return [] if csv.all? { |row| one_of_data_headers.any? { |header| row[header].present? } }
+
+    ["is missing a title (each row needs a value in #{one_of_data_headers.join(' or ')})"]
   end
 
   def one_of_data_headers

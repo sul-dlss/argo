@@ -14,7 +14,8 @@ class CsvUploadValidator
   end
 
   def valid?
-    self.errors += ["missing headers: #{missing_headers.join(', ')}."] if missing_headers.present?
+    # No trailing period: errors are joined into a single sentence for display.
+    self.errors += ["missing headers: #{missing_headers.join(', ')}"] if missing_headers.present?
     self.errors += Array(yield csv) if block_given?
 
     errors.empty?

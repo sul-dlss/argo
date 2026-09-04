@@ -67,9 +67,11 @@ module CreatesBulkActions
     Success()
   end
 
-  def validate_csv_headers(csv, required_headers)
+  # An optional block is passed through to CsvUploadValidator#valid? for additional
+  # checks; it is yielded the parsed CSV and returns an array of error messages.
+  def validate_csv_headers(csv, required_headers, &)
     validator = CsvUploadValidator.new(csv:, required_headers:)
-    return Success() if validator.valid?
+    return Success() if validator.valid?(&)
 
     Failure(validator.errors)
   end
