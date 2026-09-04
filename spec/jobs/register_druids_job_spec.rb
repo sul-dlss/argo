@@ -56,7 +56,7 @@ RSpec.describe RegisterDruidsJob do
       job.perform_now
 
       expect(RegistrationService).not_to have_received(:register)
-      expect(log).to have_received(:puts).with(include('does not match'))
+      expect(log).to have_received(:puts).with(include(' - line 2 - ', 'does not match'))
       expect(bulk_action.druid_count_success).to eq 0
       expect(bulk_action.druid_count_fail).to eq 1
     end
@@ -77,6 +77,29 @@ RSpec.describe RegisterDruidsJob do
       expect(log).to have_received(:puts).with(/connection problem/)
       expect(bulk_action.druid_count_success).to eq 0
       expect(bulk_action.druid_count_fail).to eq 1
+    end
+  end
+
+  context 'when registration raises' do
+    let(:csv_string) do
+      <<~CSV
+        administrative_policy_object,initial_workflow,content_type,source_id,title,rights_view,rights_download
+        druid:bc123df4567,accessionWF,book,foo:123,My new object,world,world
+        druid:bc123df4567,accessionWF,book,foo:456,Another new object,world,world
+      CSV
+    end
+
+    before do
+      allow(RegistrationService).to receive(:register).and_raise('connection problem')
+    end
+
+    it 'logs a failure for each row with its CSV line number' do
+      job.perform_now
+
+      expect(log).to have_received(:puts).with(/ - line 2 - Failed RuntimeError connection problem/)
+      expect(log).to have_received(:puts).with(/ - line 3 - Failed RuntimeError connection problem/)
+      expect(bulk_action.druid_count_fail).to eq 2
+      expect(bulk_action.status).to eq 'Completed'
     end
   end
 

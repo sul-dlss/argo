@@ -4,6 +4,13 @@
 class RegistrationCsvConverter
   include Dry::Monads[:result]
 
+  # Raised when the CSV is missing a column that is required for a row.
+  class MissingColumnError < StandardError
+    def initialize(column)
+      super("Missing required column: #{column}")
+    end
+  end
+
   CONTENT_TYPES = [Cocina::Models::ObjectType.book,
                    Cocina::Models::ObjectType.document,
                    Cocina::Models::ObjectType.file,
@@ -56,21 +63,28 @@ class RegistrationCsvConverter
   def convert_row(row)
     model = Cocina::Models::RequestDRO.new(model_params(row))
     Success(model:,
-            workflow: params[:initial_workflow] || row.fetch('initial_workflow'),
+            workflow: params[:initial_workflow] || fetch_column(row, 'initial_workflow'),
             tags: tags(row) + ticket_tags(row))
-  rescue Cocina::Models::ValidationError => e
+  rescue Cocina::Models::ValidationError, MissingColumnError => e
     Failure(e)
+  end
+
+  # Like CSV::Row#fetch, but raises an error naming the missing column.
+  def fetch_column(row, column)
+    raise MissingColumnError, column unless row.headers.include?(column)
+
+    row[column]
   end
 
   def model_params(row)
     model_params = {
-      type: dro_type(params[:content_type] || row.fetch('content_type')),
+      type: dro_type(params[:content_type] || fetch_column(row, 'content_type')),
       version: 1,
       administrative: {
-        hasAdminPolicy: params[:administrative_policy_object] || row.fetch('administrative_policy_object')
+        hasAdminPolicy: params[:administrative_policy_object] || fetch_column(row, 'administrative_policy_object')
       },
       identification: {
-        sourceId: row.fetch('source_id'),
+        sourceId: fetch_column(row, 'source_id'),
         barcode: row['barcode'],
         catalogLinks: catalog_links(row)
       }.compact
@@ -154,7 +168,7 @@ class RegistrationCsvConverter
 
   def description(row)
     {}.tap do |description|
-      title = row[catalog_record_id_column] ? row['title'] : row.fetch('title')
+      title = row[catalog_record_id_column] ? row['title'] : fetch_column(row, 'title')
       description[:title] = [{ value: title }]
     end
   end
@@ -164,8 +178,7 @@ class RegistrationCsvConverter
       access[:view] = params[:rights_view] || row['rights_view']
       access[:download] =
         params[:rights_download] || row['rights_download'] || ('none' if %w[citation-only dark].include? access[:view])
-      access[:location] = (params[:rights_location] || row.fetch('rights_location')) if [access[:view],
-                                                                                         access[:download]].include?('location-based')
+      access[:location] = (params[:rights_location] || fetch_column(row, 'rights_location')) if [access[:view], access[:download]].include?('location-based')
       cdl = params[:rights_controlledDigitalLending] || row['rights_controlledDigitalLending']
       access[:controlledDigitalLending] = ActiveModel::Type::Boolean.new.cast(cdl) if cdl.present?
     end.compact

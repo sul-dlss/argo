@@ -6,11 +6,21 @@ class RegisterDruidsJob < BulkActionJob
   HEADERS = ['Druid', 'Barcode', CatalogRecordId.label, 'Source Id', 'Title'].freeze
 
   def perform_bulk_action
-    convert_results.each.with_index do |convert_result, index|
+    # Index from 2, since the first row of the CSV is the header.
+    convert_results.each.with_index(2) do |convert_result, index|
       perform_item_class.new(druid: 'Unregistered', index:, job: self, convert_result:).perform
     rescue StandardError => e
       failure!(druid: 'Unregistered', message: "Failed #{e.class} #{e.message}", index:)
     end
+  end
+
+  # Rows are not registered yet, so log the CSV line number to identify them.
+  def success!(druid:, message:, index:)
+    super(druid:, message: " - line #{index} - #{message}")
+  end
+
+  def failure!(druid:, message:, index:)
+    super(druid:, message: " - line #{index} - #{message}")
   end
 
   def druid_count
@@ -36,6 +46,14 @@ class RegisterDruidsJob < BulkActionJob
     end
 
     attr_reader :convert_result
+
+    def success!(message:)
+      job.success!(druid: druid, message: "Success: #{message}", index:)
+    end
+
+    def failure!(message:)
+      job.failure!(druid: druid, message: "Error: #{message}", index:)
+    end
 
     def perform
       return failure!(message: convert_result.failure.message) if convert_result.failure?
