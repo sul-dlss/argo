@@ -20,6 +20,7 @@ gem 'faraday-multipart'
 gem 'honeybadger'
 gem 'jbuilder' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jsbundling-rails'
+gem 'json', '~> 2.0' # Pinned until Rails 8.1.4 is released https://github.com/rails/rails/issues/58685
 gem 'lograge'
 gem 'nokogiri'
 gem 'okcomputer' # monitors application and its dependencies
@@ -32,7 +33,7 @@ gem 'rails', '~> 8.1.0'
 gem 'rake'
 gem 'reform-rails'
 gem 'retries'
-gem 'roo', '~> 2.9.0' # work with newer Excel files and other types (xlsx, ods, csv)
+gem 'roo'
 gem 'roo-xls' # needed to work with legacy Excel files (xls)
 gem 'rubyzip'
 gem 'sidekiq', '~> 8.0'

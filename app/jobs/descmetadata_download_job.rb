@@ -5,7 +5,7 @@ require 'zip'
 # Download metadata as a zip of xml files.
 class DescmetadataDownloadJob < BulkActionJob
   def export_file
-    @export_file ||= ::Zip::File.open(zip_filename, Zip::File::CREATE)
+    @export_file ||= ::Zip::File.open(zip_filename, create: true)
   end
 
   class DescmetadataDownloadJobItem < BulkActionJobItem
