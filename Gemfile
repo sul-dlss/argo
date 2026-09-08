@@ -20,6 +20,7 @@ gem 'faraday-multipart'
 gem 'honeybadger'
 gem 'jbuilder' # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jsbundling-rails'
+gem 'json', '~> 2.0' # Pinned until Rails 8.1.4 is released https://github.com/rails/rails/issues/58685
 gem 'lograge'
 gem 'nokogiri'
 gem 'okcomputer' # monitors application and its dependencies
