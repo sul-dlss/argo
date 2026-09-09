@@ -178,6 +178,8 @@ class AdminPolicyPersister
 
   def roles
     Honeybadger.context(permissions:)
+    Honeybadger.context(form:)
+
     return [] if permissions.blank?
 
     attributes = permissions.values
