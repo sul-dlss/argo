@@ -182,13 +182,20 @@ class AdminPolicyPersister
 
     return [] if permissions.blank?
 
-    attributes = permissions.values
-    ungrouped_perms = attributes.each_with_object({}) do |perm, grouped|
+    ungrouped_perms = permission_attributes.each_with_object({}) do |perm, grouped|
       role_name = ROLE_NAME.fetch(perm[:access])
       grouped[role_name] ||= []
       grouped[role_name] << { type: 'workgroup', identifier: "sdr:#{perm[:name]}" }
     end
 
     ungrouped_perms.map { |name, members| { name:, members: } }
+  end
+
+  # The form serializes permissions as a hash keyed by index (e.g. apo[permissions][0][name]), but if no
+  # permissions fields were submitted, the form still holds the array that ApoForm#setup_properties! built
+  # from the model (or the defaults for a new APO).
+  # @return [Array<Hash>] the permission grants, each with name, type and access
+  def permission_attributes
+    permissions.is_a?(Hash) ? permissions.values : permissions
   end
 end

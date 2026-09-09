@@ -22,6 +22,14 @@ RSpec.describe AdminPolicyPersister do
     let(:use_license) { 'https://creativecommons.org/licenses/by-nc/3.0/legalcode' }
     let(:default_workflows) { ['registrationWF'] }
 
+    # The sharing widget serializes the grants as indexed form fields (e.g. apo[permissions][0][name])
+    let(:permissions) do
+      { '0' => { name: 'developer', access: 'manage', type: 'group' },
+        '1' => { name: 'service-manager', access: 'manage', type: 'group' },
+        '2' => { name: 'metadata-staff', access: 'manage', type: 'group' },
+        '3' => { name: 'justins', access: 'view', type: 'group' } }
+    end
+
     let(:change_set) do
       instance_double(ApoForm,
                       copyright_statement:,
@@ -34,10 +42,7 @@ RSpec.describe AdminPolicyPersister do
                       access_location: nil,
                       controlled_digital_lending: false,
                       use_license:,
-                      permissions: { '0' => { name: 'developer', access: 'manage', type: 'group' },
-                                     '1' => { name: 'service-manager', access: 'manage', type: 'group' },
-                                     '2' => { name: 'metadata-staff', access: 'manage', type: 'group' },
-                                     '3' => { name: 'justins', access: 'view', type: 'group' } },
+                      permissions:,
                       collections_for_registration: { '0' => { id: 'druid:zj785yp4820' } },
                       collection_radio: 'none',
                       collection: {},
@@ -93,6 +98,21 @@ RSpec.describe AdminPolicyPersister do
 
       it 'sets clean APO metadata for accessTemplate' do
         expect(result.to_h).to eq(expected.to_h)
+      end
+
+      # If no permissions fields are submitted, the form still holds the array built by
+      # ApoForm#setup_properties!
+      context 'when permissions is an array rather than an indexed hash' do
+        let(:permissions) do
+          [{ name: 'developer', access: 'manage', type: 'group' },
+           { name: 'service-manager', access: 'manage', type: 'group' },
+           { name: 'metadata-staff', access: 'manage', type: 'group' },
+           { name: 'justins', access: 'view', type: 'group' }]
+        end
+
+        it 'sets the same roles' do
+          expect(result.to_h).to eq(expected.to_h)
+        end
       end
     end
 
