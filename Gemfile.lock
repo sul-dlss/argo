@@ -211,7 +211,7 @@ GEM
       capistrano-one_time_key (>= 0.2.0)
       capistrano-shared_configs
       ed25519
-    domain_name (0.6.20260902)
+    domain_name (0.6.20260907)
     dor-services-client (15.67.0)
       activesupport (>= 7.0.0)
       cocina-models (~> 0.133.0)
@@ -233,7 +233,7 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.1)
       zeitwerk (~> 2.6)
-    dry-monads (1.10.0)
+    dry-monads (1.11.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.1)
       zeitwerk (~> 2.6)
@@ -307,7 +307,7 @@ GEM
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
-    io-console (0.9.2)
+    io-console (0.9.3)
     irb (1.18.0)
       pp (>= 0.6.0)
       prism (>= 1.3.0)
@@ -321,9 +321,9 @@ GEM
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
     json (2.21.2)
-    jsonschema_rs (0.55.0-arm64-darwin)
+    jsonschema_rs (0.56.0-arm64-darwin)
       bigdecimal (>= 3.1, < 5)
-    jsonschema_rs (0.55.0-x86_64-linux)
+    jsonschema_rs (0.56.0-x86_64-linux)
       bigdecimal (>= 3.1, < 5)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -377,11 +377,11 @@ GEM
       json
       nokogiri
       nokogiri-happymapper
-    msgpack (1.8.4)
+    msgpack (1.8.5)
     multipart-post (2.4.1)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.6)
+    net-imap (0.6.7)
       date
       net-protocol
     net-pop (0.1.2)
@@ -403,7 +403,7 @@ GEM
       racc (~> 1.4)
     nokogiri-happymapper (0.10.1)
       nokogiri (~> 1.5)
-    okcomputer (1.19.2)
+    okcomputer (1.20.0)
       benchmark
     optimist (3.2.1)
     orm_adapter (0.5.0)
@@ -555,7 +555,7 @@ GEM
     rspec-support (3.13.7)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.90.0)
+    rubocop (1.91.0)
       json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -605,7 +605,7 @@ GEM
       launchy
       zeitwerk
     securerandom (0.4.1)
-    selenium-webdriver (4.48.0)
+    selenium-webdriver (4.49.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -617,7 +617,7 @@ GEM
       logger (>= 1.7.0)
       rack (>= 3.2.0)
       redis-client (>= 0.29.0)
-    simplecov (1.2.0)
+    simplecov (1.3.0)
     smart_properties (1.17.0)
     spreadsheet (1.3.5)
       bigdecimal
