@@ -719,7 +719,6 @@ DEPENDENCIES
   http_logger
   jbuilder
   jsbundling-rails
-  json (~> 2.0)
   listen (~> 3.2)
   lograge
   nokogiri
