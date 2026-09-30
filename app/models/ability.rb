@@ -25,7 +25,7 @@ class Ability
 
   attr_reader :current_user
 
-  def grant_permissions
+  def grant_permissions # rubocop:disable Metrics/PerceivedComplexity
     can :manage, :all if current_user.admin?
     cannot :impersonate, User unless current_user.webauth_admin?
 
@@ -40,6 +40,10 @@ class Ability
           DRO_MODELS + COLLECTION_MODELS
       can :create, ADMIN_POLICY_MODELS
     end
+
+    # A collection is always registered with an APO, so creating one requires at
+    # least one APO the user is permitted to register with.
+    can :create, COLLECTION_MODELS if can_register_with_any_apo?
 
     can %i[read view_content], DRO_MODELS + COLLECTION_MODELS + ADMIN_POLICY_MODELS if current_user.viewer?
 
@@ -83,6 +87,11 @@ class Ability
   # what sort of access to grant the user:
   MANAGE_ITEM_ROLES = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
   VIEW_ROLES = (MANAGE_ITEM_ROLES + %w[dor-viewer sdr-viewer]).freeze
+
+  # Admins are already covered by `can :manage, :all`, so skip the Solr query for them.
+  def can_register_with_any_apo?
+    current_user.admin? || AdminPolicyOptions.for(current_user).any?
+  end
 
   def can_manage_items?(user_roles)
     intersect? user_roles, MANAGE_ITEM_ROLES
