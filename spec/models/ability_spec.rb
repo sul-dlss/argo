@@ -35,10 +35,12 @@ RSpec.describe Ability do
   let(:apo_roles) { [] }
   let(:new_cocina_object_id) { 'druid:bc123df4567' }
   let(:apo_id) { 'druid:hv992yv2222' }
+  let(:registerable_apos) { [] }
 
   before do
     allow(user).to receive(:roles).with(apo_id).and_return(apo_roles)
     allow(user).to receive(:roles).with(new_cocina_object_id).and_return(new_cocina_object_roles)
+    allow(AdminPolicyOptions).to receive(:for).and_return(registerable_apos)
   end
 
   context 'as an administrator' do
@@ -51,6 +53,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:update, dro_with_metadata) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro_with_metadata, apo_id) }
     it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.to be_able_to(:create, Cocina::Models::Collection) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, dro_with_metadata) }
     it { is_expected.to be_able_to(:view_content, dro_lite) }
@@ -195,6 +198,22 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, dro_with_metadata) }
     it { is_expected.not_to be_able_to(:view_content, dro_lite) }
+  end
+
+  context 'with register permissions on at least one APO' do
+    let(:registerable_apos) { [['An APO', 'druid:vt333hq2222']] }
+
+    it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+    it { is_expected.to be_able_to(:create, Cocina::Models::Collection) }
+    it { is_expected.to be_able_to(:create, Cocina::Models::CollectionWithMetadata) }
+    it { is_expected.to be_able_to(:create, Cocina::Models::CollectionLite) }
+  end
+
+  context 'without register permissions on any APO' do
+    it { is_expected.not_to be_able_to(:create, Cocina::Models::Collection) }
+    it { is_expected.not_to be_able_to(:create, Cocina::Models::CollectionWithMetadata) }
+    it { is_expected.not_to be_able_to(:create, Cocina::Models::CollectionLite) }
   end
 
   context 'with the view role on the parent APO' do
