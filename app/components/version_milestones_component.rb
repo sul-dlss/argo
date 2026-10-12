@@ -51,8 +51,8 @@ class VersionMilestonesComponent < ViewComponent::Base
   end
 
   def user_version_link_to_document?
-    version == current_version \
-     && user_version == head_user_version \
+    version == current_version
+     && user_version == head_user_version
      && user_version_view.present?
   end
 
