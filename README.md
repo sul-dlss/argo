@@ -11,7 +11,7 @@ Argo is the administrative interface to the Stanford Digital Repository.
 ### System Requirements
 
 1. Install Docker
-2. Install Ruby
+2. Install Ruby 4.0.7
 
 ### Check Out the Code
 
