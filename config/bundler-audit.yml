@@ -2,3 +2,4 @@
 ignore:
   - CVE-2026-44836 # Requires updating ViewComponent to >= 4.9.0
   - CVE-2026-44837 # Requires updating ViewComponent to >= 4.9.0
+  - GHSA-8qw7-6phv-7q6p # Requires updating ViewComponent to >= 4.14.0
