@@ -820,9 +820,9 @@ RSpec.describe Groupers::DescriptionsGrouper do
       expect(run.dig(druid3, 'note11.value')).to be_nil
       expect(run.dig(druid3, 'note12.value')).to be_nil
 
-      expect(run.dig(druid4, 'note1.value')).to eq('2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.')
-      expect(run.dig(druid4, 'note2.value')).to be_nil
-      expect(run.dig(druid4, 'note3.value')).to be_nil
+      expect(run.dig(druid4, 'note1.value')).to eq('Title from disc surface.')
+      expect(run.dig(druid4, 'note2.value')).to eq('Accompanying booklet is user guide.')
+      expect(run.dig(druid4, 'note3.value')).to eq('2016 USPS Zip+4 with 2014 ACS, 2016 estimates and 021 projections.')
       expect(run.dig(druid4, 'note4.value')).to be_nil
       expect(run.dig(druid4, 'note5.value')).to be_nil
       expect(run.dig(druid4, 'note6.value')).to be_nil
@@ -1287,6 +1287,34 @@ RSpec.describe Groupers::DescriptionsGrouper do
     it 'groups forms as expected' do
       expect(run.dig(druid1, 'form1.value')).to eq('still image')
       expect(run.dig(druid1, 'form6.value')).to eq('reformatted digital')
+    end
+  end
+
+  # See https://github.com/sul-dlss/argo/issues/5257
+  context 'with untyped notes and a nested note that has a type' do
+    let(:descriptions) do
+      {
+        druid1 => DescriptionExport.export(description:, source_id: '')
+      }
+    end
+
+    let(:description) do
+      {
+        'note' => [
+          { 'value' => 'First note' },
+          { 'value' => 'Second note' }
+        ],
+        'adminMetadata' => {
+          'note' => [
+            { 'value' => 'human prepared', 'type' => 'record origin' }
+          ]
+        }
+      }
+    end
+
+    it 'keeps all notes' do
+      expect(run.dig(druid1, 'note1.value')).to eq('First note')
+      expect(run.dig(druid1, 'note2.value')).to eq('Second note')
     end
   end
 end
