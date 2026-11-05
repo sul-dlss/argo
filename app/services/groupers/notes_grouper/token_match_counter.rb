@@ -17,8 +17,8 @@ module Groupers
       # @return [Integer]
       def count(token)
         description
-          .slice(*description.keys.grep(/#{PREFIX}.+(displayLabel|type)/o))
-          .group_by { |key, _value| key.match(/(.*#{PREFIX}\d+)\./o)[1] }
+          .slice(*description.keys.grep(/\A(old_)?#{PREFIX}\d+\.(displayLabel|type)\z/o))
+          .group_by { |key, _value| key.match(/\A((?:old_)?#{PREFIX}\d+)\./o)[1] }
           .count { |_key, value| tuple_matches?(value, token) }
       end
 
