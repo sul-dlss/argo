@@ -401,9 +401,9 @@
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
 
 "@typescript-eslint/types@^8.56.0":
-  version "8.72.2"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-8.72.2.tgz#202b5f8aabe040fbfb5c4a8783b03aa6fe1fc113"
-  integrity sha512-Xfn37OLZx03+PCU7qWx9DTv2FCRh1E6fk2+wONeNY15HXIwtcwuveaSwVpGAUptkNmPQegRxW5JyRel9T7wrog==
+  version "8.73.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-8.73.0.tgz#785586de1325a973b24e4e762bcd0093b248a2a7"
+  integrity sha512-O/1ytYzflF16QDKXx4/qOXg1IuZp+n7hr9t+S0nv7N/2Tl8rJiNCshztV1gcSUvHbPtoX3+zmNbtSAyVbzxVfw==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -451,9 +451,9 @@ binary-extensions@^2.0.0:
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
 "blacklight-frontend@>=7.1 <10.0.0":
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-9.2.1.tgz#f7b6a38855d0fd56f291f9f8141671e0e8f36ec6"
-  integrity sha512-ahDgeQJaAQRwLupb1DeF/IW8eIGPYLBtxDB/3qABnmqv5V3yunj0TXVy/7rbOwVh/ITBls0nigUxsmZIR9rn7A==
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-9.3.0.tgz#5e12322232b72684a6a070fa358934d6258a278a"
+  integrity sha512-4X4IcdekQiLjNGWvikoS50Wznvu6QP97KZic5hCI+IIkCBb77rSoMvK+9zbYCa9aNsjIbFtNuC8tFzrh3kwIAQ==
   dependencies:
     bootstrap ">=5.3.5 <6.0.0"
 
@@ -999,14 +999,14 @@ isexe@^2.0.0:
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
 jquery@>=1.7:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.0.0.tgz#95c33ac29005ff72ec444c5ba1cf457e61404fbb"
-  integrity sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.1.0.tgz#b15839cd1ea0e555ee3dce856dd9568e1b81f504"
+  integrity sha512-tnN2N83S+xD3yhmdBP4nnJ1XOO0Fl586rG23FA5h/JAe8XN3W9a1zGwDMltBptn+UpcqEKicnO61+jQ0EiF2fw==
 
 jquery@^3.5.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
-  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.8.0.tgz#3bf83324052cc9e7148718e9d6ea3cde1b2b9f5a"
+  integrity sha512-AOYt0viqPysMUTq45O8gF9DuOnBT3Il/8WtM/TT8z/2QeGsZ70ImwSJtNFxznn2R71v8yIgaEunOGo82OY/f0g==
 
 json-schema-traverse@^0.4.1:
   version "0.4.1"
@@ -1053,9 +1053,9 @@ minimatch@^10.2.1:
     brace-expansion "^5.0.8"
 
 minimatch@^11.0.5:
-  version "11.0.8"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-11.0.8.tgz#715fc3509cd7f76ed9af2f702a98411b1b0288c8"
-  integrity sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==
+  version "11.0.9"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-11.0.9.tgz#00d0088671fa0d872ba1e2578f5abf3be0fe878e"
+  integrity sha512-KCFkfyjqerNlSstjlhIGNXIKZGA/6O4V4RlhZ+Dsr621SPPw0mzlypE9D9ZOoPiVefHID+j7/XuMMlqfD/F60Q==
   dependencies:
     "@isaacs/nonrecursive-glob-match" "^1.1.0"
     brace-expansion "^5.0.12"
@@ -1097,9 +1097,9 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
 object-inspect@^1.13.3, object-inspect@^1.13.4:
-  version "1.13.4"
-  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.13.4.tgz#8375265e21bc20d0fa582c22e1b13485d6e00213"
-  integrity sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.14.0.tgz#8d373f7293f9d0ba656de41bdb7a55992255af46"
+  integrity sha512-IVgHNlp/jwQX271+Xzoq9LZNTWXxZK+cEOrGBOBxXNbn7fapnZ+Ts6TVMgNOuAezwG2wdtnMX97tTPK6VEnuOQ==
 
 optionator@^0.9.3:
   version "0.9.4"
@@ -1275,9 +1275,9 @@ simple-update-notifier@^2.0.0:
     semver "^7.5.3"
 
 "source-map-js@>=0.6.2 <2.0.0":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.2.tgz#79fb88d97535a21cb27162cb05d211b67acea4ab"
-  integrity sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.4.tgz#b9303bf27115446da5e6ca3a4a2ee3e9f7b69633"
+  integrity sha512-J7ZjMvHd9O1fcT/5V09QWaaSl2BbWx3F6O08spde82Namf9UB0GxRVIPiNbVsdKkoizHiSpTodo3vp2bAy91MA==
 
 stimulus@^3.0.0:
   version "3.2.2"
